@@ -30,15 +30,7 @@ const AddCostingSummaryModal = ({
     setAddCostingSummaryModel: PropTypes.func,
     projectInfo: PropTypes.func,
   };
-  // const setAddCostingSummaryModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, quoteLine }) => {
-  //   setAddCostingSummaryModal.propTypes = {
-  //     addLineItemModal: PropTypes.bool,
-  //     setAddLineItemModal: PropTypes.func,
-  //     projectInfo: PropTypes.any,
-  //     quoteLine: PropTypes.any,
-  //   };
-  //All state Varible
-  //const [totalAmount, setTotalAmount] = useState(0);
+
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
@@ -50,20 +42,7 @@ const AddCostingSummaryModal = ({
       salesman_commission: '',
     },
   ]);
-  //Insert Invoice Item
-  // const addLineItemApi = (obj) => {
-  //   obj.opportunity_id = projectInfo;
-  //   obj.quote_id = quoteLine;
-  //   api
-  //     .post('/tender/insertQuoteItems', obj)
-  //     .then(() => {
-  //       message('Line Item Added Successfully', 'sucess');
-  //       window.location.reload();
-  //     })
-  //     .catch(() => {
-  //       message('Cannot Add Line Items', 'error');
-  //     });
-  // };
+  
   const AddCostingSummary = (obj) => {
     //obj.opportunity_costing_summary_id=id;
     obj.opportunity_id = projectInfo;
@@ -78,23 +57,7 @@ const AddCostingSummaryModal = ({
       });
   };
 
-  //Add new line item
-  // const AddNewLineItem = () => {
-  //   setAddLineItem([
-  //     ...addLineItem,
-  //     {
-  //       id: new Date().getTime().toString(),
-  //       unit: '',
-  //       no_of_days_worked: '',
-  //       labour_rates_per_day: '',
-  //       remarks: '',
-  //       amount: '',
-  //       title: '',
-  //       description: '',
-  //     },
-  //   ]);
-  // };
-  //Invoice item values
+ 
   const getAllValues = () => {
     const result = [];
     $('.lineitem tbody tr').each(function input() {
@@ -114,26 +77,7 @@ const AddCostingSummaryModal = ({
     });
     console.log(result);
   };
-  //Invoice Items Calculation
-  // const calculateTotal = () => {
-  //   //let totalValue = 0;
-  //   const result = [];
-  //   $('.lineitem tbody tr').each(function input() {
-  //     const allValues = {};
-  //     $(this)
-  //       .find('input')
-  //       .each(function output() {
-  //         const fieldName = $(this).attr('name');
-  //         allValues[fieldName] = $(this).val();
-  //         allValues.total_labour_charges =
-  //            allValues.no_of_worker_used *
-  //            allValues.no_of_days_worked *
-  //            allValues.labour_rates_per_day;
-  //         allValues.total_cost = allValues.transport_charges + allValues.other_charges;
-  //       });
-  //     result.push(allValues);
-  //   });
-  // setAddLineItem(result);
+  
 
   const calculateTotal = () => {
     const result = [];
@@ -178,26 +122,7 @@ const AddCostingSummaryModal = ({
     setAddLineItem(result);
   };
 
-  // result.forEach((e) => {
-  //   if (e.invoiced_price) {
-  //     totalValue += parseFloat(e.invoiced_price);
-  //   }
-  // });
-  // console.log(result);
-  // setAddLineItem(result);
-  // setTotalAmount(totalValue);
-  // Clear row value
-  // const ClearValue = (ind) => {
-  //   setAddLineItem((current) =>
-  //     current.filter((obj) => {
-  //       return obj.id !== ind.id;
-  //     }),
-  //   );
-  //   if (ind.amount) {
-  //     const finalTotal = totalAmount - parseFloat(ind.amount);
-  //     setTotalAmount(finalTotal);
-  //   }
-  // };
+ 
   return (
     <>
       <Modal size="lg" isOpen={addCostingSummaryModel}>

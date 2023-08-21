@@ -109,7 +109,7 @@ const AddProjects = Loadable(lazy(() => import('../views/cubosale/AddProjects'))
 const EditProject = Loadable(lazy(() => import('../views/cubosale/EditProject')));
 
 // Tender
-const TenderTable = Loadable(lazy(() => import('../views/smartconTables/Tender')));
+const TenderTable = Loadable(lazy(() => import('../views/smartconTables/Enquiry')));
 const OpportunityTable = Loadable(lazy(() => import('../views/smartconTables/Opportunity')));
 const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice')));
 const TaskTable = Loadable(lazy(() => import('../views/smartconTables/Task')));
@@ -437,7 +437,7 @@ const Routernew = () => {
           ></Route>
           <Route path="/InvoiceByYear" name="clienttdata" element={<InvoiceByYearTable />}></Route>
           {/* Tender */}
-          <Route path="/Tender" name="tenderdata" element={<TenderTable />}></Route>
+          <Route path="/Enquiry" name="tenderdata" element={<TenderTable />}></Route>
           <Route path="/Opportunity" name="clienttdata" element={<OpportunityTable />}></Route>
           <Route path="/Task" name="tenderdata" element={<TaskTable />}></Route>
           <Route path="/Attendance" name="tenderdata" element={<Attendance />}></Route>
