@@ -119,6 +119,7 @@ const ClientTable = Loadable(lazy(() => import('../views/smartconTables/Client')
 const BookingTable = Loadable(lazy(() => import('../views/smartconTables/Booking')));
 const TimesheetTable = Loadable(lazy(() => import('../views/smartconTables/Timesheet')));
 const ProductTable = Loadable(lazy(() => import('../views/smartconTables/product')));
+const Planning = Loadable(lazy(() => import('../views/smartconTables/Planning')));
 const TestTable = Loadable(lazy(() => import('../views/smartconTables/Test')));
 const PurchaseOrderTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrder')));
 const EmployeetrainingreportsTable = Loadable(
@@ -143,6 +144,7 @@ const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLoss
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
 const OpportunityDetails = Loadable(lazy(() => import('../views/DetailTable/OpportunityDetails')));
 const ProductDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProductDetails')));
+const PlanningDetails = Loadable(lazy(() => import('../views/DetailTable/PlanningDetails')));
 const ClientDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ClientDetails')));
 const BookingDetails = Loadable(lazy(() => import('../views/DetailTable/BookingDetails')));
 const TimesheetDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TimesheetDetails')));
@@ -449,6 +451,8 @@ const Routernew = () => {
 
           <Route path="/Project" name="projectdata" element={<ProjectTable />}></Route>
           <Route path="/Client" name="clienttdata" element={<ClientTable />}></Route>
+          <Route path="/Planning" name="clienttdata" element={<Planning />}></Route>
+          <Route path="/PlanningDetails" name="clienttdata" element={<PlanningDetails />}></Route>
           <Route path="/ClientDetails" name="clienttdata" element={<ClientDetailsTable />}></Route>
           <Route path="/Booking" name="clienttdata" element={<BookingTable />}></Route>
           <Route path="/BookingDetails" name="clienttdata" element={<BookingDetails />}></Route>
