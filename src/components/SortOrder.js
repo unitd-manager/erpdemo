@@ -43,6 +43,9 @@ const SortOrder = ({ value, tablename, idColumn, idValue }) => {
             onBlur={(e) => {
               SortingOrder(e);
             }}
+            onClick={(e) => {
+              SortingOrder(e);
+            }}
             style={{ minWidth: 70 }}
             type="number"
             name="sort_order"

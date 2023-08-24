@@ -56,7 +56,7 @@ setLoading(true)
       bDestroy: true,
       ajax: {
         type: 'POST',
-        url: 'http://43.228.126.245:4003/product/getPaginationForProducts',
+        url: 'http://43.228.126.245:5001/product/getPaginationForProducts',
       },
       lengthMenu: [
         [10, 100, -1],
