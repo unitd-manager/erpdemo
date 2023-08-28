@@ -33,7 +33,7 @@ const QuoteProject = project.find((element) => {
   });
   const deleteRecord = (deleteID) => {
     Swal.fire({
-      title: `Are you sure? ${PurchaseRequestID}`,
+      title: `Are you sure? ${deleteID}`,
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -42,7 +42,7 @@ const QuoteProject = project.find((element) => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        api.post('/tender/deleteEditItem', { quote_items_id: deleteID }).then(() => {
+        api.post('/purchaserequest/deleteEditItem', { purchase_request_items_id: deleteID }).then(() => {
           Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
           window.location.reload();
         });
@@ -104,7 +104,7 @@ return (
                                     <span
                                       className="addline"
                                       onClick={() => {
-                                        deleteRecord(e.quote_items_id);
+                                        deleteRecord(e.purchase_request_items_id);
                                       }}
                                     >
                                       <Icon.Trash2 />
