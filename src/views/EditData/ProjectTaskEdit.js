@@ -49,7 +49,7 @@ const TaskEdit = () => {
 
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/TaskList');
+    navigate('/ProjectTask');
   };
 
   // data in Description Modal
@@ -104,8 +104,8 @@ const TaskEdit = () => {
 
   //getting data from task by Id
   const getTaskById = () => {
-    api.post('/projecttask/getProjectTaskId', { project_task_id: id }).then((res) => {
-      const taskData = res.data.data[0];
+    api.post('/projecttask/getProjectTaskById', { project_task_id: id }).then((res) => {
+      const taskData = res.data.data;
       setProjectTask(taskData);
       if (taskData.description) {
         convertHtmlToDraft(taskData.description);
@@ -137,7 +137,7 @@ const TaskEdit = () => {
   //Update task
   const editTask = () => {
     api
-      .post('/projecttask/editTask', projectTask)
+      .post('/projecttask/editProjectTask', projectTask)
       .then(() => {
         message('Record editted successfully', 'success');
         getTaskById();
@@ -270,7 +270,7 @@ const TaskEdit = () => {
                   color="primary"
                   onClick={() => {
                     editTask();
-                    navigate('/TaskList');
+                    navigate('/ProjectTask');
                   }}
                 >
                   Save
@@ -294,7 +294,7 @@ const TaskEdit = () => {
                   className="btn btn-dark shadow-none"
                   onClick={(e) => {
                     if (window.confirm('Are you sure you want to cancel? ')) {
-                      navigate('/TaskList');
+                      navigate('/ProjectTask');
                     } else {
                       e.preventDefault();
                     }
@@ -328,7 +328,7 @@ const TaskEdit = () => {
       {/* projectTask Details */}
       <Form>
         <FormGroup>
-          <ComponentCard title="ProjectTaskDetails">
+          <ComponentCard title="Project Task Details">
             {' '}
             <ToastContainer></ToastContainer>
             <div>
@@ -339,7 +339,29 @@ const TaskEdit = () => {
                   <Row>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Title</Label>
+                        <Label>Task Title</Label>
+                        <Input
+                          type="text"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.task_title}
+                          name="task_title"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Job Order Title</Label>
+                        <Input
+                          type="text"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.task_title}
+                          name="task_title"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Job Order Code</Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
@@ -369,27 +391,18 @@ const TaskEdit = () => {
                         </Input>
                       </FormGroup>
                     </Col>
-                    {/* <Col md="3">
+                    <Col md="3">
                       <FormGroup>
-                        <Label>MileStone Title</Label>
+                        <Label>Customer Name</Label>
                         <Input
-                          type="select"
-                          name="project_milestone_id"
+                          type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.project_milestone_id}
-                        >
-                          <option>Select Project</option>
-                          {MileStonedetails &&
-                            MileStonedetails.map((e) => {
-                              return (
-                                <option key={e.project_milestone_id} value={e.project_milestone_id}>
-                                  {e.milestone_title}
-                                </option>
-                              );
-                            })}
-                        </Input>
+                          value={projectTask && projectTask.task_title}
+                          name="task_title"
+                        />
                       </FormGroup>
-                    </Col> */}
+                    </Col>
+                    
                     <Col md="3">
                       <FormGroup>
                         <Label>Staff Name</Label>
