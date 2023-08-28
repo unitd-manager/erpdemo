@@ -113,6 +113,8 @@ const TenderTable = Loadable(lazy(() => import('../views/smartconTables/Enquiry'
 const OpportunityTable = Loadable(lazy(() => import('../views/smartconTables/Opportunity')));
 const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice')));
 const TaskTable = Loadable(lazy(() => import('../views/smartconTables/Task')));
+const PurchaseRequestTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseRequest')));
+const ProjectTaskTable = Loadable(lazy(() => import('../views/smartconTables/ProjectTask')));
 const Attendance = Loadable(lazy(() => import('../views/smartconTables/Attendance')));
 const ProjectTable = Loadable(lazy(() => import('../views/smartconTables/Project')));
 const ClientTable = Loadable(lazy(() => import('../views/smartconTables/Client')));
@@ -122,6 +124,7 @@ const ProductTable = Loadable(lazy(() => import('../views/smartconTables/product
 const Planning = Loadable(lazy(() => import('../views/smartconTables/Planning')));
 const PriceList = Loadable(lazy(() => import('../views/smartconTables/PriceList')));
 const BillOfMaterials = Loadable(lazy(() => import('../views/smartconTables/BillOfMaterials')));
+const BillOfMaterialsShortage = Loadable(lazy(() => import('../views/smartconTables/BillOfMaterialsShortage')));
 const TestTable = Loadable(lazy(() => import('../views/smartconTables/Test')));
 const PurchaseOrderTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrder')));
 const EmployeetrainingreportsTable = Loadable(
@@ -166,6 +169,7 @@ const SubConDetailsTable = Loadable(lazy(() => import('../views/DetailTable/SubC
 const InventoryTable = Loadable(lazy(() => import('../views/smartconTables/Inventory')));
 const VehicleTable = Loadable(lazy(() => import('../views/smartconTables/Vehicle')));
 const VehicleDetails = Loadable(lazy(() => import('../views/DetailTable/VehicleDetails')));
+const PurchaseRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/PurchaseRequestDetails')));
 
 // PayrollHR
 const LeaveTable = Loadable(lazy(() => import('../views/smartconTables/Leave')));
@@ -263,6 +267,8 @@ const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit'))
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
 const PurchaseOrderEdit = Loadable(lazy(() => import('../views/EditData/PurchaseOrderEdit')));
+const PurchaseRequestEdit = Loadable(lazy(() => import('../views/EditData/PurchaseRequestEdit')));
+const ProjectTaskEdit = Loadable(lazy(() => import('../views/EditData/ProjectTaskEdit')));
 
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
@@ -304,6 +310,7 @@ const Routernew = () => {
           <Route path="/LeavesEdit/:id" name="clienttdata" element={<LeavesEdit />}></Route>
           <Route path="/TranslationEdit/:id" name="translationdata" element={<TranslationEdit />}></Route>
           <Route path="/BookingEdit/:id" name="clienttdata" element={<BookingEdit />}></Route>
+          <Route path="/ProjectTaskEdit/:id" name="tenderdata" element={<ProjectTaskEdit />}></Route>
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"
@@ -340,6 +347,11 @@ const Routernew = () => {
             path="/PurchaseOrderEdit/:id"
             name="clienttdata"
             element={<PurchaseOrderEdit />}
+          ></Route>
+          <Route
+            path="/PurchaseRequestEdit/:id"
+            name="clienttdata"
+            element={<PurchaseRequestEdit />}
           ></Route>
 
           {/* Supplier Modal */}
@@ -449,6 +461,9 @@ const Routernew = () => {
           <Route path="/Enquiry" name="tenderdata" element={<TenderTable />}></Route>
           <Route path="/Opportunity" name="clienttdata" element={<OpportunityTable />}></Route>
           <Route path="/Task" name="tenderdata" element={<TaskTable />}></Route>
+          <Route path="/PurchaseRequest" name="tenderdata" element={<PurchaseRequestTable />}></Route>
+          <Route path="/ProjectTask" name="tenderdata" element={<ProjectTaskTable />}></Route>
+          
           <Route path="/Attendance" name="tenderdata" element={<Attendance />}></Route>
           <Route path="/TenderDetails" name="tenderdata" element={<TenderDetailsTable />}></Route>
           <Route path="/TranslationDetails" name="translationdetailsdata" element={<TranslationDetails />}></Route>
@@ -461,6 +476,7 @@ const Routernew = () => {
           <Route path="/Planning" name="clienttdata" element={<Planning />}></Route>
           <Route path="/PriceList" name="clienttdata" element={<PriceList />}></Route>
           <Route path="/BillOfMaterials/:id" name="clienttdata" element={<BillOfMaterials />}></Route>
+          <Route path="/BillOfMaterialsShortage/:id" name="clienttdata" element={<BillOfMaterialsShortage />}></Route>
           <Route path="/PlanningDetails" name="clienttdata" element={<PlanningDetails />}></Route>
           <Route path="/PriceListDetails" name="clienttdata" element={<PriceListDetails />}></Route>
           <Route path="/ClientDetails" name="clienttdata" element={<ClientDetailsTable />}></Route>
@@ -468,6 +484,7 @@ const Routernew = () => {
           <Route path="/BookingDetails" name="clienttdata" element={<BookingDetails />}></Route>
           <Route path="/Product" name="clienttdata" element={<ProductTable />}></Route>
           <Route path="/Timesheet" name="clienttdata" element={<TimesheetTable />}></Route>
+          <Route path="/PurchaserequestDetails" name="tenderdata" element={<PurchaseRequestDetailsTable />}></Route>
           <Route
             path="/TimesheetDetails"
             name="clienttdata"

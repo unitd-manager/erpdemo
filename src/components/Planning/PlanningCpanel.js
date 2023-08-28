@@ -286,6 +286,10 @@ export default function PlanningCpanel({
                      <Link to={`/BillOfMaterials/${element.planning_cpanel_id}`}>
                         <u>Imported Item</u>
                       </Link>
+                      <br></br>
+                      <Link to={`/BillOfMaterialsShortage/${element.planning_cpanel_id}`}>
+                        <u>Shortage List</u>
+                      </Link>
                       </td>
                     <td>
                     <Button className="shadow-none"
