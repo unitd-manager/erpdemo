@@ -9,12 +9,10 @@ import {
   TabContent,
 } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import * as Icon from 'react-feather';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-import LeavePastHistory from '../../components/LeaveTable/LeavePastHistory';
 import ComponentCard from '../../components/ComponentCard';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
@@ -22,7 +20,9 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import PlanningMainDetails from '../../components/Planning/PlanningMainDetails';
-import ApiButton from '../../components/ApiButton';
+import PlanningButton from '../../components/Planning/PlanningButton';
+import PlanningCpanel from '../../components/Planning/PlanningCpanel';
+import PlanEditModal from '../../components/Planning/PlanEditModal';
 import Tab from '../../components/project/Tab';
 
 const PlanningEdit = () => {
@@ -36,6 +36,18 @@ const PlanningEdit = () => {
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
+  const [planningDetails, setPlanningDetails] = useState(null);
+  const [newPlanningData, setNewPlanningData] = useState({
+    cpanel_name: '',
+    ordered_qty: '',
+    fg_code: '',
+    start_date: '',
+    end_date: '',
+    due_date: '',
+  });
+  const [addContactModal, setAddContactModal] = useState(false);
+  const [planData, setPlanData] = useState();
+  const [editPlanEditModal, setPlanEditModal] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -49,26 +61,16 @@ const PlanningEdit = () => {
 
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
-      {id:'1',name:'Attachment'},
-      {id:'2',name:'Past Leave HIstory'},
+      {id:'1',name:'Cpanel'},
+      {id:'2',name:'Attachment'},
     ];
     const toggle = (tab) => {
       setActiveTab(tab);
     };
     // End for tab refresh navigation #Renuka 1-06-23
-
-  // //  get Leave Past history
-  // const LeavePastHistoryById = (empId) => {
-  //   api
-  //     .post('/leave/getPastLeaveHistoryById', { employee_id: empId })
-  //     .then((res) => {
-  //       setPastLeavesDetails(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('leaves Data Not Found', 'info');
-  //     });
-  // };
-
+    const addContactToggle = () => {
+      setAddContactModal(!addContactModal);
+    };
   // Get Leaves By Id
   const PlanningById = () => {
     api
@@ -111,9 +113,86 @@ const PlanningEdit = () => {
       message('Please fill all required fields', 'warning');
     }
   };
+  const getCpanelLinked = () => {
+    api
+      .post('/planning/getPlanningCpanelLinkedById', { project_planning_id: id })
+      .then((res) => {
+        setPlanningDetails(res.data.data);
+      })
+      .catch(() => {
+       
+      });
+  };
+  const CalculateBillofmaterials = (cpanelId) => {
+    api
+      .post('/planning/getPlanningCpanelMaterialsById', { planning_cpanel_id: cpanelId })
+      .then((res) => {
+        res.data.data.forEach((element) => {
+          const orderedQty = element.ordered_qty ? parseFloat(element.ordered_qty) : 0;
+          const qty = element.qty ? parseFloat(element.qty) : 0;
+          const totalMaterial = orderedQty * qty;
+          console.log('totalMaterial', totalMaterial);
+          const Inventorystock = element.actual_stock ? parseFloat(element.actual_stock) : 0;
+          console.log('Inventorystock', Inventorystock);
+  
+          if (totalMaterial > Inventorystock) {
+            element.matrl_shortage = 1;
+            // Calculate matrl_shortage_qty and insert it
+            element.matrl_shortage_qty = totalMaterial - Inventorystock;
+            api.post('/planning/editPlanningBom',element).then(()=>{
+           
+            }).catch(()=>{})
+          } else {
+            element.matrl_shortage = 0;
+            // Set matrl_shortage_qty to 0 when there's no shortage
+            element.matrl_shortage_qty = 0;
+            api.post('/planning/editPlanningBom',element).then(()=>{}).catch(()=>{})
+          }
+          message('Material shortage insert successfully', 'success');
+          console.log('el', element.matrl_shortage);
+          console.log('el.matrl_shortage_qty', element.matrl_shortage_qty);
+        });
+      })
+      .catch(() => {
+        
+      });
+  };
+  
+  
+  
+  const AddNewPlanning = () => {
+  
+    const newContactWithCompanyId = newPlanningData;
+newContactWithCompanyId.project_planning_id = id;
+console.log('idra',newContactWithCompanyId.project_planning_id )
+if (
+  newContactWithCompanyId.cpanel_name !== '' 
+
+
+) {
+api
+  .post('/planning/insertPlanningCpanel', newContactWithCompanyId)
+  .then(() => {
+    message('Contact inserted successfully.', 'success');
+     window.location.reload();
+  })
+  .catch(() => { 
+    message('Network connection error.', 'error');
+  });
+}else {
+message('Please fill all required fields', 'warning');
+}
+};
+
+//Contact Functions/Methods
+const handleAddNewPlanning = (e) => {
+  setNewPlanningData({ ...newPlanningData, [e.target.name]: e.target.value });
+};
+
 
   useEffect(() => {
     PlanningById();
+    getCpanelLinked();
   }, [id]);
 
   return (
@@ -121,20 +200,18 @@ const PlanningEdit = () => {
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <ApiButton
-        editData={editplanningData}
+      <PlanningButton
+       editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-        module="Planning"
-      ></ApiButton>
-
-      {/* Main Details */}
+       ></PlanningButton>
+       
+       {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
-        
-      ></PlanningMainDetails>
+        ></PlanningMainDetails>
 
       {/* Nav tab */}
       <ComponentCard title="More Details">
@@ -144,7 +221,23 @@ const PlanningEdit = () => {
 
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">
-            <LeavePastHistory PastleavesDetails={PastleavesDetails} leavesDetails={leavesDetails} ></LeavePastHistory>
+           <PlanningCpanel
+           planningDetails={planningDetails}
+           handleAddNewPlanning={handleAddNewPlanning}
+           newPlanningData={newPlanningData}
+           AddNewPlanning={AddNewPlanning}
+           addContactModal={addContactModal}
+           addContactToggle={addContactToggle}
+           setPlanData={setPlanData}
+           setPlanEditModal={setPlanEditModal}
+           CalculateBillofmaterials={CalculateBillofmaterials}
+           ></PlanningCpanel>
+           {/* Cpanel Linked Edit modal */}
+           <PlanEditModal
+           planData={planData}
+           editPlanEditModal={editPlanEditModal}
+           setPlanEditModal={setPlanEditModal}
+           ></PlanEditModal>
           </TabPane>
           {/* Attachment */}
           <TabPane tabId="2">

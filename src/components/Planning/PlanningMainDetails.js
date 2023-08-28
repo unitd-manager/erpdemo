@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
 export default function PlanningMainDetails({ handleInputs, plannings }) {
@@ -12,7 +11,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
   };
   return (
     <>
-      <ComponentCard title="Leave Edit">
+      <ComponentCard title=" Project Planning Edit">
         <Form>
           <FormGroup>
             <Row>
@@ -52,21 +51,21 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 <FormGroup>
                   <Label>Date</Label>
                   <Input
-                    type="Date"
+                    type="date"
                     onChange={handleInputs}
-                    value={plannings && moment(plannings.date).format('DD-MM-YYYy')}
+                    value={plannings && plannings.date}
                     name="date"
                   />
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label> Due Date</Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}
-                    value={plannings && moment(plannings.date).format('DD-MM-YYYy')}
-                    name="date"
+                    value={plannings && plannings.due_date}
+                    name="due_date"
                   />
                 </FormGroup>
               </Col>

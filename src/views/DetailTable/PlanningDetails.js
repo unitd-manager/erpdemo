@@ -27,7 +27,7 @@ const PlanningDetails = () => {
     if (planningForms.title !== '') {
       planningForms.creation_date = creationdatetime;
       api
-        .post('/planing/insertProjectPlanning', planningForms)
+        .post('/planning/insertProjectPlanning', planningForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           message('Planning inserted successfully.', 'success');

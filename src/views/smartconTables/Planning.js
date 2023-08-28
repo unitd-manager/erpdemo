@@ -148,8 +148,8 @@ const Leaves = () => {
                     <td>{element.code}</td>
                     <td>{element.title}</td>
                     <td>{element.customer}</td>
-                    <td>{moment(element.date).format('DD-MM-YYYYY')}</td>
-                    <td>{moment(element.due_date).format('DD-MM-YYYY')}</td>
+                    <td>{(element.date)?moment(element.date).format('DD-MM-YYYY'):''}</td>
+                    <td>{(element.due_date)?moment(element.due_date).format('DD-MM-YYYY'):''}</td>
                     <td>{element.status}</td>
                     </tr>
                 );
