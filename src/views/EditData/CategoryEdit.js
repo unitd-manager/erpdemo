@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
+import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
@@ -73,8 +74,10 @@ const CategoryEdit = () => {
 
   //Logic for edit data in db
   const editCategoryData = () => {
-    categoryDetails.modification_date = creationdatetime;
+    categoryDetails.modification_date =  moment().format('DD-MM-YYYY');
     if (categoryDetails.category_title !== '') {
+      categoryDetails.modification_date = creationdatetime;
+
       api
         .post('/category/edit-Category', categoryDetails)
         .then(() => {

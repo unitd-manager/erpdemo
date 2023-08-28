@@ -23,7 +23,7 @@ const Leaves = () => {
   // get Leave
   const getPlanning = () => {
     api
-      .get('/planning/getPlanning')
+      .get('/pricelistitem/getPriceList')
       .then((res) => {
         setPlanning(res.data.data);
         $('#example').DataTable({
@@ -53,7 +53,7 @@ const Leaves = () => {
   const columns = [
     {
       name: 'id',
-      selector: 'project_planning_id',
+      selector: 'price_list_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -69,35 +69,15 @@ const Leaves = () => {
     },
 
     {
-      name: 'Code',
-      selector: 'code',
+      name: 'Customer Name',
+      selector: 'customer_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Title',
-      selector: 'title',
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: 'Customer',
-      selector: 'customer',
-      sortable: true,
-      grow: 0,
-    },
-    {
-      name: 'Date',
-      selector: 'date',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'Due Date',
-      selector: '	due_date',
+      name: 'Effective Date',
+      selector: 'effective_date',
       sortable: true,
       grow: 2,
       width: 'auto',
@@ -118,9 +98,9 @@ const Leaves = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Planning List"
+          title="Price List"
           Button={
-            <Link to="/PlanningDetails">
+            <Link to="/PriceListDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -138,18 +118,15 @@ const Leaves = () => {
             {planning &&
               planning.map((element, i) => {
                 return (
-                  <tr key={element.project_planning_id}>
+                  <tr key={element.price_list_id}>
                     <td>{i + 1}</td>
                     <td>
-                      <Link to={`/PlanningEdit/${element.project_planning_id}?tab=1`}>
+                      <Link to={`/PriceListEdit/${element.price_list_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.code}</td>
-                    <td>{element.title}</td>
-                    <td>{element.customer}</td>
-                    <td>{(element.date)?moment(element.date).format('DD-MM-YYYY'):''}</td>
-                    <td>{(element.due_date)?moment(element.due_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{element.customer_name}</td>
+                    <td>{(element.effective_date)?moment(element.effective_date).format('DD-MM-YYYY'):''}</td>
                     <td>{element.status}</td>
                     </tr>
                 );

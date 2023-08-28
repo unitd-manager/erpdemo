@@ -19,13 +19,13 @@ import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
-import PlanningMainDetails from '../../components/Planning/PlanningMainDetails';
-import PlanningButton from '../../components/Planning/PlanningButton';
-import PlanningCpanel from '../../components/Planning/PlanningCpanel';
-import PlanEditModal from '../../components/Planning/PlanEditModal';
+import PlanningMainDetails from '../../components/PriceList/PriceMainDetails';
+import PlanningButton from '../../components/PriceList/PriceButton';
+import PlanningCpanel from '../../components/PriceList/PriceListItem';
+import PlanEditModal from '../../components/PriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
 
-const PlanningEdit = () => {
+const PriceListEdit = () => {
   //Const Variables
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
@@ -38,12 +38,10 @@ const PlanningEdit = () => {
   const [update, setUpdate] = useState(false);
   const [planningDetails, setPlanningDetails] = useState(null);
   const [newPlanningData, setNewPlanningData] = useState({
-    cpanel_name: '',
-    ordered_qty: '',
-    fg_code: '',
-    start_date: '',
-    end_date: '',
-    due_date: '',
+    product_name: '',
+    price: '',
+    unit: '',
+
   });
   const [addContactModal, setAddContactModal] = useState(false);
   const [planData, setPlanData] = useState();
@@ -56,12 +54,12 @@ const PlanningEdit = () => {
   // Button Save Apply Back List
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Planning');
+    navigate('/PriceList');
   };
 
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
-      {id:'1',name:'Cpanel'},
+      {id:'1',name:'Price List Item'},
       {id:'2',name:'Attachment'},
     ];
     const toggle = (tab) => {
@@ -74,7 +72,7 @@ const PlanningEdit = () => {
   // Get Leaves By Id
   const PlanningById = () => {
     api
-      .post('/planning/getPlanningById', { project_planning_id: id })
+      .post('/pricelistitem/getPriceListById', { price_list_id: id })
       .then((res) => {
         setPlannings(res.data.data[0]);
       })
@@ -98,11 +96,11 @@ const PlanningEdit = () => {
   const editplanningData = () => {
     
     if (
-      plannings.title &&
-      plannings.customer 
+      plannings.effective_date &&
+      plannings.customer_name 
       ) {
       api
-        .post('/planning/editPlanning', plannings)
+        .post('/pricelistitem/editPriceList', plannings)
         .then(() => {
           message('Record editted successfully', 'success');
         })
@@ -115,46 +113,12 @@ const PlanningEdit = () => {
   };
   const getCpanelLinked = () => {
     api
-      .post('/planning/getPlanningCpanelLinkedById', { project_planning_id: id })
+      .post('/pricelistitem/getPriceListItemLinkedById', { price_list_id: id })
       .then((res) => {
         setPlanningDetails(res.data.data);
       })
       .catch(() => {
        
-      });
-  };
-  const CalculateBillofmaterials = (cpanelId) => {
-    api
-      .post('/planning/getPlanningCpanelMaterialsById', { planning_cpanel_id: cpanelId })
-      .then((res) => {
-        res.data.data.forEach((element) => {
-          const orderedQty = element.ordered_qty ? parseFloat(element.ordered_qty) : 0;
-          const qty = element.qty ? parseFloat(element.qty) : 0;
-          const totalMaterial = orderedQty * qty;
-          console.log('totalMaterial', totalMaterial);
-          const Inventorystock = element.actual_stock ? parseFloat(element.actual_stock) : 0;
-          console.log('Inventorystock', Inventorystock);
-  
-          if (totalMaterial > Inventorystock) {
-            element.matrl_shortage = 1;
-            // Calculate matrl_shortage_qty and insert it
-            element.matrl_shortage_qty = totalMaterial - Inventorystock;
-            api.post('/planning/editPlanningBom',element).then(()=>{
-           
-            }).catch(()=>{})
-          } else {
-            element.matrl_shortage = 0;
-            // Set matrl_shortage_qty to 0 when there's no shortage
-            element.matrl_shortage_qty = 0;
-            api.post('/planning/editPlanningBom',element).then(()=>{}).catch(()=>{})
-          }
-          message('Material shortage insert successfully', 'success');
-          console.log('el', element.matrl_shortage);
-          console.log('el.matrl_shortage_qty', element.matrl_shortage_qty);
-        });
-      })
-      .catch(() => {
-        
       });
   };
   
@@ -163,15 +127,15 @@ const PlanningEdit = () => {
   const AddNewPlanning = () => {
   
     const newContactWithCompanyId = newPlanningData;
-newContactWithCompanyId.project_planning_id = id;
-console.log('idra',newContactWithCompanyId.project_planning_id )
+newContactWithCompanyId.price_list_id = id;
+console.log('idra',newContactWithCompanyId.price_list_id )
 if (
-  newContactWithCompanyId.cpanel_name !== '' 
+  newContactWithCompanyId.product_name !== '' 
 
 
 ) {
 api
-  .post('/planning/insertPlanningCpanel', newContactWithCompanyId)
+  .post('/pricelistitem/insertPriceListItem', newContactWithCompanyId)
   .then(() => {
     message('Contact inserted successfully.', 'success');
      window.location.reload();
@@ -230,7 +194,6 @@ const handleAddNewPlanning = (e) => {
            addContactToggle={addContactToggle}
            setPlanData={setPlanData}
            setPlanEditModal={setPlanEditModal}
-           CalculateBillofmaterials={CalculateBillofmaterials}
            ></PlanningCpanel>
            {/* Cpanel Linked Edit modal */}
            <PlanEditModal
@@ -282,4 +245,4 @@ const handleAddNewPlanning = (e) => {
     </>
   );
 };
-export default PlanningEdit;
+export default PriceListEdit;

@@ -196,9 +196,10 @@ const SectionEdit = () => {
                   <option value="Reports">Reports</option>
                   <option value="Home">Home</option>
                   <option value="Tender/Project">Tender/Project</option>
+                  <option value="Project">Project</option>
                   <option value="Finance/Purchase">Finance/Purchase</option>
                   <option value="Payroll/HR">Payroll/HR</option>
-                  <option value="Project Planning">Project Planning</option>
+                  <option value="Planning">Planning</option>
                   <option value="Trading">Trading</option>
                   <option value="Accounts">Accounts</option>
                   <option value="Inventory">Inventory</option>
