@@ -28,20 +28,9 @@ const TaskEdit = () => {
   //All state variable
   const [projectTask, setProjectTask] = useState();
   const [employeeProject, setEmployeeProject] = useState();
-  // const [attachmentModal, setAttachmentModal] = useState(false);
-  // const [activeTab, setActiveTab] = useState('1');
-  // const [timeSheet, setTimesheet] = useState(null);
-  // const [addTimesheetModal, setAddTimesheetModal] = useState(false);
   const [projectdetails, setProjectDetails] = useState();
-  // const [MileStonedetails, setMilestoneDetails] = useState();
-  // const [attachmentData, setDataForAttachment] = useState({
-  //   modelType: '',
-  // });
-  // const [roomName, setRoomName] = useState('');
-  // const [fileTypes, setFileTypes] = useState();
+  const [companydetails, setCompanyDetails] = useState();
   const [description, setDescription] = useState('');
-  // const [employeeTeam, setEmployeeTeam] = useState();
-
 
   //navigation and parameters
   const { id } = useParams();
@@ -82,21 +71,20 @@ const TaskEdit = () => {
       });
   };
 
-  //Api call for getting Milestone dropdown
-  // const getMilestonename = () => {
-  //   api
-  //     .get('/projecttask/getMilestoneTitle')
-  //     .then((res) => {
-  //       setMilestoneDetails(res.data.data);
-  //       console.log(res.data.data[0]);
-  //     })
-  //     .catch(() => {
-  //       message('Milestone not found', 'info');
-  //     });
-  // };
-  // const toggle = (tab) => {
-  //   if (activeTab !== tab) setActiveTab(tab);
-  // };
+  //Api call for getting company name dropdown
+  const getCompanyName = () => {
+    api
+      .get('/projecttask/getCompanyName')
+      .then((res) => {
+        setCompanyDetails(res.data.data);
+        console.log(res.data.data[0]);
+      })
+      .catch(() => {
+        message('Company not found', 'info');
+      });
+  };
+
+  
   //timesheet data in timesheet
   const handleInputs = (e) => {
     setProjectTask({ ...projectTask, [e.target.name]: e.target.value });
@@ -104,8 +92,9 @@ const TaskEdit = () => {
 
   //getting data from task by Id
   const getTaskById = () => {
-    api.post('/projecttask/getProjectTaskById', { project_task_id: id }).then((res) => {
-      const taskData = res.data.data;
+    api.post('/projecttask/getProjectTaskById', { project_task_id: id })
+    .then((res) => {
+      const taskData = res.data.data[0];
       setProjectTask(taskData);
       if (taskData.description) {
         convertHtmlToDraft(taskData.description);
@@ -113,9 +102,9 @@ const TaskEdit = () => {
     });
   };  
   // //  Gettind data from Job By Id
-  const JobTask = () => {
+  const getEmployee = () => {
     api
-      .get('/jobinformation/getEmployee')
+      .get('/projecttask/getEmployeeName')
       .then((res) => {
         console.log(res.data.data);
         setEmployeeProject(res.data.data);
@@ -123,16 +112,6 @@ const TaskEdit = () => {
       .catch(() => {});
   };
 
-  //  Gettind data from Job By Id
-  // const editJob = () => {
-  //   api
-  //     .get('/jobinformation/getEmployee')
-  //     .then((res) => {
-  //       console.log(res.data.data);
-  //       setEmployeeTeam(res.data.data);
-  //     })
-  //     .catch(() => {});
-  // };
 
   //Update task
   const editTask = () => {
@@ -140,120 +119,19 @@ const TaskEdit = () => {
       .post('/projecttask/editProjectTask', projectTask)
       .then(() => {
         message('Record editted successfully', 'success');
-        getTaskById();
+        // getTaskById();
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
   };
 
-  // const [timesheeteditdata, setTimesheetEditData] = useState();
-
-  // const getTimesheet = () => {
-  //   api
-  //     .post('/projecttimesheet/getTaskTimeSheetById', { project_task_id: id })
-  //     .then((res) => {
-  //       setTimesheet(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('Loan Data Not Found', 'info');
-  //     });
-  // };
- 
-
-  // const handleTaskInputs = (e) => {
-  //   setTimesheetEditData({ ...timesheeteditdata, [e.target.name]: e.target.value });
-  // };
-
-  //Logic for edit data in db
-
-  // const editTimesheetData = () => {
-  //   api
-  //     .post('/Projecttimesheet/editTimeSheet', timesheeteditdata)
-  //     .then(() => {
-  //       getTimesheet()   
-  //        })
-  //     .catch(() => {
-  //       message('Unable to edit record.', 'error');
-  //     });
-  // };
-
-  // //attachments
-  // const dataForAttachment = () => {
-  //   setDataForAttachment({
-  //     modelType: 'attachment',
-  //   });
-  //   console.log('inside DataForAttachment');
-  // };
-  //structure of projectTask list view
-  // const columns = [
-  //   {
-  //     name: '#',
-  //     selector: 'project_timesheet_id',
-  //     grow: 0,
-  //     wrap: true,
-  //     width: '4%',
-  //   },
-  //   {
-  //     name: 'Edit',
-  //     selector: 'edit',
-  //     cell: () => <Icon.Edit2 />,
-  //     grow: 0,
-  //     width: 'auto',
-  //     button: true,
-  //     sortable: false,
-  //   },
-  //   {
-  //     name: 'Title',
-  //     selector: 'task_title',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Date',
-  //     selector: 'date',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Name',
-  //     selector: 'first_name',
-  //     sortable: true,
-  //     grow: 2,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Hours',
-  //     selector: 'hours',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Status',
-  //     selector: 'status',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Description',
-  //     selector: 'description',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  // ];
 
   useEffect(() => {
     getTaskById();
-    // getTimesheet();
-    // // getMilestonename();
     getProjectname();
-    JobTask();
-    // editJob();
+    getEmployee();
+    getCompanyName()
   }, [id]);
 
   return (
@@ -354,8 +232,8 @@ const TaskEdit = () => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.task_title}
-                          name="task_title"
+                          value={projectTask && projectTask.job_order_title}
+                          name="job_order_title"
                         />
                       </FormGroup>
                     </Col>
@@ -365,8 +243,8 @@ const TaskEdit = () => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.task_title}
-                          name="task_title"
+                          value={projectTask && projectTask.job_order_code}
+                          name="job_order_code"
                         />
                       </FormGroup>
                     </Col>
@@ -395,11 +273,21 @@ const TaskEdit = () => {
                       <FormGroup>
                         <Label>Customer Name</Label>
                         <Input
-                          type="text"
+                          type="select"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.task_title}
-                          name="task_title"
-                        />
+                          value={projectTask && projectTask.company_id}
+                          name="company_id"
+                        >
+                          <option defaultValue="selected">Please Select</option>
+                          {companydetails &&
+                            companydetails.map((e) => {
+                              return (
+                                <option key={e.company_id} value={e.company_id}>
+                                  {e.company_name}
+                                </option>
+                              );
+                            })}
+                        </Input>
                       </FormGroup>
                     </Col>
                     
