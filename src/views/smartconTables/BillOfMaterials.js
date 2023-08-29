@@ -70,15 +70,7 @@ const BillOfMaterials = () => {
       name: 'Qty',
      
     },
-    {
-      name: 'Matrl Shortage Qty',
-      
-    },
-    {
-      name: 'Matrl Shortage',
-     
-    },
-    
+ 
   ];
 
   return (
@@ -113,8 +105,6 @@ const BillOfMaterials = () => {
                     <td>{element.product_name}</td>
                     <td>{element.bom_unit}</td>
                     <td>{element.qty}</td>
-                    <td>{element.matrl_shortage_qty}</td>
-                    <td>{element.matrl_shortage}</td>
                     </tr>
                 );
               })}

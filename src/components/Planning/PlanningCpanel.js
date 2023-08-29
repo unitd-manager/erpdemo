@@ -50,55 +50,6 @@ export default function PlanningCpanel({
 
 console.log('planningDetails',planningDetails)
 
-//   const [selectedFile, setSelectedFile] = useState(null);
-
-//   const handleFileChange = (e) => {
-//     const file = e.target.files[0];
-//     setSelectedFile(file);
-//   };
-// console.log('excel',selectedFile)
-//   const handleFileUpload = () => {
-//     if (!selectedFile) {
-//       console.log('No file selected.');
-//       return;
-//     }
-
-//     const reader = new FileReader();
-
-// reader.onload = (e) => {
-//   const data = new Uint8Array(e.target.result);
-//   const workbook = XLSX.read(data, { type: 'array' });
-
-//   // Assuming there is only one sheet in the Excel file
-//   const sheetName = workbook.SheetNames[0];
-//   const sheet = workbook.Sheets[sheetName];
-
-//   // Parse the sheet into JSON format
-//   const jsonData = XLSX.utils.sheet_to_json(sheet);
-//   console.log('Excel Data:', jsonData);
-
-//   // Send jsonData to the server for database insertion
-// };
-
-// reader.readAsArrayBuffer(selectedFile);
-//     const formData = new FormData();
-//     formData.append('file', selectedFile);
-
-//   // Send formData to the server for processing
-// fetch('http://43.228.126.245:5001/planning/upload-excel', {
-//   method: 'POST',
-//   body: formData,
-// })
-//   .then((response) => response.json())
-//   .then((data) => {
-//     console.log(data.message);
-//     // Handle success or error messages
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     // Handle error
-//   });
-//   };
 
 
 
@@ -199,33 +150,6 @@ const arr=JSON.parse(jsonData);
     }
   };
   
-  
-  
-
-  // const [excelData, setExcelData] = useState(null);
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return; // No file selected
-
-  //   const reader = new FileReader();
-
-  //   reader.onload = () => {
-  //     const data = new Uint8Array(e.target.result);
-  //     const workbook = XLSX.read(data, { type: 'array' });
-
-  //     // Assuming there is only one sheet in the Excel file
-  //     const sheetName = workbook.SheetNames[0];
-  //     const sheet = workbook.Sheets[sheetName];
-
-  //     // Parse the sheet into JSON format
-  //     const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-  //     console.log('Excel',jsonData)
-  //     setExcelData(jsonData);
-  //   };
-
-  //   reader.readAsArrayBuffer(file);
-  // };
 
   //  Table Contact
   const columns = [
@@ -471,22 +395,6 @@ const arr=JSON.parse(jsonData);
                       <Button color="primary" className="shadow-none" onClick={()=>handleFileUpload(element.planning_cpanel_id,element.project_planning_id)}>
                         Import
                       </Button>
-                      {/* <div>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
-      {excelData && (
-        <div>
-          <h2>Imported Data:</h2>
-          <pre>{JSON.stringify(excelData, null, 2)}</pre>
-        </div>
-      )}
-    </div> */}
-                      <Link to={`/BillOfMaterials/${element.planning_cpanel_id}`}>
-                        <u>Imported Item</u>
-                      </Link>
-                      <br></br>
-                      <Link to={`/BillOfMaterialsShortage/${element.planning_cpanel_id}`}>
-                        <u>Shortage List</u>
-                      </Link>
                     </td>
                     <td>
                       <Button
@@ -499,7 +407,13 @@ const arr=JSON.parse(jsonData);
                         Generate Shortage List
                       </Button>
                     </td>
-                    <td></td>
+                    <td>  <Link to={`/BillOfMaterials/${element.planning_cpanel_id}`}>
+                        <u>Imported Item</u>
+                      </Link>
+                      <br></br>
+                      <Link to={`/BillOfMaterialsShortage/${element.planning_cpanel_id}`}>
+                        <u>Shortage List</u>
+                      </Link></td>
                   </tr>
                 );
               })}
