@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +19,7 @@ import api from '../../constants/api';
 import PurchaseOrderLinked from '../../components/SupplierModal/Purchaseorderlinked';
 import SupplierTable from '../../components/SupplierModal/SupplierTable';
 import SupplierDetails from '../../components/SupplierModal/SupplierDetails';
+import AppContext from '../../context/AppContext';
 
 const SupplierEdit = () => {
   //all state variables
@@ -37,6 +38,10 @@ const SupplierEdit = () => {
   const handleInputs = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
   };
+
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
+  
   // Get Supplier By Id
   const editSupplierById = () => {
 
@@ -55,6 +60,7 @@ const SupplierEdit = () => {
   const editSupplierData = () => {
     if (supplier.company_name !== '') {
       supplier.modification_date = creationdatetime;
+      supplier.modified_by= loggedInuser.first_name; 
 
       api
         .post('/supplier/edit-Supplier', supplier)

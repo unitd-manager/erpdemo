@@ -8,13 +8,13 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
-const PlanningDetails = () => {
+const PriceListDetails = () => {
   //Navigation and Parameter Constants
   const navigate = useNavigate();
 
   //Logic for adding Planning in db
   const [planningForms, setPlanningForms] = useState({
-    title: '',
+    customer_name: '',
   });
 
   //setting data in PlanningForms
@@ -24,15 +24,15 @@ const PlanningDetails = () => {
 
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.title !== '') {
+    if (planningForms.customer_name !== '') {
       planningForms.creation_date = creationdatetime;
       api
-        .post('/planning/insertProjectPlanning', planningForms)
+        .post('/pricelistitem/insertPriceList', planningForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          message('Planning inserted successfully.', 'success');
+          message('Price inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/PlanningEdit/${insertedDataId}`);
+            navigate(`/PriceListEdit/${insertedDataId}`);
           }, 300);
         })
         .catch(() => {
@@ -59,9 +59,9 @@ const PlanningDetails = () => {
                     </Label>
                     <Input
                       type="text"
-                      name="title"
+                      name="customer_name"
                       onChange={handlePlanningForms}
-                      value={planningForms && planningForms.title}
+                      value={planningForms && planningForms.customer_name}
                     ></Input>
                   </Col>
                 </Row>
@@ -98,4 +98,4 @@ const PlanningDetails = () => {
     </div>
   );
 };
-export default PlanningDetails;
+export default PriceListDetails;

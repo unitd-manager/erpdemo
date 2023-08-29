@@ -1,47 +1,56 @@
-import React, { useState } from 'react';
+import React, {useContext, useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import message from '../../components/Message';
+import { useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
-const PlanningDetails = () => {
-  //Navigation and Parameter Constants
+const PurchaseRequestDetails = () => {
+  //All const variables
   const navigate = useNavigate();
-
-  //Logic for adding Planning in db
-  const [planningForms, setPlanningForms] = useState({
-    title: '',
+  const [projecttaskdetails, setProjectTaskDetails] = useState({
+    task_title: '',
   });
-
-  //setting data in PlanningForms
-  const handlePlanningForms = (e) => {
-    setPlanningForms({ ...planningForms, [e.target.name]: e.target.value });
+  //setting data in ProductDetails
+  const handleInputs = (e) => {
+    setProjectTaskDetails({ ...projecttaskdetails, [e.target.name]: e.target.value });
   };
-
-  //Api for insertPlanning
-  const insertPlanning = () => {
-    if (planningForms.title !== '') {
-      planningForms.creation_date = creationdatetime;
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
+  //Insert Product Data
+  const insertPurchaseRequestData = () => {
+    if (projecttaskdetails.task_title !== '')
+    {
+      projecttaskdetails.creation_date = creationdatetime;
+      projecttaskdetails.created_by= loggedInuser.first_name;   
       api
-        .post('/planning/insertProjectPlanning', planningForms)
+        .post('/projecttask/insertProjectTask', projecttaskdetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          message('Planning inserted successfully.', 'success');
+          message('PurchaseRequest inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/PlanningEdit/${insertedDataId}`);
+            navigate(`/ProjectTaskEdit/${insertedDataId}`);
           }, 300);
         })
         .catch(() => {
-          message('Network connection error.', 'error');
+          message('Unable to insert record.', 'error');
         });
     } else {
-      message('Please fill all required fields', 'warning');
+      message('Please fill all required fields.', 'warning');
     }
   };
+
+
+
+
+  //useeffect
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <div>
@@ -54,15 +63,13 @@ const PlanningDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
-                      Title<span className="required"> *</span>
-                    </Label>
+                    <Label>Task Title <span className="required"> *</span> </Label>
                     <Input
                       type="text"
-                      name="title"
-                      onChange={handlePlanningForms}
-                      value={planningForms && planningForms.title}
-                    ></Input>
+                      onChange={handleInputs}
+                      value={projecttaskdetails && projecttaskdetails.purchase_request_date}
+                      name="task_title"
+                    />
                   </Col>
                 </Row>
               </FormGroup>
@@ -70,18 +77,17 @@ const PlanningDetails = () => {
                 <Row>
                   <div className="pt-3 mt-3 d-flex align-items-center gap-2">
                     <Button
+                      className="shadow-none"
                       color="primary"
                       onClick={() => {
-                        insertPlanning();
+                        insertPurchaseRequestData();
                       }}
-                      type="button"
-                      className="btn mr-2 shadow-none"
                     >
                       Save & Continue
                     </Button>
                     <Button
                       onClick={() => {
-                        navigate(-1);
+                        navigate('/ProjectTask');
                       }}
                       type="button"
                       className="btn btn-dark shadow-none"
@@ -98,4 +104,4 @@ const PlanningDetails = () => {
     </div>
   );
 };
-export default PlanningDetails;
+export default PurchaseRequestDetails;

@@ -17,30 +17,24 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Code</Label>
+                  <Label>Customer Name</Label>
                   <br />
-                  <span>{plannings && plannings.code}</span>
-                </FormGroup>
-              </Col>
-              <Col md="4">
-              <FormGroup>
-                <Label>Title <span style={{ color: 'red' }}>*</span></Label>
-                <Input
+                  <Input
                   type="text"
                   onChange={handleInputs}
-                  value={plannings && plannings.title}
-                  name="title"
-                />
-              </FormGroup>
-            </Col>
+                  value={plannings && plannings.customer_name}
+                  name="customer_name"
+                />                </FormGroup>
+              </Col>
+             
             <Col md="4">
               <FormGroup>
-                <Label>Customer <span style={{ color: 'red' }}>*</span></Label>
+                <Label>Notes <span style={{ color: 'red' }}>*</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={plannings && plannings.customer}
-                  name="customer"
+                  value={plannings && plannings.notes}
+                  name="notes"
                 />
               </FormGroup>
             </Col>
@@ -49,23 +43,23 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
             <Row>
             <Col md="4">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label>Effective Date</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={plannings && plannings.date}
-                    name="date"
+                    value={plannings && plannings.effective_date}
+                    name="effective_date"
                   />
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label> Due Date</Label>
+                  <Label> Expiry Date</Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}
-                    value={plannings && plannings.due_date}
-                    name="due_date"
+                    value={plannings && plannings.expiry_date}
+                    name="expiry_date"
                   />
                 </FormGroup>
               </Col>
@@ -78,11 +72,9 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   name="status"
                 >
                   <option defaultValue="selected">Please Select</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Completed">Completed</option>
-                  <option value="On Hold">On Hold</option>
-                  <option value="Re Opened">Re Opened</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Pending">Pending</option>
+                  
                 </Input>
               </Col>
             </Row>

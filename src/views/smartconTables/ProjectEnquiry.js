@@ -5,27 +5,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
-import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Leaves = () => {
-  //Const Variables
-  const [planning, setPlanning] = useState(null);
+const Opportunity = () => {
+  const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // get Leave
-  const getPlanning = () => {
+  const getTenders = () => {
     api
-      .get('/planning/getPlanning')
+    .get('/projectenquiry/getProjectEnquiry')
       .then((res) => {
-        setPlanning(res.data.data);
+        setTenders(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -45,15 +43,14 @@ const Leaves = () => {
         setLoading(false);
       });
   };
-
   useEffect(() => {
-    getPlanning();
+    getTenders();
   }, []);
-  //  stucture of leave list view
+
   const columns = [
     {
-      name: 'id',
-      selector: 'project_planning_id',
+      name: '#',
+      selector: 'project_enquiry_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -67,37 +64,36 @@ const Leaves = () => {
       button: true,
       sortable: false,
     },
-
     {
-      name: 'Code',
-      selector: 'code',
+      name: 'Enquiry code',
+      selector: 'enquiry_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Title',
-      selector: 'title',
+      name: 'Services',
+      selector: 'services',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
       name: 'Customer',
-      selector: 'customer',
+      selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Date',
-      selector: 'date',
+      name: 'Reference',
+      selector: 'office_ref_no',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Due Date',
-      selector: '	due_date',
+      name: 'BID Expiry',
+      selector: 'project_end_date',
       sortable: true,
       grow: 2,
       width: 'auto',
@@ -109,7 +105,7 @@ const Leaves = () => {
       grow: 2,
       wrap: true,
     },
-    
+   
   ];
 
   return (
@@ -118,9 +114,9 @@ const Leaves = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Planning List"
+          title="Project Enquiry List"
           Button={
-            <Link to="/PlanningDetails">
+            <Link to="/ProjectEnquiryDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,23 +131,23 @@ const Leaves = () => {
             </tr>
           </thead>
           <tbody>
-            {planning &&
-              planning.map((element, i) => {
+            {tenders &&
+              tenders.map((element, index) => {
                 return (
-                  <tr key={element.project_planning_id}>
-                    <td>{i + 1}</td>
+                  <tr key={element.project_enquiry_id}>
+                    <td>{index + 1}</td>
                     <td>
-                      <Link to={`/PlanningEdit/${element.project_planning_id}?tab=1`}>
+                      <Link to={`/ProjectEnquiryEdit/${element.project_enquiry_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.code}</td>
-                    <td>{element.title}</td>
-                    <td>{element.customer}</td>
-                    <td>{(element.date)?moment(element.date).format('DD-MM-YYYY'):''}</td>
-                    <td>{(element.due_date)?moment(element.due_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{element.enquiry_code}</td>
+                    <td>{element.services}</td>
+                    <td>{element.company_name}</td>
+                    <td>{element.office_ref_no}</td>
+                    <td>{element.project_end_date ? moment(element.project_end_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.status}</td>
-                    </tr>
+                  </tr>
                 );
               })}
           </tbody>
@@ -161,4 +157,4 @@ const Leaves = () => {
   );
 };
 
-export default Leaves;
+export default Opportunity;
