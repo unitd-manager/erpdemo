@@ -172,6 +172,7 @@ const InventoryTable = Loadable(lazy(() => import('../views/smartconTables/Inven
 const VehicleTable = Loadable(lazy(() => import('../views/smartconTables/Vehicle')));
 const VehicleDetails = Loadable(lazy(() => import('../views/DetailTable/VehicleDetails')));
 const PurchaseRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/PurchaseRequestDetails')));
+const ProjectTaskDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProjectTaskDetails')));
 
 // PayrollHR
 const LeaveTable = Loadable(lazy(() => import('../views/smartconTables/Leave')));
@@ -491,6 +492,7 @@ const Routernew = () => {
           <Route path="/Product" name="clienttdata" element={<ProductTable />}></Route>
           <Route path="/Timesheet" name="clienttdata" element={<TimesheetTable />}></Route>
           <Route path="/PurchaserequestDetails" name="tenderdata" element={<PurchaseRequestDetailsTable />}></Route>
+          <Route path="/ProjectTaskDetails" name="tenderdata" element={<ProjectTaskDetailsTable />}></Route>
           <Route
             path="/TimesheetDetails"
             name="clienttdata"
