@@ -117,6 +117,8 @@ const Attendance = Loadable(lazy(() => import('../views/smartconTables/Attendanc
 const ProjectTable = Loadable(lazy(() => import('../views/smartconTables/Project')));
 const ClientTable = Loadable(lazy(() => import('../views/smartconTables/Client')));
 const BookingTable = Loadable(lazy(() => import('../views/smartconTables/Booking')));
+const TradingQuotationTable = Loadable(lazy(() => import('../views/smartconTables/TradingQuotation')));
+const GoodsDeliveryTable = Loadable(lazy(() => import('../views/smartconTables/GoodsDelivery')));
 const TimesheetTable = Loadable(lazy(() => import('../views/smartconTables/Timesheet')));
 const ProductTable = Loadable(lazy(() => import('../views/smartconTables/product')));
 const Planning = Loadable(lazy(() => import('../views/smartconTables/Planning')));
@@ -143,6 +145,7 @@ const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLoss
 // Details Table
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
 const OpportunityDetails = Loadable(lazy(() => import('../views/DetailTable/OpportunityDetails')));
+const TradingQuotationDetails = Loadable(lazy(() => import('../views/DetailTable/TradingQuotationDetails')));
 const ProductDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProductDetails')));
 const PlanningDetails = Loadable(lazy(() => import('../views/DetailTable/PlanningDetails')));
 const ClientDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ClientDetails')));
@@ -234,6 +237,7 @@ const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit'))
 const TrainingEdit = Loadable(lazy(() => import('../views/EditData/TrainingEdit')));
 const ProjectEdit = Loadable(lazy(() => import('../views/EditData/ProjectEdit')));
 const BookingEdit = Loadable(lazy(() => import('../views/EditData/BookingEdit')));
+const TradingQuotationEdit = Loadable(lazy(() => import('../views/EditData/TradingQuotationEdit')));
 const ClientEdit = Loadable(lazy(() => import('../views/EditData/ClientEdit')));
 const VehicleEdit = Loadable(lazy(() => import('../views/EditData/VehicleEdit')));
 const ContentEdit = Loadable(lazy(() => import('../views/EditData/ContentEdit')));
@@ -297,6 +301,7 @@ const Routernew = () => {
           <Route path="/LeavesEdit/:id" name="clienttdata" element={<LeavesEdit />}></Route>
           <Route path="/TranslationEdit/:id" name="translationdata" element={<TranslationEdit />}></Route>
           <Route path="/BookingEdit/:id" name="clienttdata" element={<BookingEdit />}></Route>
+          <Route path="/TradingQuotationEdit/:id" name="tradingquotationdata" element={<TradingQuotationEdit />}></Route>
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"
@@ -447,6 +452,7 @@ const Routernew = () => {
           <Route path="/TranslationDetails" name="translationdetailsdata" element={<TranslationDetails />}></Route>
           <Route path="/Translation" name="translationdata" element={<Translation />}></Route>
           <Route path="/OpportunityDetails" name="clienttdata" element={<OpportunityDetails />}></Route>
+          <Route path="/TradingQuotationDetails" name="clienttdata" element={<TradingQuotationDetails />}></Route>
           <Route path="/ProductDetails" name="tenderdata" element={<ProductDetailsTable />}></Route>
 
           <Route path="/Project" name="projectdata" element={<ProjectTable />}></Route>
@@ -455,6 +461,8 @@ const Routernew = () => {
           <Route path="/PlanningDetails" name="clienttdata" element={<PlanningDetails />}></Route>
           <Route path="/ClientDetails" name="clienttdata" element={<ClientDetailsTable />}></Route>
           <Route path="/Booking" name="clienttdata" element={<BookingTable />}></Route>
+          <Route path="/GoodsDelivery" name="clienttdata" element={<GoodsDeliveryTable />}></Route>
+          <Route path="/Quotation" name="clienttdata" element={<TradingQuotationTable />}></Route>
           <Route path="/BookingDetails" name="clienttdata" element={<BookingDetails />}></Route>
           <Route path="/Product" name="clienttdata" element={<ProductTable />}></Route>
           <Route path="/Timesheet" name="clienttdata" element={<TimesheetTable />}></Route>
