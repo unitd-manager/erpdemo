@@ -93,7 +93,7 @@ const TradingQuotationEdit = () => {
   };
   // Get Line Item
   const getLineItem = () => {
-    api.post('/tender/getQuoteLineItemsById', { quote_id: id }).then((res) => {
+    api.post('/tradingquote/getQuoteLineItemsById', { quote_id: id }).then((res) => {
       setLineItem(res.data.data);
       //   setAddLineItemModal(true);
     });
