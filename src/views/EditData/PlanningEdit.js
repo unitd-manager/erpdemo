@@ -148,7 +148,7 @@ const PlanningEdit = () => {
             element.matrl_shortage_qty = 0;
             api.post('/planning/editPlanningBom',element).then(()=>{}).catch(()=>{})
           }
-          message('Material shortage insert successfully', 'success');
+          
           console.log('el', element.matrl_shortage);
           console.log('el.matrl_shortage_qty', element.matrl_shortage_qty);
         });
