@@ -2,17 +2,30 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
+import TenderContactDetails from './TenderContactDetails';
 
 export default function TradingQuoteMoreDetails({
   tenderDetails,
   handleInputs,
+  handleAddNewContact,
   company,
+  contact,
+  AddNewContact,
+  addContactModal,
+  addContactToggle,
+  getContact
 }) {
   TradingQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
-    company:PropTypes.object
- };
+    company: PropTypes.object,
+    contact: PropTypes.any,
+    addContactModal: PropTypes.any,
+    addContactToggle: PropTypes.any,
+    AddNewContact: PropTypes.any,
+    handleAddNewContact: PropTypes.any,
+    getContact: PropTypes.any,
+  };
   return (
     <div>
       {' '}
@@ -52,7 +65,7 @@ export default function TradingQuoteMoreDetails({
                     type="select"
                     onChange={(e) => {
                       handleInputs(e);
-                      //getContact(e.target.value);
+                      getContact(e.target.value);
                     }}
                     value={tenderDetails && tenderDetails.company_id}
                     name="company_id"
@@ -67,7 +80,43 @@ export default function TradingQuoteMoreDetails({
                           </option>
                         );
                       })}
-                  </Input>                
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>
+                    Contact (OR){' '}
+                    <span className="anchor" onClick={addContactToggle.bind(null)}>
+                      <b>
+                        <u>Add New Contact</u>
+                      </b>
+                    </span>
+                  </Label>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.contact_id}
+                    name="contact_id"
+                  >
+                    <option value="" selected>
+                      Please Select
+                    </option>
+                    {contact &&
+                      contact.map((e) => {
+                        return (
+                          <option key={e.contact_id} value={e.contact_id}>
+                            {e.first_name}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                  <TenderContactDetails
+                    addContactModal={addContactModal}
+                    addContactToggle={addContactToggle}
+                    AddNewContact={AddNewContact}
+                    handleAddNewContact={handleAddNewContact}
+                  ></TenderContactDetails>
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -103,14 +152,14 @@ export default function TradingQuoteMoreDetails({
                     onChange={handleInputs}
                     name="quote_status"
                   >
-                  <option selected="selected" value="New">
-                        New
-                      </option>
-                      <option value="Quoted">Quoted</option>
-                      <option value="Awarded">Awarded</option>
-                      <option value="Not Awarded">Not Awarded</option>
-                      <option value="Cancelled">Cancelled</option>
-                      </Input>
+                    <option selected="selected" value="New">
+                      New
+                    </option>
+                    <option value="Quoted">Quoted</option>
+                    <option value="Awarded">Awarded</option>
+                    <option value="Not Awarded">Not Awarded</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </Input>
                 </FormGroup>
               </Col>
               <Col md="3">

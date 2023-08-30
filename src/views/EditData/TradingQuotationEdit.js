@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row } from 'reactstrap';
+import React, { useEffect, useState, useContext } from 'react';
+import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -16,15 +16,19 @@ import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQu
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
-import EditLineItemModal from '../../components/Tender/EditLineItemModal';
+import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
+import AppContext from '../../context/AppContext';
+import PdfQuote from '../../components/PDF/PdfQuote';
 
 const TradingQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [company, setCompany] = useState();
+  const [contact, setContact] = useState();
   const [addLineItemModal, setAddLineItemModal] = useState(false);
   const [lineItem, setLineItem] = useState();
   const [viewLineModal, setViewLineModal] = useState(false);
-  //const [editQuoteModal, setEditQuoteModal] = useState(false);
+  const [addContactModal, setAddContactModal] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState();
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
   //const [quoteLine, setQuoteLine] = useState();
@@ -32,6 +36,8 @@ const TradingQuotationEdit = () => {
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
   //   const [addCompanyModal, setAddCompanyModal] = useState(false);
+
+  const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -42,6 +48,9 @@ const TradingQuotationEdit = () => {
   };
   const addQuoteItemsToggle = () => {
     setAddLineItemModal(!addLineItemModal);
+  };
+  const addContactToggle = () => {
+    setAddContactModal(!addContactModal);
   };
   const viewLineToggle = () => {
     setViewLineModal(!viewLineModal);
@@ -54,13 +63,19 @@ const TradingQuotationEdit = () => {
   const toggle = (tab) => {
     setActiveTab(tab);
   };
+  const getContact = (companyId) => {
+    setSelectedCompany(companyId);
+    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
+      setContact(res.data.data);
+    });
+  };
 
   // Get Tenders By Id
 
   const editTenderById = () => {
     api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
       setTenderDetails(res.data.data[0]);
-      //getContact(res.data.data.company_id);
+      getContact(res.data.data.company_id);
     });
   };
 
@@ -72,6 +87,7 @@ const TradingQuotationEdit = () => {
 
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
+    tenderDetails.modified_by = loggedInuser.first_name;
     api
       .post('/tradingquote/edit-Tradingquote', tenderDetails)
       .then(() => {
@@ -95,21 +111,52 @@ const TradingQuotationEdit = () => {
   const getLineItem = () => {
     api.post('/tradingquote/getQuoteLineItemsById', { quote_id: id }).then((res) => {
       setLineItem(res.data.data);
-      //   setAddLineItemModal(true);
+      //setAddLineItemModal(true);
     });
   };
-  //   //Get contact Data
-  //   const getContact = (companyId) => {
-  //     //setSelectedCompany(companyId);
-  //     api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
-  //       setContact(res.data.data);
-  //     });
-  //   };
+   // Add new Contact
 
+   const [newContactData, setNewContactData] = useState({
+    salutation: '',
+    first_name: '',
+    email: '',
+    position: '',
+    department: '',
+    phone_direct: '',
+    fax: '',
+    mobile: '',
+  });
+
+  const handleAddNewContact = (e) => {
+    setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
+  };
+
+  const AddNewContact = () => {
+    const newDataWithCompanyId = newContactData;
+    newDataWithCompanyId.company_id = selectedCompany;
+    if (
+      newDataWithCompanyId.salutation !== '' &&
+      newDataWithCompanyId.first_name !== '' 
+    
+    ) {
+      api
+        .post('/tender/insertContact', newDataWithCompanyId)
+        .then(() => {
+          getContact(newDataWithCompanyId.company_id);
+          message('Contact Inserted Successfully', 'success');
+          window.location.reload();
+        })
+        .catch(() => {
+          message('Unable to add Contact! try again later', 'error');
+        });
+    } else {
+      message('All fields are required.', 'info');
+    }
+  };
+ 
   useEffect(() => {
     editTenderById();
     getLineItem();
-    //getContact();
     getCompany();
     // getAllCountries();
   }, [id]);
@@ -168,27 +215,23 @@ const TradingQuotationEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></TradingQuoteButton>
+      <Col md="4">
+        <Label>
+          <PdfQuote id={id} quoteId={id}></PdfQuote>
+        </Label>
+      </Col>
       <TradingQuoteMoreDetails
-        // companyInsertData={companyInsertData}
-        // newContactData={newContactData}
+        newContactData={newContactData}
         handleInputs={handleInputs}
-        // handleAddNewContact={handleAddNewContact}
-        // setAddContactModal={setAddContactModal}
-        // addContactModal={addContactModal}
+        handleAddNewContact={handleAddNewContact}
+        setAddContactModal={setAddContactModal}
+        addContactModal={addContactModal}
         tenderDetails={tenderDetails}
-        // allCountries={allCountries}
         company={company}
-        //contact={contact}
-        // contact={contact}
-        // incharge={incharge}
-        // addCompanyModal={addCompanyModal}
-        // addCompanyToggle={addCompanyToggle}
-        // companyhandleInputs={companyhandleInputs}
-        // // insertCompany={insertCompany}
-        // AddNewContact={AddNewContact}
-        // addContactToggle={addContactToggle}
-        // setAddCompanyModal={setAddCompanyModal}
-        // getContact={getContact}
+        contact={contact}
+        AddNewContact={AddNewContact}
+        addContactToggle={addContactToggle}
+        getContact={getContact}
       ></TradingQuoteMoreDetails>
 
       <ComponentCard title="More Details">
@@ -197,7 +240,7 @@ const TradingQuotationEdit = () => {
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <Row>
+            <Row>
               <Col md="6">
                 <Button
                   className="shadow-none"
@@ -209,7 +252,7 @@ const TradingQuotationEdit = () => {
                 </Button>
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
               <div className="container">
                 <Table id="example" className="display border border-secondary rounded">
