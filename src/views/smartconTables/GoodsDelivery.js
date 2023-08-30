@@ -107,7 +107,7 @@ const GoodsDelivery = () => {
           loading={loading}
           title="Goods Delivery List"
           Button={
-            <Link to="/Goods Delivery Details">
+            <Link to="/GoodsDeliveryDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
