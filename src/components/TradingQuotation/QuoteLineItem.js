@@ -17,14 +17,14 @@ import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
 
-const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, quoteLine }) => {
-  AddLineItemModal.propTypes = {
+const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tenderDetails,getLineItem }) => {
+    QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
-    projectInfo: PropTypes.any,
     quoteLine: PropTypes.any,
+    tenderDetails:PropTypes.any,
+    getLineItem:PropTypes.any,
   };
-  //All state Varible
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
     {
@@ -38,20 +38,7 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
       description: '',
     },
   ]);
-  //Insert Invoice Item
-  const addLineItemApi = (obj) => {
-    obj.opportunity_id = projectInfo;
-    obj.quote_id = quoteLine;
-    api
-      .post('/tender/insertQuoteItems', obj)
-      .then(() => {
-        message('Line Item Added Successfully', 'sucess');
-        window.location.reload();
-      })
-      .catch(() => {
-        message('Cannot Add Line Items', 'error');
-      });
-  };
+  
   //Add new line item
   const AddNewLineItem = () => {
     setAddLineItem([
@@ -67,6 +54,22 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
         description: '',
       },
     ]);
+  };
+  //Insert Invoice Item
+  const addLineItemApi = (obj) => {
+    //obj.opportunity_id = projectInfo;
+    obj.quote_id = quoteLine;
+    api
+      .post('/tender/insertQuoteItems', obj)
+      .then(() => {
+        message('Line Item Added Successfully', 'sucess');
+        getLineItem(tenderDetails.quote_id);
+        //setAddLineItemModal(false);
+        window.location.reload();
+      })
+      .catch(() => {
+        message('Cannot Add Line Items', 'error');
+      });
   };
   //Invoice item values
   const getAllValues = () => {
@@ -88,7 +91,9 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
     });
     console.log(result);
   };
-  //Invoice Items Calculation
+  
+
+//Invoice Items Calculation
   const calculateTotal = () => {
     let totalValue = 0;
     const result = [];
@@ -253,4 +258,4 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
     </>
   );
 };
-export default AddLineItemModal;
+export default QuoteLineItem;
