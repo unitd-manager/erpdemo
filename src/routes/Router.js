@@ -153,7 +153,6 @@ const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLoss
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
 const EnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/EnquiryDetails')));
 const SalesOrderDetails = Loadable(lazy(() => import('../views/DetailTable/SalesOrderDetails')));
-const OpportunityDetails = Loadable(lazy(() => import('../views/DetailTable/OpportunityDetails')));
 const ProjectEnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectEnquiryDetails')));
 const TradingQuotationDetails = Loadable(lazy(() => import('../views/DetailTable/TradingQuotationDetails')));
 const ProductDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProductDetails')));
@@ -246,7 +245,6 @@ const PurchaseOrderDetails = Loadable(
 const TenderEdit = Loadable(lazy(() => import('../views/EditData/TenderEdit')));
 const EnquiryEdit = Loadable(lazy(() => import('../views/EditData/EnquiryEdit')));
 const OrdersEdit = Loadable(lazy(() => import('../views/EditData/OrdersEdit')));
-const OpportunityEdit = Loadable(lazy(() => import('../views/EditData/OpportunityEdit')));
 const ProjectEnquiryEdit = Loadable(lazy(() => import('../views/EditData/ProjectEnquiryEdit')));
 const ProductEdit = Loadable(lazy(() => import('../views/EditData/ProductEdit')));
 const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit')));
@@ -311,7 +309,6 @@ const Routernew = () => {
           <Route path="/ProductEdit/:id" name="clienttdata" element={<ProductEdit />}></Route>
           <Route path="/EnquiryEdit/:id" name="clienttdata" element={<EnquiryEdit />}></Route>
           <Route path="/OrdersEdit/:id" name="clienttdata" element={<OrdersEdit />}></Route>
-          <Route path="/OpportunityEdit/:id" name="clienttdata" element={<OpportunityEdit />}></Route>
           <Route path="/ProjectEnquiryEdit/:id" name="clienttdata" element={<ProjectEnquiryEdit />}></Route>
           <Route path="/FinanceEdit/:id" name="clienttdata" element={<FinanceEdit />}></Route>
           <Route path="/TrainingEdit/:id" name="clienttdata" element={<TrainingEdit />}></Route>
@@ -493,7 +490,6 @@ const Routernew = () => {
           <Route path="/Translation" name="translationdata" element={<Translation />}></Route>
           <Route path="/EnquiryDetails" name="clienttdata" element={<EnquiryDetails />}></Route>
           <Route path="/SalesOrderDetails" name="clienttdata" element={<SalesOrderDetails />}></Route>
-          <Route path="/OpportunityDetails" name="clienttdata" element={<OpportunityDetails />}></Route>
           <Route path="/TradingQuotationDetails" name="clienttdata" element={<TradingQuotationDetails />}></Route>
           <Route path="/ProjectEnquiryDetails" name="clienttdata" element={<ProjectEnquiryDetails />}></Route>
           <Route path="/ProductDetails" name="tenderdata" element={<ProductDetailsTable />}></Route>
