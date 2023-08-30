@@ -12,15 +12,15 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
-import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 import PdfQuote from '../../components/PDF/PdfQuote';
+import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
 
-const TradingQuotationEdit = () => {
+const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
@@ -73,7 +73,7 @@ const TradingQuotationEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
+    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
       setTenderDetails(res.data.data[0]);
       getContact(res.data.data.company_id);
     });
@@ -220,7 +220,7 @@ const TradingQuotationEdit = () => {
           <PdfQuote id={id} quoteId={id}></PdfQuote>
         </Label>
       </Col>
-      <TradingQuoteMoreDetails
+      <GoodsDeliveryMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
         handleAddNewContact={handleAddNewContact}
@@ -232,7 +232,7 @@ const TradingQuotationEdit = () => {
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
         getContact={getContact}
-      ></TradingQuoteMoreDetails>
+      ></GoodsDeliveryMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
@@ -327,4 +327,4 @@ const TradingQuotationEdit = () => {
   );
 };
 
-export default TradingQuotationEdit;
+export default GoodsDeliveryEdit;

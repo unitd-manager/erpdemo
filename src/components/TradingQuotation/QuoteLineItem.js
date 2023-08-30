@@ -12,18 +12,25 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 import * as $ from 'jquery';
 import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
 
-const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tenderDetails,getLineItem }) => {
-    QuoteLineItem.propTypes = {
+const QuoteLineItem = ({
+  addLineItemModal,
+  setAddLineItemModal,
+  quoteLine,
+  tenderDetails,
+  getLineItem,
+}) => {
+  QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
-    tenderDetails:PropTypes.any,
-    getLineItem:PropTypes.any,
+    tenderDetails: PropTypes.any,
+    getLineItem: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
@@ -38,7 +45,7 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
       description: '',
     },
   ]);
-  
+
   //Add new line item
   const AddNewLineItem = () => {
     setAddLineItem([
@@ -60,15 +67,15 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
     //obj.opportunity_id = projectInfo;
     obj.quote_id = quoteLine;
     api
-      .post('/tender/insertQuoteItems', obj)
+      .post('/tradingquote/insertQuoteItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
         getLineItem(tenderDetails.quote_id);
         //setAddLineItemModal(false);
-        window.location.reload();
+        //window.location.reload();
       })
       .catch(() => {
-        message('Cannot Add Line Items', 'error');
+        //message('Cannot Add Line Items', 'error');
       });
   };
   //Invoice item values
@@ -91,9 +98,37 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
     });
     console.log(result);
   };
-  
 
-//Invoice Items Calculation
+  const [unitdetails, setUnitDetails] = useState();
+  // Fetch data from API
+    const getUnit = () => {
+      api.get('/product/getUnitFromValueList', unitdetails)
+        .then((res) => {
+          const items = res.data.data
+          const finaldat = []
+          items.forEach(item => {
+            finaldat.push({ value: item.value, label: item.value })
+          })
+          setUnitDetails(finaldat)
+        })
+    }
+    //onchange function
+    const onchangeItem = (selectedValue) => {
+      const updatedItems = addLineItem.map((item) => {
+        if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
+          return {
+            ...item,
+            unit: selectedValue.value,  // Update the unit with the selected option's value
+            value: selectedValue.value  // Update the value with the selected option's value
+          };
+        }
+        return item;
+      });
+    
+      setAddLineItem(updatedItems);
+    };
+
+  //Invoice Items Calculation
   const calculateTotal = () => {
     let totalValue = 0;
     const result = [];
@@ -129,6 +164,9 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
       setTotalAmount(finalTotal);
     }
   };
+  React.useEffect(() => {
+    getUnit();
+  }, []);
   return (
     <>
       <Modal size="xl" isOpen={addLineItemModal}>
@@ -190,7 +228,13 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
                                   <Input Value={item.description} type="text" name="description" />
                                 </td>
                                 <td data-label="Unit">
-                                  <Input Value={item.unit} type="text" name="unit" />
+                                  <Select
+                                    name="unit"
+                                    onChange={(selectedOption) => {
+                                      onchangeItem(selectedOption);
+                                    }}
+                                    options={unitdetails}
+                                  />
                                 </td>
                                 <td data-label="Qty">
                                   <Input Value={item.quantity} type="number" name="quantity" />
@@ -212,15 +256,15 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
                                   <Input Value={item.remarks} type="text" name="remarks" />
                                 </td>
                                 <td data-label="Action">
-                                  
-                                    <Input type="hidden" name="id" Value={item.id}></Input>
-                                    <span className='addline'
-                                      onClick={() => {
-                                        ClearValue(item);
-                                      }}
-                                    >
-                                      Clear
-                                    </span>
+                                  <Input type="hidden" name="id" Value={item.id}></Input>
+                                  <span
+                                    className="addline"
+                                    onClick={() => {
+                                      ClearValue(item);
+                                    }}
+                                  >
+                                    Clear
+                                  </span>
                                 </td>
                               </tr>
                             );
@@ -234,6 +278,7 @@ const QuoteLineItem = ({ addLineItemModal, setAddLineItemModal, quoteLine,tender
                       color="primary"
                       onClick={() => {
                         getAllValues();
+                        //setAddLineItemModal(false);
                       }}
                     >
                       {' '}

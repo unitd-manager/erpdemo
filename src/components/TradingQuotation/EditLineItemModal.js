@@ -53,6 +53,21 @@ const {id}=useParams();
         message('Unable to edit quote. please fill all fields', 'error');
       });
   };
+  const [unitdetails, setUnitDetails] = useState();
+ //Api call for getting Unit From Valuelist
+ const getUnit = () => {
+  api
+    .get('/product/getUnitFromValueList')
+    .then((res) => {
+      setUnitDetails(res.data.data);
+    })
+    .catch(() => {
+      message('Staff Data Not Found', 'info');
+    });
+};
+  React.useEffect(() => {
+    getUnit();
+  }, []);
 
   React.useEffect(() => {
     setLineItemData(FetchLineItemData);
@@ -94,7 +109,7 @@ const {id}=useParams();
               <Label sm="2">Qty</Label>
               <Col sm="10">
                 <Input
-                  type="textarea"
+                  type="text"
                   name="quantity"
                   defaultValue={lineItemData && lineItemData.quantity}
                   onChange={(e)=>{handleData(e);
@@ -110,11 +125,21 @@ const {id}=useParams();
               <Label sm="2">UOM</Label>
               <Col sm="10">
                 <Input
-                  type="textarea"
+                  type="select"
                   name="unit"
                   defaultValue={lineItemData && lineItemData.unit}
                   onChange={handleData}
-                />
+                >
+                <option defaultValue="selected">Please Select</option>
+                  {unitdetails &&
+                    unitdetails.map((ele) => {
+                      return (
+                        <option key={ele.value} value={ele.value}>
+                          {ele.value}
+                        </option>
+                      );
+                    })}
+                </Input>
               </Col>
             </Row>
           </FormGroup>
@@ -130,6 +155,7 @@ const {id}=useParams();
                     handleCalc(lineItemData.quantity,e.target.value,lineItemData.amount)
                   }}
                 />
+                 
               </Col>
             </Row>
           </FormGroup>

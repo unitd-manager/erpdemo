@@ -2,9 +2,9 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
-import TenderContactDetails from './TenderContactDetails';
+import TenderContactDetails from '../TradingQuotation/TenderContactDetails';
 
-export default function TradingQuoteMoreDetails({
+export default function GoodsDeliveryMoreDetails({
   tenderDetails,
   handleInputs,
   handleAddNewContact,
@@ -15,7 +15,7 @@ export default function TradingQuoteMoreDetails({
   addContactToggle,
   getContact
 }) {
-  TradingQuoteMoreDetails.propTypes = {
+  GoodsDeliveryMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     company: PropTypes.object,
@@ -31,18 +31,18 @@ export default function TradingQuoteMoreDetails({
       {' '}
       <Form>
         <FormGroup>
-          <ComponentCard title="Quotation Details" creationModificationDate={tenderDetails}>
+          <ComponentCard title="Goods Delivery Details" creationModificationDate={tenderDetails}>
             <Row>
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Quotation Number <span className="required"> *</span>
+                    Delivery Number <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.quote_code}
-                    name="quote_code"
+                    value={tenderDetails && tenderDetails.delivery_no}
+                    name="delivery_no"
                     disabled
                   />
                 </FormGroup>
@@ -53,8 +53,19 @@ export default function TradingQuoteMoreDetails({
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.quote_date}
-                    name="quote_date"
+                    value={tenderDetails && tenderDetails.goods_delivery_date}
+                    name="goods_delivery_date"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Order No</Label>
+                  <Input
+                    type="date"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.order_code}
+                    name="order_code"
                   />
                 </FormGroup>
               </Col>
@@ -121,23 +132,45 @@ export default function TradingQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Reference</Label>
+                  <Label>Department</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.ref_no_quote}
-                    name="ref_no_quote"
+                    value={tenderDetails && tenderDetails.departmant}
+                    name="departmant"
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Number</Label>
+                  <Label>Salesman</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.opportunity_code}
-                    name="opportunity_code"
+                    value={tenderDetails && tenderDetails.sales_man}
+                    name="sales_man"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Reference</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.goods_ref_no}
+                    name="goods_ref_no"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>PO Number</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.po_no}
+                    name="po_no"
                     disabled
                   />
                 </FormGroup>
@@ -148,9 +181,9 @@ export default function TradingQuoteMoreDetails({
                   <Label>Status</Label>
                   <Input
                     type="select"
-                    value={tenderDetails && tenderDetails.quote_status}
+                    value={tenderDetails && tenderDetails.goods_delivery_status}
                     onChange={handleInputs}
-                    name="quote_status"
+                    name="goods_delivery_status"
                   >
                     <option selected="selected" value="New">
                       New
@@ -160,17 +193,6 @@ export default function TradingQuoteMoreDetails({
                     <option value="Not Awarded">Not Awarded</option>
                     <option value="Cancelled">Cancelled</option>
                   </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Net Total</Label>
-                  <Input
-                    type="text"
-                    value={tenderDetails && tenderDetails.total_amount}
-                    onChange={handleInputs}
-                    name="total_amount"
-                  />
                 </FormGroup>
               </Col>
             </Row>
