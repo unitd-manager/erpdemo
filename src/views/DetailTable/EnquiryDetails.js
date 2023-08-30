@@ -111,7 +111,7 @@ const OpportunityDetails = () => {
           getTendersById();
           message('Tender inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/OpportunityEdit/${insertedDataId}?tab=1`);
+            navigate(`/EnquiryEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
@@ -125,7 +125,7 @@ const OpportunityDetails = () => {
   //QUTO GENERATED CODE
   const generateCode = () => {
     api
-      .post('/tender/getCodeValue', { type: 'opportunity' })
+      .post('/commonApi/getCodeValue', { type: 'enquiry' })
       .then((res) => {
         insertTender(res.data.data);
       })
@@ -145,7 +145,7 @@ const OpportunityDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Opportunity">
+          <ComponentCard title="New Enquiry">
             <Form>
               <FormGroup>
                 <Row>

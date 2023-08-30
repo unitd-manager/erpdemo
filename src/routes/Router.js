@@ -110,6 +110,7 @@ const EditProject = Loadable(lazy(() => import('../views/cubosale/EditProject'))
 
 // Tender
 const TenderTable = Loadable(lazy(() => import('../views/smartconTables/Enquiry')));
+const OrderTable = Loadable(lazy(() => import('../views/smartconTables/SalesOrder')));
 const OpportunityTable = Loadable(lazy(() => import('../views/smartconTables/Opportunity')));
 const ProjectEnquiryTable = Loadable(lazy(() => import('../views/smartconTables/ProjectEnquiry')));
 const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice')));
@@ -150,7 +151,8 @@ const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLoss
 
 // Details Table
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
-const OpportunityDetails = Loadable(lazy(() => import('../views/DetailTable/OpportunityDetails')));
+const EnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/EnquiryDetails')));
+const SalesOrderDetails = Loadable(lazy(() => import('../views/DetailTable/SalesOrderDetails')));
 const ProjectEnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectEnquiryDetails')));
 const TradingQuotationDetails = Loadable(lazy(() => import('../views/DetailTable/TradingQuotationDetails')));
 const GoodsDeliveryDetails = Loadable(lazy(() => import('../views/DetailTable/GoodsDeliveryDetails')));
@@ -242,7 +244,8 @@ const PurchaseOrderDetails = Loadable(
 
 // Table Edit's
 const TenderEdit = Loadable(lazy(() => import('../views/EditData/TenderEdit')));
-const OpportunityEdit = Loadable(lazy(() => import('../views/EditData/OpportunityEdit')));
+const EnquiryEdit = Loadable(lazy(() => import('../views/EditData/EnquiryEdit')));
+const OrdersEdit = Loadable(lazy(() => import('../views/EditData/OrdersEdit')));
 const ProjectEnquiryEdit = Loadable(lazy(() => import('../views/EditData/ProjectEnquiryEdit')));
 const ProductEdit = Loadable(lazy(() => import('../views/EditData/ProductEdit')));
 const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit')));
@@ -306,7 +309,8 @@ const Routernew = () => {
           <Route path="/AttendanceEdit/:id" name="attendancedata" element={<AttendanceEdit />}></Route>
           <Route path="/TenderEdit/:id" name="clienttdata" element={<TenderEdit />}></Route>
           <Route path="/ProductEdit/:id" name="clienttdata" element={<ProductEdit />}></Route>
-          <Route path="/OpportunityEdit/:id" name="clienttdata" element={<OpportunityEdit />}></Route>
+          <Route path="/EnquiryEdit/:id" name="clienttdata" element={<EnquiryEdit />}></Route>
+          <Route path="/OrdersEdit/:id" name="clienttdata" element={<OrdersEdit />}></Route>
           <Route path="/ProjectEnquiryEdit/:id" name="clienttdata" element={<ProjectEnquiryEdit />}></Route>
           <Route path="/FinanceEdit/:id" name="clienttdata" element={<FinanceEdit />}></Route>
           <Route path="/TrainingEdit/:id" name="clienttdata" element={<TrainingEdit />}></Route>
@@ -476,6 +480,7 @@ const Routernew = () => {
           <Route path="/InvoiceByYear" name="clienttdata" element={<InvoiceByYearTable />}></Route>
           {/* Tender */}
           <Route path="/Enquiry" name="tenderdata" element={<TenderTable />}></Route>
+          <Route path="/SalesOrder" name="tenderdata" element={<OrderTable />}></Route>
           <Route path="/Opportunity" name="clienttdata" element={<OpportunityTable />}></Route>
           <Route path="/ProjectEnquiry" name="clienttdata" element={<ProjectEnquiryTable />}></Route>
           <Route path="/Task" name="tenderdata" element={<TaskTable />}></Route>
@@ -486,7 +491,8 @@ const Routernew = () => {
           <Route path="/TenderDetails" name="tenderdata" element={<TenderDetailsTable />}></Route>
           <Route path="/TranslationDetails" name="translationdetailsdata" element={<TranslationDetails />}></Route>
           <Route path="/Translation" name="translationdata" element={<Translation />}></Route>
-          <Route path="/OpportunityDetails" name="clienttdata" element={<OpportunityDetails />}></Route>
+          <Route path="/EnquiryDetails" name="clienttdata" element={<EnquiryDetails />}></Route>
+          <Route path="/SalesOrderDetails" name="clienttdata" element={<SalesOrderDetails />}></Route>
           <Route path="/TradingQuotationDetails" name="clienttdata" element={<TradingQuotationDetails />}></Route>
           <Route path="/GoodsDeliveryDetails" name="clienttdata" element={<GoodsDeliveryDetails />}></Route>
           <Route path="/ProjectEnquiryDetails" name="clienttdata" element={<ProjectEnquiryDetails />}></Route>

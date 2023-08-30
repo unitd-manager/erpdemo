@@ -18,22 +18,58 @@ export default function TenderMoreDetails({
         <FormGroup>
           <ComponentCard title="Enquiry Details" creationModificationDate={tenderDetails}>
             <Row>
-              <Col md="3">
+            <Col md="3">
                 <FormGroup>
                   <Label>
-                    Enquiry Date <span className="required"> *</span>
+                    Title<span className="required"> *</span>
                   </Label>
                   <Input
-                    type="Date"
+                    type="text"
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.title}
                     name="title"
                   />
                 </FormGroup>
               </Col>
+             
               <Col md="3">
                 <FormGroup>
                   <Label>Enquiry No</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.opportunity_code}
+                    name="opportunity_code"
+                    readOnly
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Enquiry Date</Label>
+                  <Input
+                    type="date"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.enquiry_date}
+                    name="enquiry_date"
+                   
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Customer</Label>
+                  <Input
+                    type="text"
+                    value={tenderDetails && tenderDetails.company_name}
+                    onChange={handleInputs}
+                    name="company_name"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Reference</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -44,70 +80,44 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer</Label>
-                  <Input
-                    type="text"
-                    value={tenderDetails && tenderDetails.mode_of_submission}
-                    onChange={handleInputs}
-                    name="mode_of_submission"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Reference</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.services}
-                    name="services"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
                   <Label>BID Expiry</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.site_show_date}
-                    name="site_show_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Service</Label>
-                  <Input
                     value={tenderDetails && tenderDetails.project_end_date}
-                    type="text"
-                    onChange={handleInputs}
                     name="project_end_date"
                   />
                 </FormGroup>
               </Col>
-                  
               <Col md="3">
                 <FormGroup>
                   <Label>Service</Label>
                   <Input
+                    value={tenderDetails && tenderDetails.services}
                     type="text"
-                    value={tenderDetails && tenderDetails.actual_submission_date}
                     onChange={handleInputs}
-                    name="actual_submission_date"
+                    name="services"
                   />
                 </FormGroup>
               </Col>
+                  
+            
 
               <Col md="3">
                 <FormGroup>
                   <Label>Enquiry Status</Label>
                   <Input
                     type="select"
-                    value={tenderDetails && tenderDetails.actual_closing}
+                    value={tenderDetails && tenderDetails.status}
                     onChange={handleInputs}
-                    name="actual_closing"
-                  />
+                    name="status"
+                  >
+                      <option value="">Please Select</option>
+                    <option value="Estimated">Estimated</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Awarded">Awarded</option>
+                    <option value="Proposal Approved">Proposal Approved</option>
+                    </Input>
                 </FormGroup>
               </Col>
             </Row>
