@@ -18,8 +18,9 @@ import PropTypes from 'prop-types';
  import * as XLSX from 'xlsx';
 import axios from 'axios'
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+// import moment from 'moment';
 import * as Icon from 'react-feather';
+import message from '../Message';
 
 axios.defaults.baseURL = 'http://43.228.126.245:5001';
 
@@ -136,16 +137,16 @@ const arr=JSON.parse(jsonData);
       });
   
       if (response.status === 200) {
-        console.log('File uploaded and data inserted successfully.');
+        message('File uploaded and data inserted successfully.');
         // You may want to add code to handle success here
       } else {
-        console.error('File upload and data insertion failed.');
+        message('File upload and data insertion failed.');
         // You may want to add code to handle failure here
       }
     });
      
     } catch (error) {
-      console.error('Error uploading file and inserting data:', error);
+      message('Error uploading file and inserting data:', error);
       // You may want to add code to handle the error here
     }
   };
@@ -197,27 +198,27 @@ const arr=JSON.parse(jsonData);
       width: 'auto',
       grow: 3,
     },
-    {
-      name: 'Start Date',
-      selector: 'start_date',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'End date',
-      selector: 'end_date',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'Due Date',
-      selector: 'due_date',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
+    // {
+    //   name: 'Start Date',
+    //   selector: 'start_date',
+    //   sortable: true,
+    //   width: 'auto',
+    //   grow: 3,
+    // },
+    // {
+    //   name: 'End date',
+    //   selector: 'end_date',
+    //   sortable: true,
+    //   width: 'auto',
+    //   grow: 3,
+    // },
+    // {
+    //   name: 'Due Date',
+    //   selector: 'due_date',
+    //   sortable: true,
+    //   width: 'auto',
+    //   grow: 3,
+    // },
     {
       name: '',
     },
@@ -227,6 +228,10 @@ const arr=JSON.parse(jsonData);
     {
       name: '',
     },
+    {
+      name: '',
+    },
+    
   ];
   return (
     <Form>
@@ -378,11 +383,11 @@ const arr=JSON.parse(jsonData);
                     <td>{element.fg_code}</td>
                     <td>{element.cpanel_name}</td>
                     <td>{element.ordered_qty}</td>
-                    <td>
+                    {/* <td>
                       {element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}
                     </td>
                     <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.due_date ? moment(element.due_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>{element.due_date ? moment(element.due_date).format('DD-MM-YYYY') : ''}</td> */}
                     <td>
                       <Input
                         type="file"
@@ -396,6 +401,14 @@ const arr=JSON.parse(jsonData);
                         Import
                       </Button>
                     </td>
+                    <td>  <Link to={`/BillOfMaterials/${element.planning_cpanel_id}`}>
+                        <u>Imported Item</u>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`/BillOfMaterialsShortage/${element.planning_cpanel_id}`}>
+                        <u>Shortage List</u>
+                      </Link></td>
                     <td>
                       <Button
                         className="shadow-none"
@@ -407,13 +420,6 @@ const arr=JSON.parse(jsonData);
                         Generate Shortage List
                       </Button>
                     </td>
-                    <td>  <Link to={`/BillOfMaterials/${element.planning_cpanel_id}`}>
-                        <u>Imported Item</u>
-                      </Link>
-                      <br></br>
-                      <Link to={`/BillOfMaterialsShortage/${element.planning_cpanel_id}`}>
-                        <u>Shortage List</u>
-                      </Link></td>
                   </tr>
                 );
               })}
