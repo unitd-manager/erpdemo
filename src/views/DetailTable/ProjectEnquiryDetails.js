@@ -7,7 +7,7 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
-import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
+import TenderCompanyDetails from '../../components/ProjectEnquiryTable/TenderCompanyDetails';
 
 const OpportunityDetails = () => {
   const [company, setCompany] = useState();
@@ -92,7 +92,7 @@ const OpportunityDetails = () => {
   //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
-      .post('/tender/getTendersById', { opportunity_id: id })
+      .post('/projectenquiry/getTendersById', { project_enquiry_id: id })
       .then((res) => {
         setTenderForms(res.data.data);
         // getContact(res.data.data.company_id);
@@ -102,16 +102,16 @@ const OpportunityDetails = () => {
   //console.log(tenderDetails);
   const insertTender = (code) => {
     if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
-      tenderForms.opportunity_code = code;
+      tenderForms.enquiry_code = code;
       tenderForms.creation_date = creationdatetime;
       api
-        .post('/tender/insertTenders', tenderForms)
+        .post('/projectenquiry/insertProjectEnquiry', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           getTendersById();
           message('Tender inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/OpportunityEdit/${insertedDataId}?tab=1`);
+            navigate(`/ProjectEnquiryEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
@@ -125,7 +125,7 @@ const OpportunityDetails = () => {
   //QUTO GENERATED CODE
   const generateCode = () => {
     api
-      .post('/tender/getCodeValue', { type: 'opportunity' })
+      .post('/projectenquiry/getCodeValue', { type: 'projectenquiry' })
       .then((res) => {
         insertTender(res.data.data);
       })

@@ -10,20 +10,19 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Opportunity = () => {
-  const [tenders, setTenders] = useState(null);
+const GoodsDelivery = () => {
+  const [gdelivery, setGDelivery] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const getTenders = () => {
     api
-      .get('/tender/getTenders')
+      .get('/goodsdelivery/getgoodsdelivery')
       .then((res) => {
-        setTenders(res.data.data);
+        setGDelivery(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -50,10 +49,7 @@ const Opportunity = () => {
   const columns = [
     {
       name: '#',
-      selector: '',
-      grow: 0,
-      wrap: true,
-      width: '4%',
+     
     },
     {
       name: 'Edit',
@@ -65,51 +61,42 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Enquiry date',
-      selector: 'enquiry_date',
-      sortable: true,
-      grow: 0,
-      wrap: true,
+      name: 'Delivery No',
+      
     },
     {
-      name: 'Enquiry No',
-      selector: 'opportunity_code',
-      sortable: true,
-      grow: 2,
-      wrap: true,
+      name: 'Date',
+      
     },
+    {
+        name: 'Order No',
+        
+      },
     {
       name: 'Customer',
-      selector: 'company_name',
-      sortable: true,
-      grow: 0,
+      
     },
+    {
+        name: 'department',
+        
+      },
+      {
+        name: 'salesman',
+        
+      },
     {
       name: 'Reference',
-      selector: 'office_ref_no',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
+      
     },
     {
-      name: 'BID Expiry',
-      selector: 'project_end_date',
-      sortable: true,
-      grow: 2,
-      width: 'auto',
+      name: 'PO No',
+      
     },
     {
-      name: 'Service',
-      selector: 'services',
-      sortable: true,
-      width: 'auto',
+      name: 'Status',
+      
     },
-    {
-      name: 'Enquiry Status',
-      selector: 'status',
-      sortable: true,
-      width: 'auto',
-    },
+    
   ];
 
   return (
@@ -118,9 +105,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Opportunity List"
+          title="Goods Delivery List"
           Button={
-            <Link to="/EnquiryDetails">
+            <Link to="/GoodsDeliveryDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,22 +122,24 @@ const Opportunity = () => {
             </tr>
           </thead>
           <tbody>
-            {tenders &&
-              tenders.map((element, index) => {
+            {gdelivery &&
+              gdelivery.map((element, index) => {
                 return (
-                  <tr key={element.opportunity_id}>
+                  <tr key={element.goods_delivery_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.enquiry_date}</td>
-                    <td>{element.opportunity_code}</td>
+                    <td>{element.delivery_no}</td>
+                    <td>{element.goods_delivery_date}</td>
+                    <td>{element.order_no}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.project_end_date }</td>
-                    <td>{element.services}</td>
+                    <td>{element.department}</td>
+                    <td>{element.salesman}</td>
+                    <td>{element.goods_ref_no}</td>
+                    <td>{element.po_no}</td>
                     <td>{element.status}</td>
                   </tr>
                 );
@@ -162,4 +151,4 @@ const Opportunity = () => {
   );
 };
 
-export default Opportunity;
+export default GoodsDelivery;

@@ -3,8 +3,8 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function TenderButtons({ editTenderData, applyChanges, backToList, navigate }) {
-  TenderButtons.propTypes = {
+export default function TradingQuoteButton({ editTenderData, applyChanges, backToList, navigate }) {
+    TradingQuoteButton.propTypes = {
     editTenderData: PropTypes.func,
     navigate: PropTypes.any,
     applyChanges: PropTypes.func,
@@ -21,7 +21,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 color="primary"
                 onClick={() => {
                   editTenderData();
-                  navigate('/Enquiry');
+                  navigate('/Quotation');
                 }}
               >
                 Save

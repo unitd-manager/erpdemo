@@ -21,7 +21,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 color="primary"
                 onClick={() => {
                   editTenderData();
-                  navigate('/Enquiry');
+                  navigate('/ProjectEnquiry');
                 }}
               >
                 Save

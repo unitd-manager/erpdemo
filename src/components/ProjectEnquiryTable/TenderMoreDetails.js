@@ -18,52 +18,28 @@ export default function TenderMoreDetails({
         <FormGroup>
           <ComponentCard title="Enquiry Details" creationModificationDate={tenderDetails}>
             <Row>
-            <Col md="3">
+              <Col md="3">
                 <FormGroup>
                   <Label>
-                    Title<span className="required"> *</span>
+                    Enquiry Date <span className="required"> *</span>
                   </Label>
                   <Input
-                    type="text"
+                    type="Date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.title}
-                    name="title"
+                    value={tenderDetails && tenderDetails.enquiry_date}
+                    name="enquiry_date"
                   />
                 </FormGroup>
               </Col>
-             
               <Col md="3">
                 <FormGroup>
                   <Label>Enquiry No</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.opportunity_code}
-                    name="opportunity_code"
-                    readOnly
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Enquiry Date</Label>
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.enquiry_date}
-                    name="enquiry_date"
-                   
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Customer</Label>
-                  <Input
-                    type="text"
-                    value={tenderDetails && tenderDetails.company_name}
-                    onChange={handleInputs}
-                    name="company_name"
+                    value={tenderDetails && tenderDetails.enquiry_code}
+                    name="enquiry_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -72,9 +48,20 @@ export default function TenderMoreDetails({
                   <Label>Reference</Label>
                   <Input
                     type="text"
-                    onChange={handleInputs}
                     value={tenderDetails && tenderDetails.office_ref_no}
+                    onChange={handleInputs}
                     name="office_ref_no"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Services</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.services}
+                    name="services"
                   />
                 </FormGroup>
               </Col>
@@ -89,19 +76,6 @@ export default function TenderMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Service</Label>
-                  <Input
-                    value={tenderDetails && tenderDetails.services}
-                    type="text"
-                    onChange={handleInputs}
-                    name="services"
-                  />
-                </FormGroup>
-              </Col>
-                  
-            
 
               <Col md="3">
                 <FormGroup>
@@ -112,12 +86,10 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     name="status"
                   >
-                      <option value="">Please Select</option>
-                    <option value="Estimated">Estimated</option>
+                      <option defaultValue="selected"> Please Select </option>
                     <option value="Approved">Approved</option>
-                    <option value="Awarded">Awarded</option>
-                    <option value="Proposal Approved">Proposal Approved</option>
-                    </Input>
+                    <option value="Pending">Pending</option>
+                  </Input>
                 </FormGroup>
               </Col>
             </Row>

@@ -37,9 +37,9 @@ const PdfQuote = ({id,quoteId}) => {
 
   const getCompany = () => {
     api
-      .post('/tender/getTendersById', { opportunity_id: id })
+      .post('/tradingquote/getTradingquoteById', { quote_id: id })
       .then((res) => {
-        setTenderDetails(res.data.data);
+        setTenderDetails(res.data.data[0]);
         console.log(res);
       })
       .catch(() => {});
@@ -47,14 +47,14 @@ const PdfQuote = ({id,quoteId}) => {
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
+    api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
       setQuote(res.data.data[0]);
       console.log('quote', res.data.data[0]);
     });
   };
   const getQuoteById = () => {
     api
-      .post('/tender/getQuoteLineItemsById', { quote_id: quoteId })
+      .post('/tradingquote/getQuoteLineItemsById', { quote_id: quoteId })
       .then((res) => {
         setLineItem(res.data.data);
         console.log('quote1', res.data.data);
@@ -97,8 +97,9 @@ const PdfQuote = ({id,quoteId}) => {
         },
     
         {
-          text: 'Amt S$',
+          text: 'Amount S$',
           style: 'tableHead',
+          alignment:'right'
         },
        
       ],
@@ -291,7 +292,7 @@ const PdfQuote = ({id,quoteId}) => {
           },
           table: {
             headerRows: 1,
-            widths: [90, 110, 102, 100],
+            widths: [95, 120, 105, 100],
 
             body: lineItemBody,
           },
@@ -304,21 +305,21 @@ const PdfQuote = ({id,quoteId}) => {
                 minimumFractionDigits: 2,
               })}`,
               alignment: 'right',
-              margin: [0, 0,50, 0],
+              margin: [0, 0,20, 0],
               style: 'textSize',
             },
             '\n',
             {
               text: `VAT :         ${gstTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
               alignment: 'right',
-              margin: [0, 0, 50, 0],
+              margin: [0, 0, 20, 0],
               style: 'textSize',
             },
             '\n',
             {
               text: `Total $ :     ${Total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
               alignment: 'right',
-          margin: [0, 0, 50, 0],
+          margin: [0, 0, 20, 0],
           style: 'textSize',
             },
             '\n\n\n',

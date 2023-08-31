@@ -7,8 +7,6 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-// import 'datatables.net-buttons/js/buttons.html5';
-// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 // import moment from 'moment';
 import api from '../../constants/api';
@@ -16,14 +14,14 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
 const Opportunity = () => {
-  const [tenders, setTenders] = useState(null);
+  const [orders, setOrders] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getTenders = () => {
+  const getOrders = () => {
     api
-      .get('/tender/getTenders')
+      .get('/finance/getFinances')
       .then((res) => {
-        setTenders(res.data.data);
+        setOrders(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -44,7 +42,7 @@ const Opportunity = () => {
       });
   };
   useEffect(() => {
-    getTenders();
+    getOrders();
   }, []);
 
   const columns = [
@@ -65,15 +63,22 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Enquiry date',
+      name: 'Order No',
       selector: 'enquiry_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Enquiry No',
-      selector: 'opportunity_code',
+      name: 'Quote Code',
+      selector: 'quote_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Date',
+      selector: 'order_date',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -92,24 +97,19 @@ const Opportunity = () => {
       grow: 3,
     },
     {
-      name: 'BID Expiry',
-      selector: 'project_end_date',
+      name: 'Status',
+      selector: 'order_status',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Service',
-      selector: 'services',
+      name: 'Net Amount',
+      selector: 'amount',
       sortable: true,
       width: 'auto',
     },
-    {
-      name: 'Enquiry Status',
-      selector: 'status',
-      sortable: true,
-      width: 'auto',
-    },
+   
   ];
 
   return (
@@ -118,9 +118,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Opportunity List"
+          title="Sales Order List"
           Button={
-            <Link to="/EnquiryDetails">
+            <Link to="/SalesOrderDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,23 +135,24 @@ const Opportunity = () => {
             </tr>
           </thead>
           <tbody>
-            {tenders &&
-              tenders.map((element, index) => {
+            {orders &&
+              orders.map((element, index) => {
                 return (
                   <tr key={element.opportunity_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/OrdersEdit/${element.order_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.enquiry_date}</td>
-                    <td>{element.opportunity_code}</td>
+                    <td>{element.order_code}</td>
+                    <td>{element.quote_code}</td>
+                    <td>{element.order_date}</td>
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
-                    <td>{element.project_end_date }</td>
-                    <td>{element.services}</td>
-                    <td>{element.status}</td>
+                    <td>{element.order_status }</td>
+                    <td>{element.amount}</td>
+                  
                   </tr>
                 );
               })}

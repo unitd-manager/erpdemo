@@ -12,19 +12,26 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 import * as $ from 'jquery';
 import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
 
-const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, quoteLine }) => {
-  AddLineItemModal.propTypes = {
+const QuoteLineItem = ({
+  addLineItemModal,
+  setAddLineItemModal,
+  quoteLine,
+  tenderDetails,
+  getLineItem,
+}) => {
+  QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
-    projectInfo: PropTypes.any,
     quoteLine: PropTypes.any,
+    tenderDetails: PropTypes.any,
+    getLineItem: PropTypes.any,
   };
-  //All state Varible
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
     {
@@ -38,20 +45,7 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
       description: '',
     },
   ]);
-  //Insert Invoice Item
-  const addLineItemApi = (obj) => {
-    obj.opportunity_id = projectInfo;
-    obj.quote_id = quoteLine;
-    api
-      .post('/tender/insertQuoteItems', obj)
-      .then(() => {
-        message('Line Item Added Successfully', 'sucess');
-        window.location.reload();
-      })
-      .catch(() => {
-        message('Cannot Add Line Items', 'error');
-      });
-  };
+
   //Add new line item
   const AddNewLineItem = () => {
     setAddLineItem([
@@ -67,6 +61,22 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
         description: '',
       },
     ]);
+  };
+  //Insert Invoice Item
+  const addLineItemApi = (obj) => {
+    //obj.opportunity_id = projectInfo;
+    obj.quote_id = quoteLine;
+    api
+      .post('/tradingquote/insertQuoteItems', obj)
+      .then(() => {
+        message('Line Item Added Successfully', 'sucess');
+        getLineItem(tenderDetails.quote_id);
+        //setAddLineItemModal(false);
+        //window.location.reload();
+      })
+      .catch(() => {
+        //message('Cannot Add Line Items', 'error');
+      });
   };
   //Invoice item values
   const getAllValues = () => {
@@ -88,6 +98,36 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
     });
     console.log(result);
   };
+
+  const [unitdetails, setUnitDetails] = useState();
+  // Fetch data from API
+    const getUnit = () => {
+      api.get('/product/getUnitFromValueList', unitdetails)
+        .then((res) => {
+          const items = res.data.data
+          const finaldat = []
+          items.forEach(item => {
+            finaldat.push({ value: item.value, label: item.value })
+          })
+          setUnitDetails(finaldat)
+        })
+    }
+    //onchange function
+    const onchangeItem = (selectedValue) => {
+      const updatedItems = addLineItem.map((item) => {
+        if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
+          return {
+            ...item,
+            unit: selectedValue.value,  // Update the unit with the selected option's value
+            value: selectedValue.value  // Update the value with the selected option's value
+          };
+        }
+        return item;
+      });
+    
+      setAddLineItem(updatedItems);
+    };
+
   //Invoice Items Calculation
   const calculateTotal = () => {
     let totalValue = 0;
@@ -124,6 +164,9 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
       setTotalAmount(finalTotal);
     }
   };
+  React.useEffect(() => {
+    getUnit();
+  }, []);
   return (
     <>
       <Modal size="xl" isOpen={addLineItemModal}>
@@ -185,7 +228,13 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
                                   <Input Value={item.description} type="text" name="description" />
                                 </td>
                                 <td data-label="Unit">
-                                  <Input Value={item.unit} type="text" name="unit" />
+                                  <Select
+                                    name="unit"
+                                    onChange={(selectedOption) => {
+                                      onchangeItem(selectedOption);
+                                    }}
+                                    options={unitdetails}
+                                  />
                                 </td>
                                 <td data-label="Qty">
                                   <Input Value={item.quantity} type="number" name="quantity" />
@@ -207,15 +256,15 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
                                   <Input Value={item.remarks} type="text" name="remarks" />
                                 </td>
                                 <td data-label="Action">
-                                  
-                                    <Input type="hidden" name="id" Value={item.id}></Input>
-                                    <span className='addline'
-                                      onClick={() => {
-                                        ClearValue(item);
-                                      }}
-                                    >
-                                      Clear
-                                    </span>
+                                  <Input type="hidden" name="id" Value={item.id}></Input>
+                                  <span
+                                    className="addline"
+                                    onClick={() => {
+                                      ClearValue(item);
+                                    }}
+                                  >
+                                    Clear
+                                  </span>
                                 </td>
                               </tr>
                             );
@@ -229,6 +278,7 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
                       color="primary"
                       onClick={() => {
                         getAllValues();
+                        //setAddLineItemModal(false);
                       }}
                     >
                       {' '}
@@ -253,4 +303,4 @@ const AddLineItemModal = ({ addLineItemModal, setAddLineItemModal, projectInfo, 
     </>
   );
 };
-export default AddLineItemModal;
+export default QuoteLineItem;

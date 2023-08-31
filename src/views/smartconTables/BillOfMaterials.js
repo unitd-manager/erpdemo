@@ -8,7 +8,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -19,6 +19,10 @@ const BillOfMaterials = () => {
   const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
+  const navigate = useNavigate();
+  const backToList = () => {
+    navigate('/Planning');
+  };
   // get Leave
   const getPlanning = () => {
       api
@@ -70,21 +74,22 @@ const BillOfMaterials = () => {
       name: 'Qty',
      
     },
-    {
-      name: 'Matrl Shortage Qty',
-      
-    },
-    {
-      name: 'Matrl Shortage',
-     
-    },
-    
+ 
   ];
 
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
+        <Button
+            className="shadow-none"
+            color="dark"
+            onClick={() => {
+              backToList();
+            }}
+          >
+            Back to List
+          </Button>
         <CommonTable
           loading={loading}
           title="Bill Of Materials"
@@ -93,9 +98,12 @@ const BillOfMaterials = () => {
               <Button color="primary" className="shadow-none">
                 Export
               </Button>
+              
           
           }
+            
         >
+          
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -113,8 +121,6 @@ const BillOfMaterials = () => {
                     <td>{element.product_name}</td>
                     <td>{element.bom_unit}</td>
                     <td>{element.qty}</td>
-                    <td>{element.matrl_shortage_qty}</td>
-                    <td>{element.matrl_shortage}</td>
                     </tr>
                 );
               })}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Form,
@@ -14,10 +14,15 @@ import {
   Button,
   CardBody,
 } from 'reactstrap';
+//import Select from 'react-select';
+import random from 'random';
+import AsyncSelect from 'react-select/async';
 import PropTypes from 'prop-types';
 //import { Link } from 'react-router-dom';
 //import moment from 'moment';
 import * as Icon from 'react-feather';
+import api from '../../constants/api';
+
 
 export default function PlanningCpanel({
    setPlanData,
@@ -26,21 +31,79 @@ export default function PlanningCpanel({
   planningDetails,
   addContactToggle,
   addContactModal,
-  handleAddNewPlanning,
-  newPlanningData,
+ // handleAddNewPlanning,
+  //newPlanningData,
+  setNewPlanningData,
   AddNewPlanning,
 }) {
   PlanningCpanel.propTypes = {
     setPlanData: PropTypes.func,
     setPlanEditModal: PropTypes.func,
+    setNewPlanningData: PropTypes.func,
     // deleteRecord: PropTypes.func,
     planningDetails: PropTypes.any,
     addContactToggle: PropTypes.func,
     addContactModal: PropTypes.bool,
-    handleAddNewPlanning: PropTypes.func,
-    newPlanningData: PropTypes.object,
+   // handleAddNewPlanning: PropTypes.func,
+    //newPlanningData: PropTypes.object,
     AddNewPlanning: PropTypes.func,
   };
+
+
+ 
+// ...
+
+const [addMoreItem, setMoreItem] = useState([
+  {
+    id: random.int(1, 99).toString(),
+    unit: '',
+    price: '',
+    product_id: '', // Initialize product_id here
+    title: '', // Initialize title here
+  },
+]);
+
+
+const onchangeItem = (selectedProduct, itemId) => {
+  const updatedItems = addMoreItem.map((item) => {
+    if (item.id === itemId) {
+      return {
+        ...item,
+        product_id: selectedProduct.value.toString(),
+        title: selectedProduct.label, 
+        price: selectedProduct.price, // Set the selected title
+        unit: selectedProduct.unit,
+      };
+    }
+    return item;
+  });
+  setMoreItem(updatedItems);
+  setNewPlanningData((prevData) => ({
+    ...prevData,
+    product_id: selectedProduct.value,
+    title: selectedProduct.label,
+    price: selectedProduct.price, // Set the selected title in newPlanningData
+    unit: selectedProduct.unit,
+  }));
+};
+
+
+
+const loadOptions = (inputValue, callback) => {
+  api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
+.then((res) => {
+    const items = res.data.data;
+    const options = items.map((item) => ({
+      value: item.product_id,
+      label: item.title,
+      price: item.price,
+      unit: item.unit,
+    }));
+    callback(options);
+  });
+};
+  useEffect(() => {
+ }, []);
   //  Table Contact
   const columns = [
     {
@@ -68,8 +131,8 @@ export default function PlanningCpanel({
     //   wrap: true,
     // },
     {
-      name: 'Nmae',
-      selector: 'product_name',
+      name: 'Name',
+      selector: 'title',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -106,39 +169,70 @@ export default function PlanningCpanel({
                       <CardBody>
                         <Form>
                           <Row>
-                           <Col md="4">
-                              <FormGroup>
-                                <Label>Product Name</Label>
-                                <Input
-                                  type="text"
-                                  name="product_name"
-                                  onChange={handleAddNewPlanning}
-                                  value={newPlanningData && newPlanningData.product_name}
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md="4">
-                              <FormGroup>
-                                <Label>Price</Label>
-                                <Input
-                                  type="text"
-                                  name="price"
-                                  onChange={handleAddNewPlanning}
-                                  value={newPlanningData && newPlanningData.price}
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md="4">
-                              <FormGroup>
-                                <Label>Unit</Label>
-                                <Input
-                                  type="text"
-                                  name="unit"
-                                  onChange={handleAddNewPlanning}
-                                  value={newPlanningData && newPlanningData.unit}
-                                />
-                              </FormGroup>
-                            </Col>
+                          {addMoreItem.map((item) => (
+  <Col md="4" key={item.id}>
+    <FormGroup>
+      <Label>Product Name</Label>
+      <AsyncSelect
+        key={item.id}
+        defaultValue={{
+          value: item.product_id,
+          label: item.title,
+          price: item.price,
+          unit: item.unit,
+        }}
+        onChange={(e) => {
+          onchangeItem(e, item.id);
+        }}
+        loadOptions={loadOptions}
+      />
+      <Input value={item.product_id} type="hidden" name="product_id"></Input>
+      <Input value={item.title} type="text" name="title" ></Input>
+    </FormGroup>
+  </Col>
+))}
+                       
+                      
+                       {addMoreItem.map((item) => (
+    <Col md="4" key={item.id}>
+         <FormGroup>
+        <Label>Price</Label>
+        <Input
+          type="text"
+          name="price"
+          key={item.id}
+          defaultValue={{ value: item.product_id, label: item.title ,price: item.price}}
+          onChange={(e) => {
+            onchangeItem(e, item.id);
+          }}
+          value={item.price}
+        />
+      </FormGroup>
+    </Col>
+     
+  ))}
+
+{addMoreItem.map((item) => (
+    <Col md="4" key={item.id}>
+         <FormGroup>
+        <Label>Unit</Label>
+        <Input
+          type="text"
+          name="unit"
+          key={item.id}
+          defaultValue={{ value: item.product_id, label: item.title ,price: item.price,unit: item.unit}}
+          onChange={(e) => {
+            onchangeItem(e, item.id);
+          }}
+          value={item.unit}
+        />
+      </FormGroup>
+    </Col>
+     
+  ))}
+ 
+ 
+
                             </Row>
                            
                            </Form>
@@ -204,7 +298,7 @@ export default function PlanningCpanel({
                         </span>
                       </div>
                     </td>  */}
-                    <td>{element.product_name}</td>
+                    <td>{element.title}</td>
                     <td>{element.price}</td>
                     <td>{element.unit}</td>
                  

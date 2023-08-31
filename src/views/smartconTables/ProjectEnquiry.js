@@ -10,7 +10,7 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
+import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -21,7 +21,7 @@ const Opportunity = () => {
 
   const getTenders = () => {
     api
-      .get('/tender/getTenders')
+    .get('/projectenquiry/getProjectEnquiry')
       .then((res) => {
         setTenders(res.data.data);
         $('#example').DataTable({
@@ -50,7 +50,7 @@ const Opportunity = () => {
   const columns = [
     {
       name: '#',
-      selector: '',
+      selector: 'project_enquiry_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -65,15 +65,15 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Enquiry date',
-      selector: 'enquiry_date',
+      name: 'Enquiry code',
+      selector: 'enquiry_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Enquiry No',
-      selector: 'opportunity_code',
+      name: 'Services',
+      selector: 'services',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -99,17 +99,13 @@ const Opportunity = () => {
       width: 'auto',
     },
     {
-      name: 'Service',
-      selector: 'services',
-      sortable: true,
-      width: 'auto',
-    },
-    {
-      name: 'Enquiry Status',
+      name: 'Status',
       selector: 'status',
       sortable: true,
-      width: 'auto',
+      grow: 2,
+      wrap: true,
     },
+   
   ];
 
   return (
@@ -118,9 +114,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Opportunity List"
+          title="Project Enquiry List"
           Button={
-            <Link to="/EnquiryDetails">
+            <Link to="/ProjectEnquiryDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -138,19 +134,18 @@ const Opportunity = () => {
             {tenders &&
               tenders.map((element, index) => {
                 return (
-                  <tr key={element.opportunity_id}>
+                  <tr key={element.project_enquiry_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/ProjectEnquiryEdit/${element.project_enquiry_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.enquiry_date}</td>
-                    <td>{element.opportunity_code}</td>
+                    <td>{element.enquiry_code}</td>
+                    <td>{element.services}</td>
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
-                    <td>{element.project_end_date }</td>
-                    <td>{element.services}</td>
+                    <td>{element.project_end_date ? moment(element.project_end_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.status}</td>
                   </tr>
                 );
