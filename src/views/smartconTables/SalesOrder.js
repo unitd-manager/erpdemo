@@ -141,7 +141,7 @@ const Opportunity = () => {
                   <tr key={element.opportunity_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/OrdersEdit/${element.order_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

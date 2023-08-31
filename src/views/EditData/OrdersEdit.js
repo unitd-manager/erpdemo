@@ -11,9 +11,12 @@ import OrdersButton from '../../components/TenderTable/OrdersButton';
 import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
+import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
 
 const OpportunityEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
+  const [invoiceDetails, setInvoiceDetails] = useState();
+  const [receiptDetails, setReceiptDetails] = useState();
   const [addContactModal, setAddContactModal] = useState(false);
   const [addCompanyModal, setAddCompanyModal] = useState(false);
   const [contact, setContact] = useState();
@@ -21,7 +24,7 @@ const OpportunityEdit = () => {
   const [incharge, setIncharge] = useState();
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
-   const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -41,7 +44,6 @@ const OpportunityEdit = () => {
       setCompany(res.data.data);
     });
   };
-
 
   //Logic for adding company in db
 
@@ -108,6 +110,19 @@ const OpportunityEdit = () => {
     });
   };
 
+  const getInvoiceByOrderId = () => {
+    api.post('/finance/getInvoiceById', { order_id: id }).then((res) => {
+      setInvoiceDetails(res.data.data);
+    
+    });
+  };
+  const getReceiptByOrderId = () => {
+    api.post('/finance/getReceiptByIds', { order_id: id }).then((res) => {
+      setReceiptDetails(res.data.data);
+    
+    });
+  };
+
   const handleInputs = (e) => {
     setOrderDetails({ ...orderDetails, [e.target.name]: e.target.value });
   };
@@ -129,7 +144,7 @@ const OpportunityEdit = () => {
       });
   };
 
-   // Add new Contact
+  // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
     salutation: '',
@@ -149,11 +164,7 @@ const OpportunityEdit = () => {
   const AddNewContact = () => {
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -169,19 +180,20 @@ const OpportunityEdit = () => {
     }
   };
 
-   //Api for getting all countries
-   const getAllCountries = () => {
+  //Api for getting all countries
+  const getAllCountries = () => {
     api.get('/clients/getCountry').then((res) => {
       setallCountries(res.data.data);
     });
   };
-  
 
   useEffect(() => {
     editTenderById();
     getIncharge();
     getCompany();
     getAllCountries();
+    getInvoiceByOrderId();
+    getReceiptByOrderId();
   }, [id]);
 
   return (
@@ -193,7 +205,7 @@ const OpportunityEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></OrdersButton>
-     <OrdersMainDetails
+      <OrdersMainDetails
         companyInsertData={companyInsertData}
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -214,14 +226,16 @@ const OpportunityEdit = () => {
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
       ></OrdersMainDetails>
+     <SalesMoreDetails   
+        invoiceDetails={invoiceDetails}
+      receiptDetails={receiptDetails}
+      />
 
-
+    
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
 
-      
-            <TenderAttachment ></TenderAttachment>
-      
+        <TenderAttachment></TenderAttachment>
       </ComponentCard>
     </>
   );
