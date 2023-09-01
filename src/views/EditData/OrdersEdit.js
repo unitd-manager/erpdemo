@@ -10,13 +10,14 @@ import api from '../../constants/api';
 import OrdersButton from '../../components/TenderTable/OrdersButton';
 import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
-import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
+import OrderAttachment from '../../components/TenderTable/OrderAttachment';
 
 const OpportunityEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
   const [invoiceDetails, setInvoiceDetails] = useState();
   const [receiptDetails, setReceiptDetails] = useState();
+  const [ordersDetails, setOrdersDetails] = useState();
   const [addContactModal, setAddContactModal] = useState(false);
   const [addCompanyModal, setAddCompanyModal] = useState(false);
   const [contact, setContact] = useState();
@@ -126,6 +127,13 @@ const OpportunityEdit = () => {
     });
   };
 
+  const getOrdersByOrderId = () => {
+    api.post('/finance/getOrdersByIds', { order_id: id }).then((res) => {
+      setOrdersDetails(res.data.data);
+    
+    });
+  };
+
   const handleInputs = (e) => {
     setOrderDetails({ ...orderDetails, [e.target.name]: e.target.value });
   };
@@ -135,11 +143,11 @@ const OpportunityEdit = () => {
   const editTenderData = () => {
     orderDetails.modification_date = creationdatetime;
     api
-      .post('/tender/edit-Tenders', orderDetails)
+      .post('/finance/editFinances', orderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
         setTimeout(() => {
-          window.location.reload();
+         
         }, 300);
       })
       .catch(() => {
@@ -197,6 +205,7 @@ const OpportunityEdit = () => {
     getAllCountries();
     getInvoiceByOrderId();
     getReceiptByOrderId();
+    getOrdersByOrderId();
   }, [id]);
 
   return (
@@ -234,13 +243,14 @@ const OpportunityEdit = () => {
      <SalesMoreDetails   
         invoiceDetails={invoiceDetails}
       receiptDetails={receiptDetails}
+      ordersDetails={ordersDetails}
       />
 
     
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
 
-        <TenderAttachment></TenderAttachment>
+        <OrderAttachment></OrderAttachment>
       </ComponentCard>
     </>
   );
