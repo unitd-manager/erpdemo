@@ -329,13 +329,8 @@ const Routernew = () => {
           <Route path="/LeavesEdit/:id" name="clienttdata" element={<LeavesEdit />}></Route>
           <Route path="/TranslationEdit/:id" name="translationdata" element={<TranslationEdit />}></Route>
           <Route path="/BookingEdit/:id" name="clienttdata" element={<BookingEdit />}></Route>
-<<<<<<< HEAD
-          <Route path="/ProjectTaskEdit/:id" name="tenderdata" element={<ProjectTaskEdit />}></Route>
-          <Route path="/GoodsReceiptEdit/:id" name="tenderdata" element={<GoodsReceiptEdit />}></Route>
-=======
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
           <Route path="/GoodsDeliveryEdit/:id" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
->>>>>>> 9bf11a03edadae25ed7c118edbb1de5358f57e57
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"

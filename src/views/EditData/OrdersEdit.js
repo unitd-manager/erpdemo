@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -24,13 +24,16 @@ const OpportunityEdit = () => {
   const [incharge, setIncharge] = useState();
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
-  const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
     navigate('/Opportunity');
   };
-
+  const {id} = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const quoteId = queryParams.get('quote_id');
+  console.log('Quote ID:', quoteId);
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };
@@ -201,6 +204,8 @@ const OpportunityEdit = () => {
       <BreadCrumbs heading={orderDetails && orderDetails.title} />
       <OrdersButton
         editTenderData={editTenderData}
+        quoteId={quoteId}
+        id={id}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
