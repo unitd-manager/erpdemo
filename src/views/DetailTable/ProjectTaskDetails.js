@@ -13,14 +13,28 @@ const PurchaseRequestDetails = () => {
   //All const variables
   const navigate = useNavigate();
   const [projecttaskdetails, setProjectTaskDetails] = useState({
+    job_order_id:'',
     task_title: '',
   });
+  const [joborder, setJobOrder] = useState('');
   //setting data in ProductDetails
   const handleInputs = (e) => {
     setProjectTaskDetails({ ...projecttaskdetails, [e.target.name]: e.target.value });
   };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const getJobOrderTitle = () => {
+    api
+      .get('/projecttask/getJobOrderTitle')
+      .then((res) => {
+        setJobOrder(res.data.data);
+        console.log(res.data.data[0]);
+      })
+      .catch(() => {
+        message('Company not found', 'info');
+      });
+  };
+
   //Insert Product Data
   const insertPurchaseRequestData = () => {
     if (projecttaskdetails.task_title !== '')
@@ -49,6 +63,7 @@ const PurchaseRequestDetails = () => {
 
   //useeffect
   useEffect(() => {
+    getJobOrderTitle();
     
   }, []);
 
@@ -62,6 +77,27 @@ const PurchaseRequestDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
+                <Col md="12">
+                      <FormGroup>
+                        <Label>Job Order Title</Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          value={projecttaskdetails && projecttaskdetails.job_order_id}
+                          name="job_order_id"
+                        >
+                          <option defaultValue="selected">Please Select</option>
+                          {joborder &&
+                            joborder.map((e) => {
+                              return (
+                                <option key={e.job_order_id} value={e.job_order_id}>
+                                  {e.job_order_title}
+                                </option>
+                              );
+                            })}
+                        </Input>
+                      </FormGroup>
+                    </Col>
                   <Col md="12">
                     <Label>Task Title <span className="required"> *</span> </Label>
                     <Input

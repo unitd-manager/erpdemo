@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
@@ -9,7 +9,7 @@ export default function SupplierDetails({
   allCountries,
   supplierStatus,
   
-  setEditPurchaseOrderLinked,
+  // setEditPurchaseOrderLinked,
 }) {
   SupplierDetails.propTypes = {
     handleInputs: PropTypes.func,
@@ -17,7 +17,7 @@ export default function SupplierDetails({
     allCountries: PropTypes.object,
     supplierStatus: PropTypes.object,
     status: PropTypes.object,
-    setEditPurchaseOrderLinked: PropTypes.bool,
+    // setEditPurchaseOrderLinked: PropTypes.bool,
   };
 
   return (
@@ -209,7 +209,7 @@ export default function SupplierDetails({
             </Col>
           </Row>
         
-              <Row>
+              {/* <Row>
                 <div className="pt-3 mt-3 d-flex align-items-center gap-2">
                   <Button
                     className="shadow-none"
@@ -221,7 +221,7 @@ export default function SupplierDetails({
                     Make Supplier Payment
                   </Button>
                 </div>
-              </Row>
+              </Row> */}
           
         </ComponentCard>
       </FormGroup>

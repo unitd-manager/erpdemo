@@ -26,27 +26,26 @@ const OpportunityDetails = () => {
 
 
   //console.log(tenderDetails);
-  const insertOrder = (code) => {
-    if (insertQuote.quote_id !== '' ) {
-      insertQuote.order_code = code;
-      insertQuote.creation_date = creationdatetime;
-      api
-        .post('/finance/insertOrder', insertQuote)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          message('Order inserted successfully.', 'success');
-          setTimeout(() => {
-            navigate(`/OrdersEdit/${insertedDataId}?tab=1`);
-          }, 300);
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'warning');
-    }
-  };
+ const insertOrder = (code) => {
+  if (insertQuote.quote_id !== '') {
+    insertQuote.order_code = code;
+    insertQuote.creation_date = creationdatetime;
+    api
+      .post('/finance/insertOrder', insertQuote)
+      .then((res) => {
+        const insertedDataId = res.data.data.insertId;
+        const selectedQuoteId = encodeURIComponent(insertQuote.quote_id);
 
+        // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
+        navigate(`/OrdersEdit/${insertedDataId}?tab=1&quote_id=${selectedQuoteId}`);
+      })
+      .catch(() => {
+        message('Network connection error.', 'error');
+      });
+  } else {
+    message('Please fill all required fields', 'warning');
+  }
+};
   //QUTO GENERATED CODE
   const generateCode = () => {
     api

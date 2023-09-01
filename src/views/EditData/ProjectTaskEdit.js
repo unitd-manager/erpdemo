@@ -31,6 +31,7 @@ const TaskEdit = () => {
   const [projectdetails, setProjectDetails] = useState();
   const [companydetails, setCompanyDetails] = useState();
   const [description, setDescription] = useState('');
+  // const [joborder, setJobOrder] = useState('');
 
   //navigation and parameters
   const { id } = useParams();
@@ -84,6 +85,17 @@ const TaskEdit = () => {
       });
   };
 
+  // const getJobOrderTitle = () => {
+  //   api
+  //     .get('/projecttask/getJobOrderTitle')
+  //     .then((res) => {
+  //       setJobOrder(res.data.data);
+  //       console.log(res.data.data[0]);
+  //     })
+  //     .catch(() => {
+  //       message('Company not found', 'info');
+  //     });
+  // };
   
   //timesheet data in timesheet
   const handleInputs = (e) => {
@@ -131,7 +143,8 @@ const TaskEdit = () => {
     getTaskById();
     getProjectname();
     getEmployee();
-    getCompanyName()
+    getCompanyName();
+    // getJobOrderTitle();
   }, [id]);
 
   return (
@@ -206,8 +219,7 @@ const TaskEdit = () => {
       {/* projectTask Details */}
       <Form>
         <FormGroup>
-          <ComponentCard title="Project Task Details">
-            {' '}
+        <ComponentCard title="Project Task Details" creationModificationDate={projectTask}>
             <ToastContainer></ToastContainer>
             <div>
               <BreadCrumbs />
@@ -234,7 +246,26 @@ const TaskEdit = () => {
                           onChange={handleInputs}
                           value={projectTask && projectTask.job_order_title}
                           name="job_order_title"
+                          disabled
                         />
+
+                        {/* <Input
+                          type="select"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.job_order_id}
+                          name="job_order_id"
+                          disabled
+                        >
+                          <option defaultValue="selected">Please Select</option>
+                          {joborder &&
+                            joborder.map((e) => {
+                              return (
+                                <option key={e.job_order_id} value={e.job_order_id}>
+                                  {e.job_order_title}
+                                </option>
+                              );
+                            })}
+                        </Input> */}
                       </FormGroup>
                     </Col>
                     <Col md="3">
@@ -245,6 +276,7 @@ const TaskEdit = () => {
                           onChange={handleInputs}
                           value={projectTask && projectTask.job_order_code}
                           name="job_order_code"
+                          disabled
                         />
                       </FormGroup>
                     </Col>
@@ -422,8 +454,12 @@ const TaskEdit = () => {
                     <Col md="3">
                       <FormGroup>
                         <Label>Actual Hours</Label>
-                        <br />
-                  <span>{projectTask && projectTask.actual_hours}</span>
+                        <Input
+                          type="number"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.actual_hours}
+                          name="actual_hours"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="3">
