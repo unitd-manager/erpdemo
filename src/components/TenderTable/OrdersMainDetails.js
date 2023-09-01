@@ -6,17 +6,19 @@ import ComponentCard from '../ComponentCard';
 export default function TenderMoreDetails({
   orderDetails,
   handleInputs,
+  company,
 }) {
   TenderMoreDetails.propTypes = {
     orderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
+    company: PropTypes.array,
  };
   return (
     <div>
       {' '}
       <Form>
         <FormGroup>
-          <ComponentCard title="Enquiry Details" creationModificationDate={orderDetails}>
+          <ComponentCard title="Orders Details" creationModificationDate={orderDetails}>
             <Row>
             <Col md="3">
                 <FormGroup>
@@ -44,18 +46,23 @@ export default function TenderMoreDetails({
                   />
                 </FormGroup>
               </Col>
+           
               <Col md="3">
-                <FormGroup>
-                  <Label>Company</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={orderDetails && orderDetails.company_name}
-                    name="company_name"
-                   
-                  />
-                </FormGroup>
-              </Col>
+                  <FormGroup>
+                    <Label>
+                     Company <span className="required"> *</span>
+                    </Label>
+                    <Input type="select" onChange={handleInputs} name="company_id">
+                      <option defaultValue="selected">Please Select</option>
+                      {company &&
+                        company.map((e) => (
+                          <option key={e.company_id} value={e.company_name}>
+                            {e.company_name}
+                          </option>
+                        ))}
+                    </Input>
+                  </FormGroup>
+                </Col>
               <Col md="3">
                 <FormGroup>
                   <Label>Reference</Label>
@@ -69,13 +76,33 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
+                  <Label>Date</Label>
+                  <Input
+                    type="date"
+                    value={orderDetails && orderDetails.order_date}
+                    onChange={handleInputs}
+                    name="order_date"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
                   <Label>Status</Label>
                   <Input
-                    type="text"
+                    type="select"
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.order_status}
                     name="order_status"
-                  />
+                  >
+                   <option defaultValue="selected">
+                please Select
+              </option>
+              <option value="new">New</option>
+              <option value="paid">Paid</option>
+              <option value="partially paid">Partially Paid</option>
+              <option value="Cancelled">Cancelled</option>
+        
+                  </Input>
                 </FormGroup>
               </Col>
               <Col md="3">
