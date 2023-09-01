@@ -80,8 +80,8 @@ const Header = () => {
         </NavItem> */}
        
         
-          <Label >
-            TMS
+       <Label className='text-white'>
+            ERP Demo
           </Label>
       {/* </Nav> */}
       {/******************************/}
