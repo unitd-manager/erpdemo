@@ -5,23 +5,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
+import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
+// import 'datatables.net-buttons/js/buttons.html5';
+// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Opportunity = () => {
-  const [orders, setOrders] = useState(null);
+const LabourRequest = () => {
+  //Const Variables
+  const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getOrders = () => {
+  // get Leave
+  const getPlanning = () => {
     api
-      .get('/finance/getFinances')
+      .get('/labourrequest/getLabourRequest')
       .then((res) => {
-        setOrders(res.data.data);
+        setPlanning(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -41,14 +45,15 @@ const Opportunity = () => {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getOrders();
-  }, []);
 
+  useEffect(() => {
+    getPlanning();
+  }, []);
+  //  stucture of leave list view
   const columns = [
     {
-      name: '#',
-      selector: '',
+      name: 'id',
+      selector: 'labour_request_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -62,54 +67,43 @@ const Opportunity = () => {
       button: true,
       sortable: false,
     },
+
     {
-      name: 'Order No',
-      selector: 'enquiry_date',
+      name: 'Project Name',
+      selector: 'project_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Quote Code',
-      selector: 'quote_code',
+      name: 'Project Code',
+      selector: 'project_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
-      selector: 'order_date',
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: 'Customer',
-      selector: 'company_name',
-      sortable: true,
-      grow: 0,
-    },
-    {
-      name: 'Reference',
-      selector: 'office_ref_no',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'Status',
-      selector: 'order_status',
+      name: 'Requested Date',
+      selector: 'request_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Net Amount',
-      selector: 'amount',
+      name: 'Start Date',
+      selector: 'request_start_date',
       sortable: true,
-      width: 'auto',
+      grow: 2,
+      wrap: true,
     },
-   
+    {
+      name: 'End Date',
+      selector: 'request_end_date',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    
   ];
 
   return (
@@ -118,9 +112,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Order List"
+          title="Labour Request"
           Button={
-            <Link to="/SalesOrderDetails">
+            <Link to="/LabourRequestDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,25 +129,23 @@ const Opportunity = () => {
             </tr>
           </thead>
           <tbody>
-            {orders &&
-              orders.map((element, index) => {
+            {planning &&
+              planning.map((element, i) => {
                 return (
-                  <tr key={element.opportunity_id}>
-                    <td>{index + 1}</td>
+                  <tr key={element.labour_request_id}>
+                    <td>{i + 1}</td>
                     <td>
-                      <Link to={`/OrdersEdit/${element.order_id}?tab=1`}>
+                      <Link to={`/LabourRequestEdit/${element.labour_request_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.order_code}</td>
-                    <td>{element.quote_code}</td>
-                    <td>{element.order_date}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.order_status }</td>
-                    <td>{element.amount}</td>
-                  
-                  </tr>
+                    <td>{element.proj_title}</td>
+                    <td>{element.project_code}</td>
+                    <td>{(element.request_date)?moment(element.request_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{(element.request_start_date)?moment(element.request_start_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{(element.request_end_date)?moment(element.request_end_date).format('DD-MM-YYYY'):''}</td>
+
+                    </tr>
                 );
               })}
           </tbody>
@@ -163,4 +155,4 @@ const Opportunity = () => {
   );
 };
 
-export default Opportunity;
+export default LabourRequest;

@@ -7,33 +7,29 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
+// import 'datatables.net-buttons/js/buttons.html5';
+// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Opportunity = () => {
-  const [orders, setOrders] = useState(null);
+const ChartOfAccounts = () => {
+  //Const Variables
+  const [chartofaccounts, setChartOfAccounts] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getOrders = () => {
+  // get Leave
+  const getChartOfAccounts = () => {
     api
-      .get('/finance/getFinances')
+      .get('/chartofaccounts/getChartOfAccounts')
       .then((res) => {
-        setOrders(res.data.data);
+        setChartOfAccounts(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
           processing: true,
           dom: 'Bfrtip',
-          // buttons: [
-          //   {
-          //     extend: 'print',
-          //     text: 'Print',
-          //     className: 'shadow-none btn btn-primary',
-          //   },
-          // ],
         });
         setLoading(false);
       })
@@ -41,14 +37,15 @@ const Opportunity = () => {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getOrders();
-  }, []);
 
+  useEffect(() => {
+    getChartOfAccounts();
+  }, []);
+  //  stucture of leave list view
   const columns = [
     {
-      name: '#',
-      selector: '',
+      name: 'Id',
+      selector: 'acc_head_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -62,54 +59,28 @@ const Opportunity = () => {
       button: true,
       sortable: false,
     },
+
     {
-      name: 'Order No',
-      selector: 'enquiry_date',
+      name: 'Title',
+      selector: 'title',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Quote Code',
-      selector: 'quote_code',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Date',
-      selector: 'order_date',
+      name: 'Category',
+      selector: 'category_title',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
-      selector: 'company_name',
+      name: 'Code',
+      selector: 'code',
       sortable: true,
       grow: 0,
     },
-    {
-      name: 'Reference',
-      selector: 'office_ref_no',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'Status',
-      selector: 'order_status',
-      sortable: true,
-      grow: 2,
-      width: 'auto',
-    },
-    {
-      name: 'Net Amount',
-      selector: 'amount',
-      sortable: true,
-      width: 'auto',
-    },
-   
+    
   ];
 
   return (
@@ -118,9 +89,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Order List"
+          title="Chart Of Account List"
           Button={
-            <Link to="/SalesOrderDetails">
+            <Link to="/ChartOfAccountDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,25 +106,20 @@ const Opportunity = () => {
             </tr>
           </thead>
           <tbody>
-            {orders &&
-              orders.map((element, index) => {
+            {chartofaccounts &&
+              chartofaccounts.map((element, i) => {
                 return (
-                  <tr key={element.opportunity_id}>
-                    <td>{index + 1}</td>
+                  <tr key={element.acc_head_id}>
+                    <td>{i + 1}</td>
                     <td>
-                      <Link to={`/OrdersEdit/${element.order_id}?tab=1`}>
+                      <Link to={`/ChartofACEdit/${element.acc_head_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.order_code}</td>
-                    <td>{element.quote_code}</td>
-                    <td>{element.order_date}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.order_status }</td>
-                    <td>{element.amount}</td>
-                  
-                  </tr>
+                    <td>{element.title}</td>
+                    <td>{element.category}</td>
+                    <td>{element.code}</td>
+                    </tr>
                 );
               })}
           </tbody>
@@ -163,4 +129,4 @@ const Opportunity = () => {
   );
 };
 
-export default Opportunity;
+export default ChartOfAccounts;

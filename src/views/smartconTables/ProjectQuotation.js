@@ -7,21 +7,22 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
+// import 'datatables.net-buttons/js/buttons.html5';
+// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Opportunity = () => {
-  const [orders, setOrders] = useState(null);
+const ProjectQuotation = () => {
+  const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getOrders = () => {
+  const getTenders = () => {
     api
-      .get('/finance/getFinances')
+      .get('/projectquote/getProjectquote')
       .then((res) => {
-        setOrders(res.data.data);
+        setTenders(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -42,13 +43,13 @@ const Opportunity = () => {
       });
   };
   useEffect(() => {
-    getOrders();
+    getTenders();
   }, []);
 
   const columns = [
     {
       name: '#',
-      selector: '',
+      selector: 'project_quote_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -63,14 +64,7 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Order No',
-      selector: 'enquiry_date',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Quote Code',
+      name: 'Quotation No',
       selector: 'quote_code',
       sortable: true,
       grow: 0,
@@ -78,7 +72,7 @@ const Opportunity = () => {
     },
     {
       name: 'Date',
-      selector: 'order_date',
+      selector: 'quote_date',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -91,25 +85,30 @@ const Opportunity = () => {
     },
     {
       name: 'Reference',
-      selector: 'office_ref_no',
+      selector: 'ref_no_quote',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Status',
-      selector: 'order_status',
+      name: 'Enquiry No',
+      selector: 'enquiry_code',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Net Amount',
-      selector: 'amount',
+      name: 'Status',
+      selector: 'quote_status',
       sortable: true,
       width: 'auto',
     },
-   
+    {
+        name: 'Net Amount',
+        selector: 'total_amount',
+        sortable: true,
+        width: 'auto',
+      },
   ];
 
   return (
@@ -118,9 +117,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Order List"
+          title="QuotationList"
           Button={
-            <Link to="/SalesOrderDetails">
+            <Link to="/ProjectQuotationDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -135,24 +134,23 @@ const Opportunity = () => {
             </tr>
           </thead>
           <tbody>
-            {orders &&
-              orders.map((element, index) => {
+            {tenders &&
+              tenders.map((element, index) => {
                 return (
-                  <tr key={element.opportunity_id}>
+                  <tr key={element.project_quote_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/OrdersEdit/${element.order_id}?tab=1`}>
+                      <Link to={`/ProjectQuotationEdit/${element.project_quote_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.order_code}</td>
                     <td>{element.quote_code}</td>
-                    <td>{element.order_date}</td>
+                    <td>{element.quote_date}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.order_status }</td>
-                    <td>{element.amount}</td>
-                  
+                    <td>{element.ref_no_quote}</td>
+                    <td>{element.enquiry_code}</td>
+                    <td>{element.quote_status}</td>
+                    <td>{element.total_amount}</td>
                   </tr>
                 );
               })}
@@ -163,4 +161,4 @@ const Opportunity = () => {
   );
 };
 
-export default Opportunity;
+export default ProjectQuotation;
