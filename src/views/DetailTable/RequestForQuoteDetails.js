@@ -1,95 +1,116 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import creationdatetime from '../../constants/creationdatetime';
+import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 
-const SubConDetails = () => {
+const RequestForQuoteDetails = () => {
   //All state variables
-  const [quoteDetails, setQuoteDetails] = useState({
-    quote_status: '',
+  const [purchaseReport, setPurchaseRequest] = useState();
+  const [requestForQuote, setRequestForQuote] = useState({
+    purchase_request_id: '',
+    purchase_request_code:'',
   });
-  //Navigation and parameters
+  //Navigation and Parameters
+  const { id } = useParams();
   const navigate = useNavigate();
-  //subcon data in subconDetails
+  // Gettind data from  By Id
+  const getPurchaseRequest = () => {
+    api
+      .get('/quote/getPurchaseRequest')
+      .then((res) => {
+        setPurchaseRequest(res.data.data);
+      })
+      .catch(() => {});
+  };
+  //jobinformation data in RequestForQuoteDetails
   const handleInputs = (e) => {
-    setQuoteDetails({ ...quoteDetails, [e.target.name]: e.target.value });
+    setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
   };
-  //Insert subcon
-  const insertRequest = () => {
-    quoteDetails.creation_date = creationdatetime;
-    if (quoteDetails.quote_status !== '')
-      api
-        .post('/quote/insertQuote', quoteDetails)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          message('Quote inserted successfully.', 'success');
-          setTimeout(() => {
-            navigate(`/RequestForQuoteEdit/${insertedDataId}`);
-          }, 300);
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    else {
-      message('Please fill all required fields.', 'error');
-    }
+  //inserting data of job information
+  const insertJobInformation = () => {
+    if(requestForQuote.purchase_request_id !==''){
+    api
+      .post('/quote/insertQuote', requestForQuote)
+      .then((res) => {
+        const insertedDataId = res.data.data.insertId;
+        message('Request For Quote inserted successfully.', 'success');
+        setTimeout(() => {
+          navigate(`/RequestForQuoteEdit/${insertedDataId}`);
+        }, 300);
+      })
+      .catch(() => {
+        message('Unable to edit record.', 'error');
+      });}
+      else{
+        message('Please Select the quote', 'warning');
+      }
   };
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getPurchaseRequest();
+  }, [id]);
   return (
     <div>
       <BreadCrumbs />
-      <ToastContainer />
       <Row>
-        <Col md="6" xs="12">
-          <ComponentCard title="SubCon Name">
+        <ToastContainer></ToastContainer>
+        <Col md="6">
+          <ComponentCard title="Key Details">
             <Form>
               <FormGroup>
                 <Row>
-                  <Col md="12">
-                    <Label>
-                      {' '}
-                       Status <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input type="select" name="quote_status" onChange={handleInputs} >  <option value="">Please Select</option>
-                        <option value="New">New</option>
-                        <option value="Quoted">Quoted</option>
-                        <option value="Awarded">Awarded</option>
-                        <option value="Not Awarded">Not Awarded</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </Input>
-                  </Col>
+                  <Label>Purchase Request Code <span style={{color:'red'}}>*</span> </Label>
+                  <Input
+                    type="select"
+                    name="purchase_request_id"
+                    onChange={(e) => {
+                      handleInputs(e);
+                    }}
+                  >
+                    <option value="" selected>
+                      Please Select
+                    </option>
+                    {purchaseReport &&
+                      purchaseReport.map((ele) => {
+                        return (
+                         
+                            <option key={ele.purchase_request_id} value={ele.purchase_request_id}>
+                              {ele.purchase_request_code}
+                            </option>
+                          
+                        );
+                      })}
+                  </Input>
                 </Row>
-              </FormGroup>
-              <FormGroup>
-                <Row>
-                  <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                    <Button
-                      color="primary"
-                      onClick={() => {
-                        insertRequest();
-                      }}
-                      type="button"
-                      className="btn mr-2 shadow-none"
-                    >
-                      Save & Continue
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        navigate('/Subcon');
-                      }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
-                    >
-                      Go to List
-                    </Button>
-                  </div>
-                </Row>
+
+                <FormGroup>
+                  <Row>
+                    <div className="pt-3 mt-3 d-flex align-items-center gap-2">
+                      <Button
+                        color="primary"
+                        type="button"
+                        className="btn mr-2 shadow-none"
+                        onClick={() => {
+                          insertJobInformation();
+                        }}
+                      >
+                        Save & Continue
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          navigate('/JobInformation');
+                        }}
+                        type="button"
+                        className="btn btn-dark shadow-none"
+                      >
+                        Go to List
+                      </Button>
+                    </div>
+                  </Row>
+                </FormGroup>
               </FormGroup>
             </Form>
           </ComponentCard>
@@ -98,5 +119,4 @@ const SubConDetails = () => {
     </div>
   );
 };
-
-export default SubConDetails;
+export default RequestForQuoteDetails;

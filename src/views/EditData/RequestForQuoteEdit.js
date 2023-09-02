@@ -14,6 +14,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import DeleteButton from '../../components/DeleteButton';
 // import QuotationMoreDetails from '../../components/ProjectModal/QuotationMoreDetails';
 import Tab from '../../components/project/Tab';
+import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
 
 
 const RequestForQuoteEdit = () => {
@@ -21,6 +22,7 @@ const RequestForQuoteEdit = () => {
   const [quoteDetails, setQuoteDetails] = useState();
   const [supplier, setSupplier] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
+
 
   //navigation and parameters
   const { id } = useParams();
@@ -37,7 +39,7 @@ const RequestForQuoteEdit = () => {
   //getting data from setting by Id
   const getTabQuoteById = () => {
     api
-      .post('/quote/getPurchaseQuoteById', { quote_id: id })
+      .post('/quote/getPurchaseQuoteById', { purchase_quote_id: id })
       .then((res) => {
         setQuoteDetails(res.data.data[0]);
       })
@@ -132,7 +134,7 @@ const RequestForQuoteEdit = () => {
                 </Button>
               </Col>
               <Col>
-                <DeleteButton id={id} columnname="quote_id" tablename="quote"></DeleteButton>
+                <DeleteButton id={id} columnname="purchase_quote_id" tablename="quote"></DeleteButton>
               </Col>
               <Col>
                 <Button
@@ -179,17 +181,11 @@ const RequestForQuoteEdit = () => {
               <Col md="4">
                 <FormGroup>
                   <Label>Code</Label>
-                  <span>{quoteDetails && quoteDetails.purchase_requset_code}</span>
+                  <br></br>
+                  <span>{quoteDetails && quoteDetails.purchase_request_code}</span>
                   
                 </FormGroup>
               </Col>
-              <Col md="4">
-                <FormGroup>
-                  <Label>Title</Label>
-                  <span>{quoteDetails && quoteDetails.purchase_request_title}</span>
-                </FormGroup>
-              </Col>
-            
                 <Col md="4">
                   <FormGroup>
                     <Label>Status</Label>
@@ -256,8 +252,12 @@ const RequestForQuoteEdit = () => {
       </Form>
       <Tab toggle={toggle} tabs={tabs} />
       <TabContent className="p-4" activeTab={activeTab}>
-      <TabPane tabId="1" eventkey="quotationMoreDetails">
-          
+      <TabPane tabId="1" eventkey="MoreDetails">
+          <RequestPurchase
+          PurchaseRequestID={id}
+          quoteDetails={quoteDetails}
+          >
+          </RequestPurchase>
           </TabPane>
           </TabContent>
     </>

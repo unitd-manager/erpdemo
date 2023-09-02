@@ -73,13 +73,6 @@ const RequestForQuote = () => {
       grow: 0,
       wrap: true,
     },
-   
-    {
-      name: 'Title',
-      selector: 'purchase_request_title',
-      sortable: true,
-      grow: 0,
-    },
     {
       name: 'Status',
       selector: 'status',
@@ -143,7 +136,6 @@ const RequestForQuote = () => {
                       </Link>
                     </td>
                     <td>{element.purchase_request_code}</td>
-                    <td>{element.purchase_request_title}</td>
                     <td>{element.status}</td>
                     <td>{element.date_issued}</td>
                     <td>{element.due_date}</td>
