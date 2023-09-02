@@ -28,20 +28,10 @@ const TaskEdit = () => {
   //All state variable
   const [projectTask, setProjectTask] = useState();
   const [employeeProject, setEmployeeProject] = useState();
-  // const [attachmentModal, setAttachmentModal] = useState(false);
-  // const [activeTab, setActiveTab] = useState('1');
-  // const [timeSheet, setTimesheet] = useState(null);
-  // const [addTimesheetModal, setAddTimesheetModal] = useState(false);
   const [projectdetails, setProjectDetails] = useState();
-  // const [MileStonedetails, setMilestoneDetails] = useState();
-  // const [attachmentData, setDataForAttachment] = useState({
-  //   modelType: '',
-  // });
-  // const [roomName, setRoomName] = useState('');
-  // const [fileTypes, setFileTypes] = useState();
+  const [companydetails, setCompanyDetails] = useState();
   const [description, setDescription] = useState('');
-  // const [employeeTeam, setEmployeeTeam] = useState();
-
+  // const [joborder, setJobOrder] = useState('');
 
   //navigation and parameters
   const { id } = useParams();
@@ -49,7 +39,7 @@ const TaskEdit = () => {
 
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/TaskList');
+    navigate('/ProjectTask');
   };
 
   // data in Description Modal
@@ -82,21 +72,31 @@ const TaskEdit = () => {
       });
   };
 
-  //Api call for getting Milestone dropdown
-  // const getMilestonename = () => {
+  //Api call for getting company name dropdown
+  const getCompanyName = () => {
+    api
+      .get('/projecttask/getCompanyName')
+      .then((res) => {
+        setCompanyDetails(res.data.data);
+        console.log(res.data.data[0]);
+      })
+      .catch(() => {
+        message('Company not found', 'info');
+      });
+  };
+
+  // const getJobOrderTitle = () => {
   //   api
-  //     .get('/projecttask/getMilestoneTitle')
+  //     .get('/projecttask/getJobOrderTitle')
   //     .then((res) => {
-  //       setMilestoneDetails(res.data.data);
+  //       setJobOrder(res.data.data);
   //       console.log(res.data.data[0]);
   //     })
   //     .catch(() => {
-  //       message('Milestone not found', 'info');
+  //       message('Company not found', 'info');
   //     });
   // };
-  // const toggle = (tab) => {
-  //   if (activeTab !== tab) setActiveTab(tab);
-  // };
+  
   //timesheet data in timesheet
   const handleInputs = (e) => {
     setProjectTask({ ...projectTask, [e.target.name]: e.target.value });
@@ -104,7 +104,8 @@ const TaskEdit = () => {
 
   //getting data from task by Id
   const getTaskById = () => {
-    api.post('/projecttask/getProjectTaskId', { project_task_id: id }).then((res) => {
+    api.post('/projecttask/getProjectTaskById', { project_task_id: id })
+    .then((res) => {
       const taskData = res.data.data[0];
       setProjectTask(taskData);
       if (taskData.description) {
@@ -113,9 +114,9 @@ const TaskEdit = () => {
     });
   };  
   // //  Gettind data from Job By Id
-  const JobTask = () => {
+  const getEmployee = () => {
     api
-      .get('/jobinformation/getEmployee')
+      .get('/projecttask/getEmployeeName')
       .then((res) => {
         console.log(res.data.data);
         setEmployeeProject(res.data.data);
@@ -123,137 +124,27 @@ const TaskEdit = () => {
       .catch(() => {});
   };
 
-  //  Gettind data from Job By Id
-  // const editJob = () => {
-  //   api
-  //     .get('/jobinformation/getEmployee')
-  //     .then((res) => {
-  //       console.log(res.data.data);
-  //       setEmployeeTeam(res.data.data);
-  //     })
-  //     .catch(() => {});
-  // };
 
   //Update task
   const editTask = () => {
     api
-      .post('/projecttask/editTask', projectTask)
+      .post('/projecttask/editProjectTask', projectTask)
       .then(() => {
         message('Record editted successfully', 'success');
-        getTaskById();
+        // getTaskById();
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
   };
 
-  // const [timesheeteditdata, setTimesheetEditData] = useState();
-
-  // const getTimesheet = () => {
-  //   api
-  //     .post('/projecttimesheet/getTaskTimeSheetById', { project_task_id: id })
-  //     .then((res) => {
-  //       setTimesheet(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('Loan Data Not Found', 'info');
-  //     });
-  // };
- 
-
-  // const handleTaskInputs = (e) => {
-  //   setTimesheetEditData({ ...timesheeteditdata, [e.target.name]: e.target.value });
-  // };
-
-  //Logic for edit data in db
-
-  // const editTimesheetData = () => {
-  //   api
-  //     .post('/Projecttimesheet/editTimeSheet', timesheeteditdata)
-  //     .then(() => {
-  //       getTimesheet()   
-  //        })
-  //     .catch(() => {
-  //       message('Unable to edit record.', 'error');
-  //     });
-  // };
-
-  // //attachments
-  // const dataForAttachment = () => {
-  //   setDataForAttachment({
-  //     modelType: 'attachment',
-  //   });
-  //   console.log('inside DataForAttachment');
-  // };
-  //structure of projectTask list view
-  // const columns = [
-  //   {
-  //     name: '#',
-  //     selector: 'project_timesheet_id',
-  //     grow: 0,
-  //     wrap: true,
-  //     width: '4%',
-  //   },
-  //   {
-  //     name: 'Edit',
-  //     selector: 'edit',
-  //     cell: () => <Icon.Edit2 />,
-  //     grow: 0,
-  //     width: 'auto',
-  //     button: true,
-  //     sortable: false,
-  //   },
-  //   {
-  //     name: 'Title',
-  //     selector: 'task_title',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Date',
-  //     selector: 'date',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Name',
-  //     selector: 'first_name',
-  //     sortable: true,
-  //     grow: 2,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Hours',
-  //     selector: 'hours',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Status',
-  //     selector: 'status',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  //   {
-  //     name: 'Description',
-  //     selector: 'description',
-  //     sortable: true,
-  //     grow: 0,
-  //     wrap: true,
-  //   },
-  // ];
 
   useEffect(() => {
     getTaskById();
-    // getTimesheet();
-    // // getMilestonename();
     getProjectname();
-    JobTask();
-    // editJob();
+    getEmployee();
+    getCompanyName();
+    // getJobOrderTitle();
   }, [id]);
 
   return (
@@ -270,7 +161,7 @@ const TaskEdit = () => {
                   color="primary"
                   onClick={() => {
                     editTask();
-                    navigate('/TaskList');
+                    navigate('/ProjectTask');
                   }}
                 >
                   Save
@@ -294,7 +185,7 @@ const TaskEdit = () => {
                   className="btn btn-dark shadow-none"
                   onClick={(e) => {
                     if (window.confirm('Are you sure you want to cancel? ')) {
-                      navigate('/TaskList');
+                      navigate('/ProjectTask');
                     } else {
                       e.preventDefault();
                     }
@@ -328,8 +219,7 @@ const TaskEdit = () => {
       {/* projectTask Details */}
       <Form>
         <FormGroup>
-          <ComponentCard title="ProjectTaskDetails">
-            {' '}
+        <ComponentCard title="Project Task Details" creationModificationDate={projectTask}>
             <ToastContainer></ToastContainer>
             <div>
               <BreadCrumbs />
@@ -339,12 +229,54 @@ const TaskEdit = () => {
                   <Row>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Title</Label>
+                        <Label>Task Title</Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
                           value={projectTask && projectTask.task_title}
                           name="task_title"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Job Order Title</Label>
+                        <Input
+                          type="text"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.job_order_title}
+                          name="job_order_title"
+                          disabled
+                        />
+
+                        {/* <Input
+                          type="select"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.job_order_id}
+                          name="job_order_id"
+                          disabled
+                        >
+                          <option defaultValue="selected">Please Select</option>
+                          {joborder &&
+                            joborder.map((e) => {
+                              return (
+                                <option key={e.job_order_id} value={e.job_order_id}>
+                                  {e.job_order_title}
+                                </option>
+                              );
+                            })}
+                        </Input> */}
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Job Order Code</Label>
+                        <Input
+                          type="text"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.job_order_code}
+                          name="job_order_code"
+                          disabled
                         />
                       </FormGroup>
                     </Col>
@@ -369,27 +301,28 @@ const TaskEdit = () => {
                         </Input>
                       </FormGroup>
                     </Col>
-                    {/* <Col md="3">
+                    <Col md="3">
                       <FormGroup>
-                        <Label>MileStone Title</Label>
+                        <Label>Customer Name</Label>
                         <Input
                           type="select"
-                          name="project_milestone_id"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.project_milestone_id}
+                          value={projectTask && projectTask.company_id}
+                          name="company_id"
                         >
-                          <option>Select Project</option>
-                          {MileStonedetails &&
-                            MileStonedetails.map((e) => {
+                          <option defaultValue="selected">Please Select</option>
+                          {companydetails &&
+                            companydetails.map((e) => {
                               return (
-                                <option key={e.project_milestone_id} value={e.project_milestone_id}>
-                                  {e.milestone_title}
+                                <option key={e.company_id} value={e.company_id}>
+                                  {e.company_name}
                                 </option>
                               );
                             })}
                         </Input>
                       </FormGroup>
-                    </Col> */}
+                    </Col>
+                    
                     <Col md="3">
                       <FormGroup>
                         <Label>Staff Name</Label>
@@ -521,8 +454,12 @@ const TaskEdit = () => {
                     <Col md="3">
                       <FormGroup>
                         <Label>Actual Hours</Label>
-                        <br />
-                  <span>{projectTask && projectTask.actual_hours}</span>
+                        <Input
+                          type="number"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.actual_hours}
+                          name="actual_hours"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="3">

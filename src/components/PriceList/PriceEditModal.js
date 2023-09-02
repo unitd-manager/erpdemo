@@ -75,9 +75,10 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                                 <Label>Product Nmae</Label>
                                 <Input
                                   type="text"
-                                  name="product_name"
+                                  name="title"
                                   onChange={handleInputs}
-                                  value={PlaniEdit && PlaniEdit.product_name}
+                                  value={PlaniEdit && PlaniEdit.title}
+                                  disabled
                                 />
                               </FormGroup>
                             </Col>

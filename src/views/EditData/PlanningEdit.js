@@ -131,34 +131,70 @@ const PlanningEdit = () => {
           const orderedQty = element.ordered_qty ? parseFloat(element.ordered_qty) : 0;
           const qty = element.qty ? parseFloat(element.qty) : 0;
           const totalMaterial = orderedQty * qty;
-          console.log('totalMaterial', totalMaterial);
           const Inventorystock = element.actual_stock ? parseFloat(element.actual_stock) : 0;
-          console.log('Inventorystock', Inventorystock);
+          const shortagDate = element.stock_updated_date; // Corrected variable assignment
+          const reserveStock = Inventorystock - qty;
+          const inventoryId = element.inventory_id;
+          // console.log('totalMaterial', totalMaterial);
+          // console.log('Inventorystock', Inventorystock);
+          // console.log('qty', qty);
+          // console.log('reserveStock', reserveStock);
+          console.log('shortagDate', shortagDate);
   
-          if (totalMaterial > Inventorystock) {
-            element.matrl_shortage = 1;
-            // Calculate matrl_shortage_qty and insert it
-            element.matrl_shortage_qty = totalMaterial - Inventorystock;
-            api.post('/planning/editPlanningBom',element).then(()=>{
-           
-            }).catch(()=>{})
-          } else {
-            element.matrl_shortage = 0;
-            // Set matrl_shortage_qty to 0 when there's no shortage
-            element.matrl_shortage_qty = 0;
-            api.post('/planning/editPlanningBom',element).then(()=>{}).catch(()=>{})
-          }
-          message('Material shortage insert successfully', 'success');
-          console.log('el', element.matrl_shortage);
-          console.log('el.matrl_shortage_qty', element.matrl_shortage_qty);
+          api
+            .post('/planning/getInventoryHistoryById', { inventory_id: inventoryId })
+            .then((res2) => {
+              const inventoryHistoryDate = res2.data.data;
+              console.log('inventoryHistoryDate', inventoryHistoryDate);
+  
+              if (totalMaterial > Inventorystock) {
+                if (shortagDate === inventoryHistoryDate[0].stock_updated_date) { // Corrected the comparison here
+                  element.matrl_shortage = 1;
+                  element.stock_updated_date = shortagDate;
+                  // Calculate matrl_shortage_qty and insert it
+                  element.matrl_shortage_qty = totalMaterial - reserveStock;
+                } else {
+                  element.matrl_shortage = 1;
+                  element.stock_updated_date = shortagDate;
+                  // Calculate matrl_shortage_qty and insert it
+                  element.matrl_shortage_qty = totalMaterial - Inventorystock;
+                }
+  
+                api.post('/planning/editPlanningBom', element).then(() => {}).catch(() => {});
+                api
+                  .post('/planning/insertInventoryHistory', {
+                    ...element,
+                    reserve_stock: reserveStock,
+                    bom_qty: qty,
+                  })
+                  .then(() => {})
+                  .catch(() => {});
+              } else {
+                element.matrl_shortage = 0;
+                element.stock_updated_date = shortagDate;
+                // Set matrl_shortage_qty to 0 when there's no shortage
+                element.matrl_shortage_qty = 0;
+                api.post('/planning/editPlanningBom', element).then(() => {}).catch(() => {});
+                // api
+                // .post('/planning/insertInventoryHistory', {
+                //   ...element,
+                //   reserve_stock: reserveStock,
+                //   bom_qty: qty,
+                // })
+                // .then(() => {})
+                // .catch(() => {});
+              }
+  
+              console.log('element', element);
+              console.log('el', element.matrl_shortage);
+              console.log('el.matrl_shortage_qty', element.matrl_shortage_qty);
+            })
+            .catch(() => {});
         });
       })
-      .catch(() => {
-        
-      });
+      .catch(() => {});
   };
-  
-  
+   
   
   const AddNewPlanning = () => {
   

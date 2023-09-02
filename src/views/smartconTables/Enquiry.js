@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import { Button } from 'reactstrap';
-import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -11,42 +10,47 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
+// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Test = () => {
+const Opportunity = () => {
   const [tenders, setTenders] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const getTenders = () => {
-    api.get('/tender/getTenders').then((res) => {
-      setTenders(res.data.data);
-    });
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      $('#example').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 20,
-        processing: true,
-        dom: 'Bfrtip',
-        // buttons: [
-        //   {
-        //     extend: 'print',
-        //     text: 'Print',
-        //     className: 'shadow-none btn btn-primary',
-        //   },
-        // ],
+    api
+      .get('/tender/getTenders')
+      .then((res) => {
+        setTenders(res.data.data);
+        $('#example').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 20,
+          processing: true,
+          dom: 'Bfrtip',
+          // buttons: [
+          //   {
+          //     extend: 'print',
+          //     text: 'Print',
+          //     className: 'shadow-none btn btn-primary',
+          //   },
+          // ],
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
-    }, 1000);
-
+  };
+  useEffect(() => {
     getTenders();
   }, []);
 
   const columns = [
     {
-      name: 'id',
-      selector: 'opportunity_id',
+      name: '#',
+      selector: '',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -61,90 +65,62 @@ const Test = () => {
       sortable: false,
     },
     {
-      name: 'Del',
-      selector: 'delete',
-      cell: () => <Icon.Trash />,
-      grow: 0,
-      width: 'auto',
-      wrap: true,
-    },
-    {
-      name: 'Code',
-      selector: 'opportunity_code',
+      name: 'Enquiry date',
+      selector: 'enquiry_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Project',
-      selector: 'title',
+      name: 'Enquiry No',
+      selector: 'opportunity_code',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Ref No',
-      selector: 'office_ref_no',
+      name: 'Customer',
+      selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Main Con',
-      selector: 'company_name',
+      name: 'Reference',
+      selector: 'office_ref_no',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Actual Closing',
-      selector: 'closinactual_closing',
+      name: 'BID Expiry',
+      selector: 'project_end_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
-      selector: 'status',
+      name: 'Service',
+      selector: 'services',
       sortable: true,
-      grow: 2,
-      wrap: true,
+      width: 'auto',
     },
     {
-      name: 'Quoted By',
-      selector: 'quote_ref',
+      name: 'Enquiry Status',
+      selector: 'status',
       sortable: true,
       width: 'auto',
     },
   ];
 
-  const deleteRecord = (id) => {
-    Swal.fire({
-      title: `Are you sure? ${id}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/tender/deleteTender', { opportunity_id: id }).then(() => {
-          Swal.fire('Deleted!', 'Your Tender has been deleted.', 'success');
-          getTenders();
-        });
-      }
-    });
-  };
-
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-
         <CommonTable
-          title="Tender List"
+          loading={loading}
+          title="Opportunity List"
           Button={
-            <Link to="/TenderDetails">
+            <Link to="/EnquiryDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -160,44 +136,30 @@ const Test = () => {
           </thead>
           <tbody>
             {tenders &&
-              tenders.map((element) => {
+              tenders.map((element, index) => {
                 return (
                   <tr key={element.opportunity_id}>
-                    <td>{element.opportunity_id}</td>
+                    <td>{index + 1}</td>
                     <td>
-                      <Link to={`/TenderEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>
-                      <Link to="">
-                        <span onClick={() => deleteRecord(element.opportunity_id)}>
-                          <Icon.Trash2 />
-                        </span>
-                      </Link>
-                    </td>
+                    <td>{element.enquiry_date}</td>
                     <td>{element.opportunity_code}</td>
-                    <td>{element.title}</td>
-                    <td>{element.office_ref_no}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.closinactual_closing}</td>
+                    <td>{element.office_ref_no}</td>
+                    <td>{element.project_end_date }</td>
+                    <td>{element.services}</td>
                     <td>{element.status}</td>
-                    <td>{element.quote_ref}</td>
                   </tr>
                 );
               })}
           </tbody>
-          <tfoot>
-            <tr>
-              {columns.map((cell) => {
-                return <td key={cell.name}>{cell.name}</td>;
-              })}
-            </tr>
-          </tfoot>
         </CommonTable>
       </div>
     </div>
   );
 };
 
-export default Test;
+export default Opportunity;

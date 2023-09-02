@@ -38,9 +38,10 @@ const PriceListEdit = () => {
   const [update, setUpdate] = useState(false);
   const [planningDetails, setPlanningDetails] = useState(null);
   const [newPlanningData, setNewPlanningData] = useState({
-    product_name: '',
+    product_id: '',
     price: '',
     unit: '',
+    title:'',
 
   });
   const [addContactModal, setAddContactModal] = useState(false);
@@ -128,9 +129,8 @@ const PriceListEdit = () => {
   
     const newContactWithCompanyId = newPlanningData;
 newContactWithCompanyId.price_list_id = id;
-console.log('idra',newContactWithCompanyId.price_list_id )
 if (
-  newContactWithCompanyId.product_name !== '' 
+  newContactWithCompanyId.price !== ''
 
 
 ) {
@@ -189,6 +189,7 @@ const handleAddNewPlanning = (e) => {
            planningDetails={planningDetails}
            handleAddNewPlanning={handleAddNewPlanning}
            newPlanningData={newPlanningData}
+           setNewPlanningData={setNewPlanningData}
            AddNewPlanning={AddNewPlanning}
            addContactModal={addContactModal}
            addContactToggle={addContactToggle}
