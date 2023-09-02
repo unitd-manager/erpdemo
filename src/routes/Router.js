@@ -100,11 +100,15 @@ const CASL = Loadable(lazy(() => import('../views/apps/accessControlCASL/AccessC
 
 // Accounts
 const AccountMap = Loadable(lazy(() => import('../views/smartconTables/AccountMap')));
+const ChartOfAccounts = Loadable(lazy(() => import('../views/smartconTables/ChartOfAccounts')));
 const Journal = Loadable(lazy(() => import('../views/smartconTables/Journal')));
 const Ledger = Loadable(lazy(() => import('../views/smartconTables/Ledger')));
 const CreditNote = Loadable(lazy(() => import('../views/smartconTables/CreditNote')));
 const DebitNote = Loadable(lazy(() => import('../views/smartconTables/DebitNote')));
 const VATReturn = Loadable(lazy(() => import('../views/smartconTables/VATReturn')));
+
+const ChartOfAccountDetails = Loadable(lazy(() => import('../views/DetailTable/ChartOfAccountDetails')));
+const ChartofACEdit = Loadable(lazy(() => import('../views/EditData/ChartofACEdit')));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import('../views/auth/Error')));
@@ -707,12 +711,16 @@ const Routernew = () => {
 
           {/* Account */}
           <Route path="/AccountMap" name="AccountMap" element={<AccountMap />} ></Route>
+          <Route path="/ChartOfAccounts" name="ChartOfAccounts" element={<ChartOfAccounts />} ></Route>
           <Route path="/Journal" name="Journal" element={<Journal />} ></Route>
           <Route path="/Ledger" name="Ledger" element={<Ledger />} ></Route>
           <Route path="/CreditNote" name="CreditNote" element={<CreditNote />} ></Route>
           <Route path="/DebitNote" name="DebitNote" element={<DebitNote />} ></Route>
           <Route path="/VATReturn" name="VATReturn" element={<VATReturn />} ></Route>
 
+          <Route path="/ChartOfAccountDetails" name="ChartOfAccountDetails" element={<ChartOfAccountDetails />} ></Route>
+          <Route path="/ChartofACEdit/:id" name="ChartofACEdit" element={<ChartofACEdit />} ></Route>
+       
         </Route>
       </Routes>
     </div>
