@@ -3,6 +3,7 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
 import AccountMapButton from '../../components/Accounts/AccountMapButton';
 import ComponentCard from '../../components/ComponentCard';
@@ -47,6 +48,7 @@ const ChartofACEdit = () => {
 
   //Logic for edit data in db
   const editChartOfAcc = () => {
+    chartofAC.modification_date = creationdatetime;
       api
         .post('/chartofaccounts/editChartAc', chartofAC)
         .then(() => {
@@ -75,7 +77,7 @@ const ChartofACEdit = () => {
       ></AccountMapButton>
 
       {/* Main Details */}
-      <ComponentCard title=" Project Planning Edit">
+      <ComponentCard title="Chart of AC Edit" creationModificationDate={chartofAC}>
         <Form>
           <FormGroup>
             <Row>
