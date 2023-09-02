@@ -4,15 +4,18 @@ import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 import InvoiceTable from './InvoiceTable';
 import ReceiptTable from './ReceiptTable';
+import OrderItemsTable from './OrderItemsTable';
 
 //VehicleDetails From VehicleEdit
 export default function VehicleMoreDetails({
   invoiceDetails,
-  receiptDetails
+  receiptDetails,
+  ordersDetails,
 }) {
   VehicleMoreDetails.propTypes = {
     invoiceDetails: PropTypes.array,
     receiptDetails: PropTypes.array,
+    ordersDetails: PropTypes.array,
   };
 
   const [activeTab, setActiveTab] = useState('1');
@@ -73,10 +76,8 @@ export default function VehicleMoreDetails({
             </TabPane>
             {/* ADD NODE */}
             <TabPane tabId="3">
-             
+            <OrderItemsTable ordersDetails={ordersDetails}></OrderItemsTable>
             </TabPane>
-           
-
           </TabContent>
         </ComponentCard>
       </FormGroup>
