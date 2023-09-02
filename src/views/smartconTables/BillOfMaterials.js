@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'reactstrap';
+import { Button,Card } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -21,7 +21,7 @@ const BillOfMaterials = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const backToList = () => {
-    navigate('/Planning');
+    navigate (-1);
   };
   // get Leave
   const getPlanning = () => {
@@ -81,15 +81,19 @@ const BillOfMaterials = () => {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-        <Button
+        <Card  className="shadow-none">
+                 <div style={{padding:'5px', display:'flex',flex:'row',justifyContent:'space-between'}}> <div><span></span>
+                 </div><div><Button
             className="shadow-none"
+            style={{display:'flex',justifyContent:'space-between'}}
             color="dark"
             onClick={() => {
               backToList();
             }}
           >
             Back to List
-          </Button>
+          </Button></div></div>
+                </Card>
         <CommonTable
           loading={loading}
           title="Bill Of Materials"
