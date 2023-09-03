@@ -58,6 +58,7 @@ const PurchaseRequestEdit = () => {
       .post('/goodsreceipt/getGoodsReceiptById', { goods_receipt_id: id })
       .then((res) => {
         setGoodsReceiptEditDetails(res.data.data[0]);
+        console.log("setGoodsReceiptEditDetails",res.data.data[0])
       })
   };
   //Edit Product

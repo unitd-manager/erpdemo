@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import * as Icon from 'react-feather';
 import PropTypes from 'prop-types';
 import {
     Row,

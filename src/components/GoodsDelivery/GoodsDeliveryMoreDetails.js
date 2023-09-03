@@ -62,7 +62,7 @@ export default function GoodsDeliveryMoreDetails({
                 <FormGroup>
                   <Label>Order No</Label>
                   <Input
-                    type="date"
+                    type="text"
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.order_code}
                     name="order_code"

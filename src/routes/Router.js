@@ -100,11 +100,15 @@ const CASL = Loadable(lazy(() => import('../views/apps/accessControlCASL/AccessC
 
 // Accounts
 const AccountMap = Loadable(lazy(() => import('../views/smartconTables/AccountMap')));
+const ChartOfAccounts = Loadable(lazy(() => import('../views/smartconTables/ChartOfAccounts')));
 const Journal = Loadable(lazy(() => import('../views/smartconTables/Journal')));
 const Ledger = Loadable(lazy(() => import('../views/smartconTables/Ledger')));
 const CreditNote = Loadable(lazy(() => import('../views/smartconTables/CreditNote')));
 const DebitNote = Loadable(lazy(() => import('../views/smartconTables/DebitNote')));
 const VATReturn = Loadable(lazy(() => import('../views/smartconTables/VATReturn')));
+
+const ChartOfAccountDetails = Loadable(lazy(() => import('../views/DetailTable/ChartOfAccountDetails')));
+const ChartofACEdit = Loadable(lazy(() => import('../views/EditData/ChartofACEdit')));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import('../views/auth/Error')));
@@ -249,6 +253,8 @@ const UserGroupTable = Loadable(lazy(() => import('../views/smartconTables/UserG
 const UserGroupDetails = Loadable(lazy(() => import('../views/DetailTable/UserGroupDetails')));
 const Support = Loadable(lazy(() => import('../views/smartconTables/Support')));
 const Translation = Loadable(lazy(() => import('../views/smartconTables/Translation')));
+const RequestForQuoteTable = Loadable(lazy(() => import('../views/smartconTables/RequestForQuote')));
+const RequestForQuoteDetails = Loadable(lazy(() => import('../views/DetailTable/RequestForQuoteDetails')));
 
 
 //SupplierModal
@@ -299,6 +305,8 @@ const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit'))
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
 const PurchaseOrderEdit = Loadable(lazy(() => import('../views/EditData/PurchaseOrderEdit')));
+const RequestForQuoteEdit = Loadable(lazy(() => import('../views/EditData/RequestForQuoteEdit')));
+
 const PurchaseRequestEdit = Loadable(lazy(() => import('../views/EditData/PurchaseRequestEdit')));
 const ProjectTaskEdit = Loadable(lazy(() => import('../views/EditData/ProjectTaskEdit')));
 const GoodsReceiptEdit = Loadable(lazy(() => import('../views/EditData/GoodsReceiptEdit')));
@@ -392,6 +400,11 @@ const Routernew = () => {
             name="clienttdata"
             element={<PurchaseOrderEdit />}
           ></Route>
+            <Route
+            path="/RequestForQuoteEdit/:id"
+            name="clienttdata"
+            element={<RequestForQuoteEdit />}
+            ></Route>
           <Route
             path="/PurchaseRequestEdit/:id"
             name="clienttdata"
@@ -637,6 +650,8 @@ const Routernew = () => {
           <Route path="/CategoryDetails" name="tenderdata" element={<CategoryDetails />}></Route>
           <Route path="/UserGroup" name="clienttdata" element={<UserGroupTable />}></Route>
           <Route path="/UserGroupDetails" name="clienttdata" element={<UserGroupDetails />}></Route>
+          <Route path="/RequestForQuote" name="clienttdata" element={<RequestForQuoteTable />}></Route>
+          <Route path="/RequestForQuoteDetails" name="clienttdata" element={<RequestForQuoteDetails />}></Route>
           <Route path="/Employee" name="clienttdata" element={<Employee />}></Route>
           <Route
             path="/EmployeeDetails"
@@ -719,12 +734,16 @@ const Routernew = () => {
 
           {/* Account */}
           <Route path="/AccountMap" name="AccountMap" element={<AccountMap />} ></Route>
+          <Route path="/ChartOfAccounts" name="ChartOfAccounts" element={<ChartOfAccounts />} ></Route>
           <Route path="/Journal" name="Journal" element={<Journal />} ></Route>
           <Route path="/Ledger" name="Ledger" element={<Ledger />} ></Route>
           <Route path="/CreditNote" name="CreditNote" element={<CreditNote />} ></Route>
           <Route path="/DebitNote" name="DebitNote" element={<DebitNote />} ></Route>
           <Route path="/VATReturn" name="VATReturn" element={<VATReturn />} ></Route>
 
+          <Route path="/ChartOfAccountDetails" name="ChartOfAccountDetails" element={<ChartOfAccountDetails />} ></Route>
+          <Route path="/ChartofACEdit/:id" name="ChartofACEdit" element={<ChartofACEdit />} ></Route>
+       
         </Route>
       </Routes>
     </div>
