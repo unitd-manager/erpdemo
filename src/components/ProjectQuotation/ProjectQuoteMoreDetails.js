@@ -2,9 +2,9 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
-import TenderContactDetails from '../TradingQuotation/TenderContactDetails';
+import TenderContactDetails from './TenderContactDetails';
 
-export default function GoodsDeliveryMoreDetails({
+export default function ProjectQuoteMoreDetails({
   tenderDetails,
   handleInputs,
   handleAddNewContact,
@@ -15,7 +15,7 @@ export default function GoodsDeliveryMoreDetails({
   addContactToggle,
   getContact
 }) {
-  GoodsDeliveryMoreDetails.propTypes = {
+  ProjectQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     company: PropTypes.object,
@@ -31,18 +31,18 @@ export default function GoodsDeliveryMoreDetails({
       {' '}
       <Form>
         <FormGroup>
-          <ComponentCard title="Goods Delivery Details" creationModificationDate={tenderDetails}>
+          <ComponentCard title="Quotation Details" creationModificationDate={tenderDetails}>
             <Row>
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Delivery Number <span className="required"> *</span>
+                    Quotation Number <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.delivery_no}
-                    name="delivery_no"
+                    value={tenderDetails && tenderDetails.quote_code}
+                    name="quote_code"
                     disabled
                   />
                 </FormGroup>
@@ -53,19 +53,8 @@ export default function GoodsDeliveryMoreDetails({
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.goods_delivery_date}
-                    name="goods_delivery_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Order No</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.order_code}
-                    name="order_code"
+                    value={tenderDetails && tenderDetails.quote_date}
+                    name="quote_date"
                   />
                 </FormGroup>
               </Col>
@@ -121,35 +110,15 @@ export default function GoodsDeliveryMoreDetails({
                           </option>
                         );
                       })}
-                  </Input>
-                  <TenderContactDetails
+
+<TenderContactDetails
                     addContactModal={addContactModal}
                     addContactToggle={addContactToggle}
                     AddNewContact={AddNewContact}
                     handleAddNewContact={handleAddNewContact}
                   ></TenderContactDetails>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Department</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.departmant}
-                    name="departmant"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Salesman</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.sales_man}
-                    name="sales_man"
-                  />
+                  </Input>
+                  
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -158,19 +127,19 @@ export default function GoodsDeliveryMoreDetails({
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.goods_ref_no}
-                    name="goods_ref_no"
+                    value={tenderDetails && tenderDetails.ref_no_quote}
+                    name="ref_no_quote"
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>PO Number</Label>
+                  <Label>Enquiry Number</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.po_no}
-                    name="po_no"
+                    value={tenderDetails && tenderDetails.enquiry_code}
+                    name="enquiry_code"
                     disabled
                   />
                 </FormGroup>
@@ -181,9 +150,9 @@ export default function GoodsDeliveryMoreDetails({
                   <Label>Status</Label>
                   <Input
                     type="select"
-                    value={tenderDetails && tenderDetails.goods_delivery_status}
+                    value={tenderDetails && tenderDetails.quote_status}
                     onChange={handleInputs}
-                    name="goods_delivery_status"
+                    name="quote_status"
                   >
                     <option selected="selected" value="New">
                       New
@@ -193,6 +162,17 @@ export default function GoodsDeliveryMoreDetails({
                     <option value="Not Awarded">Not Awarded</option>
                     <option value="Cancelled">Cancelled</option>
                   </Input>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Net Total</Label>
+                  <Input
+                    type="text"
+                    value={tenderDetails && tenderDetails.total_amount}
+                    onChange={handleInputs}
+                    name="total_amount"
+                  />
                 </FormGroup>
               </Col>
             </Row>

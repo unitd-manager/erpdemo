@@ -61,6 +61,7 @@ const PurchaseRequestEdit = () => {
       .post('/goodsreceipt/getGoodsReceiptById', { goods_receipt_id: id })
       .then((res) => {
         setGoodsReceiptEditDetails(res.data.data[0]);
+        console.log("setGoodsReceiptEditDetails",res.data.data[0])
       })
       .catch((error) => {
         console.error('Error fetching goods receipt:', error);
