@@ -23,34 +23,37 @@ import Tab from '../../components/project/Tab';
 const PurchaseRequestEdit = () => {
   // All state variables
 
-  const [goodsreceipteditdetails, setGoodsReceiptEditDetails] = useState();
-  // const [pocode, setPoCode] = useState();
-  // const [supplier, setSupplier] = useState();
-  const [employee, setEmployee] = useState();
-  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
+  const [goodsreceipteditdetails, setGoodsReceiptEditDetails] = useState({});
+  const [employee, setEmployee] = useState([]);
+  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState(false);
   const [project, setProject] = useState([]);
   const [quote, setQuote] = useState({});
-  const [activeTab, setActiveTab] = useState({});
+  const [activeTab, setActiveTab] = useState('1');
+  const [isRecordCreated, setIsRecordCreated] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // get staff details
+  const { loggedInuser } = useContext(AppContext);
+
+  // Setting data in goodsreceipteditdetails
+  const handleInputs = (e) => {
+    setGoodsReceiptEditDetails({ ...goodsreceipteditdetails, [e.target.name]: e.target.value });
+  };
+
+  // Function to toggle tabs
+  const toggle = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
+
   const tabs = [
     { id: '1', name: 'Goods received Items' },
     { id: '2', name: 'Attachment' },
   ];
-  const toggle = (tab) => {
-    setActiveTab(tab);
-  };
-
-  //get staff details
-  const { loggedInuser } = useContext(AppContext);
-
-  //Setting data in goodsreceipteditdetails
-  const handleInputs = (e) => {
-    setGoodsReceiptEditDetails({ ...goodsreceipteditdetails, [e.target.name]: e.target.value });
-  };
 
   // Get Purchase data By Purchase Id
   const getGoodsReceiptById = () => {
@@ -59,15 +62,16 @@ const PurchaseRequestEdit = () => {
       .then((res) => {
         setGoodsReceiptEditDetails(res.data.data[0]);
       })
+      .catch((error) => {
+        console.error('Error fetching goods receipt:', error);
+      });
   };
-  //Edit Product
+
+  // Edit Product
   const editGoodsReceiptData = () => {
-    if (goodsreceipteditdetails.purchase_order_id !== '' &&
-    goodsreceipteditdetails.goods_received_date !== ''
-    )
-    {
+    if (goodsreceipteditdetails.purchase_order_id && goodsreceipteditdetails.goods_received_date) {
       goodsreceipteditdetails.modification_date = creationdatetime;
-      goodsreceipteditdetails.modified_by= loggedInuser.first_name; 
+      goodsreceipteditdetails.modified_by = loggedInuser.first_name;
       api
         .post('/goodsreceipt/editGoodsReceipt', goodsreceipteditdetails)
         .then(() => {
@@ -81,30 +85,7 @@ const PurchaseRequestEdit = () => {
     }
   };
 
-  // getting data from Category
-  // const getPoCode = () => {
-  //   api
-  //     .get('/goodsreceipt/getPoCode')
-  //     .then((res) => {
-  //       setPoCode(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('Company not found', 'info');
-  //     });
-  // };
-
-
-  // const getSupplierName = () => {
-  //   api
-  //     .get('/goodsreceipt/getSupplierName')
-  //     .then((res) => {
-  //       setSupplier(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('Supplier not found', 'info');
-  //     });
-  // };
-
+  // Get employee names
   const getEmployeeName = () => {
     api
       .get('/goodsreceipt/getEmployeeName')
@@ -112,32 +93,72 @@ const PurchaseRequestEdit = () => {
         setEmployee(res.data.data);
       })
       .catch(() => {
-        message('Supplier not found', 'info');
+        message('Employee not found', 'info');
       });
   };
 
-
+  // Get project data
   const getProject = () => {
     api.get('project/getOppProject').then((res) => {
       setProject(res.data.data);
     });
   };
 
+  // Get quote data
   const getQuote = () => {
     api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
       setQuote(res.data.data[0]);
     });
-  }; 
+  };
 
-  //useEffect
+  // Create a record
+  const CreateRecord = (records) => {
+    api
+      .post('/goodsreceipt/insertGoodsreceiptItems', { records })
+      .then(() => {
+        message('Goods Receipt inserted successfully.', 'success');
+        setIsRecordCreated(true); // Move this line here
+      })
+      .catch((error) => {
+        message(`Error inserting Goods Receipt: ${error.message}`, 'error');
+      });
+  };
+
+  // Get purchase order data by ID
+  const getPurchaseOrderedById = () => {
+    api
+      .post('/goodsreceipt/getPurchaseOrderedById', { purchase_order_id: goodsreceipteditdetails.purchase_order_id })
+      .then((res) => {
+        const orderDetails = res.data.data;
+        // Now that you have orderDetails, you can use it to create records for each product.
+        const records = orderDetails.product_id.map((product) => ({
+          goods_receipt_id: goodsreceipteditdetails.goods_receipt_id,
+          product_id: product.productId,
+          created_by: loggedInuser.first_name,
+          creation_date: new Date().toISOString(),
+          // Add other fields you need for the record here
+        }));
+        CreateRecord(records); // Moved this call inside the then() block
+      })
+      .catch((error) => {
+        console.error('Error fetching purchase order details:', error);
+      });
+  };
+
   useEffect(() => {
     getGoodsReceiptById();
-    // getPoCode();
-    // getSupplierName();
     getEmployeeName();
     getQuote();
     getProject();
   }, [id]);
+
+  useEffect(() => {
+    if (goodsreceipteditdetails.purchase_order_id) {
+      getPurchaseOrderedById();
+    }
+  }, [goodsreceipteditdetails.purchase_order_id]);
+
+  
 
   return (
     <>
@@ -221,8 +242,6 @@ const PurchaseRequestEdit = () => {
                   />
                 </FormGroup>
               </Col>
-              
-             
               <Col md="3">
                 <FormGroup>
                   <Label>Received By</Label>
@@ -255,6 +274,48 @@ const PurchaseRequestEdit = () => {
                     value={goodsreceipteditdetails && goodsreceipteditdetails.total_amount}
                     name="total_amount"
                   />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label> Insert Datas </Label>
+                  
+                  <Button
+  className="shadow-none"
+  color="primary"
+  onClick={() => {
+    CreateRecord(
+      goodsreceipteditdetails.product_id.map((product) => ({
+        goods_receipt_id: goodsreceipteditdetails.goods_receipt_id,
+        product_id: product.productId,
+        created_by: loggedInuser.first_name,
+        creation_date: new Date().toISOString(),
+        // Add other fields you need for the record here
+      }))
+    );
+    setIsRecordCreated(true); // Set isRecordCreated to true after clicking the button
+  }}
+  disabled={isRecordCreated} // Disable the button when isRecordCreated is true
+>
+  Create Receipt Items
+</Button>
+                
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label> Status </Label>
+                  <Input
+                    value={goodsreceipteditdetails && goodsreceipteditdetails.status}
+                    type="select"
+                    onChange={handleInputs}
+                    name="status"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </Input>
                 </FormGroup>
               </Col>
               <Col md="3">
