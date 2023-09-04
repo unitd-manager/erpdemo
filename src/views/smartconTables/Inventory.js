@@ -13,6 +13,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import axios from 'axios'
+import moment from 'moment';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import { columns } from '../../data/Tender/InventoryData';
@@ -179,9 +180,11 @@ function Inventory() {
         // Extract the actual_stock value from the element
         const actualStock = element.actual_stock;
         const searchName = element.search_name;
+        const itemCode = element.item_code;
   
        console.log('actualStock',actualStock)
        console.log('searchName',searchName)
+       console.log('itemCode',itemCode)
         // Create the product first
         const productCodeRes = await api.post('/product/getCodeValue', {
           type: 'ProductCode',
@@ -200,11 +203,14 @@ function Inventory() {
           type: 'InventoryCode',
         });
         const inventoryCode = inventoryCodeResponse.data.data;
-  
+        const currentDate = moment();
+        const stockUpdatedDate =  currentDate.format('DD-MM-YYYY');
+        console.log('stockUpdatedDate',stockUpdatedDate)
         // Create the inventory record including the actual_stock
         await api.post('/inventory/insertinventory', {
           product_id: insertedProductId,
           inventory_code: inventoryCode,
+          stock_updated_date: stockUpdatedDate,
           actual_stock: element.actual_stock,
           search_name: element.search_name
         });
@@ -295,7 +301,7 @@ function Inventory() {
                 <Col md="6">
                 <FormGroup>
                   <a
-                    href="http://43.228.126.245/smartco-api/storage/excelsheets/Inventory.xlsx"
+                    href="http://43.228.126.245/erpdemoapi/storage/excelsheets/Inventory.xlsx"
                     download
                   >
                     <Button color="primary" className="shadow-none">

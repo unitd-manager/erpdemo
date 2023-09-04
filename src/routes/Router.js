@@ -253,6 +253,8 @@ const UserGroupTable = Loadable(lazy(() => import('../views/smartconTables/UserG
 const UserGroupDetails = Loadable(lazy(() => import('../views/DetailTable/UserGroupDetails')));
 const Support = Loadable(lazy(() => import('../views/smartconTables/Support')));
 const Translation = Loadable(lazy(() => import('../views/smartconTables/Translation')));
+const RequestForQuoteTable = Loadable(lazy(() => import('../views/smartconTables/RequestForQuote')));
+const RequestForQuoteDetails = Loadable(lazy(() => import('../views/DetailTable/RequestForQuoteDetails')));
 
 
 //SupplierModal
@@ -303,6 +305,8 @@ const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit'))
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
 const PurchaseOrderEdit = Loadable(lazy(() => import('../views/EditData/PurchaseOrderEdit')));
+const RequestForQuoteEdit = Loadable(lazy(() => import('../views/EditData/RequestForQuoteEdit')));
+
 const PurchaseRequestEdit = Loadable(lazy(() => import('../views/EditData/PurchaseRequestEdit')));
 const ProjectTaskEdit = Loadable(lazy(() => import('../views/EditData/ProjectTaskEdit')));
 const GoodsReceiptEdit = Loadable(lazy(() => import('../views/EditData/GoodsReceiptEdit')));
@@ -396,6 +400,11 @@ const Routernew = () => {
             name="clienttdata"
             element={<PurchaseOrderEdit />}
           ></Route>
+            <Route
+            path="/RequestForQuoteEdit/:id"
+            name="clienttdata"
+            element={<RequestForQuoteEdit />}
+            ></Route>
           <Route
             path="/PurchaseRequestEdit/:id"
             name="clienttdata"
@@ -641,6 +650,8 @@ const Routernew = () => {
           <Route path="/CategoryDetails" name="tenderdata" element={<CategoryDetails />}></Route>
           <Route path="/UserGroup" name="clienttdata" element={<UserGroupTable />}></Route>
           <Route path="/UserGroupDetails" name="clienttdata" element={<UserGroupDetails />}></Route>
+          <Route path="/RequestForQuote" name="clienttdata" element={<RequestForQuoteTable />}></Route>
+          <Route path="/RequestForQuoteDetails" name="clienttdata" element={<RequestForQuoteDetails />}></Route>
           <Route path="/Employee" name="clienttdata" element={<Employee />}></Route>
           <Route
             path="/EmployeeDetails"
