@@ -27,12 +27,11 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
 
   const [title, setTitle] = useState("");
   const [menuItems, setMenuItems] = useState([]);
-
   const [parentOptions, setParentOptions] = useState();
-
   const [selectedParent, setSelectedParent] = useState(null);
   const [openItems, setOpenItems] = useState([]);
   const [clickedMenuItem, setClickedMenuItem] = useState(null);
+  // const [chartofaccounts, setChartOfAccounts] = useState(null);
 
   // Open Edit Modal
   const [editMenuItemModal, setEditMenuItemModal] = useState(false);
@@ -41,7 +40,6 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
   };
 
   //  insert parent Item 
-
   const SaveData = () => {
     let parentid = 0;
     let sortOrder = 1;
@@ -117,8 +115,19 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
     }
   };
 
+
+    // get Chart Of Accounts List
+    // const getChartOfAccounts = () => {
+    //   api
+    //     .get('/chartofaccounts/getChartOfAccounts')
+    //     .then((res) => {
+    //       setChartOfAccounts(res.data.data);
+    //      })
+    // };
+
   useEffect(() => {
     getGroup();
+    // getChartOfAccounts();
   }, []);
 
   useEffect(() => {
