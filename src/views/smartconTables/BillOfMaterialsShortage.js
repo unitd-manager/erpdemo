@@ -56,7 +56,7 @@ const BillOfMaterials = () => {
           .post('/planning/deleteAllInventoryHistory')
           .then(() => {
             Swal.fire('Deleted!', 'All records have been deleted.', 'success');
-            message('All records deleted successfully', 'success');
+            message('All shortlist data deleted successfully', 'success');
           })
           .catch(() => {
             message('Unable to delete all records.', 'error');
@@ -73,13 +73,13 @@ console.log('planning',planning)
       pageLength: 20,
       processing: true,
       dom: 'Bfrtip',
-      // buttons: [
-      //   {
-      //     extend: 'print',ś
-      //     text: 'Print',
-      //     className: 'shadow-none btn btn-primary',
-      //   },
-      // ],
+      buttons: [
+        {
+          extend: 'print',
+          text: 'Print',
+          className: 'shadow-none btn btn-primary',
+        },
+      ],
     });
     getPlanning();
   }, []);
@@ -146,7 +146,7 @@ console.log('planning',planning)
                   deleteAllRecords()
                 }}
               >
-                Clear
+                Clear the shortlist data
               </Button>
             </Col>
             <Col>
