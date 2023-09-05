@@ -14,13 +14,15 @@ export default function RequestPurchase({
  
 }) {
   RequestPurchase.propTypes = {
-    PurchaseRequestID: PropTypes.object,
+    PurchaseRequestID: PropTypes.number,
    
   };
 
-  const [requestPurchase, setRequestPurchase] = useState();
+  const [requestPurchase, setRequestPurchase] = useState([]);
   const [editRequestForQuoteLine, setEditRequestForQuoteLine] = useState(false);
   // const [editRequestForQuoteLineInsert, setEditRequestForQuoteLineInsert] = useState(false);
+
+  
 
 
   const getRequestForQuote = () => {
@@ -40,8 +42,7 @@ export default function RequestPurchase({
 
   useEffect(() => {
     getRequestForQuote();
-  }, []);
-
+  }, [PurchaseRequestID]);
   
   console.log(requestPurchase)
 
@@ -78,12 +79,13 @@ export default function RequestPurchase({
                 </Table>
               </FormGroup>
            
-      {editRequestForQuoteLine && (
+              {editRequestForQuoteLine && (
         <EditRequestForQuoteLine
           editRequestForQuoteLine={editRequestForQuoteLine}
           setEditRequestForQuoteLine={setEditRequestForQuoteLine}
           data={requestPurchase}
-          PurchaseRequestID={PurchaseRequestID}
+          PurchaseRequestID={PurchaseRequestID.purchase_quote_id}
+          
         />
       )}
      
