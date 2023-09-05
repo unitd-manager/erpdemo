@@ -76,17 +76,22 @@ console.log('planning',planning)
      
     },
     {
-      name: 'Inventory Stock',
+      name: 'Act Stock',
      
     },
     {
-      name: 'Reserve Stock',
+      name: 'Reserve Stock/pcs',
      
     },
     {
-      name: 'StockUpdatedDate',
+      name: 'Reserve Total',
      
     },
+    {
+      name: 'Stock date',
+     
+    },
+
     {
       name: 'Matrl Shortage Qty',
       
@@ -106,7 +111,18 @@ console.log('planning',planning)
           
           <Card  className="shadow-none">
                  <div style={{padding:'5px', display:'flex',flex:'row',justifyContent:'space-between'}}> <div><span></span>
-                 </div><div><Button
+                 </div><div>
+                 <Button
+            className="shadow-none"
+            style={{display:'flex',justifyContent:'space-between'}}
+            color="dark"
+            onClick={() => {
+              backToList();
+            }}
+          >
+            Clear
+          </Button>
+          <Button
             className="shadow-none"
             style={{display:'flex',justifyContent:'space-between'}}
             color="dark"
@@ -149,7 +165,8 @@ console.log('planning',planning)
                     <td>{element.qty}</td>
                     <td>{element.actual_stock}</td>
                     <td>{element.reserve_stock}</td>
-                    <td>{element.stock_updated_date}</td>
+                    <td>{element.inventory_reserve_stock}</td>
+                    <td>{element.stockDate}</td>
                     <td>{element.matrl_shortage_qty}</td>
                     <td>{element.matrl_shortage}</td>
                     </tr>
