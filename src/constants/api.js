@@ -11,5 +11,4 @@ const api = axios.create({
 //   baseURL: 'https://art-cause.com:3003'
 // });
 
-
 export default api

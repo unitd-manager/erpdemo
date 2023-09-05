@@ -129,6 +129,7 @@ const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice
 const TaskTable = Loadable(lazy(() => import('../views/smartconTables/Task')));
 const PurchaseRequestTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseRequest')));
 const ProjectTaskTable = Loadable(lazy(() => import('../views/smartconTables/ProjectTask')));
+const DocumentTable = Loadable(lazy(() => import('../views/smartconTables/Document')));
 
 const Attendance = Loadable(lazy(() => import('../views/smartconTables/Attendance')));
 const ProjectTable = Loadable(lazy(() => import('../views/smartconTables/Project')));
@@ -199,6 +200,8 @@ const VehicleDetails = Loadable(lazy(() => import('../views/DetailTable/VehicleD
 const PurchaseRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/PurchaseRequestDetails')));
 const ProjectTaskDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProjectTaskDetails')));
 const GoodsReceiptDetailsTable = Loadable(lazy(() => import('../views/DetailTable/GoodsReceiptDetails')));
+const ChangeRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ChangeRequestDetails')));
+const DocumentDetailsTable = Loadable(lazy(() => import('../views/DetailTable/DocumentDetails')));
 // const ChangeRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ChangeRequestDetails')));
 
 // PayrollHR
@@ -253,6 +256,8 @@ const UserGroupTable = Loadable(lazy(() => import('../views/smartconTables/UserG
 const UserGroupDetails = Loadable(lazy(() => import('../views/DetailTable/UserGroupDetails')));
 const Support = Loadable(lazy(() => import('../views/smartconTables/Support')));
 const Translation = Loadable(lazy(() => import('../views/smartconTables/Translation')));
+const RequestForQuoteTable = Loadable(lazy(() => import('../views/smartconTables/RequestForQuote')));
+const RequestForQuoteDetails = Loadable(lazy(() => import('../views/DetailTable/RequestForQuoteDetails')));
 
 
 //SupplierModal
@@ -303,10 +308,13 @@ const SettingEdit = Loadable(lazy(() => import('../views/EditData/SettingEdit'))
 const InventoryEdit = Loadable(lazy(() => import('../views/EditData/InventoryEdit')));
 const UserGroupEdit = Loadable(lazy(() => import('../views/EditData/UserGroupEdit')));
 const PurchaseOrderEdit = Loadable(lazy(() => import('../views/EditData/PurchaseOrderEdit')));
+const RequestForQuoteEdit = Loadable(lazy(() => import('../views/EditData/RequestForQuoteEdit')));
+
 const PurchaseRequestEdit = Loadable(lazy(() => import('../views/EditData/PurchaseRequestEdit')));
 const ProjectTaskEdit = Loadable(lazy(() => import('../views/EditData/ProjectTaskEdit')));
 const GoodsReceiptEdit = Loadable(lazy(() => import('../views/EditData/GoodsReceiptEdit')));
 const ChangeRequestEdit = Loadable(lazy(() => import('../views/EditData/ChangeRequestEdit')));
+const DocumentEdit = Loadable(lazy(() => import('../views/EditData/DocumentEdit')));
 
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
@@ -359,6 +367,7 @@ const Routernew = () => {
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
           <Route path="/GoodsDeliveryEdit/:id" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
           <Route path="/ChangeRequestEdit/:id" name="tenderdata" element={<ChangeRequestEdit />}></Route>
+          <Route path="/DocumentEdit/:id" name="tenderdata" element={<DocumentEdit />}></Route>
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"
@@ -396,6 +405,11 @@ const Routernew = () => {
             name="clienttdata"
             element={<PurchaseOrderEdit />}
           ></Route>
+            <Route
+            path="/RequestForQuoteEdit/:id"
+            name="clienttdata"
+            element={<RequestForQuoteEdit />}
+            ></Route>
           <Route
             path="/PurchaseRequestEdit/:id"
             name="clienttdata"
@@ -520,6 +534,7 @@ const Routernew = () => {
           <Route path="/ProjectTask" name="tenderdata" element={<ProjectTaskTable />}></Route>
           <Route path="/GoodsReceived" name="tenderdata" element={<GoodsReceivedTable />}></Route>
           <Route path="/ChangeRequest" name="tenderdata" element={<ChangeRequestTable />}></Route>
+          <Route path="/Document" name="tenderdata" element={<DocumentTable />}></Route>
           
           <Route path="/Attendance" name="tenderdata" element={<Attendance />}></Route>
           <Route path="/TenderDetails" name="tenderdata" element={<TenderDetailsTable />}></Route>
@@ -554,6 +569,9 @@ const Routernew = () => {
           <Route path="/PurchaserequestDetails" name="tenderdata" element={<PurchaseRequestDetailsTable />}></Route>
           <Route path="/ProjectTaskDetails" name="tenderdata" element={<ProjectTaskDetailsTable />}></Route>
           <Route path="/GoodsReceiptDetails" name="tenderdata" element={<GoodsReceiptDetailsTable />}></Route>
+          <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route>
+          <Route path="/DocumentDetails" name="tenderdata" element={<DocumentDetailsTable />}></Route>
+          
           {/* <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route> */}
           <Route
             path="/TimesheetDetails"
@@ -641,6 +659,8 @@ const Routernew = () => {
           <Route path="/CategoryDetails" name="tenderdata" element={<CategoryDetails />}></Route>
           <Route path="/UserGroup" name="clienttdata" element={<UserGroupTable />}></Route>
           <Route path="/UserGroupDetails" name="clienttdata" element={<UserGroupDetails />}></Route>
+          <Route path="/RequestForQuote" name="clienttdata" element={<RequestForQuoteTable />}></Route>
+          <Route path="/RequestForQuoteDetails" name="clienttdata" element={<RequestForQuoteDetails />}></Route>
           <Route path="/Employee" name="clienttdata" element={<Employee />}></Route>
           <Route
             path="/EmployeeDetails"
