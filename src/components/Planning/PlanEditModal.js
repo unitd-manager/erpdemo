@@ -103,6 +103,17 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                                 />
                               </FormGroup>
                             </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label>Priority</Label>
+                                <Input
+                                  type="text"
+                                  name="priority"
+                                  onChange={handleInputs}
+                                  value={PlaniEdit && PlaniEdit.priority}
+                                />
+                              </FormGroup>
+                            </Col>
                             </Row>
                             <Row>
                             <Col md="4">
