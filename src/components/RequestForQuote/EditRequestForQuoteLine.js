@@ -11,21 +11,20 @@ import {
   ModalFooter,
   Label,
 } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
 import message from '../Message';
 
-const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine, data }) => {
+const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine, orderDetails }) => {
   EditRequestForQuoteLine.propTypes = {
     editRequestForQuoteLine: PropTypes.bool,
     setEditRequestForQuoteLine: PropTypes.func,
-    data: PropTypes.array,
+    orderDetails: PropTypes.array,
   };
 
   // Initialize state with data from props
   const [addLineItem, setAddLineItem] = useState([]);
-  const { id } = useParams();
 
   // Function to update state
   function updateState(index, property, e) {
@@ -54,17 +53,6 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
     setAddLineItem(updatedLineItems);
   }
 
-  // Fetch data for editing
-  const editPurchase = () => {
-    api
-      .post('/quote/RequestLineItemById', { purchase_quote_id: id })
-      .then((res) => {
-        setAddLineItem(res.data.data);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-  };
 
   // Function to edit line items
   const editLineItemApi = () => {
@@ -81,14 +69,8 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
         })
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
-          setAddLineItem((prevData) =>
-          prevData.map((items) => ({
-            ...items,
-            purchase_quote_items_id: items.purchaseQuoteItemsId, // Use the correct property name
-          }))
-        );
-        
-          })
+          setAddLineItem()
+        })
         .catch((error) => {
           console.error('Error updating item:', error);
           message('Cannot Edit Line Items', 'error');
@@ -98,8 +80,7 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
   
   useEffect(() => {
     console.log('addLineItem:', addLineItem);
-    editPurchase();
-  }, [data, editRequestForQuoteLine]);
+  }, [ editRequestForQuoteLine,orderDetails]);
 
   return (
     <>

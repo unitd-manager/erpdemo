@@ -22,6 +22,7 @@ const RequestForQuoteEdit = () => {
   const [quoteDetails, setQuoteDetails] = useState();
   const [supplier, setSupplier] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
+  const [orderDetails, setOrderDetails] = useState();
 
 
   //navigation and parameters
@@ -32,21 +33,18 @@ const RequestForQuoteEdit = () => {
   const backToList = () => {
     navigate('/RequestForQuote');
   };
-  //setting data in quoteDetails
+  
   const handleInputs = (e) => {
     setQuoteDetails({ ...quoteDetails, [e.target.name]: e.target.value });
   };
-  //getting data from setting by Id
-  const getTabQuoteById = () => {
-    api
-      .post('/quote/getPurchaseQuoteById', { purchase_quote_id: id })
-      .then((res) => {
-        setQuoteDetails(res.data.data[0]);
-      })
-      .catch(() => {
-        message('Quote Data Not Found', 'info');
-      });
+  
+  const getOrdersByOrderId = () => {
+    api.post('/quote/getPurchaseQuoteById', { purchase_quote_id : id }).then((res) => {
+      setOrderDetails(res.data.data);
+    
+    });
   };
+
   //Update Setting
   const editQuoteData = () => {
     quoteDetails.modification_date = creationdatetime;
@@ -80,11 +78,83 @@ const RequestForQuoteEdit = () => {
   const toggle = (tab) => {
     setActiveTab(tab);
   };
+  const generateData = (purchaseId) => {
+    // Fetch quote items by purchase_request_id
+    api.post('/quote/getPurchaseQuoteRequestById', { purchase_request_id: purchaseId })
+      .then((res) => {
+        const quoteItems = res.data.data;
+  
+        console.log('Received quote items:', quoteItems);
+  
+        if (quoteItems.length === 0) {
+          console.warn('No quote items to insert');
+          return;
+        }
+  
+       // Create a helper function to insert a single order item
+const insertOrderItem = (quoteItem) => {
+  if (quoteItem.purchase_quote_items_id) {
+    // Order item doesn't exist, insert it
+    const orderItemData = {
+      purchase_quote_id: id,
+      quantity: quoteItem.purchase_request_qty,
+      title: quoteItem.title,
+      purchase_request_id: quoteItem.purchase_request_id,
+      unit: quoteItem.unit,
+    };
 
+    console.log(`Inserting order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}:`, orderItemData);
+
+    api
+      .post('/quote/insertQuoteItems', orderItemData)
+      .then((result) => {
+        if (result.data.msg === 'Success') {
+          console.log(`Order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id} inserted successfully`);
+          // You can trigger a UI update here if needed
+        } else {
+          console.error(`Failed to insert order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}`);
+        }
+      })
+      .catch((error) => {
+        console.error(`Error inserting order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}`, error);
+      });
+  } else {
+    console.warn('purchase_quote_items_id is undefined, skipping insertion');
+  }
+};
+  
+        // Loop through quoteItems and insert order items
+        quoteItems.forEach((quoteItem) => {
+          insertOrderItem(quoteItem);
+        });
+
+        console.log('All order items inserted or skipped successfully');
+        // You might want to trigger a UI update here
+      })
+      .catch((error) => {
+        console.error('Error fetching quote items', error);
+      });
+  };
+  
+   //getting data from setting by Id
+   const getTabQuoteById = () => {
+    api
+      .post('/quote/getPurchaseQuoteById', { purchase_quote_id: id })
+      .then((res) => {
+        setQuoteDetails(res.data.data[0]);
+        generateData(res.data.data[0].purchase_request_id);
+      })
+      .catch(() => {
+        message('Quote Data Not Found', 'info');
+      });
+  };
+  
   useEffect(() => {
     getTabQuoteById();
     getSupplier();
+    getOrdersByOrderId();
   }, [id]);
+  
 
   return (
     <>
@@ -94,6 +164,17 @@ const RequestForQuoteEdit = () => {
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
             <Row>
+            <Col>
+              <Button
+                className="shadow-none"
+                color="primary"
+                onClick={() => {
+                  generateData();
+                }}
+              >
+                Generate Data
+              </Button>
+            </Col>
               <Col>
                 <Button
                   className="shadow-none"
@@ -253,11 +334,10 @@ const RequestForQuoteEdit = () => {
       <Tab toggle={toggle} tabs={tabs} />
       <TabContent className="p-4" activeTab={activeTab}>
       <TabPane tabId="1" eventkey="MoreDetails">
-          <RequestPurchase
-          PurchaseRequestID={id}
-          quoteDetails={quoteDetails}
-          >
-          </RequestPurchase>
+          {orderDetails && <RequestPurchase
+  orderDetails={orderDetails}
+          />
+          }
           </TabPane>
           </TabContent>
     </>
