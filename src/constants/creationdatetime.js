@@ -8,4 +8,4 @@ const creationdatetime = moment(formattedDatetime, 'DD-MM-YYYY h:mm:ss a').forma
 
 console.log(creationdatetime); // Output: "2023-07-24 12:44:43"
 
-export default creationdatetime 
+export default creationdatetime

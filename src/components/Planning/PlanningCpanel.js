@@ -198,6 +198,13 @@ const arr=JSON.parse(jsonData);
       width: 'auto',
       grow: 3,
     },
+    {
+      name: 'Priority',
+      selector: 'priority',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
     // {
     //   name: 'Start Date',
     //   selector: 'start_date',
@@ -383,6 +390,7 @@ const arr=JSON.parse(jsonData);
                     <td>{element.fg_code}</td>
                     <td>{element.cpanel_name}</td>
                     <td>{element.ordered_qty}</td>
+                    <td>{element.priority}</td>
                     {/* <td>
                       {element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}
                     </td>

@@ -11,5 +11,4 @@ baseURL: 'http://43.228.126.245:5001',
 //   baseURL: 'https://art-cause.com:3003'
 // });
 
-
 export default api
