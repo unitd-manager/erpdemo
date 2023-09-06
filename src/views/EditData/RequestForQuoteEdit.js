@@ -90,6 +90,10 @@ const RequestForQuoteEdit = () => {
           console.warn('No quote items to insert');
           return;
         }
+        const quoteItemsWithIds = quoteItems.map((quoteItem, index) => ({
+          ...quoteItem,
+          purchase_quote_items_id: index + 1, // Generate a unique ID or use an appropriate identifier
+        }));
   
        // Create a helper function to insert a single order item
 const insertOrderItem = (quoteItem) => {
@@ -123,10 +127,9 @@ const insertOrderItem = (quoteItem) => {
   }
 };
   
-        // Loop through quoteItems and insert order items
-        quoteItems.forEach((quoteItem) => {
-          insertOrderItem(quoteItem);
-        });
+quoteItemsWithIds.forEach((quoteItem) => {
+  insertOrderItem(quoteItem);
+});
 
         console.log('All order items inserted or skipped successfully');
         // You might want to trigger a UI update here

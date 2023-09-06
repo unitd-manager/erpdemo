@@ -42,11 +42,11 @@ export default function RequestPurchase({
                     {orderDetails &&
                       orderDetails.map((e) => {
                         return (
-                          <tr key={e.purchase_quote_items_id}>
+                          <tr key={e.purchase_quote_id}>
                             <td data-label="Product Code">{e.product_code}</td>
                             <td data-label="Title">{e.item_title}</td>
                             <td data-label="Unit">{e.unit}</td>
-                            <td data-label="Quantity">{e.purchase_request_qty}</td>
+                            <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Updated By">{e.modified_by}</td>
                             <td data-label="Amount">{e.amount}</td>
                           </tr>
