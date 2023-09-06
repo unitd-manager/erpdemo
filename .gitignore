@@ -11,8 +11,11 @@
 # production
 /build
 
+
 #file
-/api.js
+/src
+/.constants
+.api.js
 
 # misc
 .DS_Store
