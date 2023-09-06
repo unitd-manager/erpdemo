@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   FormGroup,
@@ -6,44 +6,22 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import EditRequestForQuoteLine from './EditRequestForQuoteLine'; 
-import message from '../Message';
-import api from '../../constants/api';
 
 export default function RequestPurchase({
-  PurchaseRequestID,
- 
+  orderDetails, 
 }) {
   RequestPurchase.propTypes = {
-    PurchaseRequestID: PropTypes.object,
-   
+    orderDetails: PropTypes.array,
   };
+  console.log('orderDetails:', orderDetails);
 
-  const [requestPurchase, setRequestPurchase] = useState();
+
   const [editRequestForQuoteLine, setEditRequestForQuoteLine] = useState(false);
   // const [editRequestForQuoteLineInsert, setEditRequestForQuoteLineInsert] = useState(false);
-
-
-  const getRequestForQuote = () => {
-    api
-      .post('/quote/RequestLineItemById', { purchase_quote_id: PurchaseRequestID })
-      .then((res) => {
-        setRequestPurchase(res.data.data);
-      })
-      .catch(() => {
-        message('Request For Quote Data Not Found', 'info');
-      });
-  };
 
   const handleEditButtonClick = () => {
     setEditRequestForQuoteLine(true);
   };
-
-  useEffect(() => {
-    getRequestForQuote();
-  }, []);
-
-  
-  console.log(requestPurchase)
 
   return (
     <>
@@ -61,14 +39,14 @@ export default function RequestPurchase({
                     </tr>
                   </thead>
                   <tbody>
-                    {requestPurchase &&
-                      requestPurchase.map((e) => {
+                    {orderDetails &&
+                      orderDetails.map((e) => {
                         return (
                           <tr key={e.purchase_quote_id}>
                             <td data-label="Product Code">{e.product_code}</td>
                             <td data-label="Title">{e.item_title}</td>
                             <td data-label="Unit">{e.unit}</td>
-                            <td data-label="Quantity">{e.purchase_request_qty}</td>
+                            <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Updated By">{e.modified_by}</td>
                             <td data-label="Amount">{e.amount}</td>
                           </tr>
@@ -82,8 +60,7 @@ export default function RequestPurchase({
         <EditRequestForQuoteLine
           editRequestForQuoteLine={editRequestForQuoteLine}
           setEditRequestForQuoteLine={setEditRequestForQuoteLine}
-          data={requestPurchase}
-          PurchaseRequestID={PurchaseRequestID}
+          data={orderDetails}
         />
       )}
      

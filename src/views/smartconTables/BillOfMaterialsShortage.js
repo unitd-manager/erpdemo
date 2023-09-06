@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button,Card } from 'reactstrap';
+import { Button,Card,Row,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
+import Swal from 'sweetalert2';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { useParams,useNavigate } from 'react-router-dom';
 import api from '../../constants/api';
+import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
+import ComponentCardV2 from '../../components/ComponentCardV2';
 
 const BillOfMaterials = () => {
   //Const Variables
@@ -37,6 +40,32 @@ const BillOfMaterials = () => {
         setLoading(false);
       });
   };
+
+  const deleteAllRecords = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will delete all records!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete all!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .post('/planning/deleteAllInventoryHistory')
+          .then(() => {
+            Swal.fire('Deleted!', 'All records have been deleted.', 'success');
+            message('All shortlist data deleted successfully', 'success');
+          })
+          .catch(() => {
+            message('Unable to delete all records.', 'error');
+          });
+      }
+    });
+  };
+  
+
 console.log('planning',planning)
   useEffect(() => {
     $('#example').DataTable({
@@ -46,7 +75,7 @@ console.log('planning',planning)
       dom: 'Bfrtip',
       // buttons: [
       //   {
-      //     extend: 'print',ś
+      //     extend: 'print',
       //     text: 'Print',
       //     className: 'shadow-none btn btn-primary',
       //   },
@@ -76,17 +105,22 @@ console.log('planning',planning)
      
     },
     {
-      name: 'Inventory Stock',
+      name: 'Act Stock',
      
     },
     {
-      name: 'Reserve Stock',
+      name: 'Reserve Stock/pcs',
      
     },
     {
-      name: 'StockUpdatedDate',
+      name: 'Reserve Total',
      
     },
+    {
+      name: 'Stock date',
+     
+    },
+
     {
       name: 'Matrl Shortage Qty',
       
@@ -102,21 +136,32 @@ console.log('planning',planning)
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs /> 
-       
-          
-          <Card  className="shadow-none">
-                 <div style={{padding:'5px', display:'flex',flex:'row',justifyContent:'space-between'}}> <div><span></span>
-                 </div><div><Button
-            className="shadow-none"
-            style={{display:'flex',justifyContent:'space-between'}}
-            color="dark"
-            onClick={() => {
-              backToList();
-            }}
-          >
-            Back to List
-          </Button></div></div>
-                </Card>
+        <ComponentCardV2>
+          <Row>
+            <Col>
+              <Button
+                className="shadow-none"
+                color="primary"
+                onClick={() => {
+                  deleteAllRecords()
+                }}
+              >
+                Clear the shortlist data
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                className="shadow-none"
+                color="dark"
+                onClick={() => {
+                  backToList();
+                }}
+              >
+                Back to List
+              </Button>
+            </Col>
+          </Row>
+        </ComponentCardV2>
         <CommonTable
           loading={loading}
           title="Bill Of Materials"
@@ -149,7 +194,8 @@ console.log('planning',planning)
                     <td>{element.qty}</td>
                     <td>{element.actual_stock}</td>
                     <td>{element.reserve_stock}</td>
-                    <td>{element.stock_updated_date}</td>
+                    <td>{element.inventory_reserve_stock}</td>
+                    <td>{element.stockDate}</td>
                     <td>{element.matrl_shortage_qty}</td>
                     <td>{element.matrl_shortage}</td>
                     </tr>

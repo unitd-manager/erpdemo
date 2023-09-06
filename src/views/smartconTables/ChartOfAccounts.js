@@ -7,8 +7,6 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-// import 'datatables.net-buttons/js/buttons.html5';
-// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -19,7 +17,7 @@ const ChartOfAccounts = () => {
   const [chartofaccounts, setChartOfAccounts] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // get Leave
+  // get Chart Of Accounts List
   const getChartOfAccounts = () => {
     api
       .get('/chartofaccounts/getChartOfAccounts')
@@ -41,7 +39,7 @@ const ChartOfAccounts = () => {
   useEffect(() => {
     getChartOfAccounts();
   }, []);
-  //  stucture of leave list view
+  //  stucture of Chart Of Accounts list view
   const columns = [
     {
       name: 'Id',

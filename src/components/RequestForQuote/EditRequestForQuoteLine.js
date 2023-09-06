@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Row,
   Col,
@@ -11,99 +11,76 @@ import {
   ModalFooter,
   Label,
 } from 'reactstrap';
+// import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-// import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
 
-const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine, data ,PurchaseRequestID}) => {
+const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine, orderDetails }) => {
   EditRequestForQuoteLine.propTypes = {
     editRequestForQuoteLine: PropTypes.bool,
     setEditRequestForQuoteLine: PropTypes.func,
-    data: PropTypes.array,
-    PurchaseRequestID: PropTypes.array,
+    orderDetails: PropTypes.array,
   };
 
-  const [newItems, setNewItems] = useState([]);
-  const [purchase, setPurchase] = useState(data);
-  const [items, setItems] = useState(data)
-  const [addMoreItem, setMoreItem] = useState(0);
+  // Initialize state with data from props
+  const [addLineItem, setAddLineItem] = useState([]);
 
-  const AddMoreItem = () => {
-    setMoreItem(addMoreItem + 1);
-  };
-console.log('po',data)
+  // Function to update state
+  function updateState(index, property, e) {
+    // Create a copy of addLineItem
+    const updatedLineItems = [...addLineItem];
 
-function updateState(index, property, e) {
-    const copyDeliverOrderProducts = [...items];
-    const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
-    copyDeliverOrderProducts[index] = updatedObject;
-    setItems(copyDeliverOrderProducts);
-  }
-
-  function updateNewItemState(index, property, e) {
-    const copyDeliverOrderProducts = [...newItems];
-    const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
-    copyDeliverOrderProducts[index] = updatedObject;
-    setNewItems(copyDeliverOrderProducts);
-  }
-
-
-
-  //edit purchase
-  const editPurchase = () => {
-    const purchaseRecord={
-      purchase_request_code:purchase.purchase_request_code,
-      purchase_request_id:purchase.purchase_request_id,
-      purchase_quote_id:purchase.purchase_quote_id,
-      purchase_request_qty:purchase.purchase_request_qty,
-      amount:purchase.amount,
-
+    // Ensure the item at the given index exists
+    if (!updatedLineItems[index]) {
+      updatedLineItems[index] = {};
     }
-    api.post('/quote/RequestLineItemById',{  purchaseRecord })
-    .then((res) => {
-        setPurchase(res.data.data[0]);
-    })
-    .catch(() => {
-      message('Unable to edit record.', 'error');
-    });
-  };
 
-  const editPurchaseQuoteLineItem = (quoteId, lineItemId) => {
-    api
-      .post('/quote/editTabQuoteLineItems', {
-        purchase_quote_id: quoteId,
-        purchase_quote_line_items: lineItemId,
-        /* other data for editing */
-      })
-      .then((response) => {
-        // Update the state with the updated data for this item
-        const updatedItems = [...items];
-        const index = updatedItems.findIndex((item) => item.purchase_quote_id === lineItemId);
-        if (index !== -1) {
-          updatedItems[index] = response.data.updatedItem; // replace 'updatedItem' with the actual field name in your API response
-          setItems(updatedItems);
-        }
-        message('Record edited successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
+    // Update the specific property for the item at the given index
+    updatedLineItems[index] = {
+      ...updatedLineItems[index],
+      [property]: e.target.value,
+    };
+
+    // Recalculate total_cost if needed
+    if (property === 'amount' || property === 'purchase_request_qty') {
+      const quantity = parseFloat(updatedLineItems[index].purchase_request_qty) || 0;
+      const amount = parseFloat(updatedLineItems[index].amount) || 0;
+      updatedLineItems[index].total_cost = quantity * amount;
+    }
+
+    // Update the state with the new line items
+    setAddLineItem(updatedLineItems);
+  }
+
+
+  // Function to edit line items
+  const editLineItemApi = () => {
+    addLineItem.forEach((item) => {
+      console.log('Item to be updated:', item);
+      api
+        .post('quote/editTabQuoteLineItems', {
+          amount: item.amount, 
+          description: item.description,
+          purchase_quote_items_id: item.purchase_quote_items_id,
+          purchase_request_id: item.purchase_request_id,
+          purchase_quote_id: item.purchase_quote_id,
+          total_cost: item.total_cost,
+        })
+        .then((res) => {
+          console.log('API Response:', res.data.data); // Log the API response
+          setAddLineItem()
+        })
+        .catch((error) => {
+          console.error('Error updating item:', error);
+          message('Cannot Edit Line Items', 'error');
+        });
+    });
   };
   
-
-  const getTotalOfPurchase = () => {
-    let total = 0;
-    items.forEach((a) => {
-      total += parseInt(a.purchase_request_qty, 10) * parseFloat(a.amount, 10);
-    });
-    return total;
-  };
-
-useEffect(() => {
-    editPurchase();
-  }, []);
-
+  useEffect(() => {
+    console.log('addLineItem:', addLineItem);
+  }, [ editRequestForQuoteLine,orderDetails]);
 
   return (
     <>
@@ -116,34 +93,23 @@ useEffect(() => {
               <Col md="12" className="mb-4">
                 <Row>
                   <Col md="3">
-                    <Button color="primary" className="shadow-none" onClick={AddMoreItem}>
-                      Add More Items
-                    </Button>
-                  </Col>
-                </Row>
-                <br />
-                <Row>
-                  <Col md="3">
                     <Label>Supplier</Label>
                     <Input
                       disabled
                       type="text"
                       name="supplier"
-                      value={purchase && purchase.company_name}
+                      value={addLineItem && addLineItem.company_name}
                     />
-                  </Col>      
+                  </Col>
                   <Col md="3">
                     <Label>PR No.</Label>
                     <Input
                       disabled
                       type="text"
                       name="purchase_request_code"
-                      value={purchase && purchase.purchase_request_code}
+                      value={addLineItem && addLineItem.purchase_request_code}
                     />
                   </Col>
-                </Row>
-                <Row>
-                  <FormGroup className="mt-3"> Total Amount :{getTotalOfPurchase()}</FormGroup>
                 </Row>
               </Col>
             </Row>
@@ -159,113 +125,66 @@ useEffect(() => {
                 </tr>
               </thead>
               <tbody>
-                {items && items.map((el, index) => {
-                  return (
-                    <tr key={el.purchase_quote_id}>
-                      <td data-label="ProductName">
-                      <Input
-                      disabled
-                          type="text"
-                          name="title"
-                          value={el.title}
-                        />
-                      </td>
-                      <td data-label="unit">
-                      <Input
-                      disabled
-                          type="text"
-                          name="unit"
-                          value={el.unit}
-                        />
-                      </td>
-                      <td data-label="purchase_request_qty">
-                      <Input
-                      disabled
-                          type="text"
-                          name="purchase_request_qty"
-                          value={el.purchase_request_qty}
-        
-                        />
-                      </td>
-                      <td data-label="Amount">
-                      <Input
-                      type="text"
-                      name="amount"
-                      value={el.amount}
-                      onChange={(e) => updateState(index, 'amount', e)} 
-                    />
-                      </td>
-                      <td data-label="Total Price">{el.amount * el.purchase_request_qty}</td>
-                      <td data-label="Remarks">
-                        <Input
-                          type="textarea"
-                          name="description"
-                          value={el.description}
-                          onChange={(e) => updateState(index, 'description', e)}
-                        />
-                      </td>
-                      <td data-label="Action">
-                        <div className='anchor'>
-                          <span>Clear</span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-                {[...Array(addMoreItem)].map((elem, index) => {
-                  return (
-                    <tr key={addMoreItem}>
-                      <td data-label="ProductName">
-                      <Input
-                      disabled
-                          type="text"
-                          name="title"
-                          value={elem && elem.title}
-                          
-                        />
-                      </td>
-                      <td data-label="UoM">
-                      <Input
-                      disabled
-                          type="text"
-                          name="unit"
-                          value={elem && elem.unit}
-                          
-                        />
-                      </td>
-                      <td data-label="Qty">
-                      <Input
-                      disabled
-                          type="text"
-                          name="purchase_request_qty"
-                          value={elem && elem.purchase_request_qty}
-                        />
-                      </td>
-                      <td data-label="Unit Price">
-                        <Input
-                          type="text"
-                          name="amount"
-                          value={elem && elem.amount}
-                          onChange={(e) => updateNewItemState(index, 'amount', e)}
-                        />
-                      </td>
-                      <td data-label="Total Price">{elem && elem.amount * elem && elem.purchase_request_qty}</td>
-                      <td data-label="Remarks">
-                        <Input
-                          type="textarea"
-                          name="description"
-                          value={elem && elem.description}
-                          onChange={(e) => updateNewItemState(index, 'description', e)}
-                        />
-                      </td>
-                      <td data-label="Action">
-                        <div className='anchor'>
-                          <span>Clear</span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {addLineItem &&
+                  addLineItem.map((el, index) => {
+                    return (
+                      <tr key={el.purchase_quote_items_id}>
+                        <td data-label="ProductName">
+                          <Input
+                            disabled
+                            type="text"
+                            name="title"
+                            value={el.title}
+                          />
+                        </td>
+                        <td data-label="unit">
+                          <Input
+                            disabled
+                            type="text"
+                            name="unit"
+                            value={el.unit}
+                          />
+                        </td>
+                        <td data-label="purchase_request_qty">
+                          <Input
+                            disabled
+                            type="text"
+                            name="purchase_request_qty"
+                            value={el.purchase_request_qty}
+                          />
+                        </td>
+                        <td data-label="Amount">
+                          <Input
+                            type="text"
+                            name="amount"
+                            value={el.amount}
+                            onChange={(e) => updateState(index, 'amount', e)}
+                          />
+                        </td>
+                        <td data-label="Total Price">
+                          <Input
+                            value={el.total_cost}
+                            type="text"
+                            name="total_cost"
+                            onChange={(e) => updateState(index, 'total_cost', e)}
+                          />
+                        </td>
+                        <td data-label="Remarks">
+                          <Input
+                            type="textarea"
+                            name="description"
+                            value={el.description}
+                            onChange={(e) => updateState(index, 'description', e)}
+                          />
+                        </td>
+                        <td data-label="Action">
+                          <div className="anchor">
+                            <span>Clear</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </FormGroup>
@@ -274,18 +193,14 @@ useEffect(() => {
           <Button
             color="primary"
             className="shadow-none"
-            onClick={async() => {
-              await editPurchaseQuoteLineItem((PurchaseRequestID));
-              await setEditRequestForQuoteLine(false);
-              setTimeout(()=>{
-              },1500)
-              
+            onClick={() => {
+              editLineItemApi();
             }}
           >
             Submit
           </Button>
           <Button
-            color="secondar"
+            color="secondary"
             className="shadow-none"
             onClick={() => {
               setEditRequestForQuoteLine(false);
@@ -295,7 +210,6 @@ useEffect(() => {
           </Button>
         </ModalFooter>
       </Modal>
-
     </>
   );
 };
