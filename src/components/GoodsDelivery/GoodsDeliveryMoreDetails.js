@@ -43,7 +43,7 @@ export default function GoodsDeliveryMoreDetails({
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.delivery_no}
                     name="delivery_no"
-                    disabled
+                    
                   />
                 </FormGroup>
               </Col>
@@ -66,6 +66,7 @@ export default function GoodsDeliveryMoreDetails({
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.order_code}
                     name="order_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
