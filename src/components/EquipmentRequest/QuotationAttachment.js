@@ -48,14 +48,14 @@ export default function QuotationAttachment() {
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
     fileTypes={fileTypes}
-    altTagData="TenderRelated Data"
-    desc="TenderRelated Data"
+    altTagData="MaterialRelated Data"
+    desc="MaterialRelated Data"
     recordType="RelatedPicture"
     mediaType={attachmentData.modelType}
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="ProjectQuotation" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="EquipmentRequest" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }
