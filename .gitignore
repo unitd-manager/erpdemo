@@ -13,9 +13,8 @@
 
 
 #file
-/src
-/.constants
-.api.js
+
+/.api.js
 
 # misc
 .DS_Store
