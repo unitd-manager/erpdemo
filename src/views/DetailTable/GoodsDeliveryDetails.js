@@ -78,8 +78,7 @@ const GoodsDeliveryDetails = () => {
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
-    quote_code: '',
-    quote_date: '',
+    order_code: '',
     company_id: '',
     company_name: '',
   });
@@ -102,7 +101,7 @@ const GoodsDeliveryDetails = () => {
   //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
-      .post('/tradingquote/getTradingquoteById', { quote_id: id })
+      .post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id })
       .then((res) => {
         setTenderForms(res.data.data);
         // getContact(res.data.data.company_id);
@@ -113,19 +112,19 @@ const GoodsDeliveryDetails = () => {
   const { loggedInuser } = useContext(AppContext);
 
   //console.log(tenderDetails);
-  const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
-      tenderForms.quote_code = code;
+  const insertgoodsDelivery = () => {
+    if (tenderForms.company_id !== '' && tenderForms.goods_delivery_date !== '') {
+      //tenderForms.order_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
-        .post('/tradingquote/inserttradingquote', tenderForms)
+        .post('/goodsdelivery/insertgoodsdelivery', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           getTendersById();
-          message('Tender inserted successfully.', 'success');
+          message('Goods inserted successfully.', 'success');
           //   setTimeout(() => {
-          navigate(`/TradingQuotationEdit/${insertedDataId}?tab=1`);
+          navigate(`/GoodsDeliveryEdit/${insertedDataId}?tab=1`);
           //   }, 300);
         })
         .catch(() => {
@@ -137,16 +136,16 @@ const GoodsDeliveryDetails = () => {
   };
 
   //QUOTE GENERATED CODE
-  const generateCode = () => {
-    api
-      .post('/tender/getCodeValue', { type: 'quote' })
-      .then((res) => {
-        insertQuote(res.data.data);
-      })
-      .catch(() => {
-        insertQuote('');
-      });
-  };
+  // const generateCode = () => {
+  //   api
+  //     .post('/tender/getCodeValue', { type: 'quote' })
+  //     .then((res) => {
+  //       insertQuote(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       insertQuote('');
+  //     });
+  // };
 
   useEffect(() => {
     getCompany();
@@ -168,16 +167,16 @@ const GoodsDeliveryDetails = () => {
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}
-                    value={tenderForms && tenderForms.order_code}
-                    name="order_code"
+                    value={tenderForms && tenderForms.order_id}
+                    name="order_id"
                   >
                     <option>Please Select</option>
                     {enquirycode &&
                       enquirycode.map((e) => {
                         return (
-                          <option key={e.opportunity_id} value={e.opportunity_id}>
+                          <option key={e.order_id} value={e.order_id}>
                             {' '}
-                            {e.opportunity_code}{' '}
+                            {e.order_code}{' '}
                           </option>
                         );
                       })}
@@ -246,7 +245,7 @@ const GoodsDeliveryDetails = () => {
                     color="primary"
                     className="btn mr-2 shadow-none"
                     onClick={() => {
-                      generateCode();
+                      insertgoodsDelivery();
                     }}
                   >
                     Save & Continue
