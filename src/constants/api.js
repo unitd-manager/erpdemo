@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://localhost:5001';
 }
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
 const api = axios.create({
   baseURL, // Use object shorthand notation here
 });
