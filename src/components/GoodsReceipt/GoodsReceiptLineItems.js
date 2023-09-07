@@ -98,13 +98,11 @@ const getPurchaseOrderedById = () => {
   }, [PurchaseOrderId]);
 
 return (
-    
-
 <FormGroup>
 <Table bordered className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col"> Product Code </th>
+                          <th scope="col"> PO Code </th>
                           <th scope="col">Title </th>
                           <th scope="col">Unit </th>
                           <th scope="col">Ordered Quantity </th>
@@ -118,10 +116,10 @@ return (
                           orderdetails.map((e) => {
                             return (
                               <tr>
-                                <td >{e.product_code}</td>
+                                <td >{e.po_code}</td>
                                 <td >{e.item_title}</td>
                                 <td >{e.unit}</td>
-                                <td >{e.quantity}</td>
+                                <td >{e.ordered_quantity}</td>
                                 <td data-label="Received">{e.modified_by}</td>
                                 <td data-label="Received Quantity">{e.modified_by}</td>
                                 {quote && QuoteProject === undefined && (
