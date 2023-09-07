@@ -1,37 +1,32 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
+import { TabPane, TabContent, Button, Table, Row, Col } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import * as Icon from 'react-feather';
-import Swal from 'sweetalert2';
+//import * as Icon from 'react-feather';
+//import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
+import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
-import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
-import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
-import PdfQuote from '../../components/PDF/PdfQuote';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
+import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
 
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
+  const [goodsitemdetails, setgoodslineDetails] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
-  const [addLineItemModal, setAddLineItemModal] = useState(false);
-  const [lineItem, setLineItem] = useState();
-  const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
-  const [editLineModelItem, setEditLineModelItem] = useState(null);
-  const [editLineModal, setEditLineModal] = useState(false);
-  //const [quoteLine, setQuoteLine] = useState();
+  const [editModal, setEditModal] = useState(false);
+  //const [lineItemDatas, setLineItemDatas] = useState({});
 
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
@@ -44,20 +39,15 @@ const GoodsDeliveryEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Quotation');
+    navigate('/GoodsDelivery');
   };
-  const addQuoteItemsToggle = () => {
-    setAddLineItemModal(!addLineItemModal);
-  };
+
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };
-  const viewLineToggle = () => {
-    setViewLineModal(!viewLineModal);
-  };
-  console.log(viewLineToggle);
+
   const tabs = [
-    { id: '1', name: 'Quotation ' },
+    { id: '1', name: 'Goods Delivery ' },
     { id: '2', name: 'Attachment' },
   ];
   const toggle = (tab) => {
@@ -83,13 +73,19 @@ const GoodsDeliveryEdit = () => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
   };
 
+  const getgoodsLineItemById = () => {
+    api.post('/goodsdelivery/getgoodsdeliveryitemById', { goods_delivery_id: id }).then((res) => {
+      setgoodslineDetails(res.data.data);
+    });
+  };
+
   //Logic for edit data in db
 
-  const editTenderData = () => {
+  const editGoodsDelivery = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/tradingquote/edit-Tradingquote', tenderDetails)
+      .post('/goodsdelivery/edit-goodsdelivery', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
         setTimeout(() => {
@@ -107,16 +103,41 @@ const GoodsDeliveryEdit = () => {
       setCompany(res.data.data);
     });
   };
-  // Get Line Item
-  const getLineItem = () => {
-    api.post('/tradingquote/getQuoteLineItemsById', { quote_id: id }).then((res) => {
-      setLineItem(res.data.data);
-      //setAddLineItemModal(true);
+
+  // Function to insert order_item data into goods_delivery_item
+  const generateData = () => {
+    api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then((res) => {
+      const orderItems = res.data.data;
+
+      // Loop through order items and insert them into goods_delivery_item
+      orderItems.forEach((orderItem) => {
+        const newItem = {
+          goods_delivery_id: id,
+          order_id: tenderDetails.order_id,
+          order_item_id: orderItem.order_item_id,
+          title: orderItem.item_title,
+          description: orderItem.description,
+          quantity: orderItem.qty,
+          // Add other properties as needed
+        };
+
+        // Use your API call to insert the item into goods_delivery_item
+        api
+          .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
+          .then(() => {
+            // Handle success if needed
+            console.log('Item inserted successfully');
+          })
+          .catch((error) => {
+            // Handle error if needed
+            console.error('Error inserting item:', error);
+          });
+      });
     });
   };
-   // Add new Contact
+  // Add new Contact
 
-   const [newContactData, setNewContactData] = useState({
+  const [newContactData, setNewContactData] = useState({
     salutation: '',
     first_name: '',
     email: '',
@@ -134,11 +155,7 @@ const GoodsDeliveryEdit = () => {
   const AddNewContact = () => {
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -153,73 +170,31 @@ const GoodsDeliveryEdit = () => {
       message('All fields are required.', 'info');
     }
   };
- 
+
   useEffect(() => {
     editTenderById();
-    getLineItem();
+    getgoodsLineItemById();
     getCompany();
-    // getAllCountries();
   }, [id]);
 
+  //Structure of Invoice table
   const columns1 = [
-    {
-      name: '#',
-    },
-    {
-      name: 'Title',
-    },
-    {
-      name: 'Description',
-    },
-    {
-      name: 'Qty',
-    },
-    {
-      name: 'Unit Price',
-    },
-    {
-      name: 'Amount',
-    },
-    {
-      name: 'Updated By ',
-    },
-    {
-      name: 'Action ',
-    },
+    { name: 'Item Title' },
+    { name: 'Description' },
+    { name: 'Unit' },
+    { name: 'quantity' },
+    { name: 'Total Amount ' },
   ];
-  const deleteRecord = (deleteID) => {
-    Swal.fire({
-      title: `Are you sure? ${id}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/tender/deleteEditItem', { quote_items_id: deleteID }).then(() => {
-          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-          window.location.reload();
-        });
-      }
-    });
-  };
 
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TradingQuoteButton
-        editTenderData={editTenderData}
+      <GoodsDeliveryButton
+        editGoodsDelivery={editGoodsDelivery}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></TradingQuoteButton>
-      <Col md="4">
-        <Label>
-          <PdfQuote id={id} quoteId={id}></PdfQuote>
-        </Label>
-      </Col>
+      ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -239,84 +214,62 @@ const GoodsDeliveryEdit = () => {
 
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
+          
           <TabPane tabId="1">
-            <Row>
-              <Col md="6">
+            {!tenderDetails && (
+              <Col>
                 <Button
                   className="shadow-none"
                   color="primary"
-                  to=""
-                  onClick={addQuoteItemsToggle.bind(null)}
+                  onClick={() => {
+                    generateData();
+                  }}
                 >
-                  Add Quote Items
+                  Generate Data
                 </Button>
               </Col>
-            </Row>
-            <br />
-            <Row>
-              <div className="container">
-                <Table id="example" className="display border border-secondary rounded">
-                  <thead>
-                    <tr>
-                      {columns1.map((cell) => {
-                        return <td key={cell.name}>{cell.name}</td>;
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lineItem &&
-                      lineItem.map((e, index) => {
-                        return (
-                          <tr key={e.quote_id}>
-                            <td>{index + 1}</td>
-                            <td data-label="Title">{e.title}</td>
-                            <td data-label="Description">{e.description}</td>
-                            <td data-label="Quantity">{e.quantity}</td>
-                            <td data-label="Unit Price">{e.unit_price}</td>
-                            <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By"></td>
-                            <td data-label="Actions">
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  setEditLineModelItem(e);
-                                  setEditLineModal(true);
-                                }}
-                              >
-                                <Icon.Edit2 />
-                              </span>
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  deleteRecord(e.quote_items_id);
-                                }}
-                              >
-                                <Icon.Trash2 />
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </Table>
-              </div>
-            </Row>
-            {/* End View Line Item Modal */}
-            <EditLineItemModal
-              editLineModal={editLineModal}
-              setEditLineModal={setEditLineModal}
-              FetchLineItemData={editLineModelItem}
-              getLineItem={getLineItem}
-              setViewLineModal={setViewLineModal}
-            ></EditLineItemModal>
-            {addLineItemModal && (
-              <QuoteLineItem
-                //projectInfo={tenderId}
-                addLineItemModal={addLineItemModal}
-                setAddLineItemModal={setAddLineItemModal}
-                quoteLine={id}
-              ></QuoteLineItem>
             )}
+            <br/>
+            <Button
+            className="shadow-none"
+            color="primary"
+            onClick={() => {
+              setEditModal(true);
+            }}
+          >
+            Edit
+          </Button>
+          <br />
+            {tenderDetails && (
+              <Row>
+                <div className="container">
+                  <Table id="example" className="display border border-secondary rounded">
+                    <thead>
+                      <tr>
+                        {columns1.map((cell) => {
+                          return <td key={cell.name}>{cell.name}</td>;
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {goodsitemdetails &&
+                        goodsitemdetails.map((element) => {
+                          return (
+                            <tr key={element.goods_delivery_id}>
+                              <td>{element.title}</td>
+                              <td>{element.description}</td>
+                              <td>{element.unit}</td>
+                              <td>{element.quantity}</td>
+                              <td>{element.amount}</td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </Table>
+                </div>
+              </Row>
+            )}
+            <EditLineItem editModal={editModal} setEditModal={setEditModal}></EditLineItem>
           </TabPane>
           <TabPane tabId="2">
             <QuotationAttachment></QuotationAttachment>
