@@ -11,62 +11,53 @@ import {
   ModalFooter,
   Label,
 } from 'reactstrap';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
 import message from '../Message';
 
-const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine, orderDetails }) => {
+const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuoteLine }) => {
   EditRequestForQuoteLine.propTypes = {
     editRequestForQuoteLine: PropTypes.bool,
     setEditRequestForQuoteLine: PropTypes.func,
-    orderDetails: PropTypes.array,
   };
+  const { id } = useParams();
+
 
   // Initialize state with data from props
-  const [addLineItem, setAddLineItem] = useState([]);
+  const [addLineItem, setAddLineItem] = useState([
+    {
+    purchase_quote_items_id : id
+    }
+]);
 
   // Function to update state
   function updateState(index, property, e) {
-    // Create a copy of addLineItem
-    const updatedLineItems = [...addLineItem];
+    const copyDeliverOrderProducts = [...addLineItem];
+    const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
+    
+  const quantitys = parseFloat(updatedObject.quantity) || 0;
+  const unitPrice = parseFloat(updatedObject.amount) || 0;
+  // const totalCost = parseFloat(updatedObject.total_cost);
+  updatedObject.total_cost = quantitys * unitPrice;
 
-    // Ensure the item at the given index exists
-    if (!updatedLineItems[index]) {
-      updatedLineItems[index] = {};
-    }
-
-    // Update the specific property for the item at the given index
-    updatedLineItems[index] = {
-      ...updatedLineItems[index],
-      [property]: e.target.value,
-    };
-
-    // Recalculate total_cost if needed
-    if (property === 'amount' || property === 'purchase_request_qty') {
-      const quantity = parseFloat(updatedLineItems[index].purchase_request_qty) || 0;
-      const amount = parseFloat(updatedLineItems[index].amount) || 0;
-      updatedLineItems[index].total_cost = quantity * amount;
-    }
-
-    // Update the state with the new line items
-    setAddLineItem(updatedLineItems);
+    copyDeliverOrderProducts[index] = updatedObject;
+    setAddLineItem(copyDeliverOrderProducts);
   }
 
-
+  const getOrdersByOrderId = () => {
+    api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
+      setAddLineItem(res.data.data);
+    
+    });
+  };
+  
   // Function to edit line items
   const editLineItemApi = () => {
     addLineItem.forEach((item) => {
-      console.log('Item to be updated:', item);
+    
       api
-        .post('quote/editTabQuoteLineItems', {
-          amount: item.amount, 
-          description: item.description,
-          purchase_quote_items_id: item.purchase_quote_items_id,
-          purchase_request_id: item.purchase_request_id,
-          purchase_quote_id: item.purchase_quote_id,
-          total_cost: item.total_cost,
-        })
+        .post('quote/editTabQuoteLineItems',item )
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
           setAddLineItem()
@@ -77,10 +68,12 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
         });
     });
   };
-  
+
+ 
+
   useEffect(() => {
-    console.log('addLineItem:', addLineItem);
-  }, [ editRequestForQuoteLine,orderDetails]);
+    getOrdersByOrderId();
+  }, []);
 
   return (
     <>
@@ -128,42 +121,44 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
                 {addLineItem &&
                   addLineItem.map((el, index) => {
                     return (
-                      <tr key={el.purchase_quote_items_id}>
+                      <tr key={el.id}>
                         <td data-label="ProductName">
                           <Input
-                            disabled
-                            type="text"
+                           type="text"
                             name="title"
-                            value={el.title}
+                            defaultValue={el.title}
+                            onChange={(e) => updateState(index, 'title', e)}
                           />
                         </td>
                         <td data-label="unit">
                           <Input
-                            disabled
                             type="text"
                             name="unit"
-                            value={el.unit}
+                            defaultValue={el.unit}
+                            onChange={(e) => updateState(index, 'unit', e)}
                           />
                         </td>
-                        <td data-label="purchase_request_qty">
+                        <td data-label="quantity">
                           <Input
-                            disabled
                             type="text"
-                            name="purchase_request_qty"
-                            value={el.purchase_request_qty}
+                            name="quantity"
+                            defaultValue={el.quantity}
+                            onChange={(e) => updateState(index, 'quantity', e)}
+
                           />
                         </td>
                         <td data-label="Amount">
                           <Input
                             type="text"
                             name="amount"
-                            value={el.amount}
+                            defaultValue={el.amount}
                             onChange={(e) => updateState(index, 'amount', e)}
+                            
                           />
                         </td>
                         <td data-label="Total Price">
                           <Input
-                            value={el.total_cost}
+                            defaultValue={el.total_cost}
                             type="text"
                             name="total_cost"
                             onChange={(e) => updateState(index, 'total_cost', e)}
@@ -173,7 +168,7 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
                           <Input
                             type="textarea"
                             name="description"
-                            value={el.description}
+                            defaultValue={el.description}
                             onChange={(e) => updateState(index, 'description', e)}
                           />
                         </td>

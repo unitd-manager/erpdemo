@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Table,
-  FormGroup,
+  Row,
  Button
 } from 'reactstrap';
 import PropTypes from 'prop-types';
@@ -22,40 +22,50 @@ export default function RequestPurchase({
   const handleEditButtonClick = () => {
     setEditRequestForQuoteLine(true);
   };
+  const columns1 = [
+    { name: 'Item Code' },
+    { name: 'Item' },
+    { name: 'Description' },
+    { name: 'Unit' },
+    { name: 'quantity' },
+    { name: 'Amount' },
+    { name: 'Total Amount ' },
+  ];
 
   return (
     <>
  <Button onClick={handleEditButtonClick}>Edit Table</Button>
-              <FormGroup>
-                <Table bordered className="Request For Quote">
-                  <thead>
-                    <tr>
-                      <th scope="col"> Product Code </th>
-                      <th scope="col">Title </th>
-                      <th scope="col">Unit </th>
-                      <th scope="col">Quantity </th>
-                      <th scope="col">Updated By </th>
-                      <th scope="col">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+ {orderDetails && (
+              <Row>
+                <div className="container">
+                  <Table id="example" className="display border border-secondary rounded">
+                    <thead>
+                      <tr>
+                        {columns1.map((cell) => {
+                          return <td key={cell.name}>{cell.name}</td>;
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
                     {orderDetails &&
                       orderDetails.map((e) => {
                         return (
                           <tr key={e.purchase_quote_id}>
-                            <td data-label="Product Code">{e.product_code}</td>
-                            <td data-label="Title">{e.item_title}</td>
-                            <td data-label="Unit">{e.unit}</td>
-                            <td data-label="Quantity">{e.quantity}</td>
-                            <td data-label="Updated By">{e.modified_by}</td>
-                            <td data-label="Amount">{e.amount}</td>
+                            <td>{e.product_code}</td>
+                            <td>{e.title}</td>
+                            <td>{e.description}</td>
+                            <td>{e.unit}</td>
+                            <td>{e.quantity}</td>
+                            <td>{e.amount}</td>
+                            <td>{e.total_cost}</td>
                           </tr>
                         );
                       })}
                   </tbody>
                 </Table>
-              </FormGroup>
-           
+                </div>
+                </Row>
+            )}
       {editRequestForQuoteLine && (
         <EditRequestForQuoteLine
           editRequestForQuoteLine={editRequestForQuoteLine}
