@@ -13,10 +13,6 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-
-
-
-
 const DocumentEdit = () => {
   // All state variables
 
