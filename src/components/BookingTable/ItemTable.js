@@ -22,12 +22,14 @@ export default function ItemTable({
     { name: 'Quantity' },
     { name: 'Unit Price' },
     { name: 'Total' },
+    { name: 'Edit' },
+    { name: 'Delete' },
   ];
   const handleDelete = (invoiceItemId) => {
     api
       .delete('/invoice/deleteInvoiceItem', { data: { invoice_item_id: invoiceItemId } }) // Use 'data' property for sending data in the body
       .then(() => {
-        // Implement any UI update or refetch if needed
+       window.location.reload();
       })
       .catch(() => {
         // Handle error, show a message, etc.

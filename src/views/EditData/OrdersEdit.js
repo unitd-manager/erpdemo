@@ -108,7 +108,7 @@ const OpportunityEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/finance/getFinancesById', { order_id: id }).then((res) => {
+    api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
       setOrderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
