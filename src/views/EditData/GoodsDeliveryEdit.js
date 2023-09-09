@@ -103,38 +103,80 @@ const GoodsDeliveryEdit = () => {
       setCompany(res.data.data);
     });
   };
-
-  // Function to insert order_item data into goods_delivery_item
-  const generateData = () => {
-    api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then((res) => {
-      const orderItems = res.data.data;
-
-      // Loop through order items and insert them into goods_delivery_item
-      orderItems.forEach((orderItem) => {
-        const newItem = {
-          goods_delivery_id: id,
-          order_id: tenderDetails.order_id,
-          order_item_id: orderItem.order_item_id,
-          title: orderItem.item_title,
-          description: orderItem.description,
-          quantity: orderItem.qty,
-          // Add other properties as needed
-        };
-
-        // Use your API call to insert the item into goods_delivery_item
-        api
-          .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
-          .then(() => {
-            // Handle success if needed
-            console.log('Item inserted successfully');
-          })
-          .catch((error) => {
-            // Handle error if needed
-            console.error('Error inserting item:', error);
-          });
+  const generateData = (res) => {
+    // Retrieve existing Goods Delivery Items
+   
+      const existingGoodsDeliveryItems = res.data.data;
+  
+      // Retrieve Order Items
+      api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then(() => {
+        const orderItems = res.data.data;
+  
+        // Filter out Order Items that already exist in Goods Delivery Items
+        const newOrderItems = orderItems.filter((orderItem) => {
+          const exists = existingGoodsDeliveryItems.some((goodsItem) => goodsItem.order_item_id === orderItem.order_item_id);
+          return !exists;
+        });
+  
+        // Insert the new Order Items into Goods Delivery Items
+        newOrderItems.forEach((orderItem) => {
+          const newItem = {
+            goods_delivery_id: id,
+            order_id: tenderDetails.order_id,
+            order_item_id: orderItem.order_item_id,
+            title: orderItem.item_title,
+            description: orderItem.description,
+            quantity: orderItem.qty,
+            // Add other properties as needed
+          };
+  
+          // Use your API call to insert the item into goods_delivery_item
+          api
+            .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
+            .then(() => {
+              // Handle success if needed
+              console.log('Item inserted successfully');
+            })
+            .catch((error) => {
+              // Handle error if needed
+              console.error('Error inserting item:', error);
+            });
+        });
       });
-    });
+    
   };
+
+  // // Function to insert order_item data into goods_delivery_item
+  // const generateData = () => {
+  //   api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then((res) => {
+  //     const orderItems = res.data.data;
+
+  //     // Loop through order items and insert them into goods_delivery_item
+  //     orderItems.forEach((orderItem) => {
+  //       const newItem = {
+  //         goods_delivery_id: id,
+  //         order_id: tenderDetails.order_id,
+  //         order_item_id: orderItem.order_item_id,
+  //         title: orderItem.item_title,
+  //         description: orderItem.description,
+  //         quantity: orderItem.qty,
+  //         // Add other properties as needed
+  //       };
+
+  //       // Use your API call to insert the item into goods_delivery_item
+  //       api
+  //         .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
+  //         .then(() => {
+  //           // Handle success if needed
+  //           console.log('Item inserted successfully');
+  //         })
+  //         .catch((error) => {
+  //           // Handle error if needed
+  //           console.error('Error inserting item:', error);
+  //         });
+  //     });
+  //   });
+  // };
   // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
@@ -216,7 +258,7 @@ const GoodsDeliveryEdit = () => {
         <TabContent className="p-4" activeTab={activeTab}>
           
           <TabPane tabId="1">
-            {!tenderDetails && (
+           
               <Col>
                 <Button
                   className="shadow-none"
@@ -228,7 +270,7 @@ const GoodsDeliveryEdit = () => {
                   Generate Data
                 </Button>
               </Col>
-            )}
+         
             <br/>
             <Button
             className="shadow-none"
@@ -240,7 +282,7 @@ const GoodsDeliveryEdit = () => {
             Edit
           </Button>
           <br />
-            {tenderDetails && (
+          
               <Row>
                 <div className="container">
                   <Table id="example" className="display border border-secondary rounded">
@@ -268,7 +310,7 @@ const GoodsDeliveryEdit = () => {
                   </Table>
                 </div>
               </Row>
-            )}
+         
             <EditLineItem editModal={editModal} setEditModal={setEditModal}></EditLineItem>
           </TabPane>
           <TabPane tabId="2">

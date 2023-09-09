@@ -77,7 +77,7 @@ const DocumentDetails = () => {
         console.log(res.data.data[0]);
       })
       .catch(() => {
-        message('Company not found', 'info');
+        message('Document not found', 'info');
       });
   };
 
