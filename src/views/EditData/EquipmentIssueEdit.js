@@ -17,12 +17,11 @@ import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
-import AddEmployee from '../../components/LabourRequest/AddEmployee';
-import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
-import PlanningButton from '../../components/LabourRequest/PriceButton';
+import PlanningMainDetails from '../../components/EquipmentIssue/PriceMainDetails';
+import PlanningButton from '../../components/EquipmentIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 
-const PriceListEdit = () => {
+const EquipmentIssueEdit = () => {
   //Const Variables
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
@@ -40,7 +39,7 @@ const PriceListEdit = () => {
   // Button Save Apply Back List
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/LabourRequest');
+    navigate('/EquipmentIssue');
   };
 
     // Start for tab refresh navigation #Renuka 1-06-23
@@ -54,7 +53,7 @@ const PriceListEdit = () => {
   // Get Leaves By Id
   const PlanningById = () => {
     api
-      .post('/labourrequest/getLabourRequestById', { labour_request_id: id })
+      .post('/equipmentissue/getEquipmentIssueById', { equipment_issue_id: id })
       .then((res) => {
         setPlannings(res.data.data[0]);
       })
@@ -78,9 +77,9 @@ const PriceListEdit = () => {
   const editplanningData = () => {
     
     if (
-      plannings.request_date      ) {
+      plannings.equipment_issue_date      ) {
       api
-        .post('/labourrequest/editLabourRequest', plannings)
+        .post('/equipmentissue/editEquipmentIssue', plannings)
         .then(() => {
           message('Record editted successfully', 'success');
         })
@@ -128,13 +127,13 @@ const PriceListEdit = () => {
           {/* Start Tab Content 10 */}
           <TabPane tabId="1" eventkey="addEmployee">
             <Row>
-              <AddEmployee />
+             
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   color="primary"
                   className="shadow-none"
                   onClick={() => {
-                    setRoomName('ProjectAttach');
+                    setRoomName('EquipmentIssue');
                     setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
                     dataForAttachment();
                     setAttachmentModal(true);
@@ -156,7 +155,7 @@ const PriceListEdit = () => {
               recordType="Picture"
               mediaType={attachmentData.modelType}
             />
-            <ViewFileComponentV2 moduleId={id} roomName="ProjectAttach" recordType="Picture" />
+            <ViewFileComponentV2 moduleId={id} roomName="EquipmentIssue" recordType="Picture" />
           </TabPane>
          
         </TabContent>
@@ -164,4 +163,4 @@ const PriceListEdit = () => {
     </>
   );
 };
-export default PriceListEdit;
+export default EquipmentIssueEdit;
