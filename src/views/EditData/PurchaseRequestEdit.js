@@ -1,23 +1,23 @@
 import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button} from 'reactstrap';
+import { Row, Col, Form, FormGroup, TabContent, TabPane, Button} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import * as Icon from 'react-feather';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEditButton';
 import PurchaseRequestItemModal from '../../components/PurchaseRquestTable/PurchaseRequestItemModal';
+import PurchaseRequestEditDetails from '../../components/PurchaseRquestTable/PurchaseRequestEditDetails';
 import PurchaseRequestLineItems from '../../components/PurchaseRquestTable/PurchaseRequestLineItems';
-import PurchaseRequestAttachment from '../../components/PurchaseRquestTable/PurchaseRequestAttachment';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
-
-
-
 
 const PurchaseRequestEdit = () => {
   // All state variables
@@ -28,17 +28,35 @@ const PurchaseRequestEdit = () => {
   const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
   const [project, setProject] = useState([]);
   const [quote, setQuote] = useState({});
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [update, setUpdate] = useState(false);
+ 
 
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Function to toggle tabs
+  const toggle = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
   const tabs = [
     { id: '1', name: 'Purchase Request Item' },
     { id: '2', name: 'Attachment' },
   ];
-  const toggle = (tab) => {
-    setActiveTab(tab);
+
+   // Attachment
+   const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
   };
 
   //get staff details
@@ -57,7 +75,7 @@ const PurchaseRequestEdit = () => {
         setPurchaseRequestEditDetails(res.data.data[0]);
       })
   };
-  //Edit Product
+  //Edit PurchaseRequestData
   const editPurchaseRequestData = () => {
     if (purchaserequesteditdetails.purchase_request_date !== '' &&
     purchaserequesteditdetails.purchase_delivery_date !== '' &&
@@ -108,129 +126,22 @@ const PurchaseRequestEdit = () => {
   useEffect(() => {
     getPurchaseRequestDataById();
     getCustomerName();
-  
     getQuote();
     getProject();
   }, [id]);
 
   return (
     <>
-      <BreadCrumbs heading={purchaserequesteditdetails && purchaserequesteditdetails.title} />
-      <Form>
-        <FormGroup>
+          <BreadCrumbs/>
           <PurchaseEditButton id={id} editPurchaseRequestData={editPurchaseRequestData} navigate={navigate} />
           {/* Content Details Form */}
-          <ComponentCard title="Purchase Request Details" creationModificationDate={purchaserequesteditdetails}>
-            <ToastContainer></ToastContainer>
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Purchase Request code </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code}
-                    name="purchase_request_code"
-                    disabled
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Purchase Request Date <span className="required"> *</span> </Label>
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date}
-                    name="purchase_request_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Purchase Delivery Date <span className="required"> *</span> </Label>
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date}
-                    name="purchase_delivery_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Department <span className="required"> *</span> </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.department}
-                    name="department"
-                  />
-                </FormGroup>
-              </Col>
-              </Row>
-              <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Customer Name</Label>
-                  <Input
-                    type="select"
-                    onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.company_id}
-                    name="company_id"
-                  >
-                    <option defaultValue="selected">Please Select</option>
-                    {customername &&
-                      customername.map((e) => {
-                        return (
-                          <option key={e.company_id} value={e.company_id}>
-                            {e.company_name}
-                          </option>
-                        );               
-                      })}
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Status </Label>
-                  <Input
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.status}
-                    type="select"
-                    onChange={handleInputs}
-                    name="status"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Priority </Label>
-                  <Input
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.priority}
-                    type="select"
-                    onChange={handleInputs}
-                    name="priority"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              </Row>
-              </ComponentCard>
-              </FormGroup>
-              </Form>
-
-              <ComponentCard title="More Details">
+          <PurchaseRequestEditDetails
+            purchaserequesteditdetails={purchaserequesteditdetails}
+            handleInputs={handleInputs}
+            customername={customername}
+          ></PurchaseRequestEditDetails>
+          
+        <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
@@ -251,25 +162,53 @@ const PurchaseRequestEdit = () => {
               Add Product
             </Button>
           </Col>
-          </Row>
-          
+          </Row>        
         <PurchaseRequestLineItems
         PurchaseRequestID={id}
         project={project}
         quote={quote}
-
-        ></PurchaseRequestLineItems>
+        />
           </TabPane>
-
           <TabPane tabId="2">
-          <PurchaseRequestAttachment 
-          ></PurchaseRequestAttachment>
+          <Form>
+              <FormGroup>
+                  <Row>
+                    <Col xs="12" md="3" className="mb-3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        onClick={() => {
+                          setRoomName('PurchaseRequest');
+                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
+                          dataForAttachment();
+                          setAttachmentModal(true);
+                        }}
+                      >
+                        <Icon.File className="rounded-circle" width="20" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <AttachmentModalV2
+                    moduleId={id}
+                    attachmentModal={attachmentModal}
+                    setAttachmentModal={setAttachmentModal}
+                    roomName={RoomName}
+                    fileTypes={fileTypes}
+                    altTagData="PurchaseRequestRelated Data"
+                    desc="PurchaseRequestRelated Data"
+                    recordType="RelatedPicture"
+                    mediaType={attachmentData.modelType}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
+                  <ViewFileComponentV2 moduleId={id} roomName="PurchaseRequest" recordType="RelatedPicture" update={update}
+                    setUpdate={setUpdate}/>
+              </FormGroup>
+            </Form>  
           </TabPane>
         </TabContent>
-
         </ComponentCard>
-              
-              </>   
+  </>   
   );
 };
 export default PurchaseRequestEdit;
