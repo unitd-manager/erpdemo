@@ -9,7 +9,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-const PurchaseRequestDetails = () => {
+const ProjectTaskDetails = () => {
   //All const variables
   const navigate = useNavigate();
   const [projecttaskdetails, setProjectTaskDetails] = useState({
@@ -37,7 +37,9 @@ const PurchaseRequestDetails = () => {
 
   //Insert Product Data
   const insertPurchaseRequestData = () => {
-    if (projecttaskdetails.task_title !== '')
+    if (projecttaskdetails.task_title !== '' &&
+    projecttaskdetails.job_order_id !== ''
+    )
     {
       projecttaskdetails.creation_date = creationdatetime;
       projecttaskdetails.created_by= loggedInuser.first_name;   
@@ -58,9 +60,6 @@ const PurchaseRequestDetails = () => {
     }
   };
 
-
-
-
   //useeffect
   useEffect(() => {
     getJobOrderTitle();
@@ -79,7 +78,7 @@ const PurchaseRequestDetails = () => {
                 <Row>
                 <Col md="12">
                       <FormGroup>
-                        <Label>Job Order Title</Label>
+                        <Label>Job Order Title <span className="required"> *</span></Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
@@ -140,4 +139,4 @@ const PurchaseRequestDetails = () => {
     </div>
   );
 };
-export default PurchaseRequestDetails;
+export default ProjectTaskDetails;

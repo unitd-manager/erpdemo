@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Button, TabContent, TabPane} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
@@ -10,8 +10,11 @@ import 'datatables.net-buttons/js/buttons.html5';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../form-editor/editor.scss';
+import * as Icon from 'react-feather';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import creationdatetime from '../../constants/creationdatetime';
 import message from '../../components/Message';
@@ -20,6 +23,8 @@ import PurchaseOrderLinked from '../../components/SupplierModal/Purchaseorderlin
 import SupplierTable from '../../components/SupplierModal/SupplierTable';
 import SupplierDetails from '../../components/SupplierModal/SupplierDetails';
 import AppContext from '../../context/AppContext';
+import Tab from '../../components/project/Tab';
+
 
 const SupplierEdit = () => {
   //all state variables
@@ -29,12 +34,40 @@ const SupplierEdit = () => {
   const [editPurchaseOrderLinked, setEditPurchaseOrderLinked] = useState(false);
   const [supplierStatus, setSupplierStatus] = useState();
   const [status, setStatus] = useState();
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [update, setUpdate] = useState(false);
+  const [activeTab, setActiveTab] = useState('1');
+  // Navigation and Parameter Constants
 
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
 
+  // Function to toggle tabs
+  const toggle = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
+
+  const tabs = [
+    { id: '1', name: 'Attachment' },
+  ];
+
+   // Attachment
+   const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
+  };
+
+  //Handle input function
   const handleInputs = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
   };
@@ -131,7 +164,7 @@ const SupplierEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={supplier && supplier.company_name} />
+      <BreadCrumbs/>
       <Form>
         <FormGroup>
           <ComponentCardV2>
@@ -196,7 +229,54 @@ const SupplierEdit = () => {
       ></PurchaseOrderLinked>
       <ToastContainer></ToastContainer>
       <SupplierTable purchaseOrder={purchaseOrder}></SupplierTable>
+
+
+       {/* Attachment Tab */}
+       <ComponentCard title="More Details">
+           <ToastContainer></ToastContainer>
+           <Tab toggle={toggle} tabs={tabs} />
+           <TabContent className="p-4" activeTab={activeTab}>
+           <TabPane tabId="1">
+           <Form>
+              <FormGroup>
+                  <Row>
+                    <Col xs="12" md="3" className="mb-3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        onClick={() => {
+                          setRoomName('Supplier');
+                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
+                          dataForAttachment();
+                          setAttachmentModal(true);
+                        }}
+                      >
+                        <Icon.File className="rounded-circle" width="20" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <AttachmentModalV2
+                    moduleId={id}
+                    attachmentModal={attachmentModal}
+                    setAttachmentModal={setAttachmentModal}
+                    roomName={RoomName}
+                    fileTypes={fileTypes}
+                    altTagData="SupplierRelated Data"
+                    desc="SupplierRelated Data"
+                    recordType="RelatedPicture"
+                    mediaType={attachmentData.modelType}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
+                  <ViewFileComponentV2 moduleId={id} roomName="Supplier" recordType="RelatedPicture" update={update}
+                    setUpdate={setUpdate}/>
+              </FormGroup>
+            </Form>
+          </TabPane>
+        </TabContent>
+        </ComponentCard>
     </>
+
   );
 };
 

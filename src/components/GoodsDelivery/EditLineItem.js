@@ -15,10 +15,11 @@ import { useParams } from 'react-router-dom';
 import api from '../../constants/api';
 import message from '../Message';
 
-const InvoiceModal = ({  editModal, setEditModal }) => {
+const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
   InvoiceModal.propTypes = {
     editModal: PropTypes.bool,
     setEditModal: PropTypes.func,
+    getgoodsLineItemById:PropTypes.func,
   };
  
   const { id } = useParams();
@@ -50,17 +51,20 @@ const InvoiceModal = ({  editModal, setEditModal }) => {
 
   //editlineitem
   const editLineItemApi = () => {
+    const editPromises = addLineItem.map((item) => {
+      return api.post('/goodsdelivery/edit-goodsdeliveryitem', item);
+    });
   
-    addLineItem.forEach((item) => {
-    api
-      .post('/goodsdelivery/edit-goodsdeliveryitem', item)
+    Promise.all(editPromises)
       .then(() => {
-        message('Line Item Edited Successfully', 'sucess');
+        getgoodsLineItemById();
+        setEditModal(false);
+        message('Line Items Edited Successfully', 'success');
+      
       })
       .catch(() => {
         message('Cannot Edit Line Items', 'error');
       });
-    }) 
   };
 
  
