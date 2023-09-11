@@ -1,39 +1,42 @@
 import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button} from 'reactstrap';
+import { Row, Col, FormGroup, TabContent, TabPane, Button, Form} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import moment from 'moment';
-import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
+import * as Icon from 'react-feather';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import GoodsReceiptEditButton from '../../components/GoodsReceipt/GoodsReceiptEditButton';
 import GoodsReceiptLineItems from '../../components/GoodsReceipt/GoodsReceiptLineItems';
-import PurchaseRequestItemModal from '../../components/PurchaseRquestTable/PurchaseRequestItemModal';
-import PurchaseRequestAttachment from '../../components/PurchaseRquestTable/PurchaseRequestAttachment';
+import GoodsReceiptItemsEdit from '../../components/GoodsReceipt/GoodsReceiptItemsEdit';
+import GoodsReceiptEditDetails from '../../components/GoodsReceipt/GoodsReceiptEditDetails';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
 
-
-
-
 const PurchaseRequestEdit = () => {
-  // All state variables
 
+  // All state variables
   const [goodsreceipteditdetails, setGoodsReceiptEditDetails] = useState({});
   const [employee, setEmployee] = useState([]);
-  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState(false);
-  const [project, setProject] = useState([]);
-  const [quote, setQuote] = useState({});
+  // const [project, setProject] = useState([]);
+  // const [quote, setQuote] = useState({});
   const [activeTab, setActiveTab] = useState('1');
-  const [isRecordCreated, setIsRecordCreated] = useState(false);
+  const [receiptitemseditmodal, setReceiptItemsEditModal] = useState(false);
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [update, setUpdate] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
-  const navigate = useNavigate();
+ 
 
   // get staff details
   const { loggedInuser } = useContext(AppContext);
@@ -55,7 +58,14 @@ const PurchaseRequestEdit = () => {
     { id: '2', name: 'Attachment' },
   ];
 
-  // Get Purchase data By Purchase Id
+   // Attachment
+   const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
+  };
+
+  // Get Goods Receipt data By Goods Receipt Id
   const getGoodsReceiptById = () => {
     api
       .post('/goodsreceipt/getGoodsReceiptById', { goods_receipt_id: id })
@@ -68,7 +78,7 @@ const PurchaseRequestEdit = () => {
       });
   };
 
-  // Edit Product
+  // Edit Goods Receipt Data
   const editGoodsReceiptData = () => {
     if (goodsreceipteditdetails.purchase_order_id && goodsreceipteditdetails.goods_received_date) {
       goodsreceipteditdetails.modification_date = creationdatetime;
@@ -98,288 +108,191 @@ const PurchaseRequestEdit = () => {
       });
   };
 
-  // Get project data
-  const getProject = () => {
-    api.get('project/getOppProject').then((res) => {
-      setProject(res.data.data);
-    });
-  };
+  // // Get project data
+  // const getProject = () => {
+  //   api.get('project/getOppProject').then((res) => {
+  //     setProject(res.data.data);
+  //   });
+  // };
 
-  // Get quote data
-  const getQuote = () => {
-    api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
-      setQuote(res.data.data[0]);
-    });
-  };
+  // // Get quote data
+  // const getQuote = () => {
+  //   api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
+  //     setQuote(res.data.data[0]);
+  //   });
+  // };
 
-  // Create a record
-  const CreateRecord = (records) => {
-    api
-      .post('/goodsreceipt/insertGoodsreceiptItems', { records })
-      .then(() => {
-        message('Goods Receipt inserted successfully.', 'success');
-        setIsRecordCreated(true); // Move this line here
-      })
-      .catch((error) => {
-        message(`Error inserting Goods Receipt: ${error.message}`, 'error');
-      });
-  };
-
-  // Get purchase order data by ID
-  const getPurchaseOrderedById = () => {
+  // Generate Data for Receipt Items
+  const generateData = () => {
     api
       .post('/goodsreceipt/getPurchaseOrderedById', { purchase_order_id: goodsreceipteditdetails.purchase_order_id })
       .then((res) => {
-        const orderDetails = res.data.data;
-        // Now that you have orderDetails, you can use it to create records for each product.
-        const records = orderDetails.product_id.map((product) => ({
-          goods_receipt_id: goodsreceipteditdetails.goods_receipt_id,
-          product_id: product.productId,
-          created_by: loggedInuser.first_name,
-          creation_date: new Date().toISOString(),
-          // Add other fields you need for the record here
-        }));
-        CreateRecord(records); // Moved this call inside the then() block
+        const ReceiptItems = res.data.data;
+        console.log('Received items:', ReceiptItems);
+        if (ReceiptItems.length === 0) {
+          console.warn('No Receipt items to insert');
+          return;
+        }
+        // Retrieve all po_product_id  values from the goods_receipt_items table
+        api
+          .get('/goodsreceipt/checkReceiptItems')
+          .then((response) => {
+            const ExistingReceiptItemsId = response.data.data; 
+            const insertReceiptItems = (index) => {
+              if (index < ReceiptItems.length) {
+                const ReceiptItem = ReceiptItems[index];  
+                // Check if the po_product_id  already exists in the ExistingReceiptItemsId array
+                if (ExistingReceiptItemsId.includes(ReceiptItem.po_product_id )) {
+                  console.warn(`Receipt item for po_product_id  ${ReceiptItem.po_product_id } already exists, skipping insertion`);
+                  message('Receipt items are already Inserted', 'warning');
+                  insertReceiptItems(index + 1);
+                } else {
+                  // Insert the order item
+                  const ReceiptItemsData = {
+                    creation_date : creationdatetime,
+                    modified_by : loggedInuser.first_name, 
+                    goods_receipt_id: id,
+                    product_id: ReceiptItem.product_id,
+                    item_title: ReceiptItem.item_title,
+                    po_code: ReceiptItem.po_code,
+                    po_product_id: ReceiptItem.po_product_id,
+                    ordered_quantity: ReceiptItem.quantity,
+                    unit: ReceiptItem.unit,
+                    purchase_order_id: goodsreceipteditdetails.purchase_order_id,
+                  };  
+                  console.log(`Inserting order item ${index + 1}:`, ReceiptItemsData);  
+                  // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current ReceiptItemsData
+                  api
+                    .post('/goodsreceipt/insertGoodsReceiptItems', ReceiptItemsData)
+                    .then((result) => {
+                      if (result.data.msg === 'Success') {
+                        console.log(`Order item ${index + 1} inserted successfully`);
+                        setTimeout(() => {
+                          window.location.reload()
+                        }, 100);
+                      } else {
+                        console.error(`Failed to insert order item ${index + 1}`);
+                      }
+                      // Continue to the next item
+                      insertReceiptItems(index + 1);
+                    })
+                    .catch((error) => {
+                      console.error(`Error inserting order item ${index + 1}`, error);
+                      // Continue to the next item
+                      insertReceiptItems(index + 1);
+                    });
+                }
+              } else {
+                console.log('All order items inserted successfully');
+                // You might want to trigger a UI update here
+              }
+            }; 
+            // Start inserting order items from index 0
+            insertReceiptItems(0);
+          })
+          .catch((error) => {
+            console.error('Error checking order item existence', error);
+          });
       })
       .catch((error) => {
-        console.error('Error fetching purchase order details:', error);
+        console.error('Error fetching quote items', error);
       });
   };
-
+  
+  //UseEffect
   useEffect(() => {
     getGoodsReceiptById();
     getEmployeeName();
-    getQuote();
-    getProject();
+    // getQuote();
+    // getProject();    
   }, [id]);
-
-  useEffect(() => {
-    if (goodsreceipteditdetails.purchase_order_id) {
-      getPurchaseOrderedById();
-    }
-  }, [goodsreceipteditdetails.purchase_order_id]);
-
-  
 
   return (
     <>
-      <BreadCrumbs heading={goodsreceipteditdetails && goodsreceipteditdetails.title} />
-      <Form>
-        <FormGroup>
-          <GoodsReceiptEditButton id={id} editGoodsReceiptData={editGoodsReceiptData} navigate={navigate} />
-          {/* Content Details Form */}
-          <ComponentCard title="Goods Receipt Details" creationModificationDate={goodsreceipteditdetails}>
-            <ToastContainer></ToastContainer>
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label> PO Code </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.po_code}
-                    name="po_code"
-                    disabled
-                  />
-                  {/* <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
-                          name="purchase_order_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {pocode &&
-                            pocode.map((e) => {
-                              return (
-                                <option key={e.purchase_order_id} value={e.purchase_order_id}>
-                                  {e.po_code}
-                                </option>
-                              );
-                            })}
-                        </Input> */}
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Supplier Name </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.company_name}
-                    name="company_name"
-                    disabled
-                  />
-                  {/* <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={goodsreceipteditdetails && goodsreceipteditdetails.supplier_id}
-                          name="supplier_id"
-                          
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {supplier &&
-                            supplier.map((e) => {
-                              return (
-                                <option key={e.supplier_id} value={e.supplier_id}>
-                                  {e.company_name}
-                                </option>
-                              );
-                            })}
-                        </Input> */}
-                </FormGroup>
-              </Col>
-
-              <Col md="3">
-                <FormGroup>
-                  <Label> Goods Received Date <span className="required"> *</span> </Label>
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    // value={goodsreceipteditdetails && goodsreceipteditdetails.goods_received_date}
-                    value={
-                      goodsreceipteditdetails && moment(goodsreceipteditdetails.goods_received_date).format('YYYY-MM-DD')
-                    }
-                    name="goods_received_date"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Received By</Label>
-                  <Input
-                    type="select"
-                    onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.employee_id}
-                    name="employee_id"
-                  >
-                    <option defaultValue="selected">Please Select</option>
-                    {employee &&
-                      employee.map((e) => {
-                        return (
-                          <option key={e.employee_id} value={e.employee_id}>
-                            {e.first_name}
-                          </option>
-                        );               
-                      })}
-                  </Input>
-                </FormGroup>
-              </Col>
-              </Row>
-              <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Total Amount </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.total_amount}
-                    name="total_amount"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Insert Datas </Label>
-                  
-                  <Button
-  className="shadow-none"
-  color="primary"
-  onClick={() => {
-    CreateRecord(
-      goodsreceipteditdetails.product_id.map((product) => ({
-        goods_receipt_id: goodsreceipteditdetails.goods_receipt_id,
-        product_id: product.productId,
-        created_by: loggedInuser.first_name,
-        creation_date: new Date().toISOString(),
-        // Add other fields you need for the record here
-      }))
-    );
-    setIsRecordCreated(true); // Set isRecordCreated to true after clicking the button
-  }}
-  disabled={isRecordCreated} // Disable the button when isRecordCreated is true
->
-  Create Receipt Items
-</Button>
-                
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Status </Label>
-                  <Input
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.status}
-                    type="select"
-                    onChange={handleInputs}
-                    name="status"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Status </Label>
-                  <Input
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.status}
-                    type="select"
-                    onChange={handleInputs}
-                    name="status"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              </Row>
-              </ComponentCard>
-              </FormGroup>
-              </Form>
-
-              <ComponentCard title="More Details">
+            <GoodsReceiptEditDetails
+            handleInputs={handleInputs}
+            goodsreceipteditdetails={goodsreceipteditdetails}
+            employee={employee}
+            editGoodsReceiptData={editGoodsReceiptData}
+            id={id}
+            ></GoodsReceiptEditDetails>
+            <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <PurchaseRequestItemModal
-          PurchaseRequestId={id}
-          addPurchaseOrderModal={addPurchaseOrderModal}
-          setAddPurchaseOrderModal={setAddPurchaseOrderModal}
-        />
-          <Row className="mb-4">
-          <Col md="2">
-            <Button
-              color="primary"
-              onClick={() => {
-                setAddPurchaseOrderModal(true);
-              }}
-            >
-              Add Product
-            </Button>
-          </Col>
-          </Row>
-          
+          <Row>
+          <Col md="3">
+                <FormGroup>
+                  <Button className="shadow-none" color="primary" onClick={() => {generateData();}}>
+                    Create Receipt Items
+                 </Button>    
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <GoodsReceiptItemsEdit
+                     receiptitemseditmodal={receiptitemseditmodal}
+                     setReceiptItemsEditModal={setReceiptItemsEditModal}
+                     PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
+                    ></GoodsReceiptItemsEdit>
+                    <Button
+            className="shadow-none"
+            color="primary"
+            onClick={() => {
+              setReceiptItemsEditModal(true);
+            }
+            }
+          >
+            Edit
+          </Button>
+        </FormGroup>
+      </Col>
+    </Row>
         <GoodsReceiptLineItems
-        PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
-        project={project}
-        quote={quote}
-
+          PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
         ></GoodsReceiptLineItems>
           </TabPane>
-
           <TabPane tabId="2">
-          <PurchaseRequestAttachment 
-          ></PurchaseRequestAttachment>
+          <Form>
+              <FormGroup>
+                  <Row>
+                    <Col xs="12" md="3" className="mb-3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        onClick={() => {
+                          setRoomName('GoodsReceipt');
+                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
+                          dataForAttachment();
+                          setAttachmentModal(true);
+                        }}
+                      >
+                        <Icon.File className="rounded-circle" width="20" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <AttachmentModalV2
+                    moduleId={id}
+                    attachmentModal={attachmentModal}
+                    setAttachmentModal={setAttachmentModal}
+                    roomName={RoomName}
+                    fileTypes={fileTypes}
+                    altTagData="GoodsReceiptRelated Data"
+                    desc="GoodsReceiptRelated Data"
+                    recordType="RelatedPicture"
+                    mediaType={attachmentData.modelType}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
+                  <ViewFileComponentV2 moduleId={id} roomName="GoodsReceipt" recordType="RelatedPicture" update={update}
+                    setUpdate={setUpdate}/>
+              </FormGroup>
+            </Form>
           </TabPane>
         </TabContent>
-
-        </ComponentCard>
-              
-              </>   
+        </ComponentCard> 
+        </>   
   );
 };
 export default PurchaseRequestEdit;

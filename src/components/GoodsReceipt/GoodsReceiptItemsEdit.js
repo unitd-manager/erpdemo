@@ -200,6 +200,9 @@ const { loggedInuser } = useContext(AppContext);
             onClick={() => {
               editGoodsReceiptItems();
               setReceiptItemsEditModal(false);
+              setTimeout(() => {
+                window.location.reload()
+              }, 100);
             }}
           >
             Submit

@@ -1,12 +1,16 @@
 import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input} from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input,TabContent, TabPane, Button} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import * as Icon from 'react-feather';
 import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import Tab from '../../components/project/Tab';
 import message from '../../components/Message';
 import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeRequestButton';
 import api from '../../constants/api';
@@ -22,6 +26,14 @@ const ChangeRequestEdit = () => {
 
   const [changerequesteditdetails, setChangeRequestDetails] = useState();
   const [project, setProject] = useState([]);
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [update, setUpdate] = useState(false);
+  const [activeTab, setActiveTab] = useState('1');
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -29,6 +41,24 @@ const ChangeRequestEdit = () => {
 
   //Get Staff Details
   const { loggedInuser } = useContext(AppContext);
+
+  // Function to toggle tabs
+  const toggle = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
+
+  const tabs = [
+    { id: '1', name: 'Attachment' },
+  ];
+
+   // Attachment
+   const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
+  };
 
   //Setting data in Change Request Edit Details
   const handleInputs = (e) => {
@@ -82,7 +112,7 @@ const ChangeRequestEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={changerequesteditdetails && changerequesteditdetails.title} />
+      <BreadCrumbs />
       <Form>
         <FormGroup>
           <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} />
@@ -180,7 +210,52 @@ const ChangeRequestEdit = () => {
               </ComponentCard>
               </FormGroup>
             </Form>
-</>   
+
+            {/* Attachment Tab */}
+          <ComponentCard title="More Details">
+           <ToastContainer></ToastContainer>
+           <Tab toggle={toggle} tabs={tabs} />
+           <TabContent className="p-4" activeTab={activeTab}>
+           <TabPane tabId="1">
+           <Form>
+              <FormGroup>
+                  <Row>
+                    <Col xs="12" md="3" className="mb-3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        onClick={() => {
+                          setRoomName('ChangeRequest');
+                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
+                          dataForAttachment();
+                          setAttachmentModal(true);
+                        }}
+                      >
+                        <Icon.File className="rounded-circle" width="20" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <AttachmentModalV2
+                    moduleId={id}
+                    attachmentModal={attachmentModal}
+                    setAttachmentModal={setAttachmentModal}
+                    roomName={RoomName}
+                    fileTypes={fileTypes}
+                    altTagData="ChangeRequestRelated Data"
+                    desc="ChangeRequestRelated Data"
+                    recordType="RelatedPicture"
+                    mediaType={attachmentData.modelType}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
+                  <ViewFileComponentV2 moduleId={id} roomName="ChangeRequest" recordType="RelatedPicture" update={update}
+                    setUpdate={setUpdate}/>
+              </FormGroup>
+            </Form>
+          </TabPane>
+        </TabContent>
+        </ComponentCard>
+   </>     
   );
 };
 export default ChangeRequestEdit;

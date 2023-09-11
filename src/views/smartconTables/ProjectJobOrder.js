@@ -10,20 +10,19 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const GoodsDelivery = () => {
-  const [gdelivery, setGDelivery] = useState(null);
+const ProjectJobOrder = () => {
+  const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const getTenders = () => {
     api
-      .get('/goodsdelivery/getgoodsdelivery')
+      .get('/joborder/getJobOrder')
       .then((res) => {
-        setGDelivery(res.data.data);
+        setTenders(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -50,6 +49,10 @@ const GoodsDelivery = () => {
   const columns = [
     {
       name: '#',
+      selector: 'project_job_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
     },
     {
       name: 'Edit',
@@ -61,32 +64,45 @@ const GoodsDelivery = () => {
       sortable: false,
     },
     {
-      name: 'Delivery No',
+      name: 'Job Order No',
+      selector: 'job_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
       name: 'Date',
-    },
-    {
-      name: 'Order No',
+      selector: 'job_date',
+      sortable: true,
+      grow: 2,
+      wrap: true,
     },
     {
       name: 'Customer',
-    },
-    {
-      name: 'department',
-    },
-    {
-      name: 'salesman',
+      selector: 'company_name',
+      sortable: true,
+      grow: 0,
     },
     {
       name: 'Reference',
+      selector: 'ref_no_job',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
     },
-    {
-      name: 'PO No',
-    },
+  
     {
       name: 'Status',
+      selector: 'job_status',
+      sortable: true,
+      width: 'auto',
     },
+    {
+        name: 'Net Amount',
+        selector: 'total_amount',
+        sortable: true,
+        width: 'auto',
+      },
   ];
 
   return (
@@ -95,9 +111,9 @@ const GoodsDelivery = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Goods Delivery List"
+          title="JobOrderList"
           Button={
-            <Link to="/GoodsDeliveryDetails">
+            <Link to="/ProjectJobOrderDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -112,29 +128,22 @@ const GoodsDelivery = () => {
             </tr>
           </thead>
           <tbody>
-            {gdelivery &&
-              gdelivery.map((element, index) => {
+            {tenders &&
+              tenders.map((element, index) => {
                 return (
-                  <tr key={element.goods_delivery_id}>
+                  <tr key={element.project_job_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}?tab=1`}>
+                      <Link to={`/ProjectJobOrderEdit/${element.project_job_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.goods_delivery_code}</td>
-                    <td>
-                      {element.goods_delivery_date
-                        ? moment(element.goods_delivery_date).format('DD-MM-YYYY')
-                        : ''}
-                    </td>
-                    <td>{element.order_no}</td>
+                    <td>{element.job_code}</td>
+                    <td>{element.job_date}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.department}</td>
-                    <td>{element.sales_man}</td>
-                    <td>{element.goods_ref_no}</td>
-                    <td>{element.po_no}</td>
-                    <td>{element.goods_delivery_status}</td>
+                    <td>{element.ref_no_job}</td>
+                    <td>{element.job_status}</td>
+                    <td>{element.total_amount}</td>
                   </tr>
                 );
               })}
@@ -145,4 +154,4 @@ const GoodsDelivery = () => {
   );
 };
 
-export default GoodsDelivery;
+export default ProjectJobOrder;

@@ -5,25 +5,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
+import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const GoodsDelivery = () => {
-  const [gdelivery, setGDelivery] = useState(null);
+const EquipmentIssue = () => {
+  //Const Variables
+  const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getTenders = () => {
+  // get Leave
+  const getPlanning = () => {
     api
-      .get('/goodsdelivery/getgoodsdelivery')
+      .get('/equipmentissue/getEquipmentIssue')
       .then((res) => {
-        setGDelivery(res.data.data);
+        setPlanning(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -43,13 +45,18 @@ const GoodsDelivery = () => {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getTenders();
-  }, []);
 
+  useEffect(() => {
+    getPlanning();
+  }, []);
+  //  stucture of leave list view
   const columns = [
     {
-      name: '#',
+      name: 'id',
+      selector: 'equipment_issue_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
     },
     {
       name: 'Edit',
@@ -60,33 +67,29 @@ const GoodsDelivery = () => {
       button: true,
       sortable: false,
     },
+
     {
-      name: 'Delivery No',
+      name: 'Project Name',
+      selector: 'project_name',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Date',
+      name: 'Equipment Code',
+      selector: 'equipment_request_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Order No',
+      name: 'Issue Date',
+      selector: 'equipment_issue_date',
+      sortable: true,
+      grow: 2,
+      width: 'auto',
     },
-    {
-      name: 'Customer',
-    },
-    {
-      name: 'department',
-    },
-    {
-      name: 'salesman',
-    },
-    {
-      name: 'Reference',
-    },
-    {
-      name: 'PO No',
-    },
-    {
-      name: 'Status',
-    },
+   
   ];
 
   return (
@@ -95,9 +98,9 @@ const GoodsDelivery = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Goods Delivery List"
+          title="Equipment Issue"
           Button={
-            <Link to="/GoodsDeliveryDetails">
+            <Link to="/EquipmentIssueDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -112,30 +115,21 @@ const GoodsDelivery = () => {
             </tr>
           </thead>
           <tbody>
-            {gdelivery &&
-              gdelivery.map((element, index) => {
+            {planning &&
+              planning.map((element, i) => {
                 return (
-                  <tr key={element.goods_delivery_id}>
-                    <td>{index + 1}</td>
+                  <tr key={element.equipment_issue_id}>
+                    <td>{i + 1}</td>
                     <td>
-                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}?tab=1`}>
+                      <Link to={`/EquipmentIssueEdit/${element.equipment_issue_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.goods_delivery_code}</td>
-                    <td>
-                      {element.goods_delivery_date
-                        ? moment(element.goods_delivery_date).format('DD-MM-YYYY')
-                        : ''}
-                    </td>
-                    <td>{element.order_no}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.department}</td>
-                    <td>{element.sales_man}</td>
-                    <td>{element.goods_ref_no}</td>
-                    <td>{element.po_no}</td>
-                    <td>{element.goods_delivery_status}</td>
-                  </tr>
+                    <td>{element.proj_title}</td>
+                    <td>{element.equipment_request_code}</td>
+                    <td>{(element.equipment_issue_date)?moment(element.equipment_issue_date).format('DD-MM-YYYY'):''}</td>
+                   
+                    </tr>
                 );
               })}
           </tbody>
@@ -145,4 +139,4 @@ const GoodsDelivery = () => {
   );
 };
 
-export default GoodsDelivery;
+export default EquipmentIssue;

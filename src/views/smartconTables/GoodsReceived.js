@@ -14,7 +14,7 @@ import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Training = () => {
+const GoodsReceipt = () => {
   //All state variable
   const [goodsreceipt, setGoodsReceipt] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -144,4 +144,4 @@ const Training = () => {
     </div>
   );
 };
-export default Training;
+export default GoodsReceipt;

@@ -21,13 +21,27 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
     setEditModal: PropTypes.func,
     selectedInvoiceItemId: PropTypes.any,
   };
-  console.log('selectedInvoiceItemId', selectedInvoiceItemId);
-  const [invoiceItem, setInvoiceItem] = useState(null);
+
+  const [invoiceItem, setInvoiceItem] = useState({
+    item_title: '',
+    description: '',
+    unit: '',
+    qty: '',
+    unit_price: '',
+    total_cost: '',
+    remarks: '',
+  });
+
   const [lineItems, setLineItems] = useState([]);
-  
+
   const editInvoiceData = () => {
+    const updatedInvoiceItem = {
+      ...invoiceItem,
+      invoice_item_id: selectedInvoiceItemId, // Include the invoice_item_id in the request
+    };
+  
     api
-      .post('/invoice/editInvoiceItems', lineItems) // Send lineItems instead of invoiceItem
+      .post('/invoice/editInvoiceItems', updatedInvoiceItem)
       .then(() => {
         message('Record edited successfully', 'success');
       })
@@ -35,38 +49,42 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
         message('Unable to edit record.', 'error');
       });
   };
+
   useEffect(() => {
     if (editModal && selectedInvoiceItemId) {
-     
       api
         .get(`/invoice/getInvoiceItemsByItemsId/${selectedInvoiceItemId}`)
         .then((response) => {
-          
           setInvoiceItem(response.data.data[0]);
-          
-         setLineItems([
-            {
-              id: new Date().getTime().toString(),
-              item_title: '',
-              description: '',
-              unit: '',
-              qty: '',
-              unit_price: '',
-              remarks: '',
-            },
-          ]);
         })
         .catch((error) => {
-          // Handle errors here
           console.error(error);
         });
     }
   }, [editModal, selectedInvoiceItemId]);
 
   const handleInputChange = (e) => {
-    setLineItems({ ...lineItems, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setInvoiceItem((prevInvoiceItem) => {
+      // Create a copy of the previous state
+      const updatedInvoiceItem = { ...prevInvoiceItem };
+      
+      // Update the specific field
+      updatedInvoiceItem[name] = value;
+  
+      // Calculate total_cost when qty or unit_price changes
+      if (name === 'qty' || name === 'unit_price') {
+        const qty = name === 'qty' ? value : updatedInvoiceItem.qty;
+        const unitPrice = name === 'unit_price' ? value : updatedInvoiceItem.unit_price;
+        const totalCost = qty * unitPrice;
+        
+        // Update the total_cost field
+        updatedInvoiceItem.total_cost = totalCost;
+      }
+  
+      return updatedInvoiceItem;
+    });
   };
-
 
   const clearValue = (index) => {
     const updatedLineItems = [...lineItems];
@@ -96,11 +114,6 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
                 <Col md="12">
                   <Form>
                     <Row>
-                    
-                   
-                      {/* Invoice Detail */}
-
-                      {/* Invoice Item */}
                       <Row>
                         <Col>
                           <table className="lineitem">
@@ -117,94 +130,78 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
                               </tr>
                             </thead>
                             <tbody>
-                              {lineItems.map((item, index) => {
-                                return (
-                                  <tr key={item.id}>
-                                    <td data-label="Item">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.item_title}
-                                        type="text"
-                                        name="item_title"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="Description">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.description}
-                                        type="text"
-                                        name="description"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="UoM">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.unit}
-                                        type="text"
-                                        name="unit"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="Qty">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.qty}
-                                        type="number"
-                                        name="qty"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="Unit Price">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.unit_price}
-                                        onBlur={() => {
-                                          //calculateTotal();
-                                        }}
-                                        type="number"
-                                        name="unit_price"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="Total Price">
-                                      <Input
-                                        value={invoiceItem && invoiceItem.total_cost}
-                                        type="text"
-                                        name="total_cost"
-                                        disabled
-                                      />
-                                    </td>
-                                    <td data-label="Remarks">
-                                      <Input
-                                        value={item.remarks}
-                                        type="text"
-                                        name="remarks"
-                                        onChange={(e) =>
-                                          handleInputChange(e)
-                                        }
-                                      />
-                                    </td>
-                                    <td data-label="Action">
-                                      <div className="anchor">
-                                        <span
-                                          onClick={() => {
-                                            clearValue(index);
-                                          }}
-                                        >
-                                          Clear
-                                        </span>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
+                              <tr>
+                                <td data-label="Item">
+                                  <Input
+                                    value={invoiceItem.item_title}
+                                    type="text"
+                                    name="item_title"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="Description">
+                                  <Input
+                                    value={invoiceItem.description}
+                                    type="text"
+                                    name="description"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="UoM">
+                                  <Input
+                                    value={invoiceItem.unit}
+                                    type="text"
+                                    name="unit"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="Qty">
+                                  <Input
+                                    value={invoiceItem.qty}
+                                    type="number"
+                                    name="qty"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="Unit Price">
+                                  <Input
+                                    value={invoiceItem.unit_price}
+                                    onBlur={() => {
+                                      // calculateTotal();
+                                    }}
+                                    type="number"
+                                    name="unit_price"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="Total Price">
+                                  <Input
+                                    value={invoiceItem.total_cost}
+                                    type="text"
+                                    name="total_cost"
+                                    disabled
+                                  />
+                                </td>
+                                <td data-label="Remarks">
+                                  <Input
+                                    value={invoiceItem.remarks}
+                                    type="text"
+                                    name="remarks"
+                                    onChange={handleInputChange}
+                                  />
+                                </td>
+                                <td data-label="Action">
+                                  <div className="anchor">
+                                    <span
+                                      onClick={() => {
+                                        clearValue();
+                                      }}
+                                    >
+                                      Clear
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
                             </tbody>
                           </table>
                         </Col>

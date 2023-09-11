@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-const ProductDetails = () => {
+const DocumentDetails = () => {
   //All const variables
   const navigate = useNavigate();
   const [documentdetails, setDocumentDetails] = useState({
@@ -69,6 +68,7 @@ const ProductDetails = () => {
       });
   };
 
+  //Get project Title Dropdown API
   const getProjectId = () => {
     api
       .get('/document/getProjectTitle')
@@ -82,7 +82,6 @@ const ProductDetails = () => {
   };
 
   
-
   // Get Project data By Project Id
   const getProjectDataById = () => {
     api
@@ -92,23 +91,6 @@ const ProductDetails = () => {
         console.log(res.data.data[0]);
       })
   };
-
-  // const editDocumentData = () => {
-    
-  //   documentdetails.quote_id= projectgetdetails.quote_id; 
-  //   documentdetails.contact_id = projectgetdetails.contact_id;
-  //   documentdetails.company_id= projectgetdetails.company_id; 
-
-  //     api
-  //       .post('/document/editDocument', documentdetails)
-  //       .then(() => {
-  //         message('Record edited successfully', 'success');
-  //       })
-  //       .catch(() => {
-  //         message('Unable to edit record.', 'error');
-  //       });
-    
-  // };
 
   //useeffect
   useEffect(() => {
@@ -137,7 +119,7 @@ const ProductDetails = () => {
                         </Input>
                   </Col>
                   <Col md="12">
-                    <Label>Product Name <span className="required"> *</span> </Label>
+                    <Label>Project Name <span className="required"> *</span> </Label>
                     <Input
                           type="select"
                           onChange={handleInputs}
@@ -188,4 +170,4 @@ const ProductDetails = () => {
     </div>
   );
 };
-export default ProductDetails;
+export default DocumentDetails;
