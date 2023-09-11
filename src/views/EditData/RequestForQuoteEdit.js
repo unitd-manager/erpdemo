@@ -241,6 +241,14 @@ const RequestForQuoteEdit = () => {
                   
                 </FormGroup>
               </Col>
+              <Col md="4">
+                <FormGroup>
+                  <Label>Request For Quote Code</Label>
+                  <br></br>
+                  <span>{quoteDetails && quoteDetails.rq_code}</span>
+                  
+                </FormGroup>
+              </Col>
                 <Col md="4">
                   <FormGroup>
                     <Label>Status</Label>
