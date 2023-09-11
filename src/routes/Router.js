@@ -135,6 +135,7 @@ const Attendance = Loadable(lazy(() => import('../views/smartconTables/Attendanc
 const ProjectTable = Loadable(lazy(() => import('../views/smartconTables/Project')));
 const ClientTable = Loadable(lazy(() => import('../views/smartconTables/Client')));
 const BookingTable = Loadable(lazy(() => import('../views/smartconTables/Booking')));
+const ProposalTable = Loadable(lazy(() => import('../views/smartconTables/Proposal')));
 const TradingQuotationTable = Loadable(lazy(() => import('../views/smartconTables/TradingQuotation')));
 const ProjectQuotationTable = Loadable(lazy(() => import('../views/smartconTables/ProjectQuotation')));
 const GoodsDeliveryTable = Loadable(lazy(() => import('../views/smartconTables/GoodsDelivery')));
@@ -179,6 +180,7 @@ const PriceListDetails = Loadable(lazy(() => import('../views/DetailTable/PriceL
 const LabourRequestDetails = Loadable(lazy(() => import('../views/DetailTable/LabourRequestDetails')));
 const ClientDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ClientDetails')));
 const BookingDetails = Loadable(lazy(() => import('../views/DetailTable/BookingDetails')));
+const ProposalDetails = Loadable(lazy(() => import('../views/DetailTable/ProposalDetails')));
 const TimesheetDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TimesheetDetails')));
 const GoodsReceivedTable = Loadable(lazy(() => import('../views/smartconTables/GoodsReceived')));
 const ChangeRequestTable = Loadable(lazy(() => import('../views/smartconTables/ChangeRequest')));
@@ -202,6 +204,7 @@ const ProjectTaskDetailsTable = Loadable(lazy(() => import('../views/DetailTable
 const GoodsReceiptDetailsTable = Loadable(lazy(() => import('../views/DetailTable/GoodsReceiptDetails')));
 const ChangeRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ChangeRequestDetails')));
 const DocumentDetailsTable = Loadable(lazy(() => import('../views/DetailTable/DocumentDetails')));
+
 // const ChangeRequestDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ChangeRequestDetails')));
 
 // PayrollHR
@@ -277,6 +280,7 @@ const ProductEdit = Loadable(lazy(() => import('../views/EditData/ProductEdit'))
 const FinanceEdit = Loadable(lazy(() => import('../views/EditData/FinanceEdit')));
 const TrainingEdit = Loadable(lazy(() => import('../views/EditData/TrainingEdit')));
 const ProjectEdit = Loadable(lazy(() => import('../views/EditData/ProjectEdit')));
+const ProposalEdit = Loadable(lazy(() => import('../views/EditData/ProposalEdit')));
 const BookingEdit = Loadable(lazy(() => import('../views/EditData/BookingEdit')));
 const TradingQuotationEdit = Loadable(lazy(() => import('../views/EditData/TradingQuotationEdit')));
 const ProjectQuotationEdit = Loadable(lazy(() => import('../views/EditData/ProjectQuotationEdit')));
@@ -368,6 +372,7 @@ const Routernew = () => {
           <Route path="/GoodsDeliveryEdit/:id" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
           <Route path="/ChangeRequestEdit/:id" name="tenderdata" element={<ChangeRequestEdit />}></Route>
           <Route path="/DocumentEdit/:id" name="tenderdata" element={<DocumentEdit />}></Route>
+          <Route path="/ProposalEdit/:id" name="clienttdata" element={<ProposalEdit />}></Route>
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"
@@ -549,6 +554,7 @@ const Routernew = () => {
           <Route path="/ProductDetails" name="tenderdata" element={<ProductDetailsTable />}></Route>
 
           <Route path="/Project" name="projectdata" element={<ProjectTable />}></Route>
+          <Route path="/Proposal" name="projectdata" element={<ProposalTable />}></Route>
           <Route path="/Client" name="clienttdata" element={<ClientTable />}></Route>
           <Route path="/Planning" name="clienttdata" element={<Planning />}></Route>
           <Route path="/PriceList" name="clienttdata" element={<PriceList />}></Route>
@@ -571,6 +577,7 @@ const Routernew = () => {
           <Route path="/GoodsReceiptDetails" name="tenderdata" element={<GoodsReceiptDetailsTable />}></Route>
           <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route>
           <Route path="/DocumentDetails" name="tenderdata" element={<DocumentDetailsTable />}></Route>
+          <Route path="/ProposalDetails" name="clienttdata" element={<ProposalDetails />}></Route>
           
           {/* <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route> */}
           <Route
