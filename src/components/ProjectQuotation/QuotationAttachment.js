@@ -55,7 +55,7 @@ export default function QuotationAttachment() {
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="Tender" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="ProjectQuotation" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }

@@ -3,28 +3,42 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 import TenderContactDetails from '../TradingQuotation/TenderContactDetails';
+import TenderCompanyDetails from '../TradingQuotation/TenderCompanyDetails';
+
 
 export default function GoodsDeliveryMoreDetails({
   tenderDetails,
   handleInputs,
-  handleAddNewContact,
   company,
   contact,
-  AddNewContact,
+  addCompanyToggle,
   addContactModal,
   addContactToggle,
-  getContact
+  AddNewContact,
+  insertCompany,
+  companyhandleInputs,
+   addCompanyModal,
+  setAddCompanyModal,
+  allCountries,
+  //getContact,
+  handleAddNewContact,
 }) {
   GoodsDeliveryMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     company: PropTypes.object,
+    addCompanyModal:PropTypes.object,
     contact: PropTypes.any,
-    addContactModal: PropTypes.any,
-    addContactToggle: PropTypes.any,
-    AddNewContact: PropTypes.any,
-    handleAddNewContact: PropTypes.any,
-    getContact: PropTypes.any,
+    addCompanyToggle:PropTypes.any,
+  addContactModal:PropTypes.any,
+  addContactToggle:PropTypes.any,
+  AddNewContact:PropTypes.any,
+  insertCompany:PropTypes.any,
+  companyhandleInputs:PropTypes.any,
+  setAddCompanyModal:PropTypes.any,
+  //getContact:PropTypes.any,
+  allCountries:PropTypes.any,
+  handleAddNewContact:PropTypes.any,
   };
   return (
     <div>
@@ -41,8 +55,8 @@ export default function GoodsDeliveryMoreDetails({
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.delivery_no}
-                    name="delivery_no"
+                    value={tenderDetails && tenderDetails.goods_delivery_code}
+                    name="goods_delivery_code"
                     disabled
                   />
                 </FormGroup>
@@ -66,17 +80,30 @@ export default function GoodsDeliveryMoreDetails({
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.order_code}
                     name="order_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer</Label>
+                  <Label>
+                    Company Name (OR)
+                    <span
+                      className="anchor"
+                      onClick={() => {
+                        setAddCompanyModal(true);
+                      }}
+                    >
+                      <b>
+                        <u>Add New Company</u>
+                      </b>
+                    </span>
+                  </Label>
                   <Input
                     type="select"
                     onChange={(e) => {
                       handleInputs(e);
-                      getContact(e.target.value);
+                      //getContact(e.target.value);
                     }}
                     value={tenderDetails && tenderDetails.company_id}
                     name="company_id"
@@ -93,7 +120,15 @@ export default function GoodsDeliveryMoreDetails({
                       })}
                   </Input>
                 </FormGroup>
-              </Col>
+
+                <TenderCompanyDetails
+                  addCompanyModal={addCompanyModal}
+                  addCompanyToggle={addCompanyToggle}
+                  insertCompany={insertCompany}
+                  allCountries={allCountries}
+                  companyhandleInputs={companyhandleInputs}
+                ></TenderCompanyDetails>
+              </Col>\
               <Col md="3">
                 <FormGroup>
                   <Label>
@@ -121,13 +156,13 @@ export default function GoodsDeliveryMoreDetails({
                           </option>
                         );
                       })}
+                    <TenderContactDetails
+                      addContactModal={addContactModal}
+                      addContactToggle={addContactToggle}
+                      AddNewContact={AddNewContact}
+                      handleAddNewContact={handleAddNewContact}
+                    ></TenderContactDetails>
                   </Input>
-                  <TenderContactDetails
-                    addContactModal={addContactModal}
-                    addContactToggle={addContactToggle}
-                    AddNewContact={AddNewContact}
-                    handleAddNewContact={handleAddNewContact}
-                  ></TenderContactDetails>
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -136,8 +171,8 @@ export default function GoodsDeliveryMoreDetails({
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.departmant}
-                    name="departmant"
+                    value={tenderDetails && tenderDetails.department}
+                    name="department"
                   />
                 </FormGroup>
               </Col>
@@ -171,7 +206,6 @@ export default function GoodsDeliveryMoreDetails({
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.po_no}
                     name="po_no"
-                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -188,10 +222,8 @@ export default function GoodsDeliveryMoreDetails({
                     <option selected="selected" value="New">
                       New
                     </option>
-                    <option value="Quoted">Quoted</option>
-                    <option value="Awarded">Awarded</option>
-                    <option value="Not Awarded">Not Awarded</option>
-                    <option value="Cancelled">Cancelled</option>
+                    <option value="Invoiced">Invoiced</option>
+                    <option value="Delivered">Delivered</option>
                   </Input>
                 </FormGroup>
               </Col>

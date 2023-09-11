@@ -38,12 +38,6 @@ const RequestForQuoteEdit = () => {
     setQuoteDetails({ ...quoteDetails, [e.target.name]: e.target.value });
   };
   
-  const getOrdersByOrderId = () => {
-    api.post('/quote/getPurchaseQuoteById', { purchase_quote_id : id }).then((res) => {
-      setOrderDetails(res.data.data);
-    
-    });
-  };
 
   //Update Setting
   const editQuoteData = () => {
@@ -78,66 +72,37 @@ const RequestForQuoteEdit = () => {
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-  const generateData = (purchaseId) => {
+  const generateData = () => {
     // Fetch quote items by purchase_request_id
-    api.post('/quote/getPurchaseQuoteRequestById', { purchase_request_id: purchaseId })
-      .then((res) => {
-        const quoteItems = res.data.data;
-  
-        console.log('Received quote items:', quoteItems);
-  
-        if (quoteItems.length === 0) {
-          console.warn('No quote items to insert');
-          return;
-        }
-        const quoteItemsWithIds = quoteItems.map((quoteItem, index) => ({
-          ...quoteItem,
-          purchase_quote_items_id: index + 1, // Generate a unique ID or use an appropriate identifier
-        }));
+    api.post('/quote/getPurchaseQuoteRequestById', { purchase_request_id: quoteDetails.purchase_request_id }).then((res) => {
+      const orderItems = res.data.data;
   
        // Create a helper function to insert a single order item
-const insertOrderItem = (quoteItem) => {
-  if (quoteItem.purchase_quote_items_id) {
-    // Order item doesn't exist, insert it
-    const orderItemData = {
+       orderItems.forEach((quoteItem) => {
+        const orderItemData = {
       purchase_quote_id: id,
       quantity: quoteItem.purchase_request_qty,
-      title: quoteItem.title,
-      purchase_request_id: quoteItem.purchase_request_id,
+      product_id: quoteItem.product_id,
+      purchase_request_id: quoteDetails.purchase_request_id,
       unit: quoteItem.unit,
+      amount: quoteItem.amount,
+      description: quoteItem.description,
     };
-
-    console.log(`Inserting order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}:`, orderItemData);
 
     api
       .post('/quote/insertQuoteItems', orderItemData)
-      .then((result) => {
-        if (result.data.msg === 'Success') {
-          console.log(`Order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id} inserted successfully`);
-          // You can trigger a UI update here if needed
-        } else {
-          console.error(`Failed to insert order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}`);
-        }
+      .then(() => {
+        // Handle success if needed
+        console.log('Item inserted successfully');
       })
       .catch((error) => {
-        console.error(`Error inserting order item for purchase_quote_items_id ${quoteItem.purchase_quote_items_id}`, error);
+        // Handle error if needed
+        console.error('Error inserting item:', error);
       });
-  } else {
-    console.warn('purchase_quote_items_id is undefined, skipping insertion');
-  }
-};
-  
-quoteItemsWithIds.forEach((quoteItem) => {
-  insertOrderItem(quoteItem);
+  });
 });
-
-        console.log('All order items inserted or skipped successfully');
-        // You might want to trigger a UI update here
-      })
-      .catch((error) => {
-        console.error('Error fetching quote items', error);
-      });
-  };
+  
+  }
   
    //getting data from setting by Id
    const getTabQuoteById = () => {
@@ -150,6 +115,12 @@ quoteItemsWithIds.forEach((quoteItem) => {
       .catch(() => {
         message('Quote Data Not Found', 'info');
       });
+  };
+  const getOrdersByOrderId = () => {
+    api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
+      setOrderDetails(res.data.data);
+    
+    });
   };
   
   useEffect(() => {
@@ -267,6 +238,14 @@ quoteItemsWithIds.forEach((quoteItem) => {
                   <Label>Code</Label>
                   <br></br>
                   <span>{quoteDetails && quoteDetails.purchase_request_code}</span>
+                  
+                </FormGroup>
+              </Col>
+              <Col md="4">
+                <FormGroup>
+                  <Label>Request For Quote Code</Label>
+                  <br></br>
+                  <span>{quoteDetails && quoteDetails.rq_code}</span>
                   
                 </FormGroup>
               </Col>

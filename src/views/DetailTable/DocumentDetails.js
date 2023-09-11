@@ -9,7 +9,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-const ProductDetails = () => {
+const DocumentDetails = () => {
   //All const variables
   const navigate = useNavigate();
   const [documentdetails, setDocumentDetails] = useState({
@@ -32,7 +32,11 @@ const ProductDetails = () => {
       {
       documentdetails.document_code = DocumentCode;
       documentdetails.creation_date = creationdatetime;
-      documentdetails.created_by= loggedInuser.first_name;   
+      documentdetails.created_by= loggedInuser.first_name;
+      documentdetails.quote_id= projectgetdetails.quote_id; 
+      documentdetails.contact_id = projectgetdetails.contact_id;
+      documentdetails.company_id= projectgetdetails.company_id; 
+      documentdetails.budget= projectgetdetails.budget_inhouse;    
       api
         .post('/document/insertDocument', documentdetails)
         .then((res) => {
@@ -64,6 +68,7 @@ const ProductDetails = () => {
       });
   };
 
+  //Get project Title Dropdown API
   const getProjectId = () => {
     api
       .get('/document/getProjectTitle')
@@ -72,42 +77,26 @@ const ProductDetails = () => {
         console.log(res.data.data[0]);
       })
       .catch(() => {
-        message('Company not found', 'info');
+        message('Document not found', 'info');
       });
   };
 
+  
   // Get Project data By Project Id
   const getProjectDataById = () => {
     api
-      .post('/project/getProjectById', { project_id: documentdetails.project_id })
+      .post('/document/getProjectById', { project_id: documentdetails.project_id })
       .then((res) => {
-        setProjectDetails(res.data.data);
+        setProjectDetails(res.data.data[0]);
         console.log(res.data.data[0]);
       })
   };
 
-  const editDocumentData = () => {
-    
-    documentdetails.quote_id= projectgetdetails.quote_id; 
-    documentdetails.contact_id = projectgetdetails.contact_id;
-    documentdetails.company_id= projectgetdetails.company_id; 
-
-      api
-        .post('/document/editDocument', documentdetails)
-        .then(() => {
-          message('Record edited successfully', 'success');
-        })
-        .catch(() => {
-          message('Unable to edit record.', 'error');
-        });
-    
-  };
-
   //useeffect
   useEffect(() => {
-    getProjectDataById();
+    getProjectDataById(documentdetails.project_id);
     getProjectId();
-  }, []);
+  }, [ documentdetails.project_id],[]);
 
   return (
     <div>
@@ -130,7 +119,7 @@ const ProductDetails = () => {
                         </Input>
                   </Col>
                   <Col md="12">
-                    <Label>Product Name <span className="required"> *</span> </Label>
+                    <Label>Project Name <span className="required"> *</span> </Label>
                     <Input
                           type="select"
                           onChange={handleInputs}
@@ -157,8 +146,7 @@ const ProductDetails = () => {
                       className="shadow-none"
                       color="primary"
                       onClick={() => {
-                        generateCode();
-                        editDocumentData();
+                        generateCode();                      
                       }}
                     >
                       Save & Continue
@@ -182,4 +170,4 @@ const ProductDetails = () => {
     </div>
   );
 };
-export default ProductDetails;
+export default DocumentDetails;

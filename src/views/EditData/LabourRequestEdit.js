@@ -80,7 +80,7 @@ const PriceListEdit = () => {
     if (
       plannings.request_date      ) {
       api
-        .post('/LabourRequest/editLabourRequest', plannings)
+        .post('/labourrequest/editLabourRequest', plannings)
         .then(() => {
           message('Record editted successfully', 'success');
         })

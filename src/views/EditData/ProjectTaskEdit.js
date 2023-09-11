@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-} from 'reactstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import {Row, Col, Form, FormGroup, TabContent, TabPane, Button} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams} from 'react-router-dom';
-import moment from 'moment';
-import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import * as Icon from 'react-feather';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
+import Tab from '../../components/project/Tab';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
-import DeleteButton from '../../components/DeleteButton';
+import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
+import ProjectTaskEditDetails from '../../components/ProjectTaskTable/ProjectTaskEditDetails';
+import AppContext from '../../context/AppContext';
+
 
 const TaskEdit = () => {
   //All state variable
@@ -31,16 +28,39 @@ const TaskEdit = () => {
   const [projectdetails, setProjectDetails] = useState();
   const [companydetails, setCompanyDetails] = useState();
   const [description, setDescription] = useState('');
-  // const [joborder, setJobOrder] = useState('');
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [update, setUpdate] = useState(false);
+  const [activeTab, setActiveTab] = useState('1');
 
   //navigation and parameters
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
-  const backToList = () => {
-    navigate('/ProjectTask');
+   // Function to toggle tabs
+   const toggle = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
   };
+
+  const tabs = [
+    { id: '1', name: 'Attachment' },
+  ];
+
+   // Attachment
+   const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
+  };
+
+  //Get Staff Details
+  const { loggedInuser } = useContext(AppContext);
 
   // data in Description Modal
   const handleDataEditor = (e, type) => {
@@ -84,20 +104,8 @@ const TaskEdit = () => {
         message('Company not found', 'info');
       });
   };
-
-  // const getJobOrderTitle = () => {
-  //   api
-  //     .get('/projecttask/getJobOrderTitle')
-  //     .then((res) => {
-  //       setJobOrder(res.data.data);
-  //       console.log(res.data.data[0]);
-  //     })
-  //     .catch(() => {
-  //       message('Company not found', 'info');
-  //     });
-  // };
   
-  //timesheet data in timesheet
+  //handleInputs data
   const handleInputs = (e) => {
     setProjectTask({ ...projectTask, [e.target.name]: e.target.value });
   };
@@ -113,6 +121,7 @@ const TaskEdit = () => {
       }
     });
   };  
+
   // //  Gettind data from Job By Id
   const getEmployee = () => {
     api
@@ -127,6 +136,10 @@ const TaskEdit = () => {
 
   //Update task
   const editTask = () => {
+    if (projectTask.task_title !== '')
+    {
+      projectTask.modification_date = creationdatetime;
+      projectTask.modified_by= loggedInuser.first_name; 
     api
       .post('/projecttask/editProjectTask', projectTask)
       .then(() => {
@@ -136,363 +149,80 @@ const TaskEdit = () => {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+    }
+    else {
+      message('Please fill all required fields', 'warning');
+    }
   };
 
-
+  //UseEffect
   useEffect(() => {
     getTaskById();
     getProjectname();
     getEmployee();
     getCompanyName();
-    // getJobOrderTitle();
   }, [id]);
 
   return (
     <>
       <BreadCrumbs />
-      <Form>
-        <FormGroup>
-          <ToastContainer></ToastContainer>
-          <ComponentCardV2>
-            <Row>
-              <Col>
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  onClick={() => {
-                    editTask();
-                    navigate('/ProjectTask');
-                  }}
-                >
-                  Save
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  onClick={() => {
-                    editTask();
-                    applyChanges();
-                  }}
-                >
-                  Apply
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  type="submit"
-                  className="btn btn-dark shadow-none"
-                  onClick={(e) => {
-                    if (window.confirm('Are you sure you want to cancel? ')) {
-                      navigate('/ProjectTask');
-                    } else {
-                      e.preventDefault();
-                    }
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-              <Col>
-                <DeleteButton
-                  id={id}
-                  columnname="project_task_id"
-                  tablename="project_task"
-                ></DeleteButton>
-              </Col>
-              <Col>
-                <Button
-                  className="shadow-none"
-                  color="dark"
-                  onClick={() => {
-                    backToList();
-                  }}
-                >
-                  Back to List
-                </Button>
-              </Col>
-            </Row>
-          </ComponentCardV2>
-        </FormGroup>
-      </Form>
+      <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} />
       {/* projectTask Details */}
-      <Form>
-        <FormGroup>
-        <ComponentCard title="Project Task Details" creationModificationDate={projectTask}>
-            <ToastContainer></ToastContainer>
-            <div>
-              <BreadCrumbs />
+      <ProjectTaskEditDetails
+         projectTask={projectTask}
+         handleInputs = {handleInputs}
+         projectdetails = {projectdetails}
+         employeeProject ={employeeProject}
+         companydetails = {companydetails}
+         description = {description}
+         handleDataEditor = {handleDataEditor}
+         setDescription = {setDescription}
+      ></ProjectTaskEditDetails>
 
-              <ComponentCard title="Task">
-                <Form>
+      {/* Attachment Tab */}
+      <ComponentCard title="More Details">
+           <ToastContainer></ToastContainer>
+           <Tab toggle={toggle} tabs={tabs} />
+           <TabContent className="p-4" activeTab={activeTab}>
+           <TabPane tabId="1">
+           <Form>
+              <FormGroup>
                   <Row>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Task Title</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.task_title}
-                          name="task_title"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Job Order Title</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.job_order_title}
-                          name="job_order_title"
-                          disabled
-                        />
-
-                        {/* <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.job_order_id}
-                          name="job_order_id"
-                          disabled
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {joborder &&
-                            joborder.map((e) => {
-                              return (
-                                <option key={e.job_order_id} value={e.job_order_id}>
-                                  {e.job_order_title}
-                                </option>
-                              );
-                            })}
-                        </Input> */}
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Job Order Code</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.job_order_code}
-                          name="job_order_code"
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Project Name</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.project_id}
-                          name="project_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {projectdetails &&
-                            projectdetails.map((e) => {
-                              return (
-                                <option key={e.project_id} value={e.project_id}>
-                                  {e.title}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Customer Name</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.company_id}
-                          name="company_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {companydetails &&
-                            companydetails.map((e) => {
-                              return (
-                                <option key={e.company_id} value={e.company_id}>
-                                  {e.company_name}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Staff Name</Label>
-                        <Input
-                          type="select"
-                          name="employee_id"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.employee_id}
-                        >
-                          <option value="" defaultValue="selected"></option>
-                          {employeeProject &&
-                            employeeProject.map((ele) => {
-                              return (
-                                <option key={ele.employee_id} value={ele.employee_id}>
-                                  {ele.first_name}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Start Date</Label>
-                        <Input
-                          type="date"
-                          onChange={handleInputs}
-                          value={moment(projectTask && projectTask.start_date).format('YYYY-MM-DD')}
-                          name="start_date"
-                        />
-                      </FormGroup>
-                    </Col>
-                    
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>End Date</Label>
-                        <Input
-                          type="date"
-                          onChange={handleInputs}
-                          value={moment(projectTask && projectTask.end_date).format('YYYY-MM-DD')}
-                          name="end_date"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Actual Comp Date</Label>
-                        <Input
-                          type="date"
-                          onChange={handleInputs}
-                          value={moment(projectTask && projectTask.actual_completed_date).format('YYYY-MM-DD')}
-                          name="actual_completed_date"
-                        />
-                      </FormGroup>
-                    </Col>
-                    
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Status</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.status}
-                          name="status"
-                        >
-                          {' '}
-                          <option value="" selected="selected">
-                            Please Select
-                          </option>
-                          <option value="Pending">Pending</option>
-                          <option value="InProgress">InProgress</option>
-                          <option value="Completed">Completed</option>
-                          <option value="OnHold">OnHold</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Task Type</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.task_type}
-                          name="task_type"
-                        >
-                          {' '}
-                          <option value="" selected="selected">
-                            Please Select
-                          </option>
-                          <option value="Development">Development</option>
-                            <option value="ChangeRequest">ChangeRequest</option>
-                            <option value="Issues">Issues</option>     
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Priority</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.priority}
-                          name="priority"
-                        >
-                          {' '}
-                          <option value="" selected="selected">
-                            Please Select
-                          </option>
-                          <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option> 
-                            <option value="4">4</option> 
-                            <option value="5">5</option>     
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Completion</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.completion}
-                          name="completion"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Actual Hours</Label>
-                        <Input
-                          type="number"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.actual_hours}
-                          name="actual_hours"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Estimated Hours</Label>
-                        <Input
-                          type="number"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.estimated_hours}
-                          name="hours"
-                        />
-                      </FormGroup>
+                    <Col xs="12" md="3" className="mb-3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        onClick={() => {
+                          setRoomName('ProjectTask');
+                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
+                          dataForAttachment();
+                          setAttachmentModal(true);
+                        }}
+                      >
+                        <Icon.File className="rounded-circle" width="20" />
+                      </Button>
                     </Col>
                   </Row>
-                </Form>
-              </ComponentCard>
-              <ComponentCard title="Description">
-                <Editor
-                  editorState={description}
-                  wrapperClassName="demo-wrapper mb-0"
-                  editorClassName="demo-editor border mb-4 edi-height"
-                  onEditorStateChange={(e) => {
-                    handleDataEditor(e, 'description');
-                    setDescription(e);
-                  }}
-                />
-              </ComponentCard>
-
-              
-            </div>
-          </ComponentCard>
-        </FormGroup>
-      </Form>
+                  <AttachmentModalV2
+                    moduleId={id}
+                    attachmentModal={attachmentModal}
+                    setAttachmentModal={setAttachmentModal}
+                    roomName={RoomName}
+                    fileTypes={fileTypes}
+                    altTagData="ProjectTaskRelated Data"
+                    desc="ProjectTaskRelated Data"
+                    recordType="RelatedPicture"
+                    mediaType={attachmentData.modelType}
+                    update={update}
+                    setUpdate={setUpdate}
+                  />
+                  <ViewFileComponentV2 moduleId={id} roomName="ProjectTask" recordType="RelatedPicture" update={update}
+                    setUpdate={setUpdate}/>
+              </FormGroup>
+            </Form>
+          </TabPane>
+        </TabContent>
+        </ComponentCard>
     </>
   );
 };

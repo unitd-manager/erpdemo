@@ -1,42 +1,31 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
+import { TabPane, TabContent, Button, Table, Row, Col, FormGroup } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import * as Icon from 'react-feather';
-import Swal from 'sweetalert2';
+//import * as Icon from 'react-feather';
+//import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
+import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
-import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
-import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
-import PdfQuote from '../../components/PDF/PdfQuote';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
+import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
 
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
-  const [company, setCompany] = useState();
-  const [contact, setContact] = useState();
-  const [addLineItemModal, setAddLineItemModal] = useState(false);
-  const [lineItem, setLineItem] = useState();
-  const [viewLineModal, setViewLineModal] = useState(false);
+  const [goodsitemdetails, setgoodslineDetails] = useState();
+
+  const [editModal, setEditModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
+  const [addCompanyModal, setAddCompanyModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
-  const [editLineModelItem, setEditLineModelItem] = useState(null);
-  const [editLineModal, setEditLineModal] = useState(false);
-  //const [quoteLine, setQuoteLine] = useState();
-
-  //const [contact, setContact] = useState();
-  //   const [addContactModal, setAddContactModal] = useState(false);
-  //   const [addCompanyModal, setAddCompanyModal] = useState(false);
-
   const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
@@ -44,61 +33,31 @@ const GoodsDeliveryEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Quotation');
-  };
-  const addQuoteItemsToggle = () => {
-    setAddLineItemModal(!addLineItemModal);
+    navigate('/GoodsDelivery');
   };
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };
-  const viewLineToggle = () => {
-    setViewLineModal(!viewLineModal);
+  const addCompanyToggle = () => {
+    setAddCompanyModal(!addCompanyModal);
   };
-  console.log(viewLineToggle);
+
   const tabs = [
-    { id: '1', name: 'Quotation ' },
+    { id: '1', name: 'Goods Delivery ' },
     { id: '2', name: 'Attachment' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-  const getContact = (companyId) => {
-    setSelectedCompany(companyId);
-    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
-      setContact(res.data.data);
-    });
-  };
 
+  const [contact, setContact] = useState();
+  const [company, setCompany] = useState();
   // Get Tenders By Id
 
-  const editTenderById = () => {
-    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
-      setTenderDetails(res.data.data[0]);
-      getContact(res.data.data.company_id);
-    });
-  };
+  
 
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
-  };
-
-  //Logic for edit data in db
-
-  const editTenderData = () => {
-    tenderDetails.modification_date = creationdatetime;
-    tenderDetails.modified_by = loggedInuser.first_name;
-    api
-      .post('/tradingquote/edit-Tradingquote', tenderDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
   };
 
   // Get Company Data
@@ -107,16 +66,65 @@ const GoodsDeliveryEdit = () => {
       setCompany(res.data.data);
     });
   };
-  // Get Line Item
-  const getLineItem = () => {
-    api.post('/tradingquote/getQuoteLineItemsById', { quote_id: id }).then((res) => {
-      setLineItem(res.data.data);
-      //setAddLineItemModal(true);
+
+  const getContact = (companyId) => {
+    setSelectedCompany(companyId);
+    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
+      setContact(res.data.data);
     });
   };
-   // Add new Contact
+  const getgoodsdeliveryById = () => {
+    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
+      setTenderDetails(res.data.data[0]);
+      //getContact(res.data.data.company_id);
+    });
+  };
+  //Logic for adding company in db
 
-   const [newContactData, setNewContactData] = useState({
+  const [companyInsertData, setCompanyInsertData] = useState({
+    company_name: '',
+    address_street: '',
+    address_town: '',
+    address_country: '',
+    address_po_code: '',
+    phone: '',
+    fax: '',
+    website: '',
+    supplier_type: '',
+    industry: '',
+    company_size: '',
+    source: '',
+  });
+
+  const companyhandleInputs = (e) => {
+    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  };
+
+  // Insert Company
+  const insertCompany = () => {
+    if (
+      companyInsertData.company_name !== '' &&
+      companyInsertData.phone !== '' &&
+      companyInsertData.address_country !== ''
+    ) {
+      api
+        .post('/company/insertCompany', companyInsertData)
+        .then(() => {
+          message('Company inserted successfully.', 'success');
+          toggle();
+          getCompany();
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields.', 'error');
+    }
+  };
+
+  //Add new Contact
+
+  const [newContactData, setNewContactData] = useState({
     salutation: '',
     first_name: '',
     email: '',
@@ -134,17 +142,13 @@ const GoodsDeliveryEdit = () => {
   const AddNewContact = () => {
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(() => {
           message('Unable to add Contact! try again later', 'error');
@@ -153,85 +157,164 @@ const GoodsDeliveryEdit = () => {
       message('All fields are required.', 'info');
     }
   };
- 
-  useEffect(() => {
-    editTenderById();
-    getLineItem();
-    getCompany();
-    // getAllCountries();
-  }, [id]);
 
-  const columns1 = [
-    {
-      name: '#',
-    },
-    {
-      name: 'Title',
-    },
-    {
-      name: 'Description',
-    },
-    {
-      name: 'Qty',
-    },
-    {
-      name: 'Unit Price',
-    },
-    {
-      name: 'Amount',
-    },
-    {
-      name: 'Updated By ',
-    },
-    {
-      name: 'Action ',
-    },
-  ];
-  const deleteRecord = (deleteID) => {
-    Swal.fire({
-      title: `Are you sure? ${id}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/tender/deleteEditItem', { quote_items_id: deleteID }).then(() => {
-          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-          window.location.reload();
-        });
-      }
+  const getgoodsLineItemById = () => {
+    api.post('/goodsdelivery/getgoodsdeliveryitemById', { goods_delivery_id: id }).then((res) => {
+      setgoodslineDetails(res.data.data);
     });
   };
+
+  //Logic for edit data in db
+
+  const editGoodsDelivery = () => {
+    tenderDetails.modification_date = creationdatetime;
+    tenderDetails.modified_by = loggedInuser.first_name;
+    api
+      .post('/goodsdelivery/edit-goodsdelivery', tenderDetails)
+      .then(() => {
+        message('Record editted successfully', 'success');
+        getgoodsdeliveryById();
+      })
+      .catch(() => {
+        message('Unable to edit record.', 'error');
+      });
+  };
+
+  // Generate Data for Delivery Items
+  const generateData = () => {
+    api
+      .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
+      .then((res) => {
+        const DeliveryItems = res.data.data;
+        console.log('Received items:', DeliveryItems);
+        if (DeliveryItems.length === 0) {
+          console.warn('No Delivery items to insert');
+          return;
+        }
+        // Retrieve all order_item_id  values from the goods_delivery_items table
+        api
+          .get('/goodsdelivery/checkDeliveryItems')
+          .then((response) => {
+            const ExistingDeliveryItemsId = response.data.data;
+            let alreadyInserted = false;
+            const insertDeliveryItems = (index) => {
+              if (index < DeliveryItems.length) {
+                const DeliveryItem = DeliveryItems[index];
+                // Check if the order_item_id  already exists in the ExistingDeliveryItemsId array
+                if (ExistingDeliveryItemsId.includes(DeliveryItem.order_item_id)) {
+                  if (!alreadyInserted) {
+                    console.warn(
+                      `Delivery items are already Inserted (Order_item_id: ${DeliveryItem.order_item_id})`,
+                    );
+                    message('Delivery items are already Inserted', 'warning');
+                    alreadyInserted = true; // Set the flag to true so the message is shown only once
+                    setTimeout(() => {
+                      alreadyInserted = false;
+                    }, 3000);
+                  }
+
+                  insertDeliveryItems(index + 1);
+                } else {
+                  // Insert the order item
+                  const DeliveryItemsData = {
+                    creation_date: creationdatetime,
+                    modified_by: loggedInuser.first_name,
+                    goods_delivery_id: id,
+                    order_id: tenderDetails.order_id,
+                    order_item_id: DeliveryItem.order_item_id,
+                    title: DeliveryItem.item_title,
+                    unit: DeliveryItem.unit,
+                    unit_price: DeliveryItem.unit_price,
+                    amount: DeliveryItem.cost_price,
+                    description: DeliveryItem.description,
+                    quantity: DeliveryItem.qty,
+                  };
+                  console.log(`Inserting order item ${index + 1}:`, DeliveryItemsData);
+                  // Send a POST request to your /goodsdelivery/insertGoodsDeliveryItems API with the current DeliveryItemsData
+                  api
+                    .post('/goodsdelivery/insertgoodsdeliveryitem', DeliveryItemsData)
+                    .then((result) => {
+                      if (result.data.msg === 'Success') {
+                        console.log(`Order item ${index + 1} inserted successfully`);
+
+                        if (!alreadyInserted) {
+                          console.log(`Order item ${index + 1} inserted successfully`);
+                          message('All Order items Inserted successfully');
+                          alreadyInserted = true;
+                        }
+                        getgoodsLineItemById();
+                        window.location.reload();
+                      } else {
+                        console.error(`Failed to insert order item ${index + 1}`);
+                      }
+                      // Continue to the next item
+                      insertDeliveryItems(index + 1);
+                    })
+                    .catch((error) => {
+                      console.error(`Error inserting order item ${index + 1}`, error);
+                      // Continue to the next item
+                      insertDeliveryItems(index + 1);
+                    });
+                }
+              } else {
+                console.log('All order items inserted successfully');
+                // You might want to trigger a UI update here
+              }
+            };
+            // Start inserting order items from index 0
+            insertDeliveryItems(0);
+          })
+          .catch((error) => {
+            console.error('Error checking order item existence', error);
+          });
+      })
+
+      .catch((error) => {
+        console.error('Error fetching quote items', error);
+      });
+  };
+
+  useEffect(() => {
+    getCompany();
+    getContact();
+    getgoodsdeliveryById();
+    getgoodsLineItemById();
+  }, [id]);
+
+  //Structure of Invoice table
+  const columns1 = [
+    { name: 'SN.No' },
+    { name: 'Item Title' },
+    { name: 'Description' },
+    { name: 'Unit' },
+    { name: 'quantity' },
+    { name: 'Unit Price' },
+    { name: 'Total Amount ' },
+  ];
 
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TradingQuoteButton
-        editTenderData={editTenderData}
+      <GoodsDeliveryButton
+        editGoodsDelivery={editGoodsDelivery}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></TradingQuoteButton>
-      <Col md="4">
-        <Label>
-          <PdfQuote id={id} quoteId={id}></PdfQuote>
-        </Label>
-      </Col>
+      ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
-        newContactData={newContactData}
-        handleInputs={handleInputs}
-        handleAddNewContact={handleAddNewContact}
-        setAddContactModal={setAddContactModal}
-        addContactModal={addContactModal}
-        tenderDetails={tenderDetails}
-        company={company}
         contact={contact}
+        handleInputs={handleInputs}
+        company={company}
+        tenderDetails={tenderDetails}
+        addCompanyModal={addCompanyModal}
+        addCompanyToggle={addCompanyToggle}
+        companyhandleInputs={companyhandleInputs}
+        insertCompany={insertCompany}
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
+        setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        handleAddNewContat={handleAddNewContact}
       ></GoodsDeliveryMoreDetails>
 
       <ComponentCard title="More Details">
@@ -241,21 +324,42 @@ const GoodsDeliveryEdit = () => {
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
-              <Col md="6">
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  to=""
-                  onClick={addQuoteItemsToggle.bind(null)}
-                >
-                  Add Quote Items
-                </Button>
+              <Col md="3">
+                <FormGroup>
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      generateData();
+                    }}
+                  >
+                    Generate Delivery Item
+                  </Button>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      setEditModal(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </FormGroup>
               </Col>
             </Row>
-            <br />
-            <Row>
+            <EditLineItem
+              editModal={editModal}
+              setEditModal={setEditModal}
+              getgoodsLineItemById={getgoodsLineItemById}
+            ></EditLineItem>
+
+            <FormGroup>
               <div className="container">
-                <Table id="example" className="display border border-secondary rounded">
+                <Table id="example" className="lineitem border border-secondary rounded">
                   <thead>
                     <tr>
                       {columns1.map((cell) => {
@@ -264,59 +368,24 @@ const GoodsDeliveryEdit = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {lineItem &&
-                      lineItem.map((e, index) => {
+                    {goodsitemdetails &&
+                      goodsitemdetails.map((element, index) => {
                         return (
-                          <tr key={e.quote_id}>
+                          <tr key={element.goods_delivery_id}>
                             <td>{index + 1}</td>
-                            <td data-label="Title">{e.title}</td>
-                            <td data-label="Description">{e.description}</td>
-                            <td data-label="Quantity">{e.quantity}</td>
-                            <td data-label="Unit Price">{e.unit_price}</td>
-                            <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By"></td>
-                            <td data-label="Actions">
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  setEditLineModelItem(e);
-                                  setEditLineModal(true);
-                                }}
-                              >
-                                <Icon.Edit2 />
-                              </span>
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  deleteRecord(e.quote_items_id);
-                                }}
-                              >
-                                <Icon.Trash2 />
-                              </span>
-                            </td>
+                            <td>{element.title}</td>
+                            <td>{element.description}</td>
+                            <td>{element.unit}</td>
+                            <td>{element.quantity}</td>
+                            <td>{element.unit_price}</td>
+                            <td>{element.amount}</td>
                           </tr>
                         );
                       })}
                   </tbody>
                 </Table>
               </div>
-            </Row>
-            {/* End View Line Item Modal */}
-            <EditLineItemModal
-              editLineModal={editLineModal}
-              setEditLineModal={setEditLineModal}
-              FetchLineItemData={editLineModelItem}
-              getLineItem={getLineItem}
-              setViewLineModal={setViewLineModal}
-            ></EditLineItemModal>
-            {addLineItemModal && (
-              <QuoteLineItem
-                //projectInfo={tenderId}
-                addLineItemModal={addLineItemModal}
-                setAddLineItemModal={setAddLineItemModal}
-                quoteLine={id}
-              ></QuoteLineItem>
-            )}
+            </FormGroup>
           </TabPane>
           <TabPane tabId="2">
             <QuotationAttachment></QuotationAttachment>

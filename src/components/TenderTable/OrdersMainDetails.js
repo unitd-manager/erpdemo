@@ -6,12 +6,10 @@ import ComponentCard from '../ComponentCard';
 export default function TenderMoreDetails({
   orderDetails,
   handleInputs,
-  company,
 }) {
   TenderMoreDetails.propTypes = {
     orderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
-    company: PropTypes.array,
  };
   return (
     <div>
@@ -46,8 +44,19 @@ export default function TenderMoreDetails({
                   />
                 </FormGroup>
               </Col>
-           
               <Col md="3">
+                <FormGroup>
+                  <Label>Company</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={orderDetails && orderDetails.company_name}
+                    name="company_name"
+                    readOnly
+                  />
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                   <FormGroup>
                     <Label>
                      Company <span className="required"> *</span>
@@ -62,7 +71,7 @@ export default function TenderMoreDetails({
                         ))}
                     </Input>
                   </FormGroup>
-                </Col>
+                </Col> */}
               <Col md="3">
                 <FormGroup>
                   <Label>Reference</Label>
