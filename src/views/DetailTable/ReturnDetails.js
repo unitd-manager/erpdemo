@@ -56,7 +56,7 @@ const ReturnDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Enquiry">
+          <ComponentCard title="New Return">
             <Form>
               <FormGroup>
               
