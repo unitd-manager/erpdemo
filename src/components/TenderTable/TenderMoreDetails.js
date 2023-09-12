@@ -64,6 +64,7 @@ export default function TenderMoreDetails({
                     value={tenderDetails && tenderDetails.company_name}
                     onChange={handleInputs}
                     name="company_name"
+                    readOnly
                   />
                 </FormGroup>
               </Col>
