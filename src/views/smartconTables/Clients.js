@@ -49,7 +49,7 @@ const Claints = () => {
 
   const columns = [
     {
-      name: 'id',
+      name: '#',
       selector: 'company_id',
       grow: 0,
       wrap: true,
