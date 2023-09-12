@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row,Label } from 'reactstrap';
+import { TabPane, TabContent,  Table, Row} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,26 +11,20 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteButton';
-import ProjectQuoteMoreDetails from '../../components/ProjectQuotation/ProjectQuoteMoreDetails';
-import QuotationAttachment from '../../components/ProjectQuotation/QuotationAttachment';
+import ProjectQuoteButton from '../../components/PurchaseReturn/ProjectQuoteButton';
+import ProjectQuoteMoreDetails from '../../components/PurchaseReturn/ProjectQuoteMoreDetails';
+import QuotationAttachment from '../../components/PurchaseReturn/QuotationAttachment';
 import Tab from '../../components/project/Tab';
-import QuoteLineItem from '../../components/ProjectQuotation/QuoteLineItem';
-import EditLineItemModal from '../../components/ProjectQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
-import PdfQuote from '../../components/PDF/PdfQuotation';
 
-const ProjectQuotationEdit = () => {
+const PurchaseReturnEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
-  const [addLineItemModal, setAddLineItemModal] = useState(false);
   const [lineItem, setLineItem] = useState();
   const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
-  const [editLineModelItem, setEditLineModelItem] = useState(null);
-  const [editLineModal, setEditLineModal] = useState(false);
   //const [quoteLine, setQuoteLine] = useState();
 
   //const [contact, setContact] = useState();
@@ -44,11 +38,9 @@ const ProjectQuotationEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/ProjectQuotation');
+    navigate('/PurchaseReturn');
   };
-  const addQuoteItemsToggle = () => {
-    setAddLineItemModal(!addLineItemModal);
-  };
+
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };
@@ -57,7 +49,7 @@ const ProjectQuotationEdit = () => {
   };
   console.log(viewLineToggle);
   const tabs = [
-    { id: '1', name: 'Quotation ' },
+    { id: '1', name: 'Purchase Return' },
     { id: '2', name: 'Attachment' },
   ];
   const toggle = (tab) => {
@@ -72,16 +64,15 @@ const ProjectQuotationEdit = () => {
   };
 
   // Get Tenders By Id
-
-  const editTenderById = () => {
-    api.post('/projectquote/getProjectquoteById', { project_quote_id: id }).then((res) => {
-      setTenderDetails(res.data.data[0]);
- // Assuming you have a company_id in your response data
- const companyId = res.data.data[0].company_id;
-
- // Call getContact with the companyId
- getContact(companyId);
-    });
+   const editTenderById = () => {
+    api
+      .post('/purchasereturn/getPurchaseReturnById', { purchase_return_id: id })
+      .then((res) => {
+        setTenderDetails(res.data.data[0]);
+      })
+      .catch(() => {
+        
+      });
   };
 
   const handleInputs = (e) => {
@@ -94,12 +85,10 @@ const ProjectQuotationEdit = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/projectquote/edit-Tradingquote', tenderDetails)
+      .post('/purchasereturn/editpurchasereturn', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+       
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -114,7 +103,7 @@ const ProjectQuotationEdit = () => {
   };
   // Get Line Item
   const getLineItem = () => {
-    api.post('/projectquote/getQuoteLineItemsById', { project_quote_id: id }).then((res) => {
+    api.post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: id }).then((res) => {
       setLineItem(res.data.data);
       //setAddLineItemModal(true);
     });
@@ -220,11 +209,7 @@ const ProjectQuotationEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></ProjectQuoteButton>
-      <Col md="4">
-        <Label>
-          <PdfQuote id={id} quoteId={id}></PdfQuote>
-        </Label>
-      </Col> 
+     
       <ProjectQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -245,18 +230,7 @@ const ProjectQuotationEdit = () => {
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-            <Row>
-              <Col md="6">
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  to=""
-                  onClick={addQuoteItemsToggle.bind(null)}
-                >
-                  Add Quote Items
-                </Button>
-              </Col>
-            </Row>
+            
             <br />
             <Row>
               <div className="container">
@@ -272,28 +246,20 @@ const ProjectQuotationEdit = () => {
                     {lineItem &&
                       lineItem.map((e, index) => {
                         return (
-                          <tr key={e.project_quote_id}>
+                          <tr key={e.purchase_return_id}>
                             <td>{index + 1}</td>
-                            <td data-label="Title">{e.title}</td>
-                            <td data-label="Description">{e.description}</td>
-                            <td data-label="Quantity">{e.quantity}</td>
-                            <td data-label="Unit Price">{e.unit_price}</td>
-                            <td data-label="Amount">{e.amount}</td>
+                            <td data-label="Title">{e.item_title}</td>
+                            <td data-label="Description"></td>
+                            <td data-label="Quantity">{e.ordered_quantity}</td>
+                            <td data-label="Unit Price"></td>
+                            <td data-label="Amount"></td>
                             <td data-label="Updated By"></td>
                             <td data-label="Actions">
+                             
                               <span
                                 className="addline"
                                 onClick={() => {
-                                  setEditLineModelItem(e);
-                                  setEditLineModal(true);
-                                }}
-                              >
-                                <Icon.Edit2 />
-                              </span>
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  deleteRecord(e.project_quote_items_id);
+                                  deleteRecord(e.purchase_return_items_id);
                                 }}
                               >
                                 <Icon.Trash2 />
@@ -307,21 +273,8 @@ const ProjectQuotationEdit = () => {
               </div>
             </Row>
             {/* End View Line Item Modal */}
-            <EditLineItemModal
-              editLineModal={editLineModal}
-              setEditLineModal={setEditLineModal}
-              FetchLineItemData={editLineModelItem}
-              getLineItem={getLineItem}
-              setViewLineModal={setViewLineModal}
-            ></EditLineItemModal>
-            {addLineItemModal && (
-              <QuoteLineItem
-                //projectInfo={tenderId}
-                addLineItemModal={addLineItemModal}
-                setAddLineItemModal={setAddLineItemModal}
-                quoteLine={id}
-              ></QuoteLineItem>
-            )}
+           
+           
           </TabPane>
           <TabPane tabId="2">
             <QuotationAttachment></QuotationAttachment>
@@ -332,4 +285,4 @@ const ProjectQuotationEdit = () => {
   );
 };
 
-export default ProjectQuotationEdit;
+export default PurchaseReturnEdit;
