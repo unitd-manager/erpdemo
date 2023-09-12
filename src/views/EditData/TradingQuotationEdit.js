@@ -86,9 +86,7 @@ const TradingQuotationEdit = () => {
       .post('/tradingquote/edit-Tradingquote', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+        
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
