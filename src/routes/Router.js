@@ -108,6 +108,7 @@ const DebitNote = Loadable(lazy(() => import('../views/smartconTables/DebitNote'
 const VATReturn = Loadable(lazy(() => import('../views/smartconTables/VATReturn')));
 
 const ChartOfAccountDetails = Loadable(lazy(() => import('../views/DetailTable/ChartOfAccountDetails')));
+const JournalDetails = Loadable(lazy(() => import('../views/DetailTable/JournalDetails')));
 const ChartofACEdit = Loadable(lazy(() => import('../views/EditData/ChartofACEdit')));
 
 /***** Auth Pages ****/
@@ -800,6 +801,7 @@ const Routernew = () => {
           <Route path="/VATReturn" name="VATReturn" element={<VATReturn />} ></Route>
 
           <Route path="/ChartOfAccountDetails" name="ChartOfAccountDetails" element={<ChartOfAccountDetails />} ></Route>
+          <Route path="/JournalDetails" name="JournalDetails" element={<JournalDetails />} ></Route>
           <Route path="/ChartofACEdit/:id" name="ChartofACEdit" element={<ChartofACEdit />} ></Route>
        
         </Route>
