@@ -10,18 +10,17 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Opportunity = () => {
+const PurchaseReturn = () => {
   const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const getTenders = () => {
     api
-      .get('/tender/getTenders')
+      .get('/purchasereturn/getPurchaseReturn')
       .then((res) => {
         setTenders(res.data.data);
         $('#example').DataTable({
@@ -50,7 +49,7 @@ const Opportunity = () => {
   const columns = [
     {
       name: '#',
-      selector: '',
+      selector: 'project_quote_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -65,15 +64,15 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Enquiry date',
-      selector: 'enquiry_date',
+      name: 'Quotation No',
+      selector: 'quote_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Enquiry No',
-      selector: 'opportunity_code',
+      name: 'Date',
+      selector: 'quote_date',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -86,30 +85,30 @@ const Opportunity = () => {
     },
     {
       name: 'Reference',
-      selector: 'office_ref_no',
+      selector: 'ref_no_quote',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'BID Expiry',
-      selector: 'project_end_date',
+      name: 'Enquiry No',
+      selector: 'enquiry_code',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Service',
-      selector: 'services',
+      name: 'Status',
+      selector: 'quote_status',
       sortable: true,
       width: 'auto',
     },
     {
-      name: 'Enquiry Status',
-      selector: 'status',
-      sortable: true,
-      width: 'auto',
-    },
+        name: 'Net Amount',
+        selector: 'total_amount',
+        sortable: true,
+        width: 'auto',
+      },
   ];
 
   return (
@@ -118,9 +117,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Enquiry List"
+          title="QuotationList"
           Button={
-            <Link to="/EnquiryDetails">
+            <Link to="/PurchaseReturnDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -138,20 +137,20 @@ const Opportunity = () => {
             {tenders &&
               tenders.map((element, index) => {
                 return (
-                  <tr key={element.opportunity_id}>
+                  <tr key={element.project_quote_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/EnquiryEdit/${element.opportunity_id}?tab=1`}>
+                      <Link to={`/PurchaseReturnEdit/${element.project_quote_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.enquiry_date}</td>
-                    <td>{element.opportunity_code}</td>
+                    <td>{element.quote_code}</td>
+                    <td>{element.quote_date}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.project_end_date }</td>
-                    <td>{element.services}</td>
-                    <td>{element.status}</td>
+                    <td>{element.ref_no_quote}</td>
+                    <td>{element.enquiry_code}</td>
+                    <td>{element.quote_status}</td>
+                    <td>{element.total_amount}</td>
                   </tr>
                 );
               })}
@@ -162,4 +161,4 @@ const Opportunity = () => {
   );
 };
 
-export default Opportunity;
+export default PurchaseReturn;
