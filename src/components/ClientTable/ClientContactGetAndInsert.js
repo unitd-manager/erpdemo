@@ -169,9 +169,9 @@ export default function ClientContactGetAndInsert({
                       <CardBody>
                         <Form>
                           <Row>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
-                                <Label>Title</Label>
+                                <Label>Title<span className='required'>*</span></Label>
                                 <Input
                                   type="select"
                                   name="salutation"
@@ -187,9 +187,9 @@ export default function ClientContactGetAndInsert({
                                 </Input>
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
-                                <Label>Name</Label>
+                                <Label>Name<span className='required'>*</span></Label>
                                 <Input
                                   type="text"
                                   name="first_name"
@@ -198,7 +198,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Email</Label>
                                 <Input
@@ -209,7 +209,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Position</Label>
                                 <Input
@@ -220,7 +220,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Department</Label>
                                 <Input
@@ -231,7 +231,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Phone (Direct)</Label>
                                 <Input
@@ -242,7 +242,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Fax (Direct)</Label>
                                 <Input
@@ -253,7 +253,7 @@ export default function ClientContactGetAndInsert({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="12">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Mobile</Label>
                                 <Input

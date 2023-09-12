@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 //import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import Converter from 'number-to-words';
 import PropTypes from 'prop-types';
-import * as Icon from 'react-feather';
 import moment from 'moment';
 import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
@@ -413,9 +413,9 @@ const PdfQuote = ({id,quoteId}) => {
 
   return (
     <>
-      <span onClick={GetPdf}>
-        <Icon.Printer />
-      </span>
+     <Button type="button" color='primary' onClick={GetPdf}>
+       Pdf Quote
+      </Button>
     </>
   );
 };

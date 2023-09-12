@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import AppContext from '../../context/AppContext';
 import creationdatetime from '../../constants/creationdatetime';
 
 const ClientDetails = () => {
@@ -16,6 +18,8 @@ const ClientDetails = () => {
   const [clientForms, setClientForms] = useState({
     company_name: '',
   });
+    //get staff details
+    const { loggedInuser } = useContext(AppContext);
 
   //Client Functions/Methods
   const handleClientForms = (e) => {
@@ -26,13 +30,14 @@ const ClientDetails = () => {
   const insertClient = () => {
     if (clientForms.company_name !== '') {
       clientForms.creation_date = creationdatetime;
+      clientForms.created_by = loggedInuser.first_name;
       api
         .post('/clients/insertCompany', clientForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           message('Client inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/ClientEdit/${insertedDataId}`);
+            navigate(`/ClientEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {

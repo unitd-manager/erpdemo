@@ -15,37 +15,37 @@ import { useParams } from 'react-router-dom';
 import api from '../../constants/api';
 import message from '../Message';
 
-const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
+const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
   InvoiceModal.propTypes = {
     editModal: PropTypes.bool,
     setEditModal: PropTypes.func,
-    getgoodsLineItemById:PropTypes.func,
+    getgoodsLineItemById: PropTypes.func,
   };
- 
+
   const { id } = useParams();
   //Add Line Item
   const [addLineItem, setAddLineItem] = useState([
     {
-    goods_delivery_item_id: id,
-    }
+      goods_delivery_item_id: id,
+    },
   ]);
- 
+
   function updateState(index, property, e) {
     const copyDeliverOrderProducts = [...addLineItem];
     const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
-    
-  const quantity = parseFloat(updatedObject.qty) || 0;
-  const unitPrice = parseFloat(updatedObject.unit_price) || 0;
-  // const totalCost = parseFloat(updatedObject.total_cost);
-  updatedObject.total_cost = quantity * unitPrice;
+
+    const quantity = parseFloat(updatedObject.qty) || 0;
+    const unitPrice = parseFloat(updatedObject.unit_price) || 0;
+    // const totalCost = parseFloat(updatedObject.total_cost);
+    updatedObject.total_cost = quantity * unitPrice;
 
     copyDeliverOrderProducts[index] = updatedObject;
     setAddLineItem(copyDeliverOrderProducts);
   }
 
-  const getLineItem= () => {
+  const getLineItem = () => {
     api.post('/goodsdelivery/getgoodsdeliveryitemById', { goods_delivery_id: id }).then((res) => {
-        setAddLineItem(res.data.data);
+      setAddLineItem(res.data.data);
     });
   };
 
@@ -54,20 +54,18 @@ const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
     const editPromises = addLineItem.map((item) => {
       return api.post('/goodsdelivery/edit-goodsdeliveryitem', item);
     });
-  
+
     Promise.all(editPromises)
       .then(() => {
         getgoodsLineItemById();
         setEditModal(false);
         message('Line Items Edited Successfully', 'success');
-      
       })
       .catch(() => {
         message('Cannot Edit Line Items', 'error');
       });
   };
 
- 
   useEffect(() => {
     getLineItem();
   }, []);
@@ -75,7 +73,7 @@ const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
     <>
       <Modal size="xl" isOpen={editModal}>
         <ModalHeader>
-          Create Invoice
+          Edit Delivery Items
           <Button
             className="shadow-none"
             color="secondary"
@@ -97,8 +95,7 @@ const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
                       <th scope="col">Description </th>
                       <th scope="col">UoM</th>
                       <th scope="col">Qty</th>
-                      <th scope="col">Amount</th>                      
-                      <th scope="col"></th>
+                      <th scope="col">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,7 +136,6 @@ const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
                                 type="number"
                                 name="quantiy"
                                 onChange={(e) => updateState(index, 'quantity', e)}
-                                
                               />
                             </td>
                             <td data-label="Amount">
@@ -150,7 +146,7 @@ const InvoiceModal = ({  editModal, setEditModal,getgoodsLineItemById}) => {
                                 onChange={(e) => updateState(index, 'amount', e)}
                                 disabled
                               />
-                            </td>                          
+                            </td>
                           </tr>
                         );
                       })}

@@ -5,8 +5,8 @@ import {  useParams } from 'react-router-dom';
 import AttachmentModalV2 from '../Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../ProjectModal/ViewFileComponentV2';
 
-export default function QuotationAttachment() {
-    QuotationAttachment.propTypes = {
+export default function GoodsAttachment() {
+    GoodsAttachment.propTypes = {
     }
     const { id } = useParams();
     const [update, setUpdate] = useState(false);
@@ -48,14 +48,14 @@ export default function QuotationAttachment() {
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
     fileTypes={fileTypes}
-    altTagData="QuotationRelated Data"
-    desc="QuotationRelated Data"
+    altTagData="GoodsRelated Data"
+    desc="GoodsRelated Data"
     recordType="RelatedPicture"
     mediaType={attachmentData.modelType}
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="QuotationRelated" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="GoodsRelated" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }

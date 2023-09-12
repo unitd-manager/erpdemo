@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import {
-  Card,
   Row,
   Col,
   Form,
@@ -17,6 +16,9 @@ import * as $ from 'jquery';
 import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+
 
 const QuoteLineItem = ({
   addLineItemModal,
@@ -45,6 +47,8 @@ const QuoteLineItem = ({
       description: '',
     },
   ]);
+    //get staff details
+    const { loggedInuser } = useContext(AppContext);
 
   //Add new line item
   const AddNewLineItem = () => {
@@ -64,33 +68,48 @@ const QuoteLineItem = ({
   };
   //Insert Invoice Item
   const addLineItemApi = (obj) => {
+    obj.creation_date = creationdatetime;
+    obj.created_by = loggedInuser.first_name;
     //obj.opportunity_id = projectInfo;
     obj.quote_id = quoteLine;
     api
       .post('/tradingquote/insertQuoteItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
+        window.location.reload();
         getLineItem(tenderDetails.quote_id);
-        //setAddLineItemModal(false);
-        //window.location.reload();
+        
       })
       .catch(() => {
-        //message('Cannot Add Line Items', 'error');
+        message('Cannot Add Line Items', 'error');
       });
   };
   //Invoice item values
   const getAllValues = () => {
     const result = [];
+    let isValid = true; // Initialize a validation flag
     $('.lineitem tbody tr').each(function input() {
       const allValues = {};
       $(this)
         .find('input')
         .each(function output() {
           const fieldName = $(this).attr('name');
-          allValues[fieldName] = $(this).val();
+          const fieldValue = $(this).val();
+          allValues[fieldName] = fieldValue;
+
+          // Check if Amount, Title, and Description are empty
+          if (fieldName === 'amount' || fieldName === 'title' || fieldName === 'description') {
+            if (!fieldValue) {
+              isValid = false; // Set the flag to false if any of these fields are empty
+            }
+          }
         });
       result.push(allValues);
     });
+    if (!isValid) {
+      alert('Please fill in Amount, Title, and Description for all line items.');
+      return; // Prevent further processing if validation fails
+    }
     setTotalAmount(0);
     console.log(result);
     result.forEach((element) => {
@@ -202,7 +221,7 @@ const QuoteLineItem = ({
                     </Col>
                   </Row>
                   {/* Invoice Item */}
-                  <Card>
+                  
                     <table className="lineitem">
                       <thead>
                         <tr>
@@ -271,7 +290,7 @@ const QuoteLineItem = ({
                           })}
                       </tbody>
                     </table>
-                  </Card>
+                  
                   <ModalFooter>
                     <Button
                       className="shadow-none"
