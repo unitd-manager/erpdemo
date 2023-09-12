@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,151 +7,47 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
-import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
-import AppContext from '../../context/AppContext';
 
-const TradingQuotationDetails = () => {
-  const [company, setCompany] = useState();
-  const [enquirycode, setEnquiryCode] = useState();
-  const [allCountries, setallCountries] = useState();
-  const [modal, setModal] = useState(false);
+const PurchaseReturnDetails = () => {
+  const [invoice, setInvoice] = useState();
+  const [insertReturn, setInsertReturn] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
-  const toggle = () => {
-    setModal(!modal);
-  };
+
   //Api call for getting company dropdown
-  const getCompany = () => {
-    api.get('/company/getCompany').then((res) => {
-      setCompany(res.data.data);
+  const getQuote = () => {
+    api.get('/purchasereturn/getPurchaseInvoice').then((res) => {
+      setInvoice(res.data.data);
     });
   };
-
-  //Api call for getting Enquiry dropdown
-  const getEnquiryCode = () => {
-    api.get('/projectquote/getEnquiryCode').then((res) => {
-      setEnquiryCode(res.data.data);
-    });
-  };
-
-  //Logic for adding company in db
-  const [companyInsertData, setCompanyInsertData] = useState({
-    company_name: '',
-    address_street: '',
-    address_town: '',
-    address_country: '',
-    address_po_code: '',
-    phone: '',
-    fax: '',
-    website: '',
-    supplier_type: '',
-    industry: '',
-    company_size: '',
-    source: '',
-  });
-
   const handleInputs = (e) => {
-    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+    setInsertReturn({ ...insertReturn, [e.target.name]: e.target.value });
   };
 
-  const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.address_street !== '' &&
-      companyInsertData.address_po_code !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then(() => {
-          message('Company inserted successfully.', 'success');
-          getCompany();
-          window.location.reload();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
-  };
-
-  //Logic for adding tender in db
-  const [tenderForms, setTenderForms] = useState({
-    quote_code: '',
-    quote_date: '',
-    company_id: '',
-    company_name: '',
-  });
-
-  const handleInputsTenderForms = (e) => {
-    setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
-  };
-
-  //Api for getting all countries
-  const getAllCountries = () => {
-    api
-      .get('/clients/getCountry')
-      .then((res) => {
-        setallCountries(res.data.data);
-      })
-      .catch(() => {
-        message('Country Data Not Found', 'info');
-      });
-  };
-  //const[tenderDetails,setTenderDetails]=useState();
-  const getTendersById = () => {
-    api
-      .post('/projectquote/getTradingquoteById', { project_quote_id: id })
-      .then((res) => {
-        setTenderForms(res.data.data);
-        // getContact(res.data.data.company_id);
-      })
-      .catch(() => {});
-  };
-  //get staff details
-  const { loggedInuser } = useContext(AppContext);
 
   //console.log(tenderDetails);
-  const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
-      tenderForms.quote_code = code;
-      tenderForms.creation_date = creationdatetime;
-      tenderForms.created_by = loggedInuser.first_name;
-      api
-        .post('/projectquote/inserttradingquote', tenderForms)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          getTendersById();
-          message('Quote inserted successfully.', 'success');
-          //   setTimeout(() => {
-          navigate(`/ProjectQuotationEdit/${insertedDataId}?tab=1`);
-          //   }, 300);
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'warning');
-    }
-  };
-
-  //QUOTE GENERATED CODE
-  const generateCode = () => {
+ const insertOrder = () => {
+  if (insertReturn.purchase_invoice_id !== '') {
+    insertReturn.creation_date = creationdatetime;
     api
-      .post('/tender/getCodeValue', { type: 'projectquote' })
+      .post('/purchasereturn/insertPurchaseReturn', insertReturn)
       .then((res) => {
-        insertQuote(res.data.data);
-      })
+        const insertedDataId = res.data.data.insertId;
+        message('Request inserted successfully.', 'success');
+        setTimeout(() => {
+          navigate(`/PurchaseReturnEdit/${insertedDataId}`);
+        }, 300);      })
       .catch(() => {
-        insertQuote('');
+        message('Network connection error.', 'error');
       });
-  };
+  } else {
+    message('Please fill all required fields', 'warning');
+  }
+};
 
   useEffect(() => {
-    getCompany();
-    getEnquiryCode();
-    getAllCountries();
+    getQuote();
+    
   }, [id]);
 
   return (
@@ -160,93 +56,47 @@ const TradingQuotationDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Project Quote">
+          <ComponentCard title="New Enquiry">
             <Form>
               <FormGroup>
-                <Col md="9">
-                  <Label>Enquiry Code</Label>
-                  <Input
-                    type="select"
-                    onChange={handleInputsTenderForms}
-                    value={tenderForms && tenderForms.project_enquiry_id}
-                    name="project_enquiry_id"
-                  >
-                    <option>Please Select</option>
-                    {enquirycode &&
-                      enquirycode.map((e) => {
-                        return (
-                          <option key={e.project_enquiry_id} value={e.project_enquiry_id}>
-                            {' '}
-                            {e.enquiry_code}{' '}
-                          </option>
-                        );
-                      })}
-                  </Input>
-                </Col>
+              
               </FormGroup>
               <FormGroup>
                 <Row>
                   <Col md="9">
                     <Label>
-                      {' '}
-                      Quote Date <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
-                      type="date"
-                      name="quote_date"
-                      value={tenderForms && tenderForms.quote_date}
-                      onChange={handleInputsTenderForms}
-                    />
-                  </Col>
-                </Row>
-              </FormGroup>
-              <FormGroup>
-                <Row>
-                  <Col md="9">
-                    <Label>
-                      Company Name <span className="required"> *</span>{' '}
+                Purchase Invoices<span className="required"> *</span>{' '}
                     </Label>
                     <Input
                       type="select"
-                      name="company_id"
-                      //value={tenderForms && tenderForms.company_id}
-                      onChange={handleInputsTenderForms}
+                      name="purchase_invoice_id"
+                      value={insertReturn && insertReturn.purchase_invoice_id}
+                      onChange={handleInputs}
                     >
                       <option>Please Select</option>
-                      {company &&
-                        company.map((ele) => {
+                      {invoice &&
+                        invoice.map((ele) => {
                           return (
-                            <option key={ele.company_id} value={ele.company_id}>
-                              {ele.company_name}
+                            <option key={ele.purchase_invoice_id} value={ele.purchase_invoice_id}>
+                              {ele.purchase_invoice_code}
                             </option>
                           );
                         })}
                     </Input>
                   </Col>
-                  <Col md="3" className="addNew">
-                    <Label>Add New Name</Label>
-                    <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
-                      Add New
-                    </Button>
-                  </Col>
+                 
                 </Row>
+               
               </FormGroup>
-              <TenderCompanyDetails
-                allCountries={allCountries}
-                insertCompany={insertCompany}
-                handleInputs={handleInputs}
-                toggle={toggle}
-                modal={modal}
-                setModal={setModal}
-              ></TenderCompanyDetails>
-              <Row>
+            
+                  <Row>
                 <div className="pt-3 mt-3 d-flex align-items-center gap-2">
                   <Button
                     type="button"
                     color="primary"
                     className="btn mr-2 shadow-none"
                     onClick={() => {
-                      generateCode();
+                      insertOrder();
                     }}
                   >
                     Save & Continue
@@ -276,4 +126,4 @@ const TradingQuotationDetails = () => {
   );
 };
 
-export default TradingQuotationDetails;
+export default PurchaseReturnDetails;
