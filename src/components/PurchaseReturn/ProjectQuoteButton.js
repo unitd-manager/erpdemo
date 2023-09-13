@@ -21,7 +21,7 @@ export default function ProjectQuoteButton({ editTenderData, applyChanges, backT
                 color="primary"
                 onClick={() => {
                   editTenderData();
-                  navigate('/ProjectQuotation');
+                  navigate('/PurchaseReturn');
                 }}
               >
                 Save

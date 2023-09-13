@@ -31,7 +31,7 @@ export default function QuotationAttachment() {
         className="shadow-none"
         color="primary"
         onClick={() => {
-          setRoomName('Tender');
+          setRoomName('TradingQuotation');
           setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
           dataForAttachment();
           setAttachmentModal(true);
@@ -55,7 +55,7 @@ export default function QuotationAttachment() {
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="QuotationRelated" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="TradingQuotation" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }

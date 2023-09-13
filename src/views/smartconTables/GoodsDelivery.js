@@ -128,7 +128,7 @@ const GoodsDelivery = () => {
                         ? moment(element.goods_delivery_date).format('DD-MM-YYYY')
                         : ''}
                     </td>
-                    <td>{element.order_no}</td>
+                    <td>{element.order_code}</td>
                     <td>{element.company_name}</td>
                     <td>{element.department}</td>
                     <td>{element.sales_man}</td>

@@ -81,7 +81,7 @@ const QuoteLineItem = ({
         
       })
       .catch(() => {
-        message('Cannot Add Line Items', 'error');
+       // message('Cannot Add Line Items', 'error');
       });
   };
   //Invoice item values

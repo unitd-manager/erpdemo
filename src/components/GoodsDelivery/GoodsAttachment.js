@@ -31,7 +31,7 @@ export default function GoodsAttachment() {
         className="shadow-none"
         color="primary"
         onClick={() => {
-          setRoomName('Tender');
+          setRoomName('GoodsDelivery');
           setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
           dataForAttachment();
           setAttachmentModal(true);
@@ -55,7 +55,7 @@ export default function GoodsAttachment() {
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="GoodsRelated" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="GoodsDelivery" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }

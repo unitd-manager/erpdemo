@@ -49,7 +49,7 @@ const PurchaseReturn = () => {
   const columns = [
     {
       name: '#',
-      selector: 'project_quote_id',
+      selector: 'purchase_return_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -64,51 +64,26 @@ const PurchaseReturn = () => {
       sortable: false,
     },
     {
-      name: 'Quotation No',
-      selector: 'quote_code',
+      name: 'Purchase No',
+      selector: 'purchase_invoice_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
-      selector: 'quote_date',
+      name: 'Purchase Invocie Date',
+      selector: 'purchase_invoice_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
-      selector: 'company_name',
+      name: 'Return Date',
+      selector: 'purchase_return_date',
       sortable: true,
       grow: 0,
     },
-    {
-      name: 'Reference',
-      selector: 'ref_no_quote',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
-    {
-      name: 'Enquiry No',
-      selector: 'enquiry_code',
-      sortable: true,
-      grow: 2,
-      width: 'auto',
-    },
-    {
-      name: 'Status',
-      selector: 'quote_status',
-      sortable: true,
-      width: 'auto',
-    },
-    {
-        name: 'Net Amount',
-        selector: 'total_amount',
-        sortable: true,
-        width: 'auto',
-      },
+   
   ];
 
   return (
@@ -117,7 +92,7 @@ const PurchaseReturn = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="QuotationList"
+          title="Purchase Return List"
           Button={
             <Link to="/PurchaseReturnDetails">
               <Button color="primary" className="shadow-none">
@@ -137,20 +112,18 @@ const PurchaseReturn = () => {
             {tenders &&
               tenders.map((element, index) => {
                 return (
-                  <tr key={element.project_quote_id}>
+                  <tr key={element.purchase_return_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/PurchaseReturnEdit/${element.project_quote_id}?tab=1`}>
+                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.quote_code}</td>
-                    <td>{element.quote_date}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.ref_no_quote}</td>
-                    <td>{element.enquiry_code}</td>
-                    <td>{element.quote_status}</td>
-                    <td>{element.total_amount}</td>
+                   
+                    <td>{element.purchase_invoice_code}</td>
+                    <td>{element.purchase_invoice_date}</td>
+                    <td>{element.purchase_return_date}</td>
+                   
                   </tr>
                 );
               })}
