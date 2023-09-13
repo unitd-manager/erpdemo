@@ -372,7 +372,7 @@ const Routernew = () => {
           <Route path="/TenderEdit/:id" name="clienttdata" element={<TenderEdit />}></Route>
           <Route path="/ProductEdit/:id" name="clienttdata" element={<ProductEdit />}></Route>
           <Route path="/EnquiryEdit/:id" name="clienttdata" element={<EnquiryEdit />}></Route>
-          <Route path="/OrdersEdit/:id" name="clienttdata" element={<OrdersEdit />}></Route>
+          <Route path="/OrdersEdit/:insertedDataId/:quoteId" name="clienttdata" element={<OrdersEdit />}></Route>
           <Route path="/InvoiceEdit/:id" name="clienttdata" element={<InvoiceEdit />}></Route>
           <Route path="/ReturnEdit/:insertedDataId/:invoiceId" name="clienttdata" element={<ReturnEdit />}></Route>
           <Route path="/ProjectEnquiryEdit/:id" name="clienttdata" element={<ProjectEnquiryEdit />}></Route>
