@@ -71,8 +71,8 @@ const onchangeItem = (selectedProduct, itemId) => {
         ...item,
         product_id: selectedProduct.value.toString(),
         title: selectedProduct.label, 
-        price: selectedProduct.price, // Set the selected title
-        unit: selectedProduct.unit,
+        price: selectedProduct.price || '', // Set the selected title
+        unit: selectedProduct.unit || '',
       };
     }
     return item;
@@ -82,12 +82,29 @@ const onchangeItem = (selectedProduct, itemId) => {
     ...prevData,
     product_id: selectedProduct.value,
     title: selectedProduct.label,
-    price: selectedProduct.price, // Set the selected title in newPlanningData
-    unit: selectedProduct.unit,
+    price: selectedProduct.price || '', // Set the selected title in newPlanningData
+    unit: selectedProduct.unit || '',
   }));
 };
 
+const handleUnitChange = (itemId, newUnit) => {
+  const updatedItems = addMoreItem.map((item) => {
+    if (item.id === itemId) {
+      return {
+        ...item,
+        unit: newUnit,
+      };
+    }
+    return item;
+  });
+  
+  setMoreItem(updatedItems);
 
+  setNewPlanningData((prevData) => ({
+    ...prevData,
+    unit: newUnit,
+  }));
+};
 
 const loadOptions = (inputValue, callback) => {
   api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
@@ -187,7 +204,7 @@ const loadOptions = (inputValue, callback) => {
         loadOptions={loadOptions}
       />
       <Input value={item.product_id} type="hidden" name="product_id"></Input>
-      <Input value={item.title} type="text" name="title" ></Input>
+      <Input value={item.title} type="hidden" name="title" ></Input>
     </FormGroup>
   </Col>
 ))}
@@ -201,7 +218,6 @@ const loadOptions = (inputValue, callback) => {
           type="text"
           name="price"
           key={item.id}
-          defaultValue={{ value: item.product_id, label: item.title ,price: item.price}}
           onChange={(e) => {
             onchangeItem(e, item.id);
           }}
@@ -212,24 +228,23 @@ const loadOptions = (inputValue, callback) => {
      
   ))}
 
-{addMoreItem.map((item) => (
-    <Col md="4" key={item.id}>
-         <FormGroup>
-        <Label>Unit</Label>
-        <Input
-          type="text"
-          name="unit"
-          key={item.id}
-          defaultValue={{ value: item.product_id, label: item.title ,price: item.price,unit: item.unit}}
-          onChange={(e) => {
-            onchangeItem(e, item.id);
-          }}
-          value={item.unit}
-        />
-      </FormGroup>
-    </Col>
-     
-  ))}
+                        {addMoreItem.map((item) => (
+                            <Col md="4" >
+                              <FormGroup>
+                                <Label>Unit</Label>
+                                <Input
+                                  type="text"
+                                  name="unit"
+                                  onChange={(e) => {
+                                    // Handle unit change and update state
+                                    const newUnit = e.target.value;
+                                    handleUnitChange(item.id, newUnit);
+                                  }}
+                                  value={item.unit} 
+                                />
+                              </FormGroup>
+                            </Col>
+                          ))}
  
  
 
