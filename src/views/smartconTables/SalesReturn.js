@@ -51,10 +51,7 @@ const SalesInvoice = () => {
       name: 'Invoice No',
     
     },
-    {
-      name: 'Item',
-    
-    },
+   
     {
       name: 'Date',
     
@@ -63,14 +60,7 @@ const SalesInvoice = () => {
       name: 'Status',
     
     },
-    {
-      name: 'Return Quantity',
-     
-    },
-    {
-      name: 'Price',
-     
-    }, 
+
   ];
 
   return (
@@ -99,19 +89,17 @@ const SalesInvoice = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.sales_return_history_id }>
+                  <tr key={element.sales_return_id }>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/ReturnEdit/${element.sales_return_history_id }`}>
+                      <Link to={`/ReturnEdit/${element.sales_return_id }/${element.invoice_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
                     <td>{element.invoice_code}</td>
-                    <td>{element.item_title}</td>
-                    <td>{element.return_date}</td>
+                   <td>{element.return_date}</td>
                     <td>{element.status}</td>
-                    <td>{element.qty_return}</td>
-                    <td>{element.price}</td>
+                   
                   </tr>
                 );
               })}
