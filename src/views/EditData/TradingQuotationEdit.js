@@ -68,7 +68,7 @@ const TradingQuotationEdit = () => {
 
   const editTenderById = () => {
     api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
-      setTenderDetails(res.data.data[0]);
+      setTenderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
   };
@@ -118,8 +118,7 @@ const TradingQuotationEdit = () => {
     fax: '',
     mobile: '',
   });
-
-  const handleAddNewContact = (e) => {
+ const handleAddNewContact = (e) => {
     setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
   };
 
@@ -136,7 +135,7 @@ const TradingQuotationEdit = () => {
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(() => {
           message('Unable to add Contact! try again later', 'error');

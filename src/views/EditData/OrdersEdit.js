@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -30,10 +30,8 @@ const OpportunityEdit = () => {
   const backToList = () => {
     navigate('/Opportunity');
   };
-  const {id} = useParams();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const quoteId = queryParams.get('quote_id');
+  const { insertedDataId, quoteId } = useParams();
+
   console.log('Quote ID:', quoteId);
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -108,27 +106,27 @@ const OpportunityEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
+    api.post('/finance/getFinanceById', { order_id: insertedDataId }).then((res) => {
       setOrderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
   };
 
   const getInvoiceByOrderId = () => {
-    api.post('/finance/getInvoiceById', { order_id: id }).then((res) => {
+    api.post('/finance/getInvoiceById', { order_id: insertedDataId }).then((res) => {
       setInvoiceDetails(res.data.data);
     
     });
   };
   const getReceiptByOrderId = () => {
-    api.post('/finance/getReceiptByIds', { order_id: id }).then((res) => {
+    api.post('/finance/getReceiptByIds', { order_id: insertedDataId }).then((res) => {
       setReceiptDetails(res.data.data);
     
     });
   };
 
   const getOrdersByOrderId = () => {
-    api.post('/finance/getOrdersByIds', { order_id: id }).then((res) => {
+    api.post('/finance/getOrdersByIds', { order_id: insertedDataId }).then((res) => {
       setOrdersDetails(res.data.data);
     
     });
@@ -206,7 +204,7 @@ const OpportunityEdit = () => {
     getInvoiceByOrderId();
     getReceiptByOrderId();
     getOrdersByOrderId();
-  }, [id]);
+  }, [insertedDataId]);
 
   return (
     <>
@@ -214,7 +212,7 @@ const OpportunityEdit = () => {
       <OrdersButton
         editTenderData={editTenderData}
         quoteId={quoteId}
-        id={id}
+        id={insertedDataId}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}

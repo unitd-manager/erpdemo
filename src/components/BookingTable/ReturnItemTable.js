@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Table } from 'reactstrap';
-// import InvoiceItemTable from './InvoiceItemTable';
-import api from '../../constants/api';
-import EditInvoiceItem from './EditInvoiceItem';
 
 export default function ItemTable({
   returnItemDetails,
- 
+  onRemoveItem,
 }) {
   ItemTable.propTypes = {
     returnItemDetails: PropTypes.array,
-   
+    onRemoveItem: PropTypes.func.isRequired,
      };
-     const [selectedInvoiceItemId, setSelectedInvoiceItemId] = useState(null);
-     const [editModal, setEditModal] = useState(false);
+  
      
   //Structure of Invoice table
   const invoiceTableColumns = [
@@ -22,19 +18,9 @@ export default function ItemTable({
     { name: 'Quantity' },
     { name: 'Unit Price' },
     { name: 'Total' },
-    { name: 'Edit' },
-    { name: 'Delete' },
+    { name: 'Remove' },
   ];
-  const handleDelete = (invoiceItemId) => {
-    api
-      .delete('/invoice/deleteInvoiceItem', { data: { invoice_item_id: invoiceItemId } }) // Use 'data' property for sending data in the body
-      .then(() => {
-       window.location.reload();
-      })
-      .catch(() => {
-        // Handle error, show a message, etc.
-      });
-  };
+
 
   return (
     // Invoice Tab
@@ -54,34 +40,23 @@ export default function ItemTable({
         {Array.isArray(returnItemDetails) && returnItemDetails.length > 0 ? (
           returnItemDetails.map((element) => { // Map only if returnItemDetails is an array
             return (
-              <tr key={element.invoice_id}>
+              <tr key={element.invoice_item_id}>
                <td>{element.item_title}</td>
                <td>{element.qty}</td>
                <td>{element.unit_price}</td>
                 <td>{element.total_cost}</td>
                            
-                 <td>
-                  <div className="anchor">
-                    <span
-                      onClick={() => {
-                        setSelectedInvoiceItemId(element.invoice_item_id);
-                          setEditModal(true);
-                       
-                      }}
-                    >
-                      Edit
-                    </span>
-                  </div>
-                </td>
+            
                 <td>
                   <div className="anchor">
                     <span
                         onClick={() => {
-                          handleDelete(element.invoice_item_id); // Use 'handleDelete' function
+                          console.log('Removing item with invoice_id:', element.invoice_item_id);
+                      
+                          onRemoveItem(element.invoice_item_id);
                         }}
-                    >
-                    
-                      Delete
+                      >
+                      Remove
                     </span>
                   </div>
                 </td>
@@ -94,22 +69,12 @@ export default function ItemTable({
           </tr>
         )}
       </tbody>
-            {/* <tbody>
-              {returnItemDetails &&
-                returnItemDetails.map((element) => {
-                 
-                })}
-            </tbody> */}
+           
           </Table>
         
         </div>
       </div>
-      <EditInvoiceItem
-        editModal={editModal}
-        setEditModal={setEditModal}
-        selectedInvoiceItemId={selectedInvoiceItemId}
      
-      />
     </Form>
   );
 }

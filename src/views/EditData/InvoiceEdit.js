@@ -112,7 +112,7 @@ const InvoiceEdit = () => {
                 className="shadow-none"
                 onClick={() => {
                   editInvoiceData();
-                  navigate('/Invoice');
+                  navigate('/SalesInvoice');
                 }}
               >
                 Save
@@ -177,15 +177,7 @@ const InvoiceEdit = () => {
        />
       </Row>
       </ComponentCard>
-      {/* <EditInvoiceItem
-              editModal={editModal}
-              setEditModal={setEditModal}
-              editInvoiceModal={editInvoiceModal}
-              setInvoiceDatas={setInvoiceDatas}
-              invoiceDatas={invoiceDatas}
-              invoiceInfo={id}
-              editInvoiceItem={editInvoiceItem}
-            /> */}
+    
     </>
   );
 };

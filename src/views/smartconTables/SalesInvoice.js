@@ -69,7 +69,7 @@ const Invoice = () => {
     },
     {
       name: 'Status',
-      selector: 'invoice_status',
+      selector: 'status',
       sortable: true,
       width: 'auto',
       grow: 3,
@@ -83,7 +83,7 @@ const Invoice = () => {
     },
     {
       name: 'Amount',
-      selector: 'invoice_amount',
+      selector: 'InvoiceAmount',
       sortable: true,
       width: 'auto',
     },
@@ -131,9 +131,9 @@ const Invoice = () => {
                     <td>{element.order_code}</td>
                     <td>{element.invoice_code}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.invoice_status}</td>
+                    <td>{element.status}</td>
                     <td>{element.invoice_date }</td>
-                    <td>{element.invoice_amount}</td>
+                    <td>{element.InvoiceAmount}</td>
                     <td>{element.invoice_due_date}</td>
                   </tr>
                 );
