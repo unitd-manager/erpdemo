@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
-import { Button, Col, FormGroup, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import {
+  Button,
+  Col,
+  FormGroup,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+} from 'reactstrap';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
@@ -27,7 +37,7 @@ const InvoiceEdit = () => {
   const handleInputs = (e) => {
     setReturnDetails({ ...returnDetails, [e.target.name]: e.target.value });
   };
- 
+
   const [activeTab, setActiveTab] = useState('1');
 
   const toggle = (tab) => {
@@ -66,7 +76,6 @@ const InvoiceEdit = () => {
         message('Invoice Data Not Found', 'info');
       });
   };
-  
 
   const editInvoiceData = () => {
     api
@@ -85,15 +94,17 @@ const InvoiceEdit = () => {
       .then((response) => {
         const existingQuoteItemsIds = response.data.data;
         console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
-  
+
         // Check if there are return item details
         if (returnItemDetails && returnItemDetails.length > 0) {
           // Create an array to store the API requests
           const apiRequests = [];
-  
+
           // Filter non-removed items
-          const nonRemovedItems = returnItemDetails.filter((element) => !existingQuoteItemsIds.includes(element.invoice_item_id));
-  
+          const nonRemovedItems = returnItemDetails.filter(
+            (element) => !existingQuoteItemsIds.includes(element.invoice_item_id),
+          );
+
           // Loop through each non-removed return item and create an API request
           nonRemovedItems.forEach((element) => {
             const salesReturnItem = {
@@ -104,14 +115,14 @@ const InvoiceEdit = () => {
               invoice_id: element.invoice_id,
               return_date: new Date(),
             };
-  
+
             // Create the API request for this item
             const apiRequest = api.post('/invoice/insertSalesReturnHistory', salesReturnItem);
-  
+
             // Add the request to the array of requests
             apiRequests.push(apiRequest);
           });
-  
+
           // Execute all API requests using Promise.all
           if (apiRequests.length > 0) {
             Promise.all(apiRequests)
@@ -154,13 +165,17 @@ const InvoiceEdit = () => {
   };
   const handleRemoveItem = (invoiceIdToRemove) => {
     // Find the item with the given invoice_id and add it to the removedItems array
-    const removedItem = returnItemDetails.find((item) => item.invoice_item_id === invoiceIdToRemove);
+    const removedItem = returnItemDetails.find(
+      (item) => item.invoice_item_id === invoiceIdToRemove,
+    );
     if (removedItem) {
       setRemovedItems([...removedItems, removedItem]);
     }
 
     // Filter out the item from the returnItemDetails state
-    const updatedItems = returnItemDetails.filter((item) => item.invoice_item_id !== invoiceIdToRemove);
+    const updatedItems = returnItemDetails.filter(
+      (item) => item.invoice_item_id !== invoiceIdToRemove,
+    );
     setReturnItemDetails(updatedItems);
   };
 
@@ -174,10 +189,10 @@ const InvoiceEdit = () => {
     <>
       <BreadCrumbs />
       <FormGroup>
-      <ToastContainer/>
-      <ComponentCardV2>
-      <Row>
-         <Col>
+        <ToastContainer />
+        <ComponentCardV2>
+          <Row>
+            <Col>
               <Button
                 color="primary"
                 className="shadow-none"
@@ -203,76 +218,64 @@ const InvoiceEdit = () => {
               </Button>
             </Col>
             <Col>
-            <Button
-        color="danger"
-        className="shadow-none"
-        onClick={cancelInvoice}
-        disabled={returnDetails.status === 'Paid'}
-      >
-        Cancel
-      </Button>
+              <Button
+                color="danger"
+                className="shadow-none"
+                onClick={cancelInvoice}
+                disabled={returnDetails.status === 'Paid'}
+              >
+                Cancel
+              </Button>
             </Col>
-    
           </Row>
-      </ComponentCardV2>
-      
+        </ComponentCardV2>
       </FormGroup>
-  
+
       {/*Main Details*/}
       <ComponentCard title="Invoice Details">
-        <ReturnDetailComp
-          returnDetails={returnDetails}
-           handleInputs={handleInputs}
-        />
+        <ReturnDetailComp returnDetails={returnDetails} handleInputs={handleInputs} />
       </ComponentCard>
-     
+
       <ComponentCard title="Invoice Items">
-      <Nav tabs>
-            <NavItem>
-              <NavLink
-                className={activeTab === '1' ? 'active' : ''}
-                onClick={() => {
-                  toggle('1');
-                }}
-              >
-                Invoice Item
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={activeTab === '2' ? 'active' : ''}
-                onClick={() => {
-                  toggle('2');
-                }}
-              >
-                Return History
-              </NavLink>
-            </NavItem>
-           
-          </Nav>
-          <TabContent className="p-4" activeTab={activeTab}>
-            {/* Description form */}
-            <TabPane tabId="1">
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === '1' ? 'active' : ''}
+              onClick={() => {
+                toggle('1');
+              }}
+            >
+              Invoice Item
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === '2' ? 'active' : ''}
+              onClick={() => {
+                toggle('2');
+              }}
+            >
+              Return History
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent className="p-4" activeTab={activeTab}>
+          {/* Description form */}
+          <TabPane tabId="1">
             <Row className="border-bottom mb-3">
-         <ReturnItemTable
-        returnItemDetails={returnItemDetails}
-        invoiceInfo={insertedDataId}
-        onRemoveItem={handleRemoveItem}
-       />
-      </Row>
-            </TabPane>
-            <TabPane tabId="2">
-            <ReturnInvoiceItemTable
-        returnInvoiceItemDetails={returnInvoiceItemDetails}
-          
-       />
-            </TabPane>
-            {/* ADD NODE */}
-            
-          </TabContent>
-       
+              <ReturnItemTable
+                returnItemDetails={returnItemDetails}
+                invoiceInfo={insertedDataId}
+                onRemoveItem={handleRemoveItem}
+              />
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} />
+          </TabPane>
+          {/* ADD NODE */}
+        </TabContent>
       </ComponentCard>
-    
     </>
   );
 };

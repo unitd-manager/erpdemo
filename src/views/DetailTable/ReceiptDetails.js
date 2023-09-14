@@ -6,13 +6,11 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
-import creationdatetime from '../../constants/creationdatetime';
+// import creationdatetime from '../../constants/creationdatetime';
 
 const BookingDetails = () => {
 
   const [bookingDetails, setBookingDetails] = useState();
-  const [bookingsDetails, setBookingsDetails] = useState();
-  const [selectedCompanyBookings, setSelectedCompanyBookings] = useState([]);
 
   //Navigation and Parameter Constants
   const { id } = useParams();
@@ -20,67 +18,41 @@ const BookingDetails = () => {
   const [company, setCompany] = useState();
   // const [bookings, setBookings] = useState([]);
 
-  const handleBookingInputs = (e) => {
-    const { name, value } = e.target;
-    setBookingDetails({ ...bookingDetails, [name]: value });
 
-    // Fetch bookings for the selected company
-    if (name === 'company_id' && value !== 'Select Customer') {
-      api
-        .get(`/invoice/getOrdersByCompanyId/${value}`)
-        .then((res) => {
-          console.log('invoice', res.data.data); // Log the booking data
-          setSelectedCompanyBookings(res.data?.data || []);
-        })
-        .catch(() => {
-          message('Bookings not found', 'info');
-        });    
-    } else {
-      setSelectedCompanyBookings([]);
-    }
-  };
   const handleBookingDataInputs = (e) => {
-    setBookingsDetails({ ...bookingsDetails, [e.target.name]: e.target.value });
+    setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
   };
 
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/invoice/getCompanyName')
+      .get('/finance/getOrders')
       .then((res) => {
         setCompany(res.data.data);
       })
       .catch(() => {
         message('Company not found', 'info');
       });
+
 }
   //Api for insertCompany
 
 
 
   //Logic for adding Booking in db
-  const insertInvoice = (code) =>{
-    if (bookingDetails.order_id !== '' ) {
-      const payload = {
-        ...bookingDetails,
-        order_id: bookingsDetails.order_id, // Add the booking ID here
-        invoice_code: code,
-      };
-      bookingDetails.invoice_code=code;
-      bookingDetails.creation_date = creationdatetime;
+  const insertReceipt = (code) =>{
+    if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
+     
+      bookingDetails.receipt_code=code;
       api
-        .post('/finance/insertInvoice', payload)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          const orderId = payload.order_id;
-          console.log('insertedDataId', insertedDataId);
-          console.log('orderId', orderId);
-          navigate(`/InvoiceEdit/${insertedDataId}/${orderId}`);
-          message('Invoice inserted successfully.', 'success');
+        .post('/finance/insertreceipt', bookingDetails)
+        .then(() => {
+         
+          message('Booking inserted successfully.', 'success');
          
         })
         .catch(() => {
-          message('Network Connection Error', 'error');
+          message('Network connection error.', 'error');
         });
     } else {
       message('Please fill all required fields', 'warning');
@@ -88,12 +60,12 @@ const BookingDetails = () => {
   };
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'invoice' })
+      .post('/commonApi/getCodeValue', { type: 'receipt' })
       .then((res) => {
-        insertInvoice(res.data.data);
+        insertReceipt(res.data.data);
       })
       .catch(() => {
-        insertInvoice('');
+        insertReceipt('');
       });
   };
   useEffect(() => {
@@ -106,37 +78,25 @@ const BookingDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="12">
-          <ComponentCard title="Invoice Details">
+          <ComponentCard title="Receipt Details">
             <Form>
               <FormGroup>
                 <Row>
                 <Col md="10">
-            <Label>Customer Name</Label>
-            <Input type="select" name="company_id" onChange={handleBookingInputs}>
-              <option>Select Customer</option>
+            <Label>Orders</Label>
+            <Input type="select" name="order_id" onChange={handleBookingDataInputs}>
+              <option>Select Orders</option>
               {company &&
                 company.map((e) => {
                   return (
-                    <option key={e.company_id} value={e.company_id}>
-                      {e.company_name}
+                    <option key={e.order_id} value={e.order_id}>
+                      {e.order_code}
                     </option>
                   );
                 })}
             </Input>
           </Col>
-          <br />
-          <Col md="10">
-            <Label>Orders</Label>
-            <Input type="select" name="order_id" onChange={handleBookingDataInputs}>
-              <option>Select Orders</option>
-              {selectedCompanyBookings.map((e) => (
-                <option key={e.order_id} value={e.order_id}>
-                  {e.order_code}
-                </option>
-              ))}
-            </Input>
-          </Col>
-              
+          <br />        
                 </Row>
               </FormGroup>
               <FormGroup>
@@ -168,6 +128,7 @@ const BookingDetails = () => {
           </ComponentCard>
         </Col>
       </Row>
+
     </div>
   );
 };
