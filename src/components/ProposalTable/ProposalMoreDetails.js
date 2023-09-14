@@ -163,7 +163,7 @@ export default function ProposalMoreDetails({
                 <FormGroup>
                   <Label>Est Start_Date</Label>
                   <Input
-                    type="text"
+                    type="date"
                     value={proposalDetails && proposalDetails.est_start_date}
                     onChange={handleInputs}
                     name="est_start_date"
@@ -174,7 +174,7 @@ export default function ProposalMoreDetails({
                 <FormGroup>
                   <Label>Est End_Date</Label>
                   <Input
-                    type="text"
+                    type="date"
                     value={proposalDetails && proposalDetails.est_end_date}
                     onChange={handleInputs}
                     name="est_end_date"

@@ -55,8 +55,8 @@ const SidebarData = [
         collapisble: false,
       },
       {
-        title: 'Client',
-        href: '/Client',
+        title: 'Proposal',
+        href: '/Proposal',
         icon: <Icon.Disc />,
         id:2.4,
         collapisble: false,
