@@ -21,9 +21,6 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
     api
       .delete(`/finance/deleteorder_item/${quoteId}`)
       .then(() => {
-        console.log(`Deleted old order items with quote_id ${quoteId}`);
-  
-        // Step 2: Fetch quote items from the API
         api
           .post('/tender/getQuoteLineItemsById', { quote_id: quoteId })
           .then((res) => {
@@ -96,12 +93,14 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
       <FormGroup>
         <ComponentCardV2>
           <Row>
+   
           <Col>
               <Button
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
                   generateData();
+                  window.location.reload();
                 }}
               >
                 Generate Data
@@ -119,6 +118,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 Save
               </Button>
             </Col>
+       
             <Col>
               <Button
                 className="shadow-none"

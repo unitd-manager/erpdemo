@@ -14,17 +14,17 @@ import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const Document = () => {
+const PurchaseInvoice = () => {
   //All state variable
-  const [documentdata, setDocumentData] = useState(null);
+  const [purchaseinvoicedata, setPurchaseInvoiceData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   //Get data from Training table
-  const getDocument= () => {
+  const getPurchaseInvoice= () => {
     api
-      .get('/document/getDocument')
+      .get('/purchaseinvoice/grtPurchaseInvoice')
       .then((res) => {
-        setDocumentData(res.data.data);
+        setPurchaseInvoiceData(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -46,7 +46,7 @@ const Document = () => {
   };
 
   useEffect(() => {
-    getDocument();
+    getPurchaseInvoice();
   }, []);
   //structure of Training list view
   const columns = [
@@ -70,8 +70,8 @@ const Document = () => {
       sortable: false,
     },
     {
-      name: 'DOC Code',
-      selector: 'document_code',
+      name: 'Invoice Code',
+      selector: 'purchase_invoice_code',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -84,30 +84,37 @@ const Document = () => {
         width: '4%',
       },
       {
-        name: 'Project Start Date',
-        selector: 'start_date',
+        name: 'Client Name',
+        selector: 'company_name',
         sortable: true,
         grow: 0,
         wrap: true,
       },
     {
-      name: 'Quote Status',
-      selector: 'quote_status',
+      name: 'Invoice Date',
+      selector: 'purchse_invoice_date',
       grow: 0,
       wrap: true,
       width: '4%',
     },
 
     {
-      name: 'Budget',
-      selector: 'budget_inhouse 	',
+      name: 'Amount',
+      selector: 'invoice_amount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
       {
-        name: 'Project End Date',
-        selector: 'estimated_finish_date',
+        name: ' Due Date',
+        selector: 'due_date',
+        sortable: true,
+        grow: 0,
+        wrap: true,
+      },
+      {
+        name: 'Status',
+        selector: 'status',
         sortable: true,
         grow: 0,
         wrap: true,
@@ -120,9 +127,9 @@ const Document = () => {
       <ToastContainer></ToastContainer>
       <CommonTable
         loading={loading}
-        title="Document"
+        title="Purchase Invoice"
         Button={
-          <Link to="/DocumentDetails">
+          <Link to="/PurchaseInvoiceDetails">
             <Button color="primary" className="shadow-none">
               Add New
             </Button>
@@ -137,22 +144,23 @@ const Document = () => {
           </tr>
         </thead>
         <tbody>
-          {documentdata &&
-            documentdata.map((element, index) => {
+          {purchaseinvoicedata &&
+            purchaseinvoicedata.map((element, index) => {
               return (
-                <tr key={element.document_id}>
+                <tr key={element.purchase_invoice_id}>
                   <td>{index + 1}</td>
                   <td>
-                    <Link to={`/DocumentEdit/${element.document_id}`}>
+                    <Link to={`/PurchaseInvoiceEdit/${element.purchase_invoice_id }`}>
                       <Icon.Edit2 />
                     </Link>
                   </td>
-                  <td>{element.document_code}</td>
+                  <td>{element.purchase_invoice_code}</td>
                   <td>{element.title}</td>
-                  <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
-                  <td>{element.quote_status}</td>
-                  <td>{element.budget_inhouse}</td>
-                  <td>{moment(element.estimated_finish_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.company_name}</td>
+                  <td>{moment(element.purchse_invoice_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.invoice_amount}</td>
+                  <td>{element.due_date}</td>
+                  <td>{element.status}</td>
                 </tr>
               );
             })}
@@ -161,4 +169,4 @@ const Document = () => {
     </div>
   );
 };
-export default Document;
+export default PurchaseInvoice;

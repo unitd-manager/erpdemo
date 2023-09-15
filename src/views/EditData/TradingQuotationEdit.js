@@ -262,7 +262,7 @@ const TradingQuotationEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By">{e.created_by}{e.creation_date}</td>
+                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
                             <td data-label="Actions">
                               <span
                                 className="addline"

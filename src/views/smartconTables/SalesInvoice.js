@@ -124,7 +124,7 @@ const Invoice = () => {
                   <tr key={element.invoice_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/InvoiceEdit/${element.invoice_id}`}>
+                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.order_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

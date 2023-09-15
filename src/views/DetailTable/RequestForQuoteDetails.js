@@ -56,7 +56,7 @@ const RequestForQuoteDetails = () => {
   //QUTO GENERATED CODE
   const generateCode = () => {
     api
-      .post('/quote/getCodeValue', { type: 'orders' })
+      .post('/quote/getCodeValue', { type: 'RequestQuoteCode' })
       .then((res) => {
         insertJobInformation(res.data.data);
       })
@@ -110,14 +110,13 @@ const RequestForQuoteDetails = () => {
                         className="btn mr-2 shadow-none"
                         onClick={() => {
                           generateCode();
-                          insertJobInformation();
                         }}
                       >
                         Save & Continue
                       </Button>
                       <Button
                         onClick={() => {
-                          navigate('/JobInformation');
+                          navigate('/RequestForQuote');
                         }}
                         type="button"
                         className="btn btn-dark shadow-none"
