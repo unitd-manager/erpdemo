@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,13 +11,14 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
-// import NavTabs from '../../components/ClientTable/NavTabs';
 import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
 import Tab from '../../components/project/Tab';
+import AppContext from '../../context/AppContext';
 
 const ClientsEdit = () => {
   //Const Variables
@@ -28,6 +29,7 @@ const ClientsEdit = () => {
   const [contactsDetails, setContactsDetails] = useState(null);
   const [editContactEditModal, setEditContactEditModal] = useState(false);
   const [allCountries, setallCountries] = useState();
+  const { loggedInuser } = useContext(AppContext);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -70,6 +72,7 @@ const ClientsEdit = () => {
   const editClientsData = () => {
     if (clientsDetails.company_name !== '') {
       clientsDetails.modification_date = creationdatetime;
+      clientsDetails.modified_by = loggedInuser.first_name;
       api
         .post('/clients/editClients', clientsDetails)
         .then(() => {

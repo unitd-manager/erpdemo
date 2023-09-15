@@ -13,7 +13,7 @@ export default function TradingQuoteMoreDetails({
   AddNewContact,
   addContactModal,
   addContactToggle,
-  getContact
+  getContact,
 }) {
   TradingQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
@@ -60,7 +60,8 @@ export default function TradingQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer</Label>
+                  <Label>Company Name</Label>
+
                   <Input
                     type="select"
                     onChange={(e) => {
@@ -83,6 +84,7 @@ export default function TradingQuoteMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
+
               <Col md="3">
                 <FormGroup>
                   <Label>
@@ -110,13 +112,13 @@ export default function TradingQuoteMoreDetails({
                           </option>
                         );
                       })}
+                    <TenderContactDetails
+                      addContactModal={addContactModal}
+                      addContactToggle={addContactToggle}
+                      AddNewContact={AddNewContact}
+                      handleAddNewContact={handleAddNewContact}
+                    ></TenderContactDetails>
                   </Input>
-                  <TenderContactDetails
-                    addContactModal={addContactModal}
-                    addContactToggle={addContactToggle}
-                    AddNewContact={AddNewContact}
-                    handleAddNewContact={handleAddNewContact}
-                  ></TenderContactDetails>
                 </FormGroup>
               </Col>
               <Col md="3">

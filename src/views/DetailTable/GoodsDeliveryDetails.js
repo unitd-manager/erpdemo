@@ -6,6 +6,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 

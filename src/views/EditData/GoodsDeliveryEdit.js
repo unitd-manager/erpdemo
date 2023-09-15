@@ -3,6 +3,7 @@ import { TabPane, TabContent, Button, Table, Row, Col, FormGroup } from 'reactst
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../form-editor/editor.scss';
 //import * as Icon from 'react-feather';
 //import Swal from 'sweetalert2';
@@ -12,7 +13,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
-import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
+import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
@@ -21,11 +22,8 @@ import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [goodsitemdetails, setgoodslineDetails] = useState();
-
+  const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
-  const [addContactModal, setAddContactModal] = useState(false);
-  const [addCompanyModal, setAddCompanyModal] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState();
   const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
@@ -34,12 +32,6 @@ const GoodsDeliveryEdit = () => {
   const applyChanges = () => {};
   const backToList = () => {
     navigate('/GoodsDelivery');
-  };
-  const addContactToggle = () => {
-    setAddContactModal(!addContactModal);
-  };
-  const addCompanyToggle = () => {
-    setAddCompanyModal(!addCompanyModal);
   };
 
   const tabs = [
@@ -50,11 +42,7 @@ const GoodsDeliveryEdit = () => {
     setActiveTab(tab);
   };
 
-  const [contact, setContact] = useState();
-  const [company, setCompany] = useState();
-  // Get Tenders By Id
-
-  
+  // Get goods delivery By Id
 
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
@@ -67,95 +55,10 @@ const GoodsDeliveryEdit = () => {
     });
   };
 
-  const getContact = (companyId) => {
-    setSelectedCompany(companyId);
-    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
-      setContact(res.data.data);
-    });
-  };
   const getgoodsdeliveryById = () => {
     api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
       setTenderDetails(res.data.data[0]);
-      //getContact(res.data.data.company_id);
     });
-  };
-  //Logic for adding company in db
-
-  const [companyInsertData, setCompanyInsertData] = useState({
-    company_name: '',
-    address_street: '',
-    address_town: '',
-    address_country: '',
-    address_po_code: '',
-    phone: '',
-    fax: '',
-    website: '',
-    supplier_type: '',
-    industry: '',
-    company_size: '',
-    source: '',
-  });
-
-  const companyhandleInputs = (e) => {
-    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
-  };
-
-  // Insert Company
-  const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.phone !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then(() => {
-          message('Company inserted successfully.', 'success');
-          toggle();
-          getCompany();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields.', 'error');
-    }
-  };
-
-  //Add new Contact
-
-  const [newContactData, setNewContactData] = useState({
-    salutation: '',
-    first_name: '',
-    email: '',
-    position: '',
-    department: '',
-    phone_direct: '',
-    fax: '',
-    mobile: '',
-  });
-
-  const handleAddNewContact = (e) => {
-    setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
-  };
-
-  const AddNewContact = () => {
-    const newDataWithCompanyId = newContactData;
-    newDataWithCompanyId.company_id = selectedCompany;
-    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
-      api
-        .post('/tender/insertContact', newDataWithCompanyId)
-        .then(() => {
-          getContact(newDataWithCompanyId.company_id);
-          message('Contact Inserted Successfully', 'success');
-          //window.location.reload();
-        })
-        .catch(() => {
-          message('Unable to add Contact! try again later', 'error');
-        });
-    } else {
-      message('All fields are required.', 'info');
-    }
   };
 
   const getgoodsLineItemById = () => {
@@ -276,7 +179,6 @@ const GoodsDeliveryEdit = () => {
 
   useEffect(() => {
     getCompany();
-    getContact();
     getgoodsdeliveryById();
     getgoodsLineItemById();
   }, [id]);
@@ -302,19 +204,9 @@ const GoodsDeliveryEdit = () => {
         backToList={backToList}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
-        contact={contact}
         handleInputs={handleInputs}
         company={company}
         tenderDetails={tenderDetails}
-        addCompanyModal={addCompanyModal}
-        addCompanyToggle={addCompanyToggle}
-        companyhandleInputs={companyhandleInputs}
-        insertCompany={insertCompany}
-        AddNewContact={AddNewContact}
-        addContactToggle={addContactToggle}
-        setAddCompanyModal={setAddCompanyModal}
-        getContact={getContact}
-        handleAddNewContat={handleAddNewContact}
       ></GoodsDeliveryMoreDetails>
 
       <ComponentCard title="More Details">
@@ -388,7 +280,7 @@ const GoodsDeliveryEdit = () => {
             </FormGroup>
           </TabPane>
           <TabPane tabId="2">
-            <QuotationAttachment></QuotationAttachment>
+            <GoodsAttachment></GoodsAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

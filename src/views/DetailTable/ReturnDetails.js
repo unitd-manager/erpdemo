@@ -26,24 +26,28 @@ const ReturnDetails = () => {
 
 
   //console.log(tenderDetails);
- const insertOrder = () => {
-  if (insertReturn.invoice_id !== '') {
-    insertReturn.creation_date = creationdatetime;
-    api
-      .post('/invoice/insertSalesReturn', insertReturn)
-      .then((res) => {
-        const insertedDataId = res.data.data.insertId;
-        const selectedQuoteId = encodeURIComponent(insertReturn.invoice_id);
-        // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
-        navigate(`/ReturnEdit/${insertedDataId}?tab=1&invoice_id=${selectedQuoteId}`);
-      })
-      .catch(() => {
-        message('Network connection error.', 'error');
-      });
-  } else {
-    message('Please fill all required fields', 'warning');
-  }
-};
+  const insertOrder = () => {
+    if (insertReturn.invoice_id !== '') {
+      insertReturn.creation_date = creationdatetime;
+      api
+        .post('/invoice/insertSalesReturn', insertReturn)
+        .then((res) => {
+          const insertedDataId = res.data.data.insertId;
+          const invoiceId = insertReturn.invoice_id;
+        
+        // Navigate to the next page with both invoice_id and sales_return_id
+        navigate(`/ReturnEdit/${insertedDataId}/${invoiceId}`);
+        console.log('insertedDataId', insertedDataId);
+        console.log('invoiceId', invoiceId);
+         
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
+  };
 
   useEffect(() => {
     getQuote();
@@ -56,7 +60,7 @@ const ReturnDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Enquiry">
+          <ComponentCard title="New Return">
             <Form>
               <FormGroup>
               

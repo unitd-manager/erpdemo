@@ -7,6 +7,7 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
+import moment from 'moment';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
@@ -104,11 +105,11 @@ const TradingQuotation = () => {
       width: 'auto',
     },
     {
-        name: 'Net Amount',
-        selector: 'total_amount',
-        sortable: true,
-        width: 'auto',
-      },
+      name: 'Net Amount',
+      selector: 'total_amount',
+      sortable: true,
+      width: 'auto',
+    },
   ];
 
   return (
@@ -145,7 +146,9 @@ const TradingQuotation = () => {
                       </Link>
                     </td>
                     <td>{element.quote_code}</td>
-                    <td>{element.quote_date}</td>
+                    <td>
+                      {element.quote_date ? moment(element.quote_date).format('DD-MM-YYYY') : ''}
+                    </td>
                     <td>{element.company_name}</td>
                     <td>{element.ref_no_quote}</td>
                     <td>{element.opportunity_code}</td>
