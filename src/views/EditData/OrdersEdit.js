@@ -28,7 +28,7 @@ const OpportunityEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Opportunity');
+    navigate('/SalesOrder');
   };
   const { insertedDataId, quoteId } = useParams();
 
@@ -144,10 +144,7 @@ const OpportunityEdit = () => {
       .post('/finance/editFinances', orderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-        setTimeout(() => {
-         
-        }, 300);
-      })
+        })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });

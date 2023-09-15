@@ -93,12 +93,14 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
       <FormGroup>
         <ComponentCardV2>
           <Row>
+   
           <Col>
               <Button
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
                   generateData();
+                  window.location.reload();
                 }}
               >
                 Generate Data
@@ -116,6 +118,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 Save
               </Button>
             </Col>
+       
             <Col>
               <Button
                 className="shadow-none"

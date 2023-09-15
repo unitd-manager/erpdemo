@@ -177,6 +177,7 @@ const InvoiceEdit = () => {
                 className="shadow-none"
                 onClick={() => {
                   generateData();
+                  window.location.reload();
                 }}
               >
                 Generate Data
