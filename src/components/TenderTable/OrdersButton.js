@@ -6,10 +6,9 @@ import api from '../../constants/api';
 //import message from '../Message';
 
 
-export default function TenderButtons({ editTenderData, applyChanges, backToList, navigate, quoteId, id }) {
+export default function TenderButtons({ editTenderData, applyChanges, backToList, quoteId, id }) {
   TenderButtons.propTypes = {
     editTenderData: PropTypes.func,
-    navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     quoteId: PropTypes.any,
@@ -106,31 +105,31 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 Generate Data
               </Button>
             </Col>
-            <Col>
-              <Button
-                className="shadow-none"
-                color="primary"
-                onClick={() => {
-                  editTenderData();
-                  navigate('/SalesOrder');
-                }}
-              >
-                Save
-              </Button>
-            </Col>
-       
-            <Col>
-              <Button
-                className="shadow-none"
-                color="primary"
-                onClick={() => {
-                  editTenderData();
-                  applyChanges();
-                }}
-              >
-                Apply
-              </Button>
-            </Col>
+           
+<Col>
+  <Button
+    className="shadow-none"
+    color="primary"
+    onClick={() => {
+      editTenderData(true); // Call editTenderData with navigation
+    }}
+  >
+    Save
+  </Button>
+</Col>
+
+<Col>
+  <Button
+    className="shadow-none"
+    color="primary"
+    onClick={() => {
+      editTenderData(false); // Call editTenderData without navigation
+      applyChanges();
+    }}
+  >
+    Apply
+  </Button>
+</Col>
             <Col>
               <Button
                 className="shadow-none"
