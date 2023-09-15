@@ -97,11 +97,18 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                               <FormGroup>
                                 <Label>Unit</Label>
                                 <Input
-                                  type="text"
+                                  type="select"
                                   name="unit"
                                   onChange={handleInputs}
                                   value={PlaniEdit && PlaniEdit.unit}
-                                />
+                                  >
+                                  <option defaultValue="selected">Please Select</option>
+                                  <option value="KGS">KGS</option>
+                                  <option value="PCS">PCS</option>
+                                  <option value="EA">EA</option>
+                                  <option value="NOS">NOS</option>
+                                  <option value="BOX">BOX</option>
+                                </Input>
                               </FormGroup>
                             </Col>
                             </Row>
