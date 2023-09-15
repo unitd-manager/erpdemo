@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Button, Table, Row, Col } from 'reactstrap';
+import { TabPane, TabContent, Button, Table, Row, Col, FormGroup } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../form-editor/editor.scss';
 //import * as Icon from 'react-feather';
 //import Swal from 'sweetalert2';
@@ -12,7 +13,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
-import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
+import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
@@ -22,16 +23,7 @@ const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [goodsitemdetails, setgoodslineDetails] = useState();
   const [company, setCompany] = useState();
-  const [contact, setContact] = useState();
-  const [addContactModal, setAddContactModal] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState();
   const [editModal, setEditModal] = useState(false);
-  //const [lineItemDatas, setLineItemDatas] = useState({});
-
-  //const [contact, setContact] = useState();
-  //   const [addContactModal, setAddContactModal] = useState(false);
-  //   const [addCompanyModal, setAddCompanyModal] = useState(false);
-
   const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
@@ -42,10 +34,6 @@ const GoodsDeliveryEdit = () => {
     navigate('/GoodsDelivery');
   };
 
-  const addContactToggle = () => {
-    setAddContactModal(!addContactModal);
-  };
-
   const tabs = [
     { id: '1', name: 'Goods Delivery ' },
     { id: '2', name: 'Attachment' },
@@ -53,24 +41,24 @@ const GoodsDeliveryEdit = () => {
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-  const getContact = (companyId) => {
-    setSelectedCompany(companyId);
-    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
-      setContact(res.data.data);
-    });
-  };
 
-  // Get Tenders By Id
-
-  const editTenderById = () => {
-    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
-      setTenderDetails(res.data.data[0]);
-      getContact(res.data.data.company_id);
-    });
-  };
+  // Get goods delivery By Id
 
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
+  };
+
+  // Get Company Data
+  const getCompany = () => {
+    api.get('/company/getCompany').then((res) => {
+      setCompany(res.data.data);
+    });
+  };
+
+  const getgoodsdeliveryById = () => {
+    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
+      setTenderDetails(res.data.data[0]);
+    });
   };
 
   const getgoodsLineItemById = () => {
@@ -88,143 +76,121 @@ const GoodsDeliveryEdit = () => {
       .post('/goodsdelivery/edit-goodsdelivery', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+        getgoodsdeliveryById();
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
   };
 
-  // Get Company Data
-  const getCompany = () => {
-    api.get('/company/getCompany').then((res) => {
-      setCompany(res.data.data);
-    });
-  };
-  const generateData = (res) => {
-    // Retrieve existing Goods Delivery Items
-   
-      const existingGoodsDeliveryItems = res.data.data;
-  
-      // Retrieve Order Items
-      api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then(() => {
-        const orderItems = res.data.data;
-  
-        // Filter out Order Items that already exist in Goods Delivery Items
-        const newOrderItems = orderItems.filter((orderItem) => {
-          const exists = existingGoodsDeliveryItems.some((goodsItem) => goodsItem.order_item_id === orderItem.order_item_id);
-          return !exists;
-        });
-  
-        // Insert the new Order Items into Goods Delivery Items
-        newOrderItems.forEach((orderItem) => {
-          const newItem = {
-            goods_delivery_id: id,
-            order_id: tenderDetails.order_id,
-            order_item_id: orderItem.order_item_id,
-            title: orderItem.item_title,
-            description: orderItem.description,
-            quantity: orderItem.qty,
-            // Add other properties as needed
-          };
-  
-          // Use your API call to insert the item into goods_delivery_item
-          api
-            .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
-            .then(() => {
-              // Handle success if needed
-              console.log('Item inserted successfully');
-            })
-            .catch((error) => {
-              // Handle error if needed
-              console.error('Error inserting item:', error);
-            });
-        });
+  // Generate Data for Delivery Items
+  const generateData = () => {
+    api
+      .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
+      .then((res) => {
+        const DeliveryItems = res.data.data;
+        console.log('Received items:', DeliveryItems);
+        if (DeliveryItems.length === 0) {
+          console.warn('No Delivery items to insert');
+          return;
+        }
+        // Retrieve all order_item_id  values from the goods_delivery_items table
+        api
+          .get('/goodsdelivery/checkDeliveryItems')
+          .then((response) => {
+            const ExistingDeliveryItemsId = response.data.data;
+            let alreadyInserted = false;
+            const insertDeliveryItems = (index) => {
+              if (index < DeliveryItems.length) {
+                const DeliveryItem = DeliveryItems[index];
+                // Check if the order_item_id  already exists in the ExistingDeliveryItemsId array
+                if (ExistingDeliveryItemsId.includes(DeliveryItem.order_item_id)) {
+                  if (!alreadyInserted) {
+                    console.warn(
+                      `Delivery items are already Inserted (Order_item_id: ${DeliveryItem.order_item_id})`,
+                    );
+                    message('Delivery items are already Inserted', 'warning');
+                    alreadyInserted = true; // Set the flag to true so the message is shown only once
+                    setTimeout(() => {
+                      alreadyInserted = false;
+                    }, 3000);
+                  }
+
+                  insertDeliveryItems(index + 1);
+                } else {
+                  // Insert the order item
+                  const DeliveryItemsData = {
+                    creation_date: creationdatetime,
+                    modified_by: loggedInuser.first_name,
+                    goods_delivery_id: id,
+                    order_id: tenderDetails.order_id,
+                    order_item_id: DeliveryItem.order_item_id,
+                    title: DeliveryItem.item_title,
+                    unit: DeliveryItem.unit,
+                    unit_price: DeliveryItem.unit_price,
+                    amount: DeliveryItem.cost_price,
+                    description: DeliveryItem.description,
+                    quantity: DeliveryItem.qty,
+                  };
+                  console.log(`Inserting order item ${index + 1}:`, DeliveryItemsData);
+                  // Send a POST request to your /goodsdelivery/insertGoodsDeliveryItems API with the current DeliveryItemsData
+                  api
+                    .post('/goodsdelivery/insertgoodsdeliveryitem', DeliveryItemsData)
+                    .then((result) => {
+                      if (result.data.msg === 'Success') {
+                        console.log(`Order item ${index + 1} inserted successfully`);
+
+                        if (!alreadyInserted) {
+                          console.log(`Order item ${index + 1} inserted successfully`);
+                          message('All Order items Inserted successfully');
+                          alreadyInserted = true;
+                        }
+                        getgoodsLineItemById();
+                        window.location.reload();
+                      } else {
+                        console.error(`Failed to insert order item ${index + 1}`);
+                      }
+                      // Continue to the next item
+                      insertDeliveryItems(index + 1);
+                    })
+                    .catch((error) => {
+                      console.error(`Error inserting order item ${index + 1}`, error);
+                      // Continue to the next item
+                      insertDeliveryItems(index + 1);
+                    });
+                }
+              } else {
+                console.log('All order items inserted successfully');
+                // You might want to trigger a UI update here
+              }
+            };
+            // Start inserting order items from index 0
+            insertDeliveryItems(0);
+          })
+          .catch((error) => {
+            console.error('Error checking order item existence', error);
+          });
+      })
+
+      .catch((error) => {
+        console.error('Error fetching quote items', error);
       });
-    
-  };
-
-  // // Function to insert order_item data into goods_delivery_item
-  // const generateData = () => {
-  //   api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id }).then((res) => {
-  //     const orderItems = res.data.data;
-
-  //     // Loop through order items and insert them into goods_delivery_item
-  //     orderItems.forEach((orderItem) => {
-  //       const newItem = {
-  //         goods_delivery_id: id,
-  //         order_id: tenderDetails.order_id,
-  //         order_item_id: orderItem.order_item_id,
-  //         title: orderItem.item_title,
-  //         description: orderItem.description,
-  //         quantity: orderItem.qty,
-  //         // Add other properties as needed
-  //       };
-
-  //       // Use your API call to insert the item into goods_delivery_item
-  //       api
-  //         .post('/goodsdelivery/insertgoodsdeliveryitem', newItem)
-  //         .then(() => {
-  //           // Handle success if needed
-  //           console.log('Item inserted successfully');
-  //         })
-  //         .catch((error) => {
-  //           // Handle error if needed
-  //           console.error('Error inserting item:', error);
-  //         });
-  //     });
-  //   });
-  // };
-  // Add new Contact
-
-  const [newContactData, setNewContactData] = useState({
-    salutation: '',
-    first_name: '',
-    email: '',
-    position: '',
-    department: '',
-    phone_direct: '',
-    fax: '',
-    mobile: '',
-  });
-
-  const handleAddNewContact = (e) => {
-    setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
-  };
-
-  const AddNewContact = () => {
-    const newDataWithCompanyId = newContactData;
-    newDataWithCompanyId.company_id = selectedCompany;
-    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
-      api
-        .post('/tender/insertContact', newDataWithCompanyId)
-        .then(() => {
-          getContact(newDataWithCompanyId.company_id);
-          message('Contact Inserted Successfully', 'success');
-          window.location.reload();
-        })
-        .catch(() => {
-          message('Unable to add Contact! try again later', 'error');
-        });
-    } else {
-      message('All fields are required.', 'info');
-    }
   };
 
   useEffect(() => {
-    editTenderById();
-    getgoodsLineItemById();
     getCompany();
+    getgoodsdeliveryById();
+    getgoodsLineItemById();
   }, [id]);
 
   //Structure of Invoice table
   const columns1 = [
+    { name: 'SN.No' },
     { name: 'Item Title' },
     { name: 'Description' },
     { name: 'Unit' },
     { name: 'quantity' },
+    { name: 'Unit Price' },
     { name: 'Total Amount ' },
   ];
 
@@ -238,17 +204,9 @@ const GoodsDeliveryEdit = () => {
         backToList={backToList}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
-        newContactData={newContactData}
         handleInputs={handleInputs}
-        handleAddNewContact={handleAddNewContact}
-        setAddContactModal={setAddContactModal}
-        addContactModal={addContactModal}
-        tenderDetails={tenderDetails}
         company={company}
-        contact={contact}
-        AddNewContact={AddNewContact}
-        addContactToggle={addContactToggle}
-        getContact={getContact}
+        tenderDetails={tenderDetails}
       ></GoodsDeliveryMoreDetails>
 
       <ComponentCard title="More Details">
@@ -256,65 +214,73 @@ const GoodsDeliveryEdit = () => {
 
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
-          
           <TabPane tabId="1">
-           
-              <Col>
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  onClick={() => {
-                    generateData();
-                  }}
-                >
-                  Generate Data
-                </Button>
+            <Row>
+              <Col md="3">
+                <FormGroup>
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      generateData();
+                    }}
+                  >
+                    Generate Delivery Item
+                  </Button>
+                </FormGroup>
               </Col>
-         
-            <br/>
-            <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              setEditModal(true);
-            }}
-          >
-            Edit
-          </Button>
-          <br />
-          
-              <Row>
-                <div className="container">
-                  <Table id="example" className="display border border-secondary rounded">
-                    <thead>
-                      <tr>
-                        {columns1.map((cell) => {
-                          return <td key={cell.name}>{cell.name}</td>;
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {goodsitemdetails &&
-                        goodsitemdetails.map((element) => {
-                          return (
-                            <tr key={element.goods_delivery_id}>
-                              <td>{element.title}</td>
-                              <td>{element.description}</td>
-                              <td>{element.unit}</td>
-                              <td>{element.quantity}</td>
-                              <td>{element.amount}</td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </Table>
-                </div>
-              </Row>
-         
-            <EditLineItem editModal={editModal} setEditModal={setEditModal}></EditLineItem>
+              <Col md="3">
+                <FormGroup>
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      setEditModal(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </FormGroup>
+              </Col>
+            </Row>
+            <EditLineItem
+              editModal={editModal}
+              setEditModal={setEditModal}
+              getgoodsLineItemById={getgoodsLineItemById}
+            ></EditLineItem>
+
+            <FormGroup>
+              <div className="container">
+                <Table id="example" className="lineitem border border-secondary rounded">
+                  <thead>
+                    <tr>
+                      {columns1.map((cell) => {
+                        return <td key={cell.name}>{cell.name}</td>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {goodsitemdetails &&
+                      goodsitemdetails.map((element, index) => {
+                        return (
+                          <tr key={element.goods_delivery_id}>
+                            <td>{index + 1}</td>
+                            <td>{element.title}</td>
+                            <td>{element.description}</td>
+                            <td>{element.unit}</td>
+                            <td>{element.quantity}</td>
+                            <td>{element.unit_price}</td>
+                            <td>{element.amount}</td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </div>
+            </FormGroup>
           </TabPane>
           <TabPane tabId="2">
-            <QuotationAttachment></QuotationAttachment>
+            <GoodsAttachment></GoodsAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

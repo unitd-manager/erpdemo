@@ -34,10 +34,13 @@ const OpportunityDetails = () => {
       .post('/finance/insertOrder', insertQuote)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
-        const selectedQuoteId = encodeURIComponent(insertQuote.quote_id);
+        const quoteId = insertQuote.quote_id;
 
         // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
-        navigate(`/OrdersEdit/${insertedDataId}?tab=1&quote_id=${selectedQuoteId}`);
+  
+        navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
+        console.log('insertedDataId', insertedDataId);
+        console.log('quoteId', quoteId);
       })
       .catch(() => {
         message('Network connection error.', 'error');

@@ -72,10 +72,12 @@ const BookingDetails = () => {
         .post('/finance/insertInvoice', payload)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          message('Booking inserted successfully.', 'success');
-          setTimeout(() => {
-            navigate(`/InvoiceEdit/${insertedDataId}`);
-          }, 300);
+          const orderId = payload.order_id;
+          console.log('insertedDataId', insertedDataId);
+          console.log('orderId', orderId);
+          navigate(`/InvoiceEdit/${insertedDataId}/${orderId}`);
+          message('Invoice inserted successfully.', 'success');
+         
         })
         .catch(() => {
           message('Network Connection Error', 'error');

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import * as Icon from 'react-feather';
 import { Row, Col, Button, TabContent, TabPane } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
@@ -16,13 +14,11 @@ import api from '../../constants/api';
 import AddPoModal from '../../components/PurchaseOrder/AddPoModal';
 import AttachmentTab from '../../components/PurchaseOrder/AttachmentTab';
 import PurchaseOrderlineItemEdit from '../../components/PurchaseOrder/PurchaseOrderLineItem';
-import PurchaseOrderButtons from '../../components/PurchaseOrder/PurchaseOrderButtons';
 import ViewHistoryModal from '../../components/PurchaseOrder/ViewHistoryModal';
-import DeliveryOrderEditModal from '../../components/PurchaseOrder/DeliveryOrderEditModal';
 import PurchaseOrderDetailsPart from '../../components/PurchaseOrder/PurchaseOrderDetailsPart';
 import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
-import PdfDeliveryOrderPO from '../../components/PDF/PdfDeliveryOrderPO';
 import Tab from '../../components/project/Tab';
+import ApiButton from '../../components/ApiButton';
 
 const PurchaseOrderEdit = () => {
   //All state variable
@@ -42,19 +38,15 @@ const PurchaseOrderEdit = () => {
   });
   const [activeTab, setActiveTab] = useState('1');
   const [viewHistoryModal, setViewHistoryModal] = useState(false);
-  const [deliveryOrderEditModal, setDeliveryOrderEditModal] = useState(false);
-  const [selectedPoProducts, setSelectedPoProducts] = useState([]);
-  const [selectedPoDelivers, setSelectedPoDelivers] = useState([]);
-  const [deliveryOrderId, setDeliveryOrderId] = useState();
-  const [deliveryOrders, setDeliveryOrders] = useState([]);
-  const [supplierId, setSupplierId] = useState();
+ const [selectedPoProducts, setSelectedPoProducts] = useState([]);
+ const [supplierId, setSupplierId] = useState();
   const [gTotal, setGtotal] = useState(0);
-  const [grTotal, setGrTotal] = useState(0);
-  //navigation and parameters
   const { id } = useParams();
   const navigate = useNavigate();
+  // const  [request, setRequest] = useState([]);
 
-  const applyChanges = () => {};
+
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/PurchaseOrder');
   };
@@ -76,15 +68,11 @@ const PurchaseOrderEdit = () => {
       .post('/purchaseorder/TabPurchaseOrderLineItemById', { purchase_order_id: id })
       .then((res) => {
         setProducts(res.data.data);
-        //grand total
         let grandTotal = 0;
-        let grand = 0;
         res.data.data.forEach((elem) => {
           grandTotal += elem.po_value;
-          grand += elem.actual_value;
         });
         setGtotal(grandTotal);
-        setGrTotal(grand);
       })
       .catch(() => {
         message('Products Data Not Found', 'info');
@@ -102,6 +90,18 @@ const PurchaseOrderEdit = () => {
       });
   };
 
+    // Gettind data from Job By Id
+    const getRequestForQuote = () => {
+      api
+        .get('/quote/SupplierQuote')
+        .then((res) => {
+          setSupplier(res.data.data);
+        })
+        .catch(() => {
+          message('Supplier Data Not Found', 'info');
+        });
+    };
+  
   const handlePOInputs = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
@@ -140,40 +140,6 @@ const PurchaseOrderEdit = () => {
     }
   };
 
-  //Delivery order
-  const deliverOrder = () => {
-    if (selectedPoDelivers) {
-      api.post('/purchaseorder/insertDeliveryOrder', { purchase_order_id: id }).then((res) => {
-        selectedPoDelivers.forEach((elem) => {
-          elem.delivery_order_id = res.data.data.insertId;
-          elem.purchase_order_id = id;
-
-          api
-            .post('/purchaseorder/insertDeliveryOrderHistory', elem)
-            .then(() => {
-              message('Inserted successfully.', 'success');
-            })
-            .catch(() => {
-              message('unable to deliver.', 'danger');
-            });
-        });
-      });
-    } else {
-      alert('Please select atleast one product');
-    }
-  };
-  // get delivery orders
-
-  const getDeliveryOrders = () => {
-    api
-      .post('/purchaseorder/getDeliveryOrder', { purchase_order_id: id })
-      .then((res) => {
-        setDeliveryOrders(res.data.data);
-      })
-      .catch(() => {
-        message('DeliveryOrder Data Not Found', 'info');
-      });
-  };
 
   //Update Setting
   const editPurchaseData = () => {
@@ -236,17 +202,8 @@ const PurchaseOrderEdit = () => {
       setSelectedPoProducts(copyselectedPoProducts);
     }
   };
-  //checked Dos
-  const getCheckedDeliverProducts = (checkboxVal, index, Obj) => {
-    if (checkboxVal.target.checked === true) {
-      setSelectedPoDelivers([...selectedPoDelivers, Obj]);
-    }
-    if (checkboxVal.target.checked !== true) {
-      const copyselectedPoDeliveries = [...selectedPoDelivers];
-      copyselectedPoDeliveries.splice(index, 1);
-      setSelectedPoDelivers(copyselectedPoDeliveries);
-    }
-  };
+  
+  // };
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
@@ -276,7 +233,7 @@ const PurchaseOrderEdit = () => {
     getSupplier();
     getPoProduct();
     getPurchaseOrderId();
-    getDeliveryOrders();
+    getRequestForQuote();
   }, [id]);
 
   return (
@@ -284,7 +241,7 @@ const PurchaseOrderEdit = () => {
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
       {/* PurchaseorderButtons */}
-      <PurchaseOrderButtons
+      {/* <PurchaseOrderButtons
         applyChanges={applyChanges}
         backToList={backToList}
         editPurchaseData={editPurchaseData}
@@ -292,7 +249,14 @@ const PurchaseOrderEdit = () => {
         products={products}
         product={product}
         navigate={navigate}
-      />
+      /> */}
+      <ApiButton
+              editData={editPurchaseData}
+              navigate={navigate}
+              applyChanges={editPurchaseData}
+              backToList={backToList}
+              module="PurchaseOrder"
+            ></ApiButton>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
         supplier={supplier}
@@ -328,19 +292,7 @@ const PurchaseOrderEdit = () => {
               Add all Qty to Stock
             </Button>
           </Col>
-          <Col md="2">
-            <Button
-              color="primary"
-              onClick={() => {
-                deliverOrder();
-              }}
-            >
-              Delivery Order
-            </Button>
-          </Col>
-          <Col md="3">
-            <b color="primary">Grand Total(for delivered qty):{grTotal}</b>
-          </Col>
+       
           <Col md="3">
             <b color="primary">Grand Total:{gTotal}</b>
           </Col>
@@ -348,7 +300,6 @@ const PurchaseOrderEdit = () => {
         <ProductLinkedTable
           products={products}
           setProduct={setProduct}
-          getCheckedDeliverProducts={getCheckedDeliverProducts}
           getCheckedPoProducts={getCheckedPoProducts}
           setEditModal={setEditModal}
           setViewHistoryModal={setViewHistoryModal}
@@ -374,46 +325,11 @@ const PurchaseOrderEdit = () => {
         />
       )}
 
-      {deliveryOrderEditModal && (
-        <DeliveryOrderEditModal
-          deliveryOrderEditModal={deliveryOrderEditModal}
-          setDeliveryOrderEditModal={setDeliveryOrderEditModal}
-          deliveryOrderId={deliveryOrderId}
-        />
-      )}
+     
       <ComponentCard title="More Details">
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
-          <TabPane tabId="1">
-            {/* delivery order  */}
-            {deliveryOrders &&
-              deliveryOrders.map((element) => {
-                return (
-                  <Row key={element.delivery_order_id}>
-                    <Col md="6">
-                      <span>{moment(element.date).format('YYYY-MM-DD')}</span>
-                    </Col>
-                    <Col md="6">
-                      <span
-                        color="primary"
-                        className="m-2 color-primary"
-                        onClick={() => {
-                          setDeliveryOrderId(element.delivery_order_id);
-                          setDeliveryOrderEditModal(true);
-                        }}
-                      >
-                        <Icon.Edit />
-                      </span>
-                      <PdfDeliveryOrderPO
-                        id={id}
-                        deliveryOrderId={element.delivery_order_id}
-                        date={element.date}
-                      ></PdfDeliveryOrderPO>
-                    </Col>
-                  </Row>
-                );
-              })}
-          </TabPane>
+       
           <TabPane tabId="2">
             <Row>
               <AttachmentTab

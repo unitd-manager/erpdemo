@@ -54,7 +54,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
     <>
       <Modal size="lg" isOpen={editContactEditModal}>
         <ModalHeader>
-          ContactDetails
+          Edit Contact
           <Button
             color="secondary"
             onClick={() => {
@@ -70,8 +70,9 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
             <Col md="3" className="mb-4 d-flex justify-content-between"></Col>
           </Row>
           <Row>
-            <Col md="2">
-              <Label>title </Label>
+            <Col md="4">
+            <FormGroup>
+              <Label>Title </Label>
               <Input
                 type="select"
                 onChange={handleInputs}
@@ -85,8 +86,9 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
               </Input>
+              </FormGroup>              
             </Col>
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Name</Label>
                 <Input
@@ -98,7 +100,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
               </FormGroup>
             </Col>
 
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Email</Label>
                 <Input
@@ -109,7 +111,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
                 />
               </FormGroup>
             </Col>
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Position </Label>
                 <Input
@@ -120,7 +122,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
                 />
               </FormGroup>
             </Col>
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Dept </Label>
                 <Input
@@ -131,7 +133,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
                 />
               </FormGroup>
             </Col>
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Phone(Direct) </Label>
                 <Input
@@ -143,7 +145,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
               </FormGroup>
             </Col>
 
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Fax(Direct) </Label>
                 <Input
@@ -155,7 +157,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
               </FormGroup>
             </Col>
 
-            <Col md="2">
+            <Col md="4">
               <FormGroup>
                 <Label>Mobile </Label>
                 <Input

@@ -41,8 +41,8 @@ export default function CustomerFinanceInvoice({
                     <tr key={element.order_id}>
                       <td>{element.invoice_code}</td>
                       <td>{element.invoice_date}</td>
-                      <td>{element.invoice_status}</td>
-                      <td>{element.invoice_amount}</td>
+                      <td>{element.status}</td>
+                      <td>{element.InvoiceAmount}</td>
                       <td>{element.invoice_due_date}</td>
                  
                     

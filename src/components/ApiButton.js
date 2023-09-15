@@ -33,11 +33,11 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
           <Row>
             <Col >
          
-              <HasAccess
+              {/* <HasAccess
                 roles={null}
                 permissions={`${module}-edit`}
                 renderAuthFailed={<p></p>}
-        >
+        > */}
                 <Button
                   onClick={() => {
                     editData();
@@ -46,14 +46,14 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                   color="primary">
                   Save
                 </Button>
-              </HasAccess>
+              {/* </HasAccess> */}
             </Col>
             <Col >
-              <HasAccess
+              {/* <HasAccess
                 roles={null}
                 permissions={`${module}-edit`}
                 renderAuthFailed={<p></p>}
-              >
+              > */}
                 <Button
                   onClick={() => {
                     editData();
@@ -63,7 +63,7 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                 >
                   Apply
                 </Button>
-              </HasAccess>
+              {/* </HasAccess> */}
             </Col>
             <Col>
               <Button
@@ -75,7 +75,7 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                 Back To List
               </Button>
             </Col>
-            <Col>
+            {/* <Col>
               <HasAccess
                 roles={null}
                 permissions={`${module}-remove`}
@@ -84,7 +84,7 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                   Delete
                 </Button>
               </HasAccess>
-            </Col>
+            </Col> */}
           </Row>
         </ComponentCardV2>
       </FormGroup>

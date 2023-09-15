@@ -118,7 +118,7 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Opportunity List"
+          title="Enquiry List"
           Button={
             <Link to="/EnquiryDetails">
               <Button color="primary" className="shadow-none">

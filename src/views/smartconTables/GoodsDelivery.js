@@ -10,6 +10,7 @@ import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -49,7 +50,6 @@ const GoodsDelivery = () => {
   const columns = [
     {
       name: '#',
-     
     },
     {
       name: 'Edit',
@@ -62,41 +62,31 @@ const GoodsDelivery = () => {
     },
     {
       name: 'Delivery No',
-      
     },
     {
       name: 'Date',
-      
     },
     {
-        name: 'Order No',
-        
-      },
+      name: 'Order No',
+    },
     {
       name: 'Customer',
-      
     },
     {
-        name: 'department',
-        
-      },
-      {
-        name: 'salesman',
-        
-      },
+      name: 'department',
+    },
+    {
+      name: 'salesman',
+    },
     {
       name: 'Reference',
-      
     },
     {
       name: 'PO No',
-      
     },
     {
       name: 'Status',
-      
     },
-    
   ];
 
   return (
@@ -128,19 +118,23 @@ const GoodsDelivery = () => {
                   <tr key={element.goods_delivery_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}`}>
+                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.delivery_no}</td>
-                    <td>{element.goods_delivery_date}</td>
-                    <td>{element.order_no}</td>
+                    <td>{element.goods_delivery_code}</td>
+                    <td>
+                      {element.goods_delivery_date
+                        ? moment(element.goods_delivery_date).format('DD-MM-YYYY')
+                        : ''}
+                    </td>
+                    <td>{element.order_code}</td>
                     <td>{element.company_name}</td>
                     <td>{element.department}</td>
-                    <td>{element.salesman}</td>
+                    <td>{element.sales_man}</td>
                     <td>{element.goods_ref_no}</td>
                     <td>{element.po_no}</td>
-                    <td>{element.status}</td>
+                    <td>{element.goods_delivery_status}</td>
                   </tr>
                 );
               })}

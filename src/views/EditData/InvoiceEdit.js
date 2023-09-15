@@ -13,37 +13,90 @@ import creationdatetime from '../../constants/creationdatetime';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ItemTable from '../../components/BookingTable/ItemTable';
+import OrderItemTable from '../../components/BookingTable/OrderItemTable';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({});
   const [editInvoiceItemData, setEditInvoiceItemData] = useState(false);
   const [itemDetails, setItemDetails] = useState([]);
-  const { id } = useParams();
+  const [orderitemDetails, setOrderItemDetails] = useState([]);
+  const { insertedDataId, orderId } = useParams();
+
+  console.log('order ID:', orderId);
   const navigate = useNavigate();
   const handleInputs = (e) => {
     setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
   };
-  // const getInvoiceItemById = (invoiceItemId) => {
-  //   api
-  //     .get(`/invoice/getInvoiceItemsByItemsId/${invoiceItemId}`)
-  //     .then((response) => {
-  //       // Set the fetched data to the state
-  //       setEditInvoiceItem(response.data);
-  //     })
-  //     .catch((error) => {
-  //       // Handle errors here
-  //       console.error(error);
-  //     });
-  // };
-  // const handleEditClick = (invoiceItemId) => {
-  //   // Fetch the invoice item data
-  //   getInvoiceItemById(invoiceItemId);
-  //   // Open the Edit Modal
-  //   setEditModal(true);
-  // };
+  const generateData = () => {
+    // Step 1: Delete old order items by quote_id
+    api
+      .delete(`/finance/deleteinvoice_item/${insertedDataId}`)
+      .then(() => {
+        api
+          .post('/invoice/getOrderLineItemsById', { order_id: orderId })
+          .then((res) => {
+            const quoteItems = res.data.data;
+    
+            console.log('Received quote items:', quoteItems);
+    
+            if (quoteItems.length === 0) {
+              console.warn('No quote items to insert');
+              return;
+            }
+    
+            // Step 3: Insert new order items based on quote items
+            const insertInvoiceItems = (index) => {
+              if (index < quoteItems.length) {
+                const quoteItem = quoteItems[index];
+    
+                // Insert the order item
+                const orderItemData = {
+                 invoice_id: insertedDataId,
+                  qty: quoteItem.qty,
+                  unit_price: quoteItem.unit_price,
+                  item_title: quoteItem.item_title,
+                  total_cost: quoteItem.cost_price,
+                };
+    
+                console.log(`Inserting order item ${index + 1}:`, orderItemData);
+    
+                // Send a POST request to your /finance/insertorder_item API with the current order item
+                api
+                  .post('/finance/insertInvoiceItem', orderItemData)
+                  .then((result) => {
+                    if (result.data.msg === 'Success') {
+                      console.log(`Order item ${index + 1} inserted successfully`);
+                    } else {
+                      console.error(`Failed to insert order item ${index + 1}`);
+                    }
+                    // Continue to the next item
+                    insertInvoiceItems(index + 1);
+                  })
+                  .catch((error) => {
+                    console.error(`Error inserting order item ${index + 1}`, error);
+                    // Continue to the next item
+                    insertInvoiceItems(index + 1);
+                  });
+              } else {
+                console.log('All order items inserted successfully');
+                // You might want to trigger a UI update here
+              }
+            };
+    
+            // Start inserting order items from index 0
+            insertInvoiceItems(0);
+          })
+          .catch((error) => {
+            console.error('Error fetching quote items', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error deleting old order items', error);
+      });
+  };
   const editBookingById = () => {
     api
-      .post('/invoice/getInvoiceById', { invoice_id: id })
+      .post('/invoice/getInvoiceById', { invoice_id: insertedDataId })
       .then((res) => {
         setBookingDetails(res.data.data[0]);
       })
@@ -54,9 +107,20 @@ const InvoiceEdit = () => {
  
   const editItemById = () => {
     api
-      .post('/invoice/getInvoiceByItemId', { invoice_id: id })
+      .post('/invoice/getInvoiceByItemId', { invoice_id: insertedDataId })
       .then((res) => {
         setItemDetails(res.data.data);
+      })
+      .catch(() => {
+        //message('Booking Data Not Found', 'info');
+      });
+  };
+
+  const getOrderItemById = () => {
+    api
+      .post('/invoice/getInvoiceByOrderItemId', { invoice_id: insertedDataId })
+      .then((res) => {
+        setOrderItemDetails(res.data.data);
       })
       .catch(() => {
         //message('Booking Data Not Found', 'info');
@@ -97,7 +161,8 @@ const InvoiceEdit = () => {
   useEffect(() => {
     editBookingById();
     editItemById();
-  }, [id]);
+    getOrderItemById();
+  }, [insertedDataId]);
 
   return (
     <>
@@ -106,13 +171,25 @@ const InvoiceEdit = () => {
       <ToastContainer/>
       <ComponentCardV2>
       <Row>
+      <Col>
+              <Button
+                color="primary"
+                className="shadow-none"
+                onClick={() => {
+                  generateData();
+                  window.location.reload();
+                }}
+              >
+                Generate Data
+              </Button>
+            </Col>
          <Col>
               <Button
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
                   editInvoiceData();
-                  navigate('/Invoice');
+                  navigate('/SalesInvoice');
                 }}
               >
                 Save
@@ -156,7 +233,7 @@ const InvoiceEdit = () => {
       <InvoiceItem
         editInvoiceItemData={editInvoiceItemData}
         setEditInvoiceItemData={setEditInvoiceItemData}
-        invoiceInfo={id}
+        invoiceInfo={insertedDataId}
         ></InvoiceItem>
       <ComponentCard title="Invoice Items">
       <Col>
@@ -173,19 +250,19 @@ const InvoiceEdit = () => {
         <Row className="border-bottom mb-3">
          <ItemTable
         itemDetails={itemDetails}
-        invoiceInfo={id}
+        invoiceInfo={insertedDataId}
        />
       </Row>
       </ComponentCard>
-      {/* <EditInvoiceItem
-              editModal={editModal}
-              setEditModal={setEditModal}
-              editInvoiceModal={editInvoiceModal}
-              setInvoiceDatas={setInvoiceDatas}
-              invoiceDatas={invoiceDatas}
-              invoiceInfo={id}
-              editInvoiceItem={editInvoiceItem}
-            /> */}
+      <ComponentCard title="Order Items">
+     
+        <Row className="border-bottom mb-3">
+         <OrderItemTable
+        orderitemDetails={orderitemDetails}
+        
+       />
+      </Row>
+      </ComponentCard>
     </>
   );
 };

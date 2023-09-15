@@ -81,6 +81,7 @@ console.log('invoiceInfo',invoiceInfo);
         message('Line Items Added Successfully', 'success');
         setEditInvoiceItemData(false); // Close the modal or handle as needed
         console.log('All items inserted successfully');
+        window.location.reload();
       })
       .catch(() => {
         message('Cannot Add Line Items', 'error');

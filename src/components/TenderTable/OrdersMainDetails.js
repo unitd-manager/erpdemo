@@ -56,22 +56,7 @@ export default function TenderMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              {/* <Col md="3">
-                  <FormGroup>
-                    <Label>
-                     Company <span className="required"> *</span>
-                    </Label>
-                    <Input type="select" onChange={handleInputs} name="company_id">
-                      <option defaultValue="selected">Please Select</option>
-                      {company &&
-                        company.map((e) => (
-                          <option key={e.company_id} value={e.company_name}>
-                            {e.company_name}
-                          </option>
-                        ))}
-                    </Input>
-                  </FormGroup>
-                </Col> */}
+             
               <Col md="3">
                 <FormGroup>
                   <Label>Reference</Label>
@@ -122,6 +107,7 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.amount}
                     name="amount"
+                    readOnly
                   />
                 </FormGroup>
               </Col>

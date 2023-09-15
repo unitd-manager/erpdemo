@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../form-editor/editor.scss';
 import * as Icon from 'react-feather';
 import Swal from 'sweetalert2';
@@ -18,7 +19,6 @@ import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
-import PdfQuote from '../../components/PDF/PdfQuote';
 
 const TradingQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -31,12 +31,6 @@ const TradingQuotationEdit = () => {
   const [selectedCompany, setSelectedCompany] = useState();
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
-  //const [quoteLine, setQuoteLine] = useState();
-
-  //const [contact, setContact] = useState();
-  //   const [addContactModal, setAddContactModal] = useState(false);
-  //   const [addCompanyModal, setAddCompanyModal] = useState(false);
-
   const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
@@ -74,7 +68,7 @@ const TradingQuotationEdit = () => {
 
   const editTenderById = () => {
     api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
-      setTenderDetails(res.data.data[0]);
+      setTenderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
   };
@@ -92,9 +86,7 @@ const TradingQuotationEdit = () => {
       .post('/tradingquote/edit-Tradingquote', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+        
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -126,8 +118,7 @@ const TradingQuotationEdit = () => {
     fax: '',
     mobile: '',
   });
-
-  const handleAddNewContact = (e) => {
+ const handleAddNewContact = (e) => {
     setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
   };
 
@@ -144,7 +135,7 @@ const TradingQuotationEdit = () => {
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(() => {
           message('Unable to add Contact! try again later', 'error');
@@ -214,12 +205,9 @@ const TradingQuotationEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        id={id}
       ></TradingQuoteButton>
-      <Col md="4">
-        <Label>
-          <PdfQuote id={id} quoteId={id}></PdfQuote>
-        </Label>
-      </Col>
+     
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -274,7 +262,7 @@ const TradingQuotationEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By"></td>
+                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
                             <td data-label="Actions">
                               <span
                                 className="addline"

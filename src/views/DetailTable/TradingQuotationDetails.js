@@ -6,6 +6,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
 import AppContext from '../../context/AppContext';
@@ -78,7 +79,7 @@ const TradingQuotationDetails = () => {
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
-    quote_code: '',
+    opportunity_id: '',
     quote_date: '',
     company_id: '',
     company_name: '',
@@ -114,7 +115,7 @@ const TradingQuotationDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
+    if (tenderForms.opportunity_id !== '' && tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -164,7 +165,7 @@ const TradingQuotationDetails = () => {
             <Form>
               <FormGroup>
                 <Col md="9">
-                  <Label>Enquiry Code</Label>
+                  <Label>Enquiry Code<span className="required"> *</span></Label>
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}

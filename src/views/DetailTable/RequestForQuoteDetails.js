@@ -6,6 +6,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
 
 const RequestForQuoteDetails = () => {
   //All state variables
@@ -31,15 +32,18 @@ const RequestForQuoteDetails = () => {
     setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
   };
   //inserting data of job information
-  const insertJobInformation = () => {
+  const insertJobInformation = (code) => {
     if(requestForQuote.purchase_request_id !==''){
+      requestForQuote.rq_code = code;
+      requestForQuote.creation_date = creationdatetime;
     api
       .post('/quote/insertQuote', requestForQuote)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
+        const selectedQuoteId = encodeURIComponent(requestForQuote.purchase_quote_id);
         message('Request For Quote inserted successfully.', 'success');
         setTimeout(() => {
-          navigate(`/RequestForQuoteEdit/${insertedDataId}`);
+          navigate(`/RequestForQuoteEdit/${insertedDataId}?tab=1&purchase_quote_id=${selectedQuoteId}`);
         }, 300);
       })
       .catch(() => {
@@ -48,6 +52,17 @@ const RequestForQuoteDetails = () => {
       else{
         message('Please Select the quote', 'warning');
       }
+  };
+  //QUTO GENERATED CODE
+  const generateCode = () => {
+    api
+      .post('/quote/getCodeValue', { type: 'RequestQuoteCode' })
+      .then((res) => {
+        insertJobInformation(res.data.data);
+      })
+      .catch(() => {
+        insertJobInformation('');
+      });
   };
   useEffect(() => {
     getPurchaseRequest();
@@ -94,14 +109,14 @@ const RequestForQuoteDetails = () => {
                         type="button"
                         className="btn mr-2 shadow-none"
                         onClick={() => {
-                          insertJobInformation();
+                          generateCode();
                         }}
                       >
                         Save & Continue
                       </Button>
                       <Button
                         onClick={() => {
-                          navigate('/JobInformation');
+                          navigate('/RequestForQuote');
                         }}
                         type="button"
                         className="btn btn-dark shadow-none"

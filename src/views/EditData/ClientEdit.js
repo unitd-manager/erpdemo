@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,20 +7,18 @@ import ClientButton from '../../components/ClientTable/ClientButton';
 import ClientMainDetails from '../../components/ClientTable/ClientMainDetails';
 import ContactEditModal from '../../components/Tender/ContactEditModal';
 import ClientContactGetAndInsert from '../../components/ClientTable/ClientContactGetAndInsert';
-import ClientProjectDataGet from '../../components/ClientTable/ClientProjectDataGet';
-import ClientInvoiceDataGet from '../../components/ClientTable/ClientInvoiceDataGet';
-import ClientTenderDataGet from '../../components/ClientTable/ClientTenderDataGet';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
-// import NavTabs from '../../components/ClientTable/NavTabs';
 import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
 import Tab from '../../components/project/Tab';
+import AppContext from '../../context/AppContext';
 
 const ClientsEdit = () => {
   //Const Variables
@@ -30,10 +28,8 @@ const ClientsEdit = () => {
   const [clientsDetails, setClientsDetails] = useState();
   const [contactsDetails, setContactsDetails] = useState(null);
   const [editContactEditModal, setEditContactEditModal] = useState(false);
-  const [projectDetails, setProjectDetails] = useState();
-  const [tenderDetails, setTenderDetails] = useState();
-  const [invoiceDetails, setInvoiceDetails] = useState();
   const [allCountries, setallCountries] = useState();
+  const { loggedInuser } = useContext(AppContext);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -44,13 +40,10 @@ const ClientsEdit = () => {
     navigate('/client');
   };
 
-  // Start for tab refresh navigation  #Renuka 1-06-23  
-  const tabs =  [
-    {id:'1',name:'Contacts Linked'},
-    {id:'2',name:'Projects Linked'},
-    {id:'3',name:'Invoice Linked'},
-    {id:'4',name:'Tender Linked'},
-    {id:'5',name:'Add notes'},
+  // Start for tab refresh navigation  #Renuka 1-06-23
+  const tabs = [
+    { id: '1', name: 'Contacts Linked' },
+    { id: '2', name: 'Add notes' },
   ];
 
   const toggle = (tab) => {
@@ -72,15 +65,14 @@ const ClientsEdit = () => {
       .then((res) => {
         setClientsDetails(res.data.data[0]);
       })
-      .catch(() => {
-        //message('Clients Data Not Found', 'info');
-      });
+      .catch(() => {});
   };
 
   //Logic for edit data in db
   const editClientsData = () => {
     if (clientsDetails.company_name !== '') {
       clientsDetails.modification_date = creationdatetime;
+      clientsDetails.modified_by = loggedInuser.first_name;
       api
         .post('/clients/editClients', clientsDetails)
         .then(() => {
@@ -137,33 +129,28 @@ const ClientsEdit = () => {
     mobile: '',
   });
 
-  const AddNewContact = () => {
-  
-        const newContactWithCompanyId = newContactData;
-    newContactWithCompanyId.company_id = id;
-    if (
-      newContactWithCompanyId.salutation !== '' &&
-      newContactWithCompanyId.first_name !== '' 
-    
-    ) {
-    api
-      .post('/clients/insertContact', newContactWithCompanyId)
-      .then(() => {
-        message('Contact inserted successfully.', 'success');
-        window.location.reload();
-      })
-      .catch(() => {
-        message('Network connection error.', 'error');
-      });
-  }else {
-    message('Please fill all required fields', 'warning');
-  }
-};
-
-  //Contact Functions/Methods
   const handleAddNewContact = (e) => {
     setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
   };
+
+  const AddNewContact = () => {
+    const newContactWithCompanyId = newContactData;
+    newContactWithCompanyId.company_id = id;
+    if (newContactWithCompanyId.salutation !== '' && newContactWithCompanyId.first_name !== '') {
+      api
+        .post('/clients/insertContact', newContactWithCompanyId)
+        .then(() => {
+          message('Contact inserted successfully.', 'success');
+          window.location.reload();
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
+  };
+
   //  deleteRecord
   const DeleteClient = () => {
     api
@@ -176,41 +163,6 @@ const ClientsEdit = () => {
       });
   };
 
-  // Project By Id
-  const editProjectById = () => {
-    api
-      .post('/clients/getProjectsByIdCompany', { company_id: id })
-      .then((res) => {
-        setProjectDetails(res.data.data);
-      })
-      .catch(() => {
-        //message('Project Data Not Found', 'info');
-      });
-  };
-
-  // Invoice By id
-  const editInvoiceById = () => {
-    api
-      .post('/clients/getMainInvoiceByidCompany', { company_id: id })
-      .then((res) => {
-        setInvoiceDetails(res.data.data);
-      })
-      .catch(() => {
-       // message('Invoice Data Not Found', 'info');
-      });
-  };
-
-  // Tender By id
-  const editTenderById = () => {
-    api
-      .post('/clients/getTendersByIdcompany', { company_id: id })
-      .then((res) => {
-        setTenderDetails(res.data.data);
-      })
-      .catch(() => {
-        // message('Tender Data Not Found', 'info');
-      });
-  };
   //Api for getting all countries
   const getAllCountries = () => {
     api
@@ -251,10 +203,7 @@ const ClientsEdit = () => {
 
   useEffect(() => {
     editClientsById();
-    editProjectById();
     getContactLinked();
-    editInvoiceById();
-    editTenderById();
     getAllCountries();
   }, [id]);
 
@@ -305,22 +254,10 @@ const ClientsEdit = () => {
               contactData={contactData}
             />
           </TabPane>
-          {/* clientProject */}
-          <TabPane tabId="2">
-            <ClientProjectDataGet projectDetails={projectDetails}></ClientProjectDataGet>
-          </TabPane>
-          {/* ClientInvoice */}
-          <TabPane tabId="3">
-            <ClientInvoiceDataGet invoiceDetails={invoiceDetails}></ClientInvoiceDataGet>
-          </TabPane>
-          {/* ClientTender */}
-          <TabPane tabId="4">
-            <ClientTenderDataGet tenderDetails={tenderDetails}></ClientTenderDataGet>
-          </TabPane>
           {/* ADD NOTE */}
-          <TabPane tabId="5">
-              <AddNote recordId={id} roomName="AccountEdit" />
-              <ViewNote recordId={id} roomName="AccountEdit" />
+          <TabPane tabId="2">
+            <AddNote recordId={id} roomName="AccountEdit" />
+            <ViewNote recordId={id} roomName="AccountEdit" />
           </TabPane>
         </TabContent>
       </ComponentCard>
