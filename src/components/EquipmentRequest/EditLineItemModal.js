@@ -15,7 +15,8 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import api from '../../constants/api';
 import message from '../Message';
-
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData }) => {
   EditLineItemModal.propTypes = {
@@ -26,6 +27,7 @@ const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData 
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
   const [totalAmount, setTotalAmount] = useState();
+  const { loggedInuser } = React.useContext(AppContext);
 
   const handleData = (e) => {
     setLineItemData({ ...lineItemData, [e.target.name]: e.target.value });
@@ -41,13 +43,17 @@ const {id}=useParams();
   const UpdateData = () => {
     lineItemData.equipment_request_id=id;
     //lineItemData.amount=totalAmount;
+    lineItemData.modification_date = creationdatetime;
+    lineItemData.modified_by = loggedInuser.first_name;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
     api
       .post('/equipmentrequest/editEquipmentRequestItem', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
         message('Edit Line Item Udated Successfully.', 'success');
-        window.location.reload()
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
       })
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
