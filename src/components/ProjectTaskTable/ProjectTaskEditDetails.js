@@ -6,13 +6,12 @@ import { Editor } from 'react-draft-wysiwyg';
 import { ToastContainer } from 'react-toastify';
 import ComponentCard from '../ComponentCard';
 
-function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails, employeeProject, companydetails, description, handleDataEditor, setDescription}) {
+function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails, employeeProject, description, handleDataEditor, setDescription}) {
     PurchaseRequestEditDetails.propTypes = {
         projectTask: PropTypes.bool,
         handleInputs: PropTypes.func,
         projectdetails: PropTypes.bool,
         employeeProject: PropTypes.bool,
-        companydetails: PropTypes.bool,
         description: PropTypes.bool,
         handleDataEditor: PropTypes.func,
         setDescription: PropTypes.bool,
@@ -81,7 +80,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col md="3">
+                    {/* <Col md="3">
                       <FormGroup>
                         <Label>Company Name</Label>
                         <Input
@@ -101,7 +100,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                             })}
                         </Input>
                       </FormGroup>
-                    </Col>
+                    </Col> */}
                     
                     <Col md="3">
                       <FormGroup>
@@ -238,10 +237,23 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                           type="number"
                           onChange={handleInputs}
                           value={projectTask && projectTask.estimated_hours}
-                          name="hours"
+                          name="estimated_hours"
                         />
                       </FormGroup>
                     </Col>
+
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Actual Hours</Label>
+                        <Input
+                          type="number"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.actual_hours}
+                          name="actual_hours"
+                        />
+                      </FormGroup>
+                    </Col>
+
                   </Row>
                 </Form>
              

@@ -26,7 +26,7 @@ const TaskEdit = () => {
   const [projectTask, setProjectTask] = useState();
   const [employeeProject, setEmployeeProject] = useState();
   const [projectdetails, setProjectDetails] = useState();
-  const [companydetails, setCompanyDetails] = useState();
+  // const [companydetails, setCompanyDetails] = useState();
   const [description, setDescription] = useState('');
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
@@ -93,17 +93,17 @@ const TaskEdit = () => {
   };
 
   //Api call for getting company name dropdown
-  const getCompanyName = () => {
-    api
-      .get('/projecttask/getCompanyName')
-      .then((res) => {
-        setCompanyDetails(res.data.data);
-        console.log(res.data.data[0]);
-      })
-      .catch(() => {
-        message('Company not found', 'info');
-      });
-  };
+  // const getCompanyName = () => {
+  //   api
+  //     .get('/projecttask/getCompanyName')
+  //     .then((res) => {
+  //       setCompanyDetails(res.data.data);
+  //       console.log(res.data.data[0]);
+  //     })
+  //     .catch(() => {
+  //       message('Company not found', 'info');
+  //     });
+  // };
   
   //handleInputs data
   const handleInputs = (e) => {
@@ -160,7 +160,6 @@ const TaskEdit = () => {
     getTaskById();
     getProjectname();
     getEmployee();
-    getCompanyName();
   }, [id]);
 
   return (
@@ -173,7 +172,6 @@ const TaskEdit = () => {
          handleInputs = {handleInputs}
          projectdetails = {projectdetails}
          employeeProject ={employeeProject}
-         companydetails = {companydetails}
          description = {description}
          handleDataEditor = {handleDataEditor}
          setDescription = {setDescription}

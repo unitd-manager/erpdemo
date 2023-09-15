@@ -10,51 +10,54 @@ import api from '../../constants/api';
 import AppContext from '../../context/AppContext';
 import message from '../../components/Message';
 
-const GoodsReceiptDetails = () => {
+const PurchaseInvoiceDetails = () => {
   //all state variables
-  const [goodsreceiptforms, setGoodsReceiptForms] = useState({
-    goods_received_date: '',
+  const [purchaseinvoicedetails, setPurchaseInvoiceDetails] = useState({
     purchase_order_id: '',
+    purchase_invoice_date: '',
   });
+  const [purchaseorder, setPurchaseOrder] = useState();
   const [purchaseorderdetails, setPurchaseOrderDetails] = useState();
   //navigation and params
   const navigate = useNavigate();
   //supplierData in supplier details
   const handleInputs = (e) => {
-    setGoodsReceiptForms({ ...goodsreceiptforms, [e.target.name]: e.target.value });
+    setPurchaseInvoiceDetails({ ...purchaseinvoicedetails, [e.target.name]: e.target.value });
   };
    //get staff details
    const { loggedInuser } = useContext(AppContext);
   //inserting supplier data
-  const insertGoodsReceipt = () => {
-    if (goodsreceiptforms.purchase_order_id !== '' &&
-    goodsreceiptforms.goods_received_date !== ''
-    )
-    {
-    goodsreceiptforms.creation_date = creationdatetime;
-    goodsreceiptforms.created_by= loggedInuser.first_name;
-
-      api.post('/goodsreceipt/insertGoodsReceipt', goodsreceiptforms)
+  const insertPurchaseInvoice = (PurchaseInvoiceCode) => {
+    if (purchaseinvoicedetails.purchase_order_id !== '' &&
+    purchaseinvoicedetails.purchase_invoice_date!=='') 
+      {
+        purchaseinvoicedetails.purchase_invoice_code = PurchaseInvoiceCode;
+        purchaseinvoicedetails.creation_date = creationdatetime;
+        purchaseinvoicedetails.created_by= loggedInuser.first_name;
+        purchaseinvoicedetails.supplier_id= purchaseorderdetails.supplier_id; 
+        purchaseinvoicedetails.project_id = purchaseorderdetails.project_id;   
+      api
+        .post('/purchaseinvoice/insertPurchaseInvoice', purchaseinvoicedetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          message('Goods Receipt inserted successfully.', 'success');
+          message('Product inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/GoodsReceiptEdit/${insertedDataId}`);
+            navigate(`/PurchaseInvoiceEdit/${insertedDataId}`);
           }, 300);
         })
         .catch(() => {
-          message('Network connection error.', 'error');
+          message('Unable to edit record.', 'error');
         });
+    } else {
+      message('Please fill all required fields.', 'warning');
     }
-    else {
-      message('Please fill all required fields.', 'error');
-    }
-};
-    const getPoCode = () => {
+  };
+    
+const getPoCode = () => {
         api
-          .get('/goodsreceipt/getPoCode')
+          .get('/purchaseinvoice/getPoCode')
           .then((res) => {
-            setPurchaseOrderDetails(res.data.data);
+            setPurchaseOrder(res.data.data);
             console.log(res.data.data[0]);
           })
           .catch(() => {
@@ -62,13 +65,38 @@ const GoodsReceiptDetails = () => {
           });
       };
 
+  // Get Purchase Order data By Purchase Order Id
+  const getPurchaseOrderById = () => {
+    api
+      .post('/purchaseinvoice/getPurchaseOrderById', { purchase_order_id: purchaseinvoicedetails.purchase_order_id })
+      .then((res) => {
+        setPurchaseOrderDetails(res.data.data[0]);
+        console.log(res.data.data[0]);
+      })
+  };
 
-   useEffect(() => {
+   //Auto generation code
+   const generateCode = () => {
+    api
+      .post('/purchaseinvoice/getCodeValue', { type: 'PurchaseInvoiceCode' })
+      .then((res) => {
+        const PurchaseInvoiceCode = res.data.data
+        insertPurchaseInvoice(PurchaseInvoiceCode);
+      })
+      .catch(() => {
+        insertPurchaseInvoice('');
+      });
+  };
+
+  useEffect(() => {
+    getPurchaseOrderById(purchaseinvoicedetails.purchase_order_id);
     getPoCode();
-     }, []);
-    return (
+  }, [ purchaseinvoicedetails.purchase_order_id],[]);
+
+    
+   return (
     <div>
-       <BreadCrumbs />
+      <BreadCrumbs />
       <ToastContainer />
       <Row>
         <Col md="6" xs="12">
@@ -85,12 +113,12 @@ const GoodsReceiptDetails = () => {
                     <Input
                           type="select"
                           onChange={handleInputs}
-                          value={goodsreceiptforms && goodsreceiptforms.purchase_order_id}
+                          value={purchaseinvoicedetails && purchaseinvoicedetails.purchase_order_id}
                           name="purchase_order_id"
                         >
                           <option defaultValue="selected">Please Select</option>
-                          {purchaseorderdetails &&
-                            purchaseorderdetails.map((e) => {
+                          {purchaseorder &&
+                            purchaseorder.map((e) => {
                               return (
                                 <option key={e.purchase_order_id} value={e.purchase_order_id}>
                                   {e.po_code}
@@ -102,12 +130,12 @@ const GoodsReceiptDetails = () => {
 
                     <Col md="12">
                       <FormGroup>
-                        <Label>Goods Received Date<span className="required"> *</span>{' '}</Label>
+                        <Label>Invoice Date<span className="required"> *</span>{' '}</Label>
                         <Input
                           type="date"
                           onChange={handleInputs}
-                          value={moment(goodsreceiptforms && goodsreceiptforms.goods_received_date).format('YYYY-MM-DD')}
-                          name="goods_received_date"
+                          value={moment(purchaseinvoicedetails && purchaseinvoicedetails.purchase_invoice_date).format('YYYY-MM-DD')}
+                          name="purchase_invoice_date"
                         />
                       </FormGroup>
                     </Col>
@@ -119,7 +147,7 @@ const GoodsReceiptDetails = () => {
           <div className="pt-3 mt-3 d-flex align-items-center gap-2">
             <Button color="primary"
               onClick={() => {
-                insertGoodsReceipt();
+                generateCode();
               }}
               type="button"
               className="btn mr-2 shadow-none"  >
@@ -127,7 +155,7 @@ const GoodsReceiptDetails = () => {
             </Button>
             <Button
               onClick={() => {
-                navigate('/GoodsReceived')
+                navigate('/PurchaseInvoice')
               }}
               type="button"
               className="btn btn-dark shadow-none" >
@@ -144,4 +172,4 @@ const GoodsReceiptDetails = () => {
   );
 };
 
-export default GoodsReceiptDetails;
+export default PurchaseInvoiceDetails;

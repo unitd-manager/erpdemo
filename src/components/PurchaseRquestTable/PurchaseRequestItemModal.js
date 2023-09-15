@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import {
   Row,
   Col,
@@ -18,6 +18,8 @@ import Select from 'react-select';
 import api from '../../constants/api';
 import message from '../Message'
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+
 
 const AddPoModal = ({
   addPurchaseOrderModal,
@@ -41,6 +43,10 @@ const AddPoModal = ({
     price: null,
     published: 0,
   });
+   
+   //get staff details
+   const { loggedInuser } = useContext(AppContext);
+
   const [addMoreItem, setMoreItem] = useState([
     {
       id: random.int(1, 99).toString(),
@@ -152,8 +158,9 @@ const insertProduct = (ProductCode, ItemCode) => {
     productDetail.product_code = ProductCode;
     productDetail.item_code = ItemCode;
     productDetail.creation_date = creationdatetime;
+    productDetail.created_by = loggedInuser.first_name;
     api
-      .post('/purchaseorder/insertPurchaseProduct', productDetail)
+      .post('/purchaserequest/insertPurchaseProduct', productDetail)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
         message('Product inserted successfully.', 'success');
