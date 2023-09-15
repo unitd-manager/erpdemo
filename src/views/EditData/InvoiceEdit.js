@@ -127,12 +127,16 @@ const InvoiceEdit = () => {
       });
   };
 
-  const editInvoiceData = () => {
+  const editInvoiceData = (shouldNavigate) => {
     api
       .post('/invoice/editInvoices', bookingDetails)
       .then(() => {
         message('Record edited successfully', 'success');
-        editBookingById();
+        if (shouldNavigate) {
+          setTimeout(() => {
+            navigate('/SalesInvoice'); // Navigate after showing the message if shouldNavigate is true
+          }, 100);
+        }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -188,8 +192,8 @@ const InvoiceEdit = () => {
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
-                  editInvoiceData();
-                  navigate('/SalesInvoice');
+                  editInvoiceData(true);
+                
                 }}
               >
                 Save
@@ -200,7 +204,7 @@ const InvoiceEdit = () => {
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
-                  editInvoiceData();
+                  editInvoiceData(false);
                   
                 }}
               >
