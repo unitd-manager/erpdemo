@@ -17,21 +17,24 @@ import * as $ from 'jquery';
 import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const QuoteLineItem = ({
   addLineItemModal,
   setAddLineItemModal,
   quoteLine,
-  tenderDetails,
-  getLineItem,
+  // tenderDetails,
+  // getLineItem,
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
-    tenderDetails: PropTypes.any,
-    getLineItem: PropTypes.any,
+    // tenderDetails: PropTypes.any,
+    // getLineItem: PropTypes.any,
   };
+  const { loggedInuser } = React.useContext(AppContext);
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
     {
@@ -66,13 +69,17 @@ const QuoteLineItem = ({
   const addLineItemApi = (obj) => {
     //obj.opportunity_id = projectInfo;
     obj.project_quote_id = quoteLine;
+    obj.creation_date = creationdatetime;
+    obj.created_by = loggedInuser.first_name;
     api
       .post('/projectquote/insertQuoteItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
-        getLineItem(tenderDetails.project_quote_id);
+        //getLineItem(tenderDetails.project_quote_id);
         //setAddLineItemModal(false);
-        //window.location.reload();
+         setTimeout(() => {
+          window.location.reload();
+        }, 300);
       })
       .catch(() => {
         //message('Cannot Add Line Items', 'error');

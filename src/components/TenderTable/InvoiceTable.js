@@ -42,7 +42,7 @@ export default function CustomerFinanceInvoice({
                       <td>{element.invoice_code}</td>
                       <td>{element.invoice_date}</td>
                       <td>{element.status}</td>
-                      <td>{element.invoice_amount}</td>
+                      <td>{element.InvoiceAmount}</td>
                       <td>{element.invoice_due_date}</td>
                  
                     

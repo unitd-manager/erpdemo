@@ -13,6 +13,7 @@ import {
   Row,
   TabContent,
   TabPane,
+  Tooltip,
 } from 'reactstrap';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
@@ -39,11 +40,14 @@ const InvoiceEdit = () => {
   };
 
   const [activeTab, setActiveTab] = useState('1');
-
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
+  const toggleTooltip = () => {
+    setTooltipOpen(!tooltipOpen);
+  };
   const getReturnById = () => {
     api
       .post('/invoice/getSalesReturnId', { sales_return_id: insertedDataId })
@@ -77,12 +81,15 @@ const InvoiceEdit = () => {
       });
   };
 
-  const editInvoiceData = () => {
+  const editInvoiceData = (shouldNavigate) => {
     api
       .post('/finance/editSalesReturn', returnDetails)
       .then(() => {
-        message('Record edited successfully', 'success');
-        getReturnById();
+        if (shouldNavigate) {
+          setTimeout(() => {
+            navigate('/SalesReturn'); // Navigate after showing the message if shouldNavigate is true
+          }, 100);
+        }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -197,9 +204,9 @@ const InvoiceEdit = () => {
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
-                  editInvoiceData();
+                  editInvoiceData(true);
                   editInvoiceItemData();
-                  navigate('/SalesReturn');
+                
                 }}
               >
                 Save
@@ -210,7 +217,7 @@ const InvoiceEdit = () => {
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
-                  editInvoiceData();
+                  editInvoiceData(false);
                   editInvoiceItemData();
                 }}
               >
@@ -238,16 +245,25 @@ const InvoiceEdit = () => {
 
       <ComponentCard title="Invoice Items">
         <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={activeTab === '1' ? 'active' : ''}
-              onClick={() => {
-                toggle('1');
-              }}
-            >
-              Invoice Item
-            </NavLink>
-          </NavItem>
+        <NavItem>
+      <NavLink
+        className={activeTab === '1' ? 'active' : ''}
+        onClick={() => {
+          toggle('1');
+        }}
+        id="invoiceItemLink"
+      >
+        Invoice Item
+      </NavLink>
+      <Tooltip
+        placement="right"
+        isOpen={tooltipOpen}
+        target="invoiceItemLink"
+        toggle={toggleTooltip}
+      >
+        Remove the invoice item if you do not wish to return it.
+      </Tooltip>
+    </NavItem>
           <NavItem>
             <NavLink
               className={activeTab === '2' ? 'active' : ''}

@@ -116,10 +116,6 @@ const InvoiceData = () => {
     // },
   ];
 
-  
-
-  // const [bookings, setBookings] = useState([]);
-
   const handleBookingInputs = (e) => {
     const { name, value } = e.target;
     setBookingDetails({ ...bookingDetails, [name]: value });

@@ -28,7 +28,7 @@ const OpportunityEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Opportunity');
+    navigate('/SalesOrder');
   };
   const { insertedDataId, quoteId } = useParams();
 
@@ -138,21 +138,22 @@ const OpportunityEdit = () => {
 
   //Logic for edit data in db
 
-  const editTenderData = () => {
+  const editTenderData = (shouldNavigate) => {
     orderDetails.modification_date = creationdatetime;
     api
       .post('/finance/editFinances', orderDetails)
       .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-         
-        }, 300);
+        message('Record edited successfully', 'success');
+        if (shouldNavigate) {
+          setTimeout(() => {
+            navigate('/SalesOrder'); // Navigate after showing the message if shouldNavigate is true
+          }, 100);
+        }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
   };
-
   // Add new Contact
 
   const [newContactData, setNewContactData] = useState({

@@ -25,7 +25,7 @@ const OpportunityEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Opportunity');
+    navigate('/Enquiry');
   };
 
   const addContactToggle = () => {
