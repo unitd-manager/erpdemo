@@ -71,6 +71,7 @@ const InvoiceEdit = () => {
                     }
                     // Continue to the next item
                     insertInvoiceItems(index + 1);
+                    window.location.reload();
                   })
                   .catch((error) => {
                     console.error(`Error inserting order item ${index + 1}`, error);
@@ -181,7 +182,7 @@ const InvoiceEdit = () => {
                 className="shadow-none"
                 onClick={() => {
                   generateData();
-                  window.location.reload();
+                  
                 }}
               >
                 Generate Data

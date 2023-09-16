@@ -62,6 +62,8 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                     }
                     // Continue to the next item
                     insertOrderItems(index + 1);
+                    window.location.reload();
+
                   })
                   .catch((error) => {
                     console.error(`Error inserting order item ${index + 1}`, error);
@@ -99,7 +101,6 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 color="primary"
                 onClick={() => {
                   generateData();
-                  window.location.reload();
                 }}
               >
                 Generate Data
