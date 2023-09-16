@@ -23,7 +23,8 @@ import ApiButton from '../../components/ApiButton';
 const PurchaseOrderEdit = () => {
   //All state variable
   const [purchaseDetails, setPurchaseDetails] = useState();
-  const [supplier, setSupplier] = useState([]);
+    const [supplier, setSupplier] = useState([]);
+  const [request, setRequest] = useState([]);
   const [product, setProduct] = useState();
   const [historyProduct, setHistoryProduct] = useState();
   const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
@@ -43,7 +44,6 @@ const PurchaseOrderEdit = () => {
   const [gTotal, setGtotal] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
-  // const  [request, setRequest] = useState([]);
 
 
   //const applyChanges = () => {};
@@ -90,17 +90,19 @@ const PurchaseOrderEdit = () => {
       });
   };
 
-    // Gettind data from Job By Id
-    const getRequestForQuote = () => {
-      api
-        .get('/quote/SupplierQuote')
-        .then((res) => {
-          setSupplier(res.data.data);
-        })
-        .catch(() => {
-          message('Supplier Data Not Found', 'info');
-        });
-    };
+  const getRequestForQuote = (supplierIds) => {
+    api
+      .post('/quote/SupplierQuote', {supplier_id : supplierIds})
+      .then((res) => {
+        console.log('API Response:', res.data); // Log the API response
+        setRequest(res.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching purchase_quote_id:', error);
+      });
+  };
+  
+
   
   const handlePOInputs = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -207,7 +209,7 @@ const PurchaseOrderEdit = () => {
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
-    { id: '1', name: 'Delivery order' },
+    // { id: '1', name: 'Delivery order' },
     { id: '2', name: 'Attachments' },
     { id: '3', name: 'Notes' },
   ];
@@ -233,8 +235,13 @@ const PurchaseOrderEdit = () => {
     getSupplier();
     getPoProduct();
     getPurchaseOrderId();
-    getRequestForQuote();
+    getSupplier();
+    if (purchaseDetails && purchaseDetails.supplier_id) {
+      getRequestForQuote(purchaseDetails.supplier_id); // Pass the supplier_id as an argument
+    }
   }, [id]);
+
+  
 
   return (
     <>
@@ -260,9 +267,21 @@ const PurchaseOrderEdit = () => {
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
         supplier={supplier}
+        request={request}
         handleInputs={handleInputs}
         purchaseDetails={purchaseDetails}
+        getSupplier={getSupplier}
       />
+         <Col>
+              <Button
+                className="shadow-none"
+                color="primary"
+                onClick={() => {
+                }}
+              >
+                Generate Data
+              </Button>
+            </Col>
       <ComponentCard title="Product Linked">
         <AddPoModal
           PurchaseOrderId={id}
@@ -297,6 +316,7 @@ const PurchaseOrderEdit = () => {
             <b color="primary">Grand Total:{gTotal}</b>
           </Col>
         </Row>
+     
         <ProductLinkedTable
           products={products}
           setProduct={setProduct}
