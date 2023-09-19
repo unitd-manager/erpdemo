@@ -131,7 +131,7 @@ const Proposal = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.proposal_title}</td>
+                    <td>{element.title}</td>
 
                     <td>{element.quote_code}</td>
                     <td>{element.company_name}</td>

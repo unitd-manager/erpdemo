@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// // Define the base URL(s) conditionally
+// Define the base URL(s) conditionally
 let baseURL;
 
 if (process.env.NODE_ENV === 'production') {
@@ -16,7 +16,7 @@ const api = axios.create({
 
 
 // const api = axios.create({
-//baseURL: 'http://43.228.126.245:5001',
+// baseURL: 'http://43.228.126.245:5001',
 //  // baseURL: 'http://localhost:5001',
  
 //  });

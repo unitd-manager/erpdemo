@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier }) {
+function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, request }) {
   PurchaseOrderDetailsPart.propTypes = {
     purchaseDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     supplier: PropTypes.array,
+    request: PropTypes.array,
   };
+  
   return (
     <div>
       <Form>
@@ -97,6 +99,28 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier }) {
                   </Input>
                 </FormGroup>
               </Col>
+              <Col md="3">
+  <FormGroup>
+    <Label>RQ CODE</Label>
+    <Input
+      type="select"
+      value={purchaseDetails && purchaseDetails.purchase_quote_id}
+      name="purchase_quote_id"
+      onChange={handleInputs}
+    >
+      <option defaultValue="selected">Please Select</option>
+      {request &&
+        request.map((e) => {
+          return (
+            <option key={e.supplier_id} value={e.purchase_quote_id}>
+              {e.rq_code}
+            </option>
+          );
+        })}
+    </Input>
+  </FormGroup>
+</Col>
+
             </Row>
             <Row>
               <Col md="3">
