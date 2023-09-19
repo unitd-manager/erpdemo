@@ -127,6 +127,7 @@ const OrderTable = Loadable(lazy(() => import('../views/smartconTables/SalesOrde
 const SalesInvoice = Loadable(lazy(() => import('../views/smartconTables/SalesInvoice')));
 const SalesReturn = Loadable(lazy(() => import('../views/smartconTables/SalesReturn')));
 const SalesReceipt = Loadable(lazy(() => import('../views/smartconTables/SalesReceipt')));
+const MakeSupplier = Loadable(lazy(() => import('../views/smartconTables/MakeSupplier')));
 const OpportunityTable = Loadable(lazy(() => import('../views/smartconTables/Opportunity')));
 const ProjectEnquiryTable = Loadable(lazy(() => import('../views/smartconTables/ProjectEnquiry')));
 const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice')));
@@ -184,6 +185,7 @@ const SalesOrderDetails = Loadable(lazy(() => import('../views/DetailTable/Sales
 const InvoiceDetails = Loadable(lazy(() => import('../views/DetailTable/InvoiceDetails')));
 const ReturnDetails = Loadable(lazy(() => import('../views/DetailTable/ReturnDetails')));
 const ReceiptDetails = Loadable(lazy(() => import('../views/DetailTable/ReceiptDetails')));
+const MakeSupplierDetails = Loadable(lazy(() => import('../views/DetailTable/MakeSupplierDetails')));
 const ProjectEnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectEnquiryDetails')));
 const TradingQuotationDetails = Loadable(lazy(() => import('../views/DetailTable/TradingQuotationDetails')));
 const ProjectQuotationDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectQuotationDetails')));
@@ -576,6 +578,7 @@ const Routernew = () => {
           <Route path="/SalesInvoice" name="tenderdata" element={<SalesInvoice />}></Route>
           <Route path="/SalesReturn" name="tenderdata" element={<SalesReturn />}></Route>
           <Route path="/SalesReceipt" name="tenderdata" element={<SalesReceipt />}></Route>
+          <Route path="/MakeSupplier" name="tenderdata" element={<MakeSupplier />}></Route>
           <Route path="/Opportunity" name="clienttdata" element={<OpportunityTable />}></Route>
           <Route path="/ProjectEnquiry" name="clienttdata" element={<ProjectEnquiryTable />}></Route>
           <Route path="/Task" name="tenderdata" element={<TaskTable />}></Route>
@@ -595,6 +598,7 @@ const Routernew = () => {
           <Route path="/InvoiceDetails" name="clienttdata" element={<InvoiceDetails />}></Route>
           <Route path="/ReturnDetails" name="clienttdata" element={<ReturnDetails />}></Route>
           <Route path="/ReceiptDetails" name="clienttdata" element={<ReceiptDetails />}></Route>
+          <Route path="/MakeSupplierDetails" name="clienttdata" element={<MakeSupplierDetails />}></Route>
           <Route path="/TradingQuotationDetails" name="clienttdata" element={<TradingQuotationDetails />}></Route>
           <Route path="/ProjectQuotationDetails" name="clienttdata" element={<ProjectQuotationDetails />}></Route>
           <Route path="/ProjectJobOrderDetails" name="clienttdata" element={<ProjectJobOrderDetails />}></Route>

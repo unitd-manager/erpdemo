@@ -17,6 +17,8 @@ import * as $ from 'jquery';
 import random from 'random';
 import api from '../../constants/api';
 import message from '../Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const QuoteLineItem = ({
   addLineItemModal,
@@ -33,6 +35,7 @@ const QuoteLineItem = ({
     getLineItem: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
+  const { loggedInuser } = React.useContext(AppContext);
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
@@ -65,6 +68,8 @@ const QuoteLineItem = ({
   //Insert Invoice Item
   const addLineItemApi = (obj) => {
     //obj.opportunity_id = projectInfo;
+    obj.creation_date = creationdatetime;
+    obj.created_by = loggedInuser.first_name;
     obj.project_job_id = quoteLine;
     api
       .post('/joborder/insertJobItems', obj)
