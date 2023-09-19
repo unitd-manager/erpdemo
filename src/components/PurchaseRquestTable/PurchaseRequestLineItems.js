@@ -92,7 +92,7 @@ return (
                                 <td data-label="Updated By">{e.modified_by}</td>
                                 {quote && QuoteProject === undefined && (
                                   <td data-label="Actions">
-                                    <span
+                                    {/* <span
                                       className="addline"
                                       onClick={() => {
                                         // setEditLineModelItem(e);
@@ -100,7 +100,7 @@ return (
                                       }}
                                     >
                                       <Icon.Edit2 />
-                                    </span>
+                                    </span> */}
                                     <span
                                       className="addline"
                                       onClick={() => {
