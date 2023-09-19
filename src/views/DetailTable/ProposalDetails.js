@@ -35,6 +35,8 @@ const ProposalDetails = () => {
   
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
+    title: '',
+    proposal_date: '',
     
   });
 
