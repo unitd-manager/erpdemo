@@ -11,13 +11,13 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
   };
   return (
     <>
-      <ComponentCard title=" Project Planning Edit">
+      <ComponentCard title="Price List Edit">
         <Form>
           <FormGroup>
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Customer Name</Label>
+                  <Label>Customer Name<span style={{ color: 'red' }}>*</span></Label>
                   <br />
                   <Input
                   type="text"
@@ -29,7 +29,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
              
             <Col md="4">
               <FormGroup>
-                <Label>Notes <span style={{ color: 'red' }}>*</span></Label>
+                <Label>Notes </Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
@@ -38,9 +38,6 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 />
               </FormGroup>
             </Col>
-              
-            </Row>
-            <Row>
             <Col md="4">
                 <FormGroup>
                   <Label>Effective Date</Label>
@@ -52,6 +49,9 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
+            </Row>
+            <Row>
+            
               <Col md="4">
                 <FormGroup>
                   <Label> Expiry Date</Label>
