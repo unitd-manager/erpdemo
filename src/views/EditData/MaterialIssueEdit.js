@@ -150,8 +150,8 @@ const MaterialIssueEdit = () => {
               setAttachmentModal={setAttachmentModal}
               roomName={RoomName}
               fileTypes={fileTypes}
-              altTagData="ProjectAttach Data"
-              desc="ProjectAttach Data"
+              altTagData="MaterialIssueAttach Data"
+              desc="MaterialIssueAttach Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
             />

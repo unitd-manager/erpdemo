@@ -18,23 +18,26 @@ import random from 'random';
 import AsyncSelect from 'react-select/async';
 import api from '../../constants/api';
 import message from '../Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const QuoteLineItem = ({
   addLineItemModal,
   setAddLineItemModal,
   quoteLine,
-  tenderDetails,
-  getLineItem,
+  // tenderDetails,
+  // getLineItem,
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
-    tenderDetails: PropTypes.any,
-    getLineItem: PropTypes.any,
+    // tenderDetails: PropTypes.any,
+    // getLineItem: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [supplier, setSupplier] = useState([]);
+  const { loggedInuser } = React.useContext(AppContext);
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
@@ -97,14 +100,18 @@ const QuoteLineItem = ({
   //Insert Invoice Item
   const addLineItemApi = (obj) => {
     //obj.opportunity_id = projectInfo;
+    obj.creation_date = creationdatetime;
+    obj.created_by = loggedInuser.first_name;
     obj.material_request_id = quoteLine;
     api
       .post('/materialrequest/insertQuoteItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
-        getLineItem(tenderDetails.material_request_id);
+        //getLineItem(tenderDetails.material_request_id);
         //setAddLineItemModal(false);
-        //window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
       })
       .catch(() => {
         //message('Cannot Add Line Items', 'error');

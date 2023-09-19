@@ -27,7 +27,7 @@ import api from '../../constants/api';
 export default function PlanningCpanel({
    setPlanData,
    setPlanEditModal,
-  // deleteRecord,
+   deleteRecord,
   planningDetails,
   addContactToggle,
   addContactModal,
@@ -40,7 +40,7 @@ export default function PlanningCpanel({
     setPlanData: PropTypes.func,
     setPlanEditModal: PropTypes.func,
     setNewPlanningData: PropTypes.func,
-    // deleteRecord: PropTypes.func,
+    deleteRecord: PropTypes.func,
     planningDetails: PropTypes.any,
     addContactToggle: PropTypes.func,
     addContactModal: PropTypes.bool,
@@ -51,6 +51,7 @@ export default function PlanningCpanel({
 
 
  
+  
 // ...
 
 const [addMoreItem, setMoreItem] = useState([
@@ -119,7 +120,10 @@ const loadOptions = (inputValue, callback) => {
     callback(options);
   });
 };
+
+
   useEffect(() => {
+
  }, []);
   //  Table Contact
   const columns = [
@@ -231,17 +235,24 @@ const loadOptions = (inputValue, callback) => {
                         {addMoreItem.map((item) => (
                             <Col md="4" >
                               <FormGroup>
-                                <Label>Unit</Label>
+                              <Label>Unit</Label>
                                 <Input
-                                  type="text"
-                                  name="unit"
+                                  type="select"
                                   onChange={(e) => {
                                     // Handle unit change and update state
                                     const newUnit = e.target.value;
                                     handleUnitChange(item.id, newUnit);
                                   }}
                                   value={item.unit} 
-                                />
+                                  name="unit"
+                                >
+                                  <option defaultValue="selected">Please Select</option>
+                                  <option value="KGS">KGS</option>
+                                  <option value="PCS">PCS</option>
+                                  <option value="EA">EA</option>
+                                  <option value="NOS">NOS</option>
+                                  <option value="BOX">BOX</option>
+                                </Input>
                               </FormGroup>
                             </Col>
                           ))}
@@ -304,6 +315,14 @@ const loadOptions = (inputValue, callback) => {
                         >
                           <Icon.Edit2 />
                         </span>
+                        <span
+                                className="addline"
+                                onClick={() => {
+                                  deleteRecord(element.price_list_item_id);
+                                }}
+                              >
+                                <Icon.Trash2 />
+                              </span>
                       </div>
                     </td>
                     {/* <td>

@@ -67,7 +67,7 @@ const RequestForQuote = () => {
       sortable: false,
     },
     {
-      name: 'Code',
+      name: 'Purchase Request Code',
       selector: 'purchase_request_code',
       sortable: true,
       grow: 0,
@@ -94,13 +94,7 @@ const RequestForQuote = () => {
       width: 'auto',
       grow: 3,
     },
-    {
-      name: 'Total Amount',
-      selector: 'total_amount',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
-    },
+  
   ];
   return (
     <div className="MainDiv">
@@ -139,7 +133,6 @@ const RequestForQuote = () => {
                     <td>{element.status}</td>
                     <td>{element.date_issued}</td>
                     <td>{element.due_date}</td>
-                    <td>{element.total_amount}</td>
                   </tr>
                 );
               })}

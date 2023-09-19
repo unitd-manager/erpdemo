@@ -25,7 +25,7 @@ import message from '../../components/Message';
 import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
 // import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 //geting data from invoice
-const InvoiceData = () => {
+const MakeSupplier = () => {
   //State variable
   const { id } = useParams();
   const [invoice, setInvoice] = useState(null);
@@ -287,7 +287,7 @@ const InvoiceData = () => {
 
         <Modal isOpen={secondModalOpen} toggle={() => setSecondModalOpen(!secondModalOpen)}>
           <ModalHeader toggle={() => setSecondModalOpen(!secondModalOpen)}>
-            Create receipt
+            MakeSupplierPayment
           </ModalHeader>
           <ModalBody>
        <ReceiptCreate 
@@ -300,4 +300,4 @@ const InvoiceData = () => {
     </div>
   );
 };
-export default InvoiceData;
+export default MakeSupplier;

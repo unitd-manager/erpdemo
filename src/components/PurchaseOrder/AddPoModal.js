@@ -77,46 +77,7 @@ const AddPoModal = ({
     },
   ]);
 
-  // const [query, setQuery] = useState('');
-  // const [filteredOptions, setFilteredOptions] = useState([]);
-
-  // const handleInputChange = async (event) => {
-  //   const inputQuery = event.target.value;
-  //   setQuery(inputQuery);
-
-  //   try {
-  //     if (inputQuery.trim() === '') {
-  //       setFilteredOptions([]);
-  //     } else {
-  //       api.post('/product/getProductsbySearchFilter',{keyword:inputQuery}).then((res) => {
-  //         const items = res.data.data;
-  //         const finaldat = [];
-  //         items.forEach((item) => {
-  //           finaldat.push({ value: item.product_id, label: item.title });
-  //         });
-  //         console.log('productsearchdata',finaldat)
-  //         console.log('finaldat',finaldat)
-  //         // setProductValue(finaldat);
-  //         setFilteredOptions(finaldat);
-  //       });
-        
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
-  // const handleSelectOption = (selectedOption,itemId) => {
-  //   setQuery(selectedOption);
-  //   const element = addMoreItem.find((el) => el.id === itemId);
-  //   element.title = selectedOption.label;
-  //   element.item_title = selectedOption.label;
-  //   element.product_id = selectedOption.value.toString();
-  //   setMoreItem(addMoreItem);
-  //   setFilteredOptions([]); // Clear the suggestions when an option is selected
-  //   // Additional actions to perform when an option is selected
-  //   console.log('selectedoption',selectedOption)
-  // };
+  
 
   const AddNewLineItem = () => {
     setMoreItem([
@@ -178,19 +139,7 @@ const AddPoModal = ({
     setProductDetail({ ...productDetail, [e.target.name]: e.target.value });
   };
 
-  //   Get Products
-  // const getProduct = (e) => {
-  //   api.post('/product/getProductsbySearchFilter',{keyword:e.target.value}).then((res) => {
-  //     const items = res.data.data;
-  //     const finaldat = [];
-  //     items.forEach((item) => {
-  //       finaldat.push({ value: item.product_id, label: item.title });
-  //     });
-  //     console.log('productsearchdata',finaldat)
-  //     setProductValue(finaldat);
-  //   });
-  // };
- //   Get Products
+
  const getProduct = () => {
   api.get('/product/getProducts').then((res) => {
     const items = res.data.data;
@@ -307,15 +256,6 @@ const insertProduct = (ProductCode, ItemCode) => {
         message('Unable to add Product!', 'error');
       });
   };
-
-  //     const insertlineItem = () => {
-  //        addMoreItem.forEach(pItems=>{
-  //         if(pItems.item !== ''){
-  //             poProduct(pItems)
-  //         }
-
-  //        })
-  //    }
 
   const getAllValues = () => {
     const result = [];
@@ -477,30 +417,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                         />
                         <Input value={item.product_id} type="hidden" name="product_id"></Input>
                         <Input value={item.title} type="hidden" name="title"></Input>
-                          {/* <div className="autocomplete-container">
-      <Input className="autocomplete-input"
-        type="text"
-        value={query.label}
-        onChange={(e)=>{handleInputChange(e,item.id)}}
-        placeholder="Search..."
-      />
-
-      {filteredOptions.length > 0 && (
-        <ul className="autocomplete-suggestions">
-          {filteredOptions.map((option) => (
-            <option
-              key={option.product_id}
-              onClick={() => handleSelectOption(option,item.id)}
-              value={option.product_id}
-            >
-              {option.label}
-            </option>
-          ))}
-        </ul>
-      )}
-      <Input value={item.product_id} type="hidden" name="product_id"></Input>
-                        <Input value={item.title} type="hidden" name="title"></Input> 
-    </div> */}
+                        
                       </td>
 
                       <td data-label="Unit">
@@ -523,8 +440,8 @@ const insertProduct = (ProductCode, ItemCode) => {
                       </td>
                       <td data-label="Cost Price">
                         <Input
-                          defaultValue={item.cost_price}
                           type="number"
+                          defaultValue={item.cost_price}
                           onChange={(e) => updateState(index, 'cost_price', e)}
                           value={insertPurchaseOrderData && insertPurchaseOrderData.cost_price}
                           name="cost_price"
@@ -538,16 +455,16 @@ const insertProduct = (ProductCode, ItemCode) => {
                           onChange={(e) => updateState(index, 'mrp', e)}
                           value={insertPurchaseOrderData && insertPurchaseOrderData.mrp}
                         />
-                        {item.price}
                       </td>
                       <td data-label="VAT">
-                        <Input
-                          type="number"
-                          defaultValue={item.gst}
-                          name="gst"
-                          onChange={(e) => updateState(index, 'gst', e)}
-                          value={insertPurchaseOrderData && insertPurchaseOrderData.gst}
-                        />
+                      <Input
+  type="number"
+  defaultValue={item.gst}
+  name="gst"
+  onChange={(e) => updateState(index, 'gst', e)}
+  value={item.gst} // Use item.gst here
+/>
+
                       </td>
                       <td data-label="Action">
                         {' '}

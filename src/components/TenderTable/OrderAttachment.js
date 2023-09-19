@@ -8,7 +8,7 @@ import ViewFileComponentV2 from '../ProjectModal/ViewFileComponentV2';
 export default function OrderAttachment() {
     OrderAttachment.propTypes = {
     }
-    const { id } = useParams();
+    const { insertedDataId } = useParams();
     const [update, setUpdate] = useState(false);
     const [attachmentModal, setAttachmentModal] = useState(false);
     const [RoomName, setRoomName] = useState('');
@@ -43,7 +43,7 @@ export default function OrderAttachment() {
     </Col>
   </Row>
   <AttachmentModalV2
-    moduleId={id}
+    moduleId={insertedDataId}
     attachmentModal={attachmentModal}
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
@@ -55,7 +55,7 @@ export default function OrderAttachment() {
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="SalesOrder" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={insertedDataId} roomName="SalesOrder" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }
