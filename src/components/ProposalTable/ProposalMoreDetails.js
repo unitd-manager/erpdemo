@@ -59,6 +59,7 @@ export default function ProposalMoreDetails({
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.quote_code}
                     name="quote_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -72,7 +73,7 @@ export default function ProposalMoreDetails({
                     type="text"
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.title}
-                    name="quote_code"
+                    name="title"
                   />
                 </FormGroup>
               </Col>
@@ -100,6 +101,7 @@ export default function ProposalMoreDetails({
                     }}
                     value={proposalDetails && proposalDetails.company_id}
                     name="company_id"
+                    disabled
                   >
                     <option value="selected">Please Select</option>
                     {company &&

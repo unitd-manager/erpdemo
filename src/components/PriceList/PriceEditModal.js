@@ -54,7 +54,7 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
     <>
       <Modal size="lg" isOpen={editPlanEditModal}>
         <ModalHeader>
-          CpanelDetails
+          PriceDetails
           <Button
             color="secondary"
             onClick={() => {

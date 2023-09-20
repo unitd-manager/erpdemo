@@ -6,9 +6,11 @@ import ComponentCard from '../ComponentCard';
 export default function TenderMoreDetails({
   tenderDetails,
   handleInputs,
+  company
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
+    company: PropTypes.array,
     handleInputs: PropTypes.object,
  };
   return (
@@ -57,17 +59,26 @@ export default function TenderMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
-                <FormGroup>
-                  <Label>Customer</Label>
-                  <Input
-                    type="text"
-                    value={tenderDetails && tenderDetails.company_name}
-                    onChange={handleInputs}
-                    name="company_name"
-                    readOnly
-                  />
-                </FormGroup>
-              </Col>
+                    <Label>
+                      Company Name <span className="required"> *</span>{' '}
+                    </Label>
+                    <Input
+                      type="select"
+                      name="company_id"
+                      value={tenderDetails && tenderDetails.company_id}
+                      onChange={handleInputs}
+                    >
+                      <option>Please Select</option>
+                      {company &&
+                        company.map((ele) => {
+                          return (
+                            <option key={ele.company_id} value={ele.company_id}>
+                              {ele.company_name}
+                            </option>
+                          );
+                        })}
+                    </Input>
+                  </Col>
               <Col md="3">
                 <FormGroup>
                   <Label>Reference</Label>
@@ -117,6 +128,7 @@ export default function TenderMoreDetails({
                     <option value="Estimated">Estimated</option>
                     <option value="Approved">Approved</option>
                     <option value="Awarded">Awarded</option>
+                    <option value="ConvertedtoProject">Converted to Project</option>
                     <option value="Proposal Approved">Proposal Approved</option>
                     </Input>
                 </FormGroup>

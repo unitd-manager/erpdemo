@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TabContent, TabPane, Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -164,6 +165,7 @@ const ProposalEdit = () => {
   //Logic for edit data in db
 
   const editProposalData = () => {
+    if ( proposalDetails.title !== '' ) {
     proposalDetails.modification_date = creationdatetime;
     api
       .post('/proposal/editProposal', proposalDetails)
@@ -176,6 +178,11 @@ const ProposalEdit = () => {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+      
+    }
+    else {
+      message('Please fill all required fields', 'warning');
+    }
   };
 
   // Add new Contact
