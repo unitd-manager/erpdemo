@@ -31,7 +31,7 @@ export default function TenderAttachment() {
         className="shadow-none"
         color="primary"
         onClick={() => {
-          setRoomName('Tender');
+          setRoomName('Enquiry');
           setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
           dataForAttachment();
           setAttachmentModal(true);
@@ -48,14 +48,14 @@ export default function TenderAttachment() {
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
     fileTypes={fileTypes}
-    altTagData="TenderRelated Data"
-    desc="TenderRelated Data"
+    altTagData="EnquiryRelated Data"
+    desc="EnquiryRelated Data"
     recordType="RelatedPicture"
     mediaType={attachmentData.modelType}
     update={update}
     setUpdate={setUpdate}
   />
-  <ViewFileComponentV2 moduleId={id} roomName="Tender" recordType="RelatedPicture" update={update}
+  <ViewFileComponentV2 moduleId={id} roomName="Enquiry" recordType="RelatedPicture" update={update}
     setUpdate={setUpdate} /></div>
   )
 }
