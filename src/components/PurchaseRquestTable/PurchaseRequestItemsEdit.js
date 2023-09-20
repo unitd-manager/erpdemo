@@ -40,7 +40,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
 //   updatedObject.total_cost = quantity * unitPrice;
   updatedObject.modification_date = creationdatetime;
   updatedObject.modified_by = loggedInuser.first_name;
-    copyDeliverOrderProducts[index] = updatedObject;
+  copyDeliverOrderProducts[index] = updatedObject;
     setPurchaseRequestEditDetails(copyDeliverOrderProducts);
   }
 
@@ -49,7 +49,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
   //Api call for getting Vehicle Insurance Data By ID
   const PurchaseRequestLineItemById = () => {
     api
-      .post('/purchaserequest/PurchaseRequestLineItemById', {purchase_request_id: PurchaseRequestID})
+      .get('/purchaserequest/PurchaseRequestLineItem', {purchase_request_id: PurchaseRequestID})
       .then((res) => {
         setPurchaseRequestEditDetails(res.data.data);
       })
@@ -110,10 +110,10 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
                       <tr key={item.id}>                     
                         <td data-label="Title">
                           <Input
-                            defaultValue={item.product_id}
+                            defaultValue={item.item_title}
                             type="text"
-                            name="product_id"
-                            onChange={(e) => updateState(index, 'product_id', e)}
+                            name="item_title"
+                            onChange={(e) => updateState(index, 'item_title', e)}
                           />
                         </td>
                         <td data-label="Unit">

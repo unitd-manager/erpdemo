@@ -10,7 +10,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import GoodsReceiptLineItems from '../../components/GoodsReceipt/GoodsReceiptLineItems';
-import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
+// import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
 import PurchaseInvoiceEditDetails from '../../components/PurchaseInvoiceTable/PurchaseInvoiceEditDetails';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
@@ -22,7 +22,7 @@ const PurchaseRequestEdit = () => {
   // All state variables
   const [purchaseinvoiceeditdetails, setPurchaseInvoiceEditDetails] = useState({});
   const [activeTab, setActiveTab] = useState('1');
-  const [invoiceitemseditmodal, setInvoiceItemsEditModal] = useState(false);
+  // const [invoiceitemseditmodal, setInvoiceItemsEditModal] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
@@ -194,7 +194,7 @@ const PurchaseRequestEdit = () => {
                  </Button>    
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <PurchaseInvoiceItemsEdit
                      invoiceitemseditmodal={invoiceitemseditmodal}
@@ -212,7 +212,7 @@ const PurchaseRequestEdit = () => {
             Edit
           </Button>
         </FormGroup>
-      </Col>
+      </Col> */}
     </Row>
         <GoodsReceiptLineItems
           PurchaseOrderId={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_order_id}
