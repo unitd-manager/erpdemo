@@ -221,10 +221,8 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                     Mode Of Payment <span className="required">*</span>{' '}
                   </Label>
                   <Input type="select" name="mode_of_payment" onChange={handleInputreceipt}>
-                    <option value="" selected="selected">
-                      Please Select
-                    </option>
-                    <option value="cash">Cash</option>
+                  
+                    <option value="cash" selected="selected">Cash</option>
                     <option value="cheque">Cheque</option>
                     <option value="giro">Giro</option>
                   </Input>
