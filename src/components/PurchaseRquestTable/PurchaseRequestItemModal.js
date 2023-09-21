@@ -1,39 +1,59 @@
-import React, { useContext,useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Row,
-  Col,
-  FormGroup,
-  Input,
-  Button,
+  Form,
+  Table,
+  ModalFooter,
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-  Label,
+  Input,
+  Col,
+  FormGroup,
+  Button,
+  Label
 } from 'reactstrap';
-import PropTypes from 'prop-types';
-import * as $ from 'jquery';
+// import {  useParams } from 'react-router-dom';
+//import Select from 'react-select';
 import random from 'random';
-import Select from 'react-select';
-import api from '../../constants/api';
-import message from '../Message'
+import AsyncSelect from 'react-select/async';
+import PropTypes from 'prop-types';
+// import * as Icon from 'react-feather';
+// import Swal from 'sweetalert2';
+//import { Link } from 'react-router-dom';
+//import moment from 'moment';
+import message from '../Message';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import api from '../../constants/api';
 
 
-const AddPoModal = ({
-  addPurchaseOrderModal,
-  setAddPurchaseOrderModal,
+
+export default function PurchaseRequestItemModal({
   PurchaseRequestId,
- 
-}) => {
-  AddPoModal.propTypes = {
-    addPurchaseOrderModal: PropTypes.bool,
+  addPurchaseOrderModal,
+  setAddPurchaseOrderModal
+}) {
+  PurchaseRequestItemModal.propTypes = {
     PurchaseRequestId: PropTypes.any,
-    setAddPurchaseOrderModal: PropTypes.func,
+    addPurchaseOrderModal: PropTypes.bool,
+    setAddPurchaseOrderModal: PropTypes.func
   };
-  const [addNewProductModal, setAddNewProductModal] = useState(false);
-   const [getProductValue, setProductValue] = useState();
+  // const [setPlanData] = useState();
+  // const [ setPlanEditModal] = useState(false);
+  // const [planningDetails, setPlanningDetails] = useState(null);
+  
+  // const [newPlanningData, setNewPlanningData] = useState({
+  //   product_id: '',
+  //   purchase_request_qty: '',
+  //   unit: '',
+  //   title:'',
+
+  // });
+
+   //get staff details
+   const { loggedInuser } = useContext(AppContext);
+
   const [productDetail, setProductDetail] = useState({
     category_id: null,
     sub_category_id: null,
@@ -41,126 +61,178 @@ const AddPoModal = ({
     product_code: '',
     qty_in_stock: null,
     price: null,
-    published: 0,
+    published: 1,
   });
-   
-   //get staff details
-   const { loggedInuser } = useContext(AppContext);
-
-  const [addMoreItem, setMoreItem] = useState([
-    {
-      id: random.int(1, 99).toString(),
-      itemId: '',
-      unit: '',
-      purchase_request_qty: '',
-     
-    },
-    {
-      id: random.int(0, 9999).toString(),
-      itemId: '',
-      unit: '',
-      purchase_request_qty: '',
-    },
-    {
-      id: random.int(0, 9999).toString(),
-      itemId: '',
-      unit: '',
-      purchase_request_qty: '',
-    },
-  ]);
-
-  // const [query, setQuery] = useState('');
-  // const [filteredOptions, setFilteredOptions] = useState([]);
-
-  // const handleInputChange = async (event) => {
-  //   const inputQuery = event.target.value;
-  //   setQuery(inputQuery);
-
-  //   try {
-  //     if (inputQuery.trim() === '') {
-  //       setFilteredOptions([]);
-  //     } else {
-  //       api.post('/product/getProductsbySearchFilter',{keyword:inputQuery}).then((res) => {
-  //         const items = res.data.data;
-  //         const finaldat = [];
-  //         items.forEach((item) => {
-  //           finaldat.push({ value: item.product_id, label: item.title });
-  //         });
-  //         console.log('productsearchdata',finaldat)
-  //         console.log('finaldat',finaldat)
-  //         // setProductValue(finaldat);
-  //         setFilteredOptions(finaldat);
-  //       });
-        
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
-  // const handleSelectOption = (selectedOption,itemId) => {
-  //   setQuery(selectedOption);
-  //   const element = addMoreItem.find((el) => el.id === itemId);
-  //   element.title = selectedOption.label;
-  //   element.item_title = selectedOption.label;
-  //   element.product_id = selectedOption.value.toString();
-  //   setMoreItem(addMoreItem);
-  //   setFilteredOptions([]); // Clear the suggestions when an option is selected
-  //   // Additional actions to perform when an option is selected
-  //   console.log('selectedoption',selectedOption)
-  // };
-
-  const AddNewLineItem = () => {
-    setMoreItem([
-      ...addMoreItem,
-      {
-        id: random.int(0, 9999).toString(),
-        itemId: '',
-        unit: '',
-        purchase_request_qty: '',
-      },
-    ]);
-  };
-
-  const [insertPurchaseOrderData] = useState({
-  });
-
   const handleNewProductDetails = (e) => {
     setProductDetail({ ...productDetail, [e.target.name]: e.target.value });
   };
+  const addContactToggle = () => {
+    setAddPurchaseOrderModal(!addPurchaseOrderModal);
+  };
+  const [addNewProductModal, setAddNewProductModal] = useState(false);
+// ...
+const [addMoreItem, setMoreItem] = useState([
+  {
+    id: random.int(1, 99).toString(),
+    unit: '',
+    purchase_request_qty: '',
+    product_id: '', // Initialize product_id here
+    title: '', // Initialize title here
+  },
+]);
+// const deleteRecord = (deleteID) => {
+//   Swal.fire({
+//     title: `Are you sure? ${deleteID}`,
+//     text: "You won't be able to revert this!",
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     confirmButtonText: 'Yes, delete it!',
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       api.post('/pricelistitem/deletePriceListItem', { purchase_request_items_id: deleteID }).then(() => {
+//         Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
+//         window.location.reload();
+//       });
+//     }
+//   });
+// };
 
-  //   Get Products
-  // const getProduct = (e) => {
-  //   api.post('/product/getProductsbySearchFilter',{keyword:e.target.value}).then((res) => {
-  //     const items = res.data.data;
-  //     const finaldat = [];
-  //     items.forEach((item) => {
-  //       finaldat.push({ value: item.product_id, label: item.title });
-  //     });
-  //     console.log('productsearchdata',finaldat)
-  //     setProductValue(finaldat);
-  //   });
-  // };
- //   Get Products
- const getProduct = () => {
-  api.get('/product/getProducts').then((res) => {
-    const items = res.data.data;
-    const finaldat = [];
-    items.forEach((item) => {
-      finaldat.push({ value: item.product_id, label: item.title });
-    });
-    setProductValue(finaldat);
+// const getCpanelLinked = () => {
+//   api
+//     .post('/purchaserequest/PurchaseRequestLineItemById', { purchase_request_id: PurchaseRequestId })
+//     .then((res) => {
+//       setPlanningDetails(res.data.data);
+//     })
+//     .catch(() => {
+     
+//     });
+// };
+
+// const [getProductValue, setProductValue] = useState();
+
+const AddNewPlanning = () => {
+  // Iterate over addMoreItem to submit all line items
+  addMoreItem.forEach((item) => {
+    item.purchase_request_id = PurchaseRequestId;
+    item.created_by= loggedInuser.first_name; 
+    item.creation_date = creationdatetime;
+    api
+      .post('/purchaserequest/insertPurchaseRequestLineItem', item)
+      .then(() => {
+        message('Contact inserted successfully.', 'success');
+       window.location.reload();
+      })
+      .catch(() => {
+        message('Network connection error.', 'error');
+      });
   });
 };
+
+
+const AddNewLineItem = () => {
+  setMoreItem((prevItems) => [
+    ...prevItems,
+    {
+      id: new Date().getTime().toString(),
+      unit: '',
+      purchase_request_qty: '',
+      product_id: '', // Initialize product_id here
+      title: '', // Initialize title here
+    },
+  ]);
+};
+
+const onchangeItem = (selectedProduct, itemId) => {
+  const updatedItems = addMoreItem.map((item) => {
+    if (item.id === itemId) {
+      return {
+        ...item,
+        product_id: selectedProduct.value.toString(),
+        title: selectedProduct.label,
+        purchase_request_qty: selectedProduct.purchase_request_qty || '',
+        unit: selectedProduct.unit || '',
+      };
+    }
+    return item;
+  });
+  setMoreItem(updatedItems);
+};
+
+
+const handleUnitChange = (itemId, newUnit, newQty) => {
+  const updatedItems = addMoreItem.map((item) => {
+    if (item.id === itemId) {
+      return {
+        ...item,
+        unit: newUnit,
+        purchase_request_qty: newQty
+      };
+    }
+    return item;
+  });
+  setMoreItem(updatedItems);
+
+  // setNewPlanningData((prevData) => ({
+  //   ...prevData,
+  //   unit: newUnit,
+  // }));
+};
+
+
+  const handleQtyChange = (itemId, newQty) => {
+    const updatedItems = addMoreItem.map((item) => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          purchase_request_qty: newQty
+        };
+      }
+      return item;
+    });
+  
+  setMoreItem(updatedItems);
+
+  // setNewPlanningData((prevData) => ({
+  //   ...prevData,
+  //   unit: newUnit,
+  // }));
+};
+
+const loadOptions = (inputValue, callback) => {
+  api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
+.then((res) => {
+    const items = res.data.data;
+    const options = items.map((item) => ({
+      value: item.product_id,
+      label: item.title,
+      purchase_request_qty: item.purchase_request_qty,
+      unit: item.unit,
+    }));
+    callback(options);
+  });
+};
+
+// const getProduct = () => {
+//   api.get('/product/getProducts').then((res) => {
+//     const items = res.data.data;
+//     const finaldat = [];
+//     items.forEach((item) => {
+//       finaldat.push({ value: item.product_id, label: item.title });
+//     });
+//     setProductValue(finaldat);
+//   });
+// };
 
 const insertProduct = (ProductCode, ItemCode) => {
   if (productDetail.title !== '') {
     productDetail.product_code = ProductCode;
     productDetail.item_code = ItemCode;
     productDetail.creation_date = creationdatetime;
-    productDetail.created_by = loggedInuser.first_name;
+    productDetail.created_by= loggedInuser.first_name; 
     api
-      .post('/purchaserequest/insertPurchaseProduct', productDetail)
+      .post('/purchaseorder/insertPurchaseProduct', productDetail)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
         message('Product inserted successfully.', 'success');
@@ -174,7 +246,7 @@ const insertProduct = (ProductCode, ItemCode) => {
           
           .then(() => {
             message('inventory created successfully.', 'success');
-             getProduct();
+            //  getProduct();
           })
           })
           .catch(() => {
@@ -207,142 +279,77 @@ const insertProduct = (ProductCode, ItemCode) => {
       });
   };
 
-  // Materials Purchased
-  const TabMaterialsPurchased = () => {
-    api
-      .get('/purchaserequest/PurchaseRequestLineItem')
-      .then((res) => {
-        const items = res.data.data;
-        const finaldat = [];
-        items.forEach((item) => {
-          finaldat.push({ value: item.product_id, label: item.title });
-        });
-      })
-      .catch(() => {
-        message('Tab Purchase Order not found', 'info');
-      });
-  };
-  const poProduct = (itemObj) => {
-    api
-      .post('/purchaserequest/insertPurchaseRequestLineItem', {
-        purchase_request_id:PurchaseRequestId,
-          product_id: itemObj.product_id,
-          purchase_request_qty: itemObj.purchase_request_qty,
-          unit: itemObj.unit
-      })
-      .then(() => {
-        message('Purchase Request Item Added!', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to add Product!', 'error');
-      });
-  };
-
-  //     const insertlineItem = () => {
-  //        addMoreItem.forEach(pItems=>{
-  //         if(pItems.item !== ''){
-  //             poProduct(pItems)
-  //         }
-
-  //        })
-  //    }
-
-  const getAllValues = () => {
-    const result = [];
-    const oldArray = addMoreItem;
-    $('.lineitem tbody tr').each(() => {
-      const allValues = {};
-      $(this)
-        .find('input')
-        .each(() => {
-          const fieldName = $(this).attr('name');
-          allValues[fieldName] = $(this).val();
-        });
-      result.push(allValues);
-    });
-    oldArray.forEach((obj) => {
-      if (obj.id) {
-        /* eslint-disable */
-        // const objId = parseInt(obj.id)
-        const foundObj = oldArray.find((el) => el.id === obj.id);
-        if (foundObj) {
-          obj.product_id = foundObj.product_id;
-          obj.title = foundObj.title;
-          obj.item_title = foundObj.item_title;
-        }
-        if(obj.unit){
-          poProduct(foundObj);
-          }
-      }
-    });
-
-  };
-
-  function updateState(index, property, e) {
-    const copyDeliverOrderProducts = [...addMoreItem];
-    const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
-    copyDeliverOrderProducts[index] = updatedObject;
-    setMoreItem(copyDeliverOrderProducts);
-  }
+  
+  
 
   useEffect(() => {
-     getProduct();
-    TabMaterialsPurchased();
-  }, []);
-  useEffect(() => {
-    setMoreItem([
-      {
-        id: random.int(1, 99).toString(),
-        itemId: '',
-        unit: '',
-        purchase_request_qty: '',
-      },
-      {
-        id: random.int(0, 9999).toString(),
-        itemId: '',
-        unit: '',
-        purchase_request_qty: '',
-      },
-      {
-        id: random.int(0, 9999).toString(),
-        itemId: '',
-        unit: '',
-        purchase_request_qty: '',
-      },
-    ]);
-  }, [addPurchaseOrderModal]);
-
-  const onchangeItem = (str, itemId) => {
-    const element = addMoreItem.find((el) => el.id === itemId);
-    element.title = str.label;
-    element.item_title = str.label;
-    element.product_id = str.value.toString();
-    setMoreItem(addMoreItem);
-  };
-
-  // Clear row value
-  const ClearValue = (ind) => {
-    setMoreItem((current) =>
-      current.filter((obj) => {
-        return obj.id !== ind.id;
-      }),
-    );
-  };
-
+    // getProduct();
+ }, []);
+  //  Table Contact
+  // // const columns = [
+  // //   {
+  // //     name: 'id',
+  // //     selector: 'purchase_request_items_id ',
+  // //     grow: 0,
+  // //     wrap: true,
+  // //     width: '4%',
+  // //   },
+   
+  // //   // {
+  // //   //   name: 'Del',
+  // //   //   selector: 'delete',
+  // //   //   cell: () => <Icon.Trash />,
+  // //   //   grow: 0,
+  // //   //   width: 'auto',
+  // //   //   wrap: true,
+  // //   // },
+  // //   {
+  // //     name: 'Name',
+  // //     selector: 'title',
+  // //     sortable: true,
+  // //     grow: 2,
+  // //     wrap: true,
+  // //   },
+  // //   {
+  // //     name: 'Quantity',
+  // //     selector: 'purchase_request_qty',
+  // //     sortable: true,
+  // //     grow: 0,
+  // //   },
+  // //   {
+  // //     name: 'Unit',
+  // //     selector: 'unit',
+  // //     sortable: true,
+  // //     width: 'auto',
+  // //     grow: 3,
+  // //   },
+  // //   {
+  // //     name: 'Action',
+  // //     selector: 'edit',
+  // //     cell: () => <Icon.Edit2 />,
+  // //     grow: 0,
+  // //     width: 'auto',
+  // //     button: true,
+  // //     sortable: false,
+  // //   },
+    
+  // ];
   return (
-    <>
-      <Modal size="xl" isOpen={addPurchaseOrderModal}>
-        <ModalHeader>Add Product</ModalHeader>
-
-        <ModalBody>
+    <Form>
+       <Row>
+        <Col md="3">
           <FormGroup>
-            <Row>
-              <Col md="12" className="mb-4">
+            <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
+              Add New Product{' '}
+            </Button>
+            <Modal size="lg" isOpen={addPurchaseOrderModal} toggle={addContactToggle.bind(null)}>
+              <ModalHeader toggle={addContactToggle.bind(null)}>Purchase request Items </ModalHeader>
+              <ModalBody>
+              <FormGroup>
                 <Row>
-                  <Col md="3">
+                <Col md="12" className="mb-4">
+                <Row>
+                <Col md="3">
                     <Button
                       color="primary"
                       className="shadow-none"
@@ -353,112 +360,117 @@ const insertProduct = (ProductCode, ItemCode) => {
                       Add New Product
                     </Button>
                   </Col>
-                  <Col md="3">
-                    <Button
-                      color="primary"
-                      className="shadow-none"
-                      onClick={() => {
-                        AddNewLineItem();
-                      }}
-                    >
-                      Add Item
-                    </Button>
-                  </Col>
-                </Row>
+                    <Col md="3">
+                      <Button
+                        className="shadow-none"
+                        color="primary"
+                        type="button"
+                        onClick={() => {
+                          AddNewLineItem();
+                        }}
+                      >
+                        Add Line Item
+                      </Button>
+                    </Col>
+                    </Row>
                 <br />
               </Col>
             </Row>
-
-            <table className="lineitem">
-              <thead>
-                <tr className="">
-                  <th width="20%" scope="col">
-                    Item
-                  </th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Quantity</th>
+                    
+                 
                   
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {addMoreItem.map((item, index) => {
-                  return (
-                    <tr key={item.id}>
-                      <td data-label="title">
-                        <Select
-                          key={item.id}
-                          defaultValue={{ value: item.product_id, label: item.title }}
-                          onChange={(e) => {
-                            onchangeItem(e, item.id);
-                          }}
-                          options={getProductValue}
-                        />
-                        <Input value={item.product_id} type="hidden" name="product_id"></Input>
-                        <Input value={item.title} type="hidden" name="title"></Input>
-                      </td>
+                 
+            <Table bordered className="lineitem">
+                      <thead>
+                        <tr>
+                          <th scope="col">Title </th>
+                          <th scope="col">Unit </th>
+                          <th scope="col">Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {addMoreItem.map((item) => (
+     <tr key={item.id}>
+    <td>
+      <AsyncSelect
+        key={item.id}
+        defaultValue={{
+          value: item.product_id,
+          label: item.title,
+          purchase_request_qty: item.purchase_request_qty,
+          unit: item.unit,
+        }}
+        onChange={(e) => {
+          onchangeItem(e, item.id);
+        }}
+        loadOptions={loadOptions}
+       
+       
+      />
+      <Input value={item.product_id} type="hidden" name="product_id"></Input>
+      <Input value={item.title} type="hidden" name="title"></Input>
+    </td>
+    <td>
+      <Input
+        type="select"
+        onChange={(e) => {
+          const newUnit = e.target.value;
+          handleUnitChange(item.id, newUnit);
+        }}
+        value={item.unit}
+        name="unit"
+      >
+        <option defaultValue="selected">Please Select</option>
+        <option value="KGS">KGS</option>
+        <option value="PCS">PCS</option>
+        <option value="EA">EA</option>
+        <option value="NOS">NOS</option>
+        <option value="BOX">BOX</option>
+      </Input>
+    </td>
+    <td>
+      <Input
+        type="text"
+        name="purchase_request_qty"
+        key={item.id}
+        onChange={(e) => {
+          const newQty = e.target.value;
+          handleQtyChange(item.id, newQty);
+        }}
+        value={item.purchase_request_qty}
+      />
+                                     </td>
+                                      </tr>
+                                ))}
 
-                      <td data-label="Unit">
-                        <Input
-                          defaultValue={item.uom}
-                          type="text"
-                          name="unit"
-                          onChange={(e) => updateState(index, 'unit', e)}
-                          value={insertPurchaseOrderData && insertPurchaseOrderData.unit}
-                        />
-                      </td>
-                      <td data-label="Qty">
-                        <Input
-                          defaultValue={item.qty}
-                          type="number"
-                          name="purchase_request_qty"
-                          onChange={(e) => updateState(index, 'purchase_request_qty', e)}
-                          value={insertPurchaseOrderData && insertPurchaseOrderData.purchase_request_qty}
-                        />
-                      </td>
-                      <td data-label="Action">
-                        {' '}
-                        <Input defaultValue={item.id} type="hidden" name="id"></Input>
-                          <div className="anchor">
-                            <span
-                              onClick={() => {
-                                ClearValue(item);
-                              }}
-                            >
-                              Clear
-                            </span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </tbody>
+                    </Table>
+                
+               </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  onClick={() => {
+                    AddNewPlanning();
+                    //addPurchaseOrderModal(false);
+                  }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  color="secondary"
+                  className="shadow-none"
+                  onClick={addContactToggle.bind(null)}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
           </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            className="shadow-none"
-            onClick={() => {
-              getAllValues();
-              getProduct();
-            }}
-          >
-            Submit
-          </Button>
-          <Button
-            color="secondary"
-            className="shadow-none"
-            onClick={() => {
-              setAddPurchaseOrderModal(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-
+        </Col>
+      </Row>
       {/* Add New Product Modal */}
       <Modal isOpen={addNewProductModal}>
         <ModalHeader>Add New Products</ModalHeader>
@@ -495,7 +507,7 @@ const insertProduct = (ProductCode, ItemCode) => {
             onClick={() => {
               setAddNewProductModal(false);
               generateCode();
-              getProduct();
+              // getProduct();
               // setTimeout(() => {
               //   window;
               // }, 300);
@@ -514,8 +526,61 @@ const insertProduct = (ProductCode, ItemCode) => {
           </Button>
         </ModalFooter>
       </Modal>
-    </>
+      {/* <Row>
+        <Table id="example" className="display border border-secondary rounded">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {planningDetails &&
+              planningDetails.map((element, i) => {
+                return (
+                  <tr key={element.purchase_request_items_id}>
+                    <td>{i + 1}</td>
+                     
+                    <td>
+                      <div color="primary" className='anchor'>
+                        <span onClick={() => deleteRecord(element.contact_id)}>
+                          <Icon.Trash2 />
+                        </span>
+                      </div>
+                    </td>  
+                    <td>{element.title}</td>
+                    <td>{element.purchase_request_qty}</td>
+                    <td>{element.unit}</td>
+                    <td>
+                      <div className='anchor'>
+                        <span
+                          onClick={() => {
+                            setPlanData(element);
+                            setPlanEditModal(true);
+                          }}
+                        >
+                          <Icon.Edit2 />
+                        </span>
+                        <span
+                                className="addline"
+                                onClick={() => {
+                                  deleteRecord(element.purchase_request_items_id);
+                                }}
+                              >
+                                <Icon.Trash2 />
+                              </span>
+                      </div>
+                    </td>
+                  
+                   
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
+      </Row> */}
+     
+    </Form>
   );
-};
-
-export default AddPoModal;
+}

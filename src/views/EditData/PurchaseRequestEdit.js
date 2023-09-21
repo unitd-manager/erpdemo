@@ -154,7 +154,7 @@ const PurchaseRequestEdit = () => {
           setAddPurchaseOrderModal={setAddPurchaseOrderModal}
         />
           <Row className="mb-4">
-          <Col md="2">
+          {/* <Col md="2">
             <Button
               color="primary"
               onClick={() => {
@@ -163,7 +163,7 @@ const PurchaseRequestEdit = () => {
             >
               Add Product
             </Button>
-          </Col>
+          </Col> */}
           <Col md="2">
                 
                   <PurchaseRequestItemsEdit

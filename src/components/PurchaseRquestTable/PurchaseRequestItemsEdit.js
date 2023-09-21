@@ -48,15 +48,15 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
 
   //Api call for getting Vehicle Insurance Data By ID
   const PurchaseRequestLineItemById = () => {
-    api
-      .get('/purchaserequest/PurchaseRequestLineItem', {purchase_request_id: PurchaseRequestID})
-      .then((res) => {
-        setPurchaseRequestEditDetails(res.data.data);
-      })
-      .catch(() => {
-        message('Order Data Not Found', 'info');
-      });
-  };
+      api
+        .post('/purchaserequest/PurchaseRequestLineItemById', {purchase_request_id: PurchaseRequestID})
+        .then((res) => {
+          setPurchaseRequestEditDetails(res.data.data);
+        })
+        .catch(() => {
+          message('Order Data Not Found', 'info');
+        });
+    };
 
   //Api call for Insert Vehicle Insurance Data
   const editPurchaseRequestItems = () => {
@@ -110,10 +110,11 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
                       <tr key={item.id}>                     
                         <td data-label="Title">
                           <Input
-                            defaultValue={item.item_title}
+                            defaultValue={item.title}
                             type="text"
-                            name="item_title"
-                            onChange={(e) => updateState(index, 'item_title', e)}
+                            name="title"
+                            onChange={(e) => updateState(index, 'title', e)}
+                            disabled
                           />
                         </td>
                         <td data-label="Unit">
@@ -122,6 +123,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
                             type="text"
                             name="unit"
                             onChange={(e) => updateState(index, 'unit', e)}
+                            disabled
                           />
                         </td>
                         <td data-label="Quantity">
