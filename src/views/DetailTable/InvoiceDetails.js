@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Button, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,13 +7,19 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const BookingDetails = () => {
 
-  const [bookingDetails, setBookingDetails] = useState();
-  const [bookingsDetails, setBookingsDetails] = useState();
+  const [bookingDetails, setBookingDetails] = useState({
+    company_id: '',
+    // other fields...
+  });
+  const [bookingsDetails, setBookingsDetails] = useState({
+    order_id:'',
+  });
   const [selectedCompanyBookings, setSelectedCompanyBookings] = useState([]);
-
+  const { loggedInuser } = useContext(AppContext);
   //Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,32 +65,41 @@ const BookingDetails = () => {
 
 
   //Logic for adding Booking in db
-  const insertInvoice = (code) =>{
-    if (bookingDetails.order_id !== '' ) {
-      const payload = {
-        ...bookingDetails,
-        order_id: bookingsDetails.order_id, // Add the booking ID here
-        invoice_code: code,
-      };
-      bookingDetails.invoice_code=code;
-      bookingDetails.creation_date = creationdatetime;
-      api
-        .post('/finance/insertInvoice', payload)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          const orderId = payload.order_id;
-          console.log('insertedDataId', insertedDataId);
-          console.log('orderId', orderId);
-          navigate(`/InvoiceEdit/${insertedDataId}/${orderId}`);
-          message('Invoice inserted successfully.', 'success');
-         
-        })
-        .catch(() => {
-          message('Network Connection Error', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'warning');
+  const insertInvoice = (code) => {
+ 
+    if (!bookingDetails.company_id) {
+      // Validate that company_id is not empty
+      message('Please select a customer', 'warning');
+      return;
     }
+  
+    if (!bookingsDetails.order_id) {
+      // Validate that order_id is not empty
+      message('Please select an order', 'warning');
+      return;
+    }
+  
+    // At this point, both company_id and order_id are selected
+    const payload = {
+      ...bookingDetails,
+      order_id: bookingsDetails.order_id,
+      invoice_code: code,
+      };
+      payload.creation_date = creationdatetime;
+      payload.created_by = loggedInuser.first_name;
+    api
+      .post('/finance/insertInvoice', payload)
+      .then((res) => {
+        const insertedDataId = res.data.data.insertId;
+        const orderId = payload.order_id;
+        console.log('insertedDataId', insertedDataId);
+        console.log('orderId', orderId);
+        navigate(`/InvoiceEdit/${insertedDataId}/${orderId}`);
+        message('Invoice inserted successfully.', 'success');
+      })
+      .catch(() => {
+        message('Network Connection Error', 'error');
+      });
   };
   const generateCode = () => {
     api

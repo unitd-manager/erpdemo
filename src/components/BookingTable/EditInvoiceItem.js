@@ -44,6 +44,7 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
       .post('/invoice/editInvoiceItems', updatedInvoiceItem)
       .then(() => {
         message('Record edited successfully', 'success');
+        window.location.reload();
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -150,10 +151,15 @@ export default function InvoiceItem({ editModal, setEditModal, selectedInvoiceIt
                                 <td data-label="UoM">
                                   <Input
                                     value={invoiceItem.unit}
-                                    type="text"
+                                    type="select"
                                     name="unit"
                                     onChange={handleInputChange}
-                                  />
+                                  >   
+                                <option value="KGS">KGS</option>
+                                <option value="PCS">PCS</option>
+                                <option value="NOS">NOS</option>
+                                <option value="BOX">BOX</option>
+                                <option value="EA">EA</option></Input>
                                 </td>
                                 <td data-label="Qty">
                                   <Input

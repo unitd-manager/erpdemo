@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
@@ -14,6 +14,7 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ItemTable from '../../components/BookingTable/ItemTable';
 import OrderItemTable from '../../components/BookingTable/OrderItemTable';
+import AppContext from '../../context/AppContext';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({});
@@ -21,7 +22,7 @@ const InvoiceEdit = () => {
   const [itemDetails, setItemDetails] = useState([]);
   const [orderitemDetails, setOrderItemDetails] = useState([]);
   const { insertedDataId, orderId } = useParams();
-
+  const { loggedInuser } = useContext(AppContext);
   console.log('order ID:', orderId);
   const navigate = useNavigate();
   const handleInputs = (e) => {
@@ -130,6 +131,8 @@ const InvoiceEdit = () => {
   };
 
   const editInvoiceData = (shouldNavigate) => {
+    bookingDetails.modification_date = creationdatetime;
+    bookingDetails.modified_by = loggedInuser.first_name;
     api
       .post('/invoice/editInvoices', bookingDetails)
       .then(() => {
@@ -230,7 +233,7 @@ const InvoiceEdit = () => {
       </FormGroup>
   
       {/*Main Details*/}
-      <ComponentCard title="Invoice Details">
+      <ComponentCard title="Invoice Details" creationModificationDate={bookingDetails}>
         <InvoiceDetailComp
           bookingDetails={bookingDetails}
           handleInputs={handleInputs}

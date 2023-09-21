@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,13 +7,16 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const ReturnDetails = () => {
   const [invoice, setInvoice] = useState();
-  const [insertReturn, setInsertReturn] = useState({});
+  const [insertReturn, setInsertReturn] = useState({
+    invoice_id:'',
+  });
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { loggedInuser } = useContext(AppContext);
   //Api call for getting company dropdown
   const getQuote = () => {
     api.get('/invoice/getInvoice').then((res) => {
@@ -31,6 +34,7 @@ const ReturnDetails = () => {
     if (insertReturn.invoice_id !== '') {
       // Check if it's not an empty string
       insertReturn.creation_date = creationdatetime;
+      insertReturn.created_by = loggedInuser.first_name;
       api
         .post('/invoice/insertSalesReturn', insertReturn)
         .then((res) => {
