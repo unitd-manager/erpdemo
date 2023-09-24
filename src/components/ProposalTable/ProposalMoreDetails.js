@@ -223,10 +223,10 @@ export default function ProposalMoreDetails({
                 <FormGroup>
                   <Label>Description</Label>
                   <Input
-                    value={proposalDetails && proposalDetails.discription}
+                    value={proposalDetails && proposalDetails.description}
                     type="text"
                     onChange={handleInputs}
-                    name="discription"
+                    name="description"
                   />
                 </FormGroup>
               </Col>
@@ -265,16 +265,16 @@ export default function ProposalMoreDetails({
                     Date <span className="required"> *</span>
                   </Label>
                   <Input
-                    type="text"
+                    type="date"
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.proposal_date}
-                    name="quote_code"
+                    name="proposal_date"
                   />
                 </FormGroup>
               </Col>
               </Row>
               <Row>
-            <Col md="3">
+            {/* <Col md="3">
                 <FormGroup>
                   <Label>Proposal Code</Label>
                   <Input
@@ -284,7 +284,7 @@ export default function ProposalMoreDetails({
                     name="proposal_code"
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
               </Row>
           </ComponentCard>
         </FormGroup>

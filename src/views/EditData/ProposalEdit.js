@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { TabContent, TabPane, Table, Row } from 'reactstrap';
+import { TabContent, TabPane, Table, Row,Button,Col } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as Icon from 'react-feather';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
@@ -12,19 +13,29 @@ import api from '../../constants/api';
 import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
 // import PdfQuote from '../../components/PDF/PdfQuote';
 import creationdatetime from '../../constants/creationdatetime';
-
+import AddEmployee from '../../components/ProposalTabContent/AddEmployee';
 // import TenderQuotation from '../../components/TenderTable/TenderQuotation';
 import ProposalMoreDetails from '../../components/ProposalTable/ProposalMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
+import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 
 const ProposalEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
+  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [update, setUpdate] = useState(false);
   //const [projectTeam, setProjectTeam] = useState({});
   //   const [quote, setQuote] = useState({});
   const [lineItem, setLineItem] = useState([]);
-  const [employee,setEmployee] = useState([]);
+  // const [employee,setEmployee] = useState([]);
   const [proposalDetails, setProposalDetails] = useState();
+
+  const [attachmentData, setDataForAttachment] = useState({
+    modelType: '',
+  });
+  const [RoomName, setRoomName] = useState('');
+  const [fileTypes, setFileTypes] = useState('');
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
@@ -32,6 +43,9 @@ const ProposalEdit = () => {
     { id: '2', name: 'Project Team' },
     { id: '3', name: 'Attachment' },
   ];
+
+  
+
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -86,18 +100,7 @@ const ProposalEdit = () => {
     });
   };
 
-  const getEmployeeById = () => {
-    api.post('/proposal/getEmployeeById', { proposal_id: id }).then((res) => {
-      setEmployee(res.data.data);
-      //setAddLineItemModal(true);
-    });
-  };
-  //   // Get Quote By Id
-  //   const getQuote = () => {
-  //     api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
-  //       setQuote(res.data.data[0]);
-  //     });
-  //   };
+  
 
   //Logic for adding company in db
 
@@ -228,39 +231,7 @@ const ProposalEdit = () => {
     });
   };
 
-  //   // Get Line Item
-  //   const getLineItem = (quotationId) => {
-  //     api.post('/proposal/getQuoteLineItemsById', { quote_id: quotationId }).then((res) => {
-  //       setLineItem(res.data.data);
-  //       //setViewLineModal(true);
-  //     });
-  //   };
-
-  //   const handleQuoteForms = (ele) => {
-  //     setQuoteForm({ ...quoteForm, [ele.target.name]: ele.target.value });
-  //   };
-  //Add Quote
-  //   const insertQuote = (code) => {
-  //     const newQuoteId = quoteForm;
-  //     newQuoteId.opportunity_id = id;
-  //     newQuoteId.quote_code = code;
-
-  //     api.post('/proposal/insertquote', newQuoteId).then(() => {
-  //       message('Quote inserted successfully.', 'success');
-  //       window.location.reload();
-  //     });
-  //   };
-  //QUOTE GENERATED CODE
-  //   const generateCode = () => {
-  //     api
-  //       .post('/proposal/getCodeValue', { type: 'quote' })
-  //       .then((res) => {
-  //         insertQuote(res.data.data);
-  //       })
-  //       .catch(() => {
-  //         insertQuote('');
-  //       });
-  //   };
+  
 
   const columns1 = [
     {
@@ -287,29 +258,20 @@ const ProposalEdit = () => {
     
   ];
 
-  const columns2 = [
-    {
-      name: '#',
-    },
-    {
-      name: 'Name',
-    },
-    {
-      name: 'Position',
-    },
-    
-    {
-      name: 'Updated By ',
-    },
-    
-  ];
+ 
+  const dataForAttachment = () => {
+    setDataForAttachment({
+      modelType: 'attachment',
+    });
+  };
+
 
   //Add new Project
 
   useEffect(() => {
     editProposalById();
     getLineItem();
-    getEmployeeById();
+    //getEmployeeById();
     getCompany();
 
     getAllCountries();
@@ -317,7 +279,7 @@ const ProposalEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={proposalDetails && proposalDetails.quote_code} />
+      <BreadCrumbs heading={proposalDetails && proposalDetails.project_quote_code} />
       <ProposalButtons
         editProposalData={editProposalData}
         navigate={navigate}
@@ -395,36 +357,45 @@ const ProposalEdit = () => {
               </div>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
+          <TabPane tabId="2" eventkey="addEmployee">
           <Row>
-              <div className="container">
-                <Table id="example" className="display border border-secondary rounded">
-                  <thead>
-                    <tr>
-                      {columns2.map((cell) => {
-                        return <td key={cell.name}>{cell.name}</td>;
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {employee &&
-                      employee.map((e, index) => {
-                        return (
-                          <tr key={e.employee_id}>
-                            <td>{index + 1}</td>
-                            <td data-label="Name">{e.first_name}</td>
-                            <td data-label="Position">{e.position}</td>
-                            
-                            
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </Table>
-              </div>
+              <AddEmployee />
+              <Col xs="12" md="3" className="mb-3">
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  onClick={() => {
+                    setRoomName('Tender');
+                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                    dataForAttachment();
+                    setAttachmentModal(true);
+                  }}
+                >
+                  <Icon.File className="rounded-circle" width="20" />
+                </Button>
+              </Col>
             </Row>
             
-            
+            <AttachmentModalV2
+              moduleId={id}
+              attachmentModal={attachmentModal}
+              setAttachmentModal={setAttachmentModal}
+              roomName={RoomName}
+              fileTypes={fileTypes}
+              altTagData="TenderRelated Data"
+              desc="TenderRelated Data"
+              recordType="RelatedPicture"
+              mediaType={attachmentData.modelType}
+              update={update}
+              setUpdate={setUpdate}
+            />
+            <ViewFileComponentV2
+              moduleId={id}
+              roomName="Tender"
+              recordType="RelatedPicture"
+              update={update}
+              setUpdate={setUpdate}
+            />
           </TabPane>
 
           <TabPane tabId="3">

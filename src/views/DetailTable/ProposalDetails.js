@@ -25,7 +25,7 @@ const ProposalDetails = () => {
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
-    api.get('/proposal/getQuoteCode').then((res) => {
+    api.get('/proposal/getProjectQuoteCode').then((res) => {
       setQuoteCode(res.data.data);
     });
   };
@@ -114,14 +114,14 @@ const ProposalDetails = () => {
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}
-                    value={tenderForms && tenderForms.quote_id}
-                    name="quote_id"
+                    value={tenderForms && tenderForms.project_quote_id}
+                    name="project_quote_id"
                   >
                     <option>Please Select</option>
                     {quotecode &&
                       quotecode.map((e) => {
                         return (
-                          <option key={e.quote_id} value={e.quote_id}>
+                          <option key={e.project_quote_idquote_id} value={e.project_quote_id}>
                             {' '}
                             {e.quote_code}{' '}
                           </option>
