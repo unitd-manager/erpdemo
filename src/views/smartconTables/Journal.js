@@ -1,14 +1,16 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import * as Icon from 'react-feather';
 import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
+import $ from 'jquery';
 import { Link } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
+import api from '../../constants/api';
 
 const Journal = () => {
 
@@ -65,12 +67,39 @@ const Journal = () => {
     },
   ];
 
+  const [journal, setJournal] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const getJournal = () => {
+    api
+      .get('/journal/getJournal')
+      .then((res) => {
+        setJournal(res.data.data);
+        console.log("res.data.data",res.data.data)
+        $('#example').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 20,
+          processing: true,
+          dom: 'Bfrtip',
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getJournal();
+  }, []);
+
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
 
         <CommonTable
+          loading={loading}
           title="Journal List"
           Button={
             <Link to="/JournalDetails">
@@ -88,7 +117,24 @@ const Journal = () => {
             </tr>
           </thead>
           <tbody>
-            
+            {journal &&
+              journal.map((element, index) => {
+                return (
+                  <tr key={element.journal_id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <Link to={`/JournalEdit/${element.journal_master_id}?tab=1`}>
+                        <Icon.Edit2 />
+                      </Link>
+                    </td>
+                    <td>{element.creation_date.slice(0,10)}</td>
+                    <td>{element.acc_head}</td>
+                    <td>{element.narration_main}</td>
+                    <td>{element.debit}</td>
+                    <td>{element.credit}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </CommonTable>
       </div>

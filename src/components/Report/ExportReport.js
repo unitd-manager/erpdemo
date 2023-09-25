@@ -86,6 +86,7 @@ const filename = `${exportValue}_${getCurrentDate()}.csv`;
 
     const selectors = [];
     const header = [];
+
     columns.forEach((singleColumn) => {
       selectors.push(singleColumn.selector);
       header.push({
@@ -93,7 +94,11 @@ const filename = `${exportValue}_${getCurrentDate()}.csv`;
         style: 'tableHead',
       });
     });
+    
     body.push(header);
+
+    console.log("data",data)
+    console.log("selectors",selectors)
 
     data.forEach((row, index) => {
       const dataRow = [];
@@ -104,6 +109,7 @@ const filename = `${exportValue}_${getCurrentDate()}.csv`;
           style: 'tableBody',
         });
       });
+console.log("dataRow",dataRow)
 
       body.push(dataRow);
     });

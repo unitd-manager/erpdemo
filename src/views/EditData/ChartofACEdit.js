@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
@@ -31,7 +32,7 @@ const ChartofACEdit = () => {
         setChartofAC(res.data.data[0]);
       })
       .catch(() => {
-
+        message('Unable to edit record.', 'error');
       });
   };
 
@@ -52,7 +53,8 @@ const ChartofACEdit = () => {
       api
         .post('/chartofaccounts/editChartAc', chartofAC)
         .then(() => {
-          message('Record edited successfully', 'success');
+          message('Record editted successfully', 'success');
+          ChartofACById();
         })
         .catch(() => {
           message('Unable to edit record.', 'error');
@@ -68,6 +70,8 @@ const ChartofACEdit = () => {
     <>
       {/* BreadCrumbs */}
       <BreadCrumbs />
+      <ToastContainer></ToastContainer>
+    
       {/* Button */}
       <AccountMapButton
         editData={editChartOfAcc}
