@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,6 +11,7 @@ import TenderButtons from '../../components/TenderTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/TenderTable/TenderMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
+import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -21,11 +22,12 @@ const OpportunityEdit = () => {
   const [incharge, setIncharge] = useState();
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
+  const { loggedInuser } = useContext(AppContext);
    const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Opportunity');
+    navigate('/Enquiry');
   };
 
   const addContactToggle = () => {
@@ -115,7 +117,9 @@ const OpportunityEdit = () => {
   //Logic for edit data in db
 
   const editTenderData = () => {
+    if (tenderDetails.title !== '') {
     tenderDetails.modification_date = creationdatetime;
+    tenderDetails.modified_by = loggedInuser.first_name;
     api
       .post('/tender/edit-Tenders', tenderDetails)
       .then(() => {
@@ -127,6 +131,9 @@ const OpportunityEdit = () => {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
   };
 
    // Add new Contact

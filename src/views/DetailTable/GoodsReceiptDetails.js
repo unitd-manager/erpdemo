@@ -17,7 +17,6 @@ const GoodsReceiptDetails = () => {
     purchase_order_id: '',
   });
   const [purchaseorderdetails, setPurchaseOrderDetails] = useState();
-  const [supplier, setSupplier] = useState();
   //navigation and params
   const navigate = useNavigate();
   //supplierData in supplier details
@@ -64,24 +63,10 @@ const GoodsReceiptDetails = () => {
       };
 
 
-      const getSupplierName = () => {
-        api
-          .get('/goodsreceipt/getSupplierName')
-          .then((res) => {
-            setSupplier(res.data.data);
-          })
-          .catch(() => {
-            message('Supplier not found', 'info');
-          });
-      };
-
-
-
-  useEffect(() => {
+   useEffect(() => {
     getPoCode();
-    getSupplierName();
-  }, []);
-  return (
+     }, []);
+    return (
     <div>
        <BreadCrumbs />
       <ToastContainer />
@@ -109,29 +94,6 @@ const GoodsReceiptDetails = () => {
                               return (
                                 <option key={e.purchase_order_id} value={e.purchase_order_id}>
                                   {e.po_code}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                    </Col>
-
-                    <Col md="12">
-                    <Label>
-                      {' '}
-                       Supplier Name <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={goodsreceiptforms && goodsreceiptforms.supplier_id}
-                          name="supplier_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {supplier &&
-                            supplier.map((e) => {
-                              return (
-                                <option key={e.supplier_id} value={e.supplier_id}>
-                                  {e.company_name}
                                 </option>
                               );
                             })}

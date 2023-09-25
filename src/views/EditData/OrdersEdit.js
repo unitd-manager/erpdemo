@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -12,6 +12,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
 import OrderAttachment from '../../components/TenderTable/OrderAttachment';
+import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
@@ -28,12 +29,10 @@ const OpportunityEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/Opportunity');
+    navigate('/SalesOrder');
   };
-  const {id} = useParams();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const quoteId = queryParams.get('quote_id');
+  const { insertedDataId, quoteId } = useParams();
+  const { loggedInuser } = useContext(AppContext);
   console.log('Quote ID:', quoteId);
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -108,27 +107,27 @@ const OpportunityEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
+    api.post('/finance/getFinanceById', { order_id: insertedDataId }).then((res) => {
       setOrderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
   };
 
   const getInvoiceByOrderId = () => {
-    api.post('/finance/getInvoiceById', { order_id: id }).then((res) => {
+    api.post('/finance/getInvoiceById', { order_id: insertedDataId }).then((res) => {
       setInvoiceDetails(res.data.data);
     
     });
   };
   const getReceiptByOrderId = () => {
-    api.post('/finance/getReceiptByIds', { order_id: id }).then((res) => {
+    api.post('/finance/getReceiptByIds', { order_id: insertedDataId }).then((res) => {
       setReceiptDetails(res.data.data);
     
     });
   };
 
   const getOrdersByOrderId = () => {
-    api.post('/finance/getOrdersByIds', { order_id: id }).then((res) => {
+    api.post('/finance/getOrdersByIds', { order_id: insertedDataId }).then((res) => {
       setOrdersDetails(res.data.data);
     
     });
@@ -140,21 +139,23 @@ const OpportunityEdit = () => {
 
   //Logic for edit data in db
 
-  const editTenderData = () => {
+  const editTenderData = (shouldNavigate) => {
     orderDetails.modification_date = creationdatetime;
+    orderDetails.modified_by = loggedInuser.first_name;
     api
       .post('/finance/editFinances', orderDetails)
       .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-         
-        }, 300);
+        message('Record edited successfully', 'success');
+        if (shouldNavigate) {
+          setTimeout(() => {
+            navigate('/SalesOrder'); // Navigate after showing the message if shouldNavigate is true
+          }, 100);
+        }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
   };
-
   // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
@@ -206,7 +207,7 @@ const OpportunityEdit = () => {
     getInvoiceByOrderId();
     getReceiptByOrderId();
     getOrdersByOrderId();
-  }, [id]);
+  }, [insertedDataId]);
 
   return (
     <>
@@ -214,7 +215,7 @@ const OpportunityEdit = () => {
       <OrdersButton
         editTenderData={editTenderData}
         quoteId={quoteId}
-        id={id}
+        id={insertedDataId}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}

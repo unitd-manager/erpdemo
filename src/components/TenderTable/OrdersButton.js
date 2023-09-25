@@ -6,10 +6,9 @@ import api from '../../constants/api';
 //import message from '../Message';
 
 
-export default function TenderButtons({ editTenderData, applyChanges, backToList, navigate, quoteId, id }) {
+export default function TenderButtons({ editTenderData, applyChanges, backToList, quoteId, id }) {
   TenderButtons.propTypes = {
     editTenderData: PropTypes.func,
-    navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     quoteId: PropTypes.any,
@@ -21,9 +20,6 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
     api
       .delete(`/finance/deleteorder_item/${quoteId}`)
       .then(() => {
-        console.log(`Deleted old order items with quote_id ${quoteId}`);
-  
-        // Step 2: Fetch quote items from the API
         api
           .post('/tender/getQuoteLineItemsById', { quote_id: quoteId })
           .then((res) => {
@@ -66,14 +62,18 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                     }
                     // Continue to the next item
                     insertOrderItems(index + 1);
+                 
+
                   })
                   .catch((error) => {
                     console.error(`Error inserting order item ${index + 1}`, error);
                     // Continue to the next item
                     insertOrderItems(index + 1);
+
                   });
               } else {
                 console.log('All order items inserted successfully');
+                window.location.reload(); // Reload the page after all order 
                 // You might want to trigger a UI update here
               }
             };
@@ -87,6 +87,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
       })
       .catch((error) => {
         console.error('Error deleting old order items', error);
+        
       });
   };
   
@@ -96,6 +97,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
       <FormGroup>
         <ComponentCardV2>
           <Row>
+   
           <Col>
               <Button
                 className="shadow-none"
@@ -107,30 +109,31 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 Generate Data
               </Button>
             </Col>
-            <Col>
-              <Button
-                className="shadow-none"
-                color="primary"
-                onClick={() => {
-                  editTenderData();
-                  navigate('/SalesOrder');
-                }}
-              >
-                Save
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                className="shadow-none"
-                color="primary"
-                onClick={() => {
-                  editTenderData();
-                  applyChanges();
-                }}
-              >
-                Apply
-              </Button>
-            </Col>
+           
+<Col>
+  <Button
+    className="shadow-none"
+    color="primary"
+    onClick={() => {
+      editTenderData(true); // Call editTenderData with navigation
+    }}
+  >
+    Save
+  </Button>
+</Col>
+
+<Col>
+  <Button
+    className="shadow-none"
+    color="primary"
+    onClick={() => {
+      editTenderData(false); // Call editTenderData without navigation
+      applyChanges();
+    }}
+  >
+    Apply
+  </Button>
+</Col>
             <Col>
               <Button
                 className="shadow-none"

@@ -15,6 +15,8 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import api from '../../constants/api';
 import message from '../Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 
 const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData }) => {
@@ -26,6 +28,7 @@ const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData 
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
   const [totalAmount, setTotalAmount] = useState();
+  const { loggedInuser } = React.useContext(AppContext);
 
   const handleData = (e) => {
     setLineItemData({ ...lineItemData, [e.target.name]: e.target.value });
@@ -41,6 +44,8 @@ const {id}=useParams();
   const UpdateData = () => {
     lineItemData.project_job_id=id;
     //lineItemData.amount=totalAmount;
+    lineItemData.modification_date = creationdatetime;
+    lineItemData.modified_by = loggedInuser.first_name;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
     api
       .post('/joborder/edit-TabJobLine', lineItemData)

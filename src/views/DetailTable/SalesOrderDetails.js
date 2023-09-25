@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,13 +7,16 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const OpportunityDetails = () => {
   const [quote, setQuote] = useState();
-  const [insertQuote, setInsertQuote] = useState();
+  const [insertQuote, setInsertQuote] = useState({
+    quote_id: '',
+  });
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { loggedInuser } = useContext(AppContext);
   //Api call for getting company dropdown
   const getQuote = () => {
     api.get('/finance/getQuote').then((res) => {
@@ -27,17 +30,22 @@ const OpportunityDetails = () => {
 
   //console.log(tenderDetails);
  const insertOrder = (code) => {
+  console.log('insertQuote.quote_id:', insertQuote.quote_id);
   if (insertQuote.quote_id !== '') {
     insertQuote.order_code = code;
     insertQuote.creation_date = creationdatetime;
+    insertQuote.created_by = loggedInuser.first_name;
     api
       .post('/finance/insertOrder', insertQuote)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
-        const selectedQuoteId = encodeURIComponent(insertQuote.quote_id);
+        const quoteId = insertQuote.quote_id;
 
         // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
-        navigate(`/OrdersEdit/${insertedDataId}?tab=1&quote_id=${selectedQuoteId}`);
+  
+        navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
+        console.log('insertedDataId', insertedDataId);
+        console.log('quoteId', quoteId);
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -69,7 +77,7 @@ const OpportunityDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Enquiry">
+          <ComponentCard title="New Order">
             <Form>
               <FormGroup>
               

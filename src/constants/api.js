@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// // Define the base URL(s) conditionally
+// Define the base URL(s) conditionally
 let baseURL;
 
 if (process.env.NODE_ENV === 'production') {

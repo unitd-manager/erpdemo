@@ -72,27 +72,29 @@ return (
 <Table bordered className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col"> Product Code </th>
+                          <th scope="col">  S.No </th>
                           <th scope="col">Title </th>
                           <th scope="col">Unit </th>
                           <th scope="col">Quantity </th>
+                          <th scope="col">Created By </th>
                           <th scope="col">Updated By </th>
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {vehicleinsurancegetdetails &&
-                          vehicleinsurancegetdetails.map((e) => {
+                          vehicleinsurancegetdetails.map((e,index) => {
                             return (
                               <tr>
-                                <td data-label="Product Code">{e.product_code}</td>
+                                <td data-label="S.No">{index + 1}</td>
                                 <td data-label="Title">{e.title}</td>
                                 <td data-label="Unit">{e.unit}</td>
                                 <td data-label="Quantity">{e.purchase_request_qty}</td>
+                                <td data-label="Created By">{e.created_by}</td>
                                 <td data-label="Updated By">{e.modified_by}</td>
                                 {quote && QuoteProject === undefined && (
                                   <td data-label="Actions">
-                                    <span
+                                    {/* <span
                                       className="addline"
                                       onClick={() => {
                                         // setEditLineModelItem(e);
@@ -100,7 +102,7 @@ return (
                                       }}
                                     >
                                       <Icon.Edit2 />
-                                    </span>
+                                    </span> */}
                                     <span
                                       className="addline"
                                       onClick={() => {

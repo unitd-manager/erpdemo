@@ -125,28 +125,7 @@ const PriceListEdit = () => {
   
   
   
-  const AddNewPlanning = () => {
   
-    const newContactWithCompanyId = newPlanningData;
-newContactWithCompanyId.price_list_id = id;
-if (
-  newContactWithCompanyId.price !== ''
-
-
-) {
-api
-  .post('/pricelistitem/insertPriceListItem', newContactWithCompanyId)
-  .then(() => {
-    message('Contact inserted successfully.', 'success');
-     window.location.reload();
-  })
-  .catch(() => { 
-    message('Network connection error.', 'error');
-  });
-}else {
-message('Please fill all required fields', 'warning');
-}
-};
 
 //Contact Functions/Methods
 const handleAddNewPlanning = (e) => {
@@ -190,7 +169,7 @@ const handleAddNewPlanning = (e) => {
            handleAddNewPlanning={handleAddNewPlanning}
            newPlanningData={newPlanningData}
            setNewPlanningData={setNewPlanningData}
-           AddNewPlanning={AddNewPlanning}
+           quoteLine={id}
            addContactModal={addContactModal}
            addContactToggle={addContactToggle}
            setPlanData={setPlanData}

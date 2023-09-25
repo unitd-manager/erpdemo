@@ -140,7 +140,7 @@ const Document = () => {
           {documentdata &&
             documentdata.map((element, index) => {
               return (
-                <tr key={element.change_request_id}>
+                <tr key={element.document_id}>
                   <td>{index + 1}</td>
                   <td>
                     <Link to={`/DocumentEdit/${element.document_id}`}>

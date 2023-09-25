@@ -18,32 +18,14 @@ import api from '../../constants/api';
 import message from '../Message';
 // import { TimePicker } from '@mui/lab';
 
-export default function InvoiceItem({
-  editInvoiceItemData,
-  setEditInvoiceItemData,
-  invoiceInfo,
-}) {
+export default function InvoiceItem({ editInvoiceItemData, setEditInvoiceItemData, invoiceInfo }) {
   InvoiceItem.propTypes = {
     editInvoiceItemData: PropTypes.bool,
     setEditInvoiceItemData: PropTypes.func,
     invoiceInfo: PropTypes.any,
   };
-console.log('invoiceInfo',invoiceInfo);
-  // const insertInvoiceHistory = () => {
-  //   // Construct the data object for insertion
-  
-  //   // Make an API call to insert the vehicle booking data
-  //   api
-  //     .post('/invoice/insertInvoiceItem', itemsData)
-  //     .then(() => {
-  //       message('Record inserted successfully.', 'success');
-  //       window.location.reload();
-  //     })
-  //     .catch(() => {
-  //       message('Network connection error.');
-  //     });
-  // };
-
+  console.log('invoiceInfo', invoiceInfo);
+ 
   const [lineItems, setLineItems] = useState([]);
 
   const AddNewLineItem = () => {
@@ -72,15 +54,16 @@ console.log('invoiceInfo',invoiceInfo);
         total_cost: item.qty * item.unit_price,
         remarks: item.remarks,
       };
-  
+
       return api.post('/finance/insertInvoiceItem', itemToInsert);
     });
-  
+
     Promise.all(promises)
       .then(() => {
         message('Line Items Added Successfully', 'success');
         setEditInvoiceItemData(false); // Close the modal or handle as needed
         console.log('All items inserted successfully');
+        window.location.reload();
       })
       .catch(() => {
         message('Cannot Add Line Items', 'error');
@@ -89,14 +72,14 @@ console.log('invoiceInfo',invoiceInfo);
   const handleInputChange = (index, name, value) => {
     const updatedLineItems = [...lineItems];
     updatedLineItems[index][name] = value;
-  
+
     // Calculate total_cost here and update it in the state
-updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineItems[index].unit_price);
+    updatedLineItems[index].total_cost =
+      parseFloat(value) * parseFloat(updatedLineItems[index].unit_price);
 
     setLineItems(updatedLineItems);
   };
 
- 
   const clearValue = (index) => {
     const updatedLineItems = [...lineItems];
     updatedLineItems.splice(index, 1);
@@ -120,55 +103,42 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
         <ModalBody>
           <Form>
             <FormGroup>
-            <Row>
-            <Col md="12">
-              <Form>
-                <Row>
-                  <Col md="3">
-                    <Button
-                      className="shadow-none"
-                      color="primary"
-                      type="button"
-                      onClick={() => {
-                        AddNewLineItem();
-                      }}
-                    >
-                      Add Line Item
-                    </Button>
-                  </Col>
-                  {/* Invoice Detail */}
-                  <Row>
-                    {/* Description form */}
-                    {/* <ComponentCard title="Description">
-                      <Editor
-                        editorState={paymentTerms}
-                        wrapperClassName="demo-wrapper mb-0"
-                        editorClassName="demo-editor border mb-4 edi-height"
-                        onEditorStateChange={(e) => {
-                          handleDataEditor(e, 'payment_terms');
-                          setPaymentTerms(e);
-                        }}
-                      />
-                    </ComponentCard> */}
-                  </Row>
-                  {/* Invoice Item */}
-                  <Row>
-                    <Col>
-                      <table className="lineitem">
-                        <thead>
-                          <tr>
-                            <th scope="col">Item</th>
-                            <th scope="col">Description </th>
-                            <th scope="col">UoM</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Unit Price</th>
-                            <th scope="col">Total Price</th>
-                            <th scope="col">Remarks</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        {lineItems.map((item, index) => {
+              <Row>
+                <Col md="12">
+                  <Form>
+                    <Row>
+                      <Col md="3">
+                        <Button
+                          className="shadow-none"
+                          color="primary"
+                          type="button"
+                          onClick={() => {
+                            AddNewLineItem();
+                          }}
+                        >
+                          Add Line Item
+                        </Button>
+                      </Col>
+                      {/* Invoice Detail */}
+                      <Row></Row>
+                      {/* Invoice Item */}
+                      <Row>
+                        <Col>
+                          <table className="lineitem">
+                            <thead>
+                              <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Description </th>
+                                <th scope="col">UoM</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Total Price</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {lineItems.map((item, index) => {
                                 return (
                                   <tr key={item.id}>
                                     <td data-label="Item">
@@ -177,11 +147,7 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                         type="text"
                                         name="item_title"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'item_title',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'item_title', e.target.value)
                                         }
                                       />
                                     </td>
@@ -191,27 +157,28 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                         type="text"
                                         name="description"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'description',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'description', e.target.value)
                                         }
                                       />
                                     </td>
                                     <td data-label="UoM">
                                       <Input
                                         value={item.unit}
-                                        type="text"
+                                        type="select"
                                         name="unit"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'unit',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'unit', e.target.value)
                                         }
-                                      />
+                                      >
+                                       <option value="" selected="selected">
+                    Please Select
+                  </option>
+                  <option value="KGS">KGS</option>
+                  <option value="PCS">PCS</option>
+                  <option value="NOS">NOS</option>
+                  <option value="BOX">BOX</option>
+                  <option value="EA">EA</option>
+                                      </Input>
                                     </td>
                                     <td data-label="Qty">
                                       <Input
@@ -219,11 +186,7 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                         type="number"
                                         name="qty"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'qty',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'qty', e.target.value)
                                         }
                                       />
                                     </td>
@@ -236,11 +199,7 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                         type="number"
                                         name="unit_price"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'unit_price',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'unit_price', e.target.value)
                                         }
                                       />
                                     </td>
@@ -258,11 +217,7 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                         type="text"
                                         name="remarks"
                                         onChange={(e) =>
-                                          handleInputChange(
-                                            index,
-                                            'remarks',
-                                            e.target.value
-                                          )
+                                          handleInputChange(index, 'remarks', e.target.value)
                                         }
                                       />
                                     </td>
@@ -280,37 +235,36 @@ updatedLineItems[index].total_cost = parseFloat(value) * parseFloat(updatedLineI
                                   </tr>
                                 );
                               })}
-                        </tbody>
-                      </table>
-                    </Col>
-                  </Row>
+                            </tbody>
+                          </table>
+                        </Col>
+                      </Row>
 
-                  <ModalFooter>
-                    <Button
-                      className="shadow-none"
-                      color="primary"
-                      onClick={() => {
-                        addLineItemApi();
-                      }}
-                    >
-                      {' '}
-                      Submit{' '}
-                    </Button>
-                    <Button
-                      className="shadow-none"
-                      color="secondary"
-                      onClick={() => {
-                       // setEditInvoiceData(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </ModalFooter>
-                </Row>
-              </Form>
-            </Col>
-          </Row>
-             
+                      <ModalFooter>
+                        <Button
+                          className="shadow-none"
+                          color="primary"
+                          onClick={() => {
+                            addLineItemApi();
+                          }}
+                        >
+                          {' '}
+                          Submit{' '}
+                        </Button>
+                        <Button
+                          className="shadow-none"
+                          color="secondary"
+                          onClick={() => {
+                            // setEditInvoiceData(false);
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Row>
+                  </Form>
+                </Col>
+              </Row>
             </FormGroup>
           </Form>
         </ModalBody>

@@ -49,33 +49,18 @@ const SalesInvoice = () => {
     },
     {
       name: 'Invoice No',
-      selector: 'invoice_code',
-      sortable: true,
-      grow: 0,
-      wrap: true,
+    
     },
-  
+   
     {
       name: 'Date',
-      selector: 'company_name',
-      sortable: true,
-      grow: 0,
+    
     },
     {
       name: 'Status',
-      selector: 'status',
-      sortable: true,
-      width: 'auto',
-      grow: 3,
+    
     },
-    {
-      name: 'Invoice Amount',
-      selector: 'invoice_amount',
-      sortable: true,
-      grow: 2,
-      width: 'auto',
-    },
-        
+
   ];
 
   return (
@@ -104,17 +89,17 @@ const SalesInvoice = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={element.sales_return_id }>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/InvoiceEdit/${element.invoice_id}`}>
+                      <Link to={`/ReturnEdit/${element.sales_return_id }/${element.invoice_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
                     <td>{element.invoice_code}</td>
-                    <td>{element.date}</td>
-                    <td>{element.invoice_status}</td>
-                    <td>{element.invoice_amount}</td>
+                   <td>{element.return_date}</td>
+                    <td>{element.status}</td>
+                   
                   </tr>
                 );
               })}

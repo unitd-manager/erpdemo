@@ -131,7 +131,7 @@ const Proposal = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.proposal_title}</td>
+                    <td>{element.title}</td>
 
                     <td>{element.quote_code}</td>
                     <td>{element.company_name}</td>
@@ -141,13 +141,13 @@ const Proposal = () => {
                 );
               })}
           </tbody>
-          <tfoot>
+          {/* <tfoot>
             <tr>
               {columns.map((cell) => {
                 return <td key={cell.name}>{cell.name}</td>;
               })}
             </tr>
-          </tfoot>
+          </tfoot> */}
         </CommonTable>
       </div>
     </div>
