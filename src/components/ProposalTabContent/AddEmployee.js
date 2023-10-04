@@ -2,20 +2,18 @@ import React, {useState,useEffect} from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import CommonTable from '../CommonTable';
-import TimesheetModal from '../ProposalModal/TimesheetModal';
 import ChooseEmployee from '../ProposalModal/ChooseEmployee';
 import api from '../../constants/api';
-import PdfEmpTimesheet from '../PDF/PdfEmpTimesheet';
+
 
 const AddEmployee = () => {
 
   const { id } = useParams();
 
-  const [timesheet, setTimesheet] = useState(false);
+  
   const [chooseEmp, setChooseEmp] = useState(false);
-  const [getemployeeLinked, setGetEmployeeLinked] = useState();
-  const [getSingleEmployeeData, setSingleEmployeeData] = useState();
-  const [totalEmpTimesheetRecord, setTotalEmpTimesheetRecord] = useState();
+  const [getemployeeLinked, setGetEmployeeLinked] = useState([]);
+  
 
     const Employeecolumns = [
         {
@@ -41,29 +39,26 @@ const AddEmployee = () => {
       .then((res) => {
         console.log("res.data.data",res.data.data)
         setGetEmployeeLinked(res.data.data)
+      }).catch((err)=>{
+console.log('err',err)
       })
   }
 
-  const showEmpDataInTimsheet = () => {
-    api.get('/timesheet/getAllEmpTimesheet').then((res) => {
-      setTotalEmpTimesheetRecord(res.data.data);
-    });
-  };
-
+  
 
   useEffect(() => {
     getLinkedEmployee();
-    showEmpDataInTimsheet();
+    
     }, [id])
 
-    const uniqueEmployeeData = getemployeeLinked?.reduce((acc, curr) => {
-      const existingEmployee = acc.find((employee) => employee.employee_id === curr.employee_id);
-        if (!existingEmployee) {
-        acc.push(curr);
-      }
+    // const uniqueEmployeeData = getemployeeLinked?.reduce((acc, curr) => {
+    //   const existingEmployee = acc.find((employee) => employee.employee_id === curr.employee_id);
+    //     if (!existingEmployee) {
+    //     acc.push(curr);
+    //   }
     
-      return acc;
-    }, []) || [];
+    //   return acc;
+    // }, []) || [];
 
   return (
     <>
@@ -83,30 +78,21 @@ const AddEmployee = () => {
             </tr>
           </thead>
           <tbody>
-            {uniqueEmployeeData.map((e,i)=>{
+            {getemployeeLinked && getemployeeLinked.map((e,i)=>{
              return (
              <tr>
               <td>{i+1}</td>
               <td>{e.first_name}</td>
               <td>{e.position}</td>
-              <td>
-                  <Button color="primary" className="shadow-none" 
-                  onClick={() => { 
-                    setTimesheet(true)
-                    setSingleEmployeeData(e)
-                  }}> New Timesheet </Button>
-              </td>
-              <td> < PdfEmpTimesheet getSingleEmployeeData={e} totalEmpTimesheetRecord={totalEmpTimesheetRecord} /> </td>
-           </tr>) 
+
+                         </tr>) 
             })}
           </tbody>
         </CommonTable>
       </Col>
     </Row>
      <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} />
-    <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 
-    getSingleEmployeeData={getSingleEmployeeData} 
-    setSingleEmployeeData={setSingleEmployeeData} />
+    
     </>
   );
 };
