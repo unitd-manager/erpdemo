@@ -17,14 +17,18 @@ export default function TradingQuoteButton({
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     id: PropTypes.any,
+      
+    
   };
   return (
     <Form>
       <FormGroup>
         <ComponentCardV2>
           <Row>
-            <Col>
-              <PdfQuote id={id} quoteId={id}></PdfQuote>
+            <Col >
+             
+                <PdfQuote id={id} quoteId={id}></PdfQuote>
+             
             </Col>
             <Col>
               <Button

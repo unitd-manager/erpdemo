@@ -99,23 +99,15 @@ const GoodsDeliveryEdit = () => {
           .get('/goodsdelivery/checkDeliveryItems')
           .then((response) => {
             const ExistingDeliveryItemsId = response.data.data;
-            let alreadyInserted = false;
             const insertDeliveryItems = (index) => {
               if (index < DeliveryItems.length) {
                 const DeliveryItem = DeliveryItems[index];
                 // Check if the order_item_id  already exists in the ExistingDeliveryItemsId array
                 if (ExistingDeliveryItemsId.includes(DeliveryItem.order_item_id)) {
-                  if (!alreadyInserted) {
-                    console.warn(
-                      `Delivery items are already Inserted (Order_item_id: ${DeliveryItem.order_item_id})`,
-                    );
-                    message('Delivery items are already Inserted', 'warning');
-                    alreadyInserted = true; // Set the flag to true so the message is shown only once
-                    setTimeout(() => {
-                      alreadyInserted = false;
-                    }, 3000);
-                  }
-
+                  console.warn(
+                    `Delivery items are already Inserted  ${DeliveryItem.order_item_id}  already exists, skipping insertion`,
+                  );
+                  message('Delivery items are already Inserted', 'warning');
                   insertDeliveryItems(index + 1);
                 } else {
                   // Insert the order item
@@ -123,7 +115,7 @@ const GoodsDeliveryEdit = () => {
                     creation_date: creationdatetime,
                     modified_by: loggedInuser.first_name,
                     goods_delivery_id: id,
-                    order_id: tenderDetails.order_id,
+                    order_id: DeliveryItem.order_id,
                     order_item_id: DeliveryItem.order_item_id,
                     title: DeliveryItem.item_title,
                     unit: DeliveryItem.unit,
@@ -139,13 +131,6 @@ const GoodsDeliveryEdit = () => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-
-                        if (!alreadyInserted) {
-                          console.log(`Order item ${index + 1} inserted successfully`);
-                          message('All Order items Inserted successfully');
-                          alreadyInserted = true;
-                        }
-                        getgoodsLineItemById();
                         window.location.reload();
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);

@@ -25,7 +25,8 @@ const GoodsDeliveryDetails = () => {
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
-    order_code: '',
+    order_id:'',
+    goods_delivery_date:'',
   });
 
   const handleInputsTenderForms = (e) => {
@@ -47,7 +48,7 @@ const GoodsDeliveryDetails = () => {
 
   //console.log(tenderDetails);
   const insertgoodsDelivery = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.goods_delivery_date !== '') {
+    if (tenderForms.order_id !== '' && tenderForms.goods_delivery_date !== '') {
       tenderForms.goods_delivery_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -55,10 +56,11 @@ const GoodsDeliveryDetails = () => {
         .post('/goodsdelivery/insertgoodsdelivery', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
+          const OrderId = tenderForms.order_id;
           getTendersById();
           message('Goods inserted successfully.', 'success');
           //   setTimeout(() => {
-          navigate(`/GoodsDeliveryEdit/${insertedDataId}?tab=1`);
+          navigate(`/GoodsDeliveryEdit/${insertedDataId}/${OrderId}?tab=1`);
           //   }, 300);
         })
         .catch(() => {

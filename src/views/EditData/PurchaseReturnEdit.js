@@ -14,6 +14,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import ProjectQuoteButton from '../../components/PurchaseReturn/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/PurchaseReturn/ProjectQuoteMoreDetails';
 import QuotationAttachment from '../../components/PurchaseReturn/QuotationAttachment';
+import ReturnInvoiceItemTable from '../../components/PurchaseReturn/ReturnInvoiceItemTable';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 
@@ -25,6 +26,8 @@ const PurchaseReturnEdit = () => {
   const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
+  const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
+
   //const [quoteLine, setQuoteLine] = useState();
 
   //const [contact, setContact] = useState();
@@ -34,7 +37,9 @@ const PurchaseReturnEdit = () => {
   const { loggedInuser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState('1');
-  const { id } = useParams();
+  const { insertedDataId, purchaseInvoiceId } = useParams();
+  console.log('insertedDataId:', insertedDataId);
+  console.log('invoiceId:', purchaseInvoiceId);
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -49,8 +54,9 @@ const PurchaseReturnEdit = () => {
   };
   console.log(viewLineToggle);
   const tabs = [
-    { id: '1', name: 'Purchase Return' },
-    { id: '2', name: 'Attachment' },
+    { id: '1', name: 'Return Items' },
+    { id: '2', name: 'Purchase Return' },
+    { id: '3', name: 'Attachment' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -63,10 +69,22 @@ const PurchaseReturnEdit = () => {
     });
   };
 
+
+  const getReturnInvoiceItemById = () => {
+    api
+      .post('/purchasereturn/getInvoiceItemsById', { purchase_invoice_id: purchaseInvoiceId })
+      .then((res) => {
+        setReturnInvoiceItemDetails(res.data.data);
+      })
+      .catch(() => {
+       
+      });
+  };
+
   // Get Tenders By Id
    const editTenderById = () => {
     api
-      .post('/purchasereturn/getPurchaseReturnById', { purchase_return_id: id })
+      .post('/purchasereturn/getPurchaseReturnById', { purchase_return_id: insertedDataId })
       .then((res) => {
         setTenderDetails(res.data.data[0]);
       })
@@ -103,7 +121,7 @@ const PurchaseReturnEdit = () => {
   };
   // Get Line Item
   const getLineItem = () => {
-    api.post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: id }).then((res) => {
+    api.post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: insertedDataId }).then((res) => {
       setLineItem(res.data.data);
       //setAddLineItemModal(true);
     });
@@ -152,8 +170,9 @@ const PurchaseReturnEdit = () => {
     editTenderById();
     getLineItem();
     getCompany();
+    getReturnInvoiceItemById();
     // getAllCountries();
-  }, [id]);
+  }, [insertedDataId]);
 
   const columns1 = [
     {
@@ -183,7 +202,7 @@ const PurchaseReturnEdit = () => {
   ];
   const deleteRecord = (deleteID) => {
     Swal.fire({
-      title: `Are you sure? ${id}`,
+      title: `Are you sure? ${insertedDataId}`,
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -229,7 +248,11 @@ const PurchaseReturnEdit = () => {
 
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
+         
           <TabPane tabId="1">
+            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} />
+          </TabPane>
+          <TabPane tabId="2">
             
             <br />
             <Row>
@@ -276,7 +299,7 @@ const PurchaseReturnEdit = () => {
            
            
           </TabPane>
-          <TabPane tabId="2">
+          <TabPane tabId="3">
             <QuotationAttachment></QuotationAttachment>
           </TabPane>
         </TabContent>
