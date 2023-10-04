@@ -9,8 +9,9 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import GoodsReceiptLineItems from '../../components/GoodsReceipt/GoodsReceiptLineItems';
+
 // import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
+import PurchaseInvoiceLineItems from '../../components/PurchaseInvoiceTable/PurchaseInvoiceLineItems'
 import PurchaseInvoiceEditDetails from '../../components/PurchaseInvoiceTable/PurchaseInvoiceEditDetails';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
@@ -214,9 +215,9 @@ const PurchaseRequestEdit = () => {
         </FormGroup>
       </Col> */}
     </Row>
-        <GoodsReceiptLineItems
+        <PurchaseInvoiceLineItems
           PurchaseOrderId={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_order_id}
-        ></GoodsReceiptLineItems>
+        ></PurchaseInvoiceLineItems>
           </TabPane>
           <TabPane tabId="2">
           <Form>
@@ -243,14 +244,14 @@ const PurchaseRequestEdit = () => {
                     setAttachmentModal={setAttachmentModal}
                     roomName={RoomName}
                     fileTypes={fileTypes}
-                    altTagData="GoodsReceiptRelated Data"
-                    desc="GoodsReceiptRelated Data"
+                    altTagData="PurchaseInvoiceRelated Data"
+                    desc="PurchaseInvoiceRelated Data"
                     recordType="RelatedPicture"
                     mediaType={attachmentData.modelType}
                     update={update}
                     setUpdate={setUpdate}
                   />
-                  <ViewFileComponentV2 moduleId={id} roomName="GoodsReceipt" recordType="RelatedPicture" update={update}
+                  <ViewFileComponentV2 moduleId={id} roomName="PurchaseInvoice" recordType="RelatedPicture" update={update}
                     setUpdate={setUpdate}/>
               </FormGroup>
             </Form>

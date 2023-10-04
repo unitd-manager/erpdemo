@@ -45,7 +45,7 @@ const GoodsReceiptDetails = () => {
         });
     }
     else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill title of the change request', 'warning');
     }
 };
 

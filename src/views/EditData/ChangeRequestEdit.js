@@ -172,6 +172,7 @@ const ChangeRequestEdit = () => {
                   <Input
                     type="date"
                     onChange={handleInputs}
+                    min={changerequesteditdetails && moment(changerequesteditdetails.submission_date).format('YYYY-MM-DD')}
                     value={changerequesteditdetails && moment(changerequesteditdetails.proposed_implementation_date).format('YYYY-MM-DD')}
                     name="proposed_implementation_date"
                   />

@@ -18,6 +18,7 @@ import {
 import random from 'random';
 import AsyncSelect from 'react-select/async';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 // import * as Icon from 'react-feather';
 // import Swal from 'sweetalert2';
 //import { Link } from 'react-router-dom';
@@ -80,6 +81,23 @@ const [addMoreItem, setMoreItem] = useState([
     title: '', // Initialize title here
   },
 ]);
+
+// get user information
+const [unitdetails, setUnitDetails] = useState();
+// fetch UoM dropdown from vauelist
+ const getUnit = () => {
+   api.get('/product/getUnitFromValueList', unitdetails)
+     .then((res) => {
+       const items = res.data.data
+       const finaldat = []
+       items.forEach(item => {
+         finaldat.push({ value: item.value, label: item.value })
+       })
+       setUnitDetails(finaldat)
+     })
+ }
+ 
+
 // const deleteRecord = (deleteID) => {
 //   Swal.fire({
 //     title: `Are you sure? ${deleteID}`,
@@ -161,13 +179,12 @@ const onchangeItem = (selectedProduct, itemId) => {
 };
 
 
-const handleUnitChange = (itemId, newUnit, newQty) => {
+const handleUnitChange = (itemId, newUnit) => {
   const updatedItems = addMoreItem.map((item) => {
     if (item.id === itemId) {
       return {
         ...item,
         unit: newUnit,
-        purchase_request_qty: newQty
       };
     }
     return item;
@@ -283,7 +300,7 @@ const insertProduct = (ProductCode, ItemCode) => {
   
 
   useEffect(() => {
-    // getProduct();
+    getUnit();
  }, []);
   //  Table Contact
   // // const columns = [
@@ -411,7 +428,7 @@ const insertProduct = (ProductCode, ItemCode) => {
       <Input value={item.title} type="hidden" name="title"></Input>
     </td>
     <td>
-      <Input
+      {/* <Input
         type="select"
         onChange={(e) => {
           const newUnit = e.target.value;
@@ -426,7 +443,34 @@ const insertProduct = (ProductCode, ItemCode) => {
         <option value="EA">EA</option>
         <option value="NOS">NOS</option>
         <option value="BOX">BOX</option>
-      </Input>
+      </Input> */}
+      <Select
+                                   
+                                   onChange={(selectedOption) => {
+                                     onchangeItem(selectedOption);
+                                   }}
+                                   defaultValue={{
+                                    value: item.unit,
+                                    label: item.title,
+                                    purchase_request_qty: item.purchase_request_qty,
+                                    unit: item.unit,
+                                  }}// Ensure this is set correctly
+                                   options={unitdetails}/>
+                                    {/* <Input 
+                                   name="unit"
+                                   type='hidden'
+                                   defaultValue={item.unit}
+                                   ></Input> */}
+                                   <Input
+        type="hidden"
+        onChange={(e) => {
+          const newUnit = e.target.value;
+          handleUnitChange(item.id, newUnit);
+        }}
+        value={item.unit}
+        name="unit"
+      ></Input>
+                                   
     </td>
     <td>
       <Input
@@ -473,7 +517,7 @@ const insertProduct = (ProductCode, ItemCode) => {
       </Row>
       {/* Add New Product Modal */}
       <Modal isOpen={addNewProductModal}>
-        <ModalHeader>Add New Products</ModalHeader>
+        <ModalHeader > {' '} Add New Products {' '} </ModalHeader>
 
         <ModalBody>
           <FormGroup>
@@ -483,7 +527,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                   <FormGroup>
                     <Row>
                       <Label sm="3">
-                        Product Name <span className="required"> *</span>
+                        Product Name <span className="required"> *</span>{' '}
                       </Label>
                       <Col sm="8">
                         <Input
@@ -505,8 +549,8 @@ const insertProduct = (ProductCode, ItemCode) => {
             color="primary"
             className="shadow-none"
             onClick={() => {
-              setAddNewProductModal(false);
               generateCode();
+              setAddNewProductModal(false);
               // getProduct();
               // setTimeout(() => {
               //   window;
