@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'reactstrap';
 import ComponentCardV2 from '../ComponentCardV2';
 
-function JournalButton({ navigate }) {
+function JournalButton({ navigate,editJournalData,editJournalMasterData }) {
     JournalButton.propTypes = {
     navigate: PropTypes.any,
+    editJournalData: PropTypes.func,
+    editJournalMasterData: PropTypes.func,
   };
   return (
     <div>
@@ -16,6 +18,8 @@ function JournalButton({ navigate }) {
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  editJournalData()
+                  editJournalMasterData()
                   setTimeout(() => {
                     navigate('/Journal');
                   }, 800);
@@ -28,9 +32,10 @@ function JournalButton({ navigate }) {
             <Button
               color="primary"
               className="shadow-none"
-            //   onClick={() => {
-            //     editTask();
-            //   }}
+              onClick={() => {
+                editJournalData()
+                editJournalMasterData()
+              }}
             >
               Apply
             </Button>

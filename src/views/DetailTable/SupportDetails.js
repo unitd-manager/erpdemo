@@ -31,6 +31,7 @@ const SupportDetails = () => {
     api
       .get('/support/getSection')
       .then((res) => {
+        console.log("getSection",res.data.data)
         setSection(res.data.data);
       })
       .catch(() => {

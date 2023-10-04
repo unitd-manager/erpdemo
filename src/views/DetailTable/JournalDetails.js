@@ -68,20 +68,14 @@ const JournalDetails = () => {
     const handleSaveAndContinue = async () => {
       if (
         !journalDetail.acc_head1 ||
-        !journalDetail.acc_head2 ||
-        !journalDetail.debit1 ||
-        !journalDetail.credit1 ||
-        !journalDetail.debit2 ||
-        !journalDetail.credit2
+        !journalDetail.acc_head2
       ) {
         // Handle validation error, e.g., show a message to the user.
         message('Please fill in all required fields.', 'warning');
         return;
       }
     
-      // Validation for inserting only debit or credit in a row
       if ((journalDetail.debit1 && journalDetail.credit1) || (journalDetail.debit2 && journalDetail.credit2)) {
-        // Handle validation error, e.g., show a message to the user.
         message('You can only insert either debit or credit in a row, not both.', 'warning');
         return;
       }
@@ -110,10 +104,10 @@ const JournalDetails = () => {
         const response = await api.post('/journal/insertJournalAndMaster', requestData);
     
         if (response.status === 200) {
-          const insertedDataId = response.data.data.insertId;
+          // const insertedDataId = response.data.data.insertId;
           message('Record inserted successfully', 'success');
           setTimeout(() => {
-            navigate(`/JournalEdit/${insertedDataId}`);
+            navigate(`/Journal`);
           }, 300);
         } else {
           console.error('API error:', response.data);

@@ -28,8 +28,6 @@ const ProjectEdit = () => {
   const [update, setUpdate] = useState(false);
   const [incharge, setIncharge] = useState();
 
-
-  
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });

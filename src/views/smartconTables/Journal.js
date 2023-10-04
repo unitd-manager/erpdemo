@@ -75,7 +75,7 @@ const Journal = () => {
       .get('/journal/getJournal')
       .then((res) => {
         setJournal(res.data.data);
-        console.log("res.data.data",res.data.data)
+        console.log("getJournal",res.data.data)
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -127,9 +127,9 @@ const Journal = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.creation_date.slice(0,10)}</td>
+                    <td>{element.entry_date}</td>
                     <td>{element.acc_head}</td>
-                    <td>{element.narration_main}</td>
+                    <td>{element.narration_main}<br/>{element.narration}</td>
                     <td>{element.debit}</td>
                     <td>{element.credit}</td>
                   </tr>
