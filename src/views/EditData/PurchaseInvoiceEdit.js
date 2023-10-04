@@ -10,7 +10,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import GoodsReceiptLineItems from '../../components/GoodsReceipt/GoodsReceiptLineItems';
-import GoodsReceiptItemsEdit from '../../components/GoodsReceipt/GoodsReceiptItemsEdit';
+// import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
 import PurchaseInvoiceEditDetails from '../../components/PurchaseInvoiceTable/PurchaseInvoiceEditDetails';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
@@ -22,7 +22,7 @@ const PurchaseRequestEdit = () => {
   // All state variables
   const [purchaseinvoiceeditdetails, setPurchaseInvoiceEditDetails] = useState({});
   const [activeTab, setActiveTab] = useState('1');
-  const [invoiceitemseditmodal, setInvoiceItemsEditModal] = useState(false);
+  // const [invoiceitemseditmodal, setInvoiceItemsEditModal] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
@@ -61,10 +61,10 @@ const PurchaseRequestEdit = () => {
     });
   };
 
-  // Get Goods Receipt data By Goods Receipt Id
+  // Get Goods Invoice data By Goods Invoice Id
   const getPurchaseInvoiceById = () => {
     api
-      .post('/goodsreceipt/getPurchaseInvoiceById', { purchase_invoice_id: id })
+      .post('/purchaseinvoice/getPurchaseInvoiceById', { purchase_invoice_id: id })
       .then((res) => {
         setPurchaseInvoiceEditDetails(res.data.data[0]);
         console.log("setPurchaseInvoiceEditDetails",res.data.data[0])
@@ -74,7 +74,7 @@ const PurchaseRequestEdit = () => {
       });
   };
 
-  // Edit Goods Receipt Data
+  // Edit Goods Invoice Data
   const editPurchaseInvoiceData = () => {
     if (purchaseinvoiceeditdetails.purchase_order_id && purchaseinvoiceeditdetails.purchase_invoice_date) {
       purchaseinvoiceeditdetails.modification_date = creationdatetime;
@@ -92,48 +92,47 @@ const PurchaseRequestEdit = () => {
     }
   };
 
-  // Generate Data for Receipt Items
+  // Generate Data for Invoice Items
   const generateData = () => {
     api
-      .post('/goodsreceipt/getPurchaseOrderedById', { purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id })
+      .post('/purchaseinvoice/getPoProductById', { purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id })
       .then((res) => {
-        const ReceiptItems = res.data.data;
-        console.log('Received items:', ReceiptItems);
-        if (ReceiptItems.length === 0) {
-          console.warn('No Receipt items to insert');
+        const InvoiceItems = res.data.data;
+        console.log('Invoice items:', InvoiceItems);
+        if (InvoiceItems.length === 0) {
+          console.warn('No Invoice items to insert');
           return;
         }
-        // Retrieve all po_product_id  values from the goods_receipt_items table
+        // Retrieve all po_product_id  values from the purchase_invoice_items table
         api
-          .get('/purchaseinvoice/checkReceiptItems')
+          .get('/purchaseinvoice/checkInvoiceItems')
           .then((response) => {
-            const ExistingReceiptItemsId = response.data.data; 
-            const insertReceiptItems = (index) => {
-              if (index < ReceiptItems.length) {
-                const ReceiptItem = ReceiptItems[index];  
-                // Check if the po_product_id  already exists in the ExistingReceiptItemsId array
-                if (ExistingReceiptItemsId.includes(ReceiptItem.po_product_id )) {
-                  console.warn(`Receipt item for po_product_id  ${ReceiptItem.po_product_id } already exists, skipping insertion`);
-                  message('Receipt items are already Inserted', 'warning');
-                  insertReceiptItems(index + 1);
+            const ExistingInvoiceItemsId = response.data.data; 
+            const insertInvoiceItems = (index) => {
+              if (index < InvoiceItems.length) {
+                const InvoiceItem = InvoiceItems[index];  
+                // Check if the po_product_id  already exists in the ExistingInvoiceItemsId array
+                if (ExistingInvoiceItemsId.includes(InvoiceItem.po_product_id )) {
+                  console.warn(`Invoice item for po_product_id  ${InvoiceItem.po_product_id } already exists, skipping insertion`);
+                  message('Invoice items are already Inserted', 'warning');
+                  insertInvoiceItems(index + 1);
                 } else {
                   // Insert the order item
-                  const ReceiptItemsData = {
+                  const InvoiceItemsData = {
                     creation_date : creationdatetime,
                     modified_by : loggedInuser.first_name, 
-                    goods_receipt_id: id,
-                    product_id: ReceiptItem.product_id,
-                    item_title: ReceiptItem.item_title,
-                    po_code: ReceiptItem.po_code,
-                    po_product_id: ReceiptItem.po_product_id,
-                    ordered_quantity: ReceiptItem.quantity,
-                    unit: ReceiptItem.unit,
+                    purchase_invoice_id: id,
+                    po_product_id: InvoiceItem.po_product_id,
+                    item_title: InvoiceItem.item_title,
+                    ordered_quantity: InvoiceItem.quantity,
+                    cost_price: InvoiceItem.cost_price,
+                    unit: InvoiceItem.unit,
                     purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id,
                   };  
-                  console.log(`Inserting order item ${index + 1}:`, ReceiptItemsData);  
-                  // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current ReceiptItemsData
+                  console.log(`Inserting order item ${index + 1}:`, InvoiceItemsData);  
+                  // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current InvoiceItemsData
                   api
-                    .post('/purchaseinvoice/insertPurchaseInvoiceItems', ReceiptItemsData)
+                    .post('/purchaseinvoice/insertPurchaseInvoiceItems', InvoiceItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
@@ -144,12 +143,12 @@ const PurchaseRequestEdit = () => {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
                       // Continue to the next item
-                      insertReceiptItems(index + 1);
+                      insertInvoiceItems(index + 1);
                     })
                     .catch((error) => {
                       console.error(`Error inserting order item ${index + 1}`, error);
                       // Continue to the next item
-                      insertReceiptItems(index + 1);
+                      insertInvoiceItems(index + 1);
                     });
                 }
               } else {
@@ -158,7 +157,7 @@ const PurchaseRequestEdit = () => {
               }
             }; 
             // Start inserting order items from index 0
-            insertReceiptItems(0);
+            insertInvoiceItems(0);
           })
           .catch((error) => {
             console.error('Error checking order item existence', error);
@@ -191,17 +190,17 @@ const PurchaseRequestEdit = () => {
           <Col md="3">
                 <FormGroup>
                   <Button className="shadow-none" color="primary" onClick={() => {generateData();}}>
-                    Create Receipt Items
+                    Create Invoice Items
                  </Button>    
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
-                  <GoodsReceiptItemsEdit
+                  <PurchaseInvoiceItemsEdit
                      invoiceitemseditmodal={invoiceitemseditmodal}
                      setInvoiceItemsEditModal={setInvoiceItemsEditModal}
                      PurchaseOrderId={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_order_id}
-                    ></GoodsReceiptItemsEdit>
+                    ></PurchaseInvoiceItemsEdit>
                     <Button
             className="shadow-none"
             color="primary"
@@ -213,7 +212,7 @@ const PurchaseRequestEdit = () => {
             Edit
           </Button>
         </FormGroup>
-      </Col>
+      </Col> */}
     </Row>
         <GoodsReceiptLineItems
           PurchaseOrderId={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_order_id}

@@ -110,6 +110,7 @@ const VATReturn = Loadable(lazy(() => import('../views/smartconTables/VATReturn'
 const ChartOfAccountDetails = Loadable(lazy(() => import('../views/DetailTable/ChartOfAccountDetails')));
 const JournalDetails = Loadable(lazy(() => import('../views/DetailTable/JournalDetails')));
 const ChartofACEdit = Loadable(lazy(() => import('../views/EditData/ChartofACEdit')));
+const JournalEdit = Loadable(lazy(() => import('../views/EditData/JournalEdit')));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import('../views/auth/Error')));
@@ -383,6 +384,7 @@ const Routernew = () => {
           <Route path="/OrdersEdit/:insertedDataId/:quoteId" name="clienttdata" element={<OrdersEdit />}></Route>
           <Route path="/InvoiceEdit/:insertedDataId/:orderId" name="clienttdata" element={<InvoiceEdit />}></Route>
           <Route path="/ReturnEdit/:insertedDataId/:invoiceId" name="clienttdata" element={<ReturnEdit />}></Route>
+          <Route path="/PurchaseReturnEdit/:insertedDataId/:purchaseInvoiceId" name="clienttdata" element={<PurchaseReturnEdit />}></Route>
           <Route path="/ProjectEnquiryEdit/:id" name="clienttdata" element={<ProjectEnquiryEdit />}></Route>
           <Route path="/ReceiptEdit/:id" name="clienttdata" element={<ReceiptEdit />}></Route>
           <Route path="/FinanceEdit/:id" name="clienttdata" element={<FinanceEdit />}></Route>
@@ -390,7 +392,6 @@ const Routernew = () => {
           <Route path="/PlanningEdit/:id" name="clienttdata" element={<PlanningEdit />}></Route>
           <Route path="/PriceListEdit/:id" name="clienttdata" element={<PriceListEdit />}></Route>
           <Route path="/LabourRequestEdit/:id" name="clienttdata" element={<LabourRequestEdit />}></Route>
-          <Route path="/PurchaseReturnEdit/:id" name="clienttdata" element={<PurchaseReturnEdit />}></Route>
           <Route path="/MaterialRequestEdit/:id" name="clienttdata" element={<MaterialRequestEdit />}></Route>
           <Route path="/MaterialIssueEdit/:id" name="clienttdata" element={<MaterialIssueEdit />}></Route>
           <Route path="/EquipmentRequestEdit/:id" name="clienttdata" element={<EquipmentRequestEdit />}></Route>
@@ -825,6 +826,7 @@ const Routernew = () => {
           <Route path="/ChartOfAccountDetails" name="ChartOfAccountDetails" element={<ChartOfAccountDetails />} ></Route>
           <Route path="/JournalDetails" name="JournalDetails" element={<JournalDetails />} ></Route>
           <Route path="/ChartofACEdit/:id" name="ChartofACEdit" element={<ChartofACEdit />} ></Route>
+          <Route path="/JournalEdit/:id" name="JournalEdit" element={<JournalEdit />} ></Route>
        
         </Route>
       </Routes>

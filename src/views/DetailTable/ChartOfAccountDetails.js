@@ -2,9 +2,9 @@ import React, {useState,useEffect} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
@@ -42,14 +42,16 @@ const ChartOfAccountDetails = () => {
   //Api for insertPlanning
   const insertChartOfAccount = () => {
 
-    console.log(chartOfAccountForms)
-
     if (chartOfAccountForms.title !== '' && chartOfAccountForms.acc_category_id !== '') {
       chartOfAccountForms.creation_date = creationdatetime;
       api
         .post('/chartOfAccounts/insertChartAc', chartOfAccountForms)
-        .then(() => {
+        .then((res) => {
+          const insertedDataId = res.data.data.insertId;
           message('Record inserted successfully.', 'success');
+          setTimeout(() => {
+            navigate(`/ChartofACEdit/${insertedDataId}`);
+          }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');

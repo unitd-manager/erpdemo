@@ -25,7 +25,7 @@ const ProposalDetails = () => {
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
-    api.get('/proposal/getQuoteCode').then((res) => {
+    api.get('/proposal/getProjectQuoteCode').then((res) => {
       setQuoteCode(res.data.data);
     });
   };
@@ -35,6 +35,8 @@ const ProposalDetails = () => {
   
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
+    title: '',
+    proposal_date: '',
     
   });
 
@@ -58,9 +60,9 @@ const ProposalDetails = () => {
   const { loggedInuser } = useContext(AppContext);
 
   //console.log(tenderDetails);
-  const insertQuote = (code) => {
+  const insertProposal= () => {
     if ( tenderForms.title !== '' && tenderForms.proposal_date !== '') {
-      tenderForms.proposal_code = code;
+      
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
@@ -81,17 +83,17 @@ const ProposalDetails = () => {
     }
   };
 
-  //QUOTE GENERATED CODE
-  const generateCode = () => {
-    api
-      .post('/tender/getCodeValue', { type: 'proposal' })
-      .then((res) => {
-        insertQuote(res.data.data);
-      })
-      .catch(() => {
-        insertQuote('');
-      });
-  };
+  // //QUOTE GENERATED CODE
+  // const generateCode = () => {
+  //   api
+  //     .post('/tender/getCodeValue', { type: 'proposal' })
+  //     .then((res) => {
+  //       insertQuote(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       insertQuote('');
+  //     });
+  // };
 
   useEffect(() => {
     // getCompany();
@@ -112,14 +114,14 @@ const ProposalDetails = () => {
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}
-                    value={tenderForms && tenderForms.quote_id}
-                    name="quote_id"
+                    value={tenderForms && tenderForms.project_quote_id}
+                    name="project_quote_id"
                   >
                     <option>Please Select</option>
                     {quotecode &&
                       quotecode.map((e) => {
                         return (
-                          <option key={e.quote_id} value={e.quote_id}>
+                          <option key={e.project_quote_idquote_id} value={e.project_quote_id}>
                             {' '}
                             {e.quote_code}{' '}
                           </option>
@@ -167,7 +169,7 @@ const ProposalDetails = () => {
                     color="primary"
                     className="btn mr-2 shadow-none"
                     onClick={() => {
-                      generateCode();
+                      insertProposal();
                     }}
                   >
                     Save & Continue

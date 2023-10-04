@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Input, Button, Row, Col,FormGroup } from 'reactstrap';
+import { Input, Button,Row,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -11,9 +11,7 @@ import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import * as XLSX from 'xlsx';
-import axios from 'axios'
-import moment from 'moment';
+import readXlsxFile from 'read-excel-file';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import { columns } from '../../data/Tender/InventoryData';
@@ -21,8 +19,6 @@ import ViewAdjustStockHistoryModal from '../../components/Inventory/ViewAdjustSt
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-
-axios.defaults.baseURL = 'http://43.228.126.245:5001';
 
 function Inventory() {
   //statevariables
@@ -35,7 +31,7 @@ function Inventory() {
     inventory_id: null,
     stock: null,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const [adjuststockDetails, setAdjuststockDetails] = useState({
     inventory_id: null,
@@ -49,15 +45,17 @@ function Inventory() {
   const navigate = useNavigate();
   // Get All inventories
   const getAllinventories = () => {
-    setLoading(false);
+    setLoading(false)
     api
       .get('/inventory/getinventoryMain')
       .then((res) => {
-        setLoading(false);
+        setLoading(false)
         setInventories(res.data.data);
+       
       })
       .catch(() => {
-        setLoading(false);
+        message('Inventory Data Not Found', 'info');
+        setLoading(false)
       });
   };
   //handle change
@@ -66,24 +64,23 @@ function Inventory() {
       inventory_id: element.inventory_id,
       stock: e.target.value,
     });
-  
-    const adjustedStockValue = parseFloat(e.target.value);
-    const currentStockValue = parseFloat(element.stock) || 0; // If element.stock is null, set it to 0
-  
-    const adjustStock = adjustedStockValue - currentStockValue;
-  
+    inventoryStock.inventory_id = element.inventory_id;
+    inventoryStock.stock = e.target.value;
+    // setActualStock({[e.target.name]:e.target.value});
+    const adjustStock = parseFloat(inventoryStock.stock) - parseFloat(element.stock);
+
     setAdjuststockDetails({
       inventory_id: element.inventory_id,
       product_id: element.productId,
       adjust_stock: adjustStock,
       modified_by: '',
       created_by: '',
-      current_stock: currentStockValue,
+      current_stock: element.stock,
     });
   };
-  
   //adjust stock
   const adjuststock = () => {
+  
     api
       .post('/inventory/insertadjust_stock_log', adjuststockDetails)
       .then(() => {
@@ -109,139 +106,72 @@ function Inventory() {
       });
   };
 
-  const [selectedFile, setSelectedFile] = useState({
-    title: '', 
-    item_code:'',
-    product_type:'',
-    qty_in_stock:'',
-  });
-  
-  const handleFileChange = (e) => {
-   
-    const file = e.target.files[0];
-    if (!file) return; // No file selected
-  
-    const reader = new FileReader();
-  
-    reader.onload = () => {
-      const data = new Uint8Array(reader.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-  
-      // Assuming there is only one sheet in the Excel file
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-  
-      // Convert the sheet data to an array of objects
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-  
-      // Assuming the first row contains headers, skip it
-      const headers = jsonData[0];
-      const rows = jsonData.slice(1);
-  
-      // Map each row to an object using headers
-      const mappedData = rows.map((row) => {
-        const obj = {};
-        headers.forEach((header, index) => {
-          obj[header] = row[index];
-        });
-        return obj;
-      });
-  
-      setSelectedFile(mappedData);
-    };
-  
-    reader.readAsArrayBuffer(file);
-  };
-  
-  console.log('exel',selectedFile)
-  const handleFileUpload = async () => {
-    try {
-      if (!selectedFile || selectedFile.length === 0) {
-        // Handle no file selected
-        console.error('No file selected.');
-        return;
-      }
-  
-      const formData = new FormData();
-  
-      // Convert the selectedFile to JSON string
-      const jsonData = JSON.stringify(selectedFile);
-      const arr = JSON.parse(jsonData);
-  
-      // Append the JSON data to the FormData object
-      formData.append('json', jsonData);
-  
-      console.log('formData', formData);
-      console.log('arr', arr);
-  
-      arr.forEach(async (element) => {
-        console.log('element', element);
-  
-        // Extract the actual_stock value from the element
-        const actualStock = element.actual_stock;
-        const searchName = element.search_name;
-        const itemCode = element.item_code;
-  
-       console.log('actualStock',actualStock)
-       console.log('searchName',searchName)
-       console.log('itemCode',itemCode)
-        // Create the product first
-        const productCodeRes = await api.post('/product/getCodeValue', {
-          type: 'ProductCode',
-        });
-         const productCode = productCodeRes.data.data
-        console.log('productCode',productCode)
-        const productResponse = await api.post('/product/insertProduct', {
-          ...element,
-          product_code: productCode,
-        });
-        const insertedProductId = productResponse.data.data.insertId;
-       
-  
-        // Get the Inventory Code
-        const inventoryCodeResponse = await api.post('/product/getCodeValue', {
-          type: 'InventoryCode',
-        });
-        const inventoryCode = inventoryCodeResponse.data.data;
-        const currentDate = moment();
-        const stockUpdatedDate =  currentDate.format('DD-MM-YYYY');
-        console.log('stockUpdatedDate',stockUpdatedDate)
-        // Create the inventory record including the actual_stock
-        await api.post('/inventory/insertinventory', {
-          product_id: insertedProductId,
-          inventory_code: inventoryCode,
-          stock_updated_date: stockUpdatedDate,
-          actual_stock: element.actual_stock,
-          search_name: element.search_name
-        });
-  
-       
-      });
-  
-      // Reload the inventories list or perform any other necessary actions
-      getAllinventories();
-    } catch (error) {
-      message('Error uploading file and inserting data:', error);
-      // You may want to add code to handle the error here
-    }
-  };
-  
-  const generateCode = () => {
-    api
-      .post('/product/getCodeValue', { type: 'ProductCode' })
-      .then((res) => {
-        const ProductCode = res.data.data
-      api
-      .post('/product/getCodeValue', { type: 'ItemCode' })
-      .then((response) => {
-        const ItemCode = response.data.data
-        handleFileUpload(ProductCode, ItemCode);
-      })
+   // TRIGGER TO IMPORT EXCEL SHEET
+   const importExcel = () => {
+    $('#import_excel').trigger('click');
+  }
+
+  // UPLOAD FILE ON THER SERVER
+  const uploadOnServer = (arr) => {
+      api.post('/inventory/import/excel', {data: JSON.stringify(arr)})
+      .then(() => {
+        message('File uploaded successfully', 'success');
+        $('#upload_file').val(null);
       })
       .catch(() => {
-        handleFileUpload('');
+        message('Failed to upload.', 'error');
       });
+  }
+
+  // PROCESSING AND FORMATTING THE DATA
+  const processData = (rows) => {
+    const arr = [];
+    rows.shift();
+
+    for ( let x = 0; x < rows.length; x++ ) {
+      arr.push(
+        {
+          ProductCode: rows[x][0],
+          ProductName: rows[x][1],
+          Description: rows[x][2],
+          Price: rows[x][3],
+          Unit: rows[x][4],
+          Category: rows[x][5],
+          Stock: rows[x][6]
+         
+        }
+      )
+    }
+
+    uploadOnServer(arr);
+  }
+
+  // IMPORTING EXCEL FILE
+  const importExcelFile = (e) => {
+    console.log(e.target.id)
+    message('test1', 'success');
+    const reader = new FileReader();
+    reader.onload = () => {
+      console.log(reader.readyState)
+      if (reader.readyState === 2) {
+        readXlsxFile(e.target.files[0])
+          .then((rows) => {
+            processData(rows);
+            message('Uploading File On The Server', 'info');
+          })
+          .finally(() => {
+            $('#upload_file').val(null);
+          }).catch(
+            err => console.log(err)
+          );
+      }
+    };
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
+
+
   useEffect(() => {
     setTimeout(() => {
       $('#example').DataTable({
@@ -270,50 +200,29 @@ function Inventory() {
       <div className=" pt-xs-25">
         <BreadCrumbs />
 
-        <CommonTable
-          loading={loading}
-          title="Inventory List"
-          Button={
-            <>
-              <Row>
-              <Col md="12">
-                <FormGroup>
-              <Input
-                        type="file"
-                        name="file"
-                        accept=".xlsx, .xls" // Specify allowed file types
-                        onChange={handleFileChange}
-                      />
-                      </FormGroup>
-                      </Col>
-                <Col md="3">
-                <FormGroup>
-                  <Link to="">
-                    <Button color="primary" className="shadow-none mr-2"
-                    onClick={() => {
-                      generateCode();
-                    }}>
-                      Import
-                    </Button>
-                  </Link>
-                  </FormGroup>
-                </Col>
-                <Col md="6">
-                <FormGroup>
-                  <a
-                    href="http://43.228.126.245/erpdemoapi/storage/excelsheets/Inventory.xlsx"
-                    download
-                  >
-                    <Button color="primary" className="shadow-none">
-                      Sample
-                    </Button>
-                  </a>
-                  </FormGroup>
-                </Col>
-              </Row>
-            </>
-          }
-        >
+        <CommonTable 
+        loading={loading}
+        title="Inventory List"
+        Button={<>
+        <Row>
+          <Col md="6">
+            {/* <Link to=""> */}
+            <Button color="primary" className="shadow-none mr-2" onClick={() => importExcel()}>
+                Import
+              </Button>
+            {/* </Link> */}
+            <input type='file' style={{display: 'none'}} id="import_excel" onChange={importExcelFile} />
+            </Col>
+            <Col md="6">
+            <a href="http://43.228.126.245/erpdemoapi/storage/excelsheets/Inventory.xlsx" download>
+             <Button color="primary" className="shadow-none" >
+               Sample
+             </Button>
+             </a>
+             </Col>
+             </Row>
+           </>
+          }>
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -323,10 +232,10 @@ function Inventory() {
           </thead>
           <tbody>
             {inventories &&
-              inventories.map((element,index) => {
+              inventories.map((element) => {
                 return (
                   <tr key={element.inventory_id}>
-                    <td>{index + 1}</td>
+                    <td>{element.inventory_id}</td>
                     <td>
                       <Link to={`/inventoryEdit/${element.inventory_id}`}>
                         <Icon.Edit2 />
@@ -346,9 +255,7 @@ function Inventory() {
                           defaultValue={element.stock}
                           onChange={(e) => handleStockinput(e, element)}
                         />
-                        <Button
-                          color="primary"
-                          className="shadow-none"
+                        <Button color='primary' className='shadow-none'
                           onClick={() => {
                             adjuststock(element);
                             updateStockinInventory();
@@ -377,7 +284,7 @@ function Inventory() {
                           setModalId(element.inventory_id);
                         }}
                       >
-                        <Link to="">view</Link>
+                       <Link to="">view</Link> 
                       </span>
                     </td>
                     <ViewAdjustStockHistoryModal
@@ -391,7 +298,9 @@ function Inventory() {
               })}
           </tbody>
         </CommonTable>
+      
       </div>
+     
     </div>
   );
 }

@@ -28,6 +28,8 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.order_code}
                     name="order_code"
+                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
+                    readOnly
                   />
                 </FormGroup>
               </Col>
@@ -40,6 +42,7 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.quote_code}
                     name="quote_code"
+                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
                     readOnly
                   />
                 </FormGroup>
@@ -52,6 +55,7 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.company_name}
                     name="company_name"
+                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
                     readOnly
                   />
                 </FormGroup>
@@ -65,6 +69,8 @@ export default function TenderMoreDetails({
                     value={orderDetails && orderDetails.office_ref_no}
                     onChange={handleInputs}
                     name="office_ref_no"
+                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
+                    readOnly
                   />
                 </FormGroup>
               </Col>
@@ -107,6 +113,7 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.amount}
                     name="amount"
+                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
                     readOnly
                   />
                 </FormGroup>
