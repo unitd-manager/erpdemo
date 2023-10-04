@@ -189,4 +189,4 @@ journalMasterData.modification_date = creationdatetime;
         </>
     );
 };
-export default JournalEdit;
+export default JournalEdit

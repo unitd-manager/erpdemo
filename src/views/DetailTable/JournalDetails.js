@@ -281,4 +281,4 @@ const JournalDetails = () => {
     </>
   );
 };
-export default JournalDetails;
+export default JournalDetails

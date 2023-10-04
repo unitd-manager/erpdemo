@@ -190,4 +190,4 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
     )
 }
 
-export default JournalEditDetails;
+export default JournalEditDetails
