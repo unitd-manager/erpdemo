@@ -121,12 +121,13 @@ const PurchaseRequestEdit = () => {
                   // Insert the order item
                   const InvoiceItemsData = {
                     creation_date : creationdatetime,
-                    modified_by : loggedInuser.first_name, 
+                    created_by : loggedInuser.first_name, 
                     purchase_invoice_id: id,
                     po_product_id: InvoiceItem.po_product_id,
                     item_title: InvoiceItem.item_title,
                     ordered_quantity: InvoiceItem.quantity,
                     cost_price: InvoiceItem.cost_price,
+                    total_cost: InvoiceItem.cost_price*InvoiceItem.quantity,
                     unit: InvoiceItem.unit,
                     purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id,
                   };  
