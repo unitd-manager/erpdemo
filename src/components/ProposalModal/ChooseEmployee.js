@@ -101,7 +101,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
           message('Employee Linked', 'success');
           setTimeout(() => {
             setChooseEmp(false);
-            window.location.reload();
+            // window.location.reload();
           }, 300);
         }
       })

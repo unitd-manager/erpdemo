@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import moment from 'moment';
 import ComponentCard from '../ComponentCard';
+
+
 
 function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs, customername}) {
     PurchaseRequestEditDetails.propTypes = {
@@ -35,7 +38,7 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date}
+                    value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_request_date).format('YYYY-MM-DD')}
                     name="purchase_request_date"
                   />
                 </FormGroup>
@@ -46,7 +49,8 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date}
+                    min={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_request_date).format('YYYY-MM-DD')}
+                    value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_delivery_date).format('YYYY-MM-DD')}
                     name="purchase_delivery_date"
                   />
                 </FormGroup>

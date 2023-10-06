@@ -8,25 +8,25 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import creationdatetime from '../../constants/creationdatetime';
-import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
+//import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
 import AppContext from '../../context/AppContext';
 
 const TradingQuotationDetails = () => {
-  const [company, setCompany] = useState();
+  //const [company, setCompany] = useState();
   const [enquirycode, setEnquiryCode] = useState();
-  const [allCountries, setallCountries] = useState();
-  const [modal, setModal] = useState(false);
+  //const [allCountries, setallCountries] = useState();
+  //const [modal, setModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const toggle = () => {
-    setModal(!modal);
-  };
-  //Api call for getting company dropdown
-  const getCompany = () => {
-    api.get('/company/getCompany').then((res) => {
-      setCompany(res.data.data);
-    });
-  };
+  // const toggle = () => {
+  //   setModal(!modal);
+  // };
+  // //Api call for getting company dropdown
+  // const getCompany = () => {
+  //   api.get('/company/getCompany').then((res) => {
+  //     setCompany(res.data.data);
+  //   });
+  // };
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
@@ -36,53 +36,52 @@ const TradingQuotationDetails = () => {
   };
 
   //Logic for adding company in db
-  const [companyInsertData, setCompanyInsertData] = useState({
-    company_name: '',
-    address_street: '',
-    address_town: '',
-    address_country: '',
-    address_po_code: '',
-    phone: '',
-    fax: '',
-    website: '',
-    supplier_type: '',
-    industry: '',
-    company_size: '',
-    source: '',
-  });
+  // const [companyInsertData, setCompanyInsertData] = useState({
+  //   company_name: '',
+  //   address_street: '',
+  //   address_town: '',
+  //   address_country: '',
+  //   address_po_code: '',
+  //   phone: '',
+  //   fax: '',
+  //   website: '',
+  //   supplier_type: '',
+  //   industry: '',
+  //   company_size: '',
+  //   source: '',
+  // });
 
-  const handleInputs = (e) => {
-    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
-  };
+  // const handleInputs = (e) => {
+  //   setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  // };
 
-  const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.address_street !== '' &&
-      companyInsertData.address_po_code !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then(() => {
-          message('Company inserted successfully.', 'success');
-          getCompany();
-          window.location.reload();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
-  };
+  // const insertCompany = () => {
+  //   if (
+  //     companyInsertData.company_name !== '' &&
+  //     companyInsertData.address_street !== '' &&
+  //     companyInsertData.address_po_code !== '' &&
+  //     companyInsertData.address_country !== ''
+  //   ) {
+  //     api
+  //       .post('/company/insertCompany', companyInsertData)
+  //       .then(() => {
+  //         message('Company inserted successfully.', 'success');
+  //         //getCompany();
+  //         window.location.reload();
+  //       })
+  //       .catch(() => {
+  //         message('Network connection error.', 'error');
+  //       });
+  //   } else {
+  //     message('Please fill all required fields.', 'warning');
+  //   }
+  // };
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
     opportunity_id: '',
     quote_date: '',
-    company_id: '',
-    company_name: '',
+    
   });
 
   const handleInputsTenderForms = (e) => {
@@ -90,16 +89,16 @@ const TradingQuotationDetails = () => {
   };
 
   //Api for getting all countries
-  const getAllCountries = () => {
-    api
-      .get('/clients/getCountry')
-      .then((res) => {
-        setallCountries(res.data.data);
-      })
-      .catch(() => {
-        message('Country Data Not Found', 'info');
-      });
-  };
+  // const getAllCountries = () => {
+  //   api
+  //     .get('/clients/getCountry')
+  //     .then((res) => {
+  //       setallCountries(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       message('Country Data Not Found', 'info');
+  //     });
+  // };
   //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
@@ -115,7 +114,7 @@ const TradingQuotationDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.opportunity_id !== '' && tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
+    if (tenderForms.opportunity_id !== '' && tenderForms.quote_date !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -150,9 +149,9 @@ const TradingQuotationDetails = () => {
   };
 
   useEffect(() => {
-    getCompany();
+    //getCompany();
     getEnquiryCode();
-    getAllCountries();
+    //getAllCountries();
   }, [id]);
 
   return (
@@ -201,9 +200,9 @@ const TradingQuotationDetails = () => {
                   </Col>
                 </Row>
               </FormGroup>
-              <FormGroup>
-                <Row>
-                  <Col md="9">
+              {/* <FormGroup>
+                <Row> */}
+                  {/* <Col md="9">
                     <Label>
                       Company Name <span className="required"> *</span>{' '}
                     </Label>
@@ -223,8 +222,8 @@ const TradingQuotationDetails = () => {
                           );
                         })}
                     </Input>
-                  </Col>
-                  <Col md="3" className="addNew">
+                  </Col> */}
+                  {/* <Col md="3" className="addNew">
                     <Label>Add New Name</Label>
                     <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
                       Add New
@@ -239,7 +238,7 @@ const TradingQuotationDetails = () => {
                 toggle={toggle}
                 modal={modal}
                 setModal={setModal}
-              ></TenderCompanyDetails>
+              ></TenderCompanyDetails> */}
               <Row>
                 <div className="pt-3 mt-3 d-flex align-items-center gap-2">
                   <Button

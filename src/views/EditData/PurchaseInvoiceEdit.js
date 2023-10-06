@@ -9,8 +9,9 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import GoodsReceiptLineItems from '../../components/GoodsReceipt/GoodsReceiptLineItems';
+
 // import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
+import PurchaseInvoiceLineItems from '../../components/PurchaseInvoiceTable/PurchaseInvoiceLineItems'
 import PurchaseInvoiceEditDetails from '../../components/PurchaseInvoiceTable/PurchaseInvoiceEditDetails';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
@@ -120,12 +121,13 @@ const PurchaseRequestEdit = () => {
                   // Insert the order item
                   const InvoiceItemsData = {
                     creation_date : creationdatetime,
-                    modified_by : loggedInuser.first_name, 
+                    created_by : loggedInuser.first_name, 
                     purchase_invoice_id: id,
                     po_product_id: InvoiceItem.po_product_id,
                     item_title: InvoiceItem.item_title,
                     ordered_quantity: InvoiceItem.quantity,
                     cost_price: InvoiceItem.cost_price,
+                    total_cost: InvoiceItem.cost_price*InvoiceItem.quantity,
                     unit: InvoiceItem.unit,
                     purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id,
                   };  
@@ -214,9 +216,9 @@ const PurchaseRequestEdit = () => {
         </FormGroup>
       </Col> */}
     </Row>
-        <GoodsReceiptLineItems
+        <PurchaseInvoiceLineItems
           PurchaseOrderId={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_order_id}
-        ></GoodsReceiptLineItems>
+        ></PurchaseInvoiceLineItems>
           </TabPane>
           <TabPane tabId="2">
           <Form>
@@ -243,14 +245,14 @@ const PurchaseRequestEdit = () => {
                     setAttachmentModal={setAttachmentModal}
                     roomName={RoomName}
                     fileTypes={fileTypes}
-                    altTagData="GoodsReceiptRelated Data"
-                    desc="GoodsReceiptRelated Data"
+                    altTagData="PurchaseInvoiceRelated Data"
+                    desc="PurchaseInvoiceRelated Data"
                     recordType="RelatedPicture"
                     mediaType={attachmentData.modelType}
                     update={update}
                     setUpdate={setUpdate}
                   />
-                  <ViewFileComponentV2 moduleId={id} roomName="GoodsReceipt" recordType="RelatedPicture" update={update}
+                  <ViewFileComponentV2 moduleId={id} roomName="PurchaseInvoice" recordType="RelatedPicture" update={update}
                     setUpdate={setUpdate}/>
               </FormGroup>
             </Form>

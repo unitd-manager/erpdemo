@@ -38,7 +38,6 @@ export default function PurchaseInvoiceGetFunction({PurchaseOrderId}) {
       <thead>
         <tr>
         <th scope="col"> S.No </th>
-        <th scope="col"> PO Code </th>
         <th scope="col">Title </th>
         <th scope="col">Unit </th>
         <th scope="col">Ordered Quantity </th>
@@ -52,7 +51,6 @@ export default function PurchaseInvoiceGetFunction({PurchaseOrderId}) {
           return (
             <tr>
               <td>{index+1}</td>
-              <td >{e.po_code}</td>
               <td >{e.item_title}</td>
               <td >{e.unit}</td>
               <td >{e.ordered_quantity}</td>
