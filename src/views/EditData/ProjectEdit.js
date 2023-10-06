@@ -128,7 +128,7 @@ const ProjectEdit = () => {
                   color="primary"
                   onClick={() => {
                     setRoomName('Tender');
-                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF','OGG']);
                     dataForAttachment();
                     setAttachmentModal(true);
                   }}
