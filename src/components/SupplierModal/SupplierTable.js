@@ -57,8 +57,10 @@ export default function SupplierTable({ purchaseOrder }) {
                         </td>
                         <td>{element.po_value}</td>
                         <td>
-                          {parseFloat ? element.po_value - parseFloat(element.prev_amount) : 0}
-                        </td>
+  {Number.isNaN(parseFloat(element.po_value) - parseFloat(element.prev_amount))
+    ? "0"
+    : Math.max(parseFloat(element.po_value) - parseFloat(element.prev_amount), 0)}
+</td>
                         <td>{element.payment_status}</td>
                         <td>
                           <Link to={`/SupplierHistory/${element.purchase_order_id}`}>
