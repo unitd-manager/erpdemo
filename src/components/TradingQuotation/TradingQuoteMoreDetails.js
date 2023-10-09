@@ -127,8 +127,8 @@ export default function TradingQuoteMoreDetails({
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.ref_no_quote}
-                    name="ref_no_quote"
+                    value={tenderDetails && tenderDetails.office_ref_no}
+                    name="office_ref_no"
                   />
                 </FormGroup>
               </Col>
@@ -169,9 +169,9 @@ export default function TradingQuoteMoreDetails({
                   <Label>Net Total</Label>
                   <Input
                     type="text"
-                    value={tenderDetails && tenderDetails.total_amount}
+                    value={tenderDetails && tenderDetails.totalamount}
                     onChange={handleInputs}
-                    name="total_amount"
+                    name="totalamount"
                   />
                 </FormGroup>
               </Col>
