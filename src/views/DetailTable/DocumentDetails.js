@@ -18,22 +18,11 @@ const DocumentDetails = () => {
   });
   const [projectgetdetails, setProjectDetails] = useState();
   const [projecttitle, setProjectTitle] = useState();
-  const [ setPrevSelectedProjectId] = useState(null);
   //setting data in ProductDetails
   const handleInputs = (e) => {
     setDocumentDetails({ ...documentdetails, [e.target.name]: e.target.value });
   };
-  const handleInputsForProjectId = (e) => {
-    const { name, value } = e.target;
-    
-    if (name === 'project_id' && value === documentdetails && documentdetails.project_id) {
-      // Display an alert message if the project title is selected again
-      alert('Project title already selected.');
-    } else {
-      setDocumentDetails();
-      setPrevSelectedProjectId(value); // Update the previously selected project ID
-    }
-  };
+ 
 
   //get staff details
   const { loggedInuser } = useContext(AppContext);
@@ -135,7 +124,7 @@ const DocumentDetails = () => {
                     <Label>Project Name <span className="required"> *</span> </Label>
                     <Input
                           type="select"
-                          onChange={handleInputsForProjectId}
+                          onChange={handleInputs}
                           value={documentdetails && documentdetails.project_id}
                           name="project_id"
                         >
