@@ -99,8 +99,7 @@ export default function TenderMoreDetails({
               </option>
               <option value="new">New</option>
               <option value="paid">Paid</option>
-              <option value="partially paid">Partially Paid</option>
-              <option value="Cancelled">Cancelled</option>
+             <option value="Cancelled">Cancelled</option>
         
                   </Input>
                 </FormGroup>

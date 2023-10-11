@@ -63,7 +63,7 @@ const InvoiceEdit = () => {
     
                 // Send a POST request to your /finance/insertorder_item API with the current order item
                 api
-                  .post('/finance/insertInvoiceItem', orderItemData)
+                  .post('/invoice/insertInvoiceItem', orderItemData)
                   .then((result) => {
                     if (result.data.msg === 'Success') {
                       console.log(`Order item ${index + 1} inserted successfully`);

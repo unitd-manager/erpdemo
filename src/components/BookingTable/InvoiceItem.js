@@ -55,7 +55,7 @@ export default function InvoiceItem({ editInvoiceItemData, setEditInvoiceItemDat
         remarks: item.remarks,
       };
 
-      return api.post('/finance/insertInvoiceItem', itemToInsert);
+      return api.post('/invoice/insertInvoiceItem', itemToInsert);
     });
 
     Promise.all(promises)
