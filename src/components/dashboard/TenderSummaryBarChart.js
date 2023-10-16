@@ -1,29 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Chart from 'react-apexcharts';
 import { Row, Col } from 'reactstrap';
 import ComponentCard from '../ComponentCard';
-import api from '../../constants/api';
+//import api from '../../constants/api';
 
 const TenderSummaryBarChart = () => {
-  const [tender, setTender] = useState();
-  const [amount, setAmount] = useState();
-
-  const getTenders = () => {
-    const comapnyNames = [];
-    const totalQuoteAmt = [];
-    api.get('/tender/getTenderSummaryId').then((res) => {
-      res.data.data.forEach((e) => {
-        comapnyNames.push(`${e.company_name} (${e.title.slice(0, 7)})`);
-        totalQuoteAmt.push(e.total_amount);
-      });
-      setTender(comapnyNames);
-      setAmount(totalQuoteAmt);
-    });
-  };
-
-  useEffect(() => {
-    getTenders();
-  }, []);
+ 
 
   const optionscolumn = {
     colors: ['#745af2'],
@@ -46,7 +28,7 @@ const TenderSummaryBarChart = () => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: tender,
+      //categories: tender,
       tickPlacement: 'on',
       min: 1,
       max: 5,
@@ -95,7 +77,7 @@ const TenderSummaryBarChart = () => {
   const seriescolumn = [
     {
       name: 'Desktop',
-      data: amount,
+      //data: amount,
     },
   ];
   return (

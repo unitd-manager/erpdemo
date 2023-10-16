@@ -1,4 +1,5 @@
 import { Row, Col } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
@@ -8,6 +9,8 @@ import InvoiceSummaryChart from '../../components/dashboard/InvoiceSummaryChart'
 import EmployeeSummary from '../../components/dashboard/ecommerceDashboard/EmployeeSummary';
 import PasspotExpirySummary from '../../components/dashboard/PasspotExpirySummary';
 import WorkpermitExpirySummary from '../../components/dashboard/WorkpermitExpirySummary';
+import MaterialPurchaseSummary from '../../components/dashboard/MaterialPurchaseSummary';
+import MaterialIssueChart from '../../components/dashboard/MaterialIssueChart';
 
 const Classic = () => {
   return (
@@ -16,13 +19,15 @@ const Classic = () => {
         <Col lg="12">
           {/* <TestChart/> */}
           <TenderSummaryCard />
-          <ProjectSummaryChart/>
+          <ProjectSummaryChart />
           <TenderSummary />
-          <InvoiceSummary/>
-          <InvoiceSummaryChart/>
-          <EmployeeSummary/>
+          <InvoiceSummary />
+          <InvoiceSummaryChart />
+          <EmployeeSummary />
           <PasspotExpirySummary />
-          <WorkpermitExpirySummary/>
+          <WorkpermitExpirySummary />
+          <MaterialPurchaseSummary />
+          <MaterialIssueChart/>
           {/* <SalesOverview /> */}
         </Col>
       </Row>
