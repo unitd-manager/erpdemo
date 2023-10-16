@@ -9,6 +9,8 @@ import InvoiceSummaryChart from '../../components/dashboard/InvoiceSummaryChart'
 import EmployeeSummary from '../../components/dashboard/ecommerceDashboard/EmployeeSummary';
 import PasspotExpirySummary from '../../components/dashboard/PasspotExpirySummary';
 import WorkpermitExpirySummary from '../../components/dashboard/WorkpermitExpirySummary';
+import TaskSummary from '../../components/dashboard/TaskSummary';
+import LabourSummary from '../../components/dashboard/LabourSummary';
 import MaterialPurchaseSummary from '../../components/dashboard/MaterialPurchaseSummary';
 import MaterialIssueChart from '../../components/dashboard/MaterialIssueChart';
 
@@ -20,13 +22,15 @@ const Classic = () => {
           {/* <TestChart/> */}
           <TenderSummaryCard />
           <ProjectSummaryChart />
+          <TaskSummary/>
+          <LabourSummary/>
           <TenderSummary />
           <InvoiceSummary />
           <InvoiceSummaryChart />
           <EmployeeSummary />
           <PasspotExpirySummary />
-          <WorkpermitExpirySummary />
-          <MaterialPurchaseSummary />
+          <WorkpermitExpirySummary/>
+          <MaterialPurchaseSummary/>
           <MaterialIssueChart/>
           {/* <SalesOverview /> */}
         </Col>

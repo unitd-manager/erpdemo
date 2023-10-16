@@ -152,6 +152,7 @@ const TimesheetTable = Loadable(lazy(() => import('../views/smartconTables/Times
 const ProductTable = Loadable(lazy(() => import('../views/smartconTables/product')));
 const Planning = Loadable(lazy(() => import('../views/smartconTables/Planning')));
 const PriceList = Loadable(lazy(() => import('../views/smartconTables/PriceList')));
+const SupplierPriceList = Loadable(lazy(() => import('../views/smartconTables/SupplierPriceList')));
 const LabourRequest = Loadable(lazy(() => import('../views/smartconTables/LabourRequest')));
 const PurchaseReturn = Loadable(lazy(() => import('../views/smartconTables/PurchaseReturn')));
 const MaterialRequest = Loadable(lazy(() => import('../views/smartconTables/MaterialRequest')));
@@ -196,6 +197,7 @@ const GoodsDeliveryDetails = Loadable(lazy(() => import('../views/DetailTable/Go
 const ProductDetailsTable = Loadable(lazy(() => import('../views/DetailTable/ProductDetails')));
 const PlanningDetails = Loadable(lazy(() => import('../views/DetailTable/PlanningDetails')));
 const PriceListDetails = Loadable(lazy(() => import('../views/DetailTable/PriceListDetails')));
+const SupplierPriceListDetails = Loadable(lazy(() => import('../views/DetailTable/SupplierPriceListDetails')));
 const LabourRequestDetails = Loadable(lazy(() => import('../views/DetailTable/LabourRequestDetails')));
 const PurchaseReturnDetails = Loadable(lazy(() => import('../views/DetailTable/PurchaseReturnDetails')));
 const MaterialRequestDetails = Loadable(lazy(() => import('../views/DetailTable/MaterialRequestDetails')));
@@ -331,6 +333,7 @@ const Login = Loadable(lazy(() => import('../views/DetailTable/Login')));
 const ValueListEdit = Loadable(lazy(() => import('../views/EditData/ValueListEdit')));
 const PlanningEdit = Loadable(lazy(() => import('../views/EditData/PlanningEdit')));
 const PriceListEdit = Loadable(lazy(() => import('../views/EditData/PriceListEdit')));
+const SupplierPriceListEdit = Loadable(lazy(() => import('../views/EditData/SupplierPriceListEdit')));
 const LabourRequestEdit = Loadable(lazy(() => import('../views/EditData/LabourRequestEdit')));
 const PurchaseReturnEdit = Loadable(lazy(() => import('../views/EditData/PurchaseReturnEdit')));
 const MaterialRequestEdit = Loadable(lazy(() => import('../views/EditData/MaterialRequestEdit')));
@@ -392,6 +395,7 @@ const Routernew = () => {
           <Route path="/TrainingEdit/:id" name="clienttdata" element={<TrainingEdit />}></Route>
           <Route path="/PlanningEdit/:id" name="clienttdata" element={<PlanningEdit />}></Route>
           <Route path="/PriceListEdit/:id" name="clienttdata" element={<PriceListEdit />}></Route>
+          <Route path="/SupplierPriceListEdit/:id" name="clienttdata" element={<SupplierPriceListEdit />}></Route>
           <Route path="/LabourRequestEdit/:id" name="clienttdata" element={<LabourRequestEdit />}></Route>
           <Route path="/MaterialRequestEdit/:id" name="clienttdata" element={<MaterialRequestEdit />}></Route>
           <Route path="/MaterialIssueEdit/:id" name="clienttdata" element={<MaterialIssueEdit />}></Route>
@@ -614,6 +618,7 @@ const Routernew = () => {
           <Route path="/Client" name="clienttdata" element={<ClientTable />}></Route>
           <Route path="/Planning" name="clienttdata" element={<Planning />}></Route>
           <Route path="/PriceList" name="clienttdata" element={<PriceList />}></Route>
+          <Route path="/SupplierPriceList" name="clienttdata" element={<SupplierPriceList />}></Route>
           <Route path="/LabourRequest" name="clienttdata" element={<LabourRequest />}></Route>
           <Route path="/PurchaseReturn" name="clienttdata" element={<PurchaseReturn />}></Route>
           <Route path="/MaterialRequest" name="clienttdata" element={<MaterialRequest />}></Route>
@@ -624,6 +629,7 @@ const Routernew = () => {
           <Route path="/BillOfMaterialsShortage/:id" name="clienttdata" element={<BillOfMaterialsShortage />}></Route>
           <Route path="/PlanningDetails" name="clienttdata" element={<PlanningDetails />}></Route>
           <Route path="/PriceListDetails" name="clienttdata" element={<PriceListDetails />}></Route>
+          <Route path="/SupplierPriceListDetails" name="clienttdata" element={<SupplierPriceListDetails />}></Route>
           <Route path="/LabourRequestDetails" name="clienttdata" element={<LabourRequestDetails />}></Route>
           <Route path="/PurchaseReturnDetails" name="clienttdata" element={<PurchaseReturnDetails />}></Route>
           <Route path="/ClientDetails" name="clienttdata" element={<ClientDetailsTable />}></Route>
