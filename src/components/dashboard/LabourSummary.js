@@ -119,7 +119,7 @@ const LabourSummary = () => {
                   }
                 >
                   <option value="Skilled">Skilled</option>
-                  <option value="Unskilled">Unskilled</option>
+                  <option value="UnSkilled">UnSkilled</option>
                   <option value="Temporary">Temporary</option>
                 </Input>
               </FormGroup>
