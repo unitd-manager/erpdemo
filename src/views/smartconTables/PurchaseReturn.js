@@ -115,7 +115,7 @@ const PurchaseReturn = () => {
                   <tr key={element.purchase_return_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}?tab=1`}>
+                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}/${element.purchase_invoice_id}?tab=1 }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

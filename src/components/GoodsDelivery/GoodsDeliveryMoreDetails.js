@@ -3,11 +3,11 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, company }) {
+export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }) {
   GoodsDeliveryMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
-    company: PropTypes.object,
+   // company: PropTypes.object,
   };
   return (
     <div>
@@ -59,24 +59,12 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     company Name 
                   </Label>
                   <Input
-                    type="select"
-                    onChange={(e) => {
-                      handleInputs(e);
-                    }}
-                    value={tenderDetails && tenderDetails.company_id}
-                    name="company_id"
-                  >
-                    <option value="selected">Please Select</option>
-                    {company &&
-                      company.map((e) => {
-                        return (
-                          <option key={e.company_id} value={e.company_id}>
-                            {' '}
-                            {e.company_name}{' '}
-                          </option>
-                        );
-                      })}
-                  </Input>
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.company_name}
+                    name="company_name"
+                    disabled
+                  />
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -107,8 +95,8 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.goods_ref_no}
-                    name="goods_ref_no"
+                    value={tenderDetails && tenderDetails.office_ref_no}
+                    name="office_ref_no"
                   />
                 </FormGroup>
               </Col>

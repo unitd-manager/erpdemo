@@ -150,10 +150,10 @@ const TradingQuotation = () => {
                       {element.quote_date ? moment(element.quote_date).format('DD-MM-YYYY') : ''}
                     </td>
                     <td>{element.company_name}</td>
-                    <td>{element.ref_no_quote}</td>
+                    <td>{element.office_ref_no}</td>
                     <td>{element.opportunity_code}</td>
                     <td>{element.quote_status}</td>
-                    <td>{element.total_amount}</td>
+                    <td>{element.totalamount}</td>
                   </tr>
                 );
               })}

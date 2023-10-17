@@ -17,12 +17,15 @@ import {
   ModalHeader,
   Row,
 } from 'reactstrap';
+import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
+
+
 // import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 //geting data from invoice
 const InvoiceData = () => {
@@ -216,7 +219,7 @@ const InvoiceData = () => {
                     <td>{element.mode_of_payment}</td>
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
-                    <td>{element.receipt_date}</td>
+                    <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}

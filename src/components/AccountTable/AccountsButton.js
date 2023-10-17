@@ -22,7 +22,6 @@ export default function AccountsButton({ editAccountsData, backToList ,navigate}
                 onClick={() => {
                   editAccountsData();
                   navigate('/Accounts');
-                 
                 }}
               >
                 Save

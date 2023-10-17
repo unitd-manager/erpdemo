@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -12,6 +12,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
 import OrderAttachment from '../../components/TenderTable/OrderAttachment';
+import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
@@ -31,7 +32,7 @@ const OpportunityEdit = () => {
     navigate('/SalesOrder');
   };
   const { insertedDataId, quoteId } = useParams();
-
+  const { loggedInuser } = useContext(AppContext);
   console.log('Quote ID:', quoteId);
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -140,6 +141,7 @@ const OpportunityEdit = () => {
 
   const editTenderData = (shouldNavigate) => {
     orderDetails.modification_date = creationdatetime;
+    orderDetails.modified_by = loggedInuser.first_name;
     api
       .post('/finance/editFinances', orderDetails)
       .then(() => {

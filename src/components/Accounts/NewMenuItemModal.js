@@ -15,6 +15,7 @@ import {
   Form,
 } from 'reactstrap';
 import moment from 'moment';
+import { ToastContainer } from 'react-toastify';
 import message from '../Message';
 import api from '../../constants/api';
 import AccMapSIngleDataEditModal from './AccMapSIngleDataEditModal';
@@ -81,8 +82,10 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
       modification_date: "",
       category_type: "",
     };
-
-    api
+    
+    console.log("data",data)
+    if(data.title !== ''){
+      api
       .post('/accountsMap/insertMenuItems', data)
       .then((res) => {
         setTitle(res.data.data);
@@ -94,6 +97,10 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
       .catch(() => {
         message('Menu Item Data Not inserted', 'info');
       });
+    }else {
+      message('Please fill all required fields', 'warning');
+    }
+    
   };
 
   const getGroup = () => {
@@ -175,6 +182,7 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
 
   return (
     <>
+    <ToastContainer></ToastContainer>
       <Modal size="1" isOpen={menuItemModal}>
         <ModalHeader>
           New Menu Item
@@ -211,7 +219,7 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Title</Label>
+                      <Label>Title <span className="required"> *</span></Label>
                       <Input
                         type="text"
                         name="title"

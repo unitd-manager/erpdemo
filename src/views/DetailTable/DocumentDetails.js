@@ -22,6 +22,8 @@ const DocumentDetails = () => {
   const handleInputs = (e) => {
     setDocumentDetails({ ...documentdetails, [e.target.name]: e.target.value });
   };
+ 
+
   //get staff details
   const { loggedInuser } = useContext(AppContext);
   

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
+import AppContext from '../../context/AppContext';
 
 const OpportunityDetails = () => {
   const [company, setCompany] = useState();
@@ -18,6 +19,7 @@ const OpportunityDetails = () => {
   const toggle = () => {
     setModal(!modal);
   };
+  const { loggedInuser } = useContext(AppContext);
   //Api call for getting company dropdown
   const getCompany = () => {
     api.get('/company/getCompany').then((res) => {
@@ -104,6 +106,7 @@ const OpportunityDetails = () => {
     if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
       tenderForms.opportunity_code = code;
       tenderForms.creation_date = creationdatetime;
+      tenderForms.created_by = loggedInuser.first_name;
       api
         .post('/tender/insertTenders', tenderForms)
         .then((res) => {

@@ -11,7 +11,6 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as Icon from 'react-feather';
-import Swal from 'sweetalert2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
@@ -126,52 +125,14 @@ const PriceListEdit = () => {
   
   
   
-  const AddNewPlanning = () => {
   
-    const newContactWithCompanyId = newPlanningData;
-newContactWithCompanyId.price_list_id = id;
-if (
-  newContactWithCompanyId.price !== ''
-
-
-) {
-api
-  .post('/pricelistitem/insertPriceListItem', newContactWithCompanyId)
-  .then(() => {
-    message('Contact inserted successfully.', 'success');
-     window.location.reload();
-  })
-  .catch(() => { 
-    message('Network connection error.', 'error');
-  });
-}else {
-message('Please fill all required fields', 'warning');
-}
-};
 
 //Contact Functions/Methods
 const handleAddNewPlanning = (e) => {
   setNewPlanningData({ ...newPlanningData, [e.target.name]: e.target.value });
 };
 
-const deleteRecord = (deleteID) => {
-  Swal.fire({
-    title: `Are you sure? ${id}`,
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      api.post('/pricelistitem/deletePriceListItem', { price_list_item_id: deleteID }).then(() => {
-        Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-        window.location.reload();
-      });
-    }
-  });
-};
+
   useEffect(() => {
     PlanningById();
     getCpanelLinked();
@@ -208,12 +169,11 @@ const deleteRecord = (deleteID) => {
            handleAddNewPlanning={handleAddNewPlanning}
            newPlanningData={newPlanningData}
            setNewPlanningData={setNewPlanningData}
-           AddNewPlanning={AddNewPlanning}
+           quoteLine={id}
            addContactModal={addContactModal}
            addContactToggle={addContactToggle}
            setPlanData={setPlanData}
            setPlanEditModal={setPlanEditModal}
-           deleteRecord={deleteRecord}
            ></PlanningCpanel>
            {/* Cpanel Linked Edit modal */}
            <PlanEditModal

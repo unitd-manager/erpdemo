@@ -28,8 +28,6 @@ const ProjectEdit = () => {
   const [update, setUpdate] = useState(false);
   const [incharge, setIncharge] = useState();
 
-
-  
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
@@ -130,7 +128,7 @@ const ProjectEdit = () => {
                   color="primary"
                   onClick={() => {
                     setRoomName('Tender');
-                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF','OGG']);
                     dataForAttachment();
                     setAttachmentModal(true);
                   }}

@@ -14,6 +14,7 @@ import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEdi
 import PurchaseRequestItemModal from '../../components/PurchaseRquestTable/PurchaseRequestItemModal';
 import PurchaseRequestEditDetails from '../../components/PurchaseRquestTable/PurchaseRequestEditDetails';
 import PurchaseRequestLineItems from '../../components/PurchaseRquestTable/PurchaseRequestLineItems';
+import PurchaseRequestItemsEdit from '../../components/PurchaseRquestTable/PurchaseRequestItemsEdit';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
@@ -25,7 +26,8 @@ const PurchaseRequestEdit = () => {
   const [purchaserequesteditdetails, setPurchaseRequestEditDetails] = useState();
   const [customername, setCustomerName] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
-  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
+  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState(); 
+  const [addPurchaseOrderEditModal, setAddPurchaseOrderEditModal] = useState();
   const [project, setProject] = useState([]);
   const [quote, setQuote] = useState({});
   const [attachmentModal, setAttachmentModal] = useState(false);
@@ -152,7 +154,7 @@ const PurchaseRequestEdit = () => {
           setAddPurchaseOrderModal={setAddPurchaseOrderModal}
         />
           <Row className="mb-4">
-          <Col md="2">
+          {/* <Col md="2">
             <Button
               color="primary"
               onClick={() => {
@@ -161,7 +163,26 @@ const PurchaseRequestEdit = () => {
             >
               Add Product
             </Button>
-          </Col>
+          </Col> */}
+          <Col md="2">
+                
+                  <PurchaseRequestItemsEdit
+                     addPurchaseOrderEditModal={addPurchaseOrderEditModal}
+                     setAddPurchaseOrderEditModal={setAddPurchaseOrderEditModal}
+                     PurchaseRequestID={id}
+                    ></PurchaseRequestItemsEdit>
+                    <Button
+            className="shadow-none"
+            color="primary"
+            onClick={() => {
+              setAddPurchaseOrderEditModal(true);
+            }
+            }
+          >
+            Edit
+          </Button>
+        
+      </Col>
           </Row>        
         <PurchaseRequestLineItems
         PurchaseRequestID={id}

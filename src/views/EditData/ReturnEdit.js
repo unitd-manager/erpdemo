@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
@@ -18,13 +18,14 @@ import {
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
+import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
 import ReturnDetailComp from '../../components/BookingTable/ReturnDetailComp';
-import creationdatetime from '../../constants/creationdatetime';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
 import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
+import AppContext from '../../context/AppContext';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
@@ -34,11 +35,14 @@ const InvoiceEdit = () => {
   const [removedItems, setRemovedItems] = useState([]);
   console.log('insertedDataId:', insertedDataId);
   console.log('invoiceId:', invoiceId);
+  const { loggedInuser } = useContext(AppContext);
   const navigate = useNavigate();
   const handleInputs = (e) => {
     setReturnDetails({ ...returnDetails, [e.target.name]: e.target.value });
   };
-
+  const backToList = () => {
+    navigate('/SalesReturn');
+  };
   const [activeTab, setActiveTab] = useState('1');
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const toggle = (tab) => {
@@ -55,7 +59,7 @@ const InvoiceEdit = () => {
         setReturnDetails(res.data.data[0]);
       })
       .catch(() => {
-        message('Invoice Data Not Found', 'info');
+        
       });
   };
 
@@ -66,7 +70,7 @@ const InvoiceEdit = () => {
         setReturnItemDetails(res.data.data);
       })
       .catch(() => {
-        message('Invoice Data Not Found', 'info');
+       
       });
   };
 
@@ -77,11 +81,13 @@ const InvoiceEdit = () => {
         setReturnInvoiceItemDetails(res.data.data);
       })
       .catch(() => {
-        message('Invoice Data Not Found', 'info');
+       
       });
   };
 
   const editInvoiceData = (shouldNavigate) => {
+    returnDetails.modification_date = creationdatetime;
+    returnDetails.modified_by = loggedInuser.first_name;
     api
       .post('/finance/editSalesReturn', returnDetails)
       .then(() => {
@@ -152,24 +158,7 @@ const InvoiceEdit = () => {
         message('Error fetching existing quote items.', 'error');
       });
   };
-  const cancelInvoice = () => {
-    if (returnDetails.status !== 'Paid') {
-      returnDetails.modification_date = creationdatetime;
-      const updatedInvoice = { ...returnDetails, status: 'Cancelled' };
-      api
-        .post('/invoice/editInvoice', updatedInvoice)
-        .then(() => {
-          message('Invoice cancelled successfully', 'success');
-          window.location.reload();
-          getReturnById(); // Refresh the invoice details after updating
-        })
-        .catch(() => {
-          message('Unable to cancel invoice.', 'error');
-        });
-    } else {
-      message('Paid invoices cannot be cancelled.', 'info');
-    }
-  };
+ 
   const handleRemoveItem = (invoiceIdToRemove) => {
     // Find the item with the given invoice_id and add it to the removedItems array
     const removedItem = returnItemDetails.find(
@@ -224,14 +213,16 @@ const InvoiceEdit = () => {
                 Apply
               </Button>
             </Col>
+          
             <Col>
               <Button
-                color="danger"
                 className="shadow-none"
-                onClick={cancelInvoice}
-                disabled={returnDetails.status === 'Paid'}
+                color="dark"
+                onClick={() => {
+                  backToList();
+                }}
               >
-                Cancel
+                Back to List
               </Button>
             </Col>
           </Row>
@@ -239,7 +230,7 @@ const InvoiceEdit = () => {
       </FormGroup>
 
       {/*Main Details*/}
-      <ComponentCard title="Invoice Details">
+      <ComponentCard title="Invoice Details" creationModificationDate={returnDetails}>
         <ReturnDetailComp returnDetails={returnDetails} handleInputs={handleInputs} />
       </ComponentCard>
 

@@ -2,6 +2,7 @@ import React, {useContext, useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
@@ -15,7 +16,6 @@ const PurchaseRequestDetails = () => {
   const [purchaserequestdetails, setPurchaseRequestDetails] = useState({
     purchase_request_date: '',
     purchase_delivery_date: '',
-    department: '',
   });
   //setting data in ProductDetails
   const handleInputs = (e) => {
@@ -26,8 +26,7 @@ const PurchaseRequestDetails = () => {
   //Insert Product Data
   const insertPurchaseRequestData = (PurchaseRequestCode) => {
     if (purchaserequestdetails.purchase_request_date !== '' &&
-    purchaserequestdetails.purchase_delivery_date !== '' &&
-    purchaserequestdetails.department !== ''
+    purchaserequestdetails.purchase_delivery_date !== ''
     )
     {
       purchaserequestdetails.purchase_request_code = PurchaseRequestCode;
@@ -85,7 +84,7 @@ const PurchaseRequestDetails = () => {
                     <Input
                       type="date"
                       onChange={handleInputs}
-                      value={purchaserequestdetails && purchaserequestdetails.purchase_request_date}
+                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
                       name="purchase_request_date"
                     />
                   </Col>
@@ -96,13 +95,14 @@ const PurchaseRequestDetails = () => {
                     <Input
                       type="date"
                       onChange={handleInputs}
-                      value={purchaserequestdetails && purchaserequestdetails.purchase_delivery_date}
+                      min={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
+                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date).format('YYYY-MM-DD')}
                       name="purchase_delivery_date"
                     />
                   </Col>
                 </Row>
                 <Row>
-                  <Col md="12">
+                  {/* <Col md="12">
                     <Label>Department<span className="required"> *</span> </Label>
                     <Input
                       type="text"
@@ -110,7 +110,7 @@ const PurchaseRequestDetails = () => {
                       value={purchaserequestdetails && purchaserequestdetails.department}
                       name="department"
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
               </FormGroup>
               <FormGroup>

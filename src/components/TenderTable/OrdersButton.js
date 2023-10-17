@@ -62,16 +62,18 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                     }
                     // Continue to the next item
                     insertOrderItems(index + 1);
-                    window.location.reload();
+                 
 
                   })
                   .catch((error) => {
                     console.error(`Error inserting order item ${index + 1}`, error);
                     // Continue to the next item
                     insertOrderItems(index + 1);
+
                   });
               } else {
                 console.log('All order items inserted successfully');
+                window.location.reload(); // Reload the page after all order 
                 // You might want to trigger a UI update here
               }
             };
@@ -85,6 +87,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
       })
       .catch((error) => {
         console.error('Error deleting old order items', error);
+        
       });
   };
   

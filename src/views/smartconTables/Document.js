@@ -77,6 +77,13 @@ const Document = () => {
       width: '4%',
     },
     {
+      name: 'DOC Title',
+      selector: 'document_title',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+    {
         name: 'Project Title',
         selector: 'title',
         grow: 0,
@@ -148,6 +155,7 @@ const Document = () => {
                     </Link>
                   </td>
                   <td>{element.document_code}</td>
+                  <td>{element.document_title}</td>
                   <td>{element.title}</td>
                   <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
                   <td>{element.quote_status}</td>

@@ -22,7 +22,7 @@ const PurchaseInvoice = () => {
   //Get data from Training table
   const getPurchaseInvoice= () => {
     api
-      .get('/purchaseinvoice/grtPurchaseInvoice')
+      .get('/purchaseinvoice/getPurchaseInvoice')
       .then((res) => {
         setPurchaseInvoiceData(res.data.data);
         $('#example').DataTable({
