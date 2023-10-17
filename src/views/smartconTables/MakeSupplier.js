@@ -22,7 +22,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import PurchaseOrderLinked from '../../components/SupplierModal/Purchaseorderlinked';
+import PurchaseorderSupplier from '../../components/SupplierModal/PurchaseorderSupplier';
 
 //geting data from invoice
 const MakeSupplier = () => {
@@ -74,7 +74,7 @@ const MakeSupplier = () => {
     },
     {
       name: 'Receipt Code',
-      selector: 'receipt_code',
+      selector: 'supplier_receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -142,9 +142,7 @@ const MakeSupplier = () => {
 
   const insertReceipt = (code) =>{
     const insertedOrderId = bookingDetails.purchase_order_id;
-    if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
-
-      bookingDetails.receipt_code=code;
+      bookingDetails.supplier_receipt_code=code;
       api
         .post('/supplier/insert-SupplierReceipt', bookingDetails)
         .then((res) => {
@@ -157,13 +155,11 @@ const MakeSupplier = () => {
         .catch(() => {
           message('Network connection error.', 'error');
         });
-    } else {
-      message('Please fill all required fields', 'warning');
-    }
+    
   };
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'receipt' })
+      .post('/commonApi/getCodeValue', { type: 'supplier' })
       .then((res) => {
       setModalOpen(false); // Close the first modal
       setSecondModalOpen(true); // Open the second modal
@@ -179,8 +175,6 @@ const MakeSupplier = () => {
     getCompany();
     getInvoice();
   }, [id]);
-
-
 
   return (
     <div className="MainDiv">
@@ -212,14 +206,11 @@ const MakeSupplier = () => {
                     <td>{index + 1}</td>
 
                     <td>{element.po_code}</td>
-                    <td>{element.receipt_code}</td>
+                    <td>{element.supplier_receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
                     <td>{element.payment_status}</td>
                     <td>{element.amount}</td>
                     <td>{element.date}</td>
-                    {/* <td>  
-                      <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
- </td> */}
                   </tr>
                 );
               })}
@@ -290,10 +281,10 @@ const MakeSupplier = () => {
             MakeSupplierPayment
           </ModalHeader>
           <ModalBody>
-       <PurchaseOrderLinked 
+       <PurchaseorderSupplier 
        receiptId={selectedReceiptId}
        orderId={ selectReceiptId}
-       ></PurchaseOrderLinked>
+       ></PurchaseorderSupplier>
           </ModalBody>
         </Modal>
       </div>

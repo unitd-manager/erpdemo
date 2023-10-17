@@ -1,168 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import {
-  CardBody,
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
-import { ToastContainer } from 'react-toastify';
+import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import api from '../../constants/api';
-import message from '../Message';
 
-const PurchaseOrderLinked = ({ editPurchaseOrderLinked, setEditPurchaseOrderLinked }) => {
-  PurchaseOrderLinked.propTypes = {
-    editPurchaseOrderLinked: PropTypes.bool,
-    setEditPurchaseOrderLinked: PropTypes.func,
+const PurchaseorderSupplier = ({ receiptId, orderId }) => {
+  PurchaseorderSupplier.propTypes = {
+    receiptId: PropTypes.any,
+    orderId: PropTypes.any,
   };
   //All const Variable
-  const { id } = useParams();
-  const [SupplierReceipt, setSupplierReceipt] = useState();
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [createSupplier, setCreateReceipt] = useState({
+  console.log('orderId',orderId);
+  const [invoiceReceipt, setInvoiceReceipt] = useState();
+  const [selectedInvoiceAmount, setSelectedInvoiceAmount] = useState(0);
+  const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
+    payment_status: 'Paid',
+    date: moment(),
+    supplier_receipt_code: '',
   });
-  const [selectedSupplier, setSelectedSupplier] = useState([]);
-
-  //getting data
+  const [selectedInvoice, setSelectedInvoice] = useState([]);
+  //Setting Data in createReceipt
   const handleInputreceipt = (e) => {
     if (e.target.name === 'amount') {
-      // eslint-disable-next-line
-      setTotalAmount(parseInt(e.target.value));
-    }
-    setCreateReceipt({ ...createSupplier, [e.target.name]: e.target.value });
-  };
-  //Inserting supplier-receipt
-  const insertReceiptHistory =  (createSupplierHistory) => {
-    api
-      .post('/supplier/insert-SupplierReceiptsHistory', createSupplierHistory)
-      .then(() => {
-        message('History inserted successfully.');
-      })
-      .catch(() => {
-        message('Network connection error.');
-      });
-  };
-  //Chaning purchase status
-  const editPurchaseStatus = (supplierId, Status) => {
-    api
-      .post('/supplier/editPurchaseStatus', {
-        purchase_order_id: supplierId,
-        payment_status: Status,
-      })
-      .then(() => {
-        message('data inserted successfully.');
-      })
-      .catch(() => {
-        message('Network connection error.');
-      });
-  };
-
-  const editPurchasePartialStatus = (supplierId, Status) => {
-    api
-      .post('/supplier/editPartialPurchaseStatus', {
-        purchase_order_id: supplierId,
-        payment_status: Status,
-      })
-      .then(() => {
-        message('data inserted successfully.');
-      })
-      .catch(() => {
-        message('Network connection error.');
-      });
-  };
-  
-
-  //Logic for deducting receipt amount
-  const finalCalculation = (receipt) => {
-    let leftamount = totalAmount;
-    
-    for (let j = 0; j < selectedSupplier.length; j++) {
-      
-      if (selectedSupplier[j].remainingAmount <= leftamount) {
-        leftamount = parseFloat(leftamount) - selectedSupplier[j].remainingAmount
-       selectedSupplier[j].paid = true;
-        editPurchaseStatus(selectedSupplier[j].purchase_order_id, 'Paid');
-       
-        insertReceiptHistory({
-          creation_date: moment().format(),
-          modification_date: moment().format(),
-          purchase_order_date: '',
-          invoice_paid_status: 'Paid',
-          title: '',
-          installment_id: '',
-          receipt_type: '',
-          related_purchase_order_id: '',
-          gst_amount: '',
-          purchase_order_id: selectedSupplier[j].purchase_order_id,
-          supplier_receipt_id: receipt,
-          published: '1',
-          flag: '1',
-
-          created_by: 'admin',
-          modified_by: 'admin',
-          amount: selectedSupplier[j].remainingAmount,
-        })
-      } else {
-        selectedSupplier[j].paid = true;
-        editPurchasePartialStatus(selectedSupplier[j].purchase_order_id, 'Partially Paid');
-        insertReceiptHistory({
-          creation_date: moment().format(),
-          modification_date: moment().format(),
-
-          purchase_order_date: '',
-          invoice_paid_status: 'Partially paid',
-          title: '',
-          installment_id: '',
-          receipt_type: '',
-          related_purchase_order_id: '',
-          gst_amount: '',
-          purchase_order_id: selectedSupplier[j].purchase_order_id,
-          supplier_receipt_id: receipt,
-          published: '1',
-          flag: '1',
-
-          created_by: 'admin',
-          modified_by: 'admin',
-          amount: leftamount,
-        });
-      }
-    
-    }
-
-   
-  };
-
-  //Insert Receipt
-  const insertReceipt = () => {
-    createSupplier.supplier_id = id
-
-    if (createSupplier.amount &&
-      createSupplier.mode_of_payment && (selectedSupplier.length>0)) {
-      api
-      .post('/supplier/insert-SupplierReceipt', createSupplier)
-      .then((res) => {
-        message('data inserted successfully.');
-        
-        finalCalculation(res.data.data.insertId);
-      })
-      .catch(() => {
-      });
+      setCreateReceipt({ ...createReceipt, [e.target.name]: e.target.value });
+    } else if (e.target.name === 'mode_of_payment') {
+      setCreateReceipt({ ...createReceipt, mode_of_payment: e.target.value });
+    } else if (e.target.name === 'payment_status') {
+      setCreateReceipt({ ...createReceipt, payment_status: e.target.value });
     }
   };
+
+  const addAndDeductAmount = (checkboxVal, receiptObj) => {
+    const remainingAmount = receiptObj.prev_inv_amount;
+    if (checkboxVal.target.checked === true) {
+      setSelectedInvoiceAmount(selectedInvoiceAmount + parseFloat(remainingAmount));
+    } else {
+      setSelectedInvoiceAmount(selectedInvoiceAmount - parseFloat(remainingAmount));
+    }
+  };
+
   let invoices = [];
-  const removeObjectWithId = (arr, poCode) => {
-    const objWithIdIndex = arr.findIndex((obj) => obj.po_code === poCode);
+  const removeObjectWithId = (arr, invoiceId) => {
+    const objWithIdIndex = arr.findIndex((obj) => obj.invoiceId === invoiceId);
 
     if (objWithIdIndex > -1) {
       arr.splice(objWithIdIndex, 1);
@@ -170,170 +50,212 @@ const PurchaseOrderLinked = ({ editPurchaseOrderLinked, setEditPurchaseOrderLink
 
     return arr;
   };
-  const getSupplier = (checkboxVal, invObj) => {
+  const getInvoices = (checkboxVal, invObj) => {
     if (checkboxVal.target.checked === true) {
-      setSelectedSupplier([...selectedSupplier, invObj]);
+      setSelectedInvoice([...selectedInvoice, invObj]);
     } else {
-      invoices = removeObjectWithId(selectedSupplier, invObj.po_code);
-      setSelectedSupplier(invoices);
+      invoices = removeObjectWithId(invoiceReceipt, invObj.po_code);
+      setSelectedInvoice(invoices);
     }
   };
 
   //Getting receipt data by order id
-  const getSupplierReceipt = () => {
-    api.post('/supplier/getMakePayment', { supplier_id: id }).then((res) => {
-      const datafromapi = res.data.data;
-      datafromapi.forEach((element) => {
-        element.remainingAmount = element.prev_inv_amount - element.prev_amount ;
-      });
-      setSupplierReceipt(datafromapi);
-    });
-  };
-
-  //Calculation for Supplier Payment checkbox amount
-  const addAndDeductAmount = (checkboxVal, receiptObj) => {
-    
-    const remainingAmount = receiptObj.prev_inv_amount - receiptObj.prev_amount;
-    if (checkboxVal.target.checked === true) {
-      setTotalAmount(parseFloat(totalAmount) + parseFloat(remainingAmount));
-      setCreateReceipt({
-        ...createSupplier,
-        amount: (parseFloat(createSupplier.amount) + parseFloat(remainingAmount)).toString(),
-      });
-    } else {
-      setTotalAmount(parseFloat(totalAmount) - parseFloat(remainingAmount));
-      setCreateReceipt({
-        ...createSupplier,
-        amount: parseFloat(createSupplier.amount) - parseFloat(remainingAmount),
+  const getinvoiceReceipt = () => {
+    if (orderId) {
+      api.post('/supplier/getMakePayment', { purchase_order_id: orderId }).then((res) => {
+        const datafromapi = res.data.data;
+        datafromapi.forEach((element) => {
+           element.remainingAmount = element.prev_inv_amount - element.prev_amount ;
+        });
+        const result = datafromapi.filter((el) => {
+          return el.prev_inv_amount !== el.prev_amount;
+        });
+        setInvoiceReceipt(result);
       });
     }
   };
+  const updateReceipt = () => {
+    // Create a payload with updated receipt data
+    const updatedReceiptData = {
+      supplier_receipt_id: receiptId, // Use the appropriate receipt ID
+      amount: createReceipt.amount,
+      mode_of_payment: createReceipt.mode_of_payment,
+      date: createReceipt.date,
+      remarks: createReceipt.remarks,
+      payment_status: 'Paid',
+    };
+  
+    // Define the promises for updating receipt and invoice status
+    const updateReceiptPromise = api.post('/supplier/edit-SupplierReceipt', updatedReceiptData);
+  
+    // Check if there are selected invoices to update
+    if (selectedInvoice.length > 0) {
+      const invoiceIds = selectedInvoice.map((invoice) => invoice.purchase_order_id);
+  
+      const updatedInvoiceStatusData = {
+        po_code: invoiceIds,
+        status: 'Paid', // Update to the appropriate status
+      };
+  
+      const updateInvoiceStatusPromise = api.post('/supplier/edit-Supplier', updatedInvoiceStatusData);
+  
+      // Use Promise.all to wait for both promises to resolve
+      Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
+        .then(([receiptRes, invoiceRes]) => {
+          // Handle success (you might want to show a success message)
+          console.log('Receipt updated successfully', receiptRes);
+          console.log('Invoice status updated successfully', invoiceRes);
+          window.location.reload();
+        })
+        .catch((error) => {
+          // Handle error (you might want to show an error message)
+          console.error('Error updating receipt or invoice status', error);
+        });
+    } else {
+      // If no selected invoices, only update the receipt
+      updateReceiptPromise
+        .then((res) => {
+          // Handle success (you might want to show a success message)
+          console.log('Receipt updated successfully', res);
+          window.location.reload();
+        })
+        .catch((error) => {
+          // Handle error (you might want to show an error message)
+          console.error('Error updating receipt', error);
+        });
+    }
+  };
+  
+  const deleteCreatedReceipt = () => {
+    if (receiptId) {
+      api
+        .delete('/supplier/deleteReceipt', { data: { supplier_receipt_id: receiptId } })
+        .then(() => {
+          console.log('Created receipt record deleted successfully');
+          setTimeout(() => {
+            window.location.reload();
+          }, 800);
+        
+        })
+        .catch((error) => {
+          console.error('Error deleting created receipt record', error);
+        });
+    }
+  };
+
+
   useEffect(() => {
-    getSupplierReceipt();
-  }, [id]);
+    const updatedAmount = parseFloat(createReceipt.amount) + selectedInvoiceAmount;
+    setCreateReceipt({ ...createReceipt, amount: updatedAmount.toString() });
+  }, [selectedInvoiceAmount]);
+  useEffect(() => {
+    getinvoiceReceipt();
+  }, [orderId]); // Call the API when bookingId changes
+  useEffect(() => {
+    // If there are no unpaid invoices, delete the created receipt record
+    if (invoiceReceipt && invoiceReceipt.length === 0) {
+      deleteCreatedReceipt();
+    }
+  }, [invoiceReceipt]);
   return (
     <>
-      <Modal size="lg" isOpen={editPurchaseOrderLinked}>
-        <ToastContainer></ToastContainer>
-        <ModalHeader>
-          Create Receipt
-          <Button
-            className="shadow-none"
-            color="secondary"
-            onClick={() => {
-              setEditPurchaseOrderLinked(false);
-            }}
-          >
-            X
-          </Button>
-        </ModalHeader>
-        <ModalBody>
-          <Row>
+      <Row>
+        <Col md="12">
+          <Form>
+          {invoiceReceipt && invoiceReceipt.length > 0 ? (
+  invoiceReceipt.map((element) => {
+    return (
+      <Row key={element.purchase_order_id}>
+        <Col md="12">
+          <FormGroup check>
+            <Input
+              onChange={(e) => {
+                addAndDeductAmount(e, element);
+                getInvoices(e, element);
+              }}
+              name="po_code"
+              type="checkbox"
+            />
+            <span>
+              {element.po_code} ({element.prev_inv_amount})
+            </span>
+          </FormGroup>
+        </Col>
+      </Row>
+    );
+  })
+) : (
+  <p>No unpaid invoices available.</p>
+)}
+            <br></br>
+            {/* { invoiceReceipt && invoiceReceipt.length>0? */}
+            <Row>
             <Col md="12">
-                <CardBody>
-                  <Form>
-                    {SupplierReceipt &&
-                      SupplierReceipt.map((singleInvoiceObj) => {
-                        return (
-                          <Row>
-                            <Col md="8">
-                              <FormGroup check>
-                                <Input
-                                  onChange={(e) => {
-                                    addAndDeductAmount(e, singleInvoiceObj);
-                                    getSupplier(e, singleInvoiceObj);
-                                  }}
-                                  name="po_code(prev_inv_amount)"
-                                  type="checkbox"
-                                />
-                                <span>
-                                   {singleInvoiceObj.po_code} 
-                                  ({singleInvoiceObj.prev_inv_amount}) Paid -{' '}
-                                  {singleInvoiceObj.prev_amount}
-                                </span>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                        );
-                      })}
-                    <br></br>
-                    <Row>
-                      <Col md="8">
-                        <FormGroup>
-                          <Label>Amount</Label>
-                          <Input
-                            type="numbers"
-                            onChange={handleInputreceipt}
-                            value={createSupplier && createSupplier.amount}
-                            defaultValue={totalAmount.toString()}
-                            name="amount"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md="8">
-                        <FormGroup>
-                          <Label>
-                            {' '}
-                            Mode Of Payment <span className="required">*</span>{' '}
-                          </Label>
-                          <Input type="select" name="mode_of_payment" onChange={handleInputreceipt}>
-                            <option defaultValue="selected">
-                              Please Select
-                            </option>
-                            <option value="cash">Cash</option>
-                            <option value="cheque">Cheque</option>
-                            <option value="giro">Giro</option>
-                          </Input>
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="8">
-                        <FormGroup>
-                          <Label>Notes</Label>
-                          <Input
-                            type="text"
-                            onChange={handleInputreceipt}
-                            defaultValue={createSupplier && createSupplier.remarks}
-                            name="remarks"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </Form>
-                </CardBody>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              insertReceipt();
-              setEditPurchaseOrderLinked(false);
-              setTimeout(() => {
-                console.log('Data saved successfully.');
-                // Reload the page after saving data
-                window.location.reload();
-              }, 2000);
-            }}
-          >
-            {' '}
-            Submit{' '}
-          </Button>
-          <Button
-            className="shadow-none"
-            color="secondary"
-            onClick={() => {
-              setEditPurchaseOrderLinked(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+        <FormGroup>
+          <Label>Amount</Label>
+          <Input
+              type="text"
+              onChange={handleInputreceipt}
+              value={selectedInvoiceAmount} 
+              name="amount"
+          />
+        </FormGroup>
+      </Col>
+              <Col md="12">
+                <FormGroup>
+                  <Label>Date</Label>
+                  <Input
+                    type="date"
+                    onChange={handleInputreceipt}
+                    value={createReceipt && moment(createReceipt.date).format('YYYY-MM-DD')}
+                    name="date"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="12">
+                <FormGroup>
+                  <Label>
+                    {' '}
+                    Mode Of Payment <span className="required">*</span>{' '}
+                  </Label>
+                  <Input type="select" name="mode_of_payment" onChange={handleInputreceipt}>
+                  
+                    <option value="cash" selected="selected">Cash</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="giro">Giro</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+            
+              <Col md="12">
+                <FormGroup>
+                  <Label>Notes</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputreceipt}
+                    defaultValue={createReceipt && createReceipt.remarks}
+                    name="remarks"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <FormGroup>
+              <Button
+                onClick={() => {
+                  updateReceipt();
+                }}
+                type="button"
+                className="btn btn-dark shadow-none"
+              >
+                Save
+              </Button>
+            </FormGroup>
+          </Form>
+        </Col>
+      </Row>
     </>
   );
 };
 
-export default PurchaseOrderLinked;
+export default PurchaseorderSupplier;
+ 
