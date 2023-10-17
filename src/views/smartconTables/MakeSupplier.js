@@ -22,8 +22,8 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
-// import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
+import PurchaseOrderLinked from '../../components/SupplierModal/Purchaseorderlinked';
+
 //geting data from invoice
 const MakeSupplier = () => {
   //State variable
@@ -46,7 +46,7 @@ const MakeSupplier = () => {
   //getting data from invoice table
   const getInvoice = () => {
     api
-      .get('/invoice/getReceipts')
+      .get('/supplier/getSupplierReceipts')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
@@ -128,7 +128,7 @@ const MakeSupplier = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrders')
+      .get('/quote/getSupplierPurchase')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -141,12 +141,12 @@ const MakeSupplier = () => {
   //Logic for adding Booking in db
 
   const insertReceipt = (code) =>{
-    const insertedOrderId = bookingDetails.order_id;
+    const insertedOrderId = bookingDetails.purchase_order_id;
     if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
 
       bookingDetails.receipt_code=code;
       api
-        .post('/finance/insertreceipt', bookingDetails)
+        .post('/supplier/insert-SupplierReceipt', bookingDetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           setSelectedReceiptId(insertedDataId); // Store the receiptId 
@@ -189,7 +189,7 @@ const MakeSupplier = () => {
 
         <CommonTable
           loading={loading}
-          title="Receipt List"
+          title="Supplier Receipt List"
           Button={
             // Open the modal on button click
             <Button color="primary" className="shadow-none" onClick={toggleModal}>
@@ -208,15 +208,15 @@ const MakeSupplier = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={element.supplier_id}>
                     <td>{index + 1}</td>
 
-                    <td>{element.order_code}</td>
+                    <td>{element.po_code}</td>
                     <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
-                    <td>{element.receipt_status}</td>
+                    <td>{element.payment_status}</td>
                     <td>{element.amount}</td>
-                    <td>{element.receipt_date}</td>
+                    <td>{element.date}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}
@@ -235,14 +235,14 @@ const MakeSupplier = () => {
                     <FormGroup>
                       <Row>
                         <Col md="10">
-                          <Label>Orders</Label>
-                          <Input type="select" name="order_id" onChange={handleBookingInputs}>
+                          <Label>Purchase Orders</Label>
+                          <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
                             <option>Select Customer</option>
                             {company &&
                               company.map((e) => {
                                 return (
-                                  <option key={e.order_id} value={e.order_id}>
-                                    {e.order_code}
+                                  <option key={e.purchase_order_id} value={e.purchase_order_id}>
+                                    {e.po_code}
                                   </option>
                                 );
                               })}
@@ -290,10 +290,10 @@ const MakeSupplier = () => {
             MakeSupplierPayment
           </ModalHeader>
           <ModalBody>
-       <ReceiptCreate 
+       <PurchaseOrderLinked 
        receiptId={selectedReceiptId}
        orderId={ selectReceiptId}
-       ></ReceiptCreate>
+       ></PurchaseOrderLinked>
           </ModalBody>
         </Modal>
       </div>
