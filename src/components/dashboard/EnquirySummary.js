@@ -17,7 +17,7 @@ const TradingSummary = () => {
   //get lineitems
   const getInvoices = () => {
     api
-      .get('/invoice/getTradingInvoiceSummary')
+      .get('/tender/getEnquirySummary')
       .then((res) => {
         setUserSearchData(res.data.data);
         setReport(res.data.data);
@@ -96,18 +96,30 @@ const TradingSummary = () => {
   };
   const handleSearch = () => {
     const newData = report.filter((el) => {
-      const invoiceDate = new Date(el.invoice_date);
+      const quoteDate = new Date(el.quote_date);
       const companyMatches = companyName === '' || el.company_name === companyName;
-      const dateMatches =
-        (startDate === '' || invoiceDate >= new Date(startDate)) &&
-        (endDate === '' || invoiceDate <= new Date(endDate));
+  
+      const startDateObj = startDate ? new Date(startDate) : null;
+      const endDateObj = endDate ? new Date(endDate) : null;
+  
+      let dateMatches = true;
+  
+      if (startDateObj) {
+        dateMatches = dateMatches && quoteDate >= startDateObj;
+      }
+  
+      if (endDateObj) {
+        // To filter by the end of the selected day, add 1 day and subtract 1 millisecond
+        endDateObj.setDate(endDateObj.getDate() + 1);
+        endDateObj.setMilliseconds(endDateObj.getMilliseconds() - 1);
+        dateMatches = dateMatches && quoteDate <= endDateObj;
+      }
   
       return companyMatches && dateMatches;
     });
   
     setUserSearchData(newData);
   };
-  
   const [page, setPage] = useState(0);
 
   const employeesPerPage = 20;
@@ -141,34 +153,49 @@ const TradingSummary = () => {
       wrap: true,
     },
     {
-      name: 'Invoice No',
-      selector: 'invoice_code',
+      name: 'Enquiry No',
+      selector: 'opportunity_code',
       grow: 0,
       width: 'auto',
       button: true,
       sortable: false,
     },
     {
-      name: 'Invoice Date',
-      selector: 'invoice_date',
+      name: 'Quote No',
+      selector: 'quote_code',
       grow: 0,
       width: 'auto',
       wrap: true,
     },
     {
-      name: 'Raised Invoice',
-      selector: 'invoice_amount',
+      name: 'Quote Date',
+      selector: 'quote_date',
+      grow: 0,
+      width: 'auto',
+      wrap: true,
+    },
+    {
+      name: 'Quote Amount',
+      selector: 'quoteAmount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Paid Invoice',
-      selector: 'paid_Amount',
+      name: 'Delivered Date',
+      selector: 'goods_delivery_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
+    {
+      name: 'Delivered Amount',
+      selector: 'deliveryAmount',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+   
    
    
    
@@ -227,7 +254,7 @@ const TradingSummary = () => {
           </Row>
         </CardBody>
 
-        <CommonTable title="Overall Trading Summary">
+        <CommonTable title="Enquiry Summary">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -245,10 +272,12 @@ const TradingSummary = () => {
                       {el.invoice_due_date ? moment(el.invoice_due_date).format('DD-MM-YYYY') : ''}
                     </td> */}
                     <td>{el.company_name}</td>
-                    <td>{el.invoice_code}</td>
-                    <td>{el.invoice_date ? moment(el.invoice_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{el.invoice_amount}</td>
-                    <td>{el.paid_Amount}</td>
+                    <td>{el.opportunity_code}</td>
+                    <td>{el.quote_code}</td>
+                    <td>{el.quoteAmount}</td>
+                    <td>{el.quote_date}</td>
+                    <td>{el.deliveryAmount}</td>
+                    <td>{el.goods_delivery_date}</td>
                   </tr>
                 );
               })}
