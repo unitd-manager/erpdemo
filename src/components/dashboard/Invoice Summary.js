@@ -14,6 +14,7 @@ const TradingSummary = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [companyName, setCompanyName] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
   //get lineitems
   const getInvoices = () => {
     api
@@ -101,8 +102,9 @@ const TradingSummary = () => {
       const dateMatches =
         (startDate === '' || invoiceDate >= new Date(startDate)) &&
         (endDate === '' || invoiceDate <= new Date(endDate));
+      const statusMatches = selectedStatus === '' || el.status === selectedStatus;
   
-      return companyMatches && dateMatches;
+      return companyMatches && dateMatches && statusMatches;
     });
   
     setUserSearchData(newData);
@@ -156,21 +158,13 @@ const TradingSummary = () => {
       wrap: true,
     },
     {
-      name: 'Raised Invoice',
+      name: 'Status',
       selector: 'invoice_amount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
-    {
-      name: 'Paid Invoice',
-      selector: 'paid_Amount',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-   
-   
+ 
    
   ];
 
@@ -217,6 +211,20 @@ const TradingSummary = () => {
                 </Input>
               </FormGroup>
             </Col>
+            <Col className="xs-fullWidth">
+  <FormGroup>
+    <Input
+      type="select"
+      name="status"
+      onChange={(e) => setSelectedStatus(e.target.value)}
+    >
+      <option value="">Select Status</option>
+      <option value="Due">Due</option>
+      <option value="Paid">Paid</option>
+      <option value="Cancelled">Cancelled</option>
+    </Input>
+  </FormGroup>
+</Col>
             <Col md="1">
               <FormGroup>
                 <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>
@@ -227,7 +235,7 @@ const TradingSummary = () => {
           </Row>
         </CardBody>
 
-        <CommonTable title="Overall Trading Summary">
+        <CommonTable title="Invoice Summary">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -247,8 +255,8 @@ const TradingSummary = () => {
                     <td>{el.company_name}</td>
                     <td>{el.invoice_code}</td>
                     <td>{el.invoice_date ? moment(el.invoice_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{el.invoice_amount}</td>
-                    <td>{el.paid_Amount}</td>
+                    <td>{el.status}</td>
+                  
                   </tr>
                 );
               })}

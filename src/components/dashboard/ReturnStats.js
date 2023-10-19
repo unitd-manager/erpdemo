@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, Button, Input, FormGroup } from 'reactstrap';
-import moment from 'moment';
 import ReactPaginate from 'react-paginate';
 import { v4 as uuidv4 } from 'uuid';
 import CommonTable from '../CommonTable';
@@ -11,13 +10,11 @@ const TradingSummary = () => {
   const [report, setReport] = useState();
   const [company, setCompany] = useState();
   const [userSearchData, setUserSearchData] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [companyName, setCompanyName] = useState('');
   //get lineitems
   const getInvoices = () => {
     api
-      .get('/invoice/getTradingInvoiceSummary')
+      .get('/invoice/getReturnsStats')
       .then((res) => {
         setUserSearchData(res.data.data);
         setReport(res.data.data);
@@ -27,66 +24,7 @@ const TradingSummary = () => {
       });
   };
 
-  const handlePeriod = (e) => {
-    if (e.target.value === 'Current Month') {
-      const firstdate = moment(new Date())
-        .subtract(0, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(0, 'months').endOf('month').format('YYYY-MM-DD');
-
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    } else if (e.target.value === 'Previous Month') {
-      const firstdate = moment(new Date())
-        .subtract(1, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    } else if (e.target.value === 'Last 3 Months') {
-      const firstdate = moment(new Date())
-        .subtract(3, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    } else if (e.target.value === 'Last 6 Months') {
-      const firstdate = moment(new Date())
-        .subtract(6, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    } else if (e.target.value === 'Last 9 Months') {
-      const firstdate = moment(new Date())
-        .subtract(9, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    } else if (e.target.value === 'Last 12 Months') {
-      const firstdate = moment(new Date())
-        .subtract(12, 'months')
-        .startOf('month')
-        .format('YYYY-MM-DD');
-
-      const lastdate = moment(new Date()).subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-
-      setStartDate(firstdate);
-      setEndDate(lastdate);
-    }
-  };
+  
 
   //Api call for getting company dropdown
   const getCompany = () => {
@@ -96,18 +34,16 @@ const TradingSummary = () => {
   };
   const handleSearch = () => {
     const newData = report.filter((el) => {
-      const invoiceDate = new Date(el.invoice_date);
+   
       const companyMatches = companyName === '' || el.company_name === companyName;
-      const dateMatches =
-        (startDate === '' || invoiceDate >= new Date(startDate)) &&
-        (endDate === '' || invoiceDate <= new Date(endDate));
   
-      return companyMatches && dateMatches;
+     
+  
+      return companyMatches;
     });
   
     setUserSearchData(newData);
   };
-  
   const [page, setPage] = useState(0);
 
   const employeesPerPage = 20;
@@ -141,36 +77,28 @@ const TradingSummary = () => {
       wrap: true,
     },
     {
-      name: 'Invoice No',
-      selector: 'invoice_code',
+      name: 'Order No',
+      selector: 'order_code',
       grow: 0,
       width: 'auto',
       button: true,
       sortable: false,
     },
     {
-      name: 'Invoice Date',
-      selector: 'invoice_date',
+      name: 'Invoice No',
+      selector: 'invoice_code',
       grow: 0,
       width: 'auto',
       wrap: true,
     },
     {
-      name: 'Raised Invoice',
-      selector: 'invoice_amount',
-      sortable: true,
+      name: 'Return Status',
+      selector: 'status',
       grow: 0,
+      width: 'auto',
       wrap: true,
     },
-    {
-      name: 'Paid Invoice',
-      selector: 'paid_Amount',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-   
-   
+     
    
   ];
 
@@ -179,24 +107,7 @@ const TradingSummary = () => {
       <Card>
         <CardBody>
           <Row>
-            <Col></Col>
-            <Col className="xs-fullWidth">
-              <FormGroup>
-                <Input
-                  type="select"
-                  name="period"
-                  defaultValue="Current Month"
-                  onChange={(e) => handlePeriod(e)}
-                >
-                  <option value="Current Month">Current Month</option>
-                  <option value="Previous Month">Previous Month</option>
-                  <option value="Last 3 Months">Last 3 Months</option>
-                  <option value="Last 6 Months">Last 6 Months</option>
-                  <option value="Last 9 Months">Last 9 Months</option>
-                  <option value="Last 12 Months">Last 12 Months</option>
-                </Input>
-              </FormGroup>
-            </Col>
+           
             <Col className="xs-fullWidth">
               <FormGroup>
                 <Input
@@ -227,7 +138,7 @@ const TradingSummary = () => {
           </Row>
         </CardBody>
 
-        <CommonTable title="Overall Trading Summary">
+        <CommonTable title="Return Summary">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -245,10 +156,10 @@ const TradingSummary = () => {
                       {el.invoice_due_date ? moment(el.invoice_due_date).format('DD-MM-YYYY') : ''}
                     </td> */}
                     <td>{el.company_name}</td>
+                    <td>{el.order_code}</td>
                     <td>{el.invoice_code}</td>
-                    <td>{el.invoice_date ? moment(el.invoice_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{el.invoice_amount}</td>
-                    <td>{el.paid_Amount}</td>
+                    <td>{el.status}</td>
+                  
                   </tr>
                 );
               })}

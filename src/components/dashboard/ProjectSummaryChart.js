@@ -263,14 +263,14 @@ function ProjectSummaryChart() {
                             <b>Start Date :</b> {ele.start_date}
                           </Label>
                           <Label>
-                            <b>End Date:</b>
+                            <b>End Date:</b> {ele.estimated_finish_date}
                           </Label>
                           <Label>
                             <b>Status:</b> {ele.status}
                           </Label>
-                          <Label>
+                          {/* <Label>
                             <b>% of Work:</b>
-                          </Label>
+                          </Label> */}
                         </Row>
                       </Col>
                     </Row>
