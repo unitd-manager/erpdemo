@@ -162,6 +162,7 @@ const BillOfMaterials = Loadable(lazy(() => import('../views/smartconTables/Bill
 const BillOfMaterialsShortage = Loadable(lazy(() => import('../views/smartconTables/BillOfMaterialsShortage')));
 const TestTable = Loadable(lazy(() => import('../views/smartconTables/Test')));
 const PurchaseOrderTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrder')));
+const PurchaseOrderDashboardTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrderDashboard')));
 const EmployeetrainingreportsTable = Loadable(
   lazy(() => import('../views/smartconTables/Employeetrainingreports')),
 );
@@ -768,6 +769,7 @@ const Routernew = () => {
           <Route path="/SupportNew" name="clienttdata" element={<SupportNewTable />}></Route>
           <Route path="/SupportDetails" name="tenderdata" element={<SupportDetails />}></Route>
           <Route path="/PurchaseOrder" name="clienttdata" element={<PurchaseOrderTable />}></Route>
+          <Route path="/PurchaseOrderDashboard" name="clienttdata" element={<PurchaseOrderDashboardTable/>}></Route>
           <Route
             path="/Employeetrainingreports"
             name="clienttdata"
