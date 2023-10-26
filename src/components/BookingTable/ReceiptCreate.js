@@ -78,7 +78,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
     // Create a payload with updated receipt data
     const updatedReceiptData = {
       receipt_id: receiptId, // Use the appropriate receipt ID
-      amount: createReceipt.amount,
+      amount: parseFloat(createReceipt.amount), // Convert to a number
       mode_of_payment: createReceipt.mode_of_payment,
       receipt_date: createReceipt.receipt_date,
       remarks: createReceipt.remarks,
