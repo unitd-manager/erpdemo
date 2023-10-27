@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import api from '../../constants/api';
 
-const FinanceReceiptData = ({ receiptId, orderId }) => {
-  FinanceReceiptData.propTypes = {
+const PurchaseorderSupplier = ({ receiptId, orderId }) => {
+  PurchaseorderSupplier.propTypes = {
     receiptId: PropTypes.any,
     orderId: PropTypes.any,
   };
@@ -15,9 +15,9 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const [selectedInvoiceAmount, setSelectedInvoiceAmount] = useState(0);
   const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
-    receipt_status: 'Paid',
-    receipt_date: moment(),
-    receipt_code: '',
+    payment_status: 'Paid',
+    date: moment(),
+    supplier_receipt_code: '',
   });
   const [selectedInvoice, setSelectedInvoice] = useState([]);
   //Setting Data in createReceipt
@@ -26,13 +26,13 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       setCreateReceipt({ ...createReceipt, [e.target.name]: e.target.value });
     } else if (e.target.name === 'mode_of_payment') {
       setCreateReceipt({ ...createReceipt, mode_of_payment: e.target.value });
-    } else if (e.target.name === 'receipt_status') {
-      setCreateReceipt({ ...createReceipt, receipt_status: e.target.value });
+    } else if (e.target.name === 'payment_status') {
+      setCreateReceipt({ ...createReceipt, payment_status: e.target.value });
     }
   };
 
   const addAndDeductAmount = (checkboxVal, receiptObj) => {
-    const remainingAmount = receiptObj.invoice_amount;
+    const remainingAmount = receiptObj.prev_inv_amount;
     if (checkboxVal.target.checked === true) {
       setSelectedInvoiceAmount(selectedInvoiceAmount + parseFloat(remainingAmount));
     } else {
@@ -54,7 +54,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
     if (checkboxVal.target.checked === true) {
       setSelectedInvoice([...selectedInvoice, invObj]);
     } else {
-      invoices = removeObjectWithId(invoiceReceipt, invObj.invoice_code);
+      invoices = removeObjectWithId(invoiceReceipt, invObj.po_code);
       setSelectedInvoice(invoices);
     }
   };
@@ -62,13 +62,13 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
     if (orderId) {
-      api.post('/invoice/getInvoiceForReceipt', { order_id: orderId }).then((res) => {
+      api.post('/supplier/getMakePayment', { purchase_order_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
-          element.remainingAmount = element.invoice_amount - element.prev_amount;
+           element.remainingAmount = element.prev_inv_amount - element.prev_amount ;
         });
         const result = datafromapi.filter((el) => {
-          return el.invoice_amount !== el.prev_amount;
+          return el.prev_inv_amount !== el.prev_amount;
         });
         setInvoiceReceipt(result);
       });
@@ -77,29 +77,27 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const updateReceipt = () => {
     // Create a payload with updated receipt data
     const updatedReceiptData = {
-      receipt_id: receiptId, // Use the appropriate receipt ID
-      amount: parseFloat(createReceipt.amount), // Convert to a number
+      supplier_receipt_id: receiptId, // Use the appropriate receipt ID
+      amount: createReceipt.amount,
       mode_of_payment: createReceipt.mode_of_payment,
-      receipt_date: createReceipt.receipt_date,
+      date: createReceipt.date,
       remarks: createReceipt.remarks,
-      receipt_status: 'Paid',
-      cheque_date: createReceipt.cheque_date,
-      cheque_no: createReceipt.cheque_no,
+      payment_status: 'Paid',
     };
   
     // Define the promises for updating receipt and invoice status
-    const updateReceiptPromise = api.post('/invoice/editReceipt', updatedReceiptData);
+    const updateReceiptPromise = api.post('/supplier/edit-SupplierReceipt', updatedReceiptData);
   
     // Check if there are selected invoices to update
     if (selectedInvoice.length > 0) {
-      const invoiceIds = selectedInvoice.map((invoice) => invoice.invoice_id);
+      const invoiceIds = selectedInvoice.map((invoice) => invoice.purchase_order_id);
   
       const updatedInvoiceStatusData = {
-        invoice_id: invoiceIds,
+        po_code: invoiceIds,
         status: 'Paid', // Update to the appropriate status
       };
   
-      const updateInvoiceStatusPromise = api.post('/invoice/editInvoice', updatedInvoiceStatusData);
+      const updateInvoiceStatusPromise = api.post('/supplier/edit-Supplier', updatedInvoiceStatusData);
   
       // Use Promise.all to wait for both promises to resolve
       Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
@@ -131,7 +129,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const deleteCreatedReceipt = () => {
     if (receiptId) {
       api
-        .delete('/invoice/deleteReceipt', { data: { receipt_id: receiptId } })
+        .delete('/supplier/deleteReceipt', { data: { supplier_receipt_id: receiptId } })
         .then(() => {
           console.log('Created receipt record deleted successfully');
           setTimeout(() => {
@@ -167,7 +165,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           {invoiceReceipt && invoiceReceipt.length > 0 ? (
   invoiceReceipt.map((element) => {
     return (
-      <Row key={element.invoice_id}>
+      <Row key={element.purchase_order_id}>
         <Col md="12">
           <FormGroup check>
             <Input
@@ -175,11 +173,11 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                 addAndDeductAmount(e, element);
                 getInvoices(e, element);
               }}
-              name="invoice_code"
+              name="po_code"
               type="checkbox"
             />
             <span>
-              {element.invoice_code} ({element.invoice_amount})
+              {element.po_code} ({element.prev_inv_amount})
             </span>
           </FormGroup>
         </Col>
@@ -209,8 +207,8 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   <Input
                     type="date"
                     onChange={handleInputreceipt}
-                    value={createReceipt && moment(createReceipt.receipt_date).format('YYYY-MM-DD')}
-                    name="receipt_date"
+                    value={createReceipt && moment(createReceipt.date).format('YYYY-MM-DD')}
+                    name="date"
                   />
                 </FormGroup>
               </Col>
@@ -228,45 +226,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   </Input>
                 </FormGroup>
               </Col>
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
-                <Col md="12">
-                  <FormGroup>
-                    <Label>Check No</Label>
-                    <Input
-                      type="numbers"
-                      onChange={handleInputreceipt}
-                      value={createReceipt && createReceipt.cheque_no}
-                      name="cheque_no"
-                    />
-                  </FormGroup>
-                </Col>
-              )}
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
-                <Col md="12">
-                  <FormGroup>
-                    <Label>Check date</Label>
-                    <Input
-                      type="date"
-                      onChange={handleInputreceipt}
-                      value={createReceipt && createReceipt.cheque_date}
-                      name="cheque_date"
-                    />
-                  </FormGroup>
-                </Col>
-              )}
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
-                <Col md="12">
-                  <FormGroup>
-                    <Label>Bank</Label>
-                    <Input
-                      type="numbers"
-                      onChange={handleInputreceipt}
-                      value={createReceipt && createReceipt.bank_name}
-                      name="bank_name"
-                    />
-                  </FormGroup>
-                </Col>
-              )}
+            
               <Col md="12">
                 <FormGroup>
                   <Label>Notes</Label>
@@ -297,4 +257,5 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   );
 };
 
-export default FinanceReceiptData;
+export default PurchaseorderSupplier;
+ 

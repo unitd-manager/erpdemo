@@ -42,7 +42,7 @@ const MakeSupplierDetails = () => {
   //Logic for adding Booking in db
   const insertReceipt = (code) =>{ 
      
-      bookingDetails.receipt_code=code;
+      bookingDetails.supplier_receipt_code=code;
       api
         .post('/supplier/insert-SupplierReceipt', bookingDetails)
         .then(() => {
@@ -57,7 +57,7 @@ const MakeSupplierDetails = () => {
   };
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'receipt' })
+      .post('/commonApi/getCodeValue', { type: 'supplier' })
       .then((res) => {
         insertReceipt(res.data.data);
       })

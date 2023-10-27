@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
+import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
@@ -14,15 +15,17 @@ import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const PurchaseReturn = () => {
-  const [tenders, setTenders] = useState(null);
+const Leaves = () => {
+  //Const Variables
+  const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const getTenders = () => {
+  // get Leave
+  const getPlanning = () => {
     api
-      .get('/purchasereturn/getPurchaseReturn')
+      .get('/supplierpricelistitem/getPriceList')
       .then((res) => {
-        setTenders(res.data.data);
+        setPlanning(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -42,14 +45,15 @@ const PurchaseReturn = () => {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getTenders();
-  }, []);
 
+  useEffect(() => {
+    getPlanning();
+  }, []);
+  //  stucture of leave list view
   const columns = [
     {
-      name: '#',
-      selector: 'purchase_return_id',
+      name: 'id',
+      selector: 'supplier_price_list_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -63,27 +67,29 @@ const PurchaseReturn = () => {
       button: true,
       sortable: false,
     },
+
     {
-      name: 'Purchase No',
-      selector: 'purchase_invoice_code',
+      name: 'Customer Name',
+      selector: 'customer_name',
       sortable: true,
       grow: 0,
-      wrap: true,
+      wrap: true, 
     },
     {
-      name: 'Purchase Invocie Date',
-      selector: 'purchase_invoice_date',
+      name: 'Effective Date',
+      selector: 'effective_date',
+      sortable: true,
+      grow: 2,
+      width: 'auto',
+    },
+    {
+      name: 'Status',
+      selector: 'status',
       sortable: true,
       grow: 2,
       wrap: true,
     },
-    {
-      name: 'Return Date',
-      selector: 'purchase_return_date',
-      sortable: true,
-      grow: 0,
-    },
-   
+    
   ];
 
   return (
@@ -92,9 +98,9 @@ const PurchaseReturn = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Purchase Return List"
+          title="Supplier Price List"
           Button={
-            <Link to="/PurchaseReturnDetails">
+            <Link to="/SupplierPriceListDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>
@@ -109,22 +115,20 @@ const PurchaseReturn = () => {
             </tr>
           </thead>
           <tbody>
-            {tenders &&
-              tenders.map((element, index) => {
+            {planning &&
+              planning.map((element, i) => {
                 return (
-                  <tr key={element.purchase_return_id}>
-                    <td>{index + 1}</td>
+                  <tr key={element.supplier_price_list_id}>
+                    <td>{i + 1}</td>
                     <td>
-                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}/${element.purchase_invoice_id}?tab=1 }`}>
+                      <Link to={`/SupplierPriceListEdit/${element.supplier_price_list_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                   
-                    <td>{element.purchase_invoice_code}</td>
-                    <td>{element.purchase_invoice_date}</td>
-                    <td>{element.purchase_return_date}</td>
-                   
-                  </tr>
+                    <td>{element.customer_name}</td>
+                    <td>{(element.effective_date)?moment(element.effective_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{element.status}</td>
+                    </tr>
                 );
               })}
           </tbody>
@@ -134,4 +138,4 @@ const PurchaseReturn = () => {
   );
 };
 
-export default PurchaseReturn;
+export default Leaves;

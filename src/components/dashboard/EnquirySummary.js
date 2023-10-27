@@ -14,11 +14,10 @@ const TradingSummary = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [companyName, setCompanyName] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
   //get lineitems
   const getInvoices = () => {
     api
-      .get('/invoice/getTradingInvoiceSummary')
+      .get('/tender/getEnquirySummary')
       .then((res) => {
         setUserSearchData(res.data.data);
         setReport(res.data.data);
@@ -97,19 +96,30 @@ const TradingSummary = () => {
   };
   const handleSearch = () => {
     const newData = report.filter((el) => {
-      const invoiceDate = new Date(el.invoice_date);
+      const quoteDate = new Date(el.quote_date);
       const companyMatches = companyName === '' || el.company_name === companyName;
-      const dateMatches =
-        (startDate === '' || invoiceDate >= new Date(startDate)) &&
-        (endDate === '' || invoiceDate <= new Date(endDate));
-      const statusMatches = selectedStatus === '' || el.status === selectedStatus;
   
-      return companyMatches && dateMatches && statusMatches;
+      const startDateObj = startDate ? new Date(startDate) : null;
+      const endDateObj = endDate ? new Date(endDate) : null;
+  
+      let dateMatches = true;
+  
+      if (startDateObj) {
+        dateMatches = dateMatches && quoteDate >= startDateObj;
+      }
+  
+      if (endDateObj) {
+        // To filter by the end of the selected day, add 1 day and subtract 1 millisecond
+        endDateObj.setDate(endDateObj.getDate() + 1);
+        endDateObj.setMilliseconds(endDateObj.getMilliseconds() - 1);
+        dateMatches = dateMatches && quoteDate <= endDateObj;
+      }
+  
+      return companyMatches && dateMatches;
     });
   
     setUserSearchData(newData);
   };
-  
   const [page, setPage] = useState(0);
 
   const employeesPerPage = 20;
@@ -143,56 +153,51 @@ const TradingSummary = () => {
       wrap: true,
     },
     {
-      name: 'Quote amount',
+      name: 'Enquiry No',
+      selector: 'opportunity_code',
+      grow: 0,
+      width: 'auto',
+      button: true,
+      sortable: false,
+    },
+    {
+      name: 'Quote No',
+      selector: 'quote_code',
+      grow: 0,
+      width: 'auto',
+      wrap: true,
+    },
+    {
+      name: 'Quote Date',
+      selector: 'quote_date',
+      grow: 0,
+      width: 'auto',
+      wrap: true,
+    },
+    {
+      name: 'Quote Amount',
       selector: 'quoteAmount',
-      grow: 0,
-      width: 'auto',
-      button: true,
-      sortable: false,
-    },
-    {
-      name: 'Order No',
-      selector: 'order_code',
-      grow: 0,
-      width: 'auto',
-      button: true,
-      sortable: false,
-    },
-    {
-      name: 'Invoice No',
-      selector: 'invoice_code',
-      grow: 0,
-      width: 'auto',
-      wrap: true,
-    },
-    {
-      name: 'Invoice Amount',
-      selector: 'invoiceAmount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Status',
-      selector: 'status',
+      name: 'Delivered Date',
+      selector: 'goods_delivery_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Receipt Amount',
-      selector: 'receiptAmount',
+      name: 'Delivered Amount',
+      selector: 'deliveryAmount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
-    {
-      name: 'Delivery Report',
-      selector: 'deliveryStatus',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
+   
+   
+   
    
   ];
 
@@ -239,20 +244,6 @@ const TradingSummary = () => {
                 </Input>
               </FormGroup>
             </Col>
-            <Col className="xs-fullWidth">
-  <FormGroup>
-    <Input
-      type="select"
-      name="status"
-      onChange={(e) => setSelectedStatus(e.target.value)}
-    >
-      <option value="">Select Status</option>
-      <option value="Due">Due</option>
-      <option value="Paid">Paid</option>
-      <option value="Cancelled">Cancelled</option>
-    </Input>
-  </FormGroup>
-</Col>
             <Col md="1">
               <FormGroup>
                 <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>
@@ -263,7 +254,7 @@ const TradingSummary = () => {
           </Row>
         </CardBody>
 
-        <CommonTable title="Invoice Summary">
+        <CommonTable title="Enquiry Summary">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -281,15 +272,12 @@ const TradingSummary = () => {
                       {el.invoice_due_date ? moment(el.invoice_due_date).format('DD-MM-YYYY') : ''}
                     </td> */}
                     <td>{el.company_name}</td>
+                    <td>{el.opportunity_code}</td>
+                    <td>{el.quote_code}</td>
                     <td>{el.quoteAmount}</td>
-                    <td>{el.order_code}</td>
-                    <td>{el.invoice_code}</td>
-                    <td>{el.invoiceAmount}</td>
-                    <td>{el.status}</td>
-                    <td>{el.receiptAmount}</td>
-                    <td>{el.deliveryStatus}</td>
-                    
-                  
+                    <td>{el.quote_date}</td>
+                    <td>{el.deliveryAmount}</td>
+                    <td>{el.goods_delivery_date}</td>
                   </tr>
                 );
               })}
