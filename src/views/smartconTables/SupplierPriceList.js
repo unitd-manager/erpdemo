@@ -69,7 +69,7 @@ const Leaves = () => {
     },
 
     {
-      name: 'Custofdger Name',
+      name: 'Customer Name',
       selector: 'customer_name',
       sortable: true,
       grow: 0,
@@ -98,7 +98,7 @@ const Leaves = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Suplier Price List"
+          title="Supplier Price List"
           Button={
             <Link to="/SupplierPriceListDetails">
               <Button color="primary" className="shadow-none">

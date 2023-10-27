@@ -74,7 +74,7 @@ const getValueListName = () => {
                 <Row>
                   <Col md="12">
                     <Label>
-                      Value List Name <span className="required"> *</span>
+                      Supplier List Name <span className="required"> *</span>
                     </Label>
                     <Input
                       type="select"
