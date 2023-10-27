@@ -3,11 +3,11 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ProposalButtons({ editProposalData, applyChanges, backToList, navigate }) {
+export default function ProposalButtons({ editProposalData, applyChanges,saveChanges, backToList, }) {
   ProposalButtons.propTypes = {
     editProposalData: PropTypes.func,
-    navigate: PropTypes.any,
     applyChanges: PropTypes.func,
+    saveChanges: PropTypes.func,
     backToList: PropTypes.func,
   };
   return (
@@ -21,7 +21,7 @@ export default function ProposalButtons({ editProposalData, applyChanges, backTo
                 color="primary"
                 onClick={() => {
                   editProposalData();
-                  navigate('/Proposal');
+                  saveChanges();
                 }}
               >
                 Save

@@ -37,6 +37,7 @@ const ProposalDetails = () => {
   const [tenderForms, setTenderForms] = useState({
     title: '',
     proposal_date: '',
+    project_quote_id:'',
     
   });
 
@@ -61,7 +62,7 @@ const ProposalDetails = () => {
 
   //console.log(tenderDetails);
   const insertProposal= () => {
-    if ( tenderForms.title !== '' && tenderForms.proposal_date !== '') {
+    if ( tenderForms.title !== '' && tenderForms.proposal_date !== '' && tenderForms.project_quote_id !== '') {
       
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -110,7 +111,7 @@ const ProposalDetails = () => {
             <Form>
               <FormGroup>
                 <Col md="9">
-                  <Label>Quote Code</Label>
+                  <Label>Quote Code <span className="required"> *</span>{' '}</Label>
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}

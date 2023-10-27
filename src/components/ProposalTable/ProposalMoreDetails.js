@@ -11,7 +11,6 @@ export default function ProposalMoreDetails({
   handleAddNewContact,
   company,
   contact,
-  addCompanyModal,
   getContact,
   addCompanyToggle,
   addContactModal,
@@ -19,7 +18,7 @@ export default function ProposalMoreDetails({
   AddNewContact,
   insertCompany,
   companyhandleInputs,
-  setAddCompanyModal,
+  
   //setAddContactModal,
   allCountries,
 }) {
@@ -29,14 +28,12 @@ export default function ProposalMoreDetails({
     handleAddNewContact: PropTypes.object,
     contact: PropTypes.object,
     company: PropTypes.object,
-    addCompanyModal: PropTypes.object,
     addCompanyToggle: PropTypes.object,
     addContactModal: PropTypes.object,
     addContactToggle: PropTypes.object,
     AddNewContact: PropTypes.object,
     insertCompany: PropTypes.object,
     companyhandleInputs: PropTypes.object,
-    setAddCompanyModal: PropTypes.object,
     
     getContact: PropTypes.object,
     allCountries: PropTypes.object,
@@ -81,17 +78,8 @@ export default function ProposalMoreDetails({
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Company Name (OR)
-                    <span
-                      className="anchor"
-                      onClick={() => {
-                        setAddCompanyModal(true);
-                      }}
-                    >
-                      <b>
-                        <u>Add New Company</u>
-                      </b>
-                    </span>
+                    Company Name 
+                    
                   </Label>
                   <Input
                     type="select"
@@ -117,7 +105,7 @@ export default function ProposalMoreDetails({
                 </FormGroup>
 
                 <ProposalCompanyEditDetails
-                  addCompanyModal={addCompanyModal}
+                  
                   addCompanyToggle={addCompanyToggle}
                   insertCompany={insertCompany}
                   allCountries={allCountries}
@@ -141,7 +129,7 @@ export default function ProposalMoreDetails({
                     value={proposalDetails && proposalDetails.contact_id}
                     name="contact_id"
                   >
-                    <option value="" selected>
+                    <option value="selected" >
                       Please Select
                     </option>
                     {contact &&
@@ -236,7 +224,7 @@ export default function ProposalMoreDetails({
                 <FormGroup>
                   <Label>
                     {' '}
-                    Status <span className="required"> *</span>
+                    Status 
                   </Label>
                   <Input
                     value={proposalDetails && proposalDetails.status}
@@ -262,7 +250,7 @@ export default function ProposalMoreDetails({
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Date <span className="required"> *</span>
+                    Date 
                   </Label>
                   <Input
                     type="date"
