@@ -208,6 +208,7 @@ const EquipmentRequestDetails = Loadable(lazy(() => import('../views/DetailTable
 const EquipmentIssueDetails = Loadable(lazy(() => import('../views/DetailTable/EquipmentIssueDetails')));
 const BookingDetails = Loadable(lazy(() => import('../views/DetailTable/BookingDetails')));
 const ProposalDetails = Loadable(lazy(() => import('../views/DetailTable/ProposalDetails')));
+const ProjectListDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectListDetails')));
 const TimesheetDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TimesheetDetails')));
 const GoodsReceivedTable = Loadable(lazy(() => import('../views/smartconTables/GoodsReceived')));
 const ChangeRequestTable = Loadable(lazy(() => import('../views/smartconTables/ChangeRequest')));
@@ -653,7 +654,7 @@ const Routernew = () => {
           <Route path="/DocumentDetails" name="tenderdata" element={<DocumentDetailsTable />}></Route>
           <Route path="/PurchaseInvoiceDetails" name="tenderdata" element={<PurchaseInvoiceDetailsTable />}></Route>
           <Route path="/ProposalDetails" name="clienttdata" element={<ProposalDetails />}></Route>
-          
+          <Route path="/ProjectListDetails" name="clienttdata" element={<ProjectListDetails />}></Route>
           {/* <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route> */}
           <Route
             path="/TimesheetDetails"
