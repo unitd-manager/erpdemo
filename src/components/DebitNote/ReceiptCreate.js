@@ -13,21 +13,25 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   console.log('orderId',orderId);
   const [invoiceReceipt, setInvoiceReceipt] = useState();
   const [selectedInvoiceAmount, setSelectedInvoiceAmount] = useState(0);
+  // const [paymentMethod, setPaymentMethod] = useState('Cash');
+
   const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
-    receipt_status: 'Paid',
-    receipt_date: moment(),
-    receipt_code: '',
+    debit_note_status: 'Paid',
+    debit_note_date: moment(),
+    debit_note_code: '',
+    mode_of_payment:'Cash',
+    remarks:'',
   });
   const [selectedInvoice, setSelectedInvoice] = useState([]);
   //Setting Data in createReceipt
   const handleInputreceipt = (e) => {
     if (e.target.name === 'amount') {
       setCreateReceipt({ ...createReceipt, [e.target.name]: e.target.value });
-    } else if (e.target.name === 'mode_of_payment') {
-      setCreateReceipt({ ...createReceipt, mode_of_payment: e.target.value });
-    } else if (e.target.name === 'receipt_status') {
-      setCreateReceipt({ ...createReceipt, receipt_status: e.target.value });
+    }  else if (e.target.name === 'debit_note_status') {
+      setCreateReceipt({ ...createReceipt, debit_note_status: e.target.value });
+    } else {
+      setCreateReceipt({ ...createReceipt, [e.target.name]: e.target.value });
     }
   };
 
@@ -77,18 +81,18 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const updateReceipt = () => {
     // Create a payload with updated receipt data
     const updatedReceiptData = {
-      receipt_id: receiptId, // Use the appropriate receipt ID
-      amount: parseFloat(createReceipt.amount), // Convert to a number
+      debit_note_id: receiptId, // Use the appropriate receipt ID
+      amount: createReceipt.amount,
       mode_of_payment: createReceipt.mode_of_payment,
-      receipt_date: createReceipt.receipt_date,
+      debit_note_date: createReceipt.debit_note_date,
       remarks: createReceipt.remarks,
-      receipt_status: 'Paid',
+      debit_note_status: 'Paid',
       cheque_date: createReceipt.cheque_date,
       cheque_no: createReceipt.cheque_no,
     };
   
     // Define the promises for updating receipt and invoice status
-    const updateReceiptPromise = api.post('/invoice/editReceipt', updatedReceiptData);
+    const updateReceiptPromise = api.post('/debitnote/editReceipt', updatedReceiptData);
   
     // Check if there are selected invoices to update
     if (selectedInvoice.length > 0) {
@@ -99,13 +103,13 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
         status: 'Paid', // Update to the appropriate status
       };
   
-      const updateInvoiceStatusPromise = api.post('/invoice/editInvoice', updatedInvoiceStatusData);
+      const updateInvoiceStatusPromise = api.post('/debitnote/editInvoice', updatedInvoiceStatusData);
   
       // Use Promise.all to wait for both promises to resolve
       Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
         .then(([receiptRes, invoiceRes]) => {
           // Handle success (you might want to show a success message)
-          console.log('Receipt updated successfully', receiptRes);
+          console.log('debitnote updated successfully', receiptRes);
           console.log('Invoice status updated successfully', invoiceRes);
           window.location.reload();
         })
@@ -118,7 +122,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       updateReceiptPromise
         .then((res) => {
           // Handle success (you might want to show a success message)
-          console.log('Receipt updated successfully', res);
+          console.log('debitnote updated successfully', res);
           window.location.reload();
         })
         .catch((error) => {
@@ -131,7 +135,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const deleteCreatedReceipt = () => {
     if (receiptId) {
       api
-        .delete('/invoice/deleteReceipt', { data: { receipt_id: receiptId } })
+        .delete('/debitnote/deleteReceipt', { data: { debit_note_id: receiptId } })
         .then(() => {
           console.log('Created receipt record deleted successfully');
           setTimeout(() => {
@@ -209,26 +213,32 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   <Input
                     type="date"
                     onChange={handleInputreceipt}
-                    value={createReceipt && moment(createReceipt.receipt_date).format('YYYY-MM-DD')}
-                    name="receipt_date"
+                    value={createReceipt && moment(createReceipt.debit_note_date).format('YYYY-MM-DD')}
+                    name="debit_note_date"
                   />
                 </FormGroup>
               </Col>
               <Col md="12">
                 <FormGroup>
                   <Label>
-                    {' '}
-                    Mode Of Payment <span className="required">*</span>{' '}
+                    Mode Of Payment <span className="required">*</span>
                   </Label>
-                  <Input type="select" name="mode_of_payment" onChange={handleInputreceipt}>
-                  
-                    <option value="cash" selected="selected">Cash</option>
-                    <option value="cheque">Cheque</option>
-                    <option value="giro">Giro</option>
-                  </Input>
+                  <Input
+                  type="select"
+                  name="mode_of_payment"
+                  onChange={(e) => {
+                    handleInputreceipt(e); // This will handle other input changes
+                  }}
+                  value={createReceipt.mode_of_payment}
+                >
+                  <option value="Cash">Cash</option>
+                  <option value="Cheque">Cheque</option>
+                  <option value="Giro">Giro</option>
+                </Input>
+
                 </FormGroup>
               </Col>
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
+              {createReceipt && createReceipt.mode_of_payment === 'Cheque' && (
                 <Col md="12">
                   <FormGroup>
                     <Label>Check No</Label>
@@ -241,7 +251,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   </FormGroup>
                 </Col>
               )}
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
+              {createReceipt && createReceipt.mode_of_payment === 'Cheque' && (
                 <Col md="12">
                   <FormGroup>
                     <Label>Check date</Label>
@@ -254,7 +264,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   </FormGroup>
                 </Col>
               )}
-              {createReceipt && createReceipt.mode_of_payment === 'cheque' && (
+              {createReceipt && createReceipt.mode_of_payment === 'Cheque' && (
                 <Col md="12">
                   <FormGroup>
                     <Label>Bank</Label>
@@ -273,7 +283,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                   <Input
                     type="text"
                     onChange={handleInputreceipt}
-                    defaultValue={createReceipt && createReceipt.remarks}
+                    value={createReceipt && createReceipt.remarks}
                     name="remarks"
                   />
                 </FormGroup>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { TabContent, TabPane, Table, Row,Button,Col } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +20,8 @@ import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import AppContext from '../../context/AppContext';
+
 
 const ProposalEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
@@ -69,9 +71,21 @@ const ProposalEdit = () => {
   //     quote_date: '',
   //     quote_code: '',
   //   });
+  const { loggedInuser } = useContext(AppContext);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
+  const saveChanges = () => {
+    if (proposalDetails && proposalDetails.title !== '' && 
+    proposalDetails.proposal_date !== '' && 
+    proposalDetails.status !== ''
+      
+    ) {
+      navigate('/Proposal');
+    }
+  };
+  
   const backToList = () => {
     navigate('/Proposal');
   };
@@ -168,8 +182,10 @@ const ProposalEdit = () => {
   //Logic for edit data in db
 
   const editProposalData = () => {
-    if ( proposalDetails.title !== '' ) {
+    if (proposalDetails.title && proposalDetails.title !== '' && proposalDetails.proposal_date !== '' && proposalDetails.status !== '') {
     proposalDetails.modification_date = creationdatetime;
+    proposalDetails.modified_by = loggedInuser.first_name;;
+
     api
       .post('/proposal/editProposal', proposalDetails)
       .then(() => {
@@ -252,9 +268,7 @@ const ProposalEdit = () => {
     {
       name: 'Amount',
     },
-    {
-      name: 'Updated By ',
-    },
+    
     
   ];
 
@@ -284,6 +298,7 @@ const ProposalEdit = () => {
         editProposalData={editProposalData}
         navigate={navigate}
         applyChanges={applyChanges}
+        saveChanges={saveChanges}
         backToList={backToList}
       ></ProposalButtons>
       <ProposalMoreDetails
@@ -347,7 +362,7 @@ const ProposalEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By"></td>
+                            
                             
                           </tr>
                         );
@@ -365,7 +380,7 @@ const ProposalEdit = () => {
                   className="shadow-none"
                   color="primary"
                   onClick={() => {
-                    setRoomName('Tender');
+                    setRoomName('Proposal');
                     setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
                     dataForAttachment();
                     setAttachmentModal(true);
@@ -382,8 +397,8 @@ const ProposalEdit = () => {
               setAttachmentModal={setAttachmentModal}
               roomName={RoomName}
               fileTypes={fileTypes}
-              altTagData="TenderRelated Data"
-              desc="TenderRelated Data"
+              altTagData="ProposalRelated Data"
+              desc="ProposalRelated Data"
               recordType="RelatedPicture"
               mediaType={attachmentData.modelType}
               update={update}
@@ -391,7 +406,7 @@ const ProposalEdit = () => {
             />
             <ViewFileComponentV2
               moduleId={id}
-              roomName="Tender"
+              roomName="Proposal"
               recordType="RelatedPicture"
               update={update}
               setUpdate={setUpdate}

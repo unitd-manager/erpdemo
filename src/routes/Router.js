@@ -144,6 +144,7 @@ const ProjectTable = Loadable(lazy(() => import('../views/smartconTables/Project
 const ClientTable = Loadable(lazy(() => import('../views/smartconTables/Client')));
 const BookingTable = Loadable(lazy(() => import('../views/smartconTables/Booking')));
 const ProposalTable = Loadable(lazy(() => import('../views/smartconTables/Proposal')));
+const UomTable = Loadable(lazy(() => import('../views/smartconTables/uom')));
 const TradingQuotationTable = Loadable(lazy(() => import('../views/smartconTables/TradingQuotation')));
 const ProjectQuotationTable = Loadable(lazy(() => import('../views/smartconTables/ProjectQuotation')));
 const ProjectJobOrderTable = Loadable(lazy(() => import('../views/smartconTables/ProjectJobOrder')));
@@ -182,6 +183,8 @@ const PayslipGeneratedReports = Loadable(
 const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
 const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLossReport')));
 
+
+
 // Details Table
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
 const EnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/EnquiryDetails')));
@@ -212,6 +215,8 @@ const ProjectListDetails = Loadable(lazy(() => import('../views/DetailTable/Proj
 const TimesheetDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TimesheetDetails')));
 const GoodsReceivedTable = Loadable(lazy(() => import('../views/smartconTables/GoodsReceived')));
 const ChangeRequestTable = Loadable(lazy(() => import('../views/smartconTables/ChangeRequest')));
+const UomDetails = Loadable(lazy(() => import('../views/DetailTable/UomDetails')));
+
 // Finance Admin
 const FinanceTable = Loadable(lazy(() => import('../views/smartconTables/Finance')));
 const AccountsTable = Loadable(lazy(() => import('../views/smartconTables/Accounts')));
@@ -359,6 +364,8 @@ const GoodsReceiptEdit = Loadable(lazy(() => import('../views/EditData/GoodsRece
 const ChangeRequestEdit = Loadable(lazy(() => import('../views/EditData/ChangeRequestEdit')));
 const DocumentEdit = Loadable(lazy(() => import('../views/EditData/DocumentEdit')));
 const PurchaseInvoiceEdit = Loadable(lazy(() => import('../views/EditData/PurchaseInvoiceEdit')));
+const UomEdit = Loadable(lazy(() => import('../views/EditData/UomEdit')));
+
 
 //Reports
 const ProjectReportTable = Loadable(lazy(() => import('../views/Reports/ProjectReport')));
@@ -424,6 +431,7 @@ const Routernew = () => {
           <Route path="/DocumentEdit/:id" name="tenderdata" element={<DocumentEdit />}></Route>
           <Route path="/PurchaseInvoiceEdit/:id" name="tenderdata" element={<PurchaseInvoiceEdit />}></Route>
           <Route path="/ProposalEdit/:id" name="clienttdata" element={<ProposalEdit />}></Route>
+          <Route path="/UomEdit/:id" name="clienttdata" element={<UomEdit />}></Route>
           <Route
             path="/expenseHeadEdit/:id"
             name="clienttdata"
@@ -655,6 +663,9 @@ const Routernew = () => {
           <Route path="/PurchaseInvoiceDetails" name="tenderdata" element={<PurchaseInvoiceDetailsTable />}></Route>
           <Route path="/ProposalDetails" name="clienttdata" element={<ProposalDetails />}></Route>
           <Route path="/ProjectListDetails" name="clienttdata" element={<ProjectListDetails />}></Route>
+          <Route path="/UomDetails" name="clienttdata" element={<UomDetails />}></Route>
+          <Route path="/uom" name="projectdata" element={<UomTable />}></Route>
+          
           {/* <Route path="/ChangeRequestDetails" name="tenderdata" element={<ChangeRequestDetailsTable />}></Route> */}
           <Route
             path="/TimesheetDetails"

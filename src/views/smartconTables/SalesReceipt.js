@@ -166,7 +166,7 @@ const InvoiceData = () => {
   };
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'receipt' })
+      .post('/creditnote/getCodeValue', { type: 'receipt' })
       .then((res) => {
       setModalOpen(false); // Close the first modal
       setSecondModalOpen(true); // Open the second modal

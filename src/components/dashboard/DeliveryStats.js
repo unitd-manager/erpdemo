@@ -28,27 +28,25 @@ const AverageIssues = () => {
       setLoading(true);
       // Fetch order and delivery details based on the selected company
       api
-        .post('/finance/getDeliveryStats', { company_id: selectedCompanyId })
-        .then((response) => {
-          const { ordersWithoutDelivery, ordersWithDelivery } = response.data; // Update variable names to camelCase
-          console.log('Orders without Delivery:', ordersWithoutDelivery);
-          console.log('Orders with Delivery:', ordersWithDelivery);
-          setPieData([
-            { category: 'Orders without Delivery', value: ordersWithoutDelivery },
-            { category: 'Orders with Delivery', value: ordersWithDelivery },
-          ]);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log('Error fetching order data:', err);
-          setError(err);
-          setLoading(false);
-        });
+      .post('/finance/getDeliveryStats', { company_id: selectedCompanyId })
+      .then((response) => {
+       const { ordersWithoutDelivery, ordersWithDelivery } = response.data.data;
+        setPieData([
+          { category: 'Orders', value: ordersWithoutDelivery },
+          { category: 'Deliveries', value: ordersWithDelivery },
+        ]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('Error fetching order data:', err);
+        setError(err);
+        setLoading(false);
+      });
     }
   }, [selectedCompanyId]);
 
   return (
-    <ComponentCard title="Company Orders">
+    <ComponentCard title="Order Delivery Details">
       <Col md="12">
         <FormGroup>
           <Label for="companySelect">Select Company</Label>
