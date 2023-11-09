@@ -108,7 +108,7 @@ const TradingJobOrderDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.job_date !== '') {
+    if (tenderForms.company_id !== '' && tenderForms.job_title !== '' && tenderForms.job_date !== '') {
       tenderForms.job_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;

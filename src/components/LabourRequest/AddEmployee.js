@@ -1,6 +1,8 @@
 import React, {useState,useEffect} from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router-dom';
+import * as Icon from 'react-feather';
+import Swal from 'sweetalert2';
 import CommonTable from '../CommonTable';
 import TimesheetModal from '../ProjectModal/TimesheetModal';
 import ChooseEmployee from '../ProjectModal/ChooseEmployee';
@@ -16,6 +18,24 @@ const AddEmployee = () => {
   const [chooseMonthYear, setChooseMonthYear] = useState(false);
   const [getemployeeLinked, setGetEmployeeLinked] = useState();
   const [getSingleEmployeeData, setSingleEmployeeData] = useState();
+  const deleteRecord = (deleteID) => {
+    Swal.fire({
+      title: `Are you sure? ${deleteID}`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api.post('/employeeModule/deleteEmployeeTime', { employee_timesheet_id: deleteID }).then(() => {
+          Swal.fire('Deleted!', 'Your Employee has been deleted.', 'success');
+          window.location.reload();
+        });
+      }
+    });
+  };
 
     const Employeecolumns = [
         {
@@ -77,11 +97,14 @@ const AddEmployee = () => {
               <td>{i+1}</td>
               <td>{e.first_name}</td>
               <td style={{display:'flex',justifyContent:'center'}}>
-                  <Button color="primary" className="shadow-none" 
-                  onClick={() => { 
-                    setChooseMonthYear(true)
-                    setSingleEmployeeData(e)
-                  }}> New Timesheet </Button>
+              <span
+                                className="addline"
+                                onClick={() => {
+                                  deleteRecord(e.employee_timesheet_id);
+                                }}
+                              >
+                                <Icon.Trash2 />
+                              </span>
               </td>
            </tr>) 
             })}

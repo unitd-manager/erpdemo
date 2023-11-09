@@ -6,10 +6,14 @@ import ComponentCard from '../ComponentCard';
 export default function TenderMoreDetails({
   tenderDetails,
   handleInputs,
+  company,
+  getContact,
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
+    getContact: PropTypes.any,
+    company: PropTypes.object,
  };
   return (
     <div>
@@ -89,6 +93,31 @@ export default function TenderMoreDetails({
                       <option defaultValue="selected"> Please Select </option>
                     <option value="Approved">Approved</option>
                     <option value="Pending">Pending</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Customer</Label>
+                  <Input
+                    type="select"
+                    onChange={(e) => {
+                      handleInputs(e);
+                      getContact(e.target.value);
+                    }}
+                    value={tenderDetails && tenderDetails.company_id}
+                    name="company_id"
+                  >
+                    <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {e.company_name}{' '}
+                          </option>
+                        );
+                      })}
                   </Input>
                 </FormGroup>
               </Col>

@@ -70,8 +70,10 @@ const OpportunityDetails = () => {
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
     title: '',
-    company_name: '',
+    company_id: '',
     category: '',
+    status:'',
+    enquiry_date:'',
   });
 
   const handleInputsTenderForms = (e) => {
@@ -101,7 +103,9 @@ const OpportunityDetails = () => {
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
+    if (tenderForms.category !== '' &&
+    tenderForms.company_id !== '' &&
+    tenderForms.title !== '') {
       tenderForms.enquiry_code = code;
       tenderForms.creation_date = creationdatetime;
       api

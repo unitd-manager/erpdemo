@@ -40,7 +40,7 @@ export default function TenderCompanyDetails({
   return (
     <div>
       <Modal size="lg" isOpen={modal} toggle={toggle.bind(null)}>
-        <ModalHeader toggle={toggle.bind(null)}>New Opportunity</ModalHeader>
+        <ModalHeader toggle={toggle.bind(null)}>New Company</ModalHeader>
         <ModalBody>
           <Row>
             <Col md="12">
@@ -136,8 +136,6 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
                     <Col md="4">
                       <FormGroup>
                         <Label>Supplier Type</Label>
@@ -151,6 +149,7 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
+                     
                     <Col md="4">
                       <FormGroup>
                         <Label>Industry</Label>
@@ -179,7 +178,10 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col md="4">
+                  
+                  </Row>
+                  <Row>
+                  <Col md="4">
                       <FormGroup>
                         <Label>Company Size</Label>
                         <Input type="select" name="company_size" onChange={handleInputs}>
@@ -223,7 +225,7 @@ export default function TenderCompanyDetails({
         </ModalFooter>
       </Modal>
       <Modal isOpen={modal1} toggle={toggle1.bind(null)}>
-        <ModalHeader toggle={toggle1.bind(null)}>New Opportunity</ModalHeader>
+        <ModalHeader toggle={toggle1.bind(null)}>New Company</ModalHeader>
         <ModalBody>
           <Row>
             <Col md="12">

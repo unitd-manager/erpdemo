@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -21,7 +21,6 @@ const MaterialIssueDetails = () => {
   const [project, setProject] = useState();
   const [material, setMaterial] = useState();
 
-  const { id } = useParams();
 
   const editJobById = () => {
     api
@@ -32,9 +31,11 @@ const MaterialIssueDetails = () => {
       .catch(() => {});
   };
 
-  const editMaterialById = () => {
+
+
+  const editMaterialById = (id) => {
     api
-      .get('/materialissue/getMaterialRequest')
+      .post('/materialissue/getTaskByID', { project_id: id })
       .then((res) => {
         setMaterial(res.data.data);
       })
@@ -68,7 +69,7 @@ const MaterialIssueDetails = () => {
   useEffect(() => {
     editJobById();
     editMaterialById();
-  }, [id]);
+  }, []);
   return (
     <div>
       <BreadCrumbs />
@@ -84,6 +85,8 @@ const MaterialIssueDetails = () => {
                     type="select"
                     name="project_id"
                     onChange={(e) => {
+                      editMaterialById(e.target.value);
+
                       handlePlanningForms(e);
                     }}
                   >
@@ -125,6 +128,7 @@ const MaterialIssueDetails = () => {
                         );
                       })}
                   </Input>
+                  
                 </Row>
               </FormGroup>
               <FormGroup>

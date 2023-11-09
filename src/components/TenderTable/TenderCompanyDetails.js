@@ -136,8 +136,17 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label>Company Source</Label>
+                        <Input type="select" name="source" onChange={handleInputs}>
+                          <option defaultValue="selected">Please Select</option>
+                          <option value="Agency">Agency</option>
+                          <option value="Direct">Direct</option>
+                          <option value="Referral">Referral</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
                     <Col md="4">
                       <FormGroup>
                         <Label>Supplier Type</Label>
@@ -151,6 +160,9 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                   
                     <Col md="4">
                       <FormGroup>
                         <Label>Industry</Label>
@@ -190,17 +202,7 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col md="4">
-                      <FormGroup>
-                        <Label>Company Source</Label>
-                        <Input type="select" name="source" onChange={handleInputs}>
-                          <option defaultValue="selected">Please Select</option>
-                          <option value="Agency">Agency</option>
-                          <option value="Direct">Direct</option>
-                          <option value="Referral">Referral</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
+                    
                   </Row>
                 </CardBody>
               </Card>
