@@ -31,7 +31,7 @@ export default function QuotationAttachment() {
         className="shadow-none"
         color="primary"
         onClick={() => {
-          setRoomName('Tender');
+          setRoomName('MaterialRequest');
           setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
           dataForAttachment();
           setAttachmentModal(true);
@@ -48,8 +48,8 @@ export default function QuotationAttachment() {
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
     fileTypes={fileTypes}
-    altTagData="MaterialRelated Data"
-    desc="MaterialRelated Data"
+    altTagData="MaterialRequest Data"
+    desc="MaterialRequest Data"
     recordType="RelatedPicture"
     mediaType={attachmentData.modelType}
     update={update}

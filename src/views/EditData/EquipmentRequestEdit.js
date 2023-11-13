@@ -223,7 +223,7 @@ const EquipmentRequestEdit = () => {
   ];
   const deleteRecord = (deleteID) => {
     Swal.fire({
-      title: `Are you sure? ${id}`,
+      title: `Are you sure? ${deleteID}`,
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
+import creationdatetime from '../../constants/creationdatetime';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -20,6 +21,7 @@ import api from '../../constants/api';
 import PlanningMainDetails from '../../components/EquipmentIssue/PriceMainDetails';
 import PlanningButton from '../../components/EquipmentIssue/PriceButton';
 import Tab from '../../components/project/Tab';
+import AppContext from '../../context/AppContext';
 
 const EquipmentIssueEdit = () => {
   //Const Variables
@@ -41,6 +43,7 @@ const EquipmentIssueEdit = () => {
   const backToList = () => {
     navigate('/EquipmentIssue');
   };
+  const { loggedInuser } = useContext(AppContext);
 
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
@@ -75,7 +78,8 @@ const EquipmentIssueEdit = () => {
 
   //Logic for edit data in db
   const editplanningData = () => {
-    
+    plannings.modification_date = creationdatetime;
+    plannings.modified_by = loggedInuser.first_name;
     if (
       plannings.equipment_issue_date      ) {
       api
@@ -150,8 +154,8 @@ const EquipmentIssueEdit = () => {
               setAttachmentModal={setAttachmentModal}
               roomName={RoomName}
               fileTypes={fileTypes}
-              altTagData="EquipmentIssueAttach Data"
-              desc="EquipmentIssueAttach Data"
+              altTagData="EquipmentIssue Data"
+              desc="EquipmentIssue Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
             />

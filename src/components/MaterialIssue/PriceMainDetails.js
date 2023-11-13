@@ -11,7 +11,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
   };
   return (
     <>
-      <ComponentCard title="Material Issue Edit">
+      <ComponentCard title="Material Issue Edit" creationModificationDate={plannings}>
         <Form>
           <FormGroup>
             <Row>
