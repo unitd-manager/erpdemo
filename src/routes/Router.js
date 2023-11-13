@@ -165,22 +165,14 @@ const BillOfMaterialsShortage = Loadable(lazy(() => import('../views/smartconTab
 const TestTable = Loadable(lazy(() => import('../views/smartconTables/Test')));
 const PurchaseOrderTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrder')));
 const PurchaseOrderDashboardTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseOrderDashboard')));
-const EmployeetrainingreportsTable = Loadable(
-  lazy(() => import('../views/smartconTables/Employeetrainingreports')),
-);
 const StatementofAccountsReport = Loadable(
   lazy(() => import('../views/Reports/StatementofAccountsReport')),
 );
 const NewStatementsOfAcc = Loadable(lazy(() => import('../views/Reports/NewStatementsOfAcc')));
 const AgingReportsTable = Loadable(lazy(() => import('../views/smartconTables/AgingReports')));
 const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/InvoiceByMonth')));
-const EmployeeSalaryReport = Loadable(
-  lazy(() => import('../views/smartconTables/EmployeeSalaryReport')),
-);
-const PayslipGeneratedReports = Loadable(
-  lazy(() => import('../views/smartconTables/PayslipGeneratedReports')),
-);
-const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
+
+// const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
 const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLossReport')));
 
 
@@ -375,7 +367,7 @@ const InvoiceByYearTable = Loadable(lazy(() => import('../views/Reports/InvoiceB
 const SupportNewTable = Loadable(lazy(() => import('../views/smartconTables/SupportNew')));
 
 //Reports
-const CpfSummaryReports = Loadable(lazy(() => import('../views/smartconTables/CpfSummaryReports')));
+// const CpfSummaryReports = Loadable(lazy(() => import('../views/smartconTables/CpfSummaryReports')));
 const PurchaseGstReport = Loadable(lazy(() => import('../views/smartconTables/PurchaseGstReport')));
 
 const Routernew = () => {
@@ -786,12 +778,7 @@ const Routernew = () => {
           <Route path="/SupportDetails" name="tenderdata" element={<SupportDetails />}></Route>
           <Route path="/PurchaseOrder" name="clienttdata" element={<PurchaseOrderTable />}></Route>
           <Route path="/PurchaseOrderDashboard" name="clienttdata" element={<PurchaseOrderDashboardTable/>}></Route>
-          <Route
-            path="/Employeetrainingreports"
-            name="clienttdata"
-            element={<EmployeetrainingreportsTable />}
-          ></Route>
-          <Route
+           <Route
             path="/StatementofAccountsReport"
             name="clienttdata"
             element={<StatementofAccountsReport />}
@@ -802,24 +789,9 @@ const Routernew = () => {
             element={<NewStatementsOfAcc />}
           ></Route>
           <Route path="/AgingReports" name="clienttdata" element={<AgingReportsTable />}></Route>
-          <Route
-            path="/CpfSummaryreports"
-            name="clienttdata"
-            element={<CpfSummaryReports />}
-          ></Route>
+        
           <Route path="/InvoiceByMonth" name="clienttdata" element={<InvoiceByMonth />}></Route>
-          <Route
-            path="/EmployeeSalaryReport"
-            name="clienttdata"
-            element={<EmployeeSalaryReport />}
-          ></Route>
-          <Route
-            path="/PayslipGeneratedReports"
-            name="clienttdata"
-            element={<PayslipGeneratedReports />}
-          ></Route>
-          <Route path="/IR8AReport" name="clienttdata" element={<IR8AReport />}></Route>
-          
+              
           <Route path="/ProfitLossReport" name="clienttdata" element={<ProfitLossReport />}></Route>
 
           <Route
