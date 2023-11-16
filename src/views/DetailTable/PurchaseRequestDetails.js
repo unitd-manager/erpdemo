@@ -45,7 +45,7 @@ const PurchaseRequestDetails = () => {
           message('Unable to insert record.', 'error');
         });
     } else {
-      message('Please fill all required fields.', 'warning');
+      message('Please fill all required field.', 'warning');
     }
   };
 

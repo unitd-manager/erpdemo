@@ -11,11 +11,11 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
   };
   return (
     <>
-      <ComponentCard title="Equipment Issue Edit">
+      <ComponentCard title="Equipment Issue Edit" creationModificationDate={plannings}>
         <Form>
           <FormGroup>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Project Name</Label>
                   <br />
@@ -26,7 +26,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   name="proj_title" disabled
                 />                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Code</Label>
                   <br />
@@ -39,7 +39,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 />  
                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Issue Date</Label>
                   <Input
@@ -50,10 +50,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              
-            </Row>
-            <Row>
-            <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Reason For Issue</Label>
                   <Input
@@ -64,7 +61,10 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+            </Row>
+            <Row>
+         
+              <Col md="3">
                 <FormGroup>
                   <Label>Authorized By</Label>
                   <Input
@@ -75,7 +75,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Notes</Label>
                   <Input

@@ -7,7 +7,6 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
   ReturnDetailComp.propTypes = {
     returnDetails: PropTypes.object,
     handleInputs: PropTypes.func,
-  
   };
 
   return (
@@ -15,7 +14,6 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
       <Form>
         <FormGroup>
           <Row>
-           
             <Col md="3">
               <FormGroup>
                 <Label>Invoice Code</Label>
@@ -37,13 +35,15 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
                   onChange={handleInputs}
                   value={returnDetails && returnDetails.status}
                   name="status"
-              
-                > <option value="" selected="selected">
-                Please Select
-              </option>
-              <option value="InProgress">In Progress</option>
-              <option value="Return">Return</option>
-</Input>
+                >
+                  {' '}
+                  <option value="" selected="selected">
+                    Please Select
+                  </option>
+                  <option value="InProgress">In Progress</option>
+                  <option value="Return">Return</option>
+                  <option value="CancelReturn">Cancel Return</option>
+                </Input>
               </FormGroup>
             </Col>
 
@@ -59,9 +59,7 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
                 ></Input>
               </FormGroup>
             </Col>
-        
-            </Row>
-         
+          </Row>
         </FormGroup>
       </Form>
     </>

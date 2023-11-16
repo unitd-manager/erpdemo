@@ -104,6 +104,10 @@ const QuoteLineItem = ({
     obj.creation_date = creationdatetime;
     obj.created_by = loggedInuser.first_name;
     obj.equipment_request_id = quoteLine;
+    if (
+      obj.amount !== '' 
+    
+    ) {
     api
       .post('/equipmentrequest/insertQuoteItems', obj)
       .then(() => {
@@ -116,6 +120,9 @@ const QuoteLineItem = ({
       .catch(() => {
         //message('Cannot Add Line Items', 'error');
       });
+    } else {
+      message('All fields are required.', 'info');
+    }
   };
   //Invoice item values
   const getAllValues = () => {
