@@ -236,27 +236,19 @@ const PurchaseOrderEdit = () => {
     getPoProduct();
     getPurchaseOrderId();
     getSupplier();
-    if (purchaseDetails && purchaseDetails.supplier_id) {
-      getRequestForQuote(purchaseDetails.supplier_id); // Pass the supplier_id as an argument
-    }
   }, [id]);
-
-  
+  useEffect(() => {
+    if (purchaseDetails && purchaseDetails.supplier_id) {
+      // Use purchaseDetails.supplier_id directly to get the selected project ID
+      const selectedProjectId = purchaseDetails && purchaseDetails.supplier_id;
+      getRequestForQuote(selectedProjectId);
+    }
+  }, [purchaseDetails && purchaseDetails.supplier_id]);
 
   return (
     <>
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
-      {/* PurchaseorderButtons */}
-      {/* <PurchaseOrderButtons
-        applyChanges={applyChanges}
-        backToList={backToList}
-        editPurchaseData={editPurchaseData}
-        purchaseDetails={purchaseDetails}
-        products={products}
-        product={product}
-        navigate={navigate}
-      /> */}
       <ApiButton
               editData={editPurchaseData}
               navigate={navigate}
