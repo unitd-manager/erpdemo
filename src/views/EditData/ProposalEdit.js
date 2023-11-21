@@ -1,5 +1,5 @@
-import React, { useEffect, useState,useContext } from 'react';
-import { TabContent, TabPane, Table, Row,Button,Col } from 'reactstrap';
+import React, { useEffect, useState, useContext } from 'react';
+import { TabContent, TabPane, Table, Row, Button, Col } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Icon from 'react-feather';
@@ -13,7 +13,7 @@ import api from '../../constants/api';
 import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
 // import PdfQuote from '../../components/PDF/PdfQuote';
 import creationdatetime from '../../constants/creationdatetime';
-import AddEmployee from '../../components/ProposalTabContent/AddEmployee';
+
 // import TenderQuotation from '../../components/TenderTable/TenderQuotation';
 import ProposalMoreDetails from '../../components/ProposalTable/ProposalMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
@@ -21,9 +21,12 @@ import Tab from '../../components/project/Tab';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AppContext from '../../context/AppContext';
-
+//import ProposalEmployee from '../../components/ProposalTabContent/AddProposalEmployee';
+//import TaskEmployee from '../../components/ProposalTabContent/ProposalEmployee';
+import AddEmployee from '../../components/ProposalTabContent/AddEmployee';
 
 const ProposalEdit = () => {
+  
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -46,8 +49,6 @@ const ProposalEdit = () => {
     { id: '3', name: 'Attachment' },
   ];
 
-  
-
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -66,7 +67,7 @@ const ProposalEdit = () => {
   //const [addLineItemModal, setAddLineItemModal] = useState(false);
 
   const [allCountries, setallCountries] = useState();
-  
+
   //   const [quoteForm, setQuoteForm] = useState({
   //     quote_date: '',
   //     quote_code: '',
@@ -77,15 +78,16 @@ const ProposalEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const saveChanges = () => {
-    if (proposalDetails && proposalDetails.title !== '' && 
-    proposalDetails.proposal_date !== '' && 
-    proposalDetails.status !== ''
-      
+    if (
+      proposalDetails &&
+      proposalDetails.title !== '' &&
+      proposalDetails.proposal_date !== '' &&
+      proposalDetails.status !== ''
     ) {
       navigate('/Proposal');
     }
   };
-  
+
   const backToList = () => {
     navigate('/Proposal');
   };
@@ -113,8 +115,6 @@ const ProposalEdit = () => {
       //setAddLineItemModal(true);
     });
   };
-
-  
 
   //Logic for adding company in db
 
@@ -182,24 +182,27 @@ const ProposalEdit = () => {
   //Logic for edit data in db
 
   const editProposalData = () => {
-    if (proposalDetails.title && proposalDetails.title !== '' && proposalDetails.proposal_date !== '' && proposalDetails.status !== '') {
-    proposalDetails.modification_date = creationdatetime;
-    proposalDetails.modified_by = loggedInuser.first_name;;
+    if (
+      proposalDetails.title &&
+      proposalDetails.title !== '' &&
+      proposalDetails.proposal_date !== '' &&
+      proposalDetails.status !== ''
+    ) {
+      proposalDetails.modification_date = creationdatetime;
+      proposalDetails.modified_by = loggedInuser.first_name;
 
-    api
-      .post('/proposal/editProposal', proposalDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-      
-    }
-    else {
+      api
+        .post('/proposal/editProposal', proposalDetails)
+        .then(() => {
+          message('Record editted successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        })
+        .catch(() => {
+          message('Unable to edit record.', 'error');
+        });
+    } else {
       message('Please fill all required fields', 'warning');
     }
   };
@@ -247,8 +250,6 @@ const ProposalEdit = () => {
     });
   };
 
-  
-
   const columns1 = [
     {
       name: '#',
@@ -268,17 +269,13 @@ const ProposalEdit = () => {
     {
       name: 'Amount',
     },
-    
-    
   ];
 
- 
   const dataForAttachment = () => {
     setDataForAttachment({
       modelType: 'attachment',
     });
   };
-
 
   //Add new Project
 
@@ -362,8 +359,6 @@ const ProposalEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            
-                            
                           </tr>
                         );
                       })}
@@ -373,8 +368,9 @@ const ProposalEdit = () => {
             </Row>
           </TabPane>
           <TabPane tabId="2" eventkey="addEmployee">
-          <Row>
-              <AddEmployee />
+            <Row>
+              <AddEmployee proposalDetails={proposalDetails}/>
+              {/* <TaskEmployee proposalId={id}/> */}
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   className="shadow-none"
@@ -390,7 +386,7 @@ const ProposalEdit = () => {
                 </Button>
               </Col>
             </Row>
-            
+
             <AttachmentModalV2
               moduleId={id}
               attachmentModal={attachmentModal}
