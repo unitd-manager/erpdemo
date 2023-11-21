@@ -31,7 +31,7 @@ export default function JobOrderAttachment() {
         className="shadow-none"
         color="primary"
         onClick={() => {
-          setRoomName('Tender');
+          setRoomName('ProjectJobOrder');
           setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
           dataForAttachment();
           setAttachmentModal(true);
@@ -48,8 +48,8 @@ export default function JobOrderAttachment() {
     setAttachmentModal={setAttachmentModal}
     roomName={RoomName}
     fileTypes={fileTypes}
-    altTagData="TenderRelated Data"
-    desc="TenderRelated Data"
+    altTagData="ProjectJobOrder Data"
+    desc="ProjectJobOrder Data"
     recordType="RelatedPicture"
     mediaType={attachmentData.modelType}
     update={update}

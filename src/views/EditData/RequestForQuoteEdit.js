@@ -178,7 +178,7 @@ console.error('Error fetching quote items', error);
         generateData(res.data.data[0].purchase_request_id);
       })
       .catch(() => {
-        // message('Quote Data Not Found', 'info');
+        // message('Data Not Found', 'info');
       });
   };
   
@@ -300,7 +300,7 @@ console.error('Error fetching quote items', error);
                         <option value="New">New</option>
                         <option value="Quoted">Quoted</option>
                         <option value="Awarded">Awarded</option>
-                        <option value="Not Awarded">Not Awarded</option>
+                        <option value="NotAwarded">NotAwarded</option>
                         <option value="Cancelled">Cancelled</option>
                       </Input>
                   </FormGroup>

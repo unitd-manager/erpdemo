@@ -71,6 +71,13 @@ const ProjectJobOrder = () => {
       wrap: true,
     },
     {
+      name: 'Job Order Title',
+      selector: 'job_title',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: 'Date',
       selector: 'job_date',
       sortable: true,
@@ -139,6 +146,7 @@ const ProjectJobOrder = () => {
                       </Link>
                     </td>
                     <td>{element.job_code}</td>
+                    <td>{element.job_title}</td>
                     <td>{element.job_date}</td>
                     <td>{element.company_name}</td>
                     <td>{element.ref_no_job}</td>

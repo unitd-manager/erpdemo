@@ -35,7 +35,7 @@ const LabourRequestDetails = () => {
 
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.customer_name !== '') {
+    if (planningForms.project_id !== '') {
       planningForms.creation_date = creationdatetime;
       api
         .post('/labourrequest/insertLabourRequest', planningForms)

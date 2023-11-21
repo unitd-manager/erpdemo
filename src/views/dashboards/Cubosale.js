@@ -13,6 +13,7 @@ import TaskSummary from '../../components/dashboard/TaskSummary';
 import LabourSummary from '../../components/dashboard/LabourSummary';
 import MaterialPurchaseSummary from '../../components/dashboard/MaterialPurchaseSummary';
 import MaterialIssueChart from '../../components/dashboard/MaterialIssueChart';
+import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
 
 const Classic = () => {
   return (
@@ -32,6 +33,7 @@ const Classic = () => {
           <WorkpermitExpirySummary/>
           <MaterialPurchaseSummary/>
           <MaterialIssueChart/>
+          <RequestForQuotePie/>
           {/* <SalesOverview /> */}
         </Col>
       </Row>

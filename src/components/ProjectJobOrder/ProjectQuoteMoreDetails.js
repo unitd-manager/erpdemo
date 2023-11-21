@@ -49,6 +49,20 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
+                  <Label>
+                    Job Title 
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.job_title}
+                    name="job_title"
+                    
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
                   <Label>Date</Label>
                   <Input
                     type="date"
@@ -158,9 +172,10 @@ export default function ProjectQuoteMoreDetails({
                   <Label>Net Total</Label>
                   <Input
                     type="text"
-                    value={tenderDetails && tenderDetails.total_amount}
+                    value={tenderDetails && tenderDetails.InvoiceAmount}
                     onChange={handleInputs}
-                    name="total_amount"
+                    name="InvoiceAmount"
+                    disabled
                   />
                 </FormGroup>
               </Col>

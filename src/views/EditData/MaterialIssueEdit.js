@@ -14,6 +14,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import ComponentCard from '../../components/ComponentCard';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
@@ -75,7 +76,8 @@ const MaterialIssueEdit = () => {
 
   //Logic for edit data in db
   const editplanningData = () => {
-    
+    plannings.modification_date = creationdatetime;
+
     if (
       plannings.material_issue_date      ) {
       api
@@ -150,8 +152,8 @@ const MaterialIssueEdit = () => {
               setAttachmentModal={setAttachmentModal}
               roomName={RoomName}
               fileTypes={fileTypes}
-              altTagData="MaterialIssueAttach Data"
-              desc="MaterialIssueAttach Data"
+              altTagData="MaterialIssue Data"
+              desc="MaterialIssue Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
             />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext  } from 'react';
 import {
   Row,
   Col,
@@ -14,6 +14,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import ComponentCard from '../../components/ComponentCard';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
@@ -21,6 +22,8 @@ import AddEmployee from '../../components/LabourRequest/AddEmployee';
 import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
 import PlanningButton from '../../components/LabourRequest/PriceButton';
 import Tab from '../../components/project/Tab';
+import AppContext from '../../context/AppContext';
+
 
 const PriceListEdit = () => {
   //Const Variables
@@ -73,9 +76,12 @@ const PriceListEdit = () => {
       modelType: 'attachment',
     });
   };
+  const { loggedInuser } = useContext(AppContext);
 
   //Logic for edit data in db
   const editplanningData = () => {
+    plannings.modification_date = creationdatetime;
+    plannings.modified_by = loggedInuser.first_name;
     
     if (
       plannings.request_date      ) {
@@ -83,6 +89,9 @@ const PriceListEdit = () => {
         .post('/labourrequest/editLabourRequest', plannings)
         .then(() => {
           message('Record editted successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
         })
         .catch(() => {
           message('Unable to edit record.', 'error');
@@ -134,7 +143,7 @@ const PriceListEdit = () => {
                   color="primary"
                   className="shadow-none"
                   onClick={() => {
-                    setRoomName('ProjectAttach');
+                    setRoomName('LabourRequest');
                     setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
                     dataForAttachment();
                     setAttachmentModal(true);
@@ -151,12 +160,12 @@ const PriceListEdit = () => {
               setAttachmentModal={setAttachmentModal}
               roomName={RoomName}
               fileTypes={fileTypes}
-              altTagData="ProjectAttach Data"
-              desc="ProjectAttach Data"
+              altTagData="LabourRequest Data"
+              desc="LabourRequest Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
             />
-            <ViewFileComponentV2 moduleId={id} roomName="ProjectAttach" recordType="Picture" />
+            <ViewFileComponentV2 moduleId={id} roomName="LabourRequest" recordType="Picture" />
           </TabPane>
          
         </TabContent>

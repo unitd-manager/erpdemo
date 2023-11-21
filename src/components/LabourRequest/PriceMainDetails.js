@@ -11,11 +11,11 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
   };
   return (
     <>
-      <ComponentCard title=" Project Planning Edit">
+      <ComponentCard title="Labour Request Edit" creationModificationDate={plannings}>
         <Form>
           <FormGroup>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Project Nmae</Label>
                   <br />
@@ -26,7 +26,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   name="proj_title" disabled
                 />                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Code</Label>
                   <br />
@@ -39,7 +39,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 />  
                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Request Date</Label>
                   <Input
@@ -50,10 +50,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              
-            </Row>
-            <Row>
-            <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Start Date</Label>
                   <Input
@@ -64,7 +61,33 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+            </Row>
+            <Row>
+            <Col md="3">
+                <FormGroup>
+                  <Label>No Of Employee</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={plannings && plannings.no_of_employees}
+                    name="no_of_employees"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Job Description</Label>
+                  <textarea
+                    onChange={handleInputs}
+                    value={plannings && plannings.job_description}
+                    name="job_description"
+                    rows="4" // You can adjust the number of rows as needed
+                  />
+                </FormGroup>
+              </Col>
+             
+
+              <Col md="3">
                 <FormGroup>
                   <Label>End Date</Label>
                   <Input
@@ -76,7 +99,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 </FormGroup>
               </Col>
 
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Request By</Label>
                   <Input
@@ -90,7 +113,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
              
             </Row>
             <Row>
-            <Col md="4">
+            <Col md="3">
                 <Label>Request Urgency</Label>
                 <Input
                   type="select"
@@ -105,7 +128,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                  
                 </Input>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <Label>Request Type</Label>
                 <Input
                   type="select"
@@ -120,42 +143,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                  
                 </Input>
               </Col>
-
-              <Col md="4">
-                <FormGroup>
-                  <Label>Department</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={plannings && plannings.department}
-                    name="department"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row><Col md="4">
-                <FormGroup>
-                  <Label>No Of Employee</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={plannings && plannings.no_of_employees}
-                    name="no_of_employees"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="4">
-                <FormGroup>
-                  <Label>Job Description</Label>
-                  <textarea
-                    onChange={handleInputs}
-                    value={plannings && plannings.job_description}
-                    name="job_description"
-                    rows="4" // You can adjust the number of rows as needed
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="4">
+              <Col md="3">
                   <FormGroup>
                     <Label>Skills Required</Label>
                     <textarea
@@ -167,7 +155,19 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   </FormGroup>
                 </Col>
 
+              <Col md="3">
+                <FormGroup>
+                  <Label>Department</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={plannings && plannings.department}
+                    name="department"
+                  />
+                </FormGroup>
+              </Col>
             </Row>
+          
             
             
         

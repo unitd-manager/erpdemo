@@ -24,7 +24,7 @@ export default function TradingQuoteMoreDetails({
         <FormGroup>
           <ComponentCard title="Equipment Request Details" creationModificationDate={tenderDetails}>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>
                     Request Code <span className="required"> *</span>
@@ -38,7 +38,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Date</Label>
                   <Input
@@ -50,7 +50,7 @@ export default function TradingQuoteMoreDetails({
                 </FormGroup>
               </Col>
              
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label>Shipping Method</Label>
                   <Input
@@ -61,11 +61,20 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row> 
               <Col md="3">
                 <FormGroup>
-                  <Label>Equipment Date</Label>
+                  <Label>Payment Terms</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.payment_terms}
+                    name="payment_terms"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Equipment Request Date</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -74,6 +83,9 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
+            </Row>
+            <Row> 
+        
               <Col md="3">
                 <FormGroup>
                   <Label>Site Reference</Label>
@@ -137,17 +149,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Payment Terms</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.payment_terms}
-                    name="payment_terms"
-                  />
-                </FormGroup>
-              </Col>
+             
               </Row>
           </ComponentCard>
         </FormGroup>

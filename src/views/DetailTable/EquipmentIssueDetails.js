@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -21,7 +21,6 @@ const EquipmentIssueDetails = () => {
   const [project, setProject] = useState();
   const [equipment, setEquipment] = useState();
 
-  const { id } = useParams();
 
   const editJobById = () => {
     api
@@ -32,9 +31,9 @@ const EquipmentIssueDetails = () => {
       .catch(() => {});
   };
 
-  const editMaterialById = () => {
+  const editMaterialById = (id) => {
     api
-      .get('/equipmentissue/getEquipmentRequest')
+      .post('/equipmentissue/getEquipmentRequest', { project_id: id })
       .then((res) => {
         setEquipment(res.data.data);
       })
@@ -47,7 +46,7 @@ const EquipmentIssueDetails = () => {
 
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.equipment_issue_date !== '') {
+    if (planningForms.equipment_issue_date !== '' && planningForms.project_id !== '') {
       planningForms.creation_date = creationdatetime;
       api
         .post('/equipmentissue/insertEquipmentIssue', planningForms)
@@ -68,7 +67,7 @@ const EquipmentIssueDetails = () => {
   useEffect(() => {
     editJobById();
     editMaterialById();
-  }, [id]);
+  }, []);
   return (
     <div>
       <BreadCrumbs />
@@ -84,6 +83,8 @@ const EquipmentIssueDetails = () => {
                     type="select"
                     name="project_id"
                     onChange={(e) => {
+                      editMaterialById(e.target.value);
+                      
                       handlePlanningForms(e);
                     }}
                   >

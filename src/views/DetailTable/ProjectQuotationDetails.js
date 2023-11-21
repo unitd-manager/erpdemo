@@ -114,7 +114,7 @@ const TradingQuotationDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.quote_date !== '') {
+    if (tenderForms.company_id !== '' && tenderForms.enquiry_code !== '' && tenderForms.quote_date !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
