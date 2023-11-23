@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import random from 'random';
-import * as $ from 'jquery';
 import moment from 'moment';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
@@ -10,23 +9,21 @@ import message from '../Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
-const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
+const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
   ChooseEmployee.propTypes = {
     chooseEmp: PropTypes.bool,
     setChooseEmp: PropTypes.func,
+    //getemployeeLinked: PropTypes.any,
   };
 
   const { id } = useParams();
-  const [employeeLinked, setEmployeeLinked] = useState();
+  const [employeeLinked, setEmployeeLinked] = useState([]);
 
   //Get employee name and id for linked employee select field
   const getEmployee = () => {
-    api.get('/training/getEmployeeName').then((res) => {
+    api.get('/proposal/getEmployeeName').then((res) => {
       const items = res.data.data;
-      const finaldat = [];
-      items.forEach((item) => {
-        finaldat.push({ value: item.employee_id, label: item.first_name });
-      });
+      const finaldat = items.map((item) => ({ value: item.employee_id, label: item.first_name }));
       setEmployeeLinked(finaldat);
     });
   };
@@ -37,78 +34,98 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
       id: random.int(1, 99),
       employee_name: '',
       employee_id: '',
-      
     },
   ]);
 
   //Onchange item in training staff employee name selectfield
   const onchangeItem = (str, itemId) => {
-    const element = addLineItem.find((el) => el.id === itemId);
-    element.employee_name = str.label;
-    element.employee_id = str.value.toString();
-    setAddLineItem(addLineItem);
+    setAddLineItem((prevAddLineItem) =>
+      prevAddLineItem.map((item) =>
+        item.id === itemId ? { ...item, employee_name: str.label, employee_id: str.value.toString() } : item
+      )
+    );
   };
 
   // Add new line item in link Employee
-  const AddNewLineItem = () => {
-    setAddLineItem([
-      ...addLineItem,
+  const AddNewLineItem = (empObj) => {
+    setAddLineItem((prevAddLineItem) => [
+      ...prevAddLineItem,
       {
         id: random.int(1, 99),
-        employee_name: '',
-        employee_id: '',
+        employee_name: empObj.label,
+        employee_id: empObj.value.toString(),
       },
     ]);
   };
 
+  
+
+  // const addEmployeeToTimeSheet = (empObj) => {
+  //   api
+  //     .post('/proposal/getEmployeeId', { proposal_id: parseInt(id, 10) })
+  //     .then((response) => {
+  //       const employIds = response.data.data.map((item) => item.employee_id);
+  //       console.log('employIds',employIds)
+        
+  //       if (employIds.includes(empObj.employee_id)) {
+  //         message('Employee already linked to this proposal.', 'error');
+  //       } else {
+  //         api
+  //           .post('/proposal/insertEmployee', empObj)
+  //           .then((res) => {
+  //             if (res.data.data.affectedRows === 1) {
+  //               message('Employee Linked', 'success');
+  //             }
+  //           })
+  //           .catch(() => {
+  //             message('Unable to insert record.', 'error');
+  //           });
+  //       }
+  //     })
+  //     .catch(() => {
+  //       message('Unable to fetch employee ID.', 'error');
+  //     });
+  // };
+
   const insertTrainingData = () => {
-    const result = [];
-    const oldArray = addLineItem;
-    $('.newemp tbody tr').each(function input() {
-      const allValues = {};
-      $(this)
-        .find('input')
-        .each(function output() {
-          const fieldName = $(this).attr('name');
-          allValues[fieldName] = $(this).val();
+    // Get the list of existing linked employees for the proposal
+    api.post('/proposal/getEmployeeId', { proposal_id: parseInt(id, 10) })
+      .then((response) => {
+        const existingEmployees = response.data.data.map((item) => item.employee_id);
+  
+        // Iterate through the added employees
+        addLineItem.forEach((obj) => {
+          if (!existingEmployees.includes(parseInt(obj.employee_id, 10))) {
+            // Insert the employee if it's not already linked
+            const newData = {
+              proposal_id: parseInt(id, 10),
+              employee_id: parseInt(obj.employee_id, 10),
+              creation_date: creationdatetime,
+              month: moment().month() + 1,
+              year: moment().year(),
+              day: moment().date(),
+            };
+  
+            api.post('/proposal/insertEmployee', newData)
+              .then((res) => {
+                if (res.data.data.affectedRows === 1) {
+                  message('Employee Linked', 'success');
+                }
+              })
+              .catch(() => {
+                message('Unable to insert record.', 'error');
+              });
+          } else {
+            message('Employee already linked to this proposal.', 'error');
+          }
         });
-      result.push(allValues);
-    });
-    result.forEach((obj) => {
-      if (obj.id) {
-        /* eslint-disable */
-        const foundObj = oldArray.find((el) => parseInt(el.id) === parseInt(obj.id));
-
-        if (foundObj) {
-          obj.employee_id = foundObj.employee_id;
-          obj.proposal_id = id;
-          obj.creation_date = creationdatetime;
-          obj.month = moment().month() + 1;
-          obj.year = moment().year();
-          obj.day = moment().date();
-          delete obj?.undefined;
-          addEmployeeToTimeSheet(obj);
-        }
-      }
-    });
-  };
-
-  const addEmployeeToTimeSheet = (empObj) => {
-    api
-      .post('/proposal/insertTimesheetEmployee', empObj)
-      .then((res) => {
-        if (res.data.data.affectedRows == 1) {
-          message('Employee Linked', 'success');
-          setTimeout(() => {
-            setChooseEmp(false);
-            // window.location.reload();
-          }, 300);
-        }
       })
       .catch(() => {
-        message('Unable to insert record.', 'error');
+        message('Unable to fetch employee IDs.', 'error');
       });
   };
+
+
   useEffect(() => {
     getEmployee();
   }, [id]);
@@ -152,30 +169,28 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
                 </tr>
               </thead>
               <tbody>
-                {addLineItem.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td data-label="Employee Name">
-                        <Select
-                          key={item.id}
-                          defaultValue={{ value: item.employee_id, label: item.employee_name }}
-                          onChange={(e) => {
-                            onchangeItem(e, item.id);
-                          }}
-                          options={employeeLinked}
-                        />
-                        <Input
-                          value={item.employee_id.toString()}
-                          type="hidden"
-                          name="employee_id"
-                        ></Input>
-                      </td>
-                      <td>
-                        <Input type="hidden" name="id" defaultValue={item.id}></Input>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {addLineItem.map((item) => (
+                  <tr key={item.id}>
+                    <td data-label="Employee Name">
+                      <Select
+                        key={item.id}
+                        defaultValue={{ value: item.employee_id, label: item.employee_name }}
+                        onChange={(e) => {
+                          onchangeItem(e, item.id);
+                        }}
+                        options={employeeLinked}
+                      />
+                      <Input
+                        value={item.employee_id.toString()}
+                        type="hidden"
+                        name="employee_id"
+                      ></Input>
+                    </td>
+                    <td>
+                      <Input type="hidden" name="id" defaultValue={item.id}></Input>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </Row>

@@ -38,6 +38,7 @@ const ProposalDetails = () => {
     title: '',
     proposal_date: '',
     project_quote_id:'',
+    proposal_code:'',
     
   });
 
@@ -61,9 +62,9 @@ const ProposalDetails = () => {
   const { loggedInuser } = useContext(AppContext);
 
   //console.log(tenderDetails);
-  const insertProposal= () => {
+  const insertProposal= (code) => {
     if ( tenderForms.title !== '' && tenderForms.proposal_date !== '' && tenderForms.project_quote_id !== '') {
-      
+      tenderForms.proposal_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
@@ -84,17 +85,16 @@ const ProposalDetails = () => {
     }
   };
 
-  // //QUOTE GENERATED CODE
-  // const generateCode = () => {
-  //   api
-  //     .post('/tender/getCodeValue', { type: 'proposal' })
-  //     .then((res) => {
-  //       insertQuote(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       insertQuote('');
-  //     });
-  // };
+  const generateCode = () => {
+    api
+      .post('/tender/getCodeValue', { type: 'proposal' })
+      .then((res) => {
+        insertProposal(res.data.data);
+      })
+      .catch(() => {
+        insertProposal('');
+      });
+  };
 
   useEffect(() => {
     // getCompany();
@@ -170,7 +170,7 @@ const ProposalDetails = () => {
                     color="primary"
                     className="btn mr-2 shadow-none"
                     onClick={() => {
-                      insertProposal();
+                      generateCode();
                     }}
                   >
                     Save & Continue

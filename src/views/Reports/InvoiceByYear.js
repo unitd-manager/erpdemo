@@ -26,30 +26,36 @@ const InvoiceBYYear = () => {
   console.log('thisyear',thisYear)
   //Get data from Training table
  
-  const handleSearch = () => {
-    const queryParams = companyName ? `?recordType=${companyName}` : '';
-
+  const getTendersById = () => {
     api
-    .get(`/reports/getInvoiceByYearReport${queryParams}`)
-    .then((res) => {
-      const data=[]
-     let obj = {invoice_year:'' ,invoice_amount_yearly:''}
-        let total=0
-      res.data.data.filter((x) => parseFloat(x.invoice_year) === thisYear).forEach((el)=>{
-        total +=el.invoice_amount_yearly
-      })
-      obj={invoice_year:thisYear ,invoice_amount_yearly:total}
-      data.push(obj);
-      //setInvoiceReport(res.data.data);
-      setUserSearchData(data);
-    })
-    .catch(() => {
-      message('Project Data Not Found', 'info');
-    });
-  };
+      .post('/tender/getTendersById', { opportunity_id: id })
+      .then((res) => {
+        const tenderData = res.data.data;
+        setTenderForms({
+          title: tenderData.title || '',
+          company_id: tenderData.company_id || '',
+          category: tenderData.category || '',
+        });
   
+        // Now fetch the yearly invoice amount for the selected category
+        api
+          .get(`/reports/getInvoiceByYearReport?recordType=${tenderData.category}`)
+          .then((invoiceRes) => {
+            // Assuming your API response has a structure like { data: [{ invoice_year, invoice_amount_yearly }] }
+            const yearlyInvoiceAmount = invoiceRes.data.data;
+            console.log('Yearly Invoice Amount:', yearlyInvoiceAmount);
+            // Now you can handle the yearly invoice amount data as needed
+          })
+          .catch(() => {
+            message('Failed to fetch yearly invoice amount for the selected category', 'error');
+          });
+      })
+      .catch(() => {
+        message('Failed to fetch tender details', 'error');
+      });
+  };
   useEffect(() => {
-       handleSearch();
+    getTendersById();
   }, []);
   const [page, setPage] = useState(0);
 
