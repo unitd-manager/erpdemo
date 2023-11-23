@@ -643,7 +643,7 @@ const Routernew = () => {
           <Route path="/EquipmentIssueDetails" name="clienttdata" element={<EquipmentIssueDetails />}></Route>
           <Route path="/Booking" name="clienttdata" element={<BookingTable />}></Route>
           <Route path="/GoodsDelivery" name="clienttdata" element={<GoodsDeliveryTable />}></Route>
-          <Route path="/Quotation" name="clienttdata" element={<TradingQuotationTable />}></Route>
+          <Route path="/TradingQuotation" name="clienttdata" element={<TradingQuotationTable />}></Route>
           <Route path="/ProjectQuotation" name="clienttdata" element={<ProjectQuotationTable />}></Route>
           <Route path="/ProjectJobOrder" name="clienttdata" element={<ProjectJobOrderTable />}></Route>
           <Route path="/BookingDetails" name="clienttdata" element={<BookingDetails />}></Route>
