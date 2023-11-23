@@ -25,6 +25,9 @@ const InvoiceEdit = () => {
   const { loggedInuser } = useContext(AppContext);
   console.log('order ID:', orderId);
   const navigate = useNavigate();
+  const backToList = () => {
+    navigate('/SalesInvoice');
+  };
   const handleInputs = (e) => {
     setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
   };
@@ -214,6 +217,18 @@ const InvoiceEdit = () => {
                 }}
               >
                 Apply
+              </Button>
+            </Col>
+            
+            <Col>
+              <Button
+                className="shadow-none"
+                color="dark"
+                onClick={() => {
+                  backToList();
+                }}
+              >
+                Back to List
               </Button>
             </Col>
             <Col>
