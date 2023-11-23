@@ -92,7 +92,21 @@ export default function BookingDetailComp({ bookingDetails, handleInputs }) {
                   </Input>
                 </FormGroup>
               </Col>
-             
+              <Col md="3">
+                <FormGroup>
+                  <Label>Invoice Amount</Label>
+
+                  <Input
+                    type="text"
+                    value={bookingDetails && bookingDetails.invoice_amount}
+                    onChange={handleInputs}
+                    name="invoice_amount"
+                    readOnly
+                  >
+                 
+                  </Input>
+                </FormGroup>
+              </Col>
             </Row>
             <Row></Row>
         </FormGroup>

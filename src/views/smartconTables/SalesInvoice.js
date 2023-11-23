@@ -133,7 +133,7 @@ const Invoice = () => {
                     <td>{element.company_name}</td>
                     <td>{element.status}</td>
                     <td>{element.invoice_date }</td>
-                    <td>{element.InvoiceAmount}</td>
+                    <td>{element.invoice_amount}</td>
                     <td>{element.invoice_due_date}</td>
                   </tr>
                 );
