@@ -17,6 +17,7 @@ import {
   ModalHeader,
   Row,
 } from 'reactstrap';
+import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -65,13 +66,7 @@ const MakeSupplier = () => {
       width: '4%',
     },
 
-    {
-      name: 'Order No',
-      selector: 'order_code',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
+  
     {
       name: 'Receipt Code',
       selector: 'supplier_receipt_code',
@@ -205,13 +200,11 @@ const MakeSupplier = () => {
                   <tr key={element.supplier_id}>
                     <td>{index + 1}</td>
 
-                    <td>{element.po_code}</td>
                     <td>{element.supplier_receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
-                    <td>{element.payment_status}</td>
+                    <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
-                    <td>{element.date}</td>
-                  </tr>
+                    <td>{moment(element.date).format('YYYY-MM-DD')}</td>                  </tr>
                 );
               })}
           </tbody>
