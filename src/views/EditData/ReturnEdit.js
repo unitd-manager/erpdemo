@@ -274,6 +274,7 @@ const InvoiceEdit = () => {
                 returnItemDetails={returnItemDetails}
                 invoiceInfo={insertedDataId}
                 onRemoveItem={handleRemoveItem}
+                invoiceStatus={returnDetails.invoice_status} // Pass the invoice status as a prop
               />
             </Row>
           </TabPane>

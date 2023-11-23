@@ -60,6 +60,17 @@ export default function ProposalMoreDetails({
                   />
                 </FormGroup>
               </Col>
+              <Col md="3">
+              <FormGroup>
+                  <Label>Proposal Code</Label>
+                  <Input
+                    value={proposalDetails && proposalDetails.proposal_code}
+                    type="text"
+                    onChange={handleInputs}
+                    name="proposal_code"
+                  />
+                </FormGroup>
+              </Col>
               
               <Col md="3">
                 <FormGroup>
@@ -125,7 +136,10 @@ export default function ProposalMoreDetails({
                   </Label>
                   <Input
                     type="select"
-                    onChange={handleInputs}
+                    onChange={(e) => {
+                      handleInputs(e);
+                      
+                    }}
                     value={proposalDetails && proposalDetails.contact_id}
                     name="contact_id"
                   >
@@ -149,8 +163,9 @@ export default function ProposalMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
+              
               <Col md="3">
-                <FormGroup>
+              <FormGroup>
                   <Label>Est Start_Date</Label>
                   <Input
                     type="date"
@@ -161,7 +176,7 @@ export default function ProposalMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
-                <FormGroup>
+              <FormGroup>
                   <Label>Est End_Date</Label>
                   <Input
                     type="date"
@@ -172,7 +187,7 @@ export default function ProposalMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
-                <FormGroup>
+              <FormGroup>
                   <Label>Budget</Label>
                   <Input
                     type="text"
@@ -182,28 +197,17 @@ export default function ProposalMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
+              
+            </Row>
+            <Row>
+            <Col md="3">
+            <FormGroup>
                   <Label>Project Manager</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.project_manager}
                     name="project_manager"
-                  />
-                </FormGroup>
-              </Col>
-              
-            </Row>
-            <Row>
-            <Col md="3">
-                <FormGroup>
-                  <Label>No of Employees</Label>
-                  <Input
-                    value={proposalDetails && proposalDetails.no_of_employees}
-                    type="text"
-                    onChange={handleInputs}
-                    name="no_of_employees"
                   />
                 </FormGroup>
               </Col>
@@ -248,7 +252,20 @@ export default function ProposalMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
-                <FormGroup>
+              <FormGroup>
+                  <Label>No of Employees</Label>
+                  <Input
+                    value={proposalDetails && proposalDetails.no_of_employees}
+                    type="text"
+                    onChange={handleInputs}
+                    name="no_of_employees"
+                  />
+                </FormGroup>
+              </Col>
+              </Row>
+              <Row>
+            <Col md="3">
+            <FormGroup>
                   <Label>
                     Date 
                   </Label>
@@ -260,19 +277,6 @@ export default function ProposalMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              </Row>
-              <Row>
-            {/* <Col md="3">
-                <FormGroup>
-                  <Label>Proposal Code</Label>
-                  <Input
-                    value={proposalDetails && proposalDetails.proposal_code}
-                    type="text"
-                    onChange={handleInputs}
-                    name="proposal_code"
-                  />
-                </FormGroup>
-              </Col> */}
               </Row>
           </ComponentCard>
         </FormGroup>

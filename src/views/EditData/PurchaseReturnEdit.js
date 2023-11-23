@@ -272,11 +272,11 @@ const PurchaseReturnEdit = () => {
                           <tr key={e.purchase_return_id}>
                             <td>{index + 1}</td>
                             <td data-label="Title">{e.item_title}</td>
-                            <td data-label="Description"></td>
+                            <td data-label="Description">{e.description}</td>
                             <td data-label="Quantity">{e.ordered_quantity}</td>
-                            <td data-label="Unit Price"></td>
-                            <td data-label="Amount"></td>
-                            <td data-label="Updated By"></td>
+                            <td data-label="Unit Price">{e.unit}</td>
+                            <td data-label="Amount">{e.total_cost}</td>
+                            <td data-label="Updated By">{e.updated_by}</td>
                             <td data-label="Actions">
                              
                               <span

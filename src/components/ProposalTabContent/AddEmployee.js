@@ -2,6 +2,7 @@ import React, {useState,useEffect} from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import CommonTable from '../CommonTable';
+
 import ChooseEmployee from '../ProposalModal/ChooseEmployee';
 import api from '../../constants/api';
 
@@ -26,27 +27,21 @@ const AddEmployee = () => {
           name: 'Name',
           selector: 'name',
         },
-        {
-            name: 'Position',
-            selector: 'name',
-          },
+        
       ];
 
   //getting Employee data by Employee id
   const getLinkedEmployee = () => {
   // eslint-disable-next-line
-     api.post('proposal/getTimesheetStaffById', { proposal_id: parseInt(id) })
+     api.post('/proposal/getEmployeeById', { proposal_id: parseInt(id) })
       .then((res) => {
         console.log("res.data.data",res.data.data)
         setGetEmployeeLinked(res.data.data)
-      }).catch((err)=>{
-console.log('err',err)
       })
   }
 
   
 
-  
 
   useEffect(() => {
     getLinkedEmployee();
@@ -85,15 +80,16 @@ console.log('err',err)
              <tr>
               <td>{i+1}</td>
               <td>{e.first_name}</td>
-              <td>{e.position}</td>
-
-                         </tr>) 
+              
+              
+              
+           </tr>) 
             })}
           </tbody>
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} />
+     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} getemployeeLinked={getemployeeLinked}/>
     
     </>
   );

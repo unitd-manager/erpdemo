@@ -57,8 +57,7 @@ const AttachmentModalV2 = ({
           },
         })
         .then(() => {
-          message('Files Uploaded Successfully', 'success');
-          
+          message('Files Uploaded Successfully', 'success')
           setAttachmentModal(false);
           setUpdate(!update)
         })
