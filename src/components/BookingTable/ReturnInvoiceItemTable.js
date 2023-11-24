@@ -16,7 +16,7 @@ export default function ItemTable({
   const invoiceTableColumns = [
     { name: 'Item' },
     { name: 'Quantity' },
-    { name: 'Price' },
+    // { name: 'Price' },
   ];
 
 
@@ -41,7 +41,7 @@ export default function ItemTable({
               <tr key={element.invoice_id}>
                <td>{element.item_title}</td>
                <td>{element.qty_return}</td>
-               <td>{element.price}</td>
+               {/* <td>{element.price}</td> */}
               </tr>
             );
           })

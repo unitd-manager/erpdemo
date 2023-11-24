@@ -38,7 +38,7 @@ const PdfProjectQuoteLog = ({id,logId}) => {
     api
       .post('/project/getProjectById', { project_id: id })
       .then((res) => {
-        setProjectDetail(res.data.data[0]);
+        setProjectDetail(res.data.data);
       })
       .catch(() => {});
   };
@@ -46,8 +46,8 @@ const PdfProjectQuoteLog = ({id,logId}) => {
   // Get Quote By Id
   const getQuote = () => {
     api.post('/project/getTabQuoteById', { project_id: id }).then((res) => {
-      setQuotation(res.data.data[0]);
-      console.log('quote2', res.data.data[0]);
+      setQuotation(res.data.data);
+      console.log('quote2', res.data.data);
     });
   };
  

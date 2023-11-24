@@ -24,14 +24,14 @@ const QuoteLineItem = ({
   addLineItemModal,
   setAddLineItemModal,
   quoteLine,
-  // tenderDetails,
+  tenderDetails,
   // getLineItem,
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
-    // tenderDetails: PropTypes.any,
+    tenderDetails: PropTypes.any,
     // getLineItem: PropTypes.any,
   };
   const { loggedInuser } = React.useContext(AppContext);
@@ -86,25 +86,38 @@ const QuoteLineItem = ({
       });
   };
   //Invoice item values
-  const getAllValues = () => {
-    const result = [];
-    $('.lineitem tbody tr').each(function input() {
-      const allValues = {};
-      $(this)
-        .find('input')
-        .each(function output() {
-          const fieldName = $(this).attr('name');
-          allValues[fieldName] = $(this).val();
-        });
-      result.push(allValues);
-    });
-    setTotalAmount(0);
-    console.log(result);
-    result.forEach((element) => {
-      addLineItemApi(element);
-    });
-    console.log(result);
-  };
+ // Invoice item values
+const getAllValues = () => {
+  const result = [];
+  let submittedTotal = 0;
+
+  $('.lineitem tbody tr').each(function input() {
+    const allValues = {};
+    $(this)
+      .find('input')
+      .each(function output() {
+        const fieldName = $(this).attr('name');
+        allValues[fieldName] = $(this).val();
+        if (fieldName === 'amount') {
+          submittedTotal += parseFloat($(this).val());
+        }
+      });
+    result.push(allValues);
+  });
+
+  if (submittedTotal > tenderDetails.total_amount) {
+    // Display an alert or handle the exceeded total amount here
+    alert('Total amount exceeds the quote total amount!');
+    return;
+  }
+
+  setTotalAmount(0);
+  result.forEach((element) => {
+    addLineItemApi(element);
+  });
+  console.log(result);
+};
+
 
   const [unitdetails, setUnitDetails] = useState();
   // Fetch data from API
@@ -150,12 +163,20 @@ const QuoteLineItem = ({
         });
       result.push(allValues);
     });
+  
     result.forEach((e) => {
       if (e.amount) {
         totalValue += parseFloat(e.amount);
       }
     });
-    console.log(result);
+  
+    const remainingAmount = tenderDetails.total_amount - totalValue;
+  
+    if (remainingAmount < 0) {
+      alert('Total amount exceeds the quote total amount!');
+      return;
+    }
+  
     setAddLineItem(result);
     setTotalAmount(totalValue);
   };

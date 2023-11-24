@@ -124,7 +124,7 @@ const Invoice = () => {
                   <tr key={element.invoice_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.order_id}`}>
+                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.order_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
@@ -133,7 +133,7 @@ const Invoice = () => {
                     <td>{element.company_name}</td>
                     <td>{element.status}</td>
                     <td>{element.invoice_date }</td>
-                    <td>{element.InvoiceAmount}</td>
+                    <td>{element.invoice_amount}</td>
                     <td>{element.invoice_due_date}</td>
                   </tr>
                 );
