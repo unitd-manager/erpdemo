@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,6 +11,8 @@ import TenderButtons from '../../components/ProjectEnquiryTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/ProjectEnquiryTable/TenderMoreDetails';
 import TenderAttachment from '../../components/ProjectEnquiryTable/TenderAttachment';
+import AppContext from '../../context/AppContext';
+
 
 const OpportunityEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -22,6 +24,7 @@ const OpportunityEdit = () => {
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
    const { id } = useParams();
+   const { loggedInuser } = useContext(AppContext);
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -116,6 +119,7 @@ const OpportunityEdit = () => {
 
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
+    tenderDetails.modified_by = loggedInuser.first_name;
     api
       .post('/projectenquiry/edit-Tenders', tenderDetails)
       .then(() => {

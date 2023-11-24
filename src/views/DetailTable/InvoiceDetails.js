@@ -183,29 +183,35 @@ invoicedetails && (
             </Input>
             </FormGroup>
             </Col>
-            <Col md="12">
-    <FormGroup>
-            <Label>Goods Delivery</Label>
-      <Input 
-            type="select" 
-            name="goods_delivery_id" 
-            onChange={handleInputs}>
-              <option>Select Goods Delivery</option>
-              {goodsdeliverydropdown &&
-                goodsdeliverydropdown.map((e) => {
-                  return (
-                    <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
-                      {e.goods_delivery_code}
-                    </option>
-                  );
-                })}
-            </Input>
-
-    </FormGroup>
-  </Col>
-
   </>
 )}
+
+{invoicedetails && invoicedetails.invoice_source === 'Goods Delivery' && (
+  <>
+    <Col md="12">
+      <FormGroup>
+        <Label>Goods Delivery</Label>
+        <Input 
+          type="select" 
+          name="goods_delivery_id" 
+          onChange={handleInputs}
+        >
+          <option>Select Goods Delivery</option>
+          {goodsdeliverydropdown &&
+            goodsdeliverydropdown.map((e) => {
+              return (
+                <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
+                  {e.goods_delivery_code}
+                </option>
+              );
+            })}
+        </Input>
+      </FormGroup>
+    </Col>
+  </>
+)}
+
+
                 </Row>
               </FormGroup>
                 <FormGroup>
