@@ -122,7 +122,7 @@ const ProposalDetails = () => {
                     {quotecode &&
                       quotecode.map((e) => {
                         return (
-                          <option key={e.project_quote_idquote_id} value={e.project_quote_id}>
+                          <option key={e.project_quote_id} value={e.project_quote_id}>
                             {' '}
                             {e.quote_code}{' '}
                           </option>
