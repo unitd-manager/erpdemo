@@ -11,7 +11,7 @@ import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDeta
 import AppContext from '../../context/AppContext';
 
 const TradingQuotationDetails = () => {
-  const [company, setCompany] = useState();
+  //const [company, setCompany] = useState();
   const [enquirycode, setEnquiryCode] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
@@ -21,11 +21,11 @@ const TradingQuotationDetails = () => {
     setModal(!modal);
   };
   //Api call for getting company dropdown
-  const getCompany = () => {
-    api.get('/company/getCompany').then((res) => {
-      setCompany(res.data.data);
-    });
-  };
+  // const getCompany = () => {
+  //   api.get('/company/getCompany').then((res) => {
+  //     setCompany(res.data.data);
+  //   });
+  // };
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
@@ -54,27 +54,27 @@ const TradingQuotationDetails = () => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
 
-  const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.address_street !== '' &&
-      companyInsertData.address_po_code !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then(() => {
-          message('Company inserted successfully.', 'success');
-          getCompany();
-          window.location.reload();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
-  };
+  // const insertCompany = () => {
+  //   if (
+  //     companyInsertData.company_name !== '' &&
+  //     companyInsertData.address_street !== '' &&
+  //     companyInsertData.address_po_code !== '' &&
+  //     companyInsertData.address_country !== ''
+  //   ) {
+  //     api
+  //       .post('/company/insertCompany', companyInsertData)
+  //       .then(() => {
+  //         message('Company inserted successfully.', 'success');
+  //         getCompany();
+  //         window.location.reload();
+  //       })
+  //       .catch(() => {
+  //         message('Network connection error.', 'error');
+  //       });
+  //   } else {
+  //     message('Please fill all required fields.', 'warning');
+  //   }
+  // };
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
@@ -114,7 +114,7 @@ const TradingQuotationDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.enquiry_code !== '' && tenderForms.quote_date !== '') {
+    if (tenderForms.enquiry_code !== '' && tenderForms.quote_date !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -149,7 +149,7 @@ const TradingQuotationDetails = () => {
   };
 
   useEffect(() => {
-    getCompany();
+    //getCompany();
     getEnquiryCode();
     getAllCountries();
   }, [id]);
@@ -200,7 +200,7 @@ const TradingQuotationDetails = () => {
                   </Col>
                 </Row>
               </FormGroup>
-              <FormGroup>
+              {/* <FormGroup>
                 <Row>
                   <Col md="9">
                     <Label>
@@ -230,10 +230,10 @@ const TradingQuotationDetails = () => {
                     </Button>
                   </Col>
                 </Row>
-              </FormGroup>
+              </FormGroup> */}
               <TenderCompanyDetails
                 allCountries={allCountries}
-                insertCompany={insertCompany}
+               // insertCompany={insertCompany}
                 handleInputs={handleInputs}
                 toggle={toggle}
                 modal={modal}

@@ -324,6 +324,7 @@ const ProjectQuotationEdit = () => {
                 //projectInfo={tenderId}
                 addLineItemModal={addLineItemModal}
                 setAddLineItemModal={setAddLineItemModal}
+                tenderDetails={tenderDetails}
                 quoteLine={id}
               ></QuoteLineItem>
             )}
