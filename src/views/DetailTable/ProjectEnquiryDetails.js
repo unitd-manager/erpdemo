@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,12 +8,15 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderCompanyDetails from '../../components/ProjectEnquiryTable/TenderCompanyDetails';
+import AppContext from '../../context/AppContext';
+
 
 const OpportunityDetails = () => {
   const [company, setCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
   const { id } = useParams();
+  const { loggedInuser } = useContext(AppContext);
   const navigate = useNavigate();
   const toggle = () => {
     setModal(!modal);
@@ -52,6 +55,8 @@ const OpportunityDetails = () => {
       companyInsertData.address_po_code !== '' &&
       companyInsertData.address_country !== ''
     ) {
+      companyInsertData.modification_date = creationdatetime;
+      companyInsertData.created_by = loggedInuser.first_name;
       api
         .post('/company/insertCompany', companyInsertData)
         .then(() => {
@@ -108,6 +113,7 @@ const OpportunityDetails = () => {
     tenderForms.title !== '') {
       tenderForms.enquiry_code = code;
       tenderForms.creation_date = creationdatetime;
+      tenderForms.created_by = loggedInuser.first_name;
       api
         .post('/projectenquiry/insertProjectEnquiry', tenderForms)
         .then((res) => {
