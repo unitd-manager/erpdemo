@@ -18,6 +18,7 @@ export default function ProposalMoreDetails({
   AddNewContact,
   insertCompany,
   companyhandleInputs,
+  projectManager,
   
   //setAddContactModal,
   allCountries,
@@ -34,7 +35,7 @@ export default function ProposalMoreDetails({
     AddNewContact: PropTypes.object,
     insertCompany: PropTypes.object,
     companyhandleInputs: PropTypes.object,
-    
+    projectManager:PropTypes.object,
     getContact: PropTypes.object,
     allCountries: PropTypes.object,
   };
@@ -204,11 +205,23 @@ export default function ProposalMoreDetails({
             <FormGroup>
                   <Label>Project Manager</Label>
                   <Input
-                    type="text"
+                    type="select"
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.project_manager}
                     name="project_manager"
-                  />
+                  >
+                  <option value="selected" >
+                      Please Select
+                    </option>
+                    {projectManager &&
+                      projectManager.map((e) => {
+                        return (
+                          <option key={e.employee_id} value={e.employee_id}>
+                            {e.first_name}
+                          </option>
+                        );
+                      })}
+                      </Input>
                 </FormGroup>
               </Col>
             <Col md="3">

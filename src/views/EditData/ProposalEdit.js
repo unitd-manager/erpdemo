@@ -35,7 +35,7 @@ const ProposalEdit = () => {
   const [lineItem, setLineItem] = useState([]);
   // const [employee,setEmployee] = useState([]);
   const [proposalDetails, setProposalDetails] = useState();
-
+const [projectManager, seProjectManager] = useState()
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
@@ -250,6 +250,13 @@ const ProposalEdit = () => {
     });
   };
 
+  const getProjectManager = () => {
+    api.get('/proposal/getProjectManager').then((res) => {
+      seProjectManager(res.data.data);
+    });
+  };
+
+
   const columns1 = [
     {
       name: '#',
@@ -282,7 +289,7 @@ const ProposalEdit = () => {
   useEffect(() => {
     editProposalById();
     getLineItem();
-    //getEmployeeById();
+    getProjectManager();
     getCompany();
 
     getAllCountries();
@@ -317,6 +324,8 @@ const ProposalEdit = () => {
         addContactToggle={addContactToggle}
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        projectManager={projectManager}
+        
       ></ProposalMoreDetails>
 
       <ComponentCard title="More Details">
