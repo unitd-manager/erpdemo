@@ -67,6 +67,14 @@ const QuoteLineItem = ({
   };
   //Insert Invoice Item
   const addLineItemApi = (obj) => {
+    const updatedTotalAmount = totalAmount + tenderDetails.quote_amount;
+  
+    if (updatedTotalAmount > tenderDetails.total_amount) {
+      alert('Total amount exceeds the quote total amount!');
+      return;
+    }
+    
+
     //obj.opportunity_id = projectInfo;
     obj.project_quote_id = quoteLine;
     obj.creation_date = creationdatetime;
@@ -77,9 +85,7 @@ const QuoteLineItem = ({
         message('Line Item Added Successfully', 'sucess');
         //getLineItem(tenderDetails.project_quote_id);
         //setAddLineItemModal(false);
-         setTimeout(() => {
-          window.location.reload();
-        }, 300);
+      
       })
       .catch(() => {
         //message('Cannot Add Line Items', 'error');
@@ -87,26 +93,19 @@ const QuoteLineItem = ({
   };
   //Invoice item values
  // Invoice item values
-const getAllValues = () => {
+
+ const getAllValues = () => {
   const result = [];
   let submittedTotal = 0;
 
-  $('.lineitem tbody tr').each(function input() {
-    const allValues = {};
-    $(this)
-      .find('input')
-      .each(function output() {
-        const fieldName = $(this).attr('name');
-        allValues[fieldName] = $(this).val();
-        if (fieldName === 'amount') {
-          submittedTotal += parseFloat($(this).val());
-        }
-      });
-    result.push(allValues);
+  addLineItem.forEach((element) => {
+    if (element.amount) {
+      submittedTotal += parseFloat(element.amount);
+    }
+    result.push(element);
   });
 
   if (submittedTotal > tenderDetails.total_amount) {
-    // Display an alert or handle the exceeded total amount here
     alert('Total amount exceeds the quote total amount!');
     return;
   }
@@ -117,6 +116,7 @@ const getAllValues = () => {
   });
   console.log(result);
 };
+
 
 
   const [unitdetails, setUnitDetails] = useState();
@@ -193,8 +193,17 @@ const getAllValues = () => {
     }
   };
   React.useEffect(() => {
+    // Calculate total amount of existing line items
+    let initialTotalAmount = 0;
+    addLineItem.forEach((item) => {
+      if (item.amount) {
+        initialTotalAmount += parseFloat(item.amount);
+      }
+    });
+    setTotalAmount(initialTotalAmount);
     getUnit();
   }, []);
+  
   return (
     <>
       <Modal size="xl" isOpen={addLineItemModal}>

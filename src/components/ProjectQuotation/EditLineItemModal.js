@@ -19,11 +19,12 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData }) => {
+const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData , tenderDetails,}) => {
   EditLineItemModal.propTypes = {
     editLineModal: PropTypes.bool,
     setEditLineModal: PropTypes.func,
     FetchLineItemData: PropTypes.object,
+    tenderDetails: PropTypes.any,
   };
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
@@ -42,12 +43,16 @@ const {id}=useParams();
   };
 
   const UpdateData = () => {
+  
     lineItemData.project_quote_id=id;
     lineItemData.modification_date = creationdatetime;
     lineItemData.modified_by = loggedInuser.first_name;
     //lineItemData.amount=totalAmount;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
-    api
+    const updatedTotalAmount = lineItemData.amount;
+  
+    if (updatedTotalAmount < tenderDetails.total_amount) {
+      api
       .post('/projectquote/edit-TabQuoteLine', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
@@ -59,6 +64,13 @@ const {id}=useParams();
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
       });
+    }else {
+      window.alert('Total amount exceeds the quote total amount!');
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+        }
+  
   };
   const [unitdetails, setUnitDetails] = useState();
  //Api call for getting Unit From Valuelist

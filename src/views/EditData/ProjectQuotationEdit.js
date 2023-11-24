@@ -317,6 +317,7 @@ const ProjectQuotationEdit = () => {
               setEditLineModal={setEditLineModal}
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
+              tenderDetails={tenderDetails}
               setViewLineModal={setViewLineModal}
             ></EditLineItemModal>
             {addLineItemModal && (
