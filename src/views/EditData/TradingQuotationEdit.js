@@ -17,6 +17,8 @@ import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQu
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
+import ViewQuoteLogModal from '../../components/TradingQuotation/ViewQuoteLogModal';
+
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 
@@ -32,6 +34,12 @@ const TradingQuotationEdit = () => {
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
+  const [quotationsModal, setQuotationsModal] = useState(false);
+  const [previousTenderDetails, setPreviousTenderDetails] = useState(null);
+const toggleQuotationsModal = () => {
+  setQuotationsModal(!quotationsModal);
+};
+
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -68,25 +76,65 @@ const TradingQuotationEdit = () => {
 
   const editTenderById = () => {
     api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
+      setPreviousTenderDetails(res.data.data);
       setTenderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
   };
 
-  const handleInputs = (e) => {
-    setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
-  };
+ // Function to handle changes in tenderDetails
+ const handleInputs = (e) => {
+  // Update only the current state (tenderDetails)
+  setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
+};
+
+// Function to save the current details as previousTenderDetails
+const saveCurrentDetails = () => {
+  setPreviousTenderDetails({ ...tenderDetails });
+};
 
   //Logic for edit data in db
+  const insertquote = () => {
+      const quoteData = {
+      quote_date: previousTenderDetails.quote_date,
+      quote_status: previousTenderDetails.quote_status,
+      quote_code: previousTenderDetails.quote_code,
+      quote_id: id,
+      created_by: loggedInuser.first_name,
+      creation_date: creationdatetime,
+    };
+   
+
+    api.post('/project/insertLog', quoteData).then((res) => {
+      message('quote inserted successfully.', 'success');
+      lineItem.forEach((element) => {
+        element.quote_log_id = res.data.data.insertId;
+        
+        api.post('/project/insertLogLine', element).then(() => {
+          window.location.reload();
+        });
+      });
+    });
+  };
 
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
+
+    const hasChanges = JSON.stringify(tenderDetails) !== JSON.stringify(previousTenderDetails);
+
     api
       .post('/tradingquote/edit-Tradingquote', tenderDetails)
       .then(() => {
-        message('Record editted successfully', 'success');
-        
+        message('Record edited successfully', 'success');
+
+        // If there are changes, insert into quote_log
+        if (hasChanges) {
+          insertquote();
+        }
+
+        // Save the current details as previousTenderDetails
+        saveCurrentDetails();
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -144,8 +192,13 @@ const TradingQuotationEdit = () => {
       message('All fields are required.', 'info');
     }
   };
+
+
+ 
+  
  
   useEffect(() => {
+   
     editTenderById();
     getLineItem();
     getCompany();
@@ -197,6 +250,8 @@ const TradingQuotationEdit = () => {
     });
   };
 
+ 
+
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
@@ -206,6 +261,7 @@ const TradingQuotationEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
         id={id}
+        insertquote={insertquote}
       ></TradingQuoteButton>
      
       <TradingQuoteMoreDetails
@@ -229,7 +285,16 @@ const TradingQuotationEdit = () => {
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
-              <Col md="6">
+            <Col md="2">
+            <Button
+  className="shadow-none"
+  color="primary"
+  onClick={toggleQuotationsModal}
+>
+  View Quote Log
+</Button>
+</Col>
+              <Col md="2">
                 <Button
                   className="shadow-none"
                   color="primary"
@@ -289,6 +354,15 @@ const TradingQuotationEdit = () => {
                 </Table>
               </div>
             </Row>
+            {quotationsModal && (
+  <ViewQuoteLogModal
+    quotationsModal={quotationsModal}
+    setQuotationsModal={setQuotationsModal}
+    toggleQuotationsModal={toggleQuotationsModal}
+    quoteId={id}
+  />
+)}
+
             {/* End View Line Item Modal */}
             <EditLineItemModal
               editLineModal={editLineModal}
@@ -296,6 +370,7 @@ const TradingQuotationEdit = () => {
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
               setViewLineModal={setViewLineModal}
+              insertquote={insertquote}
             ></EditLineItemModal>
             {addLineItemModal && (
               <QuoteLineItem

@@ -10,6 +10,7 @@ export default function TradingQuoteButton({
   backToList,
   navigate,
   id,
+  
 }) {
   TradingQuoteButton.propTypes = {
     editTenderData: PropTypes.func,
@@ -17,6 +18,7 @@ export default function TradingQuoteButton({
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     id: PropTypes.any,
+    
       
     
   };

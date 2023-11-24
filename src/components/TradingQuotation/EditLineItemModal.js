@@ -19,11 +19,12 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData }) => {
+const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData,insertquote }) => {
   EditLineItemModal.propTypes = {
     editLineModal: PropTypes.bool,
     setEditLineModal: PropTypes.func,
     FetchLineItemData: PropTypes.object,
+    insertquote:PropTypes.bool,
   };
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
@@ -47,12 +48,16 @@ const {id}=useParams();
     lineItemData.modification_date = creationdatetime;
     lineItemData.modified_by = loggedInuser.first_name;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
+    const hasChanges = JSON.stringify(lineItemData) !== JSON.stringify(FetchLineItemData);
     api
       .post('/tradingquote/edit-TradingQuoteLine', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
         message('Edit Line Item Udated Successfully.', 'success');
-        window.location.reload()
+        if (hasChanges) {
+          insertquote();
+        }
+        //window.location.reload()
       })
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
