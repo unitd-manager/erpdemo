@@ -32,7 +32,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
-      employee_name: '',
+      first_name: '',
       employee_id: '',
     },
   ]);
@@ -41,7 +41,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
   const onchangeItem = (str, itemId) => {
     setAddLineItem((prevAddLineItem) =>
       prevAddLineItem.map((item) =>
-        item.id === itemId ? { ...item, employee_name: str.label, employee_id: str.value.toString() } : item
+        item.id === itemId ? { ...item, first_name: str.label, employee_id: str.value.toString() } : item
       )
     );
   };
@@ -52,7 +52,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
       ...prevAddLineItem,
       {
         id: random.int(1, 99),
-        employee_name: empObj.label,
+        first_name: empObj.label,
         employee_id: empObj.value.toString(),
       },
     ]);
@@ -174,7 +174,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
                     <td data-label="Employee Name">
                       <Select
                         key={item.id}
-                        defaultValue={{ value: item.employee_id, label: item.employee_name }}
+                        defaultValue={{ value: item.employee_id, label: item.first_name }}
                         onChange={(e) => {
                           onchangeItem(e, item.id);
                         }}
