@@ -10,10 +10,11 @@ import message from '../Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
-const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
+const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId }) => {
   ChooseEmployee.propTypes = {
     chooseEmp: PropTypes.bool,
     setChooseEmp: PropTypes.func,
+    ProposalId: PropTypes.any,
   };
 
   const { id } = useParams();
@@ -93,6 +94,9 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp }) => {
   };
 
   const addEmployeeToTimeSheet = (empObj) => {
+    console.log('ProposalId1',ProposalId)
+    empObj.proposal_id= ProposalId
+    console.log('ProposalId2',empObj.proposal_id)
     api
       .post('/timesheet/insertTimesheetEmployee', empObj)
       .then((res) => {
