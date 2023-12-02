@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 // Define the base URL(s) conditionally
 let baseURL;
 
@@ -14,4 +15,7 @@ const api = axios.create({
   baseURL, // Use the baseURL variable here
 });
 
-export default api
+
+export default api;
+
+

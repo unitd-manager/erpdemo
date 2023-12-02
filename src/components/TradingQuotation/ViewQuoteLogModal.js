@@ -74,11 +74,11 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId ,id
             <Col md="12">
               <Form>
                 <Row>
-                  <Col>
+                  {/* <Col>
                     <FormGroup>
                       <Label>Reference</Label>
                     </FormGroup>
-                  </Col>
+                  </Col> */}
                   <Col>
                     <FormGroup>
                       <Label>Quote Code</Label>
@@ -112,11 +112,11 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId ,id
                   quote.map((element) => {
                     return (
                       <Row>
-                        <Col>
+                        {/* <Col>
                           <FormGroup>
                             <Label>{element.office_ref_no}</Label>
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                         <Col>
                           <FormGroup>
                             <Label>{element.quote_code}</Label>

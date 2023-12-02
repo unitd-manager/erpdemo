@@ -10,7 +10,7 @@ export default function ProposalMoreDetails({
   handleInputs,
   handleAddNewContact,
   company,
-  //contact,
+  contact,
   getContact,
   addCompanyToggle,
   addContactModal,
@@ -18,6 +18,7 @@ export default function ProposalMoreDetails({
   AddNewContact,
   insertCompany,
   companyhandleInputs,
+  projectManager,
   
   //setAddContactModal,
   allCountries,
@@ -26,7 +27,7 @@ export default function ProposalMoreDetails({
     proposalDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     handleAddNewContact: PropTypes.object,
-    //contact: PropTypes.object,
+    contact: PropTypes.object,
     company: PropTypes.object,
     addCompanyToggle: PropTypes.object,
     addContactModal: PropTypes.object,
@@ -34,7 +35,7 @@ export default function ProposalMoreDetails({
     AddNewContact: PropTypes.object,
     insertCompany: PropTypes.object,
     companyhandleInputs: PropTypes.object,
-    
+    projectManager:PropTypes.object,
     getContact: PropTypes.object,
     allCountries: PropTypes.object,
   };
@@ -68,6 +69,7 @@ export default function ProposalMoreDetails({
                     type="text"
                     onChange={handleInputs}
                     name="proposal_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -135,7 +137,7 @@ export default function ProposalMoreDetails({
                     </span>
                   </Label>
                   <Input
-                    type="text"
+                    type="select"
                     onChange={(e) => {
                       handleInputs(e);
                       
@@ -143,7 +145,7 @@ export default function ProposalMoreDetails({
                     value={proposalDetails && proposalDetails.first_name}
                     name="first_name"
                   >
-                    {/* <option value="selected" >
+                    <option value="selected" >
                       Please Select
                     </option>
                     {contact &&
@@ -153,7 +155,7 @@ export default function ProposalMoreDetails({
                             {e.first_name}
                           </option>
                         );
-                      })} */}
+                      })}
                     <ProposalContactDetails
                       addContactModal={addContactModal}
                       addContactToggle={addContactToggle}
@@ -204,11 +206,23 @@ export default function ProposalMoreDetails({
             <FormGroup>
                   <Label>Project Manager</Label>
                   <Input
-                    type="text"
+                    type="select"
                     onChange={handleInputs}
                     value={proposalDetails && proposalDetails.project_manager}
                     name="project_manager"
-                  />
+                  >
+                  <option value="selected" >
+                      Please Select
+                    </option>
+                    {projectManager &&
+                      projectManager.map((e) => {
+                        return (
+                          <option key={e.employee_id} value={e.employee_id}>
+                            {e.first_name}
+                          </option>
+                        );
+                      })}
+                      </Input>
                 </FormGroup>
               </Col>
             <Col md="3">

@@ -33,9 +33,10 @@ const ProposalEdit = () => {
   //const [projectTeam, setProjectTeam] = useState({});
   //   const [quote, setQuote] = useState({});
   const [lineItem, setLineItem] = useState([]);
+  const [materialItem, setMaterialItem] = useState();
   // const [employee,setEmployee] = useState([]);
   const [proposalDetails, setProposalDetails] = useState();
-
+const [projectManager, seProjectManager] = useState()
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
@@ -44,9 +45,10 @@ const ProposalEdit = () => {
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
-    { id: '1', name: 'Material Needed' },
-    { id: '2', name: 'Project Team' },
-    { id: '3', name: 'Attachment' },
+    { id: '1', name: 'Quotation' },
+    { id: '2', name: 'Material Needed' },
+    { id: '3', name: 'Project Team' },
+    { id: '4', name: 'Attachment' },
   ];
 
   const toggle = (tab) => {
@@ -112,6 +114,13 @@ const ProposalEdit = () => {
   const getLineItem = () => {
     api.post('/proposal/getQuoteLineItemsById', { proposal_id: id }).then((res) => {
       setLineItem(res.data.data);
+      //setAddLineItemModal(true);
+    });
+  };
+
+  const getMaterialItem = () => {
+    api.post('/proposal/getMaterialLineItemsById', { proposal_id: id }).then((res) => {
+      setMaterialItem(res.data.data);
       //setAddLineItemModal(true);
     });
   };
@@ -250,6 +259,13 @@ const ProposalEdit = () => {
     });
   };
 
+  const getProjectManager = () => {
+    api.get('/proposal/getProjectManager').then((res) => {
+      seProjectManager(res.data.data);
+    });
+  };
+
+
   const columns1 = [
     {
       name: '#',
@@ -282,9 +298,9 @@ const ProposalEdit = () => {
   useEffect(() => {
     editProposalById();
     getLineItem();
-    //getEmployeeById();
+    getProjectManager();
     getCompany();
-
+    getMaterialItem();
     getAllCountries();
   }, [id]);
 
@@ -317,6 +333,8 @@ const ProposalEdit = () => {
         addContactToggle={addContactToggle}
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        projectManager={projectManager}
+        
       ></ProposalMoreDetails>
 
       <ComponentCard title="More Details">
@@ -325,18 +343,7 @@ const ProposalEdit = () => {
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-            {/* <Row>
-              <Col md="6">
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  to=""
-                  onClick={addQuoteItemsToggle.bind(null)}
-                >
-                  Add Quote Items
-                </Button>
-              </Col>
-            </Row> */}
+            
             <br />
             <Row>
               <div className="container">
@@ -367,7 +374,38 @@ const ProposalEdit = () => {
               </div>
             </Row>
           </TabPane>
-          <TabPane tabId="2" eventkey="addEmployee">
+          <TabPane tabId="2" eventkey="">
+          <br />
+            <Row>
+              <div className="container">
+                <Table id="example" className="display border border-secondary rounded">
+                  <thead>
+                    <tr>
+                      {columns1.map((cell) => {
+                        return <td key={cell.name}>{cell.name}</td>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {materialItem &&
+                      materialItem.map((e, index) => {
+                        return (
+                          <tr key={e.proposal_id}>
+                            <td>{index + 1}</td>
+                            <td data-label="Title">{e.title}</td>
+                            <td data-label="Description">{e.description}</td>
+                            <td data-label="Quantity">{e.quantity}</td>
+                            <td data-label="Unit Price">{e.unit_price}</td>
+                            <td data-label="Amount">{e.amount}</td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </div>
+            </Row>
+          </TabPane>
+          <TabPane tabId="3" eventkey="addEmployee">
             <Row>
               <AddEmployee proposalDetails={proposalDetails}/>
               {/* <TaskEmployee proposalId={id}/> */}

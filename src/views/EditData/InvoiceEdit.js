@@ -38,7 +38,8 @@ const InvoiceEdit = () => {
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
-   const { id } = useParams();
+
+  const { id } = useParams();
   const { loggedInuser } = useContext(AppContext);
   console.log('order ID:', orderId);
   const navigate = useNavigate();
@@ -573,12 +574,14 @@ const toggle = (tab) => {
       .post('/invoice/editInvoices', bookingDetails)
       .then(() => {
         message('Record edited successfully', 'success');
+        
         if (shouldNavigate) {
           setTimeout(() => {
             navigate('/SalesInvoice'); // Navigate after showing the message if shouldNavigate is true
           }, 100);
         }
       })
+      
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
@@ -607,7 +610,7 @@ const toggle = (tab) => {
     editBookingById();
     // editItemById();
     getOrderItemById();
-  }, [insertedDataId]);
+   }, [insertedDataId]);
 
   return (
     <>

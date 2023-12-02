@@ -20,19 +20,19 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const QuoteLineItem = ({
-  addLineItemModal,
-  setAddLineItemModal,
+const MaterialLineItem = ({
+  addMaterialItemModal,
+  setAddMaterialItemModal,
   quoteLine,
   tenderDetails,
-  getLineItem,
+  getMaterialItem,
 }) => {
-  QuoteLineItem.propTypes = {
-    addLineItemModal: PropTypes.bool,
-    setAddLineItemModal: PropTypes.func,
+  MaterialLineItem.propTypes = {
+    addMaterialItemModal: PropTypes.bool,
+    setAddMaterialItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
     tenderDetails: PropTypes.any,
-    getLineItem: PropTypes.any,
+    getMaterialItem: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
@@ -73,11 +73,11 @@ const QuoteLineItem = ({
     //obj.opportunity_id = projectInfo;
     obj.project_quote_id = quoteLine;
     api
-      .post('/projectquote/insertQuoteItems', obj)
+      .post('/projectquote/insertMaterialItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
         window.location.reload();
-        getLineItem(tenderDetails.project_quote_id);
+        getMaterialItem(tenderDetails.project_quote_id);
         
       })
       .catch(() => {
@@ -188,14 +188,14 @@ const QuoteLineItem = ({
   }, []);
   return (
     <>
-      <Modal size="xl" isOpen={addLineItemModal}>
+      <Modal size="xl" isOpen={addMaterialItemModal}>
         <ModalHeader>
-          Add Quote Items
+          Add Material Items
           <Button
             className="shadow-none"
             color="secondary"
             onClick={() => {
-              setAddLineItemModal(false);
+              setAddMaterialItemModal(false);
             }}
           >
             X
@@ -297,7 +297,7 @@ const QuoteLineItem = ({
                       color="primary"
                       onClick={() => {
                         getAllValues();
-                        //setAddLineItemModal(false);
+                        //setAddMaterialItemModal(false);
                       }}
                     >
                       {' '}
@@ -307,7 +307,7 @@ const QuoteLineItem = ({
                       className="shadow-none"
                       color="secondary"
                       onClick={() => {
-                        setAddLineItemModal(false);
+                        setAddMaterialItemModal(false);
                       }}
                     >
                       Cancel
@@ -322,4 +322,4 @@ const QuoteLineItem = ({
     </>
   );
 };
-export default QuoteLineItem;
+export default MaterialLineItem;
