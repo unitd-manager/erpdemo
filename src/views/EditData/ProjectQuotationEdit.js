@@ -31,7 +31,7 @@ const ProjectQuotationEdit = () => {
   const [selectedCompany, setSelectedCompany] = useState();
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
-  //const [quoteLine, setQuoteLine] = useState();
+  
 
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
@@ -83,7 +83,22 @@ const ProjectQuotationEdit = () => {
  getContact(companyId);
     });
   };
-
+  const hideEditIcon = () => {
+    api
+      .post('/invoice/hideEditIconById', { quote_id: id })
+      .then((res) => {
+        const isQuotePresent = res.data.data.length > 0;
+        
+        setEditLineModal(!isQuotePresent);
+      })
+      .catch(() => {
+        message('Hidden Data Not Found', 'info');
+      });
+  };
+  
+  // Other functions and component code
+  
+  
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
   };
@@ -163,6 +178,7 @@ const ProjectQuotationEdit = () => {
     editTenderById();
     getLineItem();
     getCompany();
+    hideEditIcon();
     // getAllCountries();
   }, [id]);
 
@@ -285,25 +301,27 @@ const ProjectQuotationEdit = () => {
                                   : `${e.created_by} (Created on ${e.creation_date})`}
                               </td>
 
-                            <td data-label="Actions">
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  setEditLineModelItem(e);
-                                  setEditLineModal(true);
-                                }}
-                              >
-                                <Icon.Edit2 />
-                              </span>
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  deleteRecord(e.project_quote_items_id);
-                                }}
-                              >
-                                <Icon.Trash2 />
-                              </span>
-                            </td>
+                              <td data-label="Actions">
+      {editLineModal ? (
+        <span
+          className="addline"
+          onClick={() => {
+            setEditLineModelItem(editLineModelItem);
+            setEditLineModal(true);
+          }}
+        >
+          <Icon.Edit2 />
+        </span>
+      ) : null}
+      <span
+        className="addline"
+        onClick={() => {
+          deleteRecord(editLineModelItem.project_quote_items_id);
+        }}
+      >
+        <Icon.Trash2 />
+      </span>
+    </td>
                           </tr>
                         );
                       })}
