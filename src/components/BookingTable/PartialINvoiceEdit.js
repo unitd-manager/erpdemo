@@ -29,25 +29,36 @@ const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvo
     // get staff details
    const { loggedInuser } = useContext(AppContext);
 
-  
-    function updateState(index, property, e) {
+   const [totalAmount, setTotalAmount] = useState(0);
+
+const handleCalc = (Qty, UnitPrice) => {
+    if (!Qty) Qty = 0;
+    if (!UnitPrice) UnitPrice = 0;
+
+    const calculatedTotalAmount = parseFloat(Qty) * parseFloat(UnitPrice);
+    setTotalAmount(calculatedTotalAmount);
+    // Do something with calculatedTotalAmount if needed.
+};
+   function updateState(index, property, e) {
     const copyDeliverOrderProducts = [...partialinvoiceeditdetails];
     const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
     
-  const quantity = parseFloat(updatedObject.qty) || 0;
-  const unitPrice = parseFloat(updatedObject.unit_price) || 0;
-  updatedObject.total_cost = quantity * unitPrice;
-  updatedObject.modification_date = creationdatetime;
-  updatedObject.modified_by = loggedInuser.first_name;
- const InvoiceQty = updatedObject.qty
- const orderedQty =partialinvoiceeditdetails.qty
- if (InvoiceQty > orderedQty) {
-  // Show validation message or handle validation error as needed
-  alert('Entered quantity exceeds ordered quantity!');
-  // Optionally, you can prevent updating the state if validation fails
-  return;
-}
-  copyDeliverOrderProducts[index] = updatedObject;
+    const quantity = parseFloat(updatedObject.invoice_qty) || 0;
+    const unitPrice = parseFloat(updatedObject.unit_price) || 0;
+    updatedObject.total_cost = quantity * unitPrice;
+    updatedObject.modification_date = creationdatetime;
+    updatedObject.modified_by = loggedInuser.first_name;
+    updatedObject.invoice_qty = e.target.value; // Set invoice_qty to the entered value
+  
+    const InvoiceQty = updatedObject.invoice_qty;
+    const orderedQty = updatedObject.qty;
+  
+    if (InvoiceQty > orderedQty) {
+      alert('Entered quantity exceeds ordered quantity!');
+      return;
+    }
+  
+    copyDeliverOrderProducts[index] = updatedObject;
     setPartialInvoiceEditDetails(copyDeliverOrderProducts);
   }
 
@@ -67,6 +78,7 @@ const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvo
   const editSalesInvoice = () => {
     
     partialinvoiceeditdetails.forEach((item) => {
+      console.log('API Request Payload:', item);
     api
       .post('/invoice/editInvoiceItems', item)
       .then(() => {
@@ -106,9 +118,11 @@ const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvo
                   <th scope="col">Title</th>
                   <th scope="col">Unit</th>
                   <th scope="col">Unit Price</th>
-                  {/* <th scope="col">Ordered Quantity</th> */}
-                  <th scope="col">Quantity</th>
+                  {/* <th scope="col">ordered Quantity</th> */}
+                  <th scope="col">invoice Quantity</th>
                   <th scope="col">Total Amount</th>
+                  <th scope="col"> Updated By</th>
+
 
                 </tr>
               </thead>
@@ -122,7 +136,6 @@ const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvo
                             defaultValue={item.item_title}
                             type="text"
                             name="item_title"
-                            onChange={(e) => updateState(index, 'item_title', e)}
                             disabled
                           />
                         </td>
@@ -131,43 +144,53 @@ const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvo
                             defaultValue={item.unit}
                             type="text"
                             name="unit"
-                            onChange={(e) => updateState(index, 'unit', e)}
                             disabled
                           />
                         </td>
                         <td data-label="Unit Price">
                           <Input
                             defaultValue={item.unit_price}
-                            type="number"
+                            type="text"
                             name="unit_price"
-                            onChange={(e) => updateState(index, 'unit_price', e)}
+                            onChange={(e) => {
+                              updateState(index, 'unit_price', e);
+                              
+                            }}
+                            disabled
                           />
                         </td>
                         {/* <td data-label="Ordered Quantity">
                           <Input
-                            defaultValue={item.purchase_request_qty}
-                            type="number"
-                            name="qty"
-                            onChange={(e) => updateState(index, 'qty', e)}
-                          />
-                        </td>   */}
-                        <td data-label="Quantity">
-                          <Input
                             defaultValue={item.qty}
-                            type="number"
+                            type="text"
                             name="qty"
-                            onChange={(e) => updateState(index, 'qty', e)}
-                          />
-                        </td>   
-                       
+                            disabled
+                            />
+                        </td>    */}
+                        <td data-label="Invoice Quantity">
+  <Input
+    defaultValue={item.invoice_qty}
+    type="text"
+    name="invoice_qty"
+    onChange={(e) => {
+      updateState(index, 'invoice_qty', e);
+    }}
+  />
+</td>  
                         <td data-label="Total Amount">
-                          <Input
-                            defaultValue={item.total_cost}
-                            type="number"
-                            name="total_cost"
-                            onChange={(e) => updateState(index, 'total_cost', e)}
-                          />
-                        </td>               
+                        <Input
+              type="text"
+              name="total_cost"
+              value={totalAmount || item && item.total_cost}
+              onChange={(e) => {
+                updateState(index, 'total_cost', e);
+                handleCalc(item.invoice_qty, item.unit_price);
+              }}
+              disabled
+            />
+                         
+                        </td> 
+                        <td>{item.modification_date  ? `${item.modified_by} (Modified on ${item.modification_date})` : `${item.created_by} (Created on ${item.creation_date})`}</td>              
                       </tr>
                     );
                   })}

@@ -14,14 +14,17 @@ const BookingDetails = () => {
     //all state variables
     const [invoicedetails, setInvoiceDetails] = useState({
       company_id: '',
-      invoice_source: '',
+      source_type: '',
+      order_id:'',
+      goods_delivery_id:'',
     });
     const [customerdropdown, setCustomerDropdown] = useState();
     const [orderdropdown, setOrderDropdown] = useState();
     const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
     //navigation and params
     const navigate = useNavigate();
-    //supplierData in supplier details
+    
+    //supplierData in supplier 
     const handleInputs = (e) => {
       setInvoiceDetails({ ...invoicedetails, [e.target.name]: e.target.value });
     };
@@ -31,22 +34,27 @@ const BookingDetails = () => {
     //inserting supplier data
     const insertSalesInvoice = (code) => {
       if (invoicedetails.company_id !== '' &&
-      invoicedetails.invoice_source !== ''
+      invoicedetails.source_type !== ''
       )
       {
       invoicedetails.creation_date = creationdatetime;
       invoicedetails.created_by= loggedInuser.first_name;
       invoicedetails.invoice_code=code
-        api.post('/finance/insertInvoice', invoicedetails)
+        api.post('/invoice/insertInvoice', invoicedetails)
           .then((res) => {
             const insertedDataId = res.data.data.insertId;
-            const orderId = invoicedetails.order_id;
+            const orderId = invoicedetails.invoice_source_id;
+            const goodsdeliveryId = invoicedetails.invoice_source_id;
+            const InvoiceSource = invoicedetails.source_type;
             console.log('insertedDataId', insertedDataId);
             //         console.log('orderId', orderId);
-            navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
-            //         message('Invoice inserted successfully.', 'success');
-            message('Sales Invoice inserted successfully.', 'success');
-          })
+            
+            if (InvoiceSource === 'Sales_Order') {
+              navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
+            } else if (InvoiceSource === 'Goods_Delivery') {
+              navigate(`/InvoiceEdit/${insertedDataId}/${goodsdeliveryId}?tab=2`);
+            }
+      })
           .catch(() => {
             message('Network connection error.', 'error');
           });
@@ -104,7 +112,7 @@ const getGoodsDeliveryDropdown = () => {
       getCustomerDropdown();
       getSalesOrderDropdown();
       getGoodsDeliveryDropdown();
-       }, );
+       },[] );
       return (
       <div>
          <BreadCrumbs />
@@ -141,18 +149,18 @@ const getGoodsDeliveryDropdown = () => {
                 <br></br>
                 
                 <Input
-                  name="invoice_source"
-                  value="Sales Order"
+                  name="source_type"
+                  value="Sales_Order"
                   type="radio"
-                  defaultChecked={invoicedetails && invoicedetails.invoice_source === 'Sales Order' && true}
+                  defaultChecked={invoicedetails && invoicedetails.source_type === 'Sales Order' && true}
                   onChange={handleInputs}
                 />
                 <Label>Sales Order</Label>
                 <Input
-                  name="invoice_source"
-                  value="Goods Delivery"
+                  name="source_type"
+                  value="Goods_Delivery"
                   type="radio"
-                  defaultChecked={invoicedetails && invoicedetails.invoice_source === 'Goods Delivery' && true}
+                  defaultChecked={invoicedetails && invoicedetails.source_type === 'Goods Delivery' && true}
                   onChange={handleInputs}
                 />
                 <Label>Goods Delivery</Label>
@@ -160,7 +168,7 @@ const getGoodsDeliveryDropdown = () => {
               </Col>
               {
 invoicedetails && (
-  invoicedetails.invoice_source === 'Sales Order' )&&
+  invoicedetails.source_type === 'Sales_Order' )&&
   (
   <>
 
@@ -169,7 +177,7 @@ invoicedetails && (
       <Label>Sales Order</Label>
       <Input 
             type="select" 
-            name="order_id" 
+            name="invoice_source_id" 
             onChange={handleInputs}>
               <option>Select Order</option>
               {orderdropdown &&
@@ -186,14 +194,14 @@ invoicedetails && (
   </>
 )}
 
-{invoicedetails && invoicedetails.invoice_source === 'Goods Delivery' && (
+{invoicedetails && invoicedetails.source_type === 'Goods_Delivery' && (
   <>
     <Col md="12">
       <FormGroup>
         <Label>Goods Delivery</Label>
         <Input 
           type="select" 
-          name="goods_delivery_id" 
+          name="invoice_source_id" 
           onChange={handleInputs}
         >
           <option>Select Goods Delivery</option>
@@ -210,14 +218,12 @@ invoicedetails && (
     </Col>
   </>
 )}
-
-
-                </Row>
-              </FormGroup>
+        </Row>
+           </FormGroup>
                 <FormGroup>
-                  <Row>
-            <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-              <Button color="primary"
+                    <Row>
+                      <div className="pt-3 mt-3 d-flex align-items-center gap-2">
+                       <Button color="primary"
                 onClick={() => {
                   generateCode();
                 }}
@@ -246,7 +252,7 @@ invoicedetails && (
   
 //   const [invoicedetails, setInvoiceDetails] = useState({
 //     company_id: '',
-//     invoice_source:'',
+//     source_type:'',
 //     // other fields...
 //   });
 //   // const [bookingsDetails, setBookingsDetails] = useState({
@@ -307,7 +313,7 @@ invoicedetails && (
 //       return;
 //     }
   
-//     if (!bookingsDetails.invoice_source) {
+//     if (!bookingsDetails.source_type) {
 //       // Validate that order_id is not empty
 //       message('Please select an Invoice Source', 'warning');
 //       return;
@@ -396,7 +402,7 @@ invoicedetails && (
 //                 <br></br>
                 
 //                 <Input
-//                   name="invoice_source"
+//                   name="source_type"
 //                   value="1"
 //                   type="radio"
 //                   defaultChecked={invoicedetails && invoicedetails.published === 1 && true}

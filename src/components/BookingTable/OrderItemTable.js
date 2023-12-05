@@ -14,10 +14,13 @@ export default function ItemTable({
      
   //Structure of Invoice table
   const invoiceTableColumns = [
-    { name: 'Item' },
-    { name: 'Quantity' },
+    { name: 'Title' },
+    { name: 'Unit' },
     { name: 'Unit Price' },
-    { name: 'Total' },
+    // { name: 'Ordered Quantity' },
+    { name: 'Invoice Quantity' },
+    { name: 'Total Cost' },
+    { name: 'Updated By' },
   ];
  
 
@@ -27,7 +30,7 @@ export default function ItemTable({
     <Form>
       <div className="MainDiv">
         <div className="container">
-          <Table id="example">
+          <Table bordered className="lineitem">
             <thead>
               <tr>
                 {invoiceTableColumns.map((cell) => {
@@ -41,9 +44,12 @@ export default function ItemTable({
             return (
               <tr key={element.invoice_id}>
                <td>{element.item_title}</td>
-               <td>{element.qty}</td>
+               <td>{element.unit}</td>
                <td>{element.unit_price}</td>
+               {/* <td>{element.qty}</td> */}
+               <td>{element.invoice_qty}</td>
                 <td>{element.total_cost}</td>
+                <td>{element.modification_date  ? `${element.modified_by} (Modified on ${element.modification_date})` : `${element.created_by} (Created on ${element.creation_date})`}</td>
               </tr>
             );
           })
