@@ -111,12 +111,12 @@ const OverAllReport = () => {
     },
     {
       name: 'Invoice Amount',
-      selector: 'invoiceAmount',
+      selector: 'invoice_amount',
     },
 
     {
       name: 'VAT',
-      selector: 'gst',
+      selector: 'vat',
     },
  
     {
@@ -238,8 +238,8 @@ const OverAllReport = () => {
                       <td>{moment(element.invoice_date).format('YYYY-MM-DD')}</td>
                       <td>{element.invoice_code}</td>
                       <td>{element.company_name}</td>
-                      <td>{element.invoiceAmount}</td>
-                      <td>{element.gst}</td>
+                      <td>{element.invoice_amount}</td>
+                      <td>{element.vat}</td>
                       <td>{element.received}</td>
                       <td>{element.balance}</td>
                     </tr>
