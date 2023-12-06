@@ -95,7 +95,7 @@ const {id}=useParams();
   return (
     <>
       <Modal isOpen={editMaterialModal}>
-        <ModalHeader>Line Items</ModalHeader>
+        <ModalHeader>Material Items</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Row>
@@ -180,7 +180,7 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Total Price</Label>
+              <Label sm="2">Amount</Label>
               <Col sm="10">
                 <Input
                   type="text"
