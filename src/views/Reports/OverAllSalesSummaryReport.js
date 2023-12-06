@@ -23,11 +23,7 @@ const OverAllReport = () => {
   const [companyName, setCompanyName] = useState('');
   const [company, setCompany] = useState();
   const [userSearchData, setUserSearchData] = useState('');
-  const [totalinvoiceAmount, setInvoiceAmount] = useState();
-  const [totalgsts, setGst] = useState();
-  const [totaltotals, setTotal] = useState();
-
-  //Get data from Training table
+   //Get data from Training table
   const getProject = () => {
     api
       .get('/reports/getSalesReport')
@@ -60,18 +56,7 @@ const OverAllReport = () => {
 
     setUserSearchData(newData);
 
-    let invoiceAmount = 0;
-    let gst = 0;
-    let total = 0;
-    newData.forEach((el) => {
-      invoiceAmount += el.invoiceAmount;
-      gst += el.gst;
-      total += el.total
-    });
-    setInvoiceAmount(invoiceAmount.toFixed(2));  
-    setGst(gst.toFixed(2));  
-    setTotal(total.toFixed(2));   
-  };
+ };
 
   useEffect(() => {
     getProject();
@@ -212,17 +197,7 @@ const OverAllReport = () => {
         <CardBody>
           <Table>
             <thead>
-            <tr>
-              <td><b>Total:</b></td>
-              <td></td>
-              <td></td>
-              <td></td>
-               <td><b>{totalinvoiceAmount}</b></td>
-               <td><b>{totalgsts}</b></td>
-               <td><b>{totaltotals}</b></td>
-               <td></td>
-               <td></td>
-              </tr>
+            
               <tr>
                 {columns.map((cell) => {
                   return <td key={cell.name}>{cell.name}</td>;
