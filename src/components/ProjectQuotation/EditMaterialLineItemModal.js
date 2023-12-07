@@ -19,12 +19,12 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const EditMaterialLineItemModal = ({ editMaterialModal, setEditMaterialModal, FetchMaterialItemData , tenderDetails,}) => {
+const EditMaterialLineItemModal = ({ editMaterialModal, setEditMaterialModal, FetchMaterialItemData ,}) => {
     EditMaterialLineItemModal.propTypes = {
     editMaterialModal: PropTypes.bool,
     setEditMaterialModal: PropTypes.func,
     FetchMaterialItemData: PropTypes.object,
-    tenderDetails: PropTypes.any,
+    //tenderDetails: PropTypes.any,
   };
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
@@ -49,9 +49,9 @@ const {id}=useParams();
     lineItemData.modified_by = loggedInuser.first_name;
     //lineItemData.amount=totalAmount;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
-    const updatedTotalAmount = lineItemData.amount;
+    //const updatedTotalAmount = lineItemData.amount;
   
-    if (updatedTotalAmount < tenderDetails.total_amount) {
+    //if (updatedTotalAmount < tenderDetails.total_amount) {
       api
       .post('/projectquote/edit-QuoteLine', lineItemData)
       .then((res) => {
@@ -64,12 +64,12 @@ const {id}=useParams();
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
       });
-    }else {
-      window.alert('Total amount exceeds the quote total amount!');
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-        }
+    // }else {
+    //   window.alert('Total amount exceeds the quote total amount!');
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 300);
+    //     }
   
   };
   const [unitdetails, setUnitDetails] = useState();
@@ -95,7 +95,7 @@ const {id}=useParams();
   return (
     <>
       <Modal isOpen={editMaterialModal}>
-        <ModalHeader>Line Items</ModalHeader>
+        <ModalHeader>Material Items</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Row>
@@ -180,7 +180,7 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Total Price</Label>
+              <Label sm="2">Amount</Label>
               <Col sm="10">
                 <Input
                   type="text"

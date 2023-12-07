@@ -103,18 +103,18 @@ const ProjectQuotationEdit = () => {
  getContact(companyId);
     });
   };
-  const hideEditIcon = () => {
-    api
-      .post('/invoice/hideEditIconById', { quote_id: id })
-      .then((res) => {
-        const isQuotePresent = res.data.data.length > 0;
+  // const hideEditIcon = () => {
+  //   api
+  //     .post('/invoice/hideEditIconById', { quote_id: id })
+  //     .then((res) => {
+  //       const isQuotePresent = res.data.data.length > 0;
         
-        setEditLineModal(!isQuotePresent);
-      })
-      .catch(() => {
-        message('Hidden Data Not Found', 'info');
-      });
-  };
+  //       setEditLineModal(!isQuotePresent);
+  //     })
+  //     .catch(() => {
+  //       message('Hidden Data Not Found', 'info');
+  //     });
+  // };
   
   // Other functions and component code
   
@@ -231,7 +231,7 @@ const ProjectQuotationEdit = () => {
     getLineItem();
     getMaterialItem();
     getCompany();
-    hideEditIcon();
+    //hideEditIcon();
     // getAllCountries();
   }, [id]);
 
@@ -291,7 +291,7 @@ const ProjectQuotationEdit = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        api.post('/projectquote/deleteMaterial', { material_used_id: deleteLine }).then(() => {
+        api.post('/projectquote/deleteMaterial', { material_needed_id: deleteLine }).then(() => {
           Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
           window.location.reload();
         });
@@ -374,28 +374,8 @@ const ProjectQuotationEdit = () => {
                                   : `${e.created_by} (Created on ${e.creation_date})`}
                               </td>
 
-                              <td data-label="Actions">
-      {editLineModal ? (
-        <span
-          className="addline"
-          onClick={() => {
-            setEditLineModelItem(editLineModelItem);
-            setEditLineModal(true);
-          }}
-        >
-          <Icon.Edit2 />
-        </span>
-      ) : null}
-      <span
-        className="addline"
-        onClick={() => {
-          deleteRecord(editLineModelItem.project_quote_items_id);
-        }}
-      >
-        <Icon.Trash2 />
-      </span>
-    </td>
-                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
+                              
+                            
                             <td data-label="Actions">
                               <span
                                 className="addline"
@@ -491,7 +471,7 @@ const ProjectQuotationEdit = () => {
                               <span
                                 className="addline"
                                 onClick={() => {
-                                  deleteMaterial(e.material_used_id);
+                                  deleteMaterial(e.material_needed_id);
                                 }}
                               >
                                 <Icon.Trash2 />

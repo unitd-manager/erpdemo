@@ -142,8 +142,8 @@ export default function ProposalMoreDetails({
                       handleInputs(e);
                       
                     }}
-                    value={proposalDetails && proposalDetails.first_name}
-                    name="first_name"
+                    value={proposalDetails && proposalDetails.contact_id}
+                    name="contact_id"
                   >
                     <option value="selected" >
                       Please Select
