@@ -46,6 +46,12 @@ const ProjectDetails = () => {
       .then((res2) => {
         const proposalEmployees = res2.data.data
         console.log('proposalId',proposalId)
+        api
+        .post('/proposal/getMaterialLineItemsById', { proposal_id:proposalId })
+        .then((res3) => {
+          const proposalMaterial = res3.data.data
+          console.log('proposalId',proposalId)
+          console.log('proposalMaterial',proposalMaterial)
     
     if (projectdetails.title !== '') 
       {
@@ -69,15 +75,19 @@ const ProjectDetails = () => {
            console.log('projectid',res.data.data)
            proposalEmployees.forEach((el)=>{
             el.project_id = res.data.data.insertId
+            proposalMaterial.forEach((ele)=>{
+              ele.project_id = res.data.data.insertId
+              api
+              .post('/project/insertProjectMaterialItems', ele)
             api
             .post('/project/insertPrjectEmployee', el)
-  const insertedDataId = res.data.data.insertId;
- message('Project data inserted successfully.', 'success');
-  setTimeout(() => {
+             const insertedDataId = res.data.data.insertId;
+            message('Project data inserted successfully.', 'success');
+            setTimeout(() => {
             navigate(`/ProjectEdit/${insertedDataId}`);
           }, 300);
             
-           
+        })
            })
         
          
@@ -89,6 +99,7 @@ const ProjectDetails = () => {
       message('Please fill all required fields.', 'warning');
     }
   })
+})
 })
   };
     

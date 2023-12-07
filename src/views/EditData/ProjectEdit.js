@@ -3,6 +3,7 @@ import { Row, Col, TabContent,Table, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as Icon from 'react-feather';
+import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import ComponentCard from '../../components/ComponentCard';
@@ -13,7 +14,8 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AddEmployee from '../../components/ProjectTabContent/AddEmployee';
 import Tab from '../../components/project/Tab';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
-
+import ProjectMaterialLineItem from '../../components/project/ProjectMaterialLineItem';
+import EditProjectMaterialLineItemModal from '../../components/project/EditProjectMaterialLineItemModal'
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -34,13 +36,24 @@ const ProjectEdit = () => {
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
   const [contact, setContact] = useState();
-
+  const [materialItem, setMaterialItem] = useState();
+  const [editMaterialModelItem, setEditMaterialModelItem] = useState(null); 
+  const [addMaterialItemModal, setAddMaterialItemModal] = useState(false);
+  const [viewMaterialModal, setViewMaterialModal] = useState(false);
+  const [editMaterialModal, setEditMaterialModal] = useState(false);
+  const addMaterialItemsToggle = () => {
+    setAddMaterialItemModal(!addMaterialItemModal);
+  };
+  const viewMaterialToggle = () => {
+    setViewMaterialModal(!viewMaterialModal);
+  };
+  console.log(viewMaterialToggle);
   // Start for tab refresh navigation #Renuka 31-05-23
   const tabs = [
    
     { id: '1', name: 'Quote' },
-    { id: '2', name: 'Material' },
-    { id: '3', name: 'Attachment' },
+    { id: '2', name: 'Material Needed' },
+    { id: '3', name: 'Project Team' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -85,6 +98,12 @@ const ProjectEdit = () => {
     {
       name: 'Amount',
     },
+    {
+      name: 'Updated By ',
+    },
+    {
+      name: 'Action ',
+    },
   ];
   // Get Project By Id
   const getProjectById = () => {
@@ -105,6 +124,30 @@ const ProjectEdit = () => {
         setContact(res.data.data);
       })
       .catch(() => {});
+  };
+  const getMaterialItem = () => {
+    api.post('/project/getProjectMaterialLineItemsById', { project_id: id }).then((res) => {
+      setMaterialItem(res.data.data);
+      //setAddLineItemModal(true);
+    });
+  };
+  const deleteMaterial = (deleteLine) => {
+    Swal.fire({
+      title: `Are you sure? ${deleteLine}`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api.post('/project/deleteProjectMaterialneed', { project_material_needed_id: deleteLine }).then(() => {
+          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
+          window.location.reload();
+        });
+      }
+    });
   };
   const getIncharge = () => {
     api
@@ -142,6 +185,7 @@ const ProjectEdit = () => {
     getContact();
     getIncharge();
     getLineItem();
+    getMaterialItem();
   }, [id]);
 
   return (
@@ -213,18 +257,18 @@ const ProjectEdit = () => {
             </Row>
           </TabPane>
           <TabPane tabId="2">
-            {/* <Row>
-              <Col md="6">
+          <Row>
+                <Col md="6">
                 <Button
                   className="shadow-none"
                   color="primary"
                   to=""
-                  onClick={addQuoteItemsToggle.bind(null)}
+                  onClick={addMaterialItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                  Add Material Items
                 </Button>
               </Col>
-            </Row> */}
+            </Row>
             <br />
             <Row>
               <div className="container">
@@ -237,16 +281,36 @@ const ProjectEdit = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {lineItem &&
-                      lineItem.map((e, index) => {
+                    {materialItem &&
+                      materialItem.map((e, index) => {
                         return (
-                          <tr key={e.proposal_id}>
+                          <tr key={e.project_quote_id}>
                             <td>{index + 1}</td>
                             <td data-label="Title">{e.title}</td>
                             <td data-label="Description">{e.description}</td>
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
+                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
+                            <td data-label="Actions">
+                              <span
+                                className="addline"
+                                onClick={() => {
+                                  setEditMaterialModelItem(e);
+                                  setEditMaterialModal(true);
+                                }}
+                              >
+                                <Icon.Edit2 />
+                              </span>
+                              <span
+                                className="addline"
+                                onClick={() => {
+                                  deleteMaterial(e.project_material_needed_id);
+                                }}
+                              >
+                                <Icon.Trash2 />
+                              </span>
+                            </td>
                           </tr>
                         );
                       })}
@@ -254,6 +318,23 @@ const ProjectEdit = () => {
                 </Table>
               </div>
             </Row>
+            <EditProjectMaterialLineItemModal
+              editMaterialModal={editMaterialModal}
+              setEditMaterialModal={setEditMaterialModal}
+              FetchMaterialItemData={editMaterialModelItem}
+              getMaterialItem={getMaterialItem}
+              setViewMaterialModal={setViewMaterialModal}
+              projectDetail={projectDetail}
+              //insertquote={insertquote}
+            ></EditProjectMaterialLineItemModal>
+            {addMaterialItemModal && (
+              <ProjectMaterialLineItem
+                //projectInfo={tenderId}
+                addMaterialItemModal={addMaterialItemModal}
+                setAddMaterialItemModal={setAddMaterialItemModal}
+                projectLine={id}
+              ></ProjectMaterialLineItem>
+            )}
           </TabPane>
           <TabPane tabId="3" eventkey="addEmployee">
             <Row>
