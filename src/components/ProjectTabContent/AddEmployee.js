@@ -37,12 +37,12 @@ const AddEmployee = ({ProposalId,projectId}) => {
 console.log('projectId',projectId)
   //getting Employee data by Employee id
   const getLinkedEmployee = () => {
-  // eslint-disable-next-line
-     api.post('/timesheet/getTimesheetStaffById', { project: projectId })
+      api
+      .post('/project/getTimesheetStaffById', { project_id: projectId })
       .then((res) => {
-        console.log("res.data.data",res.data.data[0])
-        setGetEmployeeLinked(res.data.data[0])
+        setGetEmployeeLinked(res.data.data);
       })
+      .catch(() => {});
   }
 
   const showEmpDataInTimsheet = () => {
@@ -51,7 +51,7 @@ console.log('projectId',projectId)
     });
   };
 
-
+console.log('getemployeeLinked',getemployeeLinked)
   useEffect(() => {
     getLinkedEmployee();
     showEmpDataInTimsheet();
@@ -65,7 +65,7 @@ console.log('projectId',projectId)
     
       return acc;
     }, []) || [];
-
+    console.log('uniqueEmployeeData',uniqueEmployeeData)
   return (
     <>
     <Row>
