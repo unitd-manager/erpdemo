@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import { Form, Table } from 'reactstrap';
 
 export default function ItemTable({
-  orderitemDetails,
+  orderitemDetails
  
 }) {
   ItemTable.propTypes = {
     orderitemDetails: PropTypes.array,
-   
+    
      };
 
-     
   //Structure of Invoice table
   const invoiceTableColumns = [
     { name: 'Title' },
