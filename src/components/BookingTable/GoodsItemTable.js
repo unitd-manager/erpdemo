@@ -1,72 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import {
- Table,
-  FormGroup
-} from 'reactstrap';
+import React from 'react';
 import PropTypes from 'prop-types';
-import message from '../Message';
-import api from '../../constants/api';
+import { Form, Table } from 'reactstrap';
 
-//Goods Receipt Items Get Function
-export default function GoodsItemTable({PurchaseOrderId}) {
-    GoodsItemTable.propTypes =   {  
-    PurchaseOrderId: PropTypes.object,
-  };
-  
-  const [orderdetails, setOrderDetails] = useState();
-  
-  //Api call for getting Goods Receipt Items 
-  
-  const getGoodsReceiptItemsById = () => {
-    api
-      .post('/goodsreceipt/getGoodsReceiptItemsById',{purchase_order_id: PurchaseOrderId})
-      .then((res) => {
-        setOrderDetails(res.data.data);
-      })
-      .catch(() => {
-        message('Receipt Data Not Found', 'info');
-      });
-  };
+export default function ItemTable({
+  orderitemDetails,
+ 
+}) {
+  ItemTable.propTypes = {
+    orderitemDetails: PropTypes.array,
+   
+     };
 
-  useEffect(() => {
-    getGoodsReceiptItemsById();
-  }, [PurchaseOrderId]);
-  
+     
+  //Structure of Invoice table
+  const invoiceTableColumns = [
+    { name: 'Title' },
+    { name: 'Unit' },
+    { name: 'Unit Price' },
+    { name: 'Ordered Quantity' },
+    { name: 'Invoice Quantity' },
+    { name: 'Total Cost' },
+    { name: 'Updated By' },
+  ];
+ 
+
   return (
-  <FormGroup>
-    <Table bordered className="lineitem">
-      <thead>
-        <tr>
-        <th scope="col"> S.No </th>
-        <th scope="col"> PO Code </th>
-        <th scope="col">Title </th>
-        <th scope="col">Unit </th>
-        <th scope="col">Ordered Quantity </th>
-        <th scope="col">Received Date </th>
-        <th scope="col">Received Quantity</th>
-        <th scope="col"> Unit Price</th>
-        <th scope="col"> Total Cost </th>
-        </tr>
-        </thead>
-        <tbody>
-        {orderdetails &&
-        orderdetails.map((e, index) => {
-          return (
-            <tr>
-              <td>{index+1}</td>
-              <td >{e.po_code}</td>
-              <td >{e.item_title}</td>
-              <td >{e.unit}</td>
-              <td >{e.ordered_quantity}</td>
-              <td >{e.goods_received_date}</td>
-              <td >{e.goods_received_qty}</td>
-              <td >{e.unit_price}</td>
-              <td >{e.total_cost}</td>
-            </tr>
-          );
-          })}
-          </tbody>
-           </Table>
-            </FormGroup>                 
-);
+    // Invoice Tab
+
+    <Form>
+      <div className="MainDiv">
+        <div className="container">
+          <Table bordered className="lineitem">
+            <thead>
+              <tr>
+                {invoiceTableColumns.map((cell) => {
+                  return <td key={cell.name}>{cell.name}</td>;
+                })}
+              </tr>
+            </thead>
+            <tbody>
+        {Array.isArray(orderitemDetails) && orderitemDetails.length > 0 ? (
+          orderitemDetails.map((element) => { // Map only if orderitemDetails is an array
+            return (
+              <tr key={element.invoice_id}>
+               <td>{element.item_title}</td>
+               <td>{element.unit}</td>
+               <td>{element.unit_price}</td>
+               <td>{element.qty}</td>
+               <td>{element.invoice_qty}</td>
+                <td>{element.total_cost}</td>
+                <td>{element.modification_date  ? `${element.modified_by} (Modified on ${element.modification_date})` : `${element.created_by} (Created on ${element.creation_date})`}</td>
+              </tr>
+            );
+          })
+        ) : (
+          <tr>
+            <td colSpan={invoiceTableColumns.length}>No items available</td>
+          </tr>
+        )}
+      </tbody>
+           
+          </Table>
+        
+        </div>
+      </div>
+     
+    </Form>
+  );
 }

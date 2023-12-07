@@ -17,7 +17,7 @@ export default function ItemTable({
     { name: 'Title' },
     { name: 'Unit' },
     { name: 'Unit Price' },
-    // { name: 'Ordered Quantity' },
+    { name: 'Ordered Quantity' },
     { name: 'Invoice Quantity' },
     { name: 'Total Cost' },
     { name: 'Updated By' },
@@ -46,7 +46,7 @@ export default function ItemTable({
                <td>{element.item_title}</td>
                <td>{element.unit}</td>
                <td>{element.unit_price}</td>
-               {/* <td>{element.qty}</td> */}
+               <td>{element.qty}</td>
                <td>{element.invoice_qty}</td>
                 <td>{element.total_cost}</td>
                 <td>{element.modification_date  ? `${element.modified_by} (Modified on ${element.modification_date})` : `${element.created_by} (Created on ${element.creation_date})`}</td>
