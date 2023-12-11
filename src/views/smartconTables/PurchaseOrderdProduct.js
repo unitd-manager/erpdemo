@@ -5,14 +5,26 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 
 const PurchaseOrderProduct = () => {
+  const [productdropdown, setProductDropdown] = useState([])
   const [selectedproductid, setSelectedProductId] = useState('');
-  const [setSelectedMonth] = useState('');
   const [clientname, setClientName] = useState([]);
   const [productdata, setProductData] = useState([]);
 
+  const getProductDropdown = () => {
+    api.get('invoice/getProductDropdown')
+    .then((res) => {
+      setProductDropdown(res.data.data);
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    getProductDropdown();     
+   }, []);
+
   useEffect(() => {
     // Fetch the list of companies
-    api.get('/finance/getDashboardOrders')
+    api.get('/invoice/getClientName')
       .then((res) => {
         setClientName(res.data.data);
       })
@@ -24,9 +36,10 @@ const PurchaseOrderProduct = () => {
   useEffect(() => {
     // Fetch order details based on the selected company
     if (selectedproductid) {
-      api.post('/finance/getOrdersStats', { product_id: selectedproductid })
+      api.post('/invoice/getProductDatas', { product_id: selectedproductid })
         .then((response) => {
           setProductData(response.data.data);
+          console.log('data:', response.data.data)
         })
         .catch((error) => {
           console.log('Error fetching order data:', error);
@@ -37,30 +50,28 @@ const PurchaseOrderProduct = () => {
     }
   }, [selectedproductid]);
 
-  const getOrderStatusCounts = (orderId, status) => {
-    return productdata
-      .filter((order) => order.order_id === orderId && order.order_status === status)
-      .length;
+  const getOrderedQuantityForClient = (clientId) => {
+    const totalQuantity = productdata
+      .filter((order) => order.company_id === clientId)
+      .reduce((acc, order) => acc + order.qty, 0);
+    return totalQuantity;
   };
-
-  const orderStatuses = ['new', 'paid', 'cancelled'];
 
   const optionsColumn = {
     xaxis: {
-      categories: clientname.map((client) => `${client.company_name}`), // X-axis categories (order_code)
+      categories: clientname.map((client) => `${client.company_name}`),
     },
     yaxis: {
-      categories: ['new', 'paid', 'cancelled'], // Y-axis categories (new, paid, cancelled)
+      categories: ['Quantity Ordered'],
     },
   };
 
-  const seriesColumn = orderStatuses.map((status) => {
-    const data = clientname.map((order) => getOrderStatusCounts(order.order_id, status));
-    return {
-      name: status, // Y-axis labels (new, paid, cancelled)
-      data,
-    };
-  });
+  const seriesColumn = [
+    {
+      name: 'Quantity Ordered',
+      data: clientname.map((client) => getOrderedQuantityForClient(client.company_id)),
+    },
+  ];
 
   return (
     <ComponentCard title="Ordered Product">
@@ -71,13 +82,13 @@ const PurchaseOrderProduct = () => {
           type="select"
           name="product_id"
           onChange={(e) => {
-            const selectedCompany = e.target.value;
-            setSelectedProductId(selectedCompany);
+            const selectedproduct = e.target.value;
+            setSelectedProductId(selectedproduct);
           }}
         >
           <option value="">Select Company</option>
-          {clientname &&
-            clientname.map((element) => (
+          {productdropdown &&
+            productdropdown.map((element) => (
               <option key={element.product_id} value={element.product_id}>
                 {element.title}
               </option>
@@ -85,33 +96,9 @@ const PurchaseOrderProduct = () => {
         </Input>
       </FormGroup>
 
-    <FormGroup>
-          <Label for="SelectMonth">Month</Label>
-        <Input
-            type="select"
-            name="month"
-            onChange={(e) => {
-              const selectedMonth = e.target.value;
-              setSelectedMonth(selectedMonth);
-            }}
-          >
-            <option value="">Select Month</option>
-            {/* Add options for each month */}
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </Input>
-    </FormGroup>
-
+   
+        
+   
       <ComponentCard title="Column Chart">
         <Chart options={optionsColumn} series={seriesColumn} type="bar" height="280" />
       </ComponentCard>
