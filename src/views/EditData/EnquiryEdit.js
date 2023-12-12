@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { TabContent, TabPane, Table, Row, } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,10 +12,13 @@ import TenderButtons from '../../components/TenderTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/TenderTable/TenderMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
+import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
+  const [activeTab, setActiveTab] = useState('1');
   const [tenderDetails, setTenderDetails] = useState();
+  const [lineItem, setLineItem] = useState([]);
   const [addContactModal, setAddContactModal] = useState(false);
   const [addCompanyModal, setAddCompanyModal] = useState(false);
   const [contact, setContact] = useState();
@@ -29,6 +33,17 @@ const OpportunityEdit = () => {
   const backToList = () => {
     navigate('/Enquiry');
   };
+
+  const tabs = [
+    { id: '1', name: 'Quotation' },
+    { id: '2', name: 'Attachment' },
+
+  ];
+
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
+
 
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -96,7 +111,7 @@ const OpportunityEdit = () => {
 
   // Get Incharge
   const getIncharge = () => {
-    api.get('/tender/projectIncharge').then((res) => {
+    api.get('/enquiry/projectIncharge').then((res) => {
       setIncharge(res.data.data);
     });
   };
@@ -104,7 +119,7 @@ const OpportunityEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/tender/getTendersById', { opportunity_id: id }).then((res) => {
+    api.post('/enquiry/getEnquiryById', { opportunity_id: id }).then((res) => {
       setTenderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
@@ -121,7 +136,7 @@ const OpportunityEdit = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/tender/edit-Tenders', tenderDetails)
+      .post('/enquiry/edit-Enquiry', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
         setTimeout(() => {
@@ -134,6 +149,13 @@ const OpportunityEdit = () => {
     } else {
       message('Please fill all required fields', 'warning');
     }
+  };
+
+  const getLineItem = () => {
+    api.post('/enquiry/getQuoteLineItemsById', { opportunity_id: id }).then((res) => {
+      setLineItem(res.data.data);
+      //setAddLineItemModal(true);
+    });
   };
 
    // Add new Contact
@@ -162,7 +184,7 @@ const OpportunityEdit = () => {
     
     ) {
       api
-        .post('/tender/insertContact', newDataWithCompanyId)
+        .post('/enquiry/insertContact', newDataWithCompanyId)
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
@@ -184,8 +206,37 @@ const OpportunityEdit = () => {
   };
   
 
+  
+
+
+
+  const columns1 = [
+    {
+      name: '#',
+    },
+    {
+      name: 'Title',
+    },
+    {
+      name: 'Description',
+    },
+    {
+      name: 'Qty',
+    },
+    {
+      name: 'Unit Price',
+    },
+    {
+      name: 'Amount',
+    },
+  ];
+
+  
+
+
   useEffect(() => {
     editTenderById();
+    getLineItem();
     getIncharge();
     getCompany();
     getAllCountries();
@@ -220,14 +271,49 @@ const OpportunityEdit = () => {
         addContactToggle={addContactToggle}
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        
       ></TenderMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      
+        <Tab toggle={toggle} tabs={tabs} />
+        <TabContent className="p-4" activeTab={activeTab}>
+          <TabPane tabId="1">
+            
+            <br />
+            <Row>
+              <div className="container">
+                <Table id="example" className="display border border-secondary rounded">
+                  <thead>
+                    <tr>
+                      {columns1.map((cell) => {
+                        return <td key={cell.name}>{cell.name}</td>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lineItem &&
+                      lineItem.map((e, index) => {
+                        return (
+                          <tr key={e.opportunity_id}>
+                            <td>{index + 1}</td>
+                            <td data-label="Title">{e.title}</td>
+                            <td data-label="Description">{e.description}</td>
+                            <td data-label="Quantity">{e.quantity}</td>
+                            <td data-label="Unit Price">{e.unit_price}</td>
+                            <td data-label="Amount">{e.amount}</td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </div>
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
             <TenderAttachment ></TenderAttachment>
-      
+            </TabPane>
+            </TabContent>
       </ComponentCard>
     </>
   );

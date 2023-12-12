@@ -1,18 +1,25 @@
 import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
 export default function TenderMoreDetails({
   tenderDetails,
   handleInputs,
-  company
+  company,
+  
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     company: PropTypes.array,
     handleInputs: PropTypes.object,
+    
  };
+
+ const getCurrentDate = () => {
+  return moment().format('YYYY-MM-DD');
+};
   return (
     <div>
       {' '}
@@ -52,15 +59,17 @@ export default function TenderMoreDetails({
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.enquiry_date}
+                    value={
+                      tenderDetails && moment(tenderDetails.enquiry_date).format('YYYY-MM-DD')
+                    }
+                    defaultValue={getCurrentDate()}
                     name="enquiry_date"
-                   
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                     <Label>
-                      Company Name <span className="required"> *</span>{' '}
+                      Client <span className="required"> *</span>{' '}
                     </Label>
                     <Input
                       type="select"
@@ -92,7 +101,7 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>BID Expiry</Label>
+                  <Label>Expiry Date</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -103,10 +112,10 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Service</Label>
+                  <Label>Notes</Label>
                   <Input
                     value={tenderDetails && tenderDetails.services}
-                    type="text"
+                    type="textarea"
                     onChange={handleInputs}
                     name="services"
                   />
@@ -125,11 +134,11 @@ export default function TenderMoreDetails({
                     name="status"
                   >
                       <option value="">Please Select</option>
-                    <option value="Estimated">Estimated</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Awarded">Awarded</option>
-                    <option value="ConvertedtoProject">Converted to Project</option>
-                    <option value="Proposal Approved">Proposal Approved</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Quotation Sent">Quotation Sent</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="On Hold">On Hold</option>
+                    
                     </Input>
                 </FormGroup>
               </Col>

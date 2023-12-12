@@ -14,16 +14,29 @@ const OpportunityDetails = () => {
   const [company, setCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
+  const [categoryLinked, setCategoryLinked] = useState();
+  //const [selectedCompanyId, setSelectedCompanyId] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const toggle = () => {
     setModal(!modal);
   };
   const { loggedInuser } = useContext(AppContext);
+
+  const [tenderForms, setTenderForms] = useState({
+    title: '',
+    company_id: '',
+    category: '',
+  });
   //Api call for getting company dropdown
   const getCompany = () => {
     api.get('/company/getCompany').then((res) => {
       setCompany(res.data.data);
+      if (res.data.data && res.data.data.length > 0) {
+        // Assuming the newly added company is at the end of the list
+        const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
+        setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
+      }
     });
   };
 
@@ -47,6 +60,13 @@ const OpportunityDetails = () => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
 
+  
+
+  const handleInputsTenderForms = (e) => {
+    setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
+  };
+
+
   const insertCompany = () => {
     if (
       companyInsertData.company_name !== '' &&
@@ -56,10 +76,15 @@ const OpportunityDetails = () => {
     ) {
       api
         .post('/company/insertCompany', companyInsertData)
-        .then(() => {
+        .then((res) => {
           message('Company inserted successfully.', 'success');
           getCompany();
-          window.location.reload();
+          const newlyAddedCompanyId = res.data.data.company_id;
+          setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
+          setTenderForms({ ...tenderForms, company_id: res.data.data.company_id }); // Set selected company ID after insertion
+          toggle();
+          
+          //window.location.reload();
         })
         .catch(() => {
           message('Network connection error.', 'error');
@@ -70,15 +95,7 @@ const OpportunityDetails = () => {
   };
 
   //Logic for adding tender in db
-  const [tenderForms, setTenderForms] = useState({
-    title: '',
-    company_name: '',
-    category: '',
-  });
-
-  const handleInputsTenderForms = (e) => {
-    setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
-  };
+  
 
   //Api for getting all countries
   const getAllCountries = () => {
@@ -94,7 +111,7 @@ const OpportunityDetails = () => {
   //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
-      .post('/tender/getTendersById', { opportunity_id: id })
+      .post('/enquiry/getEnquiryById', { opportunity_id: id })
       .then((res) => {
         setTenderForms(res.data.data);
         // getContact(res.data.data.company_id);
@@ -108,7 +125,7 @@ const OpportunityDetails = () => {
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
-        .post('/tender/insertTenders', tenderForms)
+        .post('/enquiry/insertEnquiry', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           getTendersById();
@@ -137,8 +154,15 @@ const OpportunityDetails = () => {
       });
   };
 
+  const getCategory = () => {
+    api.get('/enquiry/getCategoryFromValueList', categoryLinked).then((res) => {
+      setCategoryLinked(res.data.data);
+    });
+  };
+
   useEffect(() => {
     getCompany();
+    getCategory();
     getAllCountries();
   }, [id]);
 
@@ -170,13 +194,17 @@ const OpportunityDetails = () => {
                 <Row>
                   <Col md="9">
                     <Label>
-                      Company Name <span className="required"> *</span>{' '}
+                      Client <span className="required"> *</span>{' '}
                     </Label>
                     <Input
                       type="select"
                       name="company_id"
                       //value={tenderForms && tenderForms.company_id}
-                      onChange={handleInputsTenderForms}
+                      value={tenderForms.company_id || ''}
+                      onChange={(e) => {
+                setTenderForms({ ...tenderForms, company_id: e.target.value });
+                handleInputsTenderForms(e);
+              }}
                     >
                       <option>Please Select</option>
                       {company &&
@@ -190,7 +218,7 @@ const OpportunityDetails = () => {
                     </Input>
                   </Col>
                   <Col md="3" className="addNew">
-                    <Label>Add New Name</Label>
+                    
                     <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
                       Add New
                     </Button>
@@ -243,11 +271,13 @@ const OpportunityDetails = () => {
                     value={tenderForms && tenderForms.category}
                     name="category"
                   >
-                    <option defaultValue="selected">Please Select</option>
-                    <option value="Project">Project</option>
-                    <option value="Maintenance">Maintenance</option>
-                    <option value="Tenancy Project">Tenancy Project</option>
-                    <option value="Tenancy Work">Tenancy Work</option>
+                    <option value="" selected="selected">
+                      Please Select
+                    </option>
+                    {categoryLinked &&
+                      categoryLinked.map((ele) => {
+                        return <option value={ele.value}>{ele.value}</option>;
+                      })}
                   </Input>
                 </Col>
               </FormGroup>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //import axios from 'axios'
-import { Row, Col, Label, Card, CardBody, CardHeader, Button, Input, FormGroup, Table } from 'reactstrap';
+import { Row, Col, Label, Card, CardBody, Button, Input, FormGroup, Table } from 'reactstrap';
 //import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -111,7 +111,7 @@ function StatementofAccountsReport() {
   //Get data from Reports table
   const getAccountReports = () => {
     api
-      .post('/project/getAccountReport', searchData)
+      .post('/reports/getAccountStatementReport', searchData)
       .then((res) => {
         setUserSearchData(res.data.data);
         let totalInvoiceAmount = 0;
@@ -156,9 +156,6 @@ function StatementofAccountsReport() {
     <div className="">
       <ToastContainer></ToastContainer>
       <Card>
-      <CardHeader className="card p-2 text-center">
-        <b>Statement of Accounts Report</b>
-      </CardHeader>
         <CardBody>
           <Row>
             <Col>
@@ -293,7 +290,7 @@ function StatementofAccountsReport() {
                   );
                   /* eslint-disable */
                 })}
-                   <tr>
+                 <tr>
                 <td>
                   <b></b>
                 </td>

@@ -21,7 +21,7 @@ const Opportunity = () => {
 
   const getTenders = () => {
     api
-      .get('/tender/getTenders')
+      .get('/enquiry/getEnquiry')
       .then((res) => {
         setTenders(res.data.data);
         $('#example').DataTable({
@@ -64,22 +64,23 @@ const Opportunity = () => {
       button: true,
       sortable: false,
     },
+    
     {
-      name: 'Enquiry date',
-      selector: 'enquiry_date',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Enquiry No',
+      name: 'Code',
       selector: 'opportunity_code',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
+      name: 'Enquiry Date',
+      selector: 'enquiry_date',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Client',
       selector: 'company_name',
       sortable: true,
       grow: 0,
@@ -92,7 +93,7 @@ const Opportunity = () => {
       grow: 3,
     },
     {
-      name: 'BID Expiry',
+      name: 'Expiry Date',
       selector: 'project_end_date',
       sortable: true,
       grow: 2,
@@ -145,8 +146,8 @@ const Opportunity = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.enquiry_date}</td>
                     <td>{element.opportunity_code}</td>
+                    <td>{element.enquiry_date}</td>
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
                     <td>{element.project_end_date }</td>
