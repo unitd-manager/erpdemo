@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
-import moment from 'moment';
 import message from '../Message';
 import api from '../../constants/api';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
+
 
 function AddNote({ recordId, roomName }) {
   AddNote.propTypes = {
     recordId: PropTypes.string,
     roomName: PropTypes.string,
   };
-
+  const { loggedInuser } = useContext(AppContext);
   const [addNoteData, setAddNoteData] = useState({
     comments: '',
     room_name: roomName,
     record_id: recordId,
-    creation_date: moment().format('DD-MM-YYYY'),
+    creation_date: creationdatetime,
+    created_by: loggedInuser.first_name,
   });
 
   const handleData = (e) => {

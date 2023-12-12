@@ -16,7 +16,6 @@ const ProjectDetails = () => {
     proposal_id: '',
   });
   const [proposalcode, setPoposalCode] = useState();
-  const [proposaldetails, setProposalDetails] = useState();
   //navigation and params
   const navigate = useNavigate();
   //supplierData in supplier details
@@ -26,25 +25,72 @@ const ProjectDetails = () => {
    //get staff details
    const { loggedInuser } = useContext(AppContext);
   //inserting supplier data
+
   const insertProjectData = (ProjectCode) => {
-    if (projectdetails.contact_id !== '' &&
-    projectdetails.proposal_id!=='') 
+    api
+    .post('/project/getProposalDataById', { proposal_code: projectdetails.proposal_id })
+    .then((res1) => {
+      const proposalId = res1.data.data.proposal_id
+      const CompanyId = res1.data.data.company_id
+      const categoryId = res1.data.data.category
+      const contactId = res1.data.data.contact_id
+      const titleId = res1.data.data.title
+      const descriptionId = res1.data.data.description
+      const startDateId = res1.data.data.start_date
+      const estimatedFinishDateId = res1.data.data.estimated_finish_date
+      const projectQuoteId = res1.data.data.project_quote_id
+
+      console.log('projectQuoteId',projectQuoteId)
+      api
+      .post('/project/getProposalEmployee', { proposal_id:proposalId })
+      .then((res2) => {
+        const proposalEmployees = res2.data.data
+        console.log('proposalId',proposalId)
+        api
+        .post('/proposal/getMaterialLineItemsById', { proposal_id:proposalId })
+        .then((res3) => {
+          const proposalMaterial = res3.data.data
+          console.log('proposalId',proposalId)
+          console.log('proposalMaterial',proposalMaterial)
+    
+    if (projectdetails.title !== '') 
       {
         projectdetails.project_code = ProjectCode;
         projectdetails.creation_date = creationdatetime;
         projectdetails.created_by= loggedInuser.first_name;
-        projectdetails.company_id= proposaldetails.company_id; 
-        projectdetails.contact_id = proposaldetails.contact_id;  
-        projectdetails.start_date = proposaldetails.start_date;
-        projectdetails.end_date = proposaldetails.end_date; 
+        projectdetails.company_id= CompanyId;
+        projectdetails.proposal_id= proposalId; 
+        projectdetails.category = categoryId;
+        projectdetails.contact_id = contactId;  
+        projectdetails.title = titleId;
+        projectdetails.description = descriptionId;
+        projectdetails.start_date = startDateId;
+        projectdetails.estimated_finish_date = estimatedFinishDateId;
+        projectdetails.project_quote_id = projectQuoteId;
+        console.log('projectdetails',projectdetails) 
+        console.log('proposalEmployees',proposalEmployees) 
       api
-        .post('/project/insertProjectData', projectdetails)
+        .post('/project/insertProject', projectdetails)
         .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          message('Project data inserted successfully.', 'success');
-          setTimeout(() => {
+           console.log('projectid',res.data.data)
+           proposalEmployees.forEach((el)=>{
+            el.project_id = res.data.data.insertId
+            proposalMaterial.forEach((ele)=>{
+              ele.project_id = res.data.data.insertId
+              api
+              .post('/project/insertProjectMaterialItems', ele)
+            api
+            .post('/project/insertPrjectEmployee', el)
+             const insertedDataId = res.data.data.insertId;
+            message('Project data inserted successfully.', 'success');
+            setTimeout(() => {
             navigate(`/ProjectEdit/${insertedDataId}`);
           }, 300);
+            
+        })
+           })
+        
+         
         })
         .catch(() => {
           message('Unable to edit record.', 'error');
@@ -52,6 +98,9 @@ const ProjectDetails = () => {
     } else {
       message('Please fill all required fields.', 'warning');
     }
+  })
+})
+})
   };
     
 const getProposalCode = () => {
@@ -59,27 +108,17 @@ const getProposalCode = () => {
           .get('/project/getProposalCode')
           .then((res) => {
             setPoposalCode(res.data.data);
-            console.log(res.data.data[0]);
           })
           .catch(() => {
             message('Proposal Code not found', 'info');
           });
       };
 
-  // Get Purchase Order data By Purchase Order Id
-  const getProposalDataById = () => {
-    api
-      .post('/purchaseinvoice/getProposalDataById', { proposal_id: projectdetails.proposal_id })
-      .then((res) => {
-        setProposalDetails(res.data.data[0]);
-        console.log(res.data.data[0]);
-      })
-  };
 
-   //Auto generation code
+  //  Auto generation code
    const generateCode = () => {
     api
-      .post('/project/getCodeValue', { type: 'ProjectCode' })
+      .post('/commonApi/getCodeValue', { type: 'project' })
       .then((res) => {
         const ProjectCode = res.data.data
         insertProjectData(ProjectCode);
@@ -90,9 +129,8 @@ const getProposalCode = () => {
   };
 
   useEffect(() => {
-    getProposalDataById(projectdetails.proposal_id);
     getProposalCode();
-  }, [ projectdetails.proposal_id],[]);
+  }, [],[]);
 
     
    return (
@@ -109,7 +147,7 @@ const getProposalCode = () => {
                   <Col md="12">
                     <Label>
                       {' '}
-                       Quote Code <span className="required"> *</span>{' '}
+                      Proposal Code <span className="required"> *</span>{' '}
                     </Label>
                     <Input
                           type="select"
@@ -128,19 +166,6 @@ const getProposalCode = () => {
                             })}
                         </Input>
                     </Col>
-
-                    <Col md="12">
-                      <FormGroup>
-                        <Label>Title<span className="required"> *</span>{' '}</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={projectdetails && projectdetails.title}
-                          name="title"
-                        />
-                      </FormGroup>
-                    </Col>
-
                 </Row>
               </FormGroup>
               <FormGroup>

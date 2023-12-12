@@ -17,7 +17,7 @@ const Invoice = () => {
 
   const getOrders = () => {
     api
-      .get('/finance/getInvoices')
+      .get('/invoice/getInvoices')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
@@ -48,8 +48,8 @@ const Invoice = () => {
       sortable: false,
     },
     {
-      name: 'Order No',
-      selector: 'order_code',
+      name: 'Source Code',
+      selector: 'source_code',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -124,11 +124,11 @@ const Invoice = () => {
                   <tr key={element.invoice_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.order_id}?tab=1`}>
+                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.invoice_source_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.order_code}</td>
+                    <td>{element.source_code}</td>
                     <td>{element.invoice_code}</td>
                     <td>{element.company_name}</td>
                     <td>{element.status}</td>

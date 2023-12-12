@@ -47,13 +47,13 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
   };
 
   // Add new line item in link Employee
-  const AddNewLineItem = (empObj) => {
+  const AddNewLineItem = () => {
     setAddLineItem((prevAddLineItem) => [
       ...prevAddLineItem,
       {
         id: random.int(1, 99),
-        first_name: empObj.label,
-        employee_id: empObj.value.toString(),
+        first_name: '',
+        employee_id: '',
       },
     ]);
   };
@@ -110,6 +110,9 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp, }) => {
               .then((res) => {
                 if (res.data.data.affectedRows === 1) {
                   message('Employee Linked', 'success');
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1000);
                 }
               })
               .catch(() => {

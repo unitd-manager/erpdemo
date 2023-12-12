@@ -1,13 +1,18 @@
 import React, {useState,useEffect} from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CommonTable from '../CommonTable';
 import TimesheetModal from '../ProjectModal/TimesheetModal';
 import ChooseEmployee from '../ProjectModal/ChooseEmployee';
 import api from '../../constants/api';
 import PdfEmpTimesheet from '../PDF/PdfEmpTimesheet';
 
-const AddEmployee = () => {
+const AddEmployee = ({ProposalId,projectId}) => {
+  AddEmployee.propTypes = {
+    ProposalId: PropTypes.any,
+    projectId: PropTypes.any,
+  };
 
   const { id } = useParams();
 
@@ -29,15 +34,15 @@ const AddEmployee = () => {
           selector: 'name',
         },
       ];
-
+console.log('projectId',projectId)
   //getting Employee data by Employee id
   const getLinkedEmployee = () => {
-  // eslint-disable-next-line
-     api.post('/timesheet/getTimesheetStaffById', { project_id: parseInt(id) })
+      api
+      .post('/project/getTimesheetStaffById', { project_id: projectId })
       .then((res) => {
-        console.log("res.data.data",res.data.data)
-        setGetEmployeeLinked(res.data.data)
+        setGetEmployeeLinked(res.data.data);
       })
+      .catch(() => {});
   }
 
   const showEmpDataInTimsheet = () => {
@@ -46,7 +51,7 @@ const AddEmployee = () => {
     });
   };
 
-
+console.log('getemployeeLinked',getemployeeLinked)
   useEffect(() => {
     getLinkedEmployee();
     showEmpDataInTimsheet();
@@ -60,7 +65,7 @@ const AddEmployee = () => {
     
       return acc;
     }, []) || [];
-
+    console.log('uniqueEmployeeData',uniqueEmployeeData)
   return (
     <>
     <Row>
@@ -98,7 +103,7 @@ const AddEmployee = () => {
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} />
+     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp}ProposalId={ProposalId} />
     <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 
     getSingleEmployeeData={getSingleEmployeeData} 
     setSingleEmployeeData={setSingleEmployeeData} />

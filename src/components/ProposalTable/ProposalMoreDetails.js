@@ -10,7 +10,7 @@ export default function ProposalMoreDetails({
   handleInputs,
   handleAddNewContact,
   company,
-  //contact,
+  contact,
   getContact,
   addCompanyToggle,
   addContactModal,
@@ -27,7 +27,7 @@ export default function ProposalMoreDetails({
     proposalDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     handleAddNewContact: PropTypes.object,
-    //contact: PropTypes.object,
+    contact: PropTypes.object,
     company: PropTypes.object,
     addCompanyToggle: PropTypes.object,
     addContactModal: PropTypes.object,
@@ -69,6 +69,7 @@ export default function ProposalMoreDetails({
                     type="text"
                     onChange={handleInputs}
                     name="proposal_code"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -136,15 +137,15 @@ export default function ProposalMoreDetails({
                     </span>
                   </Label>
                   <Input
-                    type="text"
+                    type="select"
                     onChange={(e) => {
                       handleInputs(e);
                       
                     }}
-                    value={proposalDetails && proposalDetails.first_name}
-                    name="first_name"
+                    value={proposalDetails && proposalDetails.contact_id}
+                    name="contact_id"
                   >
-                    {/* <option value="selected" >
+                    <option value="selected" >
                       Please Select
                     </option>
                     {contact &&
@@ -154,7 +155,7 @@ export default function ProposalMoreDetails({
                             {e.first_name}
                           </option>
                         );
-                      })} */}
+                      })}
                     <ProposalContactDetails
                       addContactModal={addContactModal}
                       addContactToggle={addContactToggle}

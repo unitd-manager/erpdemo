@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Row,
   Col,
@@ -19,17 +19,17 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const EditLineItemModal = ({ editLineModal, setEditLineModal, FetchLineItemData,insertquote }) => {
-  EditLineItemModal.propTypes = {
-    editLineModal: PropTypes.bool,
-    setEditLineModal: PropTypes.func,
-    FetchLineItemData: PropTypes.object,
-    insertquote:PropTypes.bool,
+const EditProjectMaterialLineItemModal = ({ editMaterialModal, setEditMaterialModal, FetchMaterialItemData ,}) => {
+    EditProjectMaterialLineItemModal.propTypes = {
+    editMaterialModal: PropTypes.bool,
+    setEditMaterialModal: PropTypes.func,
+    FetchMaterialItemData: PropTypes.object,
+    //tenderDetails: PropTypes.any,
   };
 const {id}=useParams();
   const [lineItemData, setLineItemData] = useState(null);
   const [totalAmount, setTotalAmount] = useState();
-  const { loggedInuser } = useContext(AppContext);
+  const { loggedInuser } = React.useContext(AppContext);
 
   const handleData = (e) => {
     setLineItemData({ ...lineItemData, [e.target.name]: e.target.value });
@@ -43,25 +43,34 @@ const {id}=useParams();
   };
 
   const UpdateData = () => {
-    lineItemData.quote_id=id;
-    //lineItemData.amount=totalAmount;
+  
+    lineItemData.project_quote_id=id;
     lineItemData.modification_date = creationdatetime;
     lineItemData.modified_by = loggedInuser.first_name;
+    //lineItemData.amount=totalAmount;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
-    const hasChanges = JSON.stringify(lineItemData) !== JSON.stringify(FetchLineItemData);
-    api
-      .post('/projectquote/edit-TabQuoteLine', lineItemData)
+    //const updatedTotalAmount = lineItemData.amount;
+  
+    //if (updatedTotalAmount < tenderDetails.total_amount) {
+      api
+      .post('/project/edit-ProjectMaterialNeeded', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
         message('Edit Line Item Udated Successfully.', 'success');
-        if (hasChanges) {
-          insertquote();
-        }
-        //window.location.reload()
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
       })
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
       });
+    // }else {
+    //   window.alert('Total amount exceeds the quote total amount!');
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 300);
+    //     }
+  
   };
   const [unitdetails, setUnitDetails] = useState();
  //Api call for getting Unit From Valuelist
@@ -80,13 +89,13 @@ const {id}=useParams();
   }, []);
 
   React.useEffect(() => {
-    setLineItemData(FetchLineItemData);
-  }, [FetchLineItemData]);
+    setLineItemData(FetchMaterialItemData);
+  }, [FetchMaterialItemData]);
 
   return (
     <>
-      <Modal isOpen={editLineModal}>
-        <ModalHeader>Line Items</ModalHeader>
+      <Modal isOpen={editMaterialModal}>
+        <ModalHeader>Material Items</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Row>
@@ -171,7 +180,7 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Total Price</Label>
+              <Label sm="2">Amount</Label>
               <Col sm="10">
                 <Input
                   type="text"
@@ -193,7 +202,7 @@ const {id}=useParams();
             type="button"
             onClick={() => {
               UpdateData();
-              setEditLineModal(false);
+              setEditMaterialModal(false);
             }}
           >
             Save & Continue
@@ -202,7 +211,7 @@ const {id}=useParams();
             color="secondary"
             className="shadow-none"
             onClick={() => {
-              setEditLineModal(false);
+              setEditMaterialModal(false);
             }}
           >
             {' '}
@@ -214,4 +223,4 @@ const {id}=useParams();
   );
 };
 
-export default EditLineItemModal;
+export default EditProjectMaterialLineItemModal;

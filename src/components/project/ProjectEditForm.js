@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
 
 const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }) => {
@@ -11,24 +9,11 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }
     contact: PropTypes.any,
     incharge: PropTypes.any,
   };
-  const [companyInvoice, setCompanyInvoice] = useState();
-  const getCompanyInvoice = () => {
-    api
-      .get('/project/getCompanyInvoive')
-      .then((res) => {
-        setCompanyInvoice(res.data.data);
-      })
-      .catch(() => {
-        
-      });
-  };
   // Edit Project
   const handleInputs = (e) => {
     setProjectDetail({ ...projectDetail, [e.target.name]: e.target.value });
   };
-  useEffect(() => {
-    getCompanyInvoice();
-  }, []);
+
 
   return (
     <>
@@ -179,27 +164,6 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }
                         return (
                           <option value={ele.employee_id} key={ele.first_name}>
                             {ele.first_name}
-                          </option>
-                        );
-                      })}
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="4">
-                <FormGroup>
-                  <Label>Company</Label>
-                  <Input
-                    type="select"
-                    onChange={handleInputs}
-                    value={projectDetail && projectDetail.company_invoice}
-                    name="company_invoice"
-                  >
-                    <option defaultValue="selected">Please Select</option>
-                    {companyInvoice &&
-                      companyInvoice.map((e) => {
-                        return (
-                          <option key={e.value} value={e.value}>
-                            {e.value}
                           </option>
                         );
                       })}

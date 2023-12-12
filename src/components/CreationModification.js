@@ -15,10 +15,10 @@ export default function CreationModification({ details = null, title }) {
           {details && (
             <Col>
               <Row>
-                <small> Creation: {details && details.created_by} {details && details.creation_date}</small>
+              <span style={{ fontSize: '0.7em' }}> Creation: {details && details.created_by} {details && details.creation_date}</span>
               </Row>
               <Row className="d-flex">
-                <small> Modified: {details && details.modified_by} {details && details.modification_date}</small>
+              <span style={{ fontSize: '0.7em' }}> Modified: {details && details.modified_by} {details && details.modification_date}</span>
               </Row>
             </Col>
           )}
