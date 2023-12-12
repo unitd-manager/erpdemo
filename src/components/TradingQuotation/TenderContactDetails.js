@@ -46,11 +46,11 @@ export default function TenderContactDetails({
                             Title<span className="required"> *</span>
                           </Label>
                           <Input type="select" name="salutation" onChange={handleAddNewContact}>
-                            <option value="" selected="selected">
+                            <option value="">
                               Please Select
                             </option>
-                            <option value="Ms">Ms</option>
-                            <option value="Mr">Mr</option>
+                            <option  value="Ms">Ms</option>
+                            <option selected="selected" value="Mr">Mr</option>
                             <option value="Mrs">Mrs</option>
                           </Input>
                         </FormGroup>

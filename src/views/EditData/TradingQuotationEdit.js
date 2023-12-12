@@ -183,7 +183,7 @@ const saveCurrentDetails = () => {
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
-          //window.location.reload();
+          window.location.reload();
         })
         .catch(() => {
           message('Unable to add Contact! try again later', 'error');
