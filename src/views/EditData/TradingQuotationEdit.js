@@ -72,6 +72,24 @@ const toggleQuotationsModal = () => {
     });
   };
 
+  const [subExpenseRec, setSubExpenseRec] = useState([]);
+
+  // ... Other functions ...
+
+  // Api Get Expense SubHead Cannot Edit
+  const HideQuotation = () => {
+    api
+      .post('/invoice/checkPricelistIdInInvoiceItems', { quote_id: id })
+      .then((res) => {
+        console.log('API Response:', res.data);
+        setSubExpenseRec(res.data);
+      })
+      .catch(() => {
+        message('Unable to fetch data.', 'error');
+      });
+  };
+  
+
   // Get Tenders By Id
 
   const editTenderById = () => {
@@ -183,7 +201,7 @@ const saveCurrentDetails = () => {
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
-          //window.location.reload();
+          window.location.reload();
         })
         .catch(() => {
           message('Unable to add Contact! try again later', 'error');
@@ -198,10 +216,10 @@ const saveCurrentDetails = () => {
   
  
   useEffect(() => {
-   
     editTenderById();
     getLineItem();
     getCompany();
+    HideQuotation();
     // getAllCountries();
   }, [id]);
 
@@ -329,6 +347,9 @@ const saveCurrentDetails = () => {
                             <td data-label="Amount">{e.amount}</td>
                             <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
                             <td data-label="Actions">
+                            {subExpenseRec.data ? null : (
+    <>
+      {console.log('Condition:', subExpenseRec.data)}
                               <span
                                 className="addline"
                                 onClick={() => {
@@ -338,6 +359,12 @@ const saveCurrentDetails = () => {
                               >
                                 <Icon.Edit2 />
                               </span>
+                              
+                              </>
+                            )}
+                             {subExpenseRec.data ? null : (
+    <>
+      {console.log('Condition:', subExpenseRec.data)}
                               <span
                                 className="addline"
                                 onClick={() => {
@@ -346,6 +373,8 @@ const saveCurrentDetails = () => {
                               >
                                 <Icon.Trash2 />
                               </span>
+                              </>
+                             )}
                             </td>
                           </tr>
                         );

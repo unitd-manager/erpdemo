@@ -6,8 +6,6 @@ import {
   Input,
   Button,
   Modal,
-FormGroup,
-  Label,
   ModalHeader,
   ModalBody,
   ModalFooter,
@@ -16,30 +14,27 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import * as $ from 'jquery';
 import random from 'random';
-import AsyncSelect from 'react-select/async';
 import api from '../../constants/api';
 import message from '../Message';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const QuoteLineItem = ({
-  addLineItemModal,
-  setAddLineItemModal,
-  quoteLine,
-  tenderDetails,
-  getLineItem,
+const ProjectMaterialLineItem = ({
+  addMaterialItemModal,
+  setAddMaterialItemModal,
+  projectLine,
+  projectDetail,
+  getMaterialItem,
 }) => {
-  QuoteLineItem.propTypes = {
-    addLineItemModal: PropTypes.bool,
-    setAddLineItemModal: PropTypes.func,
-    quoteLine: PropTypes.any,
-    tenderDetails: PropTypes.any,
-    getLineItem: PropTypes.any,
+  ProjectMaterialLineItem.propTypes = {
+    addMaterialItemModal: PropTypes.bool,
+    setAddMaterialItemModal: PropTypes.func,
+    projectLine: PropTypes.any,
+    projectDetail: PropTypes.any,
+    getMaterialItem: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
-  const [addNewProductModal, setAddNewProductModal] = useState(false);
-
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
@@ -49,7 +44,6 @@ const QuoteLineItem = ({
       amount: '',
       remarks: '',
       title: '',
-      product_id: '',
       description: '',
     },
   ]);
@@ -64,7 +58,6 @@ const QuoteLineItem = ({
         id: new Date().getTime().toString(),
         unit: '',
         quantity: '',
-        product_id: '',
         unit_price: '',
         remarks: '',
         amount: '',
@@ -78,13 +71,13 @@ const QuoteLineItem = ({
     obj.creation_date = creationdatetime;
     obj.created_by = loggedInuser.first_name;
     //obj.opportunity_id = projectInfo;
-    obj.quote_id = quoteLine;
+    obj.project_id = projectLine;
     api
-      .post('/tradingquote/insertQuoteItems', obj)
+      .post('/project/insertProjectMaterialItems', obj)
       .then(() => {
         message('Line Item Added Successfully', 'sucess');
         window.location.reload();
-        getLineItem(tenderDetails.quote_id);
+        getMaterialItem(projectDetail.project_id);
         
       })
       .catch(() => {
@@ -153,86 +146,6 @@ const QuoteLineItem = ({
     
       setAddLineItem(updatedItems);
     };
-    const [productDetail, setProductDetail] = useState({
-      category_id: null,
-      sub_category_id: null,
-      title: '',
-      product_code: '',
-      qty_in_stock: null,
-      price: null,
-      published: 1,
-    });
-    const handleNewProductDetails = (e) => {
-      setProductDetail({ ...productDetail, [e.target.name]: e.target.value });
-    };
-    const insertProduct = (ProductCode, ItemCode) => {
-      if (productDetail.title !== '') {
-        productDetail.product_code = ProductCode;
-        productDetail.item_code = ItemCode;
-        productDetail.creation_date = creationdatetime;
-        productDetail.created_by= loggedInuser.first_name; 
-        api
-          .post('/purchaseorder/insertPurchaseProduct', productDetail)
-          .then(() => {
-            message('Product inserted successfully.', 'success');
-           
-              })
-          .catch(() => {
-            message('Unable to insert product.', 'error');
-          });
-        } else {
-          message('Please fill the Product Name ', 'warning');
-        }
-      };
-    
-      //Auto generation code
-  const generateCode = () => {
-    api
-      .post('/product/getCodeValue', { type: 'ProductCode' })
-      .then((res) => {
-        const ProductCode = res.data.data
-      api
-      .post('/product/getCodeValue', { type: 'ItemCode' })
-      .then((response) => {
-        const ItemCode = response.data.data
-        insertProduct(ProductCode, ItemCode);
-      })
-      })
-      .catch(() => {
-        insertProduct('');
-      });
-  };
-
-    const onchangeItems = (selectedProduct, itemId) => {
-      const updatedItems = addLineItem.map((item) => {
-        if (item.id === itemId) {
-          return {
-            ...item,
-            product_id: selectedProduct.value.toString(),
-            title: selectedProduct.label,
-            type: selectedProduct.type,
-          };
-        }
-        return item;
-      });
-      setAddLineItem(updatedItems);
-    };
-    
-    
-    
-    const loadOptions = (inputValue, callback) => {
-      api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
-    .then((res) => {
-        const items = res.data.data;
-        const options = items.map((item) => ({
-          value: item.product_id,
-          label: item.title,
-          type: item.type,
-        
-        }));
-        callback(options);
-      });
-    };
 
   //Invoice Items Calculation
   const calculateTotal = () => {
@@ -275,14 +188,14 @@ const QuoteLineItem = ({
   }, []);
   return (
     <>
-      <Modal size="xl" isOpen={addLineItemModal}>
+      <Modal size="xl" isOpen={addMaterialItemModal}>
         <ModalHeader>
-          Add Quote Items
+          Add Material Items
           <Button
             className="shadow-none"
             color="secondary"
             onClick={() => {
-              setAddLineItemModal(false);
+              setAddMaterialItemModal(false);
             }}
           >
             X
@@ -306,24 +219,13 @@ const QuoteLineItem = ({
                         Add Line Item
                       </Button>
                     </Col>
-                    <Col md="3">
-                    <Button
-                      color="primary"
-                      className="shadow-none"
-                      onClick={() => {
-                        setAddNewProductModal(true);
-                      }}
-                    >
-                      Add New Product
-                    </Button>
-                  </Col>
                   </Row>
                   {/* Invoice Item */}
                   
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Product Name </th>
+                          <th scope="col">Title </th>
                           <th scope="col">Description </th>
                           <th scope="col">Unit </th>
                           <th scope="col">Qty</th>
@@ -338,24 +240,11 @@ const QuoteLineItem = ({
                           addLineItem.map((item) => {
                             return (
                               <tr key={item.id}>
-                                <td>
-                  <AsyncSelect
-                    defaultValue={{
-                      value: item.product_id,
-                      label: item.title,
-                      price: item.price,
-                      unit: item.unit,
-                    }}
-                    onChange={(selectedOption) => {
-                      onchangeItems(selectedOption, item.id); // Pass item.id as the itemId
-                    }}
-                    loadOptions={loadOptions}
-                  />
-                  <Input value={item.product_id} type="hidden" name="product_id"></Input>
-                  <Input value={item.title} type="hidden" name="title"></Input>
-                </td>
+                                <td data-label="Title">
+                                  <Input Value={item.title} type="text" name="title" />
+                                </td>
                                 <td data-label="Description">
-                                  <Input Value={item.description}  type="textarea" name="description" />
+                                  <Input Value={item.description} type="text" name="description" />
                                 </td>
                                 <td data-label="Unit">
                                   <Select
@@ -408,7 +297,7 @@ const QuoteLineItem = ({
                       color="primary"
                       onClick={() => {
                         getAllValues();
-                        //setAddLineItemModal(false);
+                        //setAddMaterialItemModal(false);
                       }}
                     >
                       {' '}
@@ -418,7 +307,7 @@ const QuoteLineItem = ({
                       className="shadow-none"
                       color="secondary"
                       onClick={() => {
-                        setAddLineItemModal(false);
+                        setAddMaterialItemModal(false);
                       }}
                     >
                       Cancel
@@ -430,62 +319,7 @@ const QuoteLineItem = ({
           </Row>
         </ModalBody>
       </Modal>
-       {/* Add New Product Modal */}
-       <Modal isOpen={addNewProductModal}>
-        <ModalHeader > {' '} Add New Products {' '} </ModalHeader>
-
-        <ModalBody>
-          <FormGroup>
-            <Row>
-              <Col md="12" className="mb-4">
-                <Row>
-                  <FormGroup>
-                    <Row>
-                      <Label sm="3">
-                        Product Name <span className="required"> *</span>{' '}
-                      </Label>
-                      <Col sm="8">
-                        <Input
-                          type="text"
-                          name="title"
-                          onChange={handleNewProductDetails}
-                          value={productDetail.title}
-                        />
-                      </Col>
-                    </Row>
-                  </FormGroup>
-                </Row>
-              </Col>
-            </Row>
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            className="shadow-none"
-            onClick={() => {
-              generateCode();
-              setAddNewProductModal(false);
-              // getProduct();
-              // setTimeout(() => {
-              //   window;
-              // }, 300);
-            }}
-          >
-            Submit
-          </Button>
-          <Button
-            color="secondary"
-            className="shadow-none"
-            onClick={() => {
-              setAddNewProductModal(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
     </>
   );
 };
-export default QuoteLineItem;
+export default ProjectMaterialLineItem;

@@ -80,7 +80,7 @@ const TradingQuotationDetails = () => {
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
     opportunity_id: '',
-    quote_date: '',
+    quote_date: new Date().toISOString().split('T')[0],
     
   });
 
@@ -160,7 +160,7 @@ const TradingQuotationDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Opportunity">
+          <ComponentCard title="New Quotation">
             <Form>
               <FormGroup>
                 <Col md="9">

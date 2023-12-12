@@ -7,6 +7,8 @@ import ClientButton from '../../components/ClientTable/ClientButton';
 import ClientMainDetails from '../../components/ClientTable/ClientMainDetails';
 import ContactEditModal from '../../components/Tender/ContactEditModal';
 import ClientContactGetAndInsert from '../../components/ClientTable/ClientContactGetAndInsert';
+import ClientAttachmentPortal from '../../components/ClientTable/ClientAttachmentPortal';
+import InvoiceLinkedPortal from '../../components/ClientTable/InvoiceLinkedPortal';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -27,6 +29,7 @@ const ClientsEdit = () => {
   const [addContactModal, setAddContactModal] = useState(false);
   const [clientsDetails, setClientsDetails] = useState();
   const [contactsDetails, setContactsDetails] = useState(null);
+  const [invoicedetails, setInvoiceDetails] = useState(null);
   const [editContactEditModal, setEditContactEditModal] = useState(false);
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
@@ -43,7 +46,9 @@ const ClientsEdit = () => {
   // Start for tab refresh navigation  #Renuka 1-06-23
   const tabs = [
     { id: '1', name: 'Contacts Linked' },
-    { id: '2', name: 'Add notes' },
+    { id: '2', name: 'Invoice Linked' },
+    { id: '3', name: ' Attachment' },
+    { id: '4', name: 'Add notes' },
   ];
 
   const toggle = (tab) => {
@@ -93,6 +98,17 @@ const ClientsEdit = () => {
       .post('/clients/getContactLinkedByCompanyId', { company_id: id })
       .then((res) => {
         setContactsDetails(res.data.data);
+      })
+      .catch(() => {
+        message('Conatct Data Not Found', 'info');
+      });
+  };
+  //get Invoice Linked by id
+  const getInvoiceLinkedById = () => {
+    api
+      .post('/clients/getInvoiceLinkedById', { company_id: id })
+      .then((res) => {
+        setInvoiceDetails(res.data.data);
       })
       .catch(() => {
         message('Conatct Data Not Found', 'info');
@@ -205,6 +221,8 @@ const ClientsEdit = () => {
     editClientsById();
     getContactLinked();
     getAllCountries();
+    getInvoiceLinkedById();
+    
   }, [id]);
 
   return (
@@ -254,8 +272,19 @@ const ClientsEdit = () => {
               contactData={contactData}
             />
           </TabPane>
+          { /* Invoice Linked Portal */}
+           <TabPane tabId="2">
+          <InvoiceLinkedPortal
+          invoicedetails={invoicedetails}></InvoiceLinkedPortal>
+          </TabPane>
+          { /* Attachment Portal */ }
+          <TabPane tabId="3">
+          <ClientAttachmentPortal
+          ClientId={id}
+          />
+          </TabPane>
           {/* ADD NOTE */}
-          <TabPane tabId="2">
+          <TabPane tabId="4">
             <AddNote recordId={id} roomName="AccountEdit" />
             <ViewNote recordId={id} roomName="AccountEdit" />
           </TabPane>

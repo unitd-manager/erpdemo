@@ -38,6 +38,7 @@ const InvoiceEdit = () => {
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
+  const [qtyMatch, setQtyMatch] = useState([]);
 
   const { id } = useParams();
   const { loggedInuser } = useContext(AppContext);
@@ -197,9 +198,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        setTimeout(() => {
-                          window.location.reload()
-                        }, 100);
+                        // setTimeout(() => {
+                        //   window.location.reload()
+                        // }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -560,13 +561,20 @@ const toggle = (tab) => {
     api
       .post('/invoice/getInvoiceByOrderItemId', { invoice_id: insertedDataId })
       .then((res) => {
+
         setOrderItemDetails(res.data.data);
+        console.log('setOrderItemDetails',res.data.data)
+        const qtymatch=res.data.data.filter((el)=>{
+          return el.qty !== el.invoice_qty
+        })
+        setQtyMatch(qtymatch);
+        console.log('qtymatch',qtymatch)
       })
       .catch(() => {
         //message('Booking Data Not Found', 'info');
       });
   };
-
+  console.log('qtymatch',qtyMatch)
   const editInvoiceData = (shouldNavigate) => {
     bookingDetails.modification_date = creationdatetime;
     bookingDetails.modified_by = loggedInuser.first_name;
@@ -695,7 +703,7 @@ const toggle = (tab) => {
           
           <Row className="mb-4">
           <Col md="3">
-          {hideButtonVisible  && (
+          {(hideButtonVisible &&( (hideButtonVisible &&orderitemDetails.length===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
           <Button
                 color="primary"
                 className="shadow-none"
@@ -714,8 +722,8 @@ const toggle = (tab) => {
                   setPartialInvoiceEditModal={setPartialInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
                     ></PartialINvoiceEdit>
-                    
-                    {displayButtonVisible  && (
+                    {(displayButtonVisible && ((displayButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
+                      
   <Button
     className="shadow-none"
     color="primary"
@@ -734,6 +742,7 @@ const toggle = (tab) => {
           </Row>   
           <OrderItemTable
         orderitemDetails={orderitemDetails}
+        qtyMatch={qtyMatch}
         
        />     
           </TabPane>
@@ -742,7 +751,7 @@ const toggle = (tab) => {
           
           <Row className="mb-4">
           <Col md="3">
-          {hideGoodsButtonVisible  && (
+          {(hideGoodsButtonVisible &&( (hideGoodsButtonVisible &&orderitemDetails.length===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
               <Button
                 color="primary"
                 className="shadow-none"
@@ -761,7 +770,7 @@ const toggle = (tab) => {
                   setPartialGoodsInvoiceEditModal={setPartialGoodsInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
                     ></PartialInvoiceGoodsEdit>
-                    {displayGoodsButtonVisible  && (
+                     {(displayGoodsButtonVisible && ((displayGoodsButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
                     <Button
             className="shadow-none"
             color="primary"

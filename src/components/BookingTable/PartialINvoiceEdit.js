@@ -16,8 +16,8 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 //partialinvoiceeditmodal From VehicleEdit
-const PurchaseRequestItemsEditModal = ({ partialinvoiceeditmodal, setPartialInvoiceEditModal, SalesInvoiceId }) => {
-    PurchaseRequestItemsEditModal.propTypes = {
+const PartialInvoiceEditModal = ({ partialinvoiceeditmodal, setPartialInvoiceEditModal, SalesInvoiceId }) => {
+    PartialInvoiceEditModal.propTypes = {
     partialinvoiceeditmodal: PropTypes.bool,
     setPartialInvoiceEditModal: PropTypes.func,
     SalesInvoiceId: PropTypes.any
@@ -118,7 +118,7 @@ const handleCalc = (Qty, UnitPrice) => {
                   <th scope="col">Title</th>
                   <th scope="col">Unit</th>
                   <th scope="col">Unit Price</th>
-                  {/* <th scope="col">ordered Quantity</th> */}
+                  <th scope="col">ordered Quantity</th>
                   <th scope="col">invoice Quantity</th>
                   <th scope="col">Total Amount</th>
                   <th scope="col"> Updated By</th>
@@ -159,14 +159,14 @@ const handleCalc = (Qty, UnitPrice) => {
                             disabled
                           />
                         </td>
-                        {/* <td data-label="Ordered Quantity">
+                        <td data-label="Ordered Quantity">
                           <Input
                             defaultValue={item.qty}
                             type="text"
                             name="qty"
                             disabled
                             />
-                        </td>    */}
+                        </td>   
                         <td data-label="Invoice Quantity">
   <Input
     defaultValue={item.invoice_qty}
@@ -226,4 +226,4 @@ const handleCalc = (Qty, UnitPrice) => {
   );
 };
 
-export default PurchaseRequestItemsEditModal;
+export default PartialInvoiceEditModal;

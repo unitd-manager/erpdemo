@@ -77,6 +77,13 @@ const Project = () => {
       wrap: true,
     },
     {
+      name: 'Proposal Code',
+      selector: 'proposal_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: 'Title',
       selector: 'title',
       sortable: true,
@@ -152,6 +159,7 @@ const Project = () => {
                       </Link>
                     </td> */}
                     <td>{element.project_code}</td>
+                    <td>{element.proposal_code}</td>
                     <td>{element.title}</td>
                     <td>{element.company_name}</td>
                     <td>{element.contact_name}</td>
