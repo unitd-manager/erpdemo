@@ -86,7 +86,7 @@ const PurchaseOrderProduct = () => {
             setSelectedProductId(selectedproduct);
           }}
         >
-          <option value="">Select Company</option>
+          <option value="">Select Product</option>
           {productdropdown &&
             productdropdown.map((element) => (
               <option key={element.product_id} value={element.product_id}>

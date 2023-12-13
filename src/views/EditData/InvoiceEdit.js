@@ -198,9 +198,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        // setTimeout(() => {
-                        //   window.location.reload()
-                        // }, 100);
+                        setTimeout(() => {
+                          window.location.reload()
+                        }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -276,9 +276,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        // setTimeout(() => {
-                        //   window.location.reload()
-                        // }, 100);
+                        setTimeout(() => {
+                          window.location.reload()
+                        }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -341,6 +341,7 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
+                  total_cost: QuoteItem.total_cost,
                   invoice_qty: QuoteItem.quantity,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
@@ -419,6 +420,7 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
+                  total_cost: QuoteItem.total_cost,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
