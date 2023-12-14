@@ -164,7 +164,7 @@ export default function TradingQuoteMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Net Total</Label>
                   <Input
@@ -174,7 +174,7 @@ export default function TradingQuoteMoreDetails({
                     name="totalamount"
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
             </Row>
           </ComponentCard>
         </FormGroup>
