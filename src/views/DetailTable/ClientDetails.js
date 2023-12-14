@@ -18,6 +18,7 @@ const ClientDetails = () => {
   const [clientForms, setClientForms] = useState({
     company_name: '',
   });
+  const [formSubmitted, setFormSubmitted] = useState(false);
     //get staff details
     const { loggedInuser } = useContext(AppContext);
 
@@ -28,7 +29,8 @@ const ClientDetails = () => {
 
   // Client Insert
   const insertClient = () => {
-    if (clientForms.company_name !== '') {
+    setFormSubmitted(true);
+    if (clientForms.company_name.trim() !== '') {
       clientForms.creation_date = creationdatetime;
       clientForms.created_by = loggedInuser.first_name;
       api
@@ -64,14 +66,21 @@ const ClientDetails = () => {
                     <Label>
                       Company Name <span className="required"> *</span>{' '}
                     </Label>
-
+                    
                     <Input
                       type="text"
                       name="company_name"
-                      onChange={(e) => {
-                        handleClientForms(e);
-                      }}
+                      onChange={handleClientForms}
+                      className={`form-control ${
+                        formSubmitted && clientForms.company_name.trim() === '' ? 'highlight' : ''
+                      }`}
+                      
                     ></Input>
+
+                    {formSubmitted && clientForms.company_name.trim() === '' && (
+                      <div className="error-message">Please enter the company name</div>
+                    )}
+                    
                   </Col>
                 </Row>
               </FormGroup>
@@ -90,12 +99,18 @@ const ClientDetails = () => {
                     </Button>
                     <Button
                       onClick={() => {
+                      if (
+                        window.confirm(
+                          'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                        )
+                      ) {
                         navigate(-1);
-                      }}
+                      }
+                    }}
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

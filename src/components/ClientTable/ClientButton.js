@@ -3,12 +3,36 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ClientButton({ editClientsData, navigate, applyChanges, backToList }) {
+export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted}) {
   ClientButton.propTypes = {
     editClientsData: PropTypes.any,
-    navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
+    clientsDetails: PropTypes.any,
+    navigate: PropTypes.any,
+  };
+  const handleSave = () => {
+    console.log('Handling Save...');
+  
+    // Logging the clientsDetails object
+    console.log('clientsDetails:', clientsDetails);
+  
+    // Validate company name
+    const trimmedCompanyName = clientsDetails?.company_name?.trim();
+    if (!trimmedCompanyName) {
+      // If validation fails, show an error message or take appropriate action
+      console.error('Company name cannot be empty. Current value:', trimmedCompanyName);
+      // You can also show an error message to the user using a toast or other UI element
+      return;
+    }
+  
+    // If validation passes, proceed with setting formSubmitted to true
+    setFormSubmitted(true);
+    editClientsData();
+
+  // Now navigate to the '/Client' route
+  navigate('/Client');
   };
   return (
     <Form>
@@ -21,8 +45,12 @@ export default function ClientButton({ editClientsData, navigate, applyChanges, 
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
-                  editClientsData();
-                  navigate('/Client');
+                  console.log('Clicked Save');
+                  handleSave();
+    // console.log('formSubmitted:', formSubmitted);
+    setFormSubmitted(true);
+    // editClientsData();
+    // navigate('/Client')
                 }}
               >
                 Save
@@ -33,6 +61,7 @@ export default function ClientButton({ editClientsData, navigate, applyChanges, 
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                   editClientsData();
                   applyChanges();
                 }}
