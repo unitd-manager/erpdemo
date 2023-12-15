@@ -32,11 +32,11 @@ const OpportunityDetails = () => {
   const getCompany = () => {
     api.get('/company/getCompany').then((res) => {
       setCompany(res.data.data);
-      if (res.data.data && res.data.data.length > 0) {
-        // Assuming the newly added company is at the end of the list
-        const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
-        setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
-      }
+      // if (res.data.data && res.data.data.length > 0) {
+      //   // Assuming the newly added company is at the end of the list
+      //   const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
+      //   setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
+      // }
     });
   };
 
@@ -79,9 +79,10 @@ const OpportunityDetails = () => {
         .then((res) => {
           message('Company inserted successfully.', 'success');
           getCompany();
-          const newlyAddedCompanyId = res.data.data.company_id;
+          console.log('rescomp',res.data.data)
+          const newlyAddedCompanyId = res.data.data.insertId;
           setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
-          setTenderForms({ ...tenderForms, company_id: res.data.data.company_id }); // Set selected company ID after insertion
+          setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
           toggle();
           
           //window.location.reload();

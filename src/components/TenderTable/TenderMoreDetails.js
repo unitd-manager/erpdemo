@@ -16,10 +16,10 @@ export default function TenderMoreDetails({
     handleInputs: PropTypes.object,
     
  };
-
- const getCurrentDate = () => {
-  return moment().format('YYYY-MM-DD');
-};
+console.log('tender', tenderDetails)
+//  const getCurrentDate = () => {
+//   return moment().format('YYYY-MM-DD');
+// };
   return (
     <div>
       {' '}
@@ -60,9 +60,9 @@ export default function TenderMoreDetails({
                     type="date"
                     onChange={handleInputs}
                     value={
-                      tenderDetails && moment(tenderDetails.enquiry_date).format('YYYY-MM-DD')
+                      tenderDetails && (tenderDetails.enquiry_date?moment(tenderDetails.enquiry_date).format('YYYY-MM-DD') :moment(new Date()).format('YYYY-MM-DD'))
                     }
-                    defaultValue={getCurrentDate()}
+                    //defaultValue={getCurrentDate()}
                     name="enquiry_date"
                   />
                 </FormGroup>
