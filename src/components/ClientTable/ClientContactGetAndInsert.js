@@ -178,11 +178,9 @@ export default function ClientContactGetAndInsert({
                                   onChange={handleAddNewContact}
                                   value={newContactData && newContactData.salutation}
                                 >
-                                  <option value="" selected="selected">
-                                    Please Select
-                                  </option>
+                                  <option defaultChecked="Mr">Mr</option>
                                   <option value="Ms">Ms</option>
-                                  <option value="Mr">Mr</option>
+                                  
                                   <option value="Mrs">Mrs</option>
                                 </Input>
                               </FormGroup>

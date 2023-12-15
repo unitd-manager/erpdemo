@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row ,Label} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -17,6 +17,7 @@ import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQu
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
+import QuoteDiscount from '../../components/TradingQuotation/QuoteDiscount';
 import ViewQuoteLogModal from '../../components/TradingQuotation/ViewQuoteLogModal';
 
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
@@ -27,6 +28,7 @@ const TradingQuotationEdit = () => {
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
   const [addLineItemModal, setAddLineItemModal] = useState(false);
+  const [addDiscountModal, setAddDiscountModal] = useState(false);
   const [lineItem, setLineItem] = useState();
   const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
@@ -50,6 +52,9 @@ const toggleQuotationsModal = () => {
   };
   const addQuoteItemsToggle = () => {
     setAddLineItemModal(!addLineItemModal);
+  };
+  const addDiscountToggle = () => {
+    setAddDiscountModal(!addDiscountModal);
   };
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -267,6 +272,9 @@ const saveCurrentDetails = () => {
       }
     });
   };
+  const netTotal =  Number.isNaN(tenderDetails && tenderDetails.totalamount)
+  ? 0
+  : tenderDetails && tenderDetails.totalamount - (Number.isNaN(tenderDetails && tenderDetails.discount) ? 0 : tenderDetails.discount);
 
  
 
@@ -322,6 +330,23 @@ const saveCurrentDetails = () => {
                   Add Quote Items
                 </Button>
               </Col>
+              <Col md="2">
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  to=""
+                  onClick={addDiscountToggle.bind(null)}
+                >
+                  Discount
+                </Button>
+              </Col>
+              <Col md="2">
+                <div className="net-total">
+                  <span className="label"> <Label><b>Net Total:</b></Label>{netTotal}</span>
+                  
+                </div>
+              </Col>
+
             </Row>
             <br />
             <Row>
@@ -408,6 +433,17 @@ const saveCurrentDetails = () => {
                 setAddLineItemModal={setAddLineItemModal}
                 quoteLine={id}
               ></QuoteLineItem>
+            )}
+            {addDiscountModal && (
+              <QuoteDiscount
+                //projectInfo={tenderId}
+                addDiscountModal={addDiscountModal}
+                setAddDiscountModal={setAddDiscountModal}
+                quoteLine={id}
+                tenderDetails={tenderDetails}
+                handleInputs={handleInputs}
+                editTenderData={editTenderData}
+              ></QuoteDiscount>
             )}
           </TabPane>
           <TabPane tabId="2">

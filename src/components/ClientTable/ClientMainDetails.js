@@ -3,11 +3,12 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
 
-export default function ClientMainDetails({ handleInputs, clientsDetails, allCountries }) {
+export default function ClientMainDetails({ handleInputs, clientsDetails, allCountries , formSubmitted}) {
   ClientMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     clientsDetails: PropTypes.any,
     allCountries: PropTypes.any,
+    formSubmitted: PropTypes.any,
   };
   const [arabic, setArabic] = useState([]);
 
@@ -31,16 +32,22 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
         <Row>
         <Col md="3">
       <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}>
+        <Label dir="rtl" style={{ textAlign: 'right' }}><span className="required"> *</span>
           {arabic.length > 0 && arabic[0].value} {/* Access the value property */}
-         Company Name <span className="required"> *</span>
+           Company Name 
         </Label>
-        <Input
-          type="text"
-          onChange={handleInputs}
-          value={clientsDetails && clientsDetails.company_name}
-          name="company_name"
-        />
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={clientsDetails && clientsDetails.company_name}
+                name="company_name"
+                className={`form-control ${
+                  formSubmitted && clientsDetails && clientsDetails.company_name.trim() === '' ? 'highlight' : ''
+                }`}
+                />
+                {formSubmitted && clientsDetails && clientsDetails.company_name.trim() === '' && (
+                <div className="error-message">Please enter the company name</div>
+              )}
       </FormGroup>
     </Col>
           <Col md="3">

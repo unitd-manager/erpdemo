@@ -33,6 +33,7 @@ const ClientsEdit = () => {
   const [editContactEditModal, setEditContactEditModal] = useState(false);
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -61,6 +62,7 @@ const ClientsEdit = () => {
   //Client Functions/Methods
   const handleInputs = (e) => {
     setClientsDetails({ ...clientsDetails, [e.target.name]: e.target.value });
+    console.log('Current State:', clientsDetails);
   };
 
   //  Get Clients By Id
@@ -237,6 +239,9 @@ const ClientsEdit = () => {
         DeleteClient={DeleteClient}
         backToList={backToList}
         sendMail={sendMail}
+        formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted}
+        clientsDetails={clientsDetails}
       ></ClientButton>
 
       {/* Client Main details */}
@@ -245,6 +250,7 @@ const ClientsEdit = () => {
           handleInputs={handleInputs}
           clientsDetails={clientsDetails}
           allCountries={allCountries}
+          formSubmitted={formSubmitted}
         ></ClientMainDetails>
       </ComponentCard>
       <ComponentCard title="More Details">
