@@ -21,7 +21,7 @@ const Opportunity = () => {
 
   const getTenders = () => {
     api
-      .get('/enquiry/getEnquiry')
+      .get('/tender/getTenders')
       .then((res) => {
         setTenders(res.data.data);
         $('#example').DataTable({

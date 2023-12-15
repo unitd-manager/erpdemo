@@ -111,7 +111,7 @@ const OpportunityDetails = () => {
   //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
-      .post('/enquiry/getEnquiryById', { opportunity_id: id })
+      .post('/tender/getTendersById', { opportunity_id: id })
       .then((res) => {
         setTenderForms(res.data.data);
         // getContact(res.data.data.company_id);
@@ -125,7 +125,7 @@ const OpportunityDetails = () => {
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
-        .post('/enquiry/insertEnquiry', tenderForms)
+        .post('/tender/insertTenders', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           getTendersById();
@@ -155,7 +155,7 @@ const OpportunityDetails = () => {
   };
 
   const getCategory = () => {
-    api.get('/enquiry/getCategoryFromValueList', categoryLinked).then((res) => {
+    api.get('/tender/getCategoryFromValueList', categoryLinked).then((res) => {
       setCategoryLinked(res.data.data);
     });
   };

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { TabContent, TabPane, Table, Row, } from 'reactstrap';
+import { TabContent, TabPane,Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -111,7 +111,7 @@ const OpportunityEdit = () => {
 
   // Get Incharge
   const getIncharge = () => {
-    api.get('/enquiry/projectIncharge').then((res) => {
+    api.get('/tender/projectIncharge').then((res) => {
       setIncharge(res.data.data);
     });
   };
@@ -119,7 +119,7 @@ const OpportunityEdit = () => {
   // Get Tenders By Id
 
   const editTenderById = () => {
-    api.post('/enquiry/getEnquiryById', { opportunity_id: id }).then((res) => {
+    api.post('/tender/getTendersById', { opportunity_id: id }).then((res) => {
       setTenderDetails(res.data.data);
       getContact(res.data.data.company_id);
     });
@@ -136,7 +136,7 @@ const OpportunityEdit = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/enquiry/edit-Enquiry', tenderDetails)
+      .post('/tender/edit-Tenders', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
         setTimeout(() => {
@@ -184,7 +184,7 @@ const OpportunityEdit = () => {
     
     ) {
       api
-        .post('/enquiry/insertContact', newDataWithCompanyId)
+        .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
           getContact(newDataWithCompanyId.company_id);
           message('Contact Inserted Successfully', 'success');
