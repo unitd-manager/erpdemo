@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, Button,FormFeedback } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -83,9 +83,11 @@ const TradingQuotationDetails = () => {
     quote_date: new Date().toISOString().split('T')[0],
     
   });
-
+  const [enquiryCodeError, setEnquiryCodeError] = useState('');
   const handleInputsTenderForms = (e) => {
     setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
+    
+    setEnquiryCodeError('');
   };
 
   //Api for getting all countries
@@ -135,9 +137,14 @@ const TradingQuotationDetails = () => {
       message('Please fill all required fields', 'warning');
     }
   };
-
+console.log("1223434",enquiryCodeError)
   //QUOTE GENERATED CODE
   const generateCode = () => {
+    if (!tenderForms.opportunity_id) {
+      setEnquiryCodeError('Please enter Enquiry Code.');
+      return;
+    }
+
     api
       .post('/tender/getCodeValue', { type: 'quote' })
       .then((res) => {
@@ -147,6 +154,7 @@ const TradingQuotationDetails = () => {
         insertQuote('');
       });
   };
+
 
   useEffect(() => {
     //getCompany();
@@ -170,6 +178,7 @@ const TradingQuotationDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.opportunity_id}
                     name="opportunity_id"
+                    invalid={!!enquiryCodeError}
                   >
                     <option>Please Select</option>
                     {enquirycode &&
@@ -182,6 +191,7 @@ const TradingQuotationDetails = () => {
                         );
                       })}
                   </Input>
+                  <FormFeedback>{enquiryCodeError}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup>
