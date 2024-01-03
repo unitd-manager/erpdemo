@@ -89,7 +89,7 @@ console.log('tender', tenderDetails)
                       //   formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
                       // }`}
                       onChange={handleInputs}
-                      
+                      disabled
                     >
                       
                       <option>Please Select</option>
