@@ -133,8 +133,9 @@ const OpportunityEdit = () => {
   //Logic for edit data in db
 
   const editTenderData = () => {
+    setFormSubmitted(true);
     
-    if (tenderDetails.title.trim() !== '' && tenderDetails.company_id.trim() !== '')
+    if (tenderDetails.title !== '' && tenderDetails.company_id!== '')
     // setFormSubmitted(true);
     // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '') 
     {
@@ -152,7 +153,6 @@ const OpportunityEdit = () => {
         message('Unable to edit record.', 'error');
       });
     } else {
-      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };

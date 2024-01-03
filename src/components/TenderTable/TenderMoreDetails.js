@@ -84,10 +84,10 @@ console.log('tender', tenderDetails)
                     <Input
                       type="select"
                       name="company_id"
-                      //value={tenderDetails && tenderDetails.company_id}
-                      className={`form-control ${
-                        formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
-                      }`}
+                      value={tenderDetails && tenderDetails.company_id}
+                      // className={`form-control ${
+                      //   formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
+                      // }`}
                       onChange={handleInputs}
                       
                     >
@@ -102,9 +102,9 @@ console.log('tender', tenderDetails)
                           );
                         })}
                     </Input>
-                    {formSubmitted && tenderDetails.company_id.trim() === '' && (
+                    {/* {formSubmitted && tenderDetails.company_id.trim() === '' && (
                       <div className="error-message">Please Select Client</div>
-                    )}
+                    )} */}
                   </Col>
               <Col md="3">
                 <FormGroup>
