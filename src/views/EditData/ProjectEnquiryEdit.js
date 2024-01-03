@@ -25,6 +25,7 @@ const OpportunityEdit = () => {
   const [allCountries, setallCountries] = useState();
    const { id } = useParams();
    const { loggedInuser } = useContext(AppContext);
+   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -118,6 +119,8 @@ const OpportunityEdit = () => {
   //Logic for edit data in db
 
   const editTenderData = () => {
+    if (tenderDetails.enquiry_date.trim() !== '')
+    {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
@@ -131,6 +134,10 @@ const OpportunityEdit = () => {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+    } else {
+      setFormSubmitted(true);
+      message('Please fill all required fields', 'warning');
+    }
   };
 
    // Add new Contact
@@ -217,6 +224,7 @@ const OpportunityEdit = () => {
         addContactToggle={addContactToggle}
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        formSubmitted={formSubmitted}
       ></TenderMoreDetails>
 
       <ComponentCard title="More Details">

@@ -8,18 +8,20 @@ export default function TenderMoreDetails({
   tenderDetails,
   handleInputs,
   company,
-  
+  formSubmitted
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
-    company: PropTypes.array,
+    company: PropTypes.object,
     handleInputs: PropTypes.object,
-    
+    formSubmitted:PropTypes.object,
  };
 console.log('tender', tenderDetails)
 //  const getCurrentDate = () => {
 //   return moment().format('YYYY-MM-DD');
 // };
+
+
   return (
     <div>
       {' '}
@@ -35,15 +37,23 @@ console.log('tender', tenderDetails)
                   <Input
                     type="text"
                     onChange={handleInputs}
+                    className={`form-control ${
+                      formSubmitted && tenderDetails.title.trim() === '' ? 'highlight' : ''
+                    }`}
                     value={tenderDetails && tenderDetails.title}
                     name="title"
-                  />
+                    />
+                      
+                 
                 </FormGroup>
+                {formSubmitted && tenderDetails.title.trim() === '' && (
+                      <div className="error-message">Please Enter Title</div>
+                    )}
               </Col>
              
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry No</Label>
+                  <Label>Enquiry Code</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -74,9 +84,14 @@ console.log('tender', tenderDetails)
                     <Input
                       type="select"
                       name="company_id"
-                      value={tenderDetails && tenderDetails.company_id}
+                      //value={tenderDetails && tenderDetails.company_id}
+                      className={`form-control ${
+                        formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
+                      }`}
                       onChange={handleInputs}
+                      
                     >
+                      
                       <option>Please Select</option>
                       {company &&
                         company.map((ele) => {
@@ -87,6 +102,9 @@ console.log('tender', tenderDetails)
                           );
                         })}
                     </Input>
+                    {formSubmitted && tenderDetails.company_id.trim() === '' && (
+                      <div className="error-message">Please Select Client</div>
+                    )}
                   </Col>
               <Col md="3">
                 <FormGroup>

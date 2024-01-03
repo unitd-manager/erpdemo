@@ -8,12 +8,14 @@ export default function TenderMoreDetails({
   handleInputs,
   company,
   getContact,
+  formSubmitted
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     getContact: PropTypes.any,
     company: PropTypes.object,
+    formSubmitted:PropTypes.object,
  };
   return (
     <div>
@@ -32,8 +34,14 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.enquiry_date}
                     name="enquiry_date"
+                    className={`form-control ${
+                      formSubmitted && tenderDetails.enquiry_date.trim() === '' ? 'highlight' : ''
+                    }`}
                   />
                 </FormGroup>
+                {formSubmitted && tenderDetails.enquiry_date.trim() === '' && (
+                      <div className="error-message">Please Select Date</div>
+                    )}
               </Col>
               <Col md="3">
                 <FormGroup>

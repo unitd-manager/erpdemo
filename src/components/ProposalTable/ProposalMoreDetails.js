@@ -19,6 +19,7 @@ export default function ProposalMoreDetails({
   insertCompany,
   companyhandleInputs,
   projectManager,
+  formSubmitted,
   
   //setAddContactModal,
   allCountries,
@@ -38,6 +39,7 @@ export default function ProposalMoreDetails({
     projectManager:PropTypes.object,
     getContact: PropTypes.object,
     allCountries: PropTypes.object,
+    formSubmitted: PropTypes.object,
   };
   return (
     <div>
@@ -82,10 +84,16 @@ export default function ProposalMoreDetails({
                   <Input
                     type="text"
                     onChange={handleInputs}
+                    className={`form-control ${
+                      formSubmitted && proposalDetails.title.trim() === '' ? 'highlight' : ''
+                    }`}
                     value={proposalDetails && proposalDetails.title}
                     name="title"
                   />
                 </FormGroup>
+                {formSubmitted && proposalDetails.title.trim() === '' && (
+                      <div className="error-message">Please enter Title</div>
+                    )}
               </Col>
               
               <Col md="3">

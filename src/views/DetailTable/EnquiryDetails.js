@@ -5,98 +5,45 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
-import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
-import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
 import AppContext from '../../context/AppContext';
+import message from '../../components/Message';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
 
 const OpportunityDetails = () => {
   const [company, setCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
   const [categoryLinked, setCategoryLinked] = useState();
-  //const [selectedCompanyId, setSelectedCompanyId] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  //const [addFormSubmitted, setAddFormSubmitted] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const toggle = () => {
     setModal(!modal);
   };
+  //get staff details
   const { loggedInuser } = useContext(AppContext);
-
-  const [tenderForms, setTenderForms] = useState({
-    title: '',
-    company_id: '',
-    category: '',
-  });
   //Api call for getting company dropdown
   const getCompany = () => {
     api.get('/company/getCompany').then((res) => {
       setCompany(res.data.data);
-      // if (res.data.data && res.data.data.length > 0) {
-      //   // Assuming the newly added company is at the end of the list
-      //   const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
-      //   setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
-      // }
     });
   };
 
-  //Logic for adding company in db
-  const [companyInsertData, setCompanyInsertData] = useState({
-    company_name: '',
-    address_street: '',
-    address_town: '',
-    address_country: '',
-    address_po_code: '',
-    phone: '',
-    fax: '',
-    website: '',
-    supplier_type: '',
-    industry: '',
-    company_size: '',
-    source: '',
+
+
+  //Logic for adding tender in db
+  const [tenderForms, setTenderForms] = useState({
+    title: '', // Default value for title
+    company_id: '', // Default value for company_id
+    category: '', // Default value for category
   });
-
-  const handleInputs = (e) => {
-    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
-  };
-
-  
 
   const handleInputsTenderForms = (e) => {
     setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
   };
-
-
-  const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.address_street !== '' &&
-      companyInsertData.address_po_code !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then((res) => {
-          message('Company inserted successfully.', 'success');
-          getCompany();
-          console.log('rescomp',res.data.data)
-          const newlyAddedCompanyId = res.data.data.insertId;
-          setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
-          setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
-          toggle();
-          
-          //window.location.reload();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
-  };
-
-  //Logic for adding tender in db
-  
 
   //Api for getting all countries
   const getAllCountries = () => {
@@ -106,7 +53,7 @@ const OpportunityDetails = () => {
         setallCountries(res.data.data);
       })
       .catch(() => {
-        message('Country Data Not Found', 'info');
+        //message('Country Data Not Found', 'info');
       });
   };
   //const[tenderDetails,setTenderDetails]=useState();
@@ -117,14 +64,15 @@ const OpportunityDetails = () => {
         setTenderForms(res.data.data);
         // getContact(res.data.data.company_id);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
+    setFormSubmitted(true);
+    tenderForms.created_by = loggedInuser.first_name;
+    tenderForms.creation_date = creationdatetime;
+    if (tenderForms.title.trim() !== '' && tenderForms.category.trim() !== '')  {
       tenderForms.opportunity_code = code;
-      tenderForms.creation_date = creationdatetime;
-      tenderForms.created_by = loggedInuser.first_name;
       api
         .post('/tender/insertTenders', tenderForms)
         .then((res) => {
@@ -146,7 +94,7 @@ const OpportunityDetails = () => {
   //QUTO GENERATED CODE
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'enquiry' })
+      .post('/tender/getCodeValue', { type: 'enquiry' })
       .then((res) => {
         insertTender(res.data.data);
       })
@@ -154,13 +102,57 @@ const OpportunityDetails = () => {
         insertTender('');
       });
   };
+  //Logic for adding company in db
+  const [companyInsertData, setCompanyInsertData] = useState({
+    company_name: '',
+    address_street: '',
+    address_town: '',
+    address_country: 'Singapore',
+    address_po_code: '',
+    phone: '',
+    fax: '',
+    website: '',
+    supplier_type: '',
+    industry: '',
+    company_size: '',
+    source: '',
+  });
+
+  const handleInputs = (e) => {
+    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  };
+
+  const insertCompany = () => {
+    if (
+      companyInsertData.company_name !== '' &&
+      companyInsertData.address_street !== '' &&
+      companyInsertData.address_po_code !== '' &&
+      companyInsertData.address_country !== ''
+    ) {
+      api
+        .post('/company/insertCompany', companyInsertData)
+        .then((res) => {
+          getCompany();
+          const newlyAddedCompanyId = res.data.data.insertId;
+          setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
+          setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
+          message('Company inserted successfully.', 'success');
+           toggle();
+
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields.', 'warning');
+    }
+  };
 
   const getCategory = () => {
     api.get('/tender/getCategoryFromValueList', categoryLinked).then((res) => {
       setCategoryLinked(res.data.data);
     });
   };
-
   useEffect(() => {
     getCompany();
     getCategory();
@@ -173,7 +165,7 @@ const OpportunityDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Enquiry">
+          <ComponentCard title="New Opportunity">
             <Form>
               <FormGroup>
                 <Row>
@@ -185,9 +177,15 @@ const OpportunityDetails = () => {
                     <Input
                       type="text"
                       name="title"
-                      value={tenderForms && tenderForms.title}
+                      value={tenderForms && tenderForms?.title}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${
+                        formSubmitted && tenderForms.title.trim() === '' ? 'highlight' : ''
+                      }`}
                     />
+                    {formSubmitted && tenderForms.title.trim() === '' && (
+                      <div className="error-message">Please Enter Title</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -195,31 +193,37 @@ const OpportunityDetails = () => {
                 <Row>
                   <Col md="9">
                     <Label>
-                      Client <span className="required"> *</span>{' '}
+                      Company Name <span className="required"> *</span>{' '}
                     </Label>
                     <Input
                       type="select"
                       name="company_id"
-                      //value={tenderForms && tenderForms.company_id}
-                      value={tenderForms.company_id || ''}
+                      value={tenderForms?.company_id || ''}
                       onChange={(e) => {
-                setTenderForms({ ...tenderForms, company_id: e.target.value });
-                handleInputsTenderForms(e);
-              }}
+                        setTenderForms({ ...tenderForms, company_id: e.target.value });
+                        handleInputsTenderForms(e);
+                      }}
+                    // onChange={(e) => {
+                    //   handleInputsTenderForms(e);
+                    //                     }}
+                    //getContact(e.target.value);
+                    //value={tenderForms && tenderForms.company_id}
                     >
-                      <option>Please Select</option>
+
+                      <option >Please Select</option>
                       {company &&
-                        company.map((ele) => {
+                        company.map((e) => {
                           return (
-                            <option key={ele.company_id} value={ele.company_id}>
-                              {ele.company_name}
+                            <option key={e.company_id} value={e.company_id}>
+                              {' '}
+                              {e.company_name}{' '}
                             </option>
                           );
                         })}
                     </Input>
                   </Col>
                   <Col md="3" className="addNew">
-                    
+                    <Label>Add New Name</Label>
                     <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
                       Add New
                     </Button>
@@ -255,12 +259,14 @@ const OpportunityDetails = () => {
               </FormGroup>
               <TenderCompanyDetails
                 allCountries={allCountries}
+                companyInsertData={companyInsertData}
                 insertCompany={insertCompany}
                 handleInputs={handleInputs}
                 toggle={toggle}
                 modal={modal}
                 setModal={setModal}
               ></TenderCompanyDetails>
+
               <FormGroup>
                 <Col md="9">
                   <Label>
@@ -271,6 +277,9 @@ const OpportunityDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.category}
                     name="category"
+                    className={`form-control ${
+                      formSubmitted && tenderForms.category.trim() === '' ? 'highlight' : ''
+                    }`}
                   >
                     <option value="" selected="selected">
                       Please Select
@@ -280,6 +289,9 @@ const OpportunityDetails = () => {
                         return <option value={ele.value}>{ele.value}</option>;
                       })}
                   </Input>
+                  {formSubmitted && tenderForms.category.trim() === '' && (
+                      <div className="error-message">Please Select Category</div>
+                    )}
                 </Col>
               </FormGroup>
               <Row>

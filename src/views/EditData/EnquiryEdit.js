@@ -27,6 +27,7 @@ const OpportunityEdit = () => {
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
+  const [formSubmitted, setFormSubmitted] = useState(false);
    const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
@@ -132,7 +133,11 @@ const OpportunityEdit = () => {
   //Logic for edit data in db
 
   const editTenderData = () => {
-    if (tenderDetails.title !== '') {
+    
+    if (tenderDetails.title.trim() !== '' && tenderDetails.company_id.trim() !== '')
+    // setFormSubmitted(true);
+    // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '') 
+    {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
     api
@@ -147,6 +152,7 @@ const OpportunityEdit = () => {
         message('Unable to edit record.', 'error');
       });
     } else {
+      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };
@@ -176,6 +182,7 @@ const OpportunityEdit = () => {
   };
 
   const AddNewContact = () => {
+    
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
     if (
@@ -271,6 +278,7 @@ const OpportunityEdit = () => {
         addContactToggle={addContactToggle}
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
+        formSubmitted={formSubmitted}
         
       ></TenderMoreDetails>
 
