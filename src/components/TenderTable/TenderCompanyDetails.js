@@ -62,7 +62,7 @@ export default function TenderCompanyDetails({
                         }`}
                           />
                           {addFormSubmitted && companyInsertData && companyInsertData.company_name.trim() === '' && (
-                      <div className="error-message">Please enter the company name</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                         </FormGroup>
                       </Col>
@@ -82,7 +82,7 @@ export default function TenderCompanyDetails({
                         }`}
                           />
                           {addFormSubmitted && companyInsertData && companyInsertData.phone.trim() === '' && (
-                      <div className="error-message">Please enter the phone</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                         </FormGroup>
                       </Col>
@@ -114,7 +114,7 @@ export default function TenderCompanyDetails({
                         }`}
                         />
                          {addFormSubmitted && companyInsertData && companyInsertData.address_street.trim() === '' && (
-                      <div className="error-message">Please enter the Address</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                       </FormGroup>
                     </Col>
@@ -141,7 +141,7 @@ export default function TenderCompanyDetails({
                         }`}
                         />
                          {addFormSubmitted && companyInsertData && companyInsertData.address_po_code.trim() === '' && (
-                      <div className="error-message">Please enter the Post Code</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                       </FormGroup>
                     </Col>
@@ -164,7 +164,7 @@ export default function TenderCompanyDetails({
                             ))}
                         </Input>
                         {addFormSubmitted && companyInsertData && companyInsertData.address_country.trim() === '' && (
-                      <div className="error-message">Please Select Country</div>
+                      <div className="error-message">Please Select</div>
                     )}
                       </FormGroup>
                     </Col>

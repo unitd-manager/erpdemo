@@ -78,7 +78,15 @@ const OpportunityDetails = () => {
       companyInsertData.address_street !== '' &&
       companyInsertData.address_po_code !== '' &&
       companyInsertData.address_country !== ''
-    ) {
+    ) 
+    {
+      // Check if the entered company name already exists in the company list
+      const isCompanyExists = company && company.some((comp) => comp.company_name === companyInsertData.company_name);
+  
+      if (isCompanyExists) {
+        message('Company already exists.', 'error');
+      } else
+    {
       api
         .post('/company/insertCompany', companyInsertData)
         .then((res) => {
@@ -95,6 +103,7 @@ const OpportunityDetails = () => {
         .catch(() => {
           message('Network connection error.', 'error');
         });
+      }
     } else {
       setAddFormSubmitted(true)
       message('Please fill all required fields.', 'warning');
@@ -199,7 +208,7 @@ const OpportunityDetails = () => {
                         }`}
                     />
                     {formSubmitted && tenderForms && tenderForms.title.trim() === '' && (
-                      <div className="error-message">Please enter the title</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                   </Col>
                 </Row>
@@ -237,7 +246,7 @@ const OpportunityDetails = () => {
                         })}
                     </Input>
                     {formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '') && (
-                      <div className="error-message">Please select the company name</div>
+                      <div className="error-message">Please Select</div>
                     )}
                   </Col>
                   <Col md="3" className="addNew">
@@ -310,7 +319,7 @@ const OpportunityDetails = () => {
                       })}
                   </Input>
                   {formSubmitted && tenderForms && (tenderForms.category === undefined || tenderForms.category.trim() === '') && (
-                      <div className="error-message">PleaseSselect Category</div>
+                      <div className="error-message">Please Select</div>
                     )}
                 </Col>
               </FormGroup>
