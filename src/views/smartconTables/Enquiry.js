@@ -99,12 +99,7 @@ const Opportunity = () => {
       grow: 2,
       width: 'auto',
     },
-    {
-      name: 'Service',
-      selector: 'services',
-      sortable: true,
-      width: 'auto',
-    },
+    
     {
       name: 'Enquiry Status',
       selector: 'status',
@@ -151,7 +146,6 @@ const Opportunity = () => {
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
                     <td>{element.project_end_date }</td>
-                    <td>{element.services}</td>
                     <td>{element.status}</td>
                   </tr>
                 );

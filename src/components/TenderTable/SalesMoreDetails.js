@@ -29,16 +29,17 @@ export default function VehicleMoreDetails({
       <FormGroup>
         <ComponentCard title="More Details">
           <Nav tabs>
-            <NavItem>
+          <NavItem>
               <NavLink
                 className={activeTab === '1' ? 'active' : ''}
                 onClick={() => {
                   toggle('1');
                 }}
               >
-                Invoice
+                Order Items
               </NavLink>
             </NavItem>
+
             <NavItem>
               <NavLink
                 className={activeTab === '2' ? 'active' : ''}
@@ -46,7 +47,7 @@ export default function VehicleMoreDetails({
                   toggle('2');
                 }}
               >
-                Receipt
+                Invoice
               </NavLink>
             </NavItem>
             <NavItem>
@@ -56,13 +57,18 @@ export default function VehicleMoreDetails({
                   toggle('3');
                 }}
               >
-                Order Items
+                Receipt
               </NavLink>
             </NavItem>
+            
           </Nav>
           <TabContent className="p-4" activeTab={activeTab}>
-            {/* Description form */}
+            {/* ADD NODE */}
             <TabPane tabId="1">
+            <OrderItemsTable ordersDetails={ordersDetails}></OrderItemsTable>
+            </TabPane>
+            {/* Description form */}
+            <TabPane tabId="2">
               <Row className="border-bottom mb-3">
                <InvoiceTable
                invoiceDetails={invoiceDetails}
@@ -71,13 +77,10 @@ export default function VehicleMoreDetails({
             </TabPane>
 
             {/* attachments */}
-            <TabPane tabId="2">
+            <TabPane tabId="3">
             <ReceiptTable receiptDetails={receiptDetails}></ReceiptTable>
             </TabPane>
-            {/* ADD NODE */}
-            <TabPane tabId="3">
-            <OrderItemsTable ordersDetails={ordersDetails}></OrderItemsTable>
-            </TabPane>
+            
           </TabContent>
         </ComponentCard>
       </FormGroup>
