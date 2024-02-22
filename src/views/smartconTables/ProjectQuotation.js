@@ -28,13 +28,7 @@ const ProjectQuotation = () => {
           pageLength: 20,
           processing: true,
           dom: 'Bfrtip',
-          // buttons: [
-          //   {
-          //     extend: 'print',
-          //     text: 'Print',
-          //     className: 'shadow-none btn btn-primary',
-          //   },
-          // ],
+        
         });
         setLoading(false);
       })
@@ -64,7 +58,7 @@ const ProjectQuotation = () => {
       sortable: false,
     },
     {
-      name: 'Quotation No',
+      name: 'Quotation Code',
       selector: 'quote_code',
       sortable: true,
       grow: 0,
@@ -91,7 +85,7 @@ const ProjectQuotation = () => {
       grow: 3,
     },
     {
-      name: 'Enquiry No',
+      name: 'Enquiry Code',
       selector: 'enquiry_code',
       sortable: true,
       grow: 2,

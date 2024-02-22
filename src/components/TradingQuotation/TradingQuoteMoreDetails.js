@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import ComponentCard from '../ComponentCard';
 import TenderContactDetails from './TenderContactDetails';
+
 
 export default function TradingQuoteMoreDetails({
   tenderDetails,
@@ -33,10 +35,29 @@ export default function TradingQuoteMoreDetails({
         <FormGroup>
           <ComponentCard title="Quotation Details" creationModificationDate={tenderDetails}>
             <Row>
+            <Col md="3">
+                <FormGroup>
+                  <Label>Enquiry Code</Label>
+                  <br />
+                <td>
+                  {' '}
+                  <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
+                    {tenderDetails && tenderDetails.opportunity_code}
+                  </Link>
+                </td>
+                  {/* <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.opportunity_code}
+                    name="opportunity_code"
+                    disabled
+                  /> */}
+                </FormGroup>
+              </Col>
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Quotation Number <span className="required"> *</span>
+                    Quotation Code <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
@@ -132,18 +153,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Enquiry Number</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.opportunity_code}
-                    name="opportunity_code"
-                    disabled
-                  />
-                </FormGroup>
-              </Col>
+            
 
               <Col md="3">
                 <FormGroup>
@@ -164,17 +174,7 @@ export default function TradingQuoteMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
-              {/* <Col md="3">
-                <FormGroup>
-                  <Label>Net Total</Label>
-                  <Input
-                    type="text"
-                    value={tenderDetails && tenderDetails.totalamount}
-                    onChange={handleInputs}
-                    name="totalamount"
-                  />
-                </FormGroup>
-              </Col> */}
+            
             </Row>
           </ComponentCard>
         </FormGroup>

@@ -92,7 +92,7 @@ export default function QuotationMoreDetails({
               setquotationsModal(true);
             }}
           >
-            View Quote Log
+            View Quote
           </Button>
         </Col>
       )}

@@ -116,6 +116,31 @@ const saveCurrentDetails = () => {
   setPreviousTenderDetails({ ...tenderDetails });
 };
 
+const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleIconMouseOver = () => {
+    console.log('Mouse over icon'); // Log when mouse over icon
+    setShowTooltip(true);
+  };
+
+  const handleIconMouseOut = () => {
+    console.log('Mouse out icon'); // Log when mouse out of icon
+    setShowTooltip(false);
+  };
+
+  const handleIconFocus = () => {
+    console.log('Icon focused'); // Log when icon is focused
+    setShowTooltip(true);
+  };
+
+  const handleIconBlur = () => {
+    console.log('Icon blurred'); // Log when icon is blurred
+    setShowTooltip(false);
+  };
+
+  console.log('showTooltip:', showTooltip); // Log the showTooltip state
+
+
   //Logic for edit data in db
   const insertquote = () => {
       const quoteData = {
@@ -317,7 +342,7 @@ const saveCurrentDetails = () => {
   color="primary"
   onClick={toggleQuotationsModal}
 >
-  View Quote Log
+  View Quote
 </Button>
 </Col>
               <Col md="2">
@@ -327,7 +352,7 @@ const saveCurrentDetails = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                  Add Items
                 </Button>
               </Col>
               <Col md="2">
@@ -341,9 +366,14 @@ const saveCurrentDetails = () => {
                 </Button>
               </Col>
               <Col md="2">
+                <div className="discount">
+                  <span className="label"> <Label><b> Discount:</b></Label>{tenderDetails && tenderDetails.discount}</span>
+                </div>
+              </Col>
+
+              <Col md="2">
                 <div className="net-total">
                   <span className="label"> <Label><b>Net Total:</b></Label>{netTotal}</span>
-                  
                 </div>
               </Col>
 
@@ -370,8 +400,23 @@ const saveCurrentDetails = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
-                            <td data-label="Actions">
+                            <td data-label="Updated By">
+      <tooltip title={`${e.created_by} on ${e.creation_date}`}>
+        <span
+          onMouseOver={handleIconMouseOver} 
+        onMouseOut={handleIconMouseOut}
+        onFocus={handleIconFocus}
+        onBlur={handleIconBlur}
+          style={{
+            position: 'relative',
+            display: 'inline-block',
+          }}
+        >
+          created by
+        </span>
+      </tooltip>
+    </td>
+                 <td data-label="Actions">
                             {subExpenseRec.data ? null : (
     <>
       {console.log('Condition:', subExpenseRec.data)}
