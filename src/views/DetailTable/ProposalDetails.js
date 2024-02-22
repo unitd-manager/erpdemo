@@ -16,12 +16,6 @@ const ProposalDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  //Api call for getting company dropdown
-//   const getCompany = () => {
-//     api.get('/company/getCompany').then((res) => {
-//       setCompany(res.data.data);
-//     });
-//   };
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
@@ -29,8 +23,6 @@ const ProposalDetails = () => {
       setQuoteCode(res.data.data);
     });
   };
-
-  
 
   
   //Logic for adding tender in db

@@ -39,6 +39,8 @@ const ProjectQuotationEdit = () => {
   
   const [editMaterialModelItem, setEditMaterialModelItem] = useState(null);
   const [editMaterialModal, setEditMaterialModal] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
   //const [previousTenderDetails, setPreviousTenderDetails] = useState(null);
   //const [quoteLine, setQuoteLine] = useState();
 
@@ -90,6 +92,24 @@ const ProjectQuotationEdit = () => {
     });
   };
 
+  const handleMouseOver = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseOut = () => {
+    setShowTooltip(false);
+  };
+
+  const handleFocus = () => {
+    setShowTooltip(true);
+  };
+
+  const handleBlur = () => {
+    setShowTooltip(false);
+  };
+
+
+
   // Get Tenders By Id
 
   const editTenderById = () => {
@@ -103,52 +123,14 @@ const ProjectQuotationEdit = () => {
  getContact(companyId);
     });
   };
-  // const hideEditIcon = () => {
-  //   api
-  //     .post('/invoice/hideEditIconById', { quote_id: id })
-  //     .then((res) => {
-  //       const isQuotePresent = res.data.data.length > 0;
-        
-  //       setEditLineModal(!isQuotePresent);
-  //     })
-  //     .catch(() => {
-  //       message('Hidden Data Not Found', 'info');
-  //     });
-  // };
-  
-  // Other functions and component code
+ 
   
   
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
   };
 
-  
 
-  
-//   //Logic for edit data in db
-//   const insertquote = () => {
-//     const quoteData = {
-//     quote_date: previousTenderDetails.quote_date,
-//     quote_status: previousTenderDetails.quote_status,
-//     quote_code: previousTenderDetails.quote_code,
-//     quote_id: id,
-//     created_by: loggedInuser.first_name,
-//     creation_date: creationdatetime,
-//   };
- 
-
-//   api.post('/project/insertLog', quoteData).then((res) => {
-//     message('quote inserted successfully.', 'success');
-//     lineItem.forEach((element) => {
-//       element.quote_log_id = res.data.data.insertId;
-      
-//       api.post('/project/insertLogLine', element).then(() => {
-//         window.location.reload();
-//       });
-//     });
-//   });
-// };
 
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
@@ -231,8 +213,6 @@ const ProjectQuotationEdit = () => {
     getLineItem();
     getMaterialItem();
     getCompany();
-    //hideEditIcon();
-    // getAllCountries();
   }, [id]);
 
   const columns1 = [
@@ -368,13 +348,26 @@ const ProjectQuotationEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By">
-                                {e.modification_date
-                                  ? `${e.modified_by} (Modified on ${e.modification_date})`
-                                  : `${e.created_by} (Created on ${e.creation_date})`}
-                              </td>
-
-                              
+                            <td 
+      data-label="Updated By"
+      className="tooltip"
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+    >
+      {e.modification_date
+        ? `${e.modified_by} (Modified on ${e.modification_date})`
+        : `${e.created_by} (Created on ${e.creation_date})`}
+      {showTooltip && (
+        <span className="tooltiptext">
+          {e.modification_date
+            ? `Modified by ${e.modified_by} on ${e.modification_date}`
+            : `Created by ${e.created_by} on ${e.creation_date}`}
+            
+        </span>
+      )}
+    </td>
                             
                             <td data-label="Actions">
                               <span
