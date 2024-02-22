@@ -46,7 +46,7 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
                 }`}
                 />
                 {formSubmitted && clientsDetails && clientsDetails.company_name.trim() === '' && (
-                <div className="error-message">Please enter the company name</div>
+                <div className="error-message">Please Enter</div>
               )}
       </FormGroup>
     </Col>
@@ -76,8 +76,7 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
           </Col>
           <Col md="3">
           <FormGroup>
-  <Label dir="rtl" style={{ textAlign: 'right' }}>
-  <span style={{ color: 'blue' }}>{arabic.find(item => item.key_text === 'cm.email')?.value}</span>
+          <Label dir="rtl" style={{ textAlign: 'right' }}><span className="required"> *</span>
     Email
   </Label>
   <Input
@@ -85,7 +84,13 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
     onChange={handleInputs}
     value={clientsDetails && clientsDetails.email}
     name="email"
-  />
+    className={`form-control ${
+      formSubmitted && clientsDetails && clientsDetails.email.trim() === '' ? 'highlight' : ''
+    }`}
+    />
+    {formSubmitted && clientsDetails && clientsDetails.email.trim() === '' && (
+    <div className="error-message">Please Enter</div>
+  )}
 </FormGroup>
           </Col>
           <Col md="3">
@@ -154,7 +159,7 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
               />
             </FormGroup>
           </Col>
-          <Col md="3">
+          {/* <Col md="3">
             <FormGroup>
               <Label>Retention </Label>
               <Input
@@ -164,7 +169,7 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
                 name="retention"
               />
             </FormGroup>
-          </Col>
+          </Col> */}
         </Row>
       </FormGroup>
     </Form>
