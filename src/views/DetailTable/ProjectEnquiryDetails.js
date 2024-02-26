@@ -157,7 +157,7 @@ const OpportunityDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Opportunity">
+          <ComponentCard title="New Enquiry">
             <Form>
               <FormGroup>
                 <Row>

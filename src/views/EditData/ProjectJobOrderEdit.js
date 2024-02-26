@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row,Label } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row,Label ,Tooltip} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -32,6 +32,12 @@ const ProjectJobOrderEdit = () => {
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
   //const [quoteLine, setQuoteLine] = useState();
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
+
+  // Function to handle tooltip toggle
+  const toggleTooltip = (index) => {
+    setHoveredRowIndex(index === hoveredRowIndex ? null : index);
+  };
 
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
@@ -280,11 +286,23 @@ const ProjectJobOrderEdit = () => {
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
                             <td data-label="Updated By">
-                              {e.modification_date
-                                ? `${e.modified_by} (Modified on ${e.modification_date})`
-                                : `${e.created_by} (Created on ${e.creation_date})`}
-                            </td>
-
+              <Icon.Eye
+                id={`tooltip-${index}`}
+                onMouseOver={() => toggleTooltip(index)} // Pass index to toggle function
+              />
+              <Tooltip
+                placement="top"
+                isOpen={hoveredRowIndex === index} // Check if current row index matches hoveredRowIndex
+                target={`tooltip-${index}`}
+                toggle={() => toggleTooltip(index)}
+              >
+                <span className="tooltiptext">
+                  {e.modification_date
+                    ? `Modified by ${e.modified_by} on ${e.modification_date}`
+                    : `Created by ${e.created_by} on ${e.creation_date}`}
+                </span>
+              </Tooltip>
+            </td>
                             <td data-label="Actions">
                               <span
                                 className="addline"

@@ -80,16 +80,7 @@ const [projectManager, seProjectManager] = useState()
   const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
-  const saveChanges = () => {
-    if (
-      proposalDetails &&
-      proposalDetails.title !== '' &&
-      proposalDetails.proposal_date !== '' &&
-      proposalDetails.status !== ''
-    ) {
-      navigate('/Proposal');
-    }
-  };
+ 
 
   const backToList = () => {
     navigate('/Proposal');
@@ -198,7 +189,6 @@ const [projectManager, seProjectManager] = useState()
       proposalDetails.title !== '' &&
       proposalDetails.proposal_date !== '' &&
       proposalDetails.status !== ''
-      (proposalDetails.company_id.trim() !== '' && proposalDetails.title.trim() !== '')
     ) {
       proposalDetails.modification_date = creationdatetime;
       proposalDetails.modified_by = loggedInuser.first_name;
@@ -314,7 +304,6 @@ const [projectManager, seProjectManager] = useState()
         editProposalData={editProposalData}
         navigate={navigate}
         applyChanges={applyChanges}
-        saveChanges={saveChanges}
         backToList={backToList}
       ></ProposalButtons>
       <ProposalMoreDetails
