@@ -28,15 +28,19 @@ const OpportunityDetails = () => {
     company_id: '',
     category: '',
   });
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [addFormSubmitted, setAddFormSubmitted] = useState(false);
+
   //Api call for getting company dropdown
   const getCompany = () => {
     api.get('/company/getCompany').then((res) => {
       setCompany(res.data.data);
-      if (res.data.data && res.data.data.length > 0) {
-        // Assuming the newly added company is at the end of the list
-        const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
-        setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
-      }
+      // if (res.data.data && res.data.data.length > 0) {
+      //   // Assuming the newly added company is at the end of the list
+      //   const newlyAddedCompanyId = res.data.data[res.data.data.length - 1].company_id;
+      //   setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId }); // Set the last company as selected
+      // }
     });
   };
 
@@ -68,20 +72,30 @@ const OpportunityDetails = () => {
 
 
   const insertCompany = () => {
+    
     if (
       companyInsertData.company_name !== '' &&
       companyInsertData.address_street !== '' &&
       companyInsertData.address_po_code !== '' &&
       companyInsertData.address_country !== ''
-    ) {
+    ) 
+    {
+      // Check if the entered company name already exists in the company list
+      const isCompanyExists = company && company.some((comp) => comp.company_name === companyInsertData.company_name);
+  
+      if (isCompanyExists) {
+        message('Company already exists.', 'error');
+      } else
+    {
       api
         .post('/company/insertCompany', companyInsertData)
         .then((res) => {
           message('Company inserted successfully.', 'success');
           getCompany();
-          const newlyAddedCompanyId = res.data.data.company_id;
+          console.log('rescomp',res.data.data)
+          const newlyAddedCompanyId = res.data.data.insertId;
           setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
-          setTenderForms({ ...tenderForms, company_id: res.data.data.company_id }); // Set selected company ID after insertion
+          setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
           toggle();
           
           //window.location.reload();
@@ -89,7 +103,9 @@ const OpportunityDetails = () => {
         .catch(() => {
           message('Network connection error.', 'error');
         });
+      }
     } else {
+      setAddFormSubmitted(true)
       message('Please fill all required fields.', 'warning');
     }
   };
@@ -120,6 +136,7 @@ const OpportunityDetails = () => {
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
+    
     if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
       tenderForms.opportunity_code = code;
       tenderForms.creation_date = creationdatetime;
@@ -138,6 +155,7 @@ const OpportunityDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
+      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };
@@ -184,9 +202,14 @@ const OpportunityDetails = () => {
                     <Input
                       type="text"
                       name="title"
-                      value={tenderForms && tenderForms.title}
+                      
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${formSubmitted && tenderForms && tenderForms.title.trim() === '' ? 'highlight' : ''
+                        }`}
                     />
+                    {formSubmitted && tenderForms && tenderForms.title.trim() === '' && (
+                      <div className="error-message">Please Enter</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -199,12 +222,17 @@ const OpportunityDetails = () => {
                     <Input
                       type="select"
                       name="company_id"
+                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
                       //value={tenderForms && tenderForms.company_id}
-                      value={tenderForms.company_id || ''}
+                      value={tenderForms?.company_id || ''}
                       onChange={(e) => {
                 setTenderForms({ ...tenderForms, company_id: e.target.value });
                 handleInputsTenderForms(e);
               }}
+              
                     >
                       <option>Please Select</option>
                       {company &&
@@ -213,9 +241,13 @@ const OpportunityDetails = () => {
                             <option key={ele.company_id} value={ele.company_id}>
                               {ele.company_name}
                             </option>
+                            
                           );
                         })}
                     </Input>
+                    {formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '') && (
+                      <div className="error-message">Please Select</div>
+                    )}
                   </Col>
                   <Col md="3" className="addNew">
                     
@@ -259,6 +291,9 @@ const OpportunityDetails = () => {
                 toggle={toggle}
                 modal={modal}
                 setModal={setModal}
+                addFormSubmitted={addFormSubmitted}
+                companyInsertData={companyInsertData}
+                tenderForms={tenderForms}
               ></TenderCompanyDetails>
               <FormGroup>
                 <Col md="9">
@@ -270,6 +305,10 @@ const OpportunityDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.category}
                     name="category"
+                    className={`form-control ${formSubmitted && tenderForms && (tenderForms.category === undefined || tenderForms.category.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
                   >
                     <option value="" selected="selected">
                       Please Select
@@ -279,6 +318,9 @@ const OpportunityDetails = () => {
                         return <option value={ele.value}>{ele.value}</option>;
                       })}
                   </Input>
+                  {formSubmitted && tenderForms && (tenderForms.category === undefined || tenderForms.category.trim() === '') && (
+                      <div className="error-message">Please Select</div>
+                    )}
                 </Col>
               </FormGroup>
               <Row>

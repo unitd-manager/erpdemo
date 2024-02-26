@@ -41,6 +41,7 @@ const ProjectEdit = () => {
   const [addMaterialItemModal, setAddMaterialItemModal] = useState(false);
   const [viewMaterialModal, setViewMaterialModal] = useState(false);
   const [editMaterialModal, setEditMaterialModal] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const addMaterialItemsToggle = () => {
     setAddMaterialItemModal(!addMaterialItemModal);
   };
@@ -158,6 +159,8 @@ const ProjectEdit = () => {
       .catch(() => {});
   };
   const UpdateData = () => {
+    setFormSubmitted(true);
+    if(projectDetail.category.trim() !== '')
     api.post('/project/edit-Project', projectDetail).then(() => {
       message('Record editted successfully', 'success');
       setTimeout(() => {
@@ -203,6 +206,7 @@ const ProjectEdit = () => {
         setProjectDetail={setProjectDetail}
         contact={contact}
         incharge={incharge}
+        formSubmitted={formSubmitted}
       />
 
       <ComponentCard title="More Details">

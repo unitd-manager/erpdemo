@@ -19,7 +19,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Delivery Number <span className="required"> *</span>
+                    Delivery Code <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
@@ -43,7 +43,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Order No</Label>
+                  <Label>Order Code</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -56,7 +56,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }
               <Col md="3">
                 <FormGroup>
                 <Label>
-                    company Name 
+                    Company Name 
                   </Label>
                   <Input
                     type="text"
@@ -102,7 +102,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>PO Number</Label>
+                  <Label>PO Code</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}

@@ -42,6 +42,7 @@ const [projectManager, seProjectManager] = useState()
   });
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
@@ -191,11 +192,13 @@ const [projectManager, seProjectManager] = useState()
   //Logic for edit data in db
 
   const editProposalData = () => {
+    setFormSubmitted(true);
     if (
       proposalDetails.title &&
       proposalDetails.title !== '' &&
       proposalDetails.proposal_date !== '' &&
       proposalDetails.status !== ''
+      (proposalDetails.company_id.trim() !== '' && proposalDetails.title.trim() !== '')
     ) {
       proposalDetails.modification_date = creationdatetime;
       proposalDetails.modified_by = loggedInuser.first_name;
@@ -334,6 +337,7 @@ const [projectManager, seProjectManager] = useState()
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
         projectManager={projectManager}
+        formSubmitted={formSubmitted}
         
       ></ProposalMoreDetails>
 

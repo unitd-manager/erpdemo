@@ -15,6 +15,8 @@ const OpportunityDetails = () => {
   const [company, setCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [addFormSubmitted, setAddFormSubmitted] = useState(false);
   const { id } = useParams();
   const { loggedInuser } = useContext(AppContext);
   const navigate = useNavigate();
@@ -68,6 +70,7 @@ const OpportunityDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
+      setAddFormSubmitted(true)
       message('Please fill all required fields.', 'warning');
     }
   };
@@ -108,9 +111,7 @@ const OpportunityDetails = () => {
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
-    if (tenderForms.category !== '' &&
-    tenderForms.company_id !== '' &&
-    tenderForms.title !== '') {
+    if  ((tenderForms.company_id.trim() !== '' && tenderForms.title.trim() !== '' && tenderForms.category.trim() !== '')) {
       tenderForms.enquiry_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -128,6 +129,7 @@ const OpportunityDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
+      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };
@@ -169,7 +171,13 @@ const OpportunityDetails = () => {
                       name="title"
                       value={tenderForms && tenderForms.title}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${
+                        formSubmitted && tenderForms.title.trim() === '' ? 'highlight' : ''
+                      }`}
                     />
+                    {formSubmitted && tenderForms.title.trim() === '' && (
+                      <div className="error-message">Please Enter Title</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -184,6 +192,10 @@ const OpportunityDetails = () => {
                       name="company_id"
                       //value={tenderForms && tenderForms.company_id}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
                     >
                       <option>Please Select</option>
                       {company &&
@@ -195,6 +207,9 @@ const OpportunityDetails = () => {
                           );
                         })}
                     </Input>
+                    {formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '') && (
+                      <div className="error-message">Please select the Company</div>
+                    )}
                   </Col>
                   <Col md="3" className="addNew">
                     <Label>Add New Name</Label>
@@ -238,6 +253,9 @@ const OpportunityDetails = () => {
                 toggle={toggle}
                 modal={modal}
                 setModal={setModal}
+                addFormSubmitted={addFormSubmitted}
+                companyInsertData={companyInsertData}
+                tenderForms={tenderForms}
               ></TenderCompanyDetails>
               <FormGroup>
                 <Col md="9">
@@ -249,6 +267,9 @@ const OpportunityDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.category}
                     name="category"
+                    className={`form-control ${
+                      formSubmitted && tenderForms.category.trim() === '' ? 'highlight' : ''
+                    }`}
                   >
                     <option defaultValue="selected">Please Select</option>
                     <option value="Project">Project</option>
@@ -256,6 +277,9 @@ const OpportunityDetails = () => {
                     <option value="Tenancy Project">Tenancy Project</option>
                     <option value="Tenancy Work">Tenancy Work</option>
                   </Input>
+                  {formSubmitted && tenderForms.category.trim() === '' && (
+                      <div className="error-message">Please Select Category</div>
+                    )}
                 </Col>
               </FormGroup>
               <Row>

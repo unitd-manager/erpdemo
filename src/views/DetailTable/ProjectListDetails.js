@@ -16,6 +16,7 @@ const ProjectDetails = () => {
     proposal_id: '',
   });
   const [proposalcode, setPoposalCode] = useState();
+  const [formSubmitted, setFormSubmitted] = useState(false);
   //navigation and params
   const navigate = useNavigate();
   //supplierData in supplier details
@@ -27,6 +28,7 @@ const ProjectDetails = () => {
   //inserting supplier data
 
   const insertProjectData = (ProjectCode) => {
+    setFormSubmitted(true);
     api
     .post('/project/getProposalDataById', { proposal_code: projectdetails.proposal_id })
     .then((res1) => {
@@ -52,8 +54,10 @@ const ProjectDetails = () => {
           const proposalMaterial = res3.data.data
           console.log('proposalId',proposalId)
           console.log('proposalMaterial',proposalMaterial)
+
+          
     
-    if (projectdetails.title !== '') 
+    if (projectdetails.proposal_id.trim() !== '') 
       {
         projectdetails.project_code = ProjectCode;
         projectdetails.creation_date = creationdatetime;
@@ -132,7 +136,11 @@ const getProposalCode = () => {
     getProposalCode();
   }, [],[]);
 
-    
+  const inputClass = `form-control ${
+    formSubmitted && (!projectdetails.proposal_id || projectdetails.proposal_id === 'Please Select') ? 'highlight' : ''
+  }`;
+  
+
    return (
     <div>
       <BreadCrumbs />
@@ -154,6 +162,7 @@ const getProposalCode = () => {
                           onChange={handleInputs}
                           value={projectdetails && projectdetails.proposal_id}
                           name="proposal_id"
+                          className={inputClass}
                         >
                           <option defaultValue="selected">Please Select</option>
                           {proposalcode &&
@@ -165,6 +174,9 @@ const getProposalCode = () => {
                               );
                             })}
                         </Input>
+                        {(formSubmitted && !projectdetails.proposal_id) && (
+      <div className="error-message">Please Select the Proposal Code</div>
+    )}
                     </Col>
                 </Row>
               </FormGroup>

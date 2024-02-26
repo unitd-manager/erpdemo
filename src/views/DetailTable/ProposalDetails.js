@@ -11,17 +11,11 @@ import AppContext from '../../context/AppContext';
 
 const ProposalDetails = () => {
   const [quotecode, setQuoteCode] = useState();
- 
+  const [formSubmitted, setFormSubmitted] = useState(false);
   
   const { id } = useParams();
   const navigate = useNavigate();
   
-  //Api call for getting company dropdown
-//   const getCompany = () => {
-//     api.get('/company/getCompany').then((res) => {
-//       setCompany(res.data.data);
-//     });
-//   };
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
@@ -29,8 +23,6 @@ const ProposalDetails = () => {
       setQuoteCode(res.data.data);
     });
   };
-
-  
 
   
   //Logic for adding tender in db
@@ -63,7 +55,8 @@ const ProposalDetails = () => {
 
   //console.log(tenderDetails);
   const insertProposal= (code) => {
-    if ( tenderForms.title !== '' && tenderForms.proposal_date !== '' && tenderForms.project_quote_id !== '') {
+    setFormSubmitted(true);
+    if ( tenderForms.title.trim() !== '' && tenderForms.proposal_date.trim() !== '' && tenderForms.project_quote_id.trim() !== '') {
       tenderForms.proposal_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -100,6 +93,9 @@ const ProposalDetails = () => {
     // getCompany();
     getEnquiryCode();
   }, [id]);
+const inputClass = `form-control ${
+  formSubmitted && (!tenderForms.project_quote_id || tenderForms.project_quote_id === 'Please Select') ? 'highlight' : ''
+}`;
 
   return (
     <div>
@@ -117,8 +113,9 @@ const ProposalDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.project_quote_id}
                     name="project_quote_id"
+                    className={inputClass}
                   >
-                    <option>Please Select</option>
+                    <option value="">Please Select</option>
                     {quotecode &&
                       quotecode.map((e) => {
                         return (
@@ -129,6 +126,9 @@ const ProposalDetails = () => {
                         );
                       })}
                   </Input>
+                  {(formSubmitted && !tenderForms.project_quote_id) && (
+      <div className="error-message">Please Select the Quote Code</div>
+    )}
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -143,7 +143,13 @@ const ProposalDetails = () => {
                       name="proposal_date"
                       value={tenderForms && tenderForms.proposal_date}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${
+                      formSubmitted && tenderForms.proposal_date.trim() === '' ? 'highlight' : ''
+                    }`}
                     />
+                    {formSubmitted && tenderForms.proposal_date.trim() === '' && (
+                      <div className="error-message">Please Select the Date</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -158,7 +164,13 @@ const ProposalDetails = () => {
                       name="title"
                       //value={tenderForms && tenderForms.company_id}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${
+                      formSubmitted && tenderForms.title.trim() === '' ? 'highlight' : ''
+                    }`}
                     ></Input>
+                    {formSubmitted && tenderForms.title.trim() === '' && (
+                      <div className="error-message">Please Enter the Title</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>

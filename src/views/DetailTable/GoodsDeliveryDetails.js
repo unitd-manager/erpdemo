@@ -93,7 +93,7 @@ const GoodsDeliveryDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Opportunity">
+          <ComponentCard title="New Goods Delivery">
             <Form>
               <FormGroup>
                 <Col md="9">

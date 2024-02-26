@@ -339,6 +339,7 @@ const QuoteLineItem = ({
                             return (
                               <tr key={item.id}>
                                 <td>
+                                <div style={{ width: '130px' }}> 
                   <AsyncSelect
                     defaultValue={{
                       value: item.product_id,
@@ -353,6 +354,7 @@ const QuoteLineItem = ({
                   />
                   <Input value={item.product_id} type="hidden" name="product_id"></Input>
                   <Input value={item.title} type="hidden" name="title"></Input>
+                  </div> 
                 </td>
                                 <td data-label="Description">
                                   <Input Value={item.description}  type="textarea" name="description" />

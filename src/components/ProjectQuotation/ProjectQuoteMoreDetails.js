@@ -36,7 +36,7 @@ export default function ProjectQuoteMoreDetails({
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Quotation Number <span className="required"> *</span>
+                    Quotation Code <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
@@ -44,6 +44,18 @@ export default function ProjectQuoteMoreDetails({
                     value={tenderDetails && tenderDetails.quote_code}
                     name="quote_code"
                     disabled
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Enquiry Code</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.enquiry_code}
+                    name="enquiry_code"
+                    
                   />
                 </FormGroup>
               </Col>
@@ -133,19 +145,7 @@ export default function ProjectQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Enquiry Number</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.enquiry_code}
-                    name="enquiry_code"
-                    disabled
-                  />
-                </FormGroup>
-              </Col>
-
+             
               <Col md="3">
                 <FormGroup>
                   <Label>Status</Label>

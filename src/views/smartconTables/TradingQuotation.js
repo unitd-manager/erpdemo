@@ -65,7 +65,7 @@ const TradingQuotation = () => {
       sortable: false,
     },
     {
-      name: 'Quotation No',
+      name: 'Quotation Code',
       selector: 'quote_code',
       sortable: true,
       grow: 0,
@@ -92,7 +92,7 @@ const TradingQuotation = () => {
       grow: 3,
     },
     {
-      name: 'Enquiry No',
+      name: 'Enquiry Code',
       selector: 'opportunity_code',
       sortable: true,
       grow: 2,
