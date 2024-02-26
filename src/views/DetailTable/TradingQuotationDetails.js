@@ -52,6 +52,17 @@ const TradingQuotationDetails = () => {
   //get staff details
   const { loggedInuser } = useContext(AppContext);
 
+  const updateEnquiryStatus = (opportunityId) => {
+    api
+      .post(`/tender/updateEnquiryStatus/${opportunityId}`, { status: 'Quotation Sent' })
+      .then(() => {
+        console.log('Enquiry status updated successfully');
+      })
+      .catch((error) => {
+        console.error('Error updating enquiry status:', error);
+      });
+  };
+
   //console.log(tenderDetails);
   const insertQuote = (code) => {
     setFormSubmitted(true);
@@ -63,6 +74,8 @@ const TradingQuotationDetails = () => {
         .post('/tradingquote/inserttradingquote', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
+          updateEnquiryStatus(tenderForms.opportunity_id); // Call updateEnquiryStatus here
+        message('Tender inserted successfully.', 'success');
           getTendersById();
           message('Tender inserted successfully.', 'success');
           navigate(`/TradingQuotationEdit/${insertedDataId}?tab=1`);
@@ -87,6 +100,7 @@ const TradingQuotationDetails = () => {
       });
   };
 
+  
 
   useEffect(() => {
     getEnquiryCode();

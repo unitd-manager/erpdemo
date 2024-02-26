@@ -19,6 +19,8 @@ import PurchaseOrderDetailsPart from '../../components/PurchaseOrder/PurchaseOrd
 import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
 import Tab from '../../components/project/Tab';
 import ApiButton from '../../components/ApiButton';
+import PdfPurchaseOrder from '../../components/PDF/PdfPurchaseOrder';
+import ComponentCardV2 from '../../components/ComponentCardV2';
 
 const PurchaseOrderEdit = () => {
   //All state variable
@@ -256,6 +258,9 @@ const PurchaseOrderEdit = () => {
               backToList={backToList}
               module="PurchaseOrder"
             ></ApiButton>
+            <ComponentCardV2>
+              <PdfPurchaseOrder></PdfPurchaseOrder>
+            </ComponentCardV2>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
         supplier={supplier}
@@ -268,6 +273,7 @@ const PurchaseOrderEdit = () => {
               <Button
                 className="shadow-none"
                 color="primary"
+                style={{marginBottom:'10px'}}
                 onClick={() => {
                 }}
               >

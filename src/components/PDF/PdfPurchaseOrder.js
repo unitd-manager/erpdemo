@@ -241,7 +241,7 @@ const PdfPurchaseOrder = () => {
                       : ''
                   } `,
                   style: ['textSize'],
-                  margin: [135, 0, 0, 0],
+                  margin: [120, 0, 0, 0],
                 },
                 {
                   text: ` Your Ref :${
@@ -250,14 +250,14 @@ const PdfPurchaseOrder = () => {
                       : ''
                   } `,
                   style: ['textSize'],
-                  margin: [132, 0, 0, 0],
+                  margin: [120, 0, 0, 0],
                 },
                 {
                   text: ` Our Ref : ${
                     purchaseDetails.our_reference_no ? purchaseDetails.our_reference_no : ''
                   }`,
                   style: ['textSize'],
-                  margin: [137, 0, 0, 0],
+                  margin: [120, 0, 0, 0],
                 },
                 {
                   text: ` Ship To :${
@@ -274,7 +274,7 @@ const PdfPurchaseOrder = () => {
                       : ''
                   }`,
                   style: ['textSize'],
-                  margin: [130, 0, 0, 0],
+                  margin: [120, 0, 0, 0],
                 },
               ],
             },

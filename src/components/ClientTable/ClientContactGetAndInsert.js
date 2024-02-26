@@ -110,52 +110,6 @@ export default function ClientContactGetAndInsert({
   return (
     <Form>
       <Row>
-        <Table id="example" className="display border border-secondary rounded">
-          <thead>
-            <tr>
-              {columns.map((cell) => {
-                return <td key={cell.name}>{cell.name}</td>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {contactsDetails &&
-              contactsDetails.map((element, i) => {
-                return (
-                  <tr key={element.contact_id}>
-                    <td>{i + 1}</td>
-                    <td>
-                      <div className='anchor'>
-                        <span
-                          onClick={() => {
-                            setContactData(element);
-                            setEditContactEditModal(true);
-                          }}
-                        >
-                          <Icon.Edit2 />
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div color="primary" className='anchor'>
-                        <span onClick={() => deleteRecord(element.contact_id)}>
-                          <Icon.Trash2 />
-                        </span>
-                      </div>
-                    </td>
-                    <td>{element.first_name}</td>
-                    <td>{element.email}</td>
-                    <td>{element.phone_direct}</td>
-                    <td>{element.mobile}</td>
-                    <td>{element.position}</td>
-                    <td>{element.department}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
-      </Row>
-      <Row>
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
@@ -291,6 +245,52 @@ export default function ClientContactGetAndInsert({
             </Modal>
           </FormGroup>
         </Col>
+      </Row>
+      <Row>
+        <Table id="example" className="display border border-secondary rounded">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {contactsDetails &&
+              contactsDetails.map((element, i) => {
+                return (
+                  <tr key={element.contact_id}>
+                    <td>{i + 1}</td>
+                    <td>
+                      <div className='anchor'>
+                        <span
+                          onClick={() => {
+                            setContactData(element);
+                            setEditContactEditModal(true);
+                          }}
+                        >
+                          <Icon.Edit2 />
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div color="primary" className='anchor'>
+                        <span onClick={() => deleteRecord(element.contact_id)}>
+                          <Icon.Trash2 />
+                        </span>
+                      </div>
+                    </td>
+                    <td>{element.first_name}</td>
+                    <td>{element.email}</td>
+                    <td>{element.phone_direct}</td>
+                    <td>{element.mobile}</td>
+                    <td>{element.position}</td>
+                    <td>{element.department}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
       </Row>
     </Form>
   );
