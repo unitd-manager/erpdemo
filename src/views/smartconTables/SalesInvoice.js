@@ -69,13 +69,13 @@ const Opportunity = () => {
       grow: 0,
       wrap: true,
     },
-    {
-      name: 'Source Code',
-      selector: 'source_code',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
+    // {
+    //   name: 'Source Code',
+    //   selector: 'source_code',
+    //   sortable: true,
+    //   grow: 0,
+    //   wrap: true,
+    // },
     {
       name: 'Customer Name',
       selector: 'company_name',
@@ -148,7 +148,11 @@ const Opportunity = () => {
                       </Link>
                     </td>
                     <td>{element.invoice_code}</td>
-                    <td>{element.source_code}</td>
+                    {/* <td>
+                    {element.source_type === 'Goods_Delivery' && element.goods_delivery_code}
+                      {element.source_type === 'Sales_Order' && element.order_code}
+                      {!element.source_type && 'No Source'}
+                    </td> */}
                     <td>{element.company_name}</td>
                     <td>{element.invoice_date}</td>
                     <td>{element.invoice_amount}</td>
