@@ -82,7 +82,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
     <>
       <Modal size="xl" isOpen={addPurchaseOrderEditModal}>
         <ModalHeader>
-          Goods Receipt Items
+          Purchase Request Items
           <Button
             color="secondary"
             onClick={() => {

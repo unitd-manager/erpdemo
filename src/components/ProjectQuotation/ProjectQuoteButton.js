@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
-
+ 
 export default function ProjectQuoteButton({ editTenderData, applyChanges, backToList, navigate }) {
     ProjectQuoteButton.propTypes = {
     editTenderData: PropTypes.func,

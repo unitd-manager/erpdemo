@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row,Label } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row, Label, Tooltip } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -39,7 +39,6 @@ const ProjectQuotationEdit = () => {
   
   const [editMaterialModelItem, setEditMaterialModelItem] = useState(null);
   const [editMaterialModal, setEditMaterialModal] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
 
   //const [previousTenderDetails, setPreviousTenderDetails] = useState(null);
   //const [quoteLine, setQuoteLine] = useState();
@@ -47,6 +46,17 @@ const ProjectQuotationEdit = () => {
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
   //   const [addCompanyModal, setAddCompanyModal] = useState(false);
+
+ // const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  // const toggleTooltip = () => setTooltipOpen(!tooltipOpen);
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
+
+  // Function to handle tooltip toggle
+  const toggleTooltip = (index) => {
+    setHoveredRowIndex(index === hoveredRowIndex ? null : index);
+  };
+
 
   const { loggedInuser } = useContext(AppContext);
 
@@ -90,22 +100,6 @@ const ProjectQuotationEdit = () => {
       setContact(res.data.data);
 
     });
-  };
-
-  const handleMouseOver = () => {
-    setShowTooltip(true);
-  };
-
-  const handleMouseOut = () => {
-    setShowTooltip(false);
-  };
-
-  const handleFocus = () => {
-    setShowTooltip(true);
-  };
-
-  const handleBlur = () => {
-    setShowTooltip(false);
   };
 
 
@@ -252,9 +246,10 @@ const ProjectQuotationEdit = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        api.post('/projectquote/deleteEditItem', { project_quote_items_id: deleteID }).then(() => {
+        api.post('/projectquote/deleteProjectQuote', { project_quote_items_id: deleteID }).then(() => {
           Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
           window.location.reload();
+
         });
       }
     });
@@ -348,26 +343,24 @@ const ProjectQuotationEdit = () => {
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td 
-      data-label="Updated By"
-      className="tooltip"
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-    >
-      {e.modification_date
-        ? `${e.modified_by} (Modified on ${e.modification_date})`
-        : `${e.created_by} (Created on ${e.creation_date})`}
-      {showTooltip && (
-        <span className="tooltiptext">
-          {e.modification_date
-            ? `Modified by ${e.modified_by} on ${e.modification_date}`
-            : `Created by ${e.created_by} on ${e.creation_date}`}
-            
-        </span>
-      )}
-    </td>
+                            <td data-label="Updated By">
+              <Icon.Eye
+                id={`tooltip-${index}`}
+                onMouseOver={() => toggleTooltip(index)} // Pass index to toggle function
+              />
+              <Tooltip
+                placement="top"
+                isOpen={hoveredRowIndex === index} // Check if current row index matches hoveredRowIndex
+                target={`tooltip-${index}`}
+                toggle={() => toggleTooltip(index)}
+              >
+                <span className="tooltiptext">
+                  {e.modification_date
+                    ? `Modified by ${e.modified_by} on ${e.modification_date}`
+                    : `Created by ${e.created_by} on ${e.creation_date}`}
+                </span>
+              </Tooltip>
+            </td>
                             
                             <td data-label="Actions">
                               <span
