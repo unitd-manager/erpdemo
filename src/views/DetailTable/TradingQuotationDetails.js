@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button,FormFeedback } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -8,25 +8,15 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import creationdatetime from '../../constants/creationdatetime';
-//import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDetails';
 import AppContext from '../../context/AppContext';
 
 const TradingQuotationDetails = () => {
-  //const [company, setCompany] = useState();
   const [enquirycode, setEnquiryCode] = useState();
-  //const [allCountries, setallCountries] = useState();
-  //const [modal, setModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  // const toggle = () => {
-  //   setModal(!modal);
-  // };
-  // //Api call for getting company dropdown
-  // const getCompany = () => {
-  //   api.get('/company/getCompany').then((res) => {
-  //     setCompany(res.data.data);
-  //   });
-  // };
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  
 
   //Api call for getting Enquiry dropdown
   const getEnquiryCode = () => {
@@ -35,73 +25,21 @@ const TradingQuotationDetails = () => {
     });
   };
 
-  //Logic for adding company in db
-  // const [companyInsertData, setCompanyInsertData] = useState({
-  //   company_name: '',
-  //   address_street: '',
-  //   address_town: '',
-  //   address_country: '',
-  //   address_po_code: '',
-  //   phone: '',
-  //   fax: '',
-  //   website: '',
-  //   supplier_type: '',
-  //   industry: '',
-  //   company_size: '',
-  //   source: '',
-  // });
-
-  // const handleInputs = (e) => {
-  //   setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
-  // };
-
-  // const insertCompany = () => {
-  //   if (
-  //     companyInsertData.company_name !== '' &&
-  //     companyInsertData.address_street !== '' &&
-  //     companyInsertData.address_po_code !== '' &&
-  //     companyInsertData.address_country !== ''
-  //   ) {
-  //     api
-  //       .post('/company/insertCompany', companyInsertData)
-  //       .then(() => {
-  //         message('Company inserted successfully.', 'success');
-  //         //getCompany();
-  //         window.location.reload();
-  //       })
-  //       .catch(() => {
-  //         message('Network connection error.', 'error');
-  //       });
-  //   } else {
-  //     message('Please fill all required fields.', 'warning');
-  //   }
-  // };
+ 
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
     opportunity_id: '',
     quote_date: new Date().toISOString().split('T')[0],
+    enquiry_code:'',
     
   });
-  const [enquiryCodeError, setEnquiryCodeError] = useState('');
+  // const [enquiryCodeError, setEnquiryCodeError] = useState('');
   const handleInputsTenderForms = (e) => {
     setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
-    
-    setEnquiryCodeError('');
+    // setEnquiryCodeError('');
   };
 
-  //Api for getting all countries
-  // const getAllCountries = () => {
-  //   api
-  //     .get('/clients/getCountry')
-  //     .then((res) => {
-  //       setallCountries(res.data.data);
-  //     })
-  //     .catch(() => {
-  //       message('Country Data Not Found', 'info');
-  //     });
-  // };
-  //const[tenderDetails,setTenderDetails]=useState();
   const getTendersById = () => {
     api
       .post('/tradingquote/getTradingquoteById', { quote_id: id })
@@ -114,9 +52,21 @@ const TradingQuotationDetails = () => {
   //get staff details
   const { loggedInuser } = useContext(AppContext);
 
+  const updateEnquiryStatus = (opportunityId) => {
+    api
+      .post(`/tender/updateEnquiryStatus/${opportunityId}`, { status: 'Quotation Sent' })
+      .then(() => {
+        console.log('Enquiry status updated successfully');
+      })
+      .catch((error) => {
+        console.error('Error updating enquiry status:', error);
+      });
+  };
+
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.opportunity_id !== '' && tenderForms.quote_date !== '') {
+    setFormSubmitted(true);
+    if ( tenderForms.opportunity_id.trim() !== '' && tenderForms.quote_date.trim() !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -124,11 +74,11 @@ const TradingQuotationDetails = () => {
         .post('/tradingquote/inserttradingquote', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
+          updateEnquiryStatus(tenderForms.opportunity_id); // Call updateEnquiryStatus here
+        message('Tender inserted successfully.', 'success');
           getTendersById();
           message('Tender inserted successfully.', 'success');
-          //   setTimeout(() => {
           navigate(`/TradingQuotationEdit/${insertedDataId}?tab=1`);
-          //   }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
@@ -137,14 +87,9 @@ const TradingQuotationDetails = () => {
       message('Please fill all required fields', 'warning');
     }
   };
-console.log("1223434",enquiryCodeError)
+// console.log("1223434",enquiryCodeError)
   //QUOTE GENERATED CODE
   const generateCode = () => {
-    if (!tenderForms.opportunity_id) {
-      setEnquiryCodeError('Please enter Enquiry Code.');
-      return;
-    }
-
     api
       .post('/tender/getCodeValue', { type: 'quote' })
       .then((res) => {
@@ -155,13 +100,14 @@ console.log("1223434",enquiryCodeError)
       });
   };
 
+  
 
   useEffect(() => {
-    //getCompany();
     getEnquiryCode();
-    //getAllCountries();
   }, [id]);
-
+  const inputClass = `form-control ${
+    formSubmitted && (!tenderForms.opportunity_id || tenderForms.opportunity_id === 'Please Select') ? 'highlight' : ''
+  }`;
   return (
     <div>
       <BreadCrumbs />
@@ -178,7 +124,7 @@ console.log("1223434",enquiryCodeError)
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.opportunity_id}
                     name="opportunity_id"
-                    invalid={!!enquiryCodeError}
+                    className={inputClass}
                   >
                     <option>Please Select</option>
                     {enquirycode &&
@@ -191,7 +137,9 @@ console.log("1223434",enquiryCodeError)
                         );
                       })}
                   </Input>
-                  <FormFeedback>{enquiryCodeError}</FormFeedback>
+                  {(formSubmitted && !tenderForms.opportunity_id) && (
+      <div className="error-message">Please Select the Quote Code</div>
+    )}
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -206,49 +154,18 @@ console.log("1223434",enquiryCodeError)
                       name="quote_date"
                       value={tenderForms && tenderForms.quote_date}
                       onChange={handleInputsTenderForms}
-                    />
+                      className={`form-control ${
+                        formSubmitted && tenderForms.quote_date.trim() === '' ? 'highlight' : ''
+                      }`}
+                      />
+                      {formSubmitted && tenderForms.quote_date.trim() === '' && (
+                        <div className="error-message">Please Select the Date</div>
+                      )}
+                    
                   </Col>
                 </Row>
               </FormGroup>
-              {/* <FormGroup>
-                <Row> */}
-                  {/* <Col md="9">
-                    <Label>
-                      Company Name <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
-                      type="select"
-                      name="company_id"
-                      //value={tenderForms && tenderForms.company_id}
-                      onChange={handleInputsTenderForms}
-                    >
-                      <option>Please Select</option>
-                      {company &&
-                        company.map((ele) => {
-                          return (
-                            <option key={ele.company_id} value={ele.company_id}>
-                              {ele.company_name}
-                            </option>
-                          );
-                        })}
-                    </Input>
-                  </Col> */}
-                  {/* <Col md="3" className="addNew">
-                    <Label>Add New Name</Label>
-                    <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
-                      Add New
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-              <TenderCompanyDetails
-                allCountries={allCountries}
-                insertCompany={insertCompany}
-                handleInputs={handleInputs}
-                toggle={toggle}
-                modal={modal}
-                setModal={setModal}
-              ></TenderCompanyDetails> */}
+             
               <Row>
                 <div className="pt-3 mt-3 d-flex align-items-center gap-2">
                   <Button

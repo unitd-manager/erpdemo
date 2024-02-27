@@ -23,6 +23,8 @@ export default function TenderCompanyDetails({
   insertCompany,
   modal,
   toggle,
+  companyInsertData,
+  addFormSubmitted
 }) {
   TenderCompanyDetails.propTypes = {
     handleInputs: PropTypes.any,
@@ -30,6 +32,8 @@ export default function TenderCompanyDetails({
     allCountries: PropTypes.any,
     modal: PropTypes.any,
     toggle: PropTypes.any,
+    companyInsertData: PropTypes.any,
+    addFormSubmitted: PropTypes.any,
   };
 
   const [modal1, setModal1] = useState(false);
@@ -53,7 +57,13 @@ export default function TenderCompanyDetails({
                           <Label>
                             Company Name <span className="required"> *</span>
                           </Label>
-                          <Input type="text" name="company_name" onChange={handleInputs} />
+                          <Input type="text" name="company_name" onChange={handleInputs}
+                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.company_name.trim() === '' ? 'highlight' : ''
+                        }`} 
+                        />
+{addFormSubmitted && companyInsertData && companyInsertData.company_name.trim() === '' && (
+                      <div className="error-message">Please enter the company name</div>
+                    )}
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -65,9 +75,15 @@ export default function TenderCompanyDetails({
                       <Col md="4">
                         <FormGroup>
                           <Label>
-                            Main Phone
+                            Main Phone <span className="required"> *</span>
                           </Label>
-                          <Input type="text" name="phone" onChange={handleInputs} />
+                          <Input type="text" name="phone" onChange={handleInputs} 
+                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.phone.trim() === '' ? 'highlight' : ''
+                        }`}
+                          />
+                          {addFormSubmitted && companyInsertData && companyInsertData.phone.trim() === '' && (
+                      <div className="error-message">Please enter the phone</div>
+                    )}
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -94,7 +110,12 @@ export default function TenderCompanyDetails({
                           name="address_street"
                           placeholder=" "
                           onChange={handleInputs}
+                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_street.trim() === '' ? 'highlight' : ''
+                        }`}
                         />
+                         {addFormSubmitted && companyInsertData && companyInsertData.address_street.trim() === '' && (
+                      <div className="error-message">Please enter the Address</div>
+                    )}
                       </FormGroup>
                     </Col>
                     <Col md="4">
@@ -116,14 +137,22 @@ export default function TenderCompanyDetails({
                           name="address_po_code"
                           placeholder=""
                           onChange={handleInputs}
+                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_po_code.trim() === '' ? 'highlight' : ''
+                        }`}
                         />
+                         {addFormSubmitted && companyInsertData && companyInsertData.address_po_code.trim() === '' && (
+                      <div className="error-message">Please enter the Post Code</div>
+                    )}
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
                         {' '}
                         <Label>Country<span className="required"> *</span></Label>
-                        <Input type="select" name="address_country" onChange={handleInputs}>
+                        <Input type="select" name="address_country" onChange={handleInputs}
+                        className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_country.trim() === '' ? 'highlight' : ''
+                      }`}
+                        >
                           <option defaultValue="selected" value="">
                             Please Select
                           </option>
@@ -134,6 +163,9 @@ export default function TenderCompanyDetails({
                               </option>
                             ))}
                         </Input>
+                        {addFormSubmitted && companyInsertData && companyInsertData.address_country.trim() === '' && (
+                      <div className="error-message">Please Select Country</div>
+                    )}
                       </FormGroup>
                     </Col>
                     <Col md="4">

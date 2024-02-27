@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import {
   Row,
   Col,
@@ -9,7 +10,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Label,
+  Label
 } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -30,6 +31,18 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
     purchase_quote_items_id : id
     }
 ]);
+const [unitdetails, setUnitDetails] = useState();
+  // Fetch data from API
+  const getUnit = () => {
+    api.get('/product/getUnitFromValueList', unitdetails).then((res) => {
+      const items = res.data.data;
+      const finaldat = [];
+      items.forEach((item) => {
+        finaldat.push({ value: item.value, label: item.value });
+      });
+      setUnitDetails(finaldat);
+    });
+  };
 
   // Function to update state
   function updateState(index, property, e) {
@@ -44,11 +57,19 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
     copyDeliverOrderProducts[index] = updatedObject;
     setAddLineItem(copyDeliverOrderProducts);
   }
+  const onchangeItem = (selectedValue, index) => {
+    const updatedItems = [...addLineItem];
 
+    updatedItems[index] = {
+      ...updatedItems[index],
+      unit: selectedValue.value,
+      value: selectedValue.value,
+    };
+
+  }
   const getOrdersByOrderId = () => {
     api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
       setAddLineItem(res.data.data);
-    
     });
   };
   
@@ -60,7 +81,8 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
         .post('quote/editTabQuoteLineItems',item )
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
-          setAddLineItem()
+          setAddLineItem();
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating item:', error);
@@ -72,6 +94,7 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
  
 
   useEffect(() => {
+    getUnit();
     getOrdersByOrderId();
   }, []);
 
@@ -131,13 +154,13 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
                           />
                         </td>
                         <td data-label="unit">
-                          <Input
-                            type="text"
-                            name="unit"
-                            defaultValue={el.unit}
-                            onChange={(e) => updateState(index, 'unit', e)}
-                          />
-                        </td>
+                        <Select
+                                name="unit"
+                                value={{ value: el.unit, label: el.unit }}
+                                onChange={(selectedOption) => onchangeItem(selectedOption, index)}
+                                options={unitdetails}/>
+                              
+                            </td>
                         <td data-label="quantity">
                           <Input
                             type="text"

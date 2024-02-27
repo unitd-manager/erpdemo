@@ -1,45 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import api from '../../constants/api';
-import message from '../Message';
+// import api from '../../constants/api';
+// import message from '../Message';
 
 export default function BookingDetailComp({ bookingDetails, handleInputs }) {
   BookingDetailComp.propTypes = {
     bookingDetails: PropTypes.object,
     handleInputs: PropTypes.func,
+    // goodsdeliverydropdown: PropTypes.any,
+    // orderdropdown: PropTypes.any,
    
   };
-  const [orderdropdown, setOrderDropdown] = useState();
-  const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
-  const getSalesOrderDropdown = () => {
-    api
-      .get('/invoice/getSalesOrderDropdown')
-      .then((res) => {
-        setOrderDropdown(res.data.data);
-      })
-      .catch(() => {
-        message('Sales Order Data not found', 'info');
-      });
-  }
+  // const [orderdropdown, setOrderDropdown] = useState();
+  // const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
+  // const getSalesOrderDropdown = () => {
+  //   api
+  //     .get('/invoice/getSalesOrderDropdown')
+  //     .then((res) => {
+  //       setOrderDropdown(res.data.data);
+  //     })
+  //     // .catch(() => {
+  //     //   message('Sales Order Data not found', 'info');
+  //     // });
+  // }
   
-  //Api call for getting customer dropdown
-  const getGoodsDeliveryDropdown = () => {
-    api
-      .get('/invoice/getGoodsDeliveryDropdown')
-      .then((res) => {
-        setGoodsDeliveryDropdown(res.data.data);
-      })
-      .catch(() => {
-        message('Goods Delivery Data not found', 'info');
-      });
-  }
+  // //Api call for getting customer dropdown
+  // const getGoodsDeliveryDropdown = () => {
+  //   api
+  //     .get('/invoice/getGoodsDeliveryDropdown')
+  //     .then((res) => {
+  //       setGoodsDeliveryDropdown(res.data.data);
+  //     })
+  //     // .catch(() => {
+  //     //   message('Goods Delivery Data not found', 'info');
+  //     // });
+  // }
 
-  useEffect(() => {
-    getSalesOrderDropdown();
-    getGoodsDeliveryDropdown();
-     },[] );
+  // useEffect(() => {
+  //   getSalesOrderDropdown();
+  //   getGoodsDeliveryDropdown();
+  //    },[] );
 
   return (
     <>
@@ -84,12 +86,12 @@ bookingDetails && (
     <FormGroup>
       <Label>Sales Order</Label>
       <Input 
-            type="select" 
-            name="invoice_source_id" 
-            onChange={handleInputs}
-              value={bookingDetails && bookingDetails.invoice_source_id}
+            type="text" 
+            name="order_code" 
+              value={bookingDetails && bookingDetails.order_code}
+              readOnly
               >
-              <option>Select Order</option>
+              {/* <option>Select Order</option>
               {orderdropdown &&
                 orderdropdown.map((e) => {
                   return (
@@ -97,7 +99,7 @@ bookingDetails && (
                       {e.order_code}
                     </option>
                   );
-                })}
+                })} */}
             </Input>
             </FormGroup>
             </Col>
@@ -110,12 +112,12 @@ bookingDetails && (
       <FormGroup>
         <Label>Goods Delivery</Label>
         <Input 
-          type="select" 
-          name="invoice_source_id" 
-          onChange={handleInputs}
-          value={bookingDetails && bookingDetails.invoice_source_id}
+          type="text" 
+          name="goods_delivery_code" 
+          value={bookingDetails && bookingDetails.goods_delivery_code}
+          readOnly
         >
-          <option>Select Goods Delivery</option>
+          {/* <option>Select Goods Delivery</option>
           {goodsdeliverydropdown &&
             goodsdeliverydropdown.map((e) => {
               return (
@@ -123,14 +125,47 @@ bookingDetails && (
                   {e.goods_delivery_code}
                 </option>
               );
-            })}
+            })} */}
         </Input>
       </FormGroup>
     </Col>
   </>
 )}
     
-                
+    <Col md="3">
+                <FormGroup>
+                  <Label>Company Name</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={bookingDetails && bookingDetails.company_name}
+                    name="company_name"
+                    readOnly
+                  >
+                   
+                  </Input>
+                </FormGroup>
+              </Col>     
+              <Col md="3">
+                <FormGroup>
+                  <Label>Invoice Date</Label>
+
+                  <Input
+                    type="date"
+                    // value={bookingDetails && bookingDetails.invoice_date}
+                    value={
+                      bookingDetails &&
+                      moment(bookingDetails.invoice_date).format('YYYY-MM-DD')
+                    }
+                    onChange={handleInputs}
+                    name="invoice_date"
+                   
+                  >
+                  
+                  </Input>
+                </FormGroup>
+              </Col>
+
               
               <Col md="3">
                 <FormGroup>
@@ -146,39 +181,26 @@ bookingDetails && (
                   </Input>
                 </FormGroup>
               </Col>
-              
               <Col md="3">
                 <FormGroup>
-                  <Label>Invoice Date</Label>
+                  <Label>Invoice Due Date</Label>
 
                   <Input
                     type="date"
                     value={
                       bookingDetails &&
-                      moment(bookingDetails.invoice_date).format('YYYY-MM-DD')
+                      moment(bookingDetails.invoice_due_date).format('YYYY-MM-DD')
                     }
                     onChange={handleInputs}
-                    name="invoice_date"
+                    name="invoice_due_date"
                    
                   >
                   
                   </Input>
                 </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Invoice Terms</Label>
+              </Col> 
+              
 
-                  <Input
-                    type="text"
-                    value={bookingDetails && bookingDetails.invoice_terms}
-                    onChange={handleInputs}
-                    name="invoice_terms"
-                  >
-                 
-                  </Input>
-                </FormGroup>
-              </Col>
               <Col md="3">
                 <FormGroup>
                   <Label>Invoice Amount</Label>
@@ -187,13 +209,29 @@ bookingDetails && (
                     type="text"
                     value={bookingDetails && bookingDetails.invoice_amount}
                     onChange={handleInputs}
-                    name="invoice_amount"
+                    name="InvoiceAmount"
                     readOnly
                   >
                  
                   </Input>
                 </FormGroup>
               </Col>
+              
+              <Col md="6">
+                <FormGroup>
+                  <Label>Invoice Terms</Label>
+
+                  <Input
+                    type="textarea"
+                    value={bookingDetails && bookingDetails.invoice_terms}
+                    onChange={handleInputs}
+                    name="invoice_terms"
+                  >
+                 
+                  </Input>
+                </FormGroup>
+              </Col>
+              
             </Row>
             <Row></Row>
         </FormGroup>

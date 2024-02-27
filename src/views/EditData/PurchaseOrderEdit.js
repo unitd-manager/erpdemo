@@ -19,6 +19,8 @@ import PurchaseOrderDetailsPart from '../../components/PurchaseOrder/PurchaseOrd
 import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
 import Tab from '../../components/project/Tab';
 import ApiButton from '../../components/ApiButton';
+import PdfPurchaseOrder from '../../components/PDF/PdfPurchaseOrder';
+import ComponentCardV2 from '../../components/ComponentCardV2';
 
 const PurchaseOrderEdit = () => {
   //All state variable
@@ -161,6 +163,7 @@ const PurchaseOrderEdit = () => {
       .post('/purchaseorder/editTabPurchaseOrderLineItem', product)
       .then(() => {
         message('product edited successfully.', 'success');
+        window.location.reload();
       })
       .catch(() => {
         message('unable to edit product.', 'danger');
@@ -256,6 +259,9 @@ const PurchaseOrderEdit = () => {
               backToList={backToList}
               module="PurchaseOrder"
             ></ApiButton>
+            <ComponentCardV2>
+              <PdfPurchaseOrder></PdfPurchaseOrder>
+            </ComponentCardV2>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
         supplier={supplier}
@@ -268,6 +274,7 @@ const PurchaseOrderEdit = () => {
               <Button
                 className="shadow-none"
                 color="primary"
+                style={{marginBottom:'10px'}}
                 onClick={() => {
                 }}
               >

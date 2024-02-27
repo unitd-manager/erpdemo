@@ -77,13 +77,16 @@ const ClientsEdit = () => {
 
   //Logic for edit data in db
   const editClientsData = () => {
-    if (clientsDetails.company_name !== '') {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(clientsDetails.email)) {
+      message('Invalid email address', 'warning');
+    } else if (clientsDetails.company_name !== '') {
       clientsDetails.modification_date = creationdatetime;
       clientsDetails.modified_by = loggedInuser.first_name;
+      
       api
         .post('/clients/editClients', clientsDetails)
         .then(() => {
-          message('Record editted successfully', 'success');
+          message('Record edited successfully', 'success');
           editClientsById();
         })
         .catch(() => {
@@ -92,7 +95,7 @@ const ClientsEdit = () => {
     } else {
       message('Please fill all required fields', 'warning');
     }
-  };
+};
 
   // get Contact Linked by id
   const getContactLinked = () => {
@@ -154,7 +157,10 @@ const ClientsEdit = () => {
   const AddNewContact = () => {
     const newContactWithCompanyId = newContactData;
     newContactWithCompanyId.company_id = id;
-    if (newContactWithCompanyId.salutation !== '' && newContactWithCompanyId.first_name !== '') {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
+      message('Invalid email address', 'warning');
+    }
+    else if (newContactWithCompanyId.salutation !== '' && newContactWithCompanyId.first_name !== '' && newContactWithCompanyId.email !== '') {
       api
         .post('/clients/insertContact', newContactWithCompanyId)
         .then(() => {

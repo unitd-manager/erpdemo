@@ -126,7 +126,7 @@ export default function TenderQuotation({
                 setquotationsModal(true);
               }}
             >
-              View Quote Log
+              View Quote
             </Button>
           </Col>
         )}

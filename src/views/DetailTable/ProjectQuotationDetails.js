@@ -33,7 +33,7 @@ const TradingQuotationDetails = () => {
       setEnquiryCode(res.data.data);
     });
   };
-
+ 
   //Logic for adding company in db
   const [companyInsertData, setCompanyInsertData] = useState({
     company_name: '',

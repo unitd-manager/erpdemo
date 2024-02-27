@@ -23,7 +23,9 @@ import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoic
 import AppContext from '../../context/AppContext';
 
 const InvoiceEdit = () => {
-  const [bookingDetails, setBookingDetails] = useState({});
+  const [bookingDetails, setBookingDetails] = useState({
+    invoice_date: new Date().toISOString().split('T')[0],
+  });
   // const [editInvoiceItemData, setEditInvoiceItemData] = useState(false);
   // const [itemDetails, setItemDetails] = useState([]);
   const [partialinvoiceeditmodal, setPartialInvoiceEditModal] = useState(false);
@@ -44,6 +46,9 @@ const InvoiceEdit = () => {
   const { loggedInuser } = useContext(AppContext);
   console.log('order ID:', orderId);
   const navigate = useNavigate();
+  const [orderdropdown, setOrderDropdown] = useState();
+    const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
+
   const handleInputs = (e) => {
     setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
   };
@@ -70,6 +75,40 @@ const [hideButtonVisible, setHideButtonVisible] = useState(
 const [displayButtonVisible, setDisplayButtonVisible] = useState(
   initialVisibilityStates[insertedDataId] !== false
 );
+console.log('companyid', bookingDetails.company_id)
+// Api call for getting sales order dropdown
+const getSalesOrderDropdown = () => {
+  api
+    .post('/invoice/getSalesOrderDropdown', {company_id: bookingDetails.company_id} )
+    .then((res) => {
+      setOrderDropdown(res.data.data);
+    })
+    .catch(() => {
+      message('Sales Order Data not found', 'info');
+    });
+}
+
+//Api call for getting customer dropdown
+const getGoodsDeliveryDropdown = () => {
+  api
+    .post('/invoice/getGoodsDeliveryDropdown', {company_id: bookingDetails.company_id} )
+    .then((res) => {
+      setGoodsDeliveryDropdown(res.data.data);
+    })
+    .catch(() => {
+      message('Goods Delivery Data not found', 'info');
+    });
+}
+// const handleInputs = (e) => {
+//   const { name, value } = e.target;
+//   setBookingDetails({ ...bookingDetails, [name]: value });
+
+//   // Fetch sales order and goods delivery dropdown data whenever company ID changes
+//   if (name === 'company_id') {
+//     getSalesOrderDropdown(value);
+//     getGoodsDeliveryDropdown(value);
+//   }
+// };
 
 const handleHideButtonClick = () => {
   // Update visibility state for the current ID
@@ -617,6 +656,11 @@ const toggle = (tab) => {
   };
 
   useEffect(() => {
+    getSalesOrderDropdown();
+    getGoodsDeliveryDropdown();
+   }, [bookingDetails.company_id]);
+
+  useEffect(() => {
     editBookingById();
     // editItemById();
     getOrderItemById();
@@ -674,6 +718,8 @@ const toggle = (tab) => {
         <InvoiceDetailComp
           bookingDetails={bookingDetails}
           handleInputs={handleInputs}
+          orderdropdown={orderdropdown}
+          goodsdeliverydropdown={goodsdeliverydropdown}
         />
       </ComponentCard>
       

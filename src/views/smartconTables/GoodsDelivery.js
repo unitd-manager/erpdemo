@@ -61,13 +61,13 @@ const GoodsDelivery = () => {
       sortable: false,
     },
     {
-      name: 'Delivery No',
+      name: 'Delivery Code',
     },
     {
       name: 'Date',
     },
     {
-      name: 'Order No',
+      name: 'Order Code',
     },
     {
       name: 'Customer',
@@ -82,7 +82,7 @@ const GoodsDelivery = () => {
       name: 'Reference',
     },
     {
-      name: 'PO No',
+      name: 'PO Code',
     },
     {
       name: 'Status',

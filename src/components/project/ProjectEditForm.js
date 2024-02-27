@@ -2,12 +2,13 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }) => {
+const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,formSubmitted }) => {
   ProjectEditForm.propTypes = {
     projectDetail: PropTypes.any,
     setProjectDetail: PropTypes.any,
     contact: PropTypes.any,
     incharge: PropTypes.any,
+    formSubmitted:PropTypes.any,
   };
   // Edit Project
   const handleInputs = (e) => {
@@ -43,6 +44,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }
                     name="category"
                     value={projectDetail && projectDetail.category}
                     onChange={handleInputs}
+                    className={`form-control ${
+                      formSubmitted && projectDetail.category.trim() === '' ? 'highlight' : ''
+                    }`}
                   >
                     <option value="">Please Select</option>
                     <option value="Project">Project</option>
@@ -52,6 +56,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge, }
                     <option value="Tenancy Project">Tenancy Project</option>
                     <option value="Tenancy Work">Tenancy Work</option>
                   </Input>
+                  {formSubmitted && projectDetail.category.trim() === '' && (
+                      <div className="error-message">Please Select Category</div>
+                    )}
                 </FormGroup>
               </Col>
 

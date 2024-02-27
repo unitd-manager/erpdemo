@@ -58,7 +58,7 @@ const ClientDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6" xs="12">
-          <ComponentCard title="Key Details">
+          <ComponentCard title="New Customer">
             <Form>
               <FormGroup>
                 <Row>
@@ -78,7 +78,7 @@ const ClientDetails = () => {
                     ></Input>
 
                     {formSubmitted && clientForms.company_name.trim() === '' && (
-                      <div className="error-message">Please enter the company name</div>
+                      <div className="error-message">Please Enter</div>
                     )}
                     
                   </Col>

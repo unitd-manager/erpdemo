@@ -42,6 +42,7 @@ const [projectManager, seProjectManager] = useState()
   });
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
@@ -79,16 +80,7 @@ const [projectManager, seProjectManager] = useState()
   const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
-  const saveChanges = () => {
-    if (
-      proposalDetails &&
-      proposalDetails.title !== '' &&
-      proposalDetails.proposal_date !== '' &&
-      proposalDetails.status !== ''
-    ) {
-      navigate('/Proposal');
-    }
-  };
+ 
 
   const backToList = () => {
     navigate('/Proposal');
@@ -191,6 +183,7 @@ const [projectManager, seProjectManager] = useState()
   //Logic for edit data in db
 
   const editProposalData = () => {
+    setFormSubmitted(true);
     if (
       proposalDetails.title &&
       proposalDetails.title !== '' &&
@@ -311,7 +304,6 @@ const [projectManager, seProjectManager] = useState()
         editProposalData={editProposalData}
         navigate={navigate}
         applyChanges={applyChanges}
-        saveChanges={saveChanges}
         backToList={backToList}
       ></ProposalButtons>
       <ProposalMoreDetails
@@ -334,6 +326,7 @@ const [projectManager, seProjectManager] = useState()
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
         projectManager={projectManager}
+        formSubmitted={formSubmitted}
         
       ></ProposalMoreDetails>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row,Label } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row, Label, Tooltip } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -39,12 +39,24 @@ const ProjectQuotationEdit = () => {
   
   const [editMaterialModelItem, setEditMaterialModelItem] = useState(null);
   const [editMaterialModal, setEditMaterialModal] = useState(false);
+
   //const [previousTenderDetails, setPreviousTenderDetails] = useState(null);
   //const [quoteLine, setQuoteLine] = useState();
 
   //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
   //   const [addCompanyModal, setAddCompanyModal] = useState(false);
+
+ // const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  // const toggleTooltip = () => setTooltipOpen(!tooltipOpen);
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
+
+  // Function to handle tooltip toggle
+  const toggleTooltip = (index) => {
+    setHoveredRowIndex(index === hoveredRowIndex ? null : index);
+  };
+
 
   const { loggedInuser } = useContext(AppContext);
 
@@ -90,6 +102,8 @@ const ProjectQuotationEdit = () => {
     });
   };
 
+
+
   // Get Tenders By Id
 
   const editTenderById = () => {
@@ -103,52 +117,14 @@ const ProjectQuotationEdit = () => {
  getContact(companyId);
     });
   };
-  // const hideEditIcon = () => {
-  //   api
-  //     .post('/invoice/hideEditIconById', { quote_id: id })
-  //     .then((res) => {
-  //       const isQuotePresent = res.data.data.length > 0;
-        
-  //       setEditLineModal(!isQuotePresent);
-  //     })
-  //     .catch(() => {
-  //       message('Hidden Data Not Found', 'info');
-  //     });
-  // };
-  
-  // Other functions and component code
+ 
   
   
   const handleInputs = (e) => {
     setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
   };
 
-  
 
-  
-//   //Logic for edit data in db
-//   const insertquote = () => {
-//     const quoteData = {
-//     quote_date: previousTenderDetails.quote_date,
-//     quote_status: previousTenderDetails.quote_status,
-//     quote_code: previousTenderDetails.quote_code,
-//     quote_id: id,
-//     created_by: loggedInuser.first_name,
-//     creation_date: creationdatetime,
-//   };
- 
-
-//   api.post('/project/insertLog', quoteData).then((res) => {
-//     message('quote inserted successfully.', 'success');
-//     lineItem.forEach((element) => {
-//       element.quote_log_id = res.data.data.insertId;
-      
-//       api.post('/project/insertLogLine', element).then(() => {
-//         window.location.reload();
-//       });
-//     });
-//   });
-// };
 
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
@@ -231,8 +207,6 @@ const ProjectQuotationEdit = () => {
     getLineItem();
     getMaterialItem();
     getCompany();
-    //hideEditIcon();
-    // getAllCountries();
   }, [id]);
 
   const columns1 = [
@@ -272,9 +246,10 @@ const ProjectQuotationEdit = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        api.post('/projectquote/deleteEditItem', { project_quote_items_id: deleteID }).then(() => {
+        api.post('/projectquote/deleteProjectQuote', { project_quote_items_id: deleteID }).then(() => {
           Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
           window.location.reload();
+
         });
       }
     });
@@ -369,12 +344,23 @@ const ProjectQuotationEdit = () => {
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
                             <td data-label="Updated By">
-                                {e.modification_date
-                                  ? `${e.modified_by} (Modified on ${e.modification_date})`
-                                  : `${e.created_by} (Created on ${e.creation_date})`}
-                              </td>
-
-                              
+              <Icon.Eye
+                id={`tooltip-${index}`}
+                onMouseOver={() => toggleTooltip(index)} // Pass index to toggle function
+              />
+              <Tooltip
+                placement="top"
+                isOpen={hoveredRowIndex === index} // Check if current row index matches hoveredRowIndex
+                target={`tooltip-${index}`}
+                toggle={() => toggleTooltip(index)}
+              >
+                <span className="tooltiptext">
+                  {e.modification_date
+                    ? `Modified by ${e.modified_by} on ${e.modification_date}`
+                    : `Created by ${e.created_by} on ${e.creation_date}`}
+                </span>
+              </Tooltip>
+            </td>
                             
                             <td data-label="Actions">
                               <span

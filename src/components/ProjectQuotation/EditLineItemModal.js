@@ -60,7 +60,6 @@ const {id}=useParams();
         //window.location.reload()
       })
       .catch(() => {
-        message('Unable to edit quote. please fill all fields', 'error');
       });
   };
   const [unitdetails, setUnitDetails] = useState();

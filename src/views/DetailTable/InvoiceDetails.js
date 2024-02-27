@@ -24,10 +24,7 @@ const BookingDetails = () => {
     //navigation and params
     const navigate = useNavigate();
     
-    //supplierData in supplier 
-    const handleInputs = (e) => {
-      setInvoiceDetails({ ...invoicedetails, [e.target.name]: e.target.value });
-    };
+   
      //get staff details
      const { loggedInuser } = useContext(AppContext);
     //  const { id } = useParams();
@@ -76,9 +73,9 @@ const BookingDetails = () => {
 }
 
 //Api call for getting sales order dropdown
-const getSalesOrderDropdown = () => {
+const getSalesOrderDropdown = (companyId) => {
   api
-    .get('/invoice/getSalesOrderDropdown')
+    .post('/invoice/getSalesOrderDropdown', {company_id: companyId} )
     .then((res) => {
       setOrderDropdown(res.data.data);
     })
@@ -88,9 +85,9 @@ const getSalesOrderDropdown = () => {
 }
 
 //Api call for getting customer dropdown
-const getGoodsDeliveryDropdown = () => {
+const getGoodsDeliveryDropdown = (companyId) => {
   api
-    .get('/invoice/getGoodsDeliveryDropdown')
+    .post('/invoice/getGoodsDeliveryDropdown', {company_id:companyId} )
     .then((res) => {
       setGoodsDeliveryDropdown(res.data.data);
     })
@@ -98,6 +95,16 @@ const getGoodsDeliveryDropdown = () => {
       message('Goods Delivery Data not found', 'info');
     });
 }
+const handleInputs = (e) => {
+  const { name, value } = e.target;
+  setInvoiceDetails({ ...invoicedetails, [name]: value });
+
+  // Fetch sales order and goods delivery dropdown data whenever company ID changes
+  if (name === 'company_id') {
+    getSalesOrderDropdown(value);
+    getGoodsDeliveryDropdown(value);
+  }
+};
         const generateCode = () => {
               api
                 .post('/commonApi/getCodeValue', { type: 'invoice' })
@@ -155,7 +162,7 @@ const getGoodsDeliveryDropdown = () => {
                   defaultChecked={invoicedetails && invoicedetails.source_type === 'Sales Order' && true}
                   onChange={handleInputs}
                 />
-                <Label>Sales Order</Label>
+                <Label style={{ marginRight: '50px' }}>Sales Order</Label>
                 <Input
                   name="source_type"
                   value="Goods_Delivery"
@@ -163,7 +170,7 @@ const getGoodsDeliveryDropdown = () => {
                   defaultChecked={invoicedetails && invoicedetails.source_type === 'Goods Delivery' && true}
                   onChange={handleInputs}
                 />
-                <Label>Goods Delivery</Label>
+                <Label style={{ marginRight: '10px' }}>Goods Delivery</Label>
               </FormGroup>
               </Col>
               {

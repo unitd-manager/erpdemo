@@ -34,7 +34,7 @@ export default function RequestPurchase({
 
   return (
     <>
- <Button onClick={handleEditButtonClick}>Edit Table</Button>
+ <Button onClick={handleEditButtonClick} color="primary" style={{marginBottom:'10px'}}>Edit Table</Button>
  {orderDetails && (
               <Row>
                 <div className="container">
