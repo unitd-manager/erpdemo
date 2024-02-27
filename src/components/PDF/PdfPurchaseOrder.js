@@ -1,4 +1,4 @@
-import React ,{useState}from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -8,19 +8,20 @@ import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
+
 const PdfPurchaseOrder = () => {
   const { id } = useParams();
   const [hfdata, setHeaderFooterData] = React.useState();
   const [products, setProducts] = React.useState([]);
   const [purchaseDetails, setPurchaseDetails] = React.useState();
-  const [gTotal, setGtotal] = React.useState(0);
-  const [gstTotal, setGsttotal] = React.useState(0);
-  const [Total, setTotal] = React.useState(0);
-  const [projectDetail, setProjectDetail] = useState();
+  const [gTotal, setGtotal] = React. useState(0);
+  const [gstTotal, setGsttotal] = React. useState(0);
+  const [Total, setTotal] = React. useState(0);
 
   React.useEffect(() => {
     api.get('/setting/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
+     
     });
   }, []);
 
@@ -28,47 +29,43 @@ const PdfPurchaseOrder = () => {
     const filteredResult = hfdata.find((e) => e.key_text === key);
     return filteredResult.value;
   };
-  const getProjectById = () => {
-    api
-      .post('/project/getProjectById', { project_id: id })
-      .then((res) => {
-        setProjectDetail(res.data.data[0]);
-      })
-      .catch(() => {});
-  };
   // Gettind data from Job By Id
   const getPoProduct = () => {
     api
       .post('/purchaseorder/getPurchaseOrderById', { purchase_order_id: id })
       .then((res) => {
         setPurchaseDetails(res.data.data[0]);
+        
       })
-      .catch(() => {});
+      .catch(() => {
+         
+      });
   };
   const getPurchaseOrderId = () => {
     api
       .post('/purchaseorder/getPurchaseOrderByPdf', { purchase_order_id: id })
       .then((res) => {
         setProducts(res.data.data);
-        //grand total
-        let grandTotal = 0;
-        let grand = 0;
-        let gst = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal += elem.total_price;
+          //grand total
+          let grandTotal = 0;
+          let grand = 0;
+         let gst = 0;
+         res.data.data.forEach((elem) => {
+           grandTotal += elem.total_price;
           //  grand += elem.actual_value;
-        });
-        setGtotal(grandTotal);
-        gst = grandTotal * 0.07;
-        setGsttotal(gst);
-        grand = grandTotal + gst;
-        setTotal(grand);
+         });
+         setGtotal(grandTotal);
+         gst=grandTotal*0.07
+         setGsttotal(gst);
+         grand=grandTotal+gst
+         setTotal(grand);
       })
-      .catch(() => {});
+      .catch(() => {
+         
+      });
   };
   React.useEffect(() => {
     getPurchaseOrderId();
-    getProjectById();
     getPoProduct();
   }, []);
 
@@ -80,9 +77,8 @@ const PdfPurchaseOrder = () => {
           style: 'tableHead',
         },
         {
-          text: 'Product Name',
+          text: 'Description',
           style: 'tableHead',
-          alignment:'center'
         },
         {
           text: 'Uom',
@@ -91,7 +87,6 @@ const PdfPurchaseOrder = () => {
         {
           text: 'Qty',
           style: 'tableHead',
-          alignment:'right'
         },
         {
           text: 'Unit Price S$ ',
@@ -100,11 +95,11 @@ const PdfPurchaseOrder = () => {
         {
           text: 'Amount S$',
           style: 'tableHead',
-          alignment:'right'
         },
       ],
     ];
     products.forEach((element, index) => {
+      
       productItems.push([
         {
           text: `${index + 1}`,
@@ -112,33 +107,30 @@ const PdfPurchaseOrder = () => {
           border: [false, false, false, true],
         },
         {
-          text: `${element.item_title ? element.item_title : ''}`,
+          text: `${element.item_title? element.item_title : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
-          alignment:'center'
         },
         {
-          text: `${element.unit ? element.unit : ''}`,
+          text: `${element.unit? element.unit : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
           text: `${element.po_QTY ? element.po_QTY : ''}`,
           border: [false, false, false, true],
-          style: 'tableBody',
-          alignment:'right'
+          style: 'tableBody2',
         },
         {
-          text: `${element.cost_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+          text: `${(element.cost_price  .toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,
           border: [false, false, false, true],
           margin: [0, 5, 0, 5],
           style: 'tableBody1',
         },
         {
-          
-          text: `${element.total_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-          fillColor: '#f5f5f5',
           border: [false, false, false, true],
+          text: `${(element.total_price  .toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,
+          fillColor: '#f5f5f5',
           style: 'tableBody1',
         },
       ]);
@@ -192,7 +184,7 @@ const PdfPurchaseOrder = () => {
           },
           table: {
             headerRows: 1,
-            widths: ['101%'],
+            widths: ['101%',],
 
             body: [
               [
@@ -206,7 +198,7 @@ const PdfPurchaseOrder = () => {
           },
         },
         '\n',
-
+       
         {
           columns: [
             {
@@ -215,67 +207,19 @@ const PdfPurchaseOrder = () => {
                 '\n',
 
                 {
-                  text: `${projectDetail.company_name ? projectDetail.company_name : ''}
-                     ${projectDetail.address_street ? projectDetail.address_street : ''}
-                     ${projectDetail.address_town ? projectDetail.address_town : ''}
-                     ${projectDetail.address_country ? projectDetail.address_country : ''}
-                     ${ projectDetail.address_po_code ? projectDetail.address_po_code : ''}`,
-                  style: ['notesText', 'textSize'],
-                  margin: [-250, 20, 0, 0],
-    
-                  bold: 'true',
+                  text: `10 Jalan Besar, #15-02 Sim Lim Tower, \n  Singapore - 208787, \n Email:arif@usoftsolutions.com`,
+                  style: ['textSize'],
                 },
               ],
             },
-            {
+            { 
               stack: [
-                {
-                  text: ` Po Number :${purchaseDetails.po_code ? purchaseDetails.po_code : ''} `,
-                  style: ['textSize'],
-                  margin: [120, 0, 0, 0],
-                },
-                {
-                  text: ` Po Date : ${
-                    purchaseDetails.purchase_order_date
-                      ? moment(purchaseDetails.purchase_order_date).format('DD-MM-YYYY')
-                      : ''
-                  } `,
-                  style: ['textSize'],
-                  margin: [120, 0, 0, 0],
-                },
-                {
-                  text: ` Your Ref :${
-                    purchaseDetails.supplier_reference_no
-                      ? purchaseDetails.supplier_reference_no
-                      : ''
-                  } `,
-                  style: ['textSize'],
-                  margin: [120, 0, 0, 0],
-                },
-                {
-                  text: ` Our Ref : ${
-                    purchaseDetails.our_reference_no ? purchaseDetails.our_reference_no : ''
-                  }`,
-                  style: ['textSize'],
-                  margin: [120, 0, 0, 0],
-                },
-                {
-                  text: ` Ship To :${
-                    purchaseDetails.shipping_address_flat
-                      ? purchaseDetails.shipping_address_flat
-                      : ''
-                  }\n${
-                    purchaseDetails.shipping_address_street
-                      ? purchaseDetails.shipping_address_street
-                      : ''
-                  }\n ${
-                    purchaseDetails.shipping_address_country
-                      ? purchaseDetails.shipping_address_country
-                      : ''
-                  }`,
-                  style: ['textSize'],
-                  margin: [120, 0, 0, 0],
-                },
+                {text:` Po Number :${purchaseDetails.po_code?purchaseDetails.po_code:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+                {text:` Date : ${(purchaseDetails.purchase_order_date)? moment(purchaseDetails.purchase_order_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+                {text:` Yr Ref No :${purchaseDetails.supplier_reference_no?purchaseDetails.supplier_reference_no:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+                {text:` Yr Quote Date : ${(purchaseDetails.yr_quote_date)? moment(purchaseDetails.yr_quote_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+                {text:` Delivery Date : ${(purchaseDetails.delivery_date)? moment(purchaseDetails.delivery_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+
               ],
             },
           ],
@@ -324,111 +268,42 @@ const PdfPurchaseOrder = () => {
           },
           table: {
             headerRows: 1,
-            widths: ['50%', '51%'],
+            widths: ['34%','33%', '33%'],
 
             body: [
               [
                 {
-                  text: 'Vendor Name',
-                  alignment: 'center',
+                  text: 'Item',
+                  alignment: 'left',
                   style: 'tableHead',
                 },
-                {
-                  text: 'Company Name',
-                  alignment: 'center',
-                  style: 'tableHead',
-                },
-              ],
-            ],
-          },
-        },
-        '\n',
-        {
-          columns: [
-            {
-              text: ` To : ${purchaseDetails.supplier_name ? purchaseDetails.supplier_name : ''}`,
-              margin: [20, 0, 0, 0],
-              style: ['notesText', 'textSize'],
-            },
-            {
-              text: `${purchaseDetails.company_name ? purchaseDetails.company_name : ''}`,
-              alignment: 'center',
-              style: ['invoiceAdd', 'textSize'],
-            },
-          ],
-        },
-        '\n',
-        {
-          layout: {
-            defaultBorder: false,
-            hLineWidth: () => {
-              return 1;
-            },
-            vLineWidth: () => {
-              return 1;
-            },
-            hLineColor: (i) => {
-              if (i === 1 || i === 0) {
-                return '#bfdde8';
-              }
-              return '#eaeaea';
-            },
-            vLineColor: () => {
-              return '#eaeaea';
-            },
-            hLineStyle: () => {
-              // if (i === 0 || i === node.table.body.length) {
-              return null;
-              //}
-            },
-            // vLineStyle: function () { return {dash: { length: 10, space: 4 }}; },
-            paddingLeft: () => {
-              return 10;
-            },
-            paddingRight: () => {
-              return 10;
-            },
-            paddingTop: () => {
-              return 2;
-            },
-            paddingBottom: () => {
-              return 2;
-            },
-            fillColor: () => {
-              return '#fff';
-            },
-          },
-          table: {
-            headerRows: 1,
-            widths: ['50%', '51%'],
-
-            body: [
-              [
                 {
                   text: 'Payment Terms',
-                  alignment: 'center',
+                  alignment: 'right',
                   style: 'tableHead',
                 },
                 {
-                  text: 'Required By Date',
-                  alignment: 'center',
+                  text: 'Currency',
+                  alignment: 'right',
                   style: 'tableHead',
                 },
               ],
               [
                 {
-                  text: `${purchaseDetails.payment_terms ? purchaseDetails.payment_terms : ''}`,
-                  alignment: 'center',
+                  text: `${purchaseDetails.purchase_item ? purchaseDetails.purchase_item : ''}`,
+                  alignment: 'left',
                   style: 'tableBody',
                   border: [false, false, false, true],
                 },
                 {
-                  text: `${
-                    purchaseDetails.creation_date
-                      ? moment(purchaseDetails.creation_date).format('DD-MM-YYYY')
-                      : ''
-                  }`,
-                  alignment: 'center',
+                  text: `${purchaseDetails.payment_terms ? purchaseDetails.payment_terms : ''}`,
+                  alignment: 'right',
+                  style: 'tableBody',
+                  border: [false, false, false, true],
+                },
+                {
+                  text: `${purchaseDetails.currency ? purchaseDetails.currency : ''}`,
+                  alignment: 'right',
                   border: [false, false, false, true],
                   style: 'tableBody',
                 },
@@ -436,7 +311,7 @@ const PdfPurchaseOrder = () => {
             ],
           },
         },
-'\n',
+
         {
           layout: {
             defaultBorder: false,
@@ -479,7 +354,7 @@ const PdfPurchaseOrder = () => {
           },
           table: {
             headerRows: 1,
-            widths: [20, 155, '*', '*', 60, 83],
+            widths: [20, 155,'*' , '*', 60, 83],
 
             body: productItems,
           },
@@ -487,48 +362,47 @@ const PdfPurchaseOrder = () => {
         '\n\n',
         {
           columns: [
-            {
-              text: `Approved By :`,
+              {
+              text: `General Condition : \n${(purchaseDetails.notes ? purchaseDetails.notes : '')}`,
               alignment: 'left',
-              style: ['invoiceAdd', 'textSize'],
+              bold: true,
+              style: ['invoiceAdd', 'textSize']
             },
-            {
-              stack: [
-                {
-                  text: `SubTotal $ : ${gTotal.toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                  })}`,
-                  style: ['textSize'],
-                  alignment: 'right',
-                  margin: [0, 0,10, 0],
-                },
-
-                '\n',
-                {
-                  text: `VAT:    ${gstTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-                  style: ['textSize'],
-                  alignment: 'right',
-                  margin: [0, 0, 10, 0],
-                },
-                '\n',
-                {
-                  text: `Total $ :  ${Total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-                  style: ['textSize'],
-                  alignment: 'right',
-                  margin: [0, 0, 10, 0],
-                },
-              ],
-            },
+          
+             {   stack:[
+    {text:`SubTotal $ : ${(gTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[130,0,0,0] },
+     '\n',
+   
+     {text:`GST:    ${(gstTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[160,0,0,0]  },
+     '\n',
+      {text:`Total $ :  ${(Total.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[145,0,0,0] },
+     
+      ]},
+      
+            
           ],
+          
         },
         '\n',
-
+    {
+        columns: [
+          {
+            width: '80%',
+            text: `Authorized By`,
+            alignment: 'right',
+            bold: true,
+            margin: [0, 10, 0, 10],
+            style: ['invoiceAdd', 'textSize']
+          },
+        ],
+      },
+      '\n',
         {
           width: '100%',
           alignment: 'center',
           text: 'PURCHASE ORDER CREATED',
           bold: true,
-          margin: [0, 10, 0, 10],
+          margin: [10, 10, 0, 10],
           fontSize: 12,
         },
       ],

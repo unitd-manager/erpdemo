@@ -163,6 +163,7 @@ const PurchaseOrderEdit = () => {
       .post('/purchaseorder/editTabPurchaseOrderLineItem', product)
       .then(() => {
         message('product edited successfully.', 'success');
+        window.location.reload();
       })
       .catch(() => {
         message('unable to edit product.', 'danger');

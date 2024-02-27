@@ -15,6 +15,7 @@ import DeleteButton from '../../components/DeleteButton';
 // import QuotationMoreDetails from '../../components/ProjectModal/QuotationMoreDetails';
 import Tab from '../../components/project/Tab';
 import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
+import PdfRequestForQuote from '../../components/PDF/PdfRequestForQuote';
 
 
 const RequestForQuoteEdit = () => {
@@ -46,8 +47,10 @@ const RequestForQuoteEdit = () => {
       api
         .post('/quote/editPurchseQuote', quoteDetails)
         .then(() => {
-          message('Record editted successfully', 'success');
+          message('Record editted successfully', 'success' );
+          
         })
+
         .catch(() => {
           message('Unable to edit record.', 'error');
         });
@@ -263,6 +266,9 @@ console.error('Error fetching quote items', error);
               </Col>
             </Row>
           </ComponentCardV2>
+          <ComponentCardV2>
+              <PdfRequestForQuote></PdfRequestForQuote>
+            </ComponentCardV2>
         </FormGroup>
       </Form>
       {/* Setting Details */}
