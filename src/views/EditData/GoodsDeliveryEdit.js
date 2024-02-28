@@ -174,7 +174,8 @@ const GoodsDeliveryEdit = () => {
     { name: 'Item Title' },
     { name: 'Description' },
     { name: 'Unit' },
-    { name: 'quantity' },
+    { name: 'Ordered Quantity' },
+    { name: 'Delivered Quantity' },
     { name: 'Unit Price' },
     { name: 'Total Amount ' },
   ];
@@ -254,6 +255,7 @@ const GoodsDeliveryEdit = () => {
                             <td>{element.description}</td>
                             <td>{element.unit}</td>
                             <td>{element.quantity}</td>
+                            <td>{element.delivery_qty}</td>
                             <td>{element.unit_price}</td>
                             <td>{element.amount}</td>
                           </tr>
