@@ -14,7 +14,7 @@ const GoodsDeliveryDetails = () => {
   const [enquirycode, setEnquiryCode] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   //Api call for getting Enquiry dropdown
   const getOrderCode = () => {
@@ -67,6 +67,7 @@ const GoodsDeliveryDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
+      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };
@@ -129,7 +130,14 @@ const GoodsDeliveryDetails = () => {
                       name="goods_delivery_date"
                       value={tenderForms && tenderForms.goods_delivery_date}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
                     />
+                    {formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '') && (
+                      <div className="error-message">Please Select</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>
