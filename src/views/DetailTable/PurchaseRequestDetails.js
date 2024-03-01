@@ -16,6 +16,7 @@ const PurchaseRequestDetails = () => {
   const [purchaserequestdetails, setPurchaseRequestDetails] = useState({
     purchase_request_date: '',
     purchase_delivery_date: '',
+    department:''
   });
   //setting data in ProductDetails
   const handleInputs = (e) => {

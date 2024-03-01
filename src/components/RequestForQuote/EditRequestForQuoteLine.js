@@ -42,7 +42,22 @@ const [unitdetails, setUnitDetails] = useState();
       });
       setUnitDetails(finaldat);
     });
-  };
+  }
+//onchange function
+const onchangeItems = (selectedValue) => {
+  const updatedItems = addLineItem.map((item) => {
+    if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
+      return {
+        ...item,
+        unit: selectedValue.value,  // Update the unit with the selected option's value
+        value: selectedValue.value  // Update the value with the selected option's value
+      };
+    }
+    return item;
+  });
+
+  setAddLineItem(updatedItems);
+};
 
   // Function to update state
   function updateState(index, property, e) {
@@ -57,16 +72,7 @@ const [unitdetails, setUnitDetails] = useState();
     copyDeliverOrderProducts[index] = updatedObject;
     setAddLineItem(copyDeliverOrderProducts);
   }
-  const onchangeItem = (selectedValue, index) => {
-    const updatedItems = [...addLineItem];
-
-    updatedItems[index] = {
-      ...updatedItems[index],
-      unit: selectedValue.value,
-      value: selectedValue.value,
-    };
-
-  }
+  
   const getOrdersByOrderId = () => {
     api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
       setAddLineItem(res.data.data);
@@ -155,9 +161,11 @@ const [unitdetails, setUnitDetails] = useState();
                         </td>
                         <td data-label="unit">
                         <Select
-                                name="unit"
-                                value={{ value: el.unit, label: el.unit }}
-                                onChange={(selectedOption) => onchangeItem(selectedOption, index)}
+                                name="unit" 
+                               // defaultValue={el.unit}
+                                //value={{ value: el.unit, label: el.unit }}
+                                onChange={(selectedOption) => {onchangeItems(selectedOption, index)}
+                    }
                                 options={unitdetails}/>
                               
                             </td>
