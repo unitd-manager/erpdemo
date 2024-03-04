@@ -75,10 +75,12 @@ const PdfPurchaseOrder = () => {
         {
           text: 'Sn',
           style: 'tableHead',
+          
         },
         {
           text: 'Description',
           style: 'tableHead',
+          alignment: 'center',
         },
         {
           text: 'Uom',
@@ -87,14 +89,17 @@ const PdfPurchaseOrder = () => {
         {
           text: 'Qty',
           style: 'tableHead',
+          alignment: 'center',
         },
         {
           text: 'Unit Price S$ ',
           style: 'tableHead',
+          alignment: 'center',
         },
         {
           text: 'Amount S$',
           style: 'tableHead',
+          alignment: 'center',
         },
       ],
     ];
@@ -105,33 +110,39 @@ const PdfPurchaseOrder = () => {
           text: `${index + 1}`,
           style: 'tableBody',
           border: [false, false, false, true],
+          alignment: 'left',
         },
         {
           text: `${element.item_title? element.item_title : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
+          alignment: 'left',
         },
         {
           text: `${element.unit? element.unit : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
+          alignment: 'left',
         },
         {
           text: `${element.po_QTY ? element.po_QTY : ''}`,
           border: [false, false, false, true],
           style: 'tableBody2',
+          alignment: 'left',
         },
         {
           text: `${(element.cost_price  .toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,
           border: [false, false, false, true],
           margin: [0, 5, 0, 5],
           style: 'tableBody1',
+          alignment: 'left',
         },
         {
           border: [false, false, false, true],
           text: `${(element.total_price  .toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,
           fillColor: '#f5f5f5',
           style: 'tableBody1',
+          alignment: 'left',
         },
       ]);
     });
@@ -216,8 +227,8 @@ const PdfPurchaseOrder = () => {
               stack: [
                 {text:` Po Number :${purchaseDetails.po_code?purchaseDetails.po_code:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
                 {text:` Date : ${(purchaseDetails.purchase_order_date)? moment(purchaseDetails.purchase_order_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
-                {text:` Yr Ref No :${purchaseDetails.supplier_reference_no?purchaseDetails.supplier_reference_no:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
-                {text:` Yr Quote Date : ${(purchaseDetails.yr_quote_date)? moment(purchaseDetails.yr_quote_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+              //  {text:` Yr Ref No :${purchaseDetails.supplier_reference_no?purchaseDetails.supplier_reference_no:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+               // {text:` Yr Quote Date : ${(purchaseDetails.yr_quote_date)? moment(purchaseDetails.yr_quote_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
                 {text:` Delivery Date : ${(purchaseDetails.delivery_date)? moment(purchaseDetails.delivery_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
 
               ],
@@ -271,7 +282,7 @@ const PdfPurchaseOrder = () => {
             widths: ['34%','33%', '33%'],
 
             body: [
-              [
+              /*[
                 {
                   text: 'Item',
                   alignment: 'left',
@@ -282,12 +293,12 @@ const PdfPurchaseOrder = () => {
                   alignment: 'right',
                   style: 'tableHead',
                 },
-                {
-                  text: 'Currency',
-                  alignment: 'right',
-                  style: 'tableHead',
+               {
+                text: 'Currency',
+               alignment: 'right',
+                style: 'tableHead',
                 },
-              ],
+              ],*/
               [
                 {
                   text: `${purchaseDetails.purchase_item ? purchaseDetails.purchase_item : ''}`,

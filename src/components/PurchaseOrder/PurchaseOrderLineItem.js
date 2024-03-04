@@ -11,7 +11,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
+  ModalFooter, 
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import * as $ from 'jquery';
