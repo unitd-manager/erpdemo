@@ -44,7 +44,7 @@ export default function TenderCompanyDetails({
   return (
     <div>
       <Modal size="lg" isOpen={modal} toggle={toggle.bind(null)}>
-        <ModalHeader toggle={toggle.bind(null)}>New Opportunity</ModalHeader>
+        <ModalHeader toggle={toggle.bind(null)}>New Company</ModalHeader>
         <ModalBody>
           <Row>
             <Col md="12">

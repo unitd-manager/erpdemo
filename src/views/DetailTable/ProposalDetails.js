@@ -127,7 +127,7 @@ const inputClass = `form-control ${
                       })}
                   </Input>
                   {(formSubmitted && !tenderForms.project_quote_id) && (
-      <div className="error-message">Please Select the Quote Code</div>
+      <div className="error-message">Please Select</div>
     )}
                 </Col>
               </FormGroup>

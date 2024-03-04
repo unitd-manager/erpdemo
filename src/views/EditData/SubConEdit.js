@@ -27,6 +27,7 @@ const SubConEdit = () => {
   const [allCountries, setAllCountries] = useState();
   const [editWorkOrderLinked, setEditWorkOrderLinked] = useState(false);
   const [subconStatus, setSubconStatus] = useState();
+  const [formSubmitted, setFormSubmitted] = useState(false);
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,7 +48,8 @@ const SubConEdit = () => {
   };
   //Logic for edit data in db
   const editSubConData = () => {
-    if (subCon.company_name !== ''){
+    
+    if (subCon.company_name !== '' && subCon.address_flat !== ''){
       subCon.modification_date = creationdatetime;
 
       api
@@ -59,6 +61,7 @@ const SubConEdit = () => {
           message('Unable to edit record.', 'error');
         });
       }else {
+        setFormSubmitted(true);
       message('Please fill all required fields.', 'error');
     }
   };
@@ -176,8 +179,14 @@ const SubConEdit = () => {
                     onChange={handleInputs}
                     value={subCon && subCon.company_name}
                     name="company_name"
+                    className={`form-control ${
+                      formSubmitted && subCon.company_name.trim() === '' ? 'highlight' : ''
+                    }`}
                   />
                 </FormGroup>
+                {formSubmitted && subCon.company_name.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )}
               </Col>
               <Col md="4">
                 <FormGroup>
@@ -253,8 +262,14 @@ const SubConEdit = () => {
                     onChange={handleInputs}
                     value={subCon && subCon.address_flat}
                     name="address_flat"
+                    className={`form-control ${
+                      formSubmitted && subCon.address_flat.trim() === '' ? 'highlight' : ''
+                    }`}
                   />
                 </FormGroup>
+                {formSubmitted && subCon.address_flat.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )}
               </Col>
               <Col md="4">
                 <FormGroup>
