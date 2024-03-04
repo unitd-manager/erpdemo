@@ -61,9 +61,9 @@ const TenderSummaryCard = () => {
       let countCurrentInvoiceRecord = 0;
       let invoiceLastMonthTotal = 0;
       res.data.data.forEach((el) => {
-        const CurrentInvoiceMonth = el.invoice_date.slice(5, 7);
+        const CurrentInvoiceMonth = el.invoice_date?.slice(5, 7);
 
-        if (`${currentYear}-${premonthzero}` === el.invoice_date.slice(0, 7)) {
+        if (`${currentYear}-${premonthzero}` === el.invoice_date?.slice(0, 7)) {
           invoiceLastMonthTotal += el.invoice_amount;
         } else if (CurrentInvoiceMonth === monthNumber) {
           countCurrentInvoiceRecord++;
