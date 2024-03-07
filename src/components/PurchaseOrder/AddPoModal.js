@@ -33,6 +33,36 @@ const AddPoModal = ({
     PurchaseOrderId: PropTypes.any,
     setAddPurchaseOrderModal: PropTypes.func,
   };
+  const [unitdetails, setUnitDetails] = useState();
+
+  const getUnit = () => {
+    api.get('/product/getUnitFromValueList').then((res) => {
+      const items = res.data.data;
+      const options = items.map((item) => ({
+        value: item.value,
+        label: item.value,
+      }));
+      // Set the unit options
+      setUnitDetails(options);
+    })
+    .catch((error) => {
+      console.error('Error fetching unit data:', error);
+    });
+  };
+  
+  // Fetch data from API
+//   const getUnit = () => {
+//     api.get('/product/getUnitFromValueList', unitdetails).then((res) => {
+//       const items = res.data.data;
+//      
+//       const finaldat = [];
+  //     items.forEach((item) => {
+  //       finaldat.push({ value: item.value, label: item.value });
+  //     });
+  //     setUnitDetails(finaldat);
+  //   });
+  // }
+
   const [addNewProductModal, setAddNewProductModal] = useState(false);
    const [getProductValue, setProductValue] = useState();
   const [productDetail, setProductDetail] = useState({
@@ -185,7 +215,12 @@ const insertProduct = (ProductCode, ItemCode) => {
       message('Please fill the Product Name ', 'warning');
     }
   };
-
+  const handleChange = (index, selectedOption) => {
+    const updatedItems = [...addMoreItem];
+    updatedItems[index].unit = selectedOption.value;
+    setMoreItem(updatedItems);
+  };
+  
   //Auto generation code
   const generateCode = () => {
     api
@@ -334,13 +369,28 @@ const insertProduct = (ProductCode, ItemCode) => {
     ]);
   }, [addPurchaseOrderModal]);
 
-  const onchangeItem = (str, itemId) => {
-    const element = addMoreItem.find((el) => el.id === itemId);
-    element.title = str.label;
-    element.item_title = str.label;
-    element.product_id = str.value.toString();
-    setMoreItem(addMoreItem);
+  const onchangeItem = (selectedOption, itemId) => {
+    const updatedItems = addMoreItem.map((item) => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          title: selectedOption.label,
+          item_title: selectedOption.label,
+          product_id: selectedOption.value.toString(),
+        };
+      }
+      return item;
+    });
+    setMoreItem(updatedItems);
   };
+  
+  // const onchangeItem = (str, itemId) => {
+  //   const element = addMoreItem.find((el) => el.id === itemId);
+  //   element.title = str.label;
+  //   element.item_title = str.label;
+  //   element.product_id = str.value.toString();
+  //   setMoreItem(addMoreItem);
+  // };
 
   // Clear row value
   const ClearValue = (ind) => {
@@ -350,6 +400,10 @@ const insertProduct = (ProductCode, ItemCode) => {
       }),
     );
   };
+  useEffect(() => {
+    getUnit();
+    
+  }, []);
 
   return (
     <>
@@ -420,15 +474,34 @@ const insertProduct = (ProductCode, ItemCode) => {
                         
                       </td>
 
-                      <td data-label="Unit">
-                        <Input
+                      {/* <td data-label="Unit">
+                         <Input
                           defaultValue={item.uom}
                           type="text"
                           name="unit"
                           onChange={(e) => updateState(index, 'unit', e)}
                           value={insertPurchaseOrderData && insertPurchaseOrderData.unit}
-                        />
-                      </td>
+                        
+                        /> 
+                        </td> 
+                      <td>
+  <Select
+    name="unit"
+    value={item.unit ? { value: item.unit, label: item.unit } : null}
+    onChange={(selectedOption) => updateState(index, 'unit', selectedOption)}
+    options={unitdetails}
+  />
+</td>*/}
+<td>
+  <Select
+    name="unit"
+    value={item.unit ? { value: item.unit, label: item.unit } : null}
+    onChange={(selectedOption) => handleChange(index, selectedOption)}
+    options={unitdetails}
+  />
+</td>
+
+
                       <td data-label="Qty">
                         <Input
                           defaultValue={item.qty}

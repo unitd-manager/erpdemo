@@ -10,6 +10,7 @@ import message from '../../components/Message';
 
 const SubConDetails = () => {
   //All state variables
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [subConForms, setSubConForms] = useState({
     company_name: '',
   });
@@ -36,6 +37,7 @@ const SubConDetails = () => {
           message('Network connection error.', 'error');
         });
     else {
+      setFormSubmitted(true);
       message('Please fill all required fields.', 'error');
     }
   };
@@ -56,7 +58,16 @@ const SubConDetails = () => {
                       {' '}
                       Subcon Name <span className="required"> *</span>{' '}
                     </Label>
-                    <Input type="text" name="company_name" onChange={handleInputsSubConForms} />
+                    <Input type="text" name="company_name" 
+                    onChange={handleInputsSubConForms}
+                    className={`form-control ${formSubmitted && subConForms && (subConForms.company_name === undefined || subConForms.company_name.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
+                    />
+                    {formSubmitted && subConForms && (subConForms.company_name === undefined || subConForms.company_name.trim() === '') && (
+                      <div className="error-message">Please Enter</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>

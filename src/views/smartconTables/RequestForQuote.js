@@ -23,7 +23,7 @@ const RequestForQuote = () => {
   //Getting data from quote
   const getQuote = () => {
     api
-      .get('/quote/getTabPurcahseQuote')
+      .get('/quote/getTabPurcahseQuote') 
       .then((res) => {
         setQuote(res.data.data);
         $('#example').DataTable({

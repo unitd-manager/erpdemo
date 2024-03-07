@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +7,7 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const RequestForQuoteDetails = () => {
   //All state variables
@@ -27,6 +28,8 @@ const RequestForQuoteDetails = () => {
       })
       .catch(() => {});
   };
+  const { loggedInuser } = useContext(AppContext);
+
   //jobinformation data in RequestForQuoteDetails
   const handleInputs = (e) => {
     setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
@@ -36,6 +39,8 @@ const RequestForQuoteDetails = () => {
     if(requestForQuote.purchase_request_id !==''){
       requestForQuote.rq_code = code;
       requestForQuote.creation_date = creationdatetime;
+      requestForQuote.created_by = loggedInuser.first_name;
+
     api
       .post('/quote/insertQuote', requestForQuote)
       .then((res) => {

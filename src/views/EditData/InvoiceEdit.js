@@ -21,6 +21,7 @@ import PartialINvoiceEdit from '../../components/BookingTable/PartialINvoiceEdit
 import GoodsItemTable from '../../components/BookingTable/GoodsItemTable';
 import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoiceGoodsEdit';
 import AppContext from '../../context/AppContext';
+import PdfCreateInvoice from '../../components/PDF/PdfCreateInvoice';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({
@@ -44,7 +45,7 @@ const InvoiceEdit = () => {
 
   const { id } = useParams();
   const { loggedInuser } = useContext(AppContext);
-  console.log('order ID:', orderId);
+  console.log('Invoiceid:', insertedDataId);
   const navigate = useNavigate();
   const [orderdropdown, setOrderDropdown] = useState();
     const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
@@ -673,7 +674,7 @@ const toggle = (tab) => {
       <ToastContainer/>
       <ComponentCardV2>
       <Row>
-      
+      <Col>         <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
          <Col>
               <Button
                 color="primary"
@@ -880,39 +881,7 @@ const toggle = (tab) => {
           </TabPane>
         </TabContent>
         </ComponentCard>
-      {/* <InvoiceItem
-        editInvoiceItemData={editInvoiceItemData}
-        setEditInvoiceItemData={setEditInvoiceItemData}
-        invoiceInfo={insertedDataId}
-        ></InvoiceItem> */}
-      {/* <ComponentCard title="Invoice Items">
-      <Col>
-          <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              setEditInvoiceItemData(true);
-            }}
-          >
-            Add Items
-          </Button>
-        </Col>
-        <Row className="border-bottom mb-3">
-         <ItemTable
-        itemDetails={itemDetails}
-        invoiceInfo={insertedDataId}
-       />
-      </Row>
-      </ComponentCard> */}
-      {/* <ComponentCard title="Order Items">
      
-        <Row className="border-bottom mb-3">
-         <OrderItemTable
-        orderitemDetails={orderitemDetails}
-        
-       />
-      </Row>
-      </ComponentCard> */}
     </>
   );
 };
