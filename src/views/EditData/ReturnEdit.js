@@ -26,6 +26,7 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
 import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
+import PdfReturn from '../../components/PDF/PdfReturn';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
@@ -188,6 +189,9 @@ const InvoiceEdit = () => {
         <ToastContainer />
         <ComponentCardV2>
           <Row>
+            <Col>
+            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
+            </Col>
             <Col>
               <Button
                 color="primary"
