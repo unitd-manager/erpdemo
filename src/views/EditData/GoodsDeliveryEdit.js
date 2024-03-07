@@ -25,6 +25,7 @@ const GoodsDeliveryEdit = () => {
   const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
+  //const { insertedDataId, OrderId } = useParams();
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -84,6 +85,7 @@ const GoodsDeliveryEdit = () => {
   };
 
   // Generate Data for Delivery Items
+  
   const generateData = () => {
     api
       .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
@@ -188,6 +190,7 @@ const GoodsDeliveryEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        //OrderId={OrderId}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
         handleInputs={handleInputs}

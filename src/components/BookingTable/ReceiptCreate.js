@@ -30,6 +30,15 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
     } else if (e.target.name === 'receipt_status') {
       setCreateReceipt({ ...createReceipt, receipt_status: e.target.value });
     }
+    else if (e.target.name === 'cheque_date') {
+      setCreateReceipt({ ...createReceipt, cheque_date: e.target.value });
+    }
+    else if (e.target.name === 'bank_name') {
+      setCreateReceipt({ ...createReceipt, bank_name: e.target.value });
+    }
+    else if (e.target.name === 'cheque_no') {
+      setCreateReceipt({ ...createReceipt, cheque_no: e.target.value });
+    }
   };
 
   const addAndDeductAmount = (checkboxVal, receiptObj) => {
@@ -128,14 +137,16 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   //       });
   //   }
   // };
+  
   const insertReceipt = (code) =>{
-    if (createReceipt.mode_of_payment !== '' && createReceipt.booking_id !== '') {
+    if (createReceipt.mode_of_payment !== '' && createReceipt.order_id !== '') {
 
-      createReceipt.receipt_code=code;
+      createReceipt.receipt_code = code;
+      createReceipt.order_id = orderId;
       api
         .post('/finance/insertreceipt', createReceipt)
-        .then(() => {
-          
+        .then((res) => {
+          console.log("data",res.data.data)
           message('Booking inserted successfully.', 'success');
      
         })
@@ -153,6 +164,8 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
        
       
       insertReceipt(res.data.data); 
+      
+      
    
       })
       .catch(() => {
