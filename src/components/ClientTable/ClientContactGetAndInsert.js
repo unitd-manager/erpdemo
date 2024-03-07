@@ -27,6 +27,8 @@ export default function ClientContactGetAndInsert({
   handleAddNewContact,
   newContactData,
   AddNewContact,
+  setFormSubmitted,
+  formSubmitted,
 }) {
   ClientContactGetAndInsert.propTypes = {
     setContactData: PropTypes.func,
@@ -38,6 +40,8 @@ export default function ClientContactGetAndInsert({
     handleAddNewContact: PropTypes.func,
     newContactData: PropTypes.object,
     AddNewContact: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
+    formSubmitted: PropTypes.any,
   };
   //  Table Contact
   const columns = [
@@ -147,18 +151,30 @@ export default function ClientContactGetAndInsert({
                                   name="first_name"
                                   onChange={handleAddNewContact}
                                   value={newContactData && newContactData.first_name}
+                                  className={`form-control ${
+                                    formSubmitted && newContactData && newContactData.first_name.trim() === '' ? 'highlight' : ''
+                                  }`}
                                 />
+                                 {formSubmitted && newContactData && newContactData.first_name.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
                               </FormGroup>
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Email</Label>
+                                <Label>Email <span className='required'>*</span> </Label>
                                 <Input
                                   type="text"
                                   name="email"
                                   onChange={handleAddNewContact}
                                   value={newContactData && newContactData.email}
+                                  className={`form-control ${
+                                    formSubmitted && newContactData && newContactData.email.trim() === '' ? 'highlight' : ''
+                                  }`}
                                 />
+                                 {formSubmitted && newContactData && newContactData.email.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
                               </FormGroup>
                             </Col>
                             <Col md="4">
@@ -228,6 +244,7 @@ export default function ClientContactGetAndInsert({
                   className="shadow-none"
                   color="primary"
                   onClick={() => {
+                    setFormSubmitted(true);
                     AddNewContact();
                     //addContactModal(false);
                   }}

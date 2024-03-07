@@ -118,7 +118,7 @@ const GoodsDelivery = () => {
                   <tr key={element.goods_delivery_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}/${element.order_id }?tab=1`}>
+                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}/${element.order_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
