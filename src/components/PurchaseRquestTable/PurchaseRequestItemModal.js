@@ -85,17 +85,18 @@ const [addMoreItem, setMoreItem] = useState([
 // get user information
 const [unitdetails, setUnitDetails] = useState();
 // fetch UoM dropdown from vauelist
- const getUnit = () => {
-   api.get('/product/getUnitFromValueList', unitdetails)
-     .then((res) => {
-       const items = res.data.data
-       const finaldat = []
-       items.forEach(item => {
-         finaldat.push({ value: item.value, label: item.value })
-       })
-       setUnitDetails(finaldat)
-     })
- }
+const getUnit = () => {
+  api.get('/product/getUnitFromValueList', unitdetails).then((res) => {
+    const items = res.data.data;
+    const finaldat = [];
+    items.forEach((item) => {
+      finaldat.push({ value: item.value, label: item.value });
+    });
+    setUnitDetails(finaldat);
+  });
+};
+
+
  
 
 // const deleteRecord = (deleteID) => {
@@ -444,7 +445,16 @@ const insertProduct = (ProductCode, ItemCode) => {
         <option value="NOS">NOS</option>
         <option value="BOX">BOX</option>
       </Input> */}
-      <Select
+       <td data-label="UoM">
+                                  <Select
+                                    name="unit"
+                                    onChange={(selectedOption) => {
+                                      onchangeItem(selectedOption);
+                                    }}
+                                    options={unitdetails}
+                                  />
+                                </td>
+      {/* <Select
                                    
                                    onChange={(selectedOption) => {
                                      onchangeItem(selectedOption);
@@ -455,7 +465,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                                     purchase_request_qty: item.purchase_request_qty,
                                     unit: item.unit,
                                   }}// Ensure this is set correctly
-                                   options={unitdetails}/>
+                                   options={unitdetails}/> */}
                                     {/* <Input 
                                    name="unit"
                                    type='hidden'
