@@ -415,11 +415,11 @@ const Routernew = () => {
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
           <Route path="/ProjectQuotationEdit/:id" name="clienttdata" element={<ProjectQuotationEdit />}></Route>
           <Route path="/ProjectJobOrderEdit/:id" name="clienttdata" element={<ProjectJobOrderEdit />}></Route>
-          <Route path="/GoodsDeliveryEdit/:insertedDataId/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
+          <Route path="/GoodsDeliveryEdit/:id/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
           <Route path="/ProjectTaskEdit/:id" name="tenderdata" element={<ProjectTaskEdit />}></Route>
           <Route path="/GoodsReceiptEdit/:id" name="tenderdata" element={<GoodsReceiptEdit />}></Route>
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
-          <Route path="/GoodsDeliveryEdit/:insertedDataId/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
+          {/* <Route path="/GoodsDeliveryEdit/:id/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route> */}
           <Route path="/ChangeRequestEdit/:id" name="tenderdata" element={<ChangeRequestEdit />}></Route>
           <Route path="/DocumentEdit/:id" name="tenderdata" element={<DocumentEdit />}></Route>
           <Route path="/PurchaseInvoiceEdit/:id" name="tenderdata" element={<PurchaseInvoiceEdit />}></Route>

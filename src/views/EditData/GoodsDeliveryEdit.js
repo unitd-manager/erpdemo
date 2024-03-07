@@ -25,7 +25,7 @@ const GoodsDeliveryEdit = () => {
   const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
-  const { insertedDataId, OrderId } = useParams();
+  //const { insertedDataId, OrderId } = useParams();
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -57,7 +57,7 @@ const GoodsDeliveryEdit = () => {
   };
 
   const getgoodsdeliveryById = () => {
-    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: insertedDataId }).then((res) => {
+    api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
       setTenderDetails(res.data.data[0]);
     });
   };
@@ -85,6 +85,7 @@ const GoodsDeliveryEdit = () => {
   };
 
   // Generate Data for Delivery Items
+  
   const generateData = () => {
     api
       .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
@@ -189,7 +190,7 @@ const GoodsDeliveryEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-        OrderId={OrderId}
+        //OrderId={OrderId}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
         handleInputs={handleInputs}
