@@ -79,10 +79,10 @@ const ClientsEdit = () => {
   const editClientsData = () => {
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(clientsDetails.email)) {
       message('Invalid email address', 'warning');
-    } else if (clientsDetails.company_name !== '') {
+    } else if (clientsDetails.company_name !== '' && 
+    clientsDetails.email !== '') {
       clientsDetails.modification_date = creationdatetime;
       clientsDetails.modified_by = loggedInuser.first_name;
-      
       api
         .post('/clients/editClients', clientsDetails)
         .then(() => {
@@ -140,7 +140,7 @@ const ClientsEdit = () => {
 
   // insert Contact
   const [newContactData, setNewContactData] = useState({
-    salutation: '',
+    salutation: 'Mr',
     first_name: '',
     email: '',
     position: '',
@@ -155,12 +155,17 @@ const ClientsEdit = () => {
   };
 
   const AddNewContact = () => {
+    setFormSubmitted(true);
     const newContactWithCompanyId = newContactData;
     newContactWithCompanyId.company_id = id;
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
       message('Invalid email address', 'warning');
     }
-    else if (newContactWithCompanyId.salutation !== '' && newContactWithCompanyId.first_name !== '' && newContactWithCompanyId.email !== '') {
+    else if (newContactWithCompanyId.salutation !== '' && 
+    newContactWithCompanyId.first_name !== '' && 
+    newContactWithCompanyId.email !== '') {
+      newContactWithCompanyId.creation_date = creationdatetime;
+      newContactWithCompanyId.created_by = loggedInuser.first_name;
       api
         .post('/clients/insertContact', newContactWithCompanyId)
         .then(() => {
@@ -276,12 +281,16 @@ const ClientsEdit = () => {
               handleAddNewContact={handleAddNewContact}
               newContactData={newContactData}
               AddNewContact={AddNewContact}
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
             ></ClientContactGetAndInsert>
             {/* Contact Linked Edit modal */}
             <ContactEditModal
               editContactEditModal={editContactEditModal}
               setEditContactEditModal={setEditContactEditModal}
               contactData={contactData}
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
             />
           </TabPane>
           { /* Invoice Linked Portal */}

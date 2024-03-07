@@ -21,6 +21,7 @@ const BookingDetails = () => {
     const [customerdropdown, setCustomerDropdown] = useState();
     const [orderdropdown, setOrderDropdown] = useState();
     const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
+    const [formSubmitted, setFormSubmitted] = useState(false);
     //navigation and params
     const navigate = useNavigate();
     
@@ -30,6 +31,7 @@ const BookingDetails = () => {
     //  const { id } = useParams();
     //inserting supplier data
     const insertSalesInvoice = (code) => {
+      setFormSubmitted(true);
       if (invoicedetails.company_id !== '' &&
       invoicedetails.source_type !== ''
       )
@@ -131,11 +133,14 @@ const handleInputs = (e) => {
               <FormGroup>
                 <Row>
                 <Col md="12">
-            <Label>Customer Name</Label>
+            <Label>Customer Name <span className="required"> *</span>{' '}</Label>
             <Input 
             type="select" 
             name="company_id" 
             onChange={handleInputs}>
+              className={`form-control ${
+                        formSubmitted && invoicedetails.company_id.trim() === '' ? 'highlight' : ''
+                      }`}
               <option>Select Customer</option>
               {customerdropdown &&
                 customerdropdown.map((e) => {
@@ -146,6 +151,10 @@ const handleInputs = (e) => {
                   );
                 })}
             </Input>
+            {formSubmitted && invoicedetails.company_id.trim() === '' && (
+                      <div className="error-message">Please Enter</div>
+                    )}
+                    
           </Col>
           </Row>
           <br />
@@ -186,6 +195,7 @@ invoicedetails && (
             type="select" 
             name="invoice_source_id" 
             onChange={handleInputs}>
+              
               <option>Select Order</option>
               {orderdropdown &&
                 orderdropdown.map((e) => {
