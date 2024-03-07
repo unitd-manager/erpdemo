@@ -27,6 +27,7 @@ const GoodsDeliveryDetails = () => {
   const [tenderForms, setTenderForms] = useState({
     order_id:'',
     goods_delivery_date:'',
+    goods_delivery_code:''
   });
 
   const handleInputsTenderForms = (e) => {
@@ -38,7 +39,7 @@ const GoodsDeliveryDetails = () => {
     api
       .post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id })
       .then((res) => {
-        setTenderForms(res.data.data);
+        setTenderForms(res.data.data[0]);
         // getContact(res.data.data.company_id);
       })
       .catch(() => {});
