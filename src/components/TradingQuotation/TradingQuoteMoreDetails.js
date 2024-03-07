@@ -91,6 +91,7 @@ export default function TradingQuoteMoreDetails({
                     }}
                     value={tenderDetails && tenderDetails.company_id}
                     name="company_id"
+                    disabled
                   >
                     <option value="selected">Please Select</option>
                     {company &&
@@ -102,6 +103,7 @@ export default function TradingQuoteMoreDetails({
                           </option>
                         );
                       })}
+                 
                   </Input>
                 </FormGroup>
               </Col>

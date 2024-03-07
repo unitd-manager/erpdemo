@@ -175,6 +175,8 @@ const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/Invoi
 
 // const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
 const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLossReport')));
+const BalanceSheetReport = Loadable(lazy(() => import('../views/Reports/BalanceSheetReport')));
+
 
 
 
@@ -797,6 +799,8 @@ const Routernew = () => {
           <Route path="/InvoiceByMonth" name="clienttdata" element={<InvoiceByMonth />}></Route>
               
           <Route path="/ProfitLossReport" name="clienttdata" element={<ProfitLossReport />}></Route>
+          <Route path="/BalanceSheetReport" name="clienttdata" element={<BalanceSheetReport />}></Route>
+
 
           <Route
             path="/PurchaseGstReport"
