@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabContent, TabPane, Table, Row, Button, Col } from 'reactstrap';
+import { TabContent, TabPane, Table, Row, Button, Col ,Label} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Icon from 'react-feather';
@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
-// import PdfQuote from '../../components/PDF/PdfQuote';
+import PdfQuote from '../../components/PDF/PdfQuotation';
 import creationdatetime from '../../constants/creationdatetime';
 
 // import TenderQuotation from '../../components/TenderTable/TenderQuotation';
@@ -306,6 +306,11 @@ const [projectManager, seProjectManager] = useState()
         applyChanges={applyChanges}
         backToList={backToList}
       ></ProposalButtons>
+       <Col md="4">
+        <Label>
+        {proposalDetails && <PdfQuote id={proposalDetails.project_quote_id} quoteId={proposalDetails.project_quote_id}></PdfQuote>}
+                </Label>
+      </Col> 
       <ProposalMoreDetails
         companyInsertData={companyInsertData}
         newContactData={newContactData}
