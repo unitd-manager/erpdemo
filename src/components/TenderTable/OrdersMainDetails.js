@@ -98,6 +98,7 @@ export default function TenderMoreDetails({
                 please Select
               </option>
               <option value="new">New</option>
+              <option value="paid">Invoiced</option>
               <option value="paid">Paid</option>
              <option value="Cancelled">Cancelled</option>
         

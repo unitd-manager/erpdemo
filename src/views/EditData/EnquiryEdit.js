@@ -257,6 +257,8 @@ const OpportunityEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        tenderDetails={tenderDetails}
+        setFormSubmitted={setFormSubmitted}
       ></TenderButtons>
      <TenderMoreDetails
         companyInsertData={companyInsertData}

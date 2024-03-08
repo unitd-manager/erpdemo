@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 // import { useParams } from 'react-router-dom';
 import {
   Row,
@@ -16,14 +16,18 @@ import PropTypes from 'prop-types';
 import message from '../Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../../views/form-editor/editor.scss';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 import api from '../../constants/api';
 
-const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEditModal }) => {
+const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEditModal, formSubmitted, setFormSubmitted }) => {
   ContactEditModal.propTypes = {
     contactData: PropTypes.object,
     editContactEditModal: PropTypes.bool,
     setEditContactEditModal: PropTypes.func,
+    formSubmitted: PropTypes.any,
+    setFormSubmitted: PropTypes.any,
   };
 
   const [contactinsert, setContactInsert] = useState(null);
@@ -31,10 +35,19 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
   const handleInputs = (e) => {
     setContactInsert({ ...contactinsert, [e.target.name]: e.target.value });
   };
+  const { loggedInuser } = useContext(AppContext);
 
   //Logic for edit data in db
 
   const editContactsData = () => {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(contactinsert.email)) {
+      message('Invalid email address', 'warning');
+    }
+    else if (contactinsert.first_name !== '' &&
+    contactinsert.email !== ''
+    ) {
+      contactinsert.modification_date = creationdatetime;
+      contactinsert.modified_by = loggedInuser.first_name;
     api
       .post('/clients/editContact', contactinsert)
       .then(() => {
@@ -44,8 +57,13 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+    }  
   };
+  const handleSave = () => {
+    setFormSubmitted(true);
+    editContactsData();
 
+  };
   useEffect(() => {
     setContactInsert(contactData);
   }, [contactData]);
@@ -72,7 +90,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
           <Row>
             <Col md="4">
             <FormGroup>
-              <Label>Title </Label>
+              <Label>Title<span className="required"> *</span> </Label>
               <Input
                 type="select"
                 onChange={handleInputs}
@@ -90,25 +108,37 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Name</Label>
+                <Label>Name <span className="required"> *</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
                   value={contactinsert && contactinsert.first_name}
                   name="first_name"
+                  className={`form-control ${
+                    formSubmitted && contactinsert && contactinsert.first_name.trim() === '' ? 'highlight' : ''
+                  }`}
                 />
+                {formSubmitted && contactinsert && contactinsert.first_name.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
               </FormGroup>
             </Col>
 
             <Col md="4">
               <FormGroup>
-                <Label>Email</Label>
+                <Label>Email <span className="required"> *</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
                   value={contactinsert && contactinsert.email}
                   name="email"
+                  className={`form-control ${
+                    formSubmitted && contactinsert && contactinsert.email.trim() === '' ? 'highlight' : ''
+                  }`}
                 />
+                {formSubmitted && contactinsert && contactinsert.email.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
               </FormGroup>
             </Col>
             <Col md="4">
@@ -176,7 +206,8 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
               <Button
                 color="primary"
                 onClick={() => {
-                  editContactsData();
+                  handleSave();
+                  setFormSubmitted(true)
                 }}
               >
                 Submit

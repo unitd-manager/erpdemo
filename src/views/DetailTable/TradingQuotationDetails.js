@@ -147,7 +147,7 @@ const TradingQuotationDetails = () => {
                   <Col md="9">
                     <Label>
                       {' '}
-                      Quote Date <span className="required"> *</span>{' '}
+                      Quote Date <span className="required"> </span>{' '}
                     </Label>
                     <Input
                       type="date"

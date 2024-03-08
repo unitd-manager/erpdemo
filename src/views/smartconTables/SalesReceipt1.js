@@ -34,10 +34,10 @@ const InvoiceData = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectOrderId, setSelectOrderId] = useState(null);
+  const [bookingDetails, setBookingDetails] = useState();
   const [secondModalOpen, setSecondModalOpen] = useState(false);
-//   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
-//   const [selectReceiptId, setSelectReceiptId] = useState(null);
+  const [selectedReceiptId, setSelectedReceiptId] = useState(null);
+  const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
 
   const navigate = useNavigate();
@@ -120,7 +120,11 @@ const InvoiceData = () => {
   ];
 
   const handleBookingInputs = (e) => {
-    setSelectOrderId(e.target.value);
+    const { name, value } = e.target;
+    setBookingDetails({ ...bookingDetails, [name]: value });
+
+    // Fetch bookings for the selected company
+   
   };
 
 
@@ -139,7 +143,41 @@ const InvoiceData = () => {
 
   //Logic for adding Booking in db
 
-  
+  const insertReceipt = (code) =>{
+    const insertedOrderId = bookingDetails.order_id;
+    if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
+
+      bookingDetails.receipt_code=code;
+      api
+        .post('/finance/insertreceipt', bookingDetails)
+        .then((res) => {
+          const insertedDataId = res.data.data.insertId;
+          setSelectedReceiptId(insertedDataId); // Store the receiptId 
+          setSelectReceiptId(insertedOrderId)
+          message('Booking inserted successfully.', 'success');
+     
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
+  };
+  const generateCode = () => {
+    api
+      .post('/commonApi/getCodeValue', { type: 'receipt' })
+      .then((res) => {
+      setModalOpen(false); // Close the first modal
+      setSecondModalOpen(true); // Open the second modal
+      insertReceipt(res.data.data); 
+   
+      })
+      .catch(() => {
+        insertReceipt('');
+       
+      });
+  };
   useEffect(() => {
     getCompany();
     getInvoice();
@@ -201,7 +239,7 @@ const InvoiceData = () => {
                       <Row>
                         <Col md="10">
                           <Label>Orders</Label>
-                          <Input type="select" name="order_id" onChange={handleBookingInputs} value={selectOrderId}>
+                          <Input type="select" name="order_id" onChange={handleBookingInputs}>
                             <option>Select Customer</option>
                             {company &&
                               company.map((e) => {
@@ -223,7 +261,7 @@ const InvoiceData = () => {
                           <Button
                             color="primary"
                             onClick={() => {
-                              setSecondModalOpen(true);
+                              generateCode();
                              
                             }}
                             type="button"
@@ -256,7 +294,8 @@ const InvoiceData = () => {
           </ModalHeader>
           <ModalBody>
        <ReceiptCreate 
-       orderId={ selectOrderId}
+       receiptId={selectedReceiptId}
+       orderId={ selectReceiptId}
        ></ReceiptCreate>
           </ModalBody>
         </Modal>

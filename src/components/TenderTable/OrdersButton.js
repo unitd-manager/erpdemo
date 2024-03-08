@@ -48,8 +48,8 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                     const orderItemData = {
                       order_id: id,
                       order_code: QuoteItem.order_code,
-                      qty: QuoteItem.qty,
-                      cost_price: QuoteItem.cost_price,
+                      qty: QuoteItem.quantity,
+                      cost_price: QuoteItem.amount,
                       item_title: QuoteItem.title,
                       quote_id: QuoteItem.quote_id,
                       unit: QuoteItem.unit,

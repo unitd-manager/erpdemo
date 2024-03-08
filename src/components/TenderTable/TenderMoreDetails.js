@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-export default function TenderMoreDetails({ tenderDetails, handleInputs, company, formSubmitted }) {
+export default function TenderMoreDetails({ tenderDetails, handleInputs,  formSubmitted }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
-    company: PropTypes.object,
+    //company: PropTypes.object,
     handleInputs: PropTypes.object,
     formSubmitted: PropTypes.object,
   };
@@ -97,16 +97,16 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
                   Client <span className="required"> *</span>{' '}
                 </Label>
                 <Input
-                  type="select"
-                  name="company_id"
-                  value={tenderDetails && tenderDetails.company_id}
+                  type="text"
+                  name="company_name"
+                  value={tenderDetails && tenderDetails.company_name}
                   // className={`form-control ${
                   //   formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
                   // }`}
                   onChange={handleInputs}
                   disabled
                 >
-                  <option>Please Select</option>
+                  {/* <option>Please Select</option>
                   {company &&
                     company.map((ele) => {
                       return (
@@ -114,7 +114,7 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
                           {ele.company_name}
                         </option>
                       );
-                    })}
+                    })} */}
                 </Input>
                 {/* {formSubmitted && tenderDetails.company_id.trim() === '' && (
                       <div className="error-message">Please Select Client</div>

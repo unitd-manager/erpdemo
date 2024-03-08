@@ -100,7 +100,7 @@ const QuoteLineItem = ({
     $('.lineitem tbody tr').each(function input() {
       const allValues = {};
       $(this)
-        .find('input')
+        .find('input,textarea')
         .each(function output() {
           const fieldName = $(this).attr('name');
           const fieldValue = $(this).val();
@@ -359,7 +359,7 @@ const QuoteLineItem = ({
                   </div> 
                 </td>
                                 <td data-label="Description">
-                                  <Input Value={item.description}  type="textarea" name="description" />
+                                  <Input   type="textarea" name="description" />
                                 </td>
                                 <td data-label="Unit">
                                   <Select
