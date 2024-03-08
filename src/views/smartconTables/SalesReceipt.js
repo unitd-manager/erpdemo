@@ -24,9 +24,8 @@ import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
+import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 
-
-// import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 //geting data from invoice
 const InvoiceData = () => {
   //State variable
@@ -111,12 +110,12 @@ const InvoiceData = () => {
       width: 'auto',
       grow: 3,
     },
-    // {
-    //   name: 'Print',
-    //   sortable: true,
-    //   width: 'auto',
-    //   grow: 3,
-    // },
+    {
+      name: 'Print',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
   ];
 
   const handleBookingInputs = (e) => {
@@ -173,7 +172,7 @@ const InvoiceData = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={element.receipt_id}>
                     <td>{index + 1}</td>
 
                     <td>{element.order_code}</td>
@@ -182,9 +181,9 @@ const InvoiceData = () => {
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
-                    {/* <td>  
+                    <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
- </td> */}
+ </td>
                   </tr>
                 );
               })}
