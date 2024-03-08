@@ -20,6 +20,7 @@ const PdfQuote = ({ id, quoteId }) => {
   const [tenderDetails, setTenderDetails] = useState(null);
   const [lineItem, setLineItem] = useState([]);
   const [gTotal, setGtotal] = React.useState(0);
+  const [gstTotal, setGsttotal] = React.useState(0);
   const [Total, setTotal] = React.useState(0);
   //const [lineItem, setLineItem] = useState(null);
 
@@ -38,7 +39,7 @@ const PdfQuote = ({ id, quoteId }) => {
     api
       .post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id })
       .then((res) => {
-        setTenderDetails(res.data.data);
+        setTenderDetails(res.data.data[0]);
         console.log('1', res.data.data);
       })
       .catch(() => {});
@@ -47,27 +48,27 @@ const PdfQuote = ({ id, quoteId }) => {
   // Get Quote By Id
   const getQuote = () => {
     api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
-      setQuote(res.data.data);
+      setQuote(res.data.data[0]);
       console.log('quote', res.data.data);
     });
   };
   const getQuoteById = () => {
     api
-      .post('/goodsdelivery/getgoodsdeliveryitemById', { goods_delivery_id: quoteId })
+      .post('/tradingquote/getQuoteLineItemsByIdss', { goods_delivery_id: quoteId })
       .then((res) => {
         setLineItem(res.data.data);
         console.log('quote1', res.data.data);
         let grandTotal = 0;
         let grand = 0;
+        let gst = 0;
         res.data.data.forEach((elem) => {
           grandTotal += elem.amount;
-          console.log('quote1111', grandTotal);
-
           //  grand += elem.actual_value;
         });
         setGtotal(grandTotal);
-
-        grand = grandTotal;
+        gst = grandTotal * 0.07;
+        setGsttotal(gst);
+        grand = grandTotal + gst;
         setTotal(grand);
         //setViewLineModal(true);
       })
@@ -183,7 +184,7 @@ const PdfQuote = ({ id, quoteId }) => {
             body: [
               [
                 {
-                  text: 'QUOTATION',
+                  text: 'GOODS DELIVERY',
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -215,8 +216,8 @@ const PdfQuote = ({ id, quoteId }) => {
         },
 
         {
-          text: `Date :   ${quote.quote_date ? moment(quote.quote_date).format('DD-MM-YYYY') : ''}
-           Quote Code :  ${quote.quote_code ? quote.quote_code : ''}\n \n  `,
+          text: `Date :   ${quote.goods_delivery_date ? moment(quote.goods_delivery_date).format('DD-MM-YYYY') : ''}
+           Code :  ${quote.goods_delivery_code ? quote.goods_delivery_code : ''}\n \n  `,
           style: ['invoiceAdd', 'textSize'],
           margin: [0, -60, 0, 0],
         },
@@ -297,7 +298,15 @@ const PdfQuote = ({ id, quoteId }) => {
               style: 'textSize',
             },
             '\n',
-           
+            {
+              text: `VAT :         ${gstTotal.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+              })}`,
+              alignment: 'right',
+              margin: [0, 0, 20, 0],
+              style: 'textSize',
+            },
+            '\n',
             {
               text: `Total $ :     ${Total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
               alignment: 'right',
