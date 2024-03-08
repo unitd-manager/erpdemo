@@ -18,7 +18,7 @@ import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
 import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
-
+ 
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [goodsitemdetails, setgoodslineDetails] = useState();
@@ -191,6 +191,7 @@ const GoodsDeliveryEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
         //OrderId={OrderId}
+        id={id}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
         handleInputs={handleInputs}
