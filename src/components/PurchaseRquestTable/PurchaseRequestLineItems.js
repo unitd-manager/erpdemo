@@ -88,7 +88,7 @@ return (
                               <tr>
                                 <td data-label="S.No">{index + 1}</td>
                                 <td data-label="Title">{e.title}</td>
-                                <td data-label="Unit">{e.unit}</td>
+                                <td data-label="Unit">{e.unit || 'N/A'}</td>
                                 <td data-label="Quantity">{e.purchase_request_qty}</td>
                                 <td data-label="Created By">{e.created_by}</td>
                                 <td data-label="Updated By">{e.modified_by}</td>
