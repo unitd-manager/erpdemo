@@ -219,6 +219,7 @@ const OpportunityEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        orderDetails={orderDetails}
       ></OrdersButton>
       <OrdersMainDetails
         companyInsertData={companyInsertData}

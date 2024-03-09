@@ -5,16 +5,18 @@ import ComponentCardV2 from '../ComponentCardV2';
 import api from '../../constants/api';
 import message from '../Message';
 
-export default function TenderButtons({ editTenderData, applyChanges, backToList, quoteId, id }) {
+export default function TenderButtons({ editTenderData, applyChanges, backToList, quoteId, id,orderDetails }) {
   TenderButtons.propTypes = {
     editTenderData: PropTypes.func,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     quoteId: PropTypes.any,
     id: PropTypes.any,
+    orderDetails: PropTypes.any,
   };
   console.log('id', id);
   const generateData = () => {
+    
     // Step 1: Delete old order items by quote_id
     api.delete(`/finance/deleteorder_item/${quoteId}`).then(() => {
       api
@@ -95,13 +97,32 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
         });
     });
   }
+
+  const renderGenerateDataButton = () => {
+    if (orderDetails && orderDetails.order_status === 'invoiced') {
+      // If order status is 'invoiced', return null to hide the button
+      return null;
+    }
+
+    // If order status is not 'invoiced', render the button
+    return (
+      <Button
+        className="shadow-none"
+        color="primary"
+        onClick={generateData}
+      >
+        Generate Data
+      </Button>
+    );
+  };
+
     return (
     <Form>
       <FormGroup>
         <ComponentCardV2>
           <Row>
             <Col>
-              <Button
+              {/* <Button
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
@@ -109,7 +130,9 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                 }}
               >
                 Generate Data
-              </Button>
+              </Button> */}
+              <Col>{renderGenerateDataButton()}</Col>
+
             </Col>
 
             <Col>

@@ -33,7 +33,7 @@ const InvoiceEdit = () => {
   const [partialgoodsinvoiceeditmodal, setPartialGoodsInvoiceEditModal] = useState(false);
   const [orderitemDetails, setOrderItemDetails] = useState([]);
   const { insertedDataId, orderId } = useParams();
-  
+  //const [salesOrderDisabled, setSalesOrderDisabled] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
@@ -647,6 +647,15 @@ const toggle = (tab) => {
           message('Invoice cancelled successfully', 'success');
           window.location.reload();
           editBookingById(); // Refresh the invoice details after updating
+          api
+          .post(`/finance/updateCancelledStatus/${orderId}`, { order_status: 'Cancelled' })
+          .then(() => {
+            message('Sales order status updated successfully', 'success');
+            //setSalesOrderDisabled(true);
+          })
+          .catch(() => {
+            message('Unable to update sales order status.', 'error');
+          });
         })
         .catch(() => {
           message('Unable to cancel invoice.', 'error');

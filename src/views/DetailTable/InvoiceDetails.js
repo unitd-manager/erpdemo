@@ -49,7 +49,16 @@ const BookingDetails = () => {
             //         console.log('orderId', orderId);
             
             if (InvoiceSource === 'Sales_Order') {
+              api.post(`/finance/updateOrderStatus/${orderId}`, { order_status: 'Invoiced' })
+            .then(() => {
+              // If the status update is successful, navigate to the invoice edit page
               navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
+            })
+            .catch((error) => {
+              console.error('Error updating order status:', error);
+              message('Error updating order status.', 'error');
+            });
+              // navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
             } else if (InvoiceSource === 'Goods_Delivery') {
               navigate(`/InvoiceEdit/${insertedDataId}/${goodsdeliveryId}?tab=2`);
             }
