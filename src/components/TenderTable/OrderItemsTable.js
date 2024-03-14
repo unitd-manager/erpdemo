@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Table } from 'reactstrap';
+// import PdfSalesOrder from '../PDF/PdfSalesOrder';
 
 export default function CustomerFinanceInvoice({ ordersDetails }) {
   CustomerFinanceInvoice.propTypes = {

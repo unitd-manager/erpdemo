@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import { Label,Col } from 'reactstrap';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
@@ -13,6 +14,8 @@ import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
 import OrderAttachment from '../../components/TenderTable/OrderAttachment';
 import AppContext from '../../context/AppContext';
+import PdfSalesOrder from '../../components/PDF/PdfSalesOrder';
+
 
 const OpportunityEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
@@ -212,6 +215,7 @@ const OpportunityEdit = () => {
   return (
     <>
       <BreadCrumbs heading={orderDetails && orderDetails.title} />
+     
       <OrdersButton
         editTenderData={editTenderData}
         quoteId={quoteId}
@@ -242,11 +246,17 @@ const OpportunityEdit = () => {
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
       ></OrdersMainDetails>
+       <Col md="4">
+        <Label>
+          <PdfSalesOrder id={insertedDataId} orderId={insertedDataId}></PdfSalesOrder>
+        </Label>
+      </Col> 
      <SalesMoreDetails   
         invoiceDetails={invoiceDetails}
       receiptDetails={receiptDetails}
       ordersDetails={ordersDetails}
       />
+    
 
     
       <ComponentCard title="More Details">
