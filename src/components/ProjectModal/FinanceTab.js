@@ -365,10 +365,7 @@ export default function FinanceTab({ projectDetail }) {
             setEditModal={setEditModal}
             setEditInvoiceModal={setEditInvoiceModal}
             setInvoiceDatas={setInvoiceDatas}
-            projectDetail={projectDetail}
-          
-            
-            
+            projectDetail={projectDetail}  
           ></CustomerFinanceInvoice>
         </Row>
       </Form>
