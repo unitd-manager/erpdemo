@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, CardBody, CardHeader, Input, FormGroup,Label, Table} from 'reactstrap';
+import { Row, Col, Card, CardBody, CardHeader, Table } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
-import 'datatables.net-buttons/js/buttons.colVis';
-import 'datatables.net-buttons/js/buttons.flash';
-// import 'datatables.net-buttons/js/buttons.html5';
-// import 'datatables.net-buttons/js/buttons.print';
-import './style.css';
 import { ToastContainer } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import api from '../../constants/api';
@@ -16,368 +11,236 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ExportReport from '../../components/Report/ExportReport';
 
 const BalanceSheetReports = () => {
-  //All state variable
- // const [report, setReport] = useState(null);
-  const [gTotal, setGtotal] = useState(0);
-  const [debitTotal, setDebittotal] = useState(0);
-  const [userSearchData, setUserSearchData] = useState('');
-  const [groups, setGroup] = useState();
-  const [netPayroll, setNetPayroll] = useState();
-  const [invoiceAmount, setInvoiceAmount] = useState();
-  const [counttotal, setCounttotal] = useState();
-  const [wagesTotal, setWagesTotal] = useState();
+  const [groups, setGroups] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
 
- // const [companyName, setCompanyName] = useState('');
-  //Get data from Reports table\
-  const[filterPeriod, setFilterPeriod]=useState({
-    month:null,
-    year:null,
-    startDate:null,
-    endDate:null
-  })
-  
-  const handleFilterInputs=(e)=>{
-  setFilterPeriod({...filterPeriod,[e.target.name]:e.target.value})
-  }
-  
+  const transformData = (data) => {
+    const groupedData = data.reduce((acc, item) => {
+      if (!acc[item.acc_category]) {
+        acc[item.acc_category] = [];
+      }
+      acc[item.acc_category].push(item);
+      return acc;
+    }, {});
 
+    return Object.entries(groupedData).map(([category, items]) => ({
+      acc_category: category,
+      titles: items.map((item) => item.acc_head),
+      amounts: items.map((item) => item.total_amount),
+    }));
+  };
 
   useEffect(() => {
-    
-    const getBalanceSheet = () => {
-      api
-      .get('/accounts/getGroupTitlzzze', {
-        params: {
-          month: filterPeriod.month,
-          year: filterPeriod.year,
-          startDate:filterPeriod.startDate,
-    endDate:filterPeriod.endDate,
-        },
-      })
-        .then((res) => {
-         
-          setUserSearchData(res.data.data);
-          //grand total
-          let grandTotal = 0;
-          res.data.data.forEach((elem) => {
-            grandTotal += elem.credit_amount;
-          });
-          setGtotal(grandTotal);
-        })
-        .catch(() => {
-          message('Reports Data Not Found', 'info');
-        });
-    };
-  
-    const getIncomeGroup = () => {
-      api  
-      .get('/accounts/getIncomeGroupAmount', {
-        params: {
-          month: filterPeriod.month,
-          year: filterPeriod.year,
-          startDate:filterPeriod.startDate,
-          endDate:filterPeriod.endDate,
-        },
-      })
-      .then((res) => {
-        setGroup(res.data.data);
-        let debitingTotal = 0;
-        res.data.data.forEach((elem) => {
-          debitingTotal += elem.debit_amount;
-        });
-        setDebittotal(debitingTotal);
-      });
+    const fetchData = async () => {
+      try {
+        const [incomeGroup, incomeGroupBank, incomeGroupCA, incomeGroupCL, incomeGroupEX, incomeGroupIN,incomeGroupSC,incomeGroupSD] = await Promise.all([
+          api.get('/accounts/getIncomeGroupAmountss'),
+          api.get('/accounts/getIncomeGroupBank'),
+          api.get('/accounts/getIncomeGroupCA'),
+          api.get('/accounts/getIncomeGroupCL'),
+          api.get('/accounts/getIncomeGroupEX'),
+          api.get('/accounts/getIncomeGroupIN'),
+          api.get('/accounts/getIncomeGroupSC'),
+          api.get('/accounts/getIncomeGroupSD'),
+        ]);
+
+        setGroups([
+         transformData(incomeGroup.data.data),
+          transformData(incomeGroupBank.data.data),
+          transformData(incomeGroupCA.data.data),
+          transformData(incomeGroupCL.data.data),
+          transformData(incomeGroupEX.data.data),
+          transformData(incomeGroupIN.data.data),
+          transformData(incomeGroupSC.data.data),
+          transformData(incomeGroupSD.data.data),
+        ]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        message('Failed to fetch data', 'error');
+      }
     };
 
-    const getNetPayroll = () => {
-      api
-      .get('/accounts/getNetPayroll', {
-        params: {
-          month: filterPeriod.month,
-          year: filterPeriod.year,
-          startDate:filterPeriod.startDate,
-          endDate:filterPeriod.endDate,
-        },
-      }).then((res) => {
-        setNetPayroll(res.data.data);
-        let totalDebit = 0;
-        res.data.data.forEach((payroll) => {
-          totalDebit = parseFloat(payroll.net_total)+parseFloat(gTotal);
-        });
-        setWagesTotal(totalDebit);
-      });
-    };
+    fetchData();
+  }, []);
 
-    const getInvoiceAmount = () => {
-      api
-      .get('/accounts/getInvoiceAmount', {
-        params: {
-          month: filterPeriod.month,
-          year: filterPeriod.year,
-          startDate:filterPeriod.startDate,
-          endDate:filterPeriod.endDate,
-        },
-      }).then((res) => {
-        setInvoiceAmount(res.data.data);
-        let totalDebit = 0;
-        res.data.data.forEach((payroll) => {
-          totalDebit = parseFloat(payroll.invoice_amount)+parseFloat(debitTotal);
-        });
-        setCounttotal(totalDebit);
-      });
-    };
-    getBalanceSheet();
-    getIncomeGroup();
-    getNetPayroll();
-    getInvoiceAmount();
-  }, [filterPeriod,counttotal,wagesTotal]);
+  const offset = currentPage * itemsPerPage;
+  const pageCount = Math.ceil(groups.reduce((total, group) => total + group.length, 0) / itemsPerPage);
 
-  const [page, setPage] = useState(0);
-
-  const employeesPerPage = 20;
-  const numberOfEmployeesVistited = page * employeesPerPage;
-  const displayEmployees = userSearchData.slice(
-    numberOfEmployeesVistited,
-    numberOfEmployeesVistited + employeesPerPage,
-  );
-  const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
-  const changePage = ({ selected }) => {
-    setPage(selected);
+  const handlePageClick = (data) => {
+    const selectedPage = data.selected;
+    setCurrentPage(selectedPage);
   };
-  //structure of Training list view
+
+  const renderTableRows = (group) => {
+    return group.map((g) => (
+      <>
+        {g.titles.map((title, index) => (
+          // Check if total_amount exists and is truthy
+          (g.amounts[index] !== undefined && g.amounts[index] !== null) &&
+          <tr key={title}>
+            <td>{title}</td>
+            <td>{g.amounts[index]}</td>
+          </tr>
+        ))}
+        {/* Calculate total only if amounts exist */}
+        {g.amounts.length > 0 && g.amounts.filter(amount => amount !== undefined && amount !== null).length > 0 &&
+          <tr key={`${g.acc_category}-total`}>
+            <td><b>Total</b></td>
+            <td>{g.amounts.reduce((total, amount) => total + (amount || 0), 0)}</td>
+          </tr>
+        }
+      </>
+    ));
+  };
+  
   const columns = [
-    {
-      name: 'Liablities',
-      selector: '',
-    },
-    {
-      name: '',
-      selector: '',
-    },
-    {
-      name: 'Assets',
-      selector: '',
-    },
-
-   
+    { name: 'Title', selector: 'title' },
+    { name: 'Amount', selector: 'amount' },
   ];
+  
+  // Flatten the grouped data
+  const flattenData = groups.flatMap(group => {
+    return group.map(g => {
+      return g.titles.map((title, index) => ({
+        title,
+        amount: g.amounts[index],
+      }));
+    });
+  }).flat();
+  
 
-  const currentYear = new Date().getFullYear();
-  const netProfit = parseFloat(counttotal) - parseFloat(wagesTotal);
-  const formattedNetProfit = netProfit.toFixed(2);
   return (
     <>
       <BreadCrumbs />
-      <ToastContainer></ToastContainer>
+      <ToastContainer />
+
       <Card>
-          <CardBody>
-            <Row>
-         
-            <Col>
-                <Row>
-              
-                  <Col >
-                    {' '}
-                    <FormGroup>
-                      <Label>Year</Label>
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Input name="year" type="select"
-                      onChange={handleFilterInputs}>
-                        <option value="">Please Select</option>
-                        <option value={currentYear.toString()}>{currentYear}</option>
-
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                
-                  <Col >
-                    <FormGroup>
-                      <Label>Month</Label>
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Input name="month" type="select" 
-                      onChange={handleFilterInputs}>
-                        <option value="">Please Select</option>
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col>
-              <FormGroup>
-                <Label>Start Date</Label>
-                <Input
-                  type="date"
-                  name="startDate"
-                  onChange={handleFilterInputs}
-
-                />
-              </FormGroup>
-            </Col>
-            <Col>
-              <FormGroup>
-                <Label>End Date</Label>
-                <Input type="date" name="endDate" onChange={handleFilterInputs}
- />
-              </FormGroup>
-            </Col>
-                </Row>
-              </Col>
-              <Col md="2">
-            {/* <Button
-              color="primary"
-              className="shadow-none"
-              onClick={() => {
-                getBalanceSheet();
-                getIncomeGroup();
-              }}
-            >
-              Go
-            </Button> */}
-          </Col>
-            </Row>
-          </CardBody>
-        </Card>
-        <Card >
         <CardHeader className="card p-2 text-center">
-        <b>Profit & Loss Report</b>
-      </CardHeader>
-      <CardBody>
-        <Row>
-          <Col md="6">
-            <b>Month:</b> &nbsp; <span>{filterPeriod.month}</span>
-          </Col>
-          <Col md="6">
-            <b>year:</b> &nbsp; <span>{filterPeriod.year}</span>
-          </Col>
-        </Row>
-      </CardBody>
+          <b>Balance Sheet Report</b>
+        </CardHeader>
       </Card>
-        <Card>
-  <CardBody>
-    <Row>
-      <Col>
-        <ExportReport columns={columns} data={userSearchData} />
-      </Col>
-    </Row>
-  </CardBody>
-
-  <CardBody>
-  <Row> 
-  <Col md="12">
-    <Row className="table-row">
-      <Col md="6" className="table-col">
-        <Table>
-          <thead>
-            <tr>
-              <td>
-                <b>Liabilities</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Display expense records */}
-            {netPayroll &&
-              netPayroll.map((payroll) => (
-                <tr >
-                  <td>Wages and Benifits</td>
-                  <td>{Number.isNaN(parseFloat(payroll.net_total)) ? 0 : payroll.net_total}</td>                </tr>
-              ))}
-            {displayEmployees &&
-              displayEmployees.map((expenseRecord) => (
-                <tr key={expenseRecord.expense_group_id}>
-                  <td>{expenseRecord.title}</td>
-                  <td>{Number.isNaN(parseFloat(expenseRecord.credit_amount)) ? 0 : expenseRecord.credit_amount}</td>                </tr>
-              ))}
-          </tbody>
-        </Table>
-      </Col>
-      <Col md="6" className="table-col">
-        <Table>
-          <thead>
-            <tr>
-              <td>
-                <b>Assets</b>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Display income records */}
-            {invoiceAmount &&
-              invoiceAmount.map((invoice) => (
-                <tr >
-                  <td>Sales Revenue</td>
-                  <td>{Number.isNaN(parseFloat(invoice.invoice_amount)) ? 0 : invoice.invoice_amount}</td>                </tr>
-              ))}
-            {groups &&
-              groups.map((incomeRecord) => (
-                <tr key={incomeRecord.income_group_id}>
-                  <td>{incomeRecord.title}</td>
-                  <td>{Number.isNaN(parseFloat(incomeRecord.debit_amount)) ? 0 : incomeRecord.debit_amount}</td>                </tr>
-              ))}
-          </tbody>
-        </Table>
-      </Col>
-    </Row>
-  </Col>
-</Row>
-
-    <Table>
-      <tbody>
-        <tr>
-          <td>
-            <b>Total Debit</b>
-          </td>
-          <td>
-          <b>{Number.isNaN(parseFloat(wagesTotal)) ? 0 : wagesTotal}</b>                
-
-          </td>
-          <td>
-            <b>Total Credit</b>
-          </td>
-          <td>
-          <b>{Number.isNaN(parseFloat(counttotal)) ? 0 : counttotal}</b>                
-
-          </td>
-        </tr>
-        <tr>
-          <td colSpan="2">
-            <b>Net Profit   {Number.isNaN(parseFloat(formattedNetProfit)) ? 0 : formattedNetProfit}</b>
-          </td>
-        </tr>
-      </tbody>
-    </Table>
-
-    <ReactPaginate
-      previousLabel="Previous"
-      nextLabel="Next"
-      pageCount={totalPages}
-      onPageChange={changePage}
-      containerClassName="navigationButtons"
-      previousLinkClassName="previousButton"
-      nextLinkClassName="nextButton"
-      disabledClassName="navigationDisabled"
-      activeClassName="navigationActive"
-    />
-  </CardBody>
-</Card>
-
+      <Card>
+        <CardBody>
+        <ExportReport columns={columns} data={flattenData} />
+          <Row className="table-row">
+            <Col md="6" className="table-col">
+              <Table id="assetsTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>Assets</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 0 && renderTableRows(groups[0].slice(offset, offset + itemsPerPage))}                
+              </tbody>
+              </Table>
+              <Table id="currentassetsTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>Current Assets</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 2 && renderTableRows(groups[2].slice(offset, offset + itemsPerPage))}               
+               </tbody>
+              </Table>
+              <Table id="expenseTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>EXPENSE</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 4 && renderTableRows(groups[4].slice(offset, offset + itemsPerPage))}     
+               </tbody>
+              </Table>
+              <Table id="creditorsTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>SUNDRY CREDITORS</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 6 && renderTableRows(groups[6].slice(offset, offset + itemsPerPage))}     
+               </tbody>
+              </Table>
+            </Col>
+            <Col md="6" className="table-col">
+              <Table id="liabilitiesTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>Liabilities</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 1 && renderTableRows(groups[1].slice(offset, offset + itemsPerPage))}               
+               </tbody>
+              </Table>
+              <Table id="currentliabilitiesTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>Current Liabilities</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 3 && renderTableRows(groups[3].slice(offset, offset + itemsPerPage))}              
+                </tbody>
+              </Table>
+              <Table id="incomeTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>INCOME</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 5 && renderTableRows(groups[5].slice(offset, offset + itemsPerPage))}     
+               </tbody>
+              </Table>
+              <Table id="debtorsTable">
+                <thead>
+                  <tr>
+                    <th colSpan="2">
+                      <b>SUNDRY DEBTORS</b>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {groups.length > 7 && renderTableRows(groups[7].slice(offset, offset + itemsPerPage))}     
+               </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+      <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageCount={pageCount}
+       
+        onPageChange={handlePageClick}
+        containerClassName="navigationButtons"
+        previousLinkClassName="previousButton"
+        nextLinkClassName="nextButton"
+        disabledClassName="navigationDisabled"
+        activeClassName="navigationActive"
+      />
     </>
   );
 };
+
 export default BalanceSheetReports;

@@ -89,14 +89,14 @@ const JournalDetails = () => {
         acc_head_id_1: journalDetail.acc_head1,
         debit_1: journalDetail.debit1,
         credit_1: journalDetail.credit1,
-        debit_base_1: 'your_debit_base_1',
-        credit_base_1: 'your_credit_base_1',
+        debit_base_1: 0,
+        credit_base_1: 0,
         narration_1: journalDetail.narration1,
         acc_head_id_2: journalDetail.acc_head2,
         debit_2: journalDetail.debit2,
         credit_2: journalDetail.credit2,
-        debit_base_2: 'your_debit_base_2',
-        credit_base_2: 'your_credit_base_2',
+        debit_base_2:0,
+        credit_base_2:0,
         narration_2: journalDetail.narration2,
       };
 
