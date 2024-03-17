@@ -131,7 +131,7 @@ const InvoiceData = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrders')
+      .get('/finance/getOrder')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -219,7 +219,7 @@ const InvoiceData = () => {
                     <td>{element.mode_of_payment}</td>
                     <td>{element.credit_note_status}</td>
                     <td>{element.amount}</td>
-                    <td>{moment(element.credit_note_date).format('DD-MM-YYYY')}</td>
+                    <td>{(element.credit_note_date)?moment(element.credit_note_date).format('DD-MM-YYYY'):''}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}
