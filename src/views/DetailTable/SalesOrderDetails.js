@@ -23,18 +23,26 @@ const OpportunityDetails = () => {
       setQuote(res.data.data);
     });
   };
+
+  const getOrdersByOrderId = () => {
+    api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
+      setInsertQuote(res.data.data);
+    
+    });
+  };
   const handleInputs = (e) => {
     setInsertQuote({ ...insertQuote, [e.target.name]: e.target.value });
   };
 
 
   //console.log(tenderDetails);
- const insertOrder = (code) => {
+ const insertOrder = (orderCode,companyId) => {
   console.log('insertQuote.quote_id:', insertQuote.quote_id);
   if (insertQuote.quote_id !== '') {
-    insertQuote.order_code = code;
+    insertQuote.order_code = orderCode;
     insertQuote.creation_date = creationdatetime;
     insertQuote.created_by = loggedInuser.first_name;
+    insertQuote.company_id = companyId;
     api
       .post('/finance/insertOrder', insertQuote)
       .then((res) => {
@@ -74,7 +82,7 @@ const OpportunityDetails = () => {
         // Fetch company_id based on quote_id
         const selectedQuote = quote.find((quotes) => quotes.quote_id === insertQuote.quote_id);
         console.log('Selected Quote:', selectedQuote);
-        
+        console.log('Selected Quote:', selectedQuote);
         if (selectedQuote) {
           const companyId = selectedQuote.company_id;
           console.log('Company ID:', companyId);
@@ -95,6 +103,7 @@ const OpportunityDetails = () => {
 
   useEffect(() => {
     getQuote();
+    getOrdersByOrderId();
     
   }, [id]);
 
