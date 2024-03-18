@@ -8,7 +8,6 @@ export default function TradingQuoteMoreDetails({
   handleInputs,
   handleStatusChange,
   status,
- 
 }) {
   TradingQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
@@ -49,7 +48,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-             
+
               <Col md="3">
                 <FormGroup>
                   <Label>Shipping Method</Label>
@@ -83,9 +82,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row> 
-        
+
               <Col md="3">
                 <FormGroup>
                   <Label>Site Reference</Label>
@@ -109,11 +106,12 @@ export default function TradingQuoteMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
+              <FormGroup>
                 <Label>Status</Label>
                 <Input
                   type="select"
                   onChange={handleStatusChange}
-                  value={status || tenderDetails && tenderDetails.equipment_status}
+                  value={status || (tenderDetails && tenderDetails.equipment_status)}
                   name="equipment_status"
                   disabled={isApproved} // Disable if status is "Approved"
                 >
@@ -123,10 +121,11 @@ export default function TradingQuoteMoreDetails({
                   <option value="On Hold">On Hold</option>
                   <option value="Cancelled">Cancelled</option>
                 </Input>
+                </FormGroup>
               </Col>
-              </Row>
-             
-              <Row>
+            </Row>
+
+            <Row>
               <Col md="3">
                 <FormGroup>
                   <Label>Approved By</Label>
@@ -149,8 +148,7 @@ export default function TradingQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-             
-              </Row>
+            </Row>
           </ComponentCard>
         </FormGroup>
       </Form>

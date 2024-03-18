@@ -18,11 +18,14 @@ import creationdatetime from '../../constants/creationdatetime';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import AddEmployee from '../../components/LabourRequest/AddEmployee';
 import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
 import PlanningButton from '../../components/LabourRequest/PriceButton';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
+import ComponentCardV2 from '../../components/ComponentCardV2';
+import PdfLabourRequest from '../../components/PDF/PdfLabourRequest';
 
 
 const PriceListEdit = () => {
@@ -119,7 +122,9 @@ const PriceListEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
        ></PlanningButton>
-       
+       <ComponentCardV2>
+        <PdfLabourRequest></PdfLabourRequest>
+       </ComponentCardV2>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}

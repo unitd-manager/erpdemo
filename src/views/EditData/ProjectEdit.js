@@ -55,6 +55,7 @@ const ProjectEdit = () => {
     { id: '1', name: 'Quote' },
     { id: '2', name: 'Material Needed' },
     { id: '3', name: 'Project Team' },
+    { id: '4', name: 'Job Order' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -379,6 +380,8 @@ const ProjectEdit = () => {
               setUpdate={setUpdate}
             />
           </TabPane>
+          <TabPane tabId="4">
+            </TabPane>
 
           {/* End Tab Content 12 */}
         </TabContent>

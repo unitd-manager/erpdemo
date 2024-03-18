@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Card,
+  // Card,
   Row,
   Col,
   Form,
@@ -255,7 +255,7 @@ const QuoteLineItem = ({
     <>
       <Modal size="xl" isOpen={addLineItemModal}>
         <ModalHeader>
-          Add Quote Items
+          Add Equipment Items
           <Button
             className="shadow-none"
             color="secondary"
@@ -284,9 +284,11 @@ const QuoteLineItem = ({
                         Add Line Item
                       </Button>
                     </Col>
+                    <br/>
                   </Row>
+                 
                   {/* Invoice Item */}
-                  <Card>
+                  {/* <Card> */}
                     <table className="lineitem">
                       <thead>
                         <tr>
@@ -376,7 +378,7 @@ const QuoteLineItem = ({
                           })}
                       </tbody>
                     </table>
-                  </Card>
+                  {/* </Card> */}
                   <ModalFooter>
                     <Button
                       className="shadow-none"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent, Col, Button, Table, Row} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
@@ -18,6 +19,8 @@ import Tab from '../../components/project/Tab';
 import QuoteLineItem from '../../components/EquipmentRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/EquipmentRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
+import ComponentCardV2 from '../../components/ComponentCardV2';
+import PdfEquipmentRequest from '../../components/PDF/PdfEquipmentRequest';
 
 const EquipmentRequestEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -31,10 +34,6 @@ const EquipmentRequestEdit = () => {
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
   //const [quoteLine, setQuoteLine] = useState();
-
-  //const [contact, setContact] = useState();
-  //   const [addContactModal, setAddContactModal] = useState(false);
-  //   const [addCompanyModal, setAddCompanyModal] = useState(false);
 
   const { loggedInuser } = useContext(AppContext);
 
@@ -250,7 +249,7 @@ const EquipmentRequestEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></TradingQuoteButton>
-     
+     <ComponentCardV2> <PdfEquipmentRequest ProjectID={id}></PdfEquipmentRequest></ComponentCardV2>
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -281,7 +280,7 @@ const EquipmentRequestEdit = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                  Add Equipment Items
                 </Button>
               </Col>
             </Row>

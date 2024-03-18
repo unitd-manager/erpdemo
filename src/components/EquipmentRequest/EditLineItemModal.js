@@ -82,7 +82,7 @@ const {id}=useParams();
   return (
     <>
       <Modal isOpen={editLineModal}>
-        <ModalHeader>Line Items</ModalHeader>
+        <ModalHeader>Edit Equipment Items</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Row>

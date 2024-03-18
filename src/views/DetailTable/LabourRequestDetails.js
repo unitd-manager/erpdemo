@@ -1,11 +1,13 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import message from '../../components/Message';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import AppContext from '../../context/AppContext';
 import creationdatetime from '../../constants/creationdatetime';
 
 const LabourRequestDetails = () => {
@@ -19,10 +21,11 @@ const LabourRequestDetails = () => {
   });
   const [project, setProject] = useState();
   const { id } = useParams();
+  const { loggedInuser } = useContext(AppContext);
 
   const editJobById = () => {
     api
-      .get('/labourrequest/getProject')
+      .get('/labourrequest/getProjecttitle')
       .then((res) => {
         setProject(res.data.data);
       })
@@ -37,6 +40,7 @@ const LabourRequestDetails = () => {
   const insertPlanning = () => {
     if (planningForms.project_id !== '') {
       planningForms.creation_date = creationdatetime;
+      planningForms.created_by = loggedInuser.first_name;
       api
         .post('/labourrequest/insertLabourRequest', planningForms)
         .then((res) => {
@@ -66,6 +70,7 @@ const LabourRequestDetails = () => {
             <Form>
               <FormGroup>
               <Row>
+              <Col md="10">
                   <Label>Title <span style={{color:'red'}}>*</span> </Label>
                   <Input
                     type="select"
@@ -87,6 +92,7 @@ const LabourRequestDetails = () => {
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
               </FormGroup>
               <FormGroup>

@@ -83,6 +83,7 @@ export default function ProjectQuoteMoreDetails({
                     }}
                     value={tenderDetails && tenderDetails.company_id}
                     name="company_id"
+                    disabled
                   >
                     <option value="selected">Please Select</option>
                     {company &&
