@@ -211,7 +211,7 @@ const TranslationEdit = () => {
                 {valueType && valueType === 'Text' && (
               <Col md="4">
                 <FormGroup>
-                  <Label> Arab Value</Label>
+                  <Label> English Value</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -226,7 +226,7 @@ const TranslationEdit = () => {
                 <Row>
                 <Col>
               <Row>
-                        <Label> Arab Html Text</Label>
+                        <Label> English Html Text</Label>
                         </Row>
                         <Editor
                             editorState={lineItem}
@@ -244,12 +244,12 @@ const TranslationEdit = () => {
                {valueType && valueType === 'Text' && (
               <Col md="4">
                 <FormGroup>
-                  <Label>English Value</Label>
+                  <Label>Arabic Value</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={translationdetails && translationdetails.english_value}
-                    name="english_value"
+                    value={translationdetails && translationdetails.arb_value}
+                    name="arb_value"
                   />
                 </FormGroup>
               </Col>
@@ -259,7 +259,7 @@ const TranslationEdit = () => {
                 <Row>
                 <Col>
               <Row>
-                        <Label> English Html Text</Label>
+                        <Label> Arabic Html Text</Label>
                         </Row>
                         <Editor
                             editorState={lineItem}

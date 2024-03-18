@@ -20,6 +20,44 @@ import message from '../../components/Message';
 const Clients = () => {
   const [clients, setClients] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForCompany')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
 
   const columns = [
     {
@@ -48,27 +86,27 @@ const Clients = () => {
       sortable: false,
     },
     {
-      name: 'Company Name',
+      name: arabic.find(item => item.key_text === 'mdClient.companyName')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Email',
+      name: arabic.find(item => item.key_text === 'mdClient.email')?.[genLabel],
       selector: 'email',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdClient.status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Phone',
+      name: arabic.find(item => item.key_text === 'mdClient.phone')?.[genLabel],
       selector: 'phone',
       sortable: true,
       width: 'auto',
@@ -162,10 +200,10 @@ const Clients = () => {
                       <Flag value={element.flag ? 1 : 0} />
                     </span>
                   </td>
-                  <td>{element.company_name}</td>
-                  <td>{element.email}</td>
+                  <td>{arb ? element.company_name_arb : element.company_name}</td>
+                  <td>{arb ? element.email_arb : element.email}</td>
                   <td>{element.status}</td>
-                  <td>{element.phone}</td>
+                  <td>{arb ? element.phone_arb : element.phone}</td>
                 </tr>
               ))}
           </tbody>
