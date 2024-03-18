@@ -29,6 +29,7 @@ const QuoteLineItem = ({
   quoteLine,
   tenderDetails,
   getLineItem,
+  previousTenderDetails
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
@@ -36,6 +37,7 @@ const QuoteLineItem = ({
     quoteLine: PropTypes.any,
     tenderDetails: PropTypes.any,
     getLineItem: PropTypes.any,
+    previousTenderDetails:PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addNewProductModal, setAddNewProductModal] = useState(false);
@@ -77,7 +79,7 @@ const QuoteLineItem = ({
   const addLineItemApi = (obj) => {
     obj.creation_date = creationdatetime;
     obj.created_by = loggedInuser.first_name;
-    //obj.opportunity_id = projectInfo;
+    obj.opportunity_id = previousTenderDetails.opportunity_id;
     obj.quote_id = quoteLine;
     api
       .post('/tradingquote/insertQuoteItems', obj)
@@ -98,7 +100,7 @@ const QuoteLineItem = ({
     $('.lineitem tbody tr').each(function input() {
       const allValues = {};
       $(this)
-        .find('input')
+        .find('input,textarea')
         .each(function output() {
           const fieldName = $(this).attr('name');
           const fieldValue = $(this).val();
@@ -357,7 +359,7 @@ const QuoteLineItem = ({
                   </div> 
                 </td>
                                 <td data-label="Description">
-                                  <Input Value={item.description}  type="textarea" name="description" />
+                                  <Input   type="textarea" name="description" />
                                 </td>
                                 <td data-label="Unit">
                                   <Select

@@ -14,7 +14,7 @@ const GoodsDeliveryDetails = () => {
   const [enquirycode, setEnquiryCode] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   //Api call for getting Enquiry dropdown
   const getOrderCode = () => {
@@ -27,6 +27,7 @@ const GoodsDeliveryDetails = () => {
   const [tenderForms, setTenderForms] = useState({
     order_id:'',
     goods_delivery_date:'',
+    goods_delivery_code:''
   });
 
   const handleInputsTenderForms = (e) => {
@@ -38,7 +39,7 @@ const GoodsDeliveryDetails = () => {
     api
       .post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id })
       .then((res) => {
-        setTenderForms(res.data.data);
+        setTenderForms(res.data.data[0]);
         // getContact(res.data.data.company_id);
       })
       .catch(() => {});
@@ -67,6 +68,7 @@ const GoodsDeliveryDetails = () => {
           message('Network connection error.', 'error');
         });
     } else {
+      setFormSubmitted(true);
       message('Please fill all required fields', 'warning');
     }
   };
@@ -129,7 +131,14 @@ const GoodsDeliveryDetails = () => {
                       name="goods_delivery_date"
                       value={tenderForms && tenderForms.goods_delivery_date}
                       onChange={handleInputsTenderForms}
+                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '')
+                          ? 'highlight'
+                          : ''
+                        }`}
                     />
+                    {formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '') && (
+                      <div className="error-message">Please Select</div>
+                    )}
                   </Col>
                 </Row>
               </FormGroup>

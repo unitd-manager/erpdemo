@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 //import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import Converter from 'number-to-words';
+// import Converter from 'number-to-words';
 import PropTypes from 'prop-types';
-import * as Icon from 'react-feather';
 import moment from 'moment';
 import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
-const PdfQuotation = ({id,quoteId}) => {
-  PdfQuotation.propTypes = {
+const PdfQuote = ({ id,orderId }) => {
+  PdfQuote.propTypes = {
     id: PropTypes.any,
-    quoteId:PropTypes.any,
-  }
+   orderId: PropTypes.any,
+  };
   const [hfdata, setHeaderFooterData] = React.useState();
   const [quote, setQuote] = React.useState([]);
   const [tenderDetails, setTenderDetails] = useState(null);
   const [lineItem, setLineItem] = useState([]);
-  const [gTotal, setGtotal] = React.useState(0);
-  const [gstTotal, setGsttotal] = React.useState(0);
-  const [Total, setTotal] = React.useState(0);
+  // const [Total, setTotal] = React.useState(0);
   //const [lineItem, setLineItem] = useState(null);
-  
+
   React.useEffect(() => {
     api.get('/setting/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
@@ -37,54 +35,63 @@ const PdfQuotation = ({id,quoteId}) => {
 
   const getCompany = () => {
     api
-      .post('/projectquote/getProjectquoteById', { project_quote_id: id })
+      .post('/finance/getFinancesById', { order_id: id })
       .then((res) => {
-        setTenderDetails(res.data.data[0]);
-        console.log("ooooo",tenderDetails);
+        setTenderDetails(res.data.data);
+        console.log('1', res.data.data);
+        console.log("Data from API:", id)
+
       })
       .catch(() => {});
   };
 
-  // Get Quote By Id
-  const getQuote = () => {
-    api.post('/projectquote/getProjectquoteById', { project_quote_id: id }).then((res) => {
-      setQuote(res.data.data[0]);
-      console.log('quote', res.data.data[0]);
+   // Get Quote By orderDetails
+   const getQuote = () => {
+    api.post('/finance/getFinancesById', { order_id: id }).then((res) => {
+      setQuote(res.data.data);
+      console.log('quote', res.data.data);
+      // console.log("Data:", orderId)
+
     });
   };
   const getQuoteById = () => {
     api
-      .post('/projectquote/getQuoteLineItemsById', { project_quote_id: quoteId })
+      .post('/finance/getOrdersByIds', { order_id: orderId })
       .then((res) => {
         setLineItem(res.data.data);
-        console.log('quote1', res.data.data);
-        let grandTotal = 0;
-        let grand = 0;
-        let gst = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal += elem.amount;
-          //  grand += elem.actual_value;
-        });
-        setGtotal(grandTotal);
-        gst = grandTotal * 0.07;
-        setGsttotal(gst);
-        grand = grandTotal + gst;
-        setTotal(grand);
+        
+
+        // let grandTotal = 0;
+        // let grand = 0;
+        // // let gst = 0;
+        // res.data.data.forEach((elem) => {
+        //   grand += elem.cost_price;
+        //   //  grand += elem.actual_value;
+        // });
+        // // setGtotal(grandTotal);
+        // // gst = grandTotal * 0.07;
+        // // setGsttotal(gst);
+        // // grand = grandTotal + gst;
+        // setTotal(grand);
         //setViewLineModal(true);
       })
       .catch(() => {});
   };
   React.useEffect(() => {
     getQuote();
-    getQuoteById();
+   getQuoteById();
     getCompany();
   }, []);
 
   const GetPdf = () => {
-    const lineItemBody = [
+   const lineItemBody = [
       [
         {
           text: 'SN',
+          style: 'tableHead',
+        },
+        {
+          text: 'OrderCode',
           style: 'tableHead',
         },
         {
@@ -92,19 +99,22 @@ const PdfQuotation = ({id,quoteId}) => {
           style: 'tableHead',
         },
         {
-          text: 'Description',
+          text: 'Unit',
           style: 'tableHead',
         },
-    
         {
-          text: 'Amount S$',
+          text: 'Qty',
           style: 'tableHead',
-          alignment:'right'
         },
-       
+
+        {
+          text: 'price',
+          style: 'tableHead',
+          alignment: 'right',
+        },
       ],
     ];
-    lineItem.forEach((element,index) => {
+    lineItem.forEach((element, index) => {
       lineItemBody.push([
         {
           text: `${index + 1}`,
@@ -112,33 +122,40 @@ const PdfQuotation = ({id,quoteId}) => {
           border: [false, false, false, true],
         },
         {
-          text: `${element.title}`,
+          text: `${element.order_code}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-          text: `${element.description}`,
+          text: `${element.item_title}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
-      
         {
-          text: `${element.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+          text: `${element.unit}`,
+          border: [false, false, false, true],
+          style: 'tableBody',
+        },
+        {
+          text: `${element.qty}`,
+          border: [false, false, false, true],
+          style: 'tableBody',
+        },
+
+        {
+          text: `${element.cost_price ? element.cost_price.toLocaleString('en-IN', { minimumFractionDigits: 2 }):''}`,
           border: [false, false, false, true],
           fillColor: '#f5f5f5',
           style: 'tableBody',
-          alignment:'right'
+          alignment: 'right',
         },
-      
       ]);
     });
-
     const dd = {
-      
-        pageSize: 'A4',
-        header: PdfHeader({ findCompany }),
-        pageMargins: [40, 150, 40, 80],
-        footer: PdfFooter,
+      pageSize: 'A4',
+      header: PdfHeader({ findCompany }),
+      pageMargins: [40, 150, 40, 80],
+      footer: PdfFooter,
       content: [
         {
           layout: {
@@ -187,7 +204,7 @@ const PdfQuotation = ({id,quoteId}) => {
             body: [
               [
                 {
-                  text: 'QUOTATION',
+                  text: 'ORDERS',
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -201,43 +218,38 @@ const PdfQuotation = ({id,quoteId}) => {
             {
               text: `TO`,
               style: ['notesText', 'textSize'],
-              bold:'true'
+              bold: 'true',
             },
             {
-                        text:` ${tenderDetails.company_name ? tenderDetails.company_name : ''}
+              text: ` ${tenderDetails.company_name ? tenderDetails.company_name : ''}
+                               ${tenderDetails.address_flat ? tenderDetails.address_flat : ''}
                                ${tenderDetails.address_street ? tenderDetails.address_street : ''}
-                               ${tenderDetails.address_town?tenderDetails.address_town:''}
                                ${tenderDetails.address_country ? tenderDetails.address_country : ''}
-                               ${tenderDetails.address_po_code ? tenderDetails.address_po_code : ''}`,
+                               ${
+                                 tenderDetails.address_po_code ? tenderDetails.address_po_code : ''
+                               }`,
               style: ['notesText', 'textSize'],
-              margin:[-250,20,0,0],
-              bold:'true'
+              margin: [-250, 20, 0, 0],
+              bold: 'true',
             },
           ],
         },
 
         {
-          text: `Date :   ${(quote.quote_date)? moment(quote.quote_date).format('DD-MM-YYYY'):''}
-           Quote Code :  ${quote.quote_code ? quote.quote_code : ''
-          }\n \n  `,
+          text: `Date :   ${quote.quote_date ? moment(quote.quote_date).format('DD-MM-YYYY') : ''}
+           Quote Code :  ${quote.quote_code ? quote.quote_code : ''}\n \n  `,
           style: ['invoiceAdd', 'textSize'],
-          margin:[0,-60,0,0]
+          margin: [0, -60, 0, 0],
         },
 
-        '\n\n\n',
+        '\n\n',
         {
           text: `Att : ${tenderDetails.first_name ? tenderDetails.first_name : ''}`,
           style: ['notesText', 'textSize'],
-          bold:'true'
+          bold: 'true',
         },
 
         '\n',
-
-        {
-          text: `Project :-    ${tenderDetails.title ? tenderDetails.title : ''}`,
-          bold:'true' ,
-          style: ['notesText', 'textSize'],
-        },
         {
           text: `Dear Sir,
 
@@ -246,10 +258,7 @@ const PdfQuotation = ({id,quoteId}) => {
           style: ['notesText', 'textSize'],
         },
         '\n',
-        '\n',
-
-        '\n',
-
+  
         {
           layout: {
             defaultBorder: false,
@@ -292,7 +301,7 @@ const PdfQuotation = ({id,quoteId}) => {
           },
           table: {
             headerRows: 1,
-            widths: [95, 120, 105, 100],
+            widths: [30, 50, 120, 50,50,100],
 
             body: lineItemBody,
           },
@@ -300,50 +309,34 @@ const PdfQuotation = ({id,quoteId}) => {
         '\n',
         {
           stack: [
-            {
-              text: `SubTotal $ :     ${gTotal.toLocaleString('en-IN', {
-                minimumFractionDigits: 2,
-              })}`,
-              alignment: 'right',
-              margin: [0, 0,20, 0],
-              style: 'textSize',
-            },
-            '\n',
-            {
-              text: `VAT :         ${gstTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-              alignment: 'right',
-              margin: [0, 0, 20, 0],
-              style: 'textSize',
-            },
-            '\n',
-            {
-              text: `Total $ :     ${Total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
-              alignment: 'right',
-          margin: [0, 0, 20, 0],
-          style: 'textSize',
-            },
-            '\n\n\n',
-            { text: `TOTAL : ${Converter.toWords(Total)}`, style: 'bold', margin: [40, 0, 0, 0] },
+            
+            // {
+            //   text: `Total $ :     ${Total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+            //   alignment: 'right',
+            //   margin: [0, 0, 20, 0],
+            //   style: 'textSize',
+            // },
+            // '\n\n\n',
+            // { text: `TOTAL : ${Converter.toWords(Total)}`, style: 'bold', margin: [40, 0, 0, 0] },
           ],
         },
-        '\n\n',
+        '\n',
         '\n',
 
         {
           columns: [
             {
-              text:  `Terms and Condition:- \n
+              text: `Terms and Condition:- \n
               :- Payment : COD \n
               :- The above quote does not cover replacement of any parts unless expressly stated above. \n
               :- We reserve the right to terminate any scope of work in event where there is a default to our Payment Schedule`,
-             
+
               style: ['notesText', 'textSize'],
             },
           ],
         },
 
-        '\n',
-        '\n',
+        '\n\n',
 
         {
           width: '100%',
@@ -413,11 +406,11 @@ const PdfQuotation = ({id,quoteId}) => {
 
   return (
     <>
-      <span onClick={GetPdf}>
-        <Icon.Printer />
-      </span>
+      <Button type="button" color="primary" onClick={GetPdf}>
+      SalesOrder
+      </Button>
     </>
   );
 };
 
-export default PdfQuotation;
+export default PdfQuote;

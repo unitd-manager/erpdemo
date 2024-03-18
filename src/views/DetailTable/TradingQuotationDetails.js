@@ -64,12 +64,13 @@ const TradingQuotationDetails = () => {
   };
 
   //console.log(tenderDetails);
-  const insertQuote = (code) => {
+  const insertQuote = (code,companyId) => {
     setFormSubmitted(true);
     if ( tenderForms.opportunity_id.trim() !== '' && tenderForms.quote_date.trim() !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
+      tenderForms.company_id = companyId;
       api
         .post('/tradingquote/inserttradingquote', tenderForms)
         .then((res) => {
@@ -89,18 +90,41 @@ const TradingQuotationDetails = () => {
   };
 // console.log("1223434",enquiryCodeError)
   //QUOTE GENERATED CODE
+  // const generateCode = () => {
+  //   api
+  //     .post('/tender/getCodeValue', { type: 'quote' })
+  //     .then((res) => {
+  //       insertQuote(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       insertQuote('');
+  //     });
+  // };
+
   const generateCode = () => {
     api
       .post('/tender/getCodeValue', { type: 'quote' })
       .then((res) => {
-        insertQuote(res.data.data);
+        const code = res.data.data;
+        // Fetch company_id based on opportunity_id
+        const selectedEnquiry = enquirycode.find(
+          (enquiry) => enquiry.opportunity_id === tenderForms.opportunity_id
+        );
+        console.log('Selected Enquiry:', selectedEnquiry);
+        if (selectedEnquiry) {
+          const companyId = selectedEnquiry.company_id;
+          console.log('Company ID:', companyId);
+          insertQuote(code, companyId);
+        } else {
+          console.error('Selected enquiry not found');
+          insertQuote(code, ''); // If company_id not found, pass empty string
+        }
       })
-      .catch(() => {
-        insertQuote('');
+      .catch((error) => {
+        console.error('Error fetching code value:', error);
+        insertQuote('', ''); // If error, pass empty string for code and company_id
       });
   };
-
-  
 
   useEffect(() => {
     getEnquiryCode();
@@ -147,7 +171,7 @@ const TradingQuotationDetails = () => {
                   <Col md="9">
                     <Label>
                       {' '}
-                      Quote Date <span className="required"> *</span>{' '}
+                      Quote Date <span className="required"> </span>{' '}
                     </Label>
                     <Input
                       type="date"

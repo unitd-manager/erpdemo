@@ -3,6 +3,7 @@ import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import api from '../../constants/api';
+import message from '../Message';
 
 const FinanceReceiptData = ({ receiptId, orderId }) => {
   FinanceReceiptData.propTypes = {
@@ -28,6 +29,15 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       setCreateReceipt({ ...createReceipt, mode_of_payment: e.target.value });
     } else if (e.target.name === 'receipt_status') {
       setCreateReceipt({ ...createReceipt, receipt_status: e.target.value });
+    }
+    else if (e.target.name === 'cheque_date') {
+      setCreateReceipt({ ...createReceipt, cheque_date: e.target.value });
+    }
+    else if (e.target.name === 'bank_name') {
+      setCreateReceipt({ ...createReceipt, bank_name: e.target.value });
+    }
+    else if (e.target.name === 'cheque_no') {
+      setCreateReceipt({ ...createReceipt, cheque_no: e.target.value });
     }
   };
 
@@ -74,58 +84,94 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       });
     }
   };
-  const updateReceipt = () => {
-    // Create a payload with updated receipt data
-    const updatedReceiptData = {
-      receipt_id: receiptId, // Use the appropriate receipt ID
-      amount: parseFloat(createReceipt.amount), // Convert to a number
-      mode_of_payment: createReceipt.mode_of_payment,
-      receipt_date: createReceipt.receipt_date,
-      remarks: createReceipt.remarks,
-      receipt_status: 'Paid',
-      cheque_date: createReceipt.cheque_date,
-      cheque_no: createReceipt.cheque_no,
-    };
+  // const updateReceipt = () => {
+  //   // Create a payload with updated receipt data
+  //   const updatedReceiptData = {
+  //     receipt_id: receiptId, // Use the appropriate receipt ID
+  //     amount: parseFloat(createReceipt.amount), // Convert to a number
+  //     mode_of_payment: createReceipt.mode_of_payment,
+  //     receipt_date: createReceipt.receipt_date,
+  //     remarks: createReceipt.remarks,
+  //     receipt_status: 'Paid',
+  //     cheque_date: createReceipt.cheque_date,
+  //     cheque_no: createReceipt.cheque_no,
+  //   };
   
-    // Define the promises for updating receipt and invoice status
-    const updateReceiptPromise = api.post('/invoice/editReceipt', updatedReceiptData);
+  //   // Define the promises for updating receipt and invoice status
+  //   const updateReceiptPromise = api.post('/invoice/editReceipt', updatedReceiptData);
   
-    // Check if there are selected invoices to update
-    if (selectedInvoice.length > 0) {
-      const invoiceIds = selectedInvoice.map((invoice) => invoice.invoice_id);
+  //   // Check if there are selected invoices to update
+  //   if (selectedInvoice.length > 0) {
+  //     const invoiceIds = selectedInvoice.map((invoice) => invoice.invoice_id);
   
-      const updatedInvoiceStatusData = {
-        invoice_id: invoiceIds,
-        status: 'Paid', // Update to the appropriate status
-      };
+  //     const updatedInvoiceStatusData = {
+  //       invoice_id: invoiceIds,
+  //       status: 'Paid', // Update to the appropriate status
+  //     };
   
-      const updateInvoiceStatusPromise = api.post('/invoice/editInvoice', updatedInvoiceStatusData);
+  //     const updateInvoiceStatusPromise = api.post('/invoice/editInvoice', updatedInvoiceStatusData);
   
-      // Use Promise.all to wait for both promises to resolve
-      Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
-        .then(([receiptRes, invoiceRes]) => {
-          // Handle success (you might want to show a success message)
-          console.log('Receipt updated successfully', receiptRes);
-          console.log('Invoice status updated successfully', invoiceRes);
-          window.location.reload();
+  //     // Use Promise.all to wait for both promises to resolve
+  //     Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
+  //       .then(([receiptRes, invoiceRes]) => {
+  //         // Handle success (you might want to show a success message)
+  //         console.log('Receipt updated successfully', receiptRes);
+  //         console.log('Invoice status updated successfully', invoiceRes);
+  //         window.location.reload();
+  //       })
+  //       .catch((error) => {
+  //         // Handle error (you might want to show an error message)
+  //         console.error('Error updating receipt or invoice status', error);
+  //       });
+  //   } else {
+  //     // If no selected invoices, only update the receipt
+  //     updateReceiptPromise
+  //       .then((res) => {
+  //         // Handle success (you might want to show a success message)
+  //         console.log('Receipt updated successfully', res);
+  //         window.location.reload();
+  //       })
+  //       .catch((error) => {
+  //         // Handle error (you might want to show an error message)
+  //         console.error('Error updating receipt', error);
+  //       });
+  //   }
+  // };
+  
+  const insertReceipt = (code) =>{
+    if (createReceipt.mode_of_payment !== '' && createReceipt.order_id !== '') {
+
+      createReceipt.receipt_code = code;
+      createReceipt.order_id = orderId;
+      api
+        .post('/finance/insertreceipt', createReceipt)
+        .then((res) => {
+          console.log("data",res.data.data)
+          message('Booking inserted successfully.', 'success');
+     
         })
-        .catch((error) => {
-          // Handle error (you might want to show an error message)
-          console.error('Error updating receipt or invoice status', error);
+        .catch(() => {
+          message('Network connection error.', 'error');
         });
     } else {
-      // If no selected invoices, only update the receipt
-      updateReceiptPromise
-        .then((res) => {
-          // Handle success (you might want to show a success message)
-          console.log('Receipt updated successfully', res);
-          window.location.reload();
-        })
-        .catch((error) => {
-          // Handle error (you might want to show an error message)
-          console.error('Error updating receipt', error);
-        });
+      message('Please fill all required fields', 'warning');
     }
+  };
+  const generateCode = () => {
+    api
+      .post('/commonApi/getCodeValue', { type: 'receipt' })
+      .then((res) => {
+       
+      
+      insertReceipt(res.data.data); 
+      
+      
+   
+      })
+      .catch(() => {
+        insertReceipt('');
+       
+      });
   };
   
   const deleteCreatedReceipt = () => {
@@ -282,7 +328,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
             <FormGroup>
               <Button
                 onClick={() => {
-                  updateReceipt();
+                  generateCode();
                 }}
                 type="button"
                 className="btn btn-dark shadow-none"

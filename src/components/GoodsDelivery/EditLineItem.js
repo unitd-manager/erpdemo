@@ -34,11 +34,18 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
     const copyDeliverOrderProducts = [...addLineItem];
     const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
 
-    const quantity = parseFloat(updatedObject.qty) || 0;
+    const quantity = parseFloat(updatedObject.delivery_qty) || 0;
     const unitPrice = parseFloat(updatedObject.unit_price) || 0;
     // const totalCost = parseFloat(updatedObject.total_cost);
     updatedObject.total_cost = quantity * unitPrice;
 
+    const DeliveryQty = updatedObject.delivery_qty;
+    const orderedQty = updatedObject.quantity;
+  
+    if (DeliveryQty > orderedQty) {
+      alert('Entered quantity exceeds ordered quantity!');
+      return;
+    }
     copyDeliverOrderProducts[index] = updatedObject;
     setAddLineItem(copyDeliverOrderProducts);
   }
@@ -95,6 +102,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                       <th scope="col">Description </th>
                       <th scope="col">UoM</th>
                       <th scope="col">Qty</th>
+                      <th scope="col">Delivery Qty</th>
                       <th scope="col">Amount</th>
                     </tr>
                   </thead>
@@ -136,6 +144,14 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                                 type="number"
                                 name="quantiy"
                                 onChange={(e) => updateState(index, 'quantity', e)}
+                              />
+                            </td>
+                            <td data-label="Delivery Qty">
+                              <Input
+                                defaultValue={item.delivery_qty}
+                                type="number"
+                                name="quantiy"
+                                onChange={(e) => updateState(index, 'delivery_qty', e)}
                               />
                             </td>
                             <td data-label="Amount">

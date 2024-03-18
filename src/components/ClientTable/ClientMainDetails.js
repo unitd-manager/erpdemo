@@ -1,135 +1,175 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import api from '../../constants/api';
 
-export default function ClientMainDetails({ handleInputs, clientsDetails, allCountries , formSubmitted}) {
+export default function ClientMainDetails({
+  handleInputs,
+  clientsDetails,
+  allCountries,
+  formSubmitted,
+  arb,
+  arabic,
+}) {
   ClientMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     clientsDetails: PropTypes.any,
     allCountries: PropTypes.any,
     formSubmitted: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
-  const [arabic, setArabic] = useState([]);
 
-  const getArabicCompanyName = () => {
-    api
-      .get('/translation/getTranslationForCompany')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });
-  };
-  console.log('arabic',arabic)
-  useEffect(() => {
-    getArabicCompanyName();
-  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   return (
     <Form>
       <FormGroup>
         <Row>
-        <Col md="3">
-      <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}><span className="required"> *</span>
-          {arabic.length > 0 && arabic[0].value} {/* Access the value property */}
-           Company Name 
-        </Label>
-              <Input
+          <Col md="3">
+          <FormGroup>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.companyName')?.[genLabel]}
+              </Label>
+          <Input
                 type="text"
                 onChange={handleInputs}
-                value={clientsDetails && clientsDetails.company_name}
-                name="company_name"
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.company_name_arb
+                    : clientsDetails && clientsDetails.company_name
+                }
+                name={arb ? 'company_name_arb' : 'company_name'}
                 className={`form-control ${
-                  formSubmitted && clientsDetails && clientsDetails.company_name.trim() === '' ? 'highlight' : ''
+                  formSubmitted && clientsDetails &&clientsDetails && clientsDetails.company_name_arb.trim() && clientsDetails.company_name.trim() === '' ? 'highlight' : ''
                 }`}
                 />
-                {formSubmitted && clientsDetails && clientsDetails.company_name.trim() === '' && (
+          {formSubmitted && clientsDetails && clientsDetails.company_name_arb.trim() && clientsDetails.company_name.trim() === '' && (
                 <div className="error-message">Please Enter</div>
               )}
-      </FormGroup>
-    </Col>
-          <Col md="3">
-            <FormGroup>
-              <Label>Phone</Label>
-              <Input
-                type="text"
-                onChange={handleInputs}
-                value={clientsDetails && clientsDetails.phone}
-                name="phone"
-              />
-            </FormGroup>
-          </Col>
-          <Col md="3">
-          <FormGroup>
-  <Label dir="rtl" style={{ textAlign: 'right' }}>
-    {arabic.find(item => item.key_text === 'cm.website')?.value} Website
-  </Label>
-  <Input
-    type="text"
-    onChange={handleInputs}
-    value={clientsDetails && clientsDetails.website}
-    name="website"
-  />
-</FormGroup>
-          </Col>
-          <Col md="3">
-          <FormGroup>
-          <Label dir="rtl" style={{ textAlign: 'right' }}><span className="required"> *</span>
-    Email
-  </Label>
-  <Input
-    type="text"
-    onChange={handleInputs}
-    value={clientsDetails && clientsDetails.email}
-    name="email"
-    className={`form-control ${
-      formSubmitted && clientsDetails && clientsDetails.email.trim() === '' ? 'highlight' : ''
-    }`}
-    />
-    {formSubmitted && clientsDetails && clientsDetails.email.trim() === '' && (
-    <div className="error-message">Please Enter</div>
-  )}
-</FormGroup>
+          </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Fax</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.phone')?.[genLabel]}
+              </Label>
               <Input
                 type="text"
                 onChange={handleInputs}
-                value={clientsDetails && clientsDetails.fax}
-                name="fax"
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.phone_arb
+                    : clientsDetails && clientsDetails.phone
+                }
+                name={arb ? 'phone_arb' : 'phone'}
               />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Address 1 </Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.website')?.[genLabel]}
+              </Label>
               <Input
                 type="text"
                 onChange={handleInputs}
-                value={clientsDetails && clientsDetails.address_flat}
-                name="address_flat"
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.website_arb
+                    : clientsDetails && clientsDetails.website
+                }
+                name={arb ? 'website_arb' : 'website'}
               />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Address 2 </Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.email')?.[genLabel]}
+              </Label>
               <Input
                 type="text"
                 onChange={handleInputs}
-                value={clientsDetails && clientsDetails.address_street}
-                name="address_street"
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.email_arb
+                    : clientsDetails && clientsDetails.email
+                }
+                name={arb ? 'email_arb' : 'email'}
+                className={`form-control ${
+                  formSubmitted &&clientsDetails && clientsDetails.email_arb.trim()&& clientsDetails && clientsDetails.email.trim() === ''
+                    ? 'highlight'
+                    : ''
+                }`}
+              />
+              {formSubmitted && clientsDetails && clientsDetails.email_arb.trim() && clientsDetails && clientsDetails.email.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.fax')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.fax_arb
+                    : clientsDetails && clientsDetails.fax
+                }
+                name={arb ? 'fax_arb' : 'fax'}
+              />
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.Address1')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.address_flat_arb
+                    : clientsDetails && clientsDetails.address_flat
+                }
+                name={arb ? 'address_flat_arb' : 'address_flat'}
+              />
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.Address2')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.address_street_arb
+                    : clientsDetails && clientsDetails.address_street
+                }
+                name={arb ? 'address_street_arb' : 'address_street'}
               />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
               {' '}
-              <Label>Country</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.country')?.[genLabel]}
+              </Label>
               <Input
                 type="select"
                 name="address_country"
@@ -150,12 +190,18 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Postal Code</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdClient.postalCode')?.[genLabel]}
+              </Label>
               <Input
                 type="text"
                 onChange={handleInputs}
-                value={clientsDetails && clientsDetails.address_po_code}
-                name="address_po_code"
+                value={
+                  arb
+                    ? clientsDetails && clientsDetails.address_po_code_arb
+                    : clientsDetails && clientsDetails.address_po_code
+                }
+                name={arb ? 'address_po_code_arb' : 'address_po_code'}
               />
             </FormGroup>
           </Col>

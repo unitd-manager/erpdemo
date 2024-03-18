@@ -23,7 +23,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import ReceiptCreate from '../../components/CreditNote/ReceiptCreate';
+import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
 
 
 // import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
@@ -49,7 +49,7 @@ const InvoiceData = () => {
   //getting data from invoice table
   const getInvoice = () => {
     api
-      .get('/creditnote/getCreditNote')
+      .get('/invoice/getReceipts')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
@@ -76,8 +76,8 @@ const InvoiceData = () => {
       wrap: true,
     },
     {
-      name: 'Code',
-      selector: 'credit_note_code',
+      name: 'Receipt Code',
+      selector: 'receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -90,7 +90,7 @@ const InvoiceData = () => {
     },
     {
       name: 'Status',
-      selector: 'credit_note_status',
+      selector: 'receipt_status',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -106,7 +106,7 @@ const InvoiceData = () => {
 
     {
       name: 'Date',
-      selector: 'credit_note_date',
+      selector: 'receipt_date',
       sortable: true,
       width: 'auto',
       grow: 3,
@@ -131,7 +131,7 @@ const InvoiceData = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrder')
+      .get('/finance/getOrders')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -145,16 +145,16 @@ const InvoiceData = () => {
 
   const insertReceipt = (code) =>{
     const insertedOrderId = bookingDetails.order_id;
-    if (bookingDetails.company_id !== '' && bookingDetails.credit_note_id !== '') {
+    if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
 
-      bookingDetails.credit_note_code=code;
+      bookingDetails.receipt_code=code;
       api
-        .post('/creditnote/insertcreditnote', bookingDetails)
+        .post('/finance/insertreceipt', bookingDetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           setSelectedReceiptId(insertedDataId); // Store the receiptId 
           setSelectReceiptId(insertedOrderId)
-          message('Credit note inserted successfully.', 'success');
+          message('Booking inserted successfully.', 'success');
      
         })
         .catch(() => {
@@ -166,7 +166,7 @@ const InvoiceData = () => {
   };
   const generateCode = () => {
     api
-      .post('/creditnote/getCodeValue', { type: 'creditNote' })
+      .post('/commonApi/getCodeValue', { type: 'receipt' })
       .then((res) => {
       setModalOpen(false); // Close the first modal
       setSecondModalOpen(true); // Open the second modal
@@ -192,7 +192,7 @@ const InvoiceData = () => {
 
         <CommonTable
           loading={loading}
-          title="Credit Note List"
+          title="Receipt List"
           Button={
             // Open the modal on button click
             <Button color="primary" className="shadow-none" onClick={toggleModal}>
@@ -215,11 +215,11 @@ const InvoiceData = () => {
                     <td>{index + 1}</td>
 
                     <td>{element.order_code}</td>
-                    <td>{element.credit_note_code}</td>
+                    <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
-                    <td>{element.credit_note_status}</td>
+                    <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
-                    <td>{(element.credit_note_date)?moment(element.credit_note_date).format('DD-MM-YYYY'):''}</td>
+                    <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}

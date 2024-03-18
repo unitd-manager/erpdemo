@@ -21,6 +21,7 @@ const BookingDetails = () => {
     const [customerdropdown, setCustomerDropdown] = useState();
     const [orderdropdown, setOrderDropdown] = useState();
     const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
+    const [formSubmitted, setFormSubmitted] = useState(false);
     //navigation and params
     const navigate = useNavigate();
     
@@ -30,6 +31,7 @@ const BookingDetails = () => {
     //  const { id } = useParams();
     //inserting supplier data
     const insertSalesInvoice = (code) => {
+      setFormSubmitted(true);
       if (invoicedetails.company_id !== '' &&
       invoicedetails.source_type !== ''
       )
@@ -47,7 +49,16 @@ const BookingDetails = () => {
             //         console.log('orderId', orderId);
             
             if (InvoiceSource === 'Sales_Order') {
+              api.post(`/finance/updateOrderStatus/${orderId}`, { order_status: 'Invoiced' })
+            .then(() => {
+              // If the status update is successful, navigate to the invoice edit page
               navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
+            })
+            .catch((error) => {
+              console.error('Error updating order status:', error);
+              message('Error updating order status.', 'error');
+            });
+              // navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
             } else if (InvoiceSource === 'Goods_Delivery') {
               navigate(`/InvoiceEdit/${insertedDataId}/${goodsdeliveryId}?tab=2`);
             }
@@ -131,11 +142,14 @@ const handleInputs = (e) => {
               <FormGroup>
                 <Row>
                 <Col md="12">
-            <Label>Customer Name</Label>
+            <Label>Customer Name <span className="required"> *</span>{' '}</Label>
             <Input 
             type="select" 
             name="company_id" 
             onChange={handleInputs}>
+              className={`form-control ${
+                        formSubmitted && invoicedetails.company_id.trim() === '' ? 'highlight' : ''
+                      }`}
               <option>Select Customer</option>
               {customerdropdown &&
                 customerdropdown.map((e) => {
@@ -146,6 +160,10 @@ const handleInputs = (e) => {
                   );
                 })}
             </Input>
+            {formSubmitted && invoicedetails.company_id.trim() === '' && (
+                      <div className="error-message">Please Enter</div>
+                    )}
+                    
           </Col>
           </Row>
           <br />
@@ -186,6 +204,7 @@ invoicedetails && (
             type="select" 
             name="invoice_source_id" 
             onChange={handleInputs}>
+              
               <option>Select Order</option>
               {orderdropdown &&
                 orderdropdown.map((e) => {

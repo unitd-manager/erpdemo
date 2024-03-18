@@ -39,8 +39,54 @@ const ChartOfAccounts = () => {
   useEffect(() => {
     getChartOfAccounts();
   }, []);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+
+const arb =selectedLanguage === 'Arabic'
+
+const eng =selectedLanguage === 'English'
+
+
+const getArabicCompanyName = () => {
+  if(selectedLanguage === 'Arabic'){
+    api
+    .get('/translation/getTranslationForCompany')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });
+  }else{
+    api
+    .get('/translation/getTranslationEnglish')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });
+  }
+ 
+};
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
   //  stucture of Chart Of Accounts list view
   const columns = [
+
     {
       name: 'Id',
       selector: 'acc_head_id',
@@ -48,6 +94,7 @@ const ChartOfAccounts = () => {
       wrap: true,
       width: '4%',
     },
+  
     {
       name: 'Edit',
       selector: 'edit',
@@ -78,13 +125,59 @@ const ChartOfAccounts = () => {
       sortable: true,
       grow: 0,
     },
-    
+      
   ];
+
+  const columnsarb = [
+
+    {
+      name: 'بطاقة تعريف',
+      selector: 'acc_head_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+  
+    {
+      name: 'يحرر',
+      selector: 'edit',
+      cell: () => <Icon.Edit2 />,
+      grow: 0,
+      width: 'auto',
+      button: true,
+      sortable: false,
+    },
+
+    {
+      name: 'عنوان',
+      selector: 'title',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'فئة',
+      selector: 'category_title',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
+      name: 'شفرة',
+      selector: 'code',
+      sortable: true,
+      grow: 0,
+    },
+      
+  ];
+
 
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
+        {eng===true &&
+
         <CommonTable
           loading={loading}
           title="Chart Of Account List"
@@ -97,16 +190,21 @@ const ChartOfAccounts = () => {
           }
         >
           <thead>
+
             <tr>
+              
               {columns.map((cell) => {
                 return <td key={cell.name}>{cell.name}</td>;
               })}
             </tr>
+          
           </thead>
+
           <tbody>
             {chartofaccounts &&
               chartofaccounts.map((element, i) => {
                 return (
+                  
                   <tr key={element.acc_head_id}>
                     <td>{i + 1}</td>
                     <td>
@@ -121,7 +219,55 @@ const ChartOfAccounts = () => {
                 );
               })}
           </tbody>
+        
         </CommonTable>
+    }
+        {arb===true &&
+
+<CommonTable
+  loading={loading}
+  title="Chart Of Account List"
+  Button={
+    <Link to="/ChartOfAccountDetails">
+      <Button color="primary" className="shadow-none">
+      Add New
+      </Button>
+    </Link>
+  }
+>
+  <thead>
+
+    <tr>
+      
+      {columnsarb.map((cell) => {
+        return <td key={cell.name}>{cell.name}</td>;
+      })}
+    </tr>
+  
+  </thead>
+
+  <tbody>
+    {chartofaccounts &&
+      chartofaccounts.map((element, i) => {
+        return (
+          
+          <tr key={element.acc_head_id}>
+            <td>{i + 1}</td>
+            <td>
+              <Link to={`/ChartofACEdit/${element.acc_head_id}`}>
+                <Icon.Edit2 />
+              </Link>
+            </td>
+            <td>{element.title_arb}</td>
+            <td>{element.category}</td>
+            <td>{element.code}</td>
+            </tr>
+        );
+      })}
+  </tbody>
+
+</CommonTable>
+}
       </div>
     </div>
   );

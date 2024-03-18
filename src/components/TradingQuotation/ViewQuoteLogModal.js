@@ -17,14 +17,13 @@ import api from '../../constants/api';
 //import QuoteLogViewLineItem from './QuoteLogViewLineItem';
 import PdfProjectQuoteLog from '../PDF/PdfProjectQuoteLog';
 
-const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId ,id}) => {
+const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) => {
   ViewQuoteLogModal.propTypes = {
     quotationsModal: PropTypes.bool,
     toggleQuotationsModal: PropTypes.any,
     quoteId: PropTypes.any,
-    id:PropTypes.any,
   };
-
+ 
   const [quoteLogViewLineItem, setQuoteLogViewLineItem] = useState(false);
   const [quote, setQuote] = useState();
   const getquotations = () => {
@@ -215,7 +214,7 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId ,id
                            
                               <PdfProjectQuoteLog
                                 logId={element.quote_log_id}
-                                id={id}
+                                id={quoteId}
                               ></PdfProjectQuoteLog>
                             
                           </FormGroup>

@@ -18,13 +18,14 @@ import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
 import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
-
+ 
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [goodsitemdetails, setgoodslineDetails] = useState();
   const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
+  //const { insertedDataId, OrderId } = useParams();
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -84,6 +85,7 @@ const GoodsDeliveryEdit = () => {
   };
 
   // Generate Data for Delivery Items
+  
   const generateData = () => {
     api
       .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
@@ -174,7 +176,8 @@ const GoodsDeliveryEdit = () => {
     { name: 'Item Title' },
     { name: 'Description' },
     { name: 'Unit' },
-    { name: 'quantity' },
+    { name: 'Ordered Quantity' },
+    { name: 'Delivered Quantity' },
     { name: 'Unit Price' },
     { name: 'Total Amount ' },
   ];
@@ -187,6 +190,8 @@ const GoodsDeliveryEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        //OrderId={OrderId}
+        id={id}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
         handleInputs={handleInputs}
@@ -254,6 +259,7 @@ const GoodsDeliveryEdit = () => {
                             <td>{element.description}</td>
                             <td>{element.unit}</td>
                             <td>{element.quantity}</td>
+                            <td>{element.delivery_qty}</td>
                             <td>{element.unit_price}</td>
                             <td>{element.amount}</td>
                           </tr>

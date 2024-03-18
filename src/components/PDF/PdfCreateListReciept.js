@@ -1,34 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Button } from 'reactstrap';
-import moment from 'moment';
+// import moment from 'moment';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 import message from '../Message';
 
-const PdfPaySlip = ({invoiceId,orderitemDetails}) => {
+const PdfPaySlip = ({receiptId}) => {
   PdfPaySlip.propTypes = {
-    invoiceId: PropTypes.any,
-    orderitemDetails: PropTypes.any
+    receiptId: PropTypes.any,
+   
   }
-console.log('invoiceId',invoiceId);
+console.log('receiptID',receiptId);
   const [hfdata, setHeaderFooterData] = React.useState();
-  const [invoiceDetails, setInvoiceDetails] = useState({});
+  const [invoice, setInvoice] = React.useState([]);
+  const [receipt, setReceipt] = React.useState([]);
 
-  const getInvoiceById = () => {
-    api
-      .post('/invoice/getInvoiceByInvoiceId', { invoice_id: invoiceId })
-      .then((res) => {
-        setInvoiceDetails(res.data.data);
-      })
-      .catch(() => {
-        message('Invoice Data Not Found', 'info');
-      });
-  };
-
+  // const [bookingDetails, setPayroll] = React.useState();
   React.useEffect(() => {
     api.get('/setting/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
@@ -39,69 +30,85 @@ console.log('invoiceId',invoiceId);
     const filteredResult = hfdata.find((e) => e.key_text === key);
     return filteredResult.value;
   };
-  const subtotal = orderitemDetails.reduce((total, element) => total + parseFloat(element.total_cost || 0), 0);
-  // const getInvoiceItemById = () => {
-  //   api
-  //     .post('/invoice/getInvoiceItemByInvoiceId', { invoice_id: invoiceId })
-  //     .then((res) => {
-  //       setCompany(res.data.data);
-  //       //grand total
+
+  const getReceiptItemById = () => {
+    api
+      .post('/invoice/getReceiptData', { receipt_id : receiptId })
+      .then((res) => {
+        setInvoice(res.data.data);
+        //grand total
     
-  //     })
-  //     .catch(() => {
-  //       message('Invoice Data Not Found', 'info');
-  //     });
-  // };
+      })
+      .catch(() => {
+        message('Invoice Data Not Found', 'info');
+      });
+  };
+  const getReceipt = () => {
+    api
+      .post('/invoice/getReceiptInvoiceData', { receipt_id : receiptId })
+      .then((res) => {
+        setReceipt(res.data.data[0]);
+        //grand total
+    
+      })
+      .catch(() => {
+        message('Invoice Data Not Found', 'info');
+      });
+  };
 
   React.useEffect(() => {
- getInvoiceById();
-
+    getReceiptItemById();
+    getReceipt();
   }, []);
 
   const GetPdf = () => {
     const productItems = [
       [
+     
         {
-          text: 'Title',
+          text: 'Receipt No',
           style: 'tableHead',
         },
         {
-          text: 'Unit Price',
+          text: 'Payment Method',
           style: 'tableHead',
         },
         {
-          text: 'Invoice Quantity',
+          text: 'Status',
           style: 'tableHead',
         },
         {
-          text: 'Total',
+          text: 'amount',
           style: 'tableHead',
         },
        
+       
       ],
     ];
-    orderitemDetails.forEach((element) => {
+    invoice.forEach((element) => {
       productItems.push([
+      
         {
-          text: `${element.item_title ? element.item_title : ''}`,
+          text: `${element.receipt_code ? element.receipt_code : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-          text: `${element.unit_price ? element.unit_price : ''}`,
+          text: `${element.mode_of_payment ? element.mode_of_payment : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-          text: `${element.invoice_qty ? element.invoice_qty : ''}`,
+          text: `${element.receipt_status ? element.receipt_status : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-          text: `${element.total_cost ? element.total_cost : ''}`,
+          text: `${element.amount ? element.amount : ''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
+      
        
      
       ]);
@@ -156,7 +163,7 @@ console.log('invoiceId',invoiceId);
             body: [
               [
                 {
-                  text: `TAX INVOICE`,
+                  text: `Receipt`,
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -172,22 +179,21 @@ console.log('invoiceId',invoiceId);
             {
               stack: [
                 {
-                  text: ` Invoice No:${
-                    invoiceDetails.invoice_code ? invoiceDetails.invoice_code : ''
+                  text: ` Order No:${
+                    receipt.order_code ? receipt.order_code : ''
                   } `,
                   style: ['textSize'],
                   margin: [20, 0, 0, 0],
                 },
                 {
-                  text: ` Date :${moment(
-                    invoiceDetails.invoice_date ? invoiceDetails.invoice_date : '',
-                  ).format('DD-MM-YYYY')}  `,
+                  text: ` Invoice No:${
+                    receipt.invoice_code ? receipt.invoice_code : ''
+                  } `,
                   style: ['textSize'],
                   margin: [20, 0, 0, 0],
                 },
-            
-              
-                  '\n',
+               
+             
               ],
             },
           ],
@@ -248,16 +254,7 @@ console.log('invoiceId',invoiceId);
                 style: ['invoiceAdd', 'textSize'],
               },
               {
-                stack: [
-                  
-                    {
-                        text: `SubTotal $ : ${subtotal.toLocaleString('en-IN', {
-                          minimumFractionDigits: 2,
-                        })}`,
-                        style: ['textSize'],
-                        margin: [145, 0, 0, 0],
-                      },
-                ],
+               
               },
             ],
           },
@@ -341,7 +338,7 @@ console.log('invoiceId',invoiceId);
   return (
     <>
       <Button type="button" className="btn btn-dark mr-2" onClick={GetPdf}>
-        Print Invoice
+        Print Receipt
       </Button>
     </>
   );

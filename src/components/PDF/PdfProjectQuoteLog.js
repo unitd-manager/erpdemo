@@ -36,21 +36,23 @@ const PdfProjectQuoteLog = ({id,logId}) => {
 
   const getProjectById = () => {
     api
-      .post('/project/getProjectById', { project_id: id })
+      .post('/tradingquote/getTradingquoteById', { quote_id: id })
       .then((res) => {
         setProjectDetail(res.data.data);
+        console.log('quote5', res.data.data);
+
       })
       .catch(() => {});
   };
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/project/getTabQuoteById', { project_id: id }).then((res) => {
-      setQuotation(res.data.data);
+    api.post('/project/getTabQuotelogsById', { quote_id: id }).then((res) => {
+      setQuotation(res.data.data[0]);
       console.log('quote2', res.data.data);
     });
   };
- 
+  
   const getQuoteById = () => {
     api
       .post('/project/getTabQuoteLineItems', { quote_log_id: logId })
@@ -219,8 +221,8 @@ const PdfProjectQuoteLog = ({id,logId}) => {
         {
           stack: [
             
-            {text:`Project Reference : ${quotation.project_reference?quotation.project_reference:''} `,style: [ 'textSize'],  },
-            {text:`Project Location  : ${quotation.project_location?quotation.project_location:''} `,style: [ 'textSize'],  },
+            {text:`Project Reference : ${quotation.project_reference?quotation.office_ref_no:''} `,style: [ 'textSize'],  },
+            {text:`roject Location  : ${quotation.project_location?quotation.project_location:''} `,style: [ 'textSize'],  },
           ],
         },'\n\n\n',
      

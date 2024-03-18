@@ -474,6 +474,7 @@ const [showTooltip, setShowTooltip] = useState(false);
             {addLineItemModal && (
               <QuoteLineItem
                 //projectInfo={tenderId}
+                previousTenderDetails={previousTenderDetails}
                 addLineItemModal={addLineItemModal}
                 setAddLineItemModal={setAddLineItemModal}
                 quoteLine={id}

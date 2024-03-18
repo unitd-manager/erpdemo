@@ -27,6 +27,10 @@ export default function ClientContactGetAndInsert({
   handleAddNewContact,
   newContactData,
   AddNewContact,
+  setFormSubmitted,
+  formSubmitted,
+  arb,
+  arabic,
 }) {
   ClientContactGetAndInsert.propTypes = {
     setContactData: PropTypes.func,
@@ -38,7 +42,18 @@ export default function ClientContactGetAndInsert({
     handleAddNewContact: PropTypes.func,
     newContactData: PropTypes.object,
     AddNewContact: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
+    formSubmitted: PropTypes.any,
+    arb:PropTypes.any,
+    arabic:PropTypes.any
   };
+  let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //  Table Contact
   const columns = [
     {
@@ -66,7 +81,7 @@ export default function ClientContactGetAndInsert({
       wrap: true,
     },
     {
-      name: 'Name',
+      name: arabic.find(item => item.key_text === 'mdClient.contactName')?.[genLabel],
       selector: 'first_name',
       sortable: true,
       grow: 0,
@@ -113,7 +128,7 @@ export default function ClientContactGetAndInsert({
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
-              Add New Contact{' '}
+              {arb ?'إضافة جهة اتصال جديدة':'Add New Contact'} 
             </Button>
             <Modal size="lg" isOpen={addContactModal} toggle={addContactToggle.bind(null)}>
               <ModalHeader toggle={addContactToggle.bind(null)}>New Contact</ModalHeader>
@@ -141,24 +156,43 @@ export default function ClientContactGetAndInsert({
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Name<span className='required'>*</span></Label>
+                              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdClient.contactName')?.[genLabel]}
+                           </Label>
                                 <Input
                                   type="text"
-                                  name="first_name"
+    
                                   onChange={handleAddNewContact}
-                                  value={newContactData && newContactData.first_name}
+                                  value={
+                                    arb
+                                      ? newContactData && newContactData.first_name_arb
+                                      : newContactData && newContactData.first_name
+                                  }
+                                  name={arb ? 'first_name_arb' : 'first_name'}
+                                  className={`form-control ${
+                                    formSubmitted && newContactData && newContactData.first_name.trim() && newContactData.first_name.trim() === '' ? 'highlight' : ''
+                                  }`}
                                 />
+                                 {formSubmitted && newContactData && newContactData.first_name.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
                               </FormGroup>
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Email</Label>
+                                <Label>Email <span className='required'>*</span> </Label>
                                 <Input
                                   type="text"
                                   name="email"
                                   onChange={handleAddNewContact}
                                   value={newContactData && newContactData.email}
+                                  className={`form-control ${
+                                    formSubmitted && newContactData && newContactData.email.trim() === '' ? 'highlight' : ''
+                                  }`}
                                 />
+                                 {formSubmitted && newContactData && newContactData.email.trim() === '' && (
+                <div className="error-message">Please Enter</div>
+              )}
                               </FormGroup>
                             </Col>
                             <Col md="4">
@@ -228,6 +262,7 @@ export default function ClientContactGetAndInsert({
                   className="shadow-none"
                   color="primary"
                   onClick={() => {
+                    setFormSubmitted(true);
                     AddNewContact();
                     //addContactModal(false);
                   }}

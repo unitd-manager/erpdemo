@@ -184,6 +184,14 @@ const OpportunityDetails = () => {
     getAllCountries();
   }, [id]);
 
+  const inputClass = `form-control ${
+    formSubmitted && (!tenderForms.company_id || tenderForms.company_id === 'Please Select') ? 'highlight' : ''
+  }`;
+
+  const inputClass1 = `form-control ${
+    formSubmitted && (!tenderForms.category || tenderForms.category === 'Please Select') ? 'highlight' : ''
+  }`;
+
   return (
     <div>
       <BreadCrumbs />
@@ -222,10 +230,7 @@ const OpportunityDetails = () => {
                     <Input
                       type="select"
                       name="company_id"
-                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '')
-                          ? 'highlight'
-                          : ''
-                        }`}
+                      className={inputClass}
                       //value={tenderForms && tenderForms.company_id}
                       value={tenderForms?.company_id || ''}
                       onChange={(e) => {
@@ -234,7 +239,9 @@ const OpportunityDetails = () => {
               }}
               
                     >
-                      <option>Please Select</option>
+                      <option value="" selected="selected">
+                      Please Select
+                    </option>
                       {company &&
                         company.map((ele) => {
                           return (
@@ -245,9 +252,7 @@ const OpportunityDetails = () => {
                           );
                         })}
                     </Input>
-                    {formSubmitted && tenderForms && (tenderForms.company_id === undefined || tenderForms.company_id.trim() === '') && (
-                      <div className="error-message">Please Select</div>
-                    )}
+                    
                   </Col>
                   <Col md="3" className="addNew">
                     
@@ -255,6 +260,9 @@ const OpportunityDetails = () => {
                       Add New
                     </Button>
                   </Col>
+                  {(formSubmitted && !tenderForms.company_id) && (
+      <div className="error-message">Please Select</div>
+    )}
                 </Row>
                 {/* <FormGroup>
                   <Label>
@@ -305,10 +313,7 @@ const OpportunityDetails = () => {
                     onChange={handleInputsTenderForms}
                     value={tenderForms && tenderForms.category}
                     name="category"
-                    className={`form-control ${formSubmitted && tenderForms && (tenderForms.category === undefined || tenderForms.category.trim() === '')
-                          ? 'highlight'
-                          : ''
-                        }`}
+                    className={inputClass1}
                   >
                     <option value="" selected="selected">
                       Please Select
@@ -318,9 +323,9 @@ const OpportunityDetails = () => {
                         return <option value={ele.value}>{ele.value}</option>;
                       })}
                   </Input>
-                  {formSubmitted && tenderForms && (tenderForms.category === undefined || tenderForms.category.trim() === '') && (
-                      <div className="error-message">Please Select</div>
-                    )}
+                  {(formSubmitted && !tenderForms.category) && (
+      <div className="error-message">Please Select</div>
+    )}
                 </Col>
               </FormGroup>
               <Row>

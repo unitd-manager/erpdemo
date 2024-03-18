@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-// import SimpleBar from 'simplebar-react';
+import SimpleBar from 'simplebar-react';
 import {
   Navbar,
   // Nav,
@@ -10,7 +10,7 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  // DropdownItem,
+   DropdownItem,
   Button,
   Label
 } from 'reactstrap';
@@ -21,9 +21,11 @@ import {
 // import MegaDD from './MegaDD';
 // import NotificationDD from './NotificationDD';
 import user1 from '../../assets/images/users/user1.jpg';
+import Language from './Language';
 
 import { ToggleMiniSidebar, ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
 import ProfileDD from './ProfileDD';
+
 
 const Header = () => {
   const isDarkMode = useSelector((state) => state.customizer.isDark);
@@ -145,6 +147,27 @@ const Header = () => {
         {/******************************/}
         {/**********Profile DD**********/}
         {/******************************/}
+        <UncontrolledDropdown className="mx-1">
+          <DropdownToggle color={topbarColor}>
+            {/* <MessageSquare size={18} /> */}
+           Language
+          </DropdownToggle>
+          <DropdownMenu className="ddWidth">
+            <DropdownItem header>
+              <span className="mb-0">Language</span>
+            </DropdownItem>
+            <DropdownItem divider />
+            <SimpleBar style={{ maxHeight: '350px' }}>
+              <Language />
+            </SimpleBar>
+            <DropdownItem divider />
+            <div className="p-2 px-3">
+              {/* <Button color="primary" size="sm" block>
+                Check All
+              </Button> */}
+            </div>
+          </DropdownMenu>
+        </UncontrolledDropdown>
         <UncontrolledDropdown>
           <DropdownToggle color={topbarColor}>
             <img src={user1} alt="profile" className="rounded-circle" width="30" />

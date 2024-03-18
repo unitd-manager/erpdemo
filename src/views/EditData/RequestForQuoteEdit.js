@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button , TabContent, TabPane} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +12,8 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import DeleteButton from '../../components/DeleteButton';
+import AppContext from '../../context/AppContext';
+
 // import QuotationMoreDetails from '../../components/ProjectModal/QuotationMoreDetails';
 import Tab from '../../components/project/Tab';
 import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
@@ -25,6 +27,7 @@ const RequestForQuoteEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
   const [orderDetails, setOrderDetails] = useState();
 
+  const { loggedInuser } = useContext(AppContext);
 
   //navigation and parameters
   const { id } = useParams();
@@ -43,17 +46,17 @@ const RequestForQuoteEdit = () => {
   //Update Setting
   const editQuoteData = () => {
     quoteDetails.modification_date = creationdatetime;
+    quoteDetails.modified_by = loggedInuser.first_name;
+
     if (quoteDetails.status !== '') {
       api
-        .post('/quote/editPurchseQuote', quoteDetails)
-        .then(() => {
-          message('Record editted successfully', 'success' );
-          
-        })
-
-        .catch(() => {
-          message('Unable to edit record.', 'error');
-        });
+      .post('/quote/editPurchseQuote', quoteDetails)
+      .then(() => {
+        message('Record editted successfully', 'success');
+      })
+      .catch(() => {
+        message('Unable to edit record.', 'error');
+      });
     } else {
       message('Please fill all required fields.', 'error');
     }
@@ -231,7 +234,7 @@ console.error('Error fetching quote items', error);
                     editQuoteData();
                     applyChanges();
                   }}
-                >
+                > 
                   Apply
                 </Button>
               </Col>
@@ -267,8 +270,10 @@ console.error('Error fetching quote items', error);
             </Row>
           </ComponentCardV2>
           <ComponentCardV2>
-              <PdfRequestForQuote></PdfRequestForQuote>
-            </ComponentCardV2>
+          <Label>
+          <PdfRequestForQuote id={id} quoteId={id}></PdfRequestForQuote>
+        </Label>
+                  </ComponentCardV2>
         </FormGroup>
       </Form>
       {/* Setting Details */}
