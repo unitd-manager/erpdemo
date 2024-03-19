@@ -32,6 +32,15 @@ const OpportunityEdit = () => {
     navigate('/ProjectEnquiry');
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };
@@ -95,6 +104,27 @@ const OpportunityEdit = () => {
       setContact(res.data.data);
     });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+
 
   // Get Incharge
   const getIncharge = () => {
@@ -193,6 +223,7 @@ const OpportunityEdit = () => {
     getIncharge();
     getCompany();
     getAllCountries();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -203,6 +234,8 @@ const OpportunityEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
+        eng={eng}
       ></TenderButtons>
      <TenderMoreDetails
         companyInsertData={companyInsertData}
@@ -225,6 +258,9 @@ const OpportunityEdit = () => {
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
         formSubmitted={formSubmitted}
+          arb={arb}
+          arabic={arabic}
+          eng={eng}
       ></TenderMoreDetails>
 
       <ComponentCard title="More Details">
