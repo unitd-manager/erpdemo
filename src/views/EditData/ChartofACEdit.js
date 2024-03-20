@@ -55,32 +55,20 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
   const arb =selectedLanguage === 'Arabic'
 
-  const eng =selectedLanguage === 'English'
   
 
   const getArabicCompanyName = () => {
-    if(selectedLanguage === 'Arabic'){
-      api
-      .get('/translation/getTranslationForCompany')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });
-    }else{
-      api
-      .get('/translation/getTranslationEnglish')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });
-    }
-   
-  };
-  console.log('arabic',arabic)
+    api
+    .get('/translation/getTranslationForCompanyAcc')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
   useEffect(() => {
     getArabicCompanyName();
   }, []);
@@ -109,6 +97,14 @@ console.log('Selected language from localStorage:', selectedLanguage);
     getGroup();
   }, [id]);
 
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   return (
     <>
       {/* BreadCrumbs */}
@@ -124,56 +120,32 @@ console.log('Selected language from localStorage:', selectedLanguage);
       ></AccountMapButton>
 
       {/* Main Details */}
-      {arb===true &&
-      <ComponentCard title= 'Chart of Account Edit'  creationModificationDate={chartofAC}>
+      <ComponentCard title="Chart of AC Edit" creationModificationDate={chartofAC}>
         <Form>
           <FormGroup>
             <Row>
-             { eng === true &&
-        <Col md="4">
-      <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-        {arabic.find(item => item.key_text === 'cm.websiteClient')?.english_value}  {/*Access the value property */}
-         <span className="required"> *</span>
-        </Label>
-        <Input
-          type="text"
-          onChange={handleInputs}
-          value={chartofAC?.title}
-          name="title"
-        />
-      </FormGroup>
-    </Col>
-       }
-
-    {arb===true &&
-        <Col md="4">
-      <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}>
-        
-        {arabic.find(item => item.key_text === 'cm.websiteClient')?.value}   {/*Access the value property */}
-         <span className="required">*</span> 
-        </Label>
-        <Input
-          type="text"
-          onChange={handleInputs}
-          value={chartofAC?.title_arb}
-          name="title_arb"
-        />
-      </FormGroup>
-    </Col>
-       }
-
-
-            { eng === true &&
+              <Col md="4">
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Title')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? (chartofAC && chartofAC.title_arb ? chartofAC && chartofAC.title_arb : chartofAC && chartofAC.title)
+                    : chartofAC && chartofAC.title
+                }
+                name={arb ? 'title_arb' : 'title'}
+              />
+            </FormGroup>
+          </Col>
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                  {arabic.find(item => item.key_text === 'cm.chartAccCode')?.english_value}  {/*Access the value property */}
-                    <span className="required"> *</span>
-                  </Label>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -182,35 +154,12 @@ console.log('Selected language from localStorage:', selectedLanguage);
                   />
                 </FormGroup>
               </Col>
-            }
-
-
-          { arb === true &&
-              <Col md="4">
-                <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                  {arabic.find(item => item.key_text === 'cm.chartAccCode')?.value}  {/*Access the value property */}
-                    <span className="required"> *</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={chartofAC && chartofAC?.code}
-                    name="code"
-                  />
-                </FormGroup>
-              </Col>
-            }
-             { arb === true &&
 
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                {arabic.find(item => item.key_text === 'cm.chartAccCategory')?.value}  {/*Access the value property */}
-                  <span className="required"> *</span>
-                </Label>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
+              </Label>
                   <Input 
                     type="select"
                     name="acc_category_id"
@@ -229,181 +178,12 @@ console.log('Selected language from localStorage:', selectedLanguage);
                   </Input>
                 </FormGroup>
               </Col>
-              }
 
-{ eng === true &&
-
-<Col md="4">
-  <FormGroup>
-  <Label dir="rtl" style={{ textAlign: 'right' }}>
-
-  {arabic.find(item => item.key_text === 'cm.chartAccCategory')?.english_value}  {/*Access the value property */}
-    <span className="required"> *</span>
-  </Label>
-    <Input 
-      type="select"
-      name="acc_category_id"
-      value={chartofAC?.acc_category_id}
-      onChange={handleInputs}
-    >
-      <option value="selected">Please Select</option>
-      {menuItems?.map((item) => (
-        <option
-          key={item.acc_category_id}
-          value={item.acc_category_id}
-        >
-          {item.title}
-        </option>
-      ))}
-    </Input>
-  </FormGroup>
-</Col>
-}
             </Row>
           </FormGroup>
         </Form>
       </ComponentCard>
-}
-{eng===true &&
-      <ComponentCard title='Chart of Account Edit' creationModificationDate={chartofAC}>
-        <Form>
-          <FormGroup>
-            <Row>
-             { eng === true &&
-        <Col md="4">
-      <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-        {arabic.find(item => item.key_text === 'cm.websiteClient')?.english_value}  {/*Access the value property */}
-         <span className="required"> *</span>
-        </Label>
-        <Input
-          type="text"
-          onChange={handleInputs}
-          value={chartofAC?.title}
-          name="title"
-        />
-      </FormGroup>
-    </Col>
-       }
 
-    {arb===true &&
-        <Col md="4">
-      <FormGroup>
-        <Label dir="rtl" style={{ textAlign: 'right' }}>
-        
-        {arabic.find(item => item.key_text === 'cm.websiteClient')?.value}   {/*Access the value property */}
-         <span className="required">*</span> 
-        </Label>
-        <Input
-          type="text"
-          onChange={handleInputs}
-          value={chartofAC?.title_arb}
-          name="title_arb"
-        />
-      </FormGroup>
-    </Col>
-       }
-
-
-            { eng === true &&
-              <Col md="4">
-                <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                  {arabic.find(item => item.key_text === 'cm.chartAccCode')?.english_value}  {/*Access the value property */}
-                    <span className="required"> *</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={chartofAC && chartofAC?.code}
-                    name="code"
-                  />
-                </FormGroup>
-              </Col>
-            }
-
-
-          { arb === true &&
-              <Col md="4">
-                <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                  {arabic.find(item => item.key_text === 'cm.chartAccCode')?.value}  {/*Access the value property */}
-                    <span className="required"> *</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={chartofAC && chartofAC?.code}
-                    name="code"
-                  />
-                </FormGroup>
-              </Col>
-            }
-             { arb === true &&
-
-              <Col md="4">
-                <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-       
-                {arabic.find(item => item.key_text === 'cm.chartAccCategory')?.value}  {/*Access the value property */}
-                  <span className="required"> *</span>
-                </Label>
-                  <Input 
-                    type="select"
-                    name="acc_category_id"
-                    value={chartofAC?.acc_category_id}
-                    onChange={handleInputs}
-                  >
-                    <option value="selected">Please Select</option>
-                    {menuItems?.map((item) => (
-                      <option
-                        key={item.acc_category_id}
-                        value={item.acc_category_id}
-                      >
-                        {item.title}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
-              }
-
-{ eng === true &&
-
-<Col md="4">
-  <FormGroup>
-  <Label dir="rtl" style={{ textAlign: 'right' }}>
-
-  {arabic.find(item => item.key_text === 'cm.chartAccCategory')?.english_value}  {/*Access the value property */}
-    <span className="required"> *</span>
-  </Label>
-    <Input 
-      type="select"
-      name="acc_category_id"
-      value={chartofAC?.acc_category_id}
-      onChange={handleInputs}
-    >
-      <option value="selected">Please Select</option>
-      {menuItems?.map((item) => (
-        <option
-          key={item.acc_category_id}
-          value={item.acc_category_id}
-        >
-          {item.title}
-        </option>
-      ))}
-    </Input>
-  </FormGroup>
-</Col>
-}
-            </Row>
-          </FormGroup>
-        </Form>
-      </ComponentCard>
-}
     </>
   );
 };

@@ -7,10 +7,13 @@ import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
-const PdfEmpTimesheet = ({ getSingleEmployeeData }) => {
+const PdfEmpTimesheet = ({ getSingleEmployeeData,selectedmonth,selectedYear }) => {
   PdfEmpTimesheet.propTypes = {
     getSingleEmployeeData: PropTypes.object.isRequired,
+    selectedmonth: PropTypes.any, // Assuming selectedmonth is a number representing the month
+    selectedYear:  PropTypes.any
   };
+  console.log("monthend11",selectedmonth)
 
   const [totalEmpTimesheetRecord, setTotalEmpTimesheetRecord] = React.useState([]);
   const [hfdata, setHeaderFooterData] = React.useState([]);
@@ -19,10 +22,18 @@ const PdfEmpTimesheet = ({ getSingleEmployeeData }) => {
     api.get('/setting/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
     });
-    api.post('/timesheet/getAllEmpTimesheetPDF', { employee_id: getSingleEmployeeData.employee_id }).then((res) => {
-      setTotalEmpTimesheetRecord(res.data.data);
-    });
-  }, [getSingleEmployeeData]);
+  
+    if (getSingleEmployeeData && selectedmonth) {
+      api.post('/timesheet/getAllEmpTimesheetPDFold', {
+        employee_id: getSingleEmployeeData.employee_id,
+        monthend: selectedmonth,
+        year: selectedYear,
+      }).then((res) => {
+        setTotalEmpTimesheetRecord(res.data.data);
+      });
+    }
+  }, [getSingleEmployeeData, selectedmonth,selectedYear]);
+  
 
   console.log("getSingleEmployeeData", getSingleEmployeeData);
   console.log("totalEmpTimesheetRecord", totalEmpTimesheetRecord);

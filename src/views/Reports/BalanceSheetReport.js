@@ -80,14 +80,14 @@ const BalanceSheetReports = () => {
           (g.amounts[index] !== undefined && g.amounts[index] !== null) &&
           <tr key={title}>
             <td>{title}</td>
-            <td>{g.amounts[index]}</td>
+            <td style={{ textAlign: 'right' }}>{g.amounts[index]}</td>
           </tr>
         ))}
         {/* Calculate total only if amounts exist */}
         {g.amounts.length > 0 && g.amounts.filter(amount => amount !== undefined && amount !== null).length > 0 &&
           <tr key={`${g.acc_category}-total`}>
             <td><b>Total</b></td>
-            <td>{g.amounts.reduce((total, amount) => total + (amount || 0), 0)}</td>
+            <td style={{ textAlign: 'right' }}>{g.amounts.reduce((total, amount) => total + (amount || 0), 0)}</td>
           </tr>
         }
       </>
