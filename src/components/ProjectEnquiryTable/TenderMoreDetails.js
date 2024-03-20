@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
@@ -8,7 +9,9 @@ export default function TenderMoreDetails({
   handleInputs,
   company,
   getContact,
-  formSubmitted
+  formSubmitted,
+  arb,
+  arabic,
 }) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
@@ -16,7 +19,16 @@ export default function TenderMoreDetails({
     getContact: PropTypes.any,
     company: PropTypes.object,
     formSubmitted:PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
  };
+ let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       {' '}
@@ -26,9 +38,10 @@ export default function TenderMoreDetails({
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Enquiry Date <span className="required"> *</span>
-                  </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectEnq.Enquiry Date')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}
@@ -45,7 +58,7 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry No</Label>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.Enquiry No')?.[genLabel]}
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -57,29 +70,37 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Reference</Label>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.Reference')?.[genLabel]}
                   <Input
                     type="text"
-                    value={tenderDetails && tenderDetails.office_ref_no}
+                    value={
+                      arb
+                        ? (tenderDetails && tenderDetails.office_ref_no_arb ? tenderDetails && tenderDetails.office_ref_no_arb : tenderDetails && tenderDetails.office_ref_no)
+                        : tenderDetails && tenderDetails.office_ref_no
+                    }
                     onChange={handleInputs}
-                    name="office_ref_no"
+                    name={arb? 'office_ref_no_arb':'office_ref_no'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Services</Label>
+                {arabic.find((item) => item.key_text === 'mdProjectEnq.service')?.[genLabel]}
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.services}
-                    name="services"
+                    value={
+                      arb
+                        ? (tenderDetails && tenderDetails.services_arb ? tenderDetails && tenderDetails.services_arb : tenderDetails && tenderDetails.services)
+                        : tenderDetails && tenderDetails.services
+                    }
+                    name={arb ? 'services_arb': 'services'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>BID Expiry</Label>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.BID Expiry')?.[genLabel]}
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -91,7 +112,7 @@ export default function TenderMoreDetails({
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Status</Label>
+                {arabic.find((item) => item.key_text === 'mdProjectEnq.status')?.[genLabel]}
                   <Input
                     type="select"
                     value={tenderDetails && tenderDetails.status}
@@ -106,7 +127,7 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer</Label>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.customer')?.[genLabel]}
                   <Input
                     type="select"
                     onChange={(e) => {
