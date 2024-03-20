@@ -4,14 +4,62 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies }) {
+function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies, team }) {
   EmployeePart.propTypes = {
     employeeDetails: PropTypes.object,
     handleInputChange: PropTypes.func,
     allCountries: PropTypes.array,
     companies: PropTypes.array,
+    team: PropTypes.array,
   };
 
+  // Use localStorage to get the initial value or set it to 0 by default
+  const initialProjectManagerValue = localStorage.getItem('project_manager') || '0';
+  const initialTeamLeaderValue = localStorage.getItem('team_leader') || '0';
+
+  // Set the initial state based on localStorage
+  const [projectManager, setProjectManager] = React.useState(initialProjectManagerValue);
+  const [teamLeader, setTeamLeader] = React.useState(initialTeamLeaderValue);
+  React.useEffect(() => {
+    // Save the current value to localStorage whenever it changes
+    localStorage.setItem('project_manager', projectManager);
+    localStorage.setItem('team_leader', teamLeader);
+  }, [projectManager, teamLeader]);
+
+  const calculateTotalExperience = (dateJoined) => {
+    if (!dateJoined) {
+      return '';
+    }
+
+    const joinDateTime = new Date(dateJoined);
+
+    const currentDate = new Date();
+
+    const difference = currentDate - joinDateTime;
+
+    const totalYears = difference / (1000 * 60 * 60 * 24 * 365.25);
+
+    const totalMonths = totalYears * 12;
+
+    const years = Math.floor(totalYears);
+    const months = Math.floor(totalMonths % 12);
+
+    let experienceString = '';
+    if (years > 0) {
+      experienceString += `${years} year${years > 1 ? 's' : ''}`;
+    }
+    if (months > 0) {
+      if (experienceString) {
+        experienceString += ' ';
+      }
+      experienceString += `${months} month${months > 1 ? 's' : ''}`;
+    }
+    return experienceString;
+  };
+
+  const totalExperience = calculateTotalExperience(employeeDetails.act_join_date);
+
+  console.log('all countries', allCountries);
   return (
     <div>
       <FormGroup>
@@ -25,8 +73,6 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   value={employeeDetails && employeeDetails.emp_code}
                   onChange={handleInputChange}
                   type="text"
-                  placeholder="EMP-1002"
-                  disabled
                 />
               </FormGroup>
             </Col>
@@ -36,8 +82,8 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   Full Name <span style={{ color: 'red' }}>*</span>
                 </Label>
                 <Input
-                  name="first_name"
-                  value={employeeDetails && employeeDetails.first_name}
+                  name="employee_name"
+                  value={employeeDetails && employeeDetails.employee_name}
                   onChange={handleInputChange}
                   type="text"
                 />
@@ -107,6 +153,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   value={
                     employeeDetails && moment(employeeDetails.date_of_birth).format('YYYY-MM-DD')
                   }
+                  max={moment().format('YYYY-MM-DD')}
                 />
               </FormGroup>
             </Col>
@@ -131,6 +178,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   value={
                     employeeDetails && moment(employeeDetails.date_of_expiry).format('YYYY-MM-DD')
                   }
+                  min={moment().format('YYYY-MM-DD')}
                 />
               </FormGroup>
             </Col>
@@ -153,22 +201,40 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                 </Input>
               </FormGroup>
             </Col>
+
             <Col md="3">
               <FormGroup>
                 <Label>
+                  {/* Nationality */}
                   Nationality <span style={{ color: 'red' }}>*</span>
                 </Label>
+                {/* <Input
+                  name="nationality"
+                  value={employeeDetails && employeeDetails.nationality}
+                  onChange={handleInputChange}
+                  type="select"
+                >
+                  <option value="">Please Select</option>
+                  {allCountries &&
+                    allCountries.map((ele) => {
+                      return (
+                        <option key={ele.country_code} value={parseFloat(ele.country_code)}>
+                          {ele.name}
+                        </option>
+                      );
+                    })}
+                </Input> */}
                 <Input
                   name="nationality"
                   value={employeeDetails && employeeDetails.nationality}
                   onChange={handleInputChange}
                   type="select"
                 >
-                  <option>Please Select</option>
+                  <option value="">Please Select</option>
                   {allCountries &&
                     allCountries.map((ele) => {
                       return (
-                        <option key={ele.country_code} value={ele.country_code}>
+                        <option key={ele.country_code} value={ele.name}>
                           {ele.name}
                         </option>
                       );
@@ -176,6 +242,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                 </Input>
               </FormGroup>
             </Col>
+
             <Col md="3">
               <FormGroup>
                 <Label>Race</Label>
@@ -230,7 +297,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                 </Input>
               </FormGroup>
             </Col>
-            {/* <Col md="3">
+            <Col md="3">
               <FormGroup>
                 <Label>Team</Label>
                 <Input
@@ -240,13 +307,32 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   type="select"
                 >
                   <option defaultValue="selected">Please Select</option>
-                  <option value="Team A">Team A</option>
-                  <option value="Team B">Team B</option>
-                  <option value="Team C">Team C</option>
-                  <option value="Team D">Team D</option>
+                  {team &&
+                    team.map((ele) => (
+                      <option key={ele.project_team_id} value={ele.project_team_id}>
+                        {ele.team_title}
+                      </option>
+                    ))}
                 </Input>
               </FormGroup>
-            </Col> */}
+            </Col>
+            <Col md="3">
+              <FormGroup>
+                <Label>Pay</Label>
+                <Input
+                  name="pay"
+                  value={employeeDetails && employeeDetails.pay}
+                  onChange={handleInputChange}
+                  type="select"
+                >
+                  <option>Please Select</option>
+                  <option defaultValue="selected" value="GroupPay">
+                    Group Pay
+                  </option>
+                  <option value="HourlyPay">Hourly Pay</option>
+                </Input>
+              </FormGroup>
+            </Col>
             <Col md="3">
               <FormGroup>
                 <Label>Company</Label>
@@ -270,16 +356,28 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
+                <Label>Experience</Label>
+                <Input
+                  name="totalexperience"
+                  value={totalExperience}
+                  onChange={handleInputChange}
+                  type="text"
+                  disabled
+                />
+              </FormGroup>
+            </Col>
+            <Col md="3">
+              <FormGroup>
                 <Label>Project manager</Label>
-                <br></br>
+                <br />
                 <Label>Yes</Label>
                 &nbsp;
                 <Input
                   name="project_manager"
                   value="1"
                   type="radio"
-                  defaultChecked={employeeDetails && employeeDetails.project_manager === 1 && true}
-                  onChange={handleInputChange}
+                  checked={projectManager === '1'}
+                  onChange={(e) => setProjectManager(e.target.value)}
                 />
                 &nbsp; &nbsp;
                 <Label>No</Label>
@@ -288,8 +386,34 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   name="project_manager"
                   value="0"
                   type="radio"
-                  defaultChecked={employeeDetails && employeeDetails.project_manager === 0 && true}
-                  onChange={handleInputChange}
+                  checked={projectManager === '0'}
+                  onChange={(e) => setProjectManager(e.target.value)}
+                />
+              </FormGroup>
+            </Col>
+
+            <Col md="3">
+              <FormGroup>
+                <Label>Team Leader</Label>
+                <br />
+                <Label>Yes</Label>
+                &nbsp;
+                <Input
+                  name="team_leader"
+                  value="1"
+                  type="radio"
+                  checked={teamLeader === '1'}
+                  onChange={(e) => setTeamLeader(e.target.value)}
+                />
+                &nbsp; &nbsp;
+                <Label>No</Label>
+                &nbsp;
+                <Input
+                  name="team_leader"
+                  value="0"
+                  type="radio"
+                  checked={teamLeader === '0'}
+                  onChange={(e) => setTeamLeader(e.target.value)}
                 />
               </FormGroup>
             </Col>

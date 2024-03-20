@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, TabContent,Table, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate,Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -16,6 +16,7 @@ import Tab from '../../components/project/Tab';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
 import ProjectMaterialLineItem from '../../components/project/ProjectMaterialLineItem';
 import EditProjectMaterialLineItemModal from '../../components/project/EditProjectMaterialLineItemModal'
+import CommonTable from '../../components/CommonTable';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -107,6 +108,78 @@ const ProjectEdit = () => {
       name: 'Action ',
     },
   ];
+  const [tenders, setTenders] = useState(null);
+  
+
+  const getTenders = () => {
+    api
+      .post('/joborder/getProjectJobOrderById',{project_id:id})
+      .then((res) => {
+        setTenders(res.data.data); 
+      });
+  };
+  useEffect(() => {
+    getTenders();
+  }, []);
+
+  const columns = [
+    {
+      name: '#',
+      selector: 'project_job_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+
+    {
+      name: 'Job Order No',
+      selector: 'job_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Job Order Title',
+      selector: 'job_title',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Date',
+      selector: 'job_date',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
+      name: 'Customer',
+      selector: 'company_name',
+      sortable: true,
+      grow: 0,
+    },
+    {
+      name: 'Reference',
+      selector: 'ref_no_job',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
+  
+    {
+      name: 'Status',
+      selector: 'job_status',
+      sortable: true,
+      width: 'auto',
+    },
+    {
+        name: 'Net Amount',
+        selector: 'total_amount',
+        sortable: true,
+        width: 'auto',
+      },
+  ];
+
   // Get Project By Id
   const getProjectById = () => {
     api
@@ -381,8 +454,40 @@ const ProjectEdit = () => {
             />
           </TabPane>
           <TabPane tabId="4">
-            </TabPane>
-
+            
+            <CommonTable 
+             title="JobOrder List">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {tenders &&
+              tenders.map((element, index) => {
+                return (
+                  <tr key={element.project_job_id}>
+                    <td>{index + 1}</td>
+                    <td>
+                    <Link to={`/ProjectJobOrderEdit/${element.project_job_id}`}>{element.job_code}</Link>
+                      {/* <Link to={`/ProjectJobOrderEdit/${element.project_job_id}?tab=1`}>
+                        <Icon.Edit2 />
+                      </Link> */}
+                    </td>
+                    <td>{element.job_title}</td>
+                    <td>{element.job_date}</td>
+                    <td>{element.company_name}</td>
+                    <td>{element.ref_no_job}</td>
+                    <td>{element.job_status}</td>
+                    <td>{element.total_amount}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </CommonTable>
+        </TabPane>
           {/* End Tab Content 12 */}
         </TabContent>
       </ComponentCard>

@@ -4,17 +4,32 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-export default function TenderMoreDetails({ tenderDetails, handleInputs,  formSubmitted }) {
+export default function TenderMoreDetails({
+  tenderDetails,
+  handleInputs,
+  formSubmitted,
+  arb,
+  arabic,
+}) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     //company: PropTypes.object,
     handleInputs: PropTypes.object,
     formSubmitted: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
   console.log('tender', tenderDetails);
   //  const getCurrentDate = () => {
   //   return moment().format('YYYY-MM-DD');
   // };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
     <div>
@@ -23,7 +38,7 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs,  formSu
         <FormGroup>
           <ComponentCard title="Enquiry Details" creationModificationDate={tenderDetails}>
             <Row>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Enquiry Code</Label>
                   <Input
@@ -32,6 +47,27 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs,  formSu
                     value={tenderDetails && tenderDetails.opportunity_code}
                     name="opportunity_code"
                     readOnly
+                  />
+                </FormGroup>
+              </Col> */}
+
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTrading.EnquiryCode')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.opportunity_code_arb
+                        : tenderDetails && tenderDetails.opportunity_code
+                    }
+                    name={arb ? 'opportunity_code_arb' : 'opportunity_code'}
+                    
                   />
                 </FormGroup>
               </Col>

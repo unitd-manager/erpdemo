@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { TabContent, TabPane,Table, Row } from 'reactstrap';
+import { TabContent, TabPane, Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -28,7 +28,7 @@ const OpportunityEdit = () => {
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
-   const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -38,13 +38,11 @@ const OpportunityEdit = () => {
   const tabs = [
     { id: '1', name: 'Quotation' },
     { id: '2', name: 'Attachment' },
-
   ];
 
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-
 
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -59,7 +57,6 @@ const OpportunityEdit = () => {
       setCompany(res.data.data);
     });
   };
-
 
   //Logic for adding company in db
 
@@ -77,10 +74,39 @@ const OpportunityEdit = () => {
     company_size: '',
     source: '',
   });
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
   const companyhandleInputs = (e) => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/translation/getTranslationForCompany')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   // Insert Company
   const insertCompany = () => {
@@ -134,24 +160,23 @@ const OpportunityEdit = () => {
 
   const editTenderData = () => {
     setFormSubmitted(true);
-    
-    if (tenderDetails.title !== '' && tenderDetails.company_id!== '')
-    // setFormSubmitted(true);
-    // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '') 
-    {
-    tenderDetails.modification_date = creationdatetime;
-    tenderDetails.modified_by = loggedInuser.first_name;
-    api
-      .post('/tender/edit-Tenders', tenderDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
+
+    if (tenderDetails.title !== '' && tenderDetails.company_id !== '') {
+      // setFormSubmitted(true);
+      // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '')
+      tenderDetails.modification_date = creationdatetime;
+      tenderDetails.modified_by = loggedInuser.first_name;
+      api
+        .post('/tender/edit-Tenders', tenderDetails)
+        .then(() => {
+          message('Record editted successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        })
+        .catch(() => {
+          message('Unable to edit record.', 'error');
+        });
     } else {
       message('Please fill all required fields', 'warning');
     }
@@ -164,7 +189,7 @@ const OpportunityEdit = () => {
     });
   };
 
-   // Add new Contact
+  // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
     salutation: '',
@@ -182,14 +207,9 @@ const OpportunityEdit = () => {
   };
 
   const AddNewContact = () => {
-    
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -205,17 +225,12 @@ const OpportunityEdit = () => {
     }
   };
 
-   //Api for getting all countries
-   const getAllCountries = () => {
+  //Api for getting all countries
+  const getAllCountries = () => {
     api.get('/clients/getCountry').then((res) => {
       setallCountries(res.data.data);
     });
   };
-  
-
-  
-
-
 
   const columns1 = [
     {
@@ -238,9 +253,6 @@ const OpportunityEdit = () => {
     },
   ];
 
-  
-
-
   useEffect(() => {
     editTenderById();
     getLineItem();
@@ -251,7 +263,9 @@ const OpportunityEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
+       {eng ===true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      { arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+      {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
       <TenderButtons
         editTenderData={editTenderData}
         navigate={navigate}
@@ -260,7 +274,9 @@ const OpportunityEdit = () => {
         tenderDetails={tenderDetails}
         setFormSubmitted={setFormSubmitted}
       ></TenderButtons>
-     <TenderMoreDetails
+      <TenderMoreDetails
+        arb={arb}
+        arabic={arabic}
         companyInsertData={companyInsertData}
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -281,7 +297,6 @@ const OpportunityEdit = () => {
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
         formSubmitted={formSubmitted}
-        
       ></TenderMoreDetails>
 
       <ComponentCard title="More Details">
@@ -289,7 +304,6 @@ const OpportunityEdit = () => {
         <Tab toggle={toggle} tabs={tabs} />
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-            
             <br />
             <Row>
               <div className="container">
@@ -321,9 +335,9 @@ const OpportunityEdit = () => {
             </Row>
           </TabPane>
           <TabPane tabId="2">
-            <TenderAttachment ></TenderAttachment>
-            </TabPane>
-            </TabContent>
+            <TenderAttachment></TenderAttachment>
+          </TabPane>
+        </TabContent>
       </ComponentCard>
     </>
   );
