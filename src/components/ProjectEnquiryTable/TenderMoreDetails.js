@@ -75,8 +75,11 @@ export default function TenderMoreDetails({
                     type="text"
                     value={
                       arb
-                        ? (tenderDetails && tenderDetails.office_ref_no_arb ? tenderDetails && tenderDetails.office_ref_no_arb : tenderDetails && tenderDetails.office_ref_no)
-                        : tenderDetails && tenderDetails.office_ref_no
+                        ? (
+                            tenderDetails && tenderDetails.office_ref_no_arb ? tenderDetails.office_ref_no_arb :
+                            (tenderDetails && tenderDetails.office_ref_no_arb !== null ? '' : tenderDetails && tenderDetails.office_ref_no)
+                          )
+                        : (tenderDetails && tenderDetails.office_ref_no)
                     }
                     onChange={handleInputs}
                     name={arb? 'office_ref_no_arb':'office_ref_no'}
@@ -91,8 +94,11 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={
                       arb
-                        ? (tenderDetails && tenderDetails.services_arb ? tenderDetails && tenderDetails.services_arb : tenderDetails && tenderDetails.services)
-                        : tenderDetails && tenderDetails.services
+                        ? (
+                            tenderDetails && tenderDetails.services_arb ? tenderDetails.services_arb :
+                            (tenderDetails && tenderDetails.services_arb !== null ? '' : tenderDetails && tenderDetails.services)
+                          )
+                        : (tenderDetails && tenderDetails.services)
                     }
                     name={arb ? 'services_arb': 'services'}
                   />

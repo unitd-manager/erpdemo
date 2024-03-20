@@ -164,23 +164,26 @@ export default function ProjectQuoteMoreDetails({
                 </FormGroup>
               </Col>
               <Col md="3">
-                <FormGroup>
-                 
-                  <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdProjectQuote.Reference')?.[genLabel]}
-              </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={
-                      arb
-                        ? (tenderDetails && tenderDetails.ref_no_quote_arb ? tenderDetails && tenderDetails.ref_no_quote_arb : tenderDetails && tenderDetails.ref_no_quote)
-                        : tenderDetails && tenderDetails.ref_no_quote
-                    }
-                    name={arb ? 'ref_no_quote_arb': 'ref_no_quote'}
-                  />
-                </FormGroup>
-              </Col>
+  <FormGroup>
+    <Label dir="rtl" style={{ textAlign: 'right' }}>
+      {arabic.find((item) => item.key_text === 'mdProjectQuote.Reference')?.[genLabel]}
+    </Label>
+    <Input
+      type="text"
+      onChange={handleInputs}
+      value={
+        arb
+          ? (
+              tenderDetails && tenderDetails.ref_no_quote_arb ? tenderDetails.ref_no_quote_arb :
+              (tenderDetails && tenderDetails.ref_no_quote_arb !== null ? '' : tenderDetails && tenderDetails.ref_no_quote)
+            )
+          : (tenderDetails && tenderDetails.ref_no_quote)
+      }
+      name={arb ? 'ref_no_quote_arb': 'ref_no_quote'}
+    />
+  </FormGroup>
+</Col>
+
              
               <Col md="3">
                 <FormGroup>
