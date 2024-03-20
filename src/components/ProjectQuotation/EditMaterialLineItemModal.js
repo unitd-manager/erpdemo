@@ -19,11 +19,13 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 
-const EditMaterialLineItemModal = ({ editMaterialModal, setEditMaterialModal, FetchMaterialItemData ,}) => {
+const EditMaterialLineItemModal = ({ editMaterialModal, setEditMaterialModal, FetchMaterialItemData,arabic,genLabel}) => {
     EditMaterialLineItemModal.propTypes = {
     editMaterialModal: PropTypes.bool,
     setEditMaterialModal: PropTypes.func,
     FetchMaterialItemData: PropTypes.object,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
     //tenderDetails: PropTypes.any,
   };
 const {id}=useParams();
@@ -99,7 +101,9 @@ const {id}=useParams();
         <ModalBody>
           <FormGroup>
             <Row>
-              <Label sm="2">Title</Label>
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Title')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="text"
@@ -112,7 +116,10 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Description</Label>
+             
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Description')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="textarea"
@@ -125,7 +132,10 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Qty</Label>
+             
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Qty')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="text"
@@ -141,7 +151,9 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">UOM</Label>
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Unit')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="select"
@@ -164,7 +176,10 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Unit Price</Label>
+            
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Unit Price')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="text"
@@ -180,7 +195,10 @@ const {id}=useParams();
           </FormGroup>
           <FormGroup>
             <Row>
-              <Label sm="2">Amount</Label>
+              
+              <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Amount')?.[genLabel]}
+              </Label>
               <Col sm="10">
                 <Input
                   type="text"

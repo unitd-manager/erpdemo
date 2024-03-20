@@ -13,7 +13,9 @@ export default function ProjectQuoteMoreDetails({
   AddNewContact,
   addContactModal,
   addContactToggle,
-  getContact
+  getContact,
+  arabic,
+  arb
 }) {
   ProjectQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
@@ -25,7 +27,16 @@ export default function ProjectQuoteMoreDetails({
     AddNewContact: PropTypes.any,
     handleAddNewContact: PropTypes.any,
     getContact: PropTypes.any,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       {' '}
@@ -35,9 +46,9 @@ export default function ProjectQuoteMoreDetails({
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Quotation Code <span className="required"> *</span>
-                  </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Quotation Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -49,19 +60,25 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Code</Label>
+                
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Enquiry Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
                     value={tenderDetails && tenderDetails.enquiry_code}
                     name="enquiry_code"
-                    
+                    disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Date</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -72,7 +89,10 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Customer')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={(e) => {
@@ -98,14 +118,23 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>
+                  {/* <Label>
                     Contact (OR){' '}
                     <span className="anchor" onClick={addContactToggle.bind(null)}>
                       <b>
                         <u>Add New Contact</u>
                       </b>
                     </span>
-                  </Label>
+                  </Label> */}
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdProjectQuote.Contact')?.[genLabel]}
+                (OR){' '}
+                    <span className="anchor" onClick={addContactToggle.bind(null)}>
+                      <b>
+                        <u>{arb?'إضافة جهة اتصال جديدة':'Add New Contact'}</u>
+                      </b>
+                    </span>
+              </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -124,7 +153,7 @@ export default function ProjectQuoteMoreDetails({
                         );
                       })}
 
-<TenderContactDetails
+                    <TenderContactDetails
                     addContactModal={addContactModal}
                     addContactToggle={addContactToggle}
                     AddNewContact={AddNewContact}
@@ -136,19 +165,29 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Reference</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Reference')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.ref_no_quote}
-                    name="ref_no_quote"
+                    value={
+                      arb
+                        ? (tenderDetails && tenderDetails.ref_no_quote_arb ? tenderDetails && tenderDetails.ref_no_quote_arb : tenderDetails && tenderDetails.ref_no_quote)
+                        : tenderDetails && tenderDetails.ref_no_quote
+                    }
+                    name={arb ? 'ref_no_quote_arb': 'ref_no_quote'}
                   />
                 </FormGroup>
               </Col>
              
               <Col md="3">
                 <FormGroup>
-                  <Label>Status</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Status')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     value={tenderDetails && tenderDetails.quote_status}
@@ -167,7 +206,10 @@ export default function ProjectQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Net Total</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectQuote.Net Total')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     value={tenderDetails && tenderDetails.total_amount}

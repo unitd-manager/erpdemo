@@ -111,7 +111,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           // Handle success (you might want to show a success message)
           console.log('CreditNote updated successfully', receiptRes);
           console.log('Invoice status updated successfully', invoiceRes);
-          // window.location.reload();
+          //  window.location.reload();
         })
         .catch((error) => {
           // Handle error (you might want to show an error message)

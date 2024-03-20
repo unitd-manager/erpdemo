@@ -99,7 +99,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
   }
 
   const renderGenerateDataButton = () => {
-    if (orderDetails && orderDetails.order_status === 'invoiced') {
+    if (orderDetails && orderDetails.order_status === 'Invoiced') {
       // If order status is 'invoiced', return null to hide the button
       return null;
     }

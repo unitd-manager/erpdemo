@@ -18,7 +18,11 @@ import CommonTable from '../../components/CommonTable';
 const Opportunity = () => {
   const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getTenders = () => {
     api
     .get('/projectenquiry/getProjectEnquiry')
@@ -43,8 +47,32 @@ const Opportunity = () => {
         setLoading(false);
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb =selectedLanguage === 'Arabic'
+  
+  const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   useEffect(() => {
     getTenders();
+    getArabicCompanyName();
   }, []);
 
   const columns = [
@@ -65,41 +93,41 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Enquiry code',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.Enquiry No')?.[genLabel],
       selector: 'enquiry_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Services',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.service')?.[genLabel],
       selector: 'services',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.customer')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.Reference')?.[genLabel],
       selector: 'office_ref_no',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'BID Expiry',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.BID Expiry')?.[genLabel],
       selector: 'project_end_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdProjectEnq.status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -142,9 +170,9 @@ const Opportunity = () => {
                       </Link>
                     </td>
                     <td>{element.enquiry_code}</td>
-                    <td>{element.services}</td>
+                    <td>{arb && element.services_arb ?element.services_arb : element.services}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
+                    <td>{arb && element.office_ref_no_arb ?element.office_ref_no_arb : element.office_ref_no}</td>
                     <td>{element.project_end_date ? moment(element.project_end_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.status}</td>
                   </tr>

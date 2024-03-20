@@ -41,7 +41,8 @@ const InvoiceData = () => {
   //Navigation and Parameter Constants
 
   const navigate = useNavigate();
-  const [company, setCompany] = useState();
+  const [invoiveId, setInvoiceId] = useState();
+  const [order, setOrder] = useState();
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -131,15 +132,26 @@ const InvoiceData = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrder')
+      .get('/creditnote/getInvoice')
       .then((res) => {
-        setCompany(res.data.data);
+        setInvoiceId(res.data.data);
+        const invoiceData = res.data.data
+        const InvoiceId = invoiceData[0].invoice_id
+        api
+          .post('/creditnote/getOrderCreditDebitNote', { invoice_id: InvoiceId })
+          .then((res1) => {
+            setOrder(res1.data.data);
+          })
+          .catch(() => {
+          
+          });
       })
       .catch(() => {
         message('Company not found', 'info');
       });
   };
 
+ 
 
   //Logic for adding Booking in db
 
@@ -237,12 +249,26 @@ const InvoiceData = () => {
                   <Form>
                     <FormGroup>
                       <Row>
+                      <Col md="10">
+                          <Label>Invoice</Label>
+                          <Input type="select" name="order_id" onChange={handleBookingInputs}>
+                            <option>Select Invoice</option>
+                            {invoiveId &&
+                              invoiveId.map((e) => {
+                                return (
+                                  <option key={e.invoice_id} value={e.invoice_id}>
+                                    {e.invoice_code}
+                                  </option>
+                                );
+                              })}
+                          </Input>
+                        </Col>
                         <Col md="10">
                           <Label>Orders</Label>
                           <Input type="select" name="order_id" onChange={handleBookingInputs}>
-                            <option>Select Customer</option>
-                            {company &&
-                              company.map((e) => {
+                            <option>Select Order</option>
+                            {order &&
+                              order.map((e) => {
                                 return (
                                   <option key={e.order_id} value={e.order_id}>
                                     {e.order_code}
