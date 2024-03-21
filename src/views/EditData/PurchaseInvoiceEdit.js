@@ -34,7 +34,11 @@ const PurchaseRequestEdit = () => {
 
   // Navigation and Parameter Constants
   const { id } = useParams();
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   // get staff details
   const { loggedInuser } = useContext(AppContext);
 
@@ -49,7 +53,16 @@ const PurchaseRequestEdit = () => {
       setActiveTab(tab);
     }
   };
-
+  const getArabicCompanyName = () => {
+    api
+    .get('/projectquote/getTranslationForProjectQuote')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
   const tabs = [
     { id: '1', name: 'Purchase Invoice Items' },
     { id: '2', name: 'Attachment' },
@@ -173,6 +186,7 @@ const PurchaseRequestEdit = () => {
   //UseEffect
   useEffect(() => {
     getPurchaseInvoiceById(); 
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -181,6 +195,8 @@ const PurchaseRequestEdit = () => {
             handleInputs={handleInputs}
             purchaseinvoiceeditdetails={purchaseinvoiceeditdetails}
             editPurchaseInvoiceData={editPurchaseInvoiceData}
+            arabic={arabic}
+            arb={arb}
             id={id}
             ></PurchaseInvoiceEditDetails>
             <ComponentCard title="More Details">
