@@ -13,6 +13,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/TenderTable/TenderMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
@@ -38,6 +39,10 @@ const OpportunityEdit = () => {
   const tabs = [
     { id: '1', name: 'Quotation' },
     { id: '2', name: 'Attachment' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'جهات الاتصال المرتبطة' },
+    { id: '2', name: 'مرفق' },
   ];
 
   const toggle = (tab) => {
@@ -77,11 +82,11 @@ const OpportunityEdit = () => {
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
-const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
-// Use the selected language value as needed
-console.log('Selected language from localStorage:', selectedLanguage);
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
   const companyhandleInputs = (e) => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
@@ -94,7 +99,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
   const getArabicCompanyName = () => {
     api
-      .get('/translation/getTranslationForCompany')
+      .get('/enquiry/getTranslationforTradingEnq')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -263,8 +268,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
   return (
     <>
-       {eng ===true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
-      { arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+      {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
       {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
       <TenderButtons
         editTenderData={editTenderData}
@@ -301,7 +306,14 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <br />

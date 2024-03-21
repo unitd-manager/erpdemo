@@ -88,18 +88,18 @@ const JobInformation = () => {
     },
     {
       name: 'Full Name',
-      selector: 'first_name',
+      selector: 'employee_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
-    {
-      name: 'Department',
-      selector: 'department',
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
+    // {
+    //   name: 'Department',
+    //   selector: 'department',
+    //   sortable: true,
+    //   grow: 2,
+    //   wrap: true,
+    // },
     {
       name: 'S Pass No',
       selector: 'spass_no',
@@ -160,7 +160,7 @@ const JobInformation = () => {
           {
             empWithoutJobInfo.map((el)=>{
               return(
-                <span style={{marginRight:'5px'}}><Badge> {el.first_name}</Badge></span>
+                <span style={{marginRight:'5px'}}><Badge> {el.employee_name}</Badge></span>
               )
             })
           }
@@ -198,12 +198,12 @@ const JobInformation = () => {
                         </Link>
                       </td>
                       <td>{element.emp_code}</td>
-                      <td>{element.first_name}</td>
-                      <td>{element.department}</td>
-                      <td>{element.spass_no}</td>
+                      <td>{element.employee_name ||element.first_name}</td>
+                      {/* <td>{element.department}</td> */}
+                      <td>{element.passport}</td>
                       <td>{element.fin_no}</td>
                       <td>{element.nric_no}</td>
-                      <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
+                      <td>{element.date_of_birth ? moment(element.date_of_birth).format('DD-MM-YYYY') : ''}</td>
                       <td>{element.basic_pay}</td>
                       <td>{element.citizen}</td>
                       <td>{element.job_information_id}</td>

@@ -6,8 +6,8 @@ import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import moment from 'moment';
-import 'datatables.net-buttons/js/buttons.colVis';
-import 'datatables.net-buttons/js/buttons.flash';
+// import 'datatables.net-buttons/js/buttons.colVis';
+// import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
@@ -152,15 +152,15 @@ const Leaves = () => {
                   <tr key={element.leave_id}>
                     <td>{i + 1}</td>
                     <td>
-                      <Link to={`/LeavesEdit/${element.leave_id}?tab=1`}>
+                      <Link className='editlink' to={`/LeavesEdit/${element.leave_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
                     <td>{element.employee_name}</td>
-                    <td>{element.designation}</td>
+                    <td>{element.position}</td>
                     <td>{element.status}</td>
-                    <td>{moment(element.from_date).format('YYYY-MM-DD')}</td>
-                    <td>{moment(element.to_date).format('YYYY-MM-DD')}</td>
+                    <td>{element.from_date ? moment(element.from_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>{element.to_date ? moment(element.to_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.no_of_days}</td>
                     <td>{element.no_of_days_next_month}</td>
                     <td>{element.leave_type}</td>
