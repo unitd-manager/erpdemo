@@ -19,6 +19,45 @@ const Opportunity = () => {
   const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationforTradingEnq')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+
   const getTenders = () => {
     api
       .get('/tender/getTenders')
@@ -101,7 +140,8 @@ const Opportunity = () => {
     },
     
     {
-      name: 'Enquiry Status',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Enquiry status')?.[genLabel],
+      // name: 'Enquiry Status',
       selector: 'status',
       sortable: true,
       width: 'auto',
@@ -146,7 +186,8 @@ const Opportunity = () => {
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
                     <td>{element.project_end_date }</td>
-                    <td>{element.status}</td>
+                    {/* <td>{element.status}</td> */}
+                    <td>{arb ? element.status_arb : element.status}</td>
                   </tr>
                 );
               })}
