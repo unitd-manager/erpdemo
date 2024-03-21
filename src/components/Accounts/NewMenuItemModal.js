@@ -40,18 +40,57 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
     setEditMenuItemModal(!editMenuItemModal);
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+//const eng =selectedLanguage === 'English'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyAccMap')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+
+
   //  insert parent Item 
   const SaveData = () => {
     let parentid = 0;
     let sortOrder = 1;
-
+  
     if (selectedParent !== null && selectedParent !== "") {
       // Convert selectedParent to a number
       parentid = parseInt(selectedParent, 10);
-
+  
       // Check if a record with the same parent_id (acc_category_id) exists
-      const existingItem = menuItems.find((item) => item.parent_id === parentid);
-
+      const existingItem = menuItems.find((item) => item.acc_category_id === parentid);
+  
       if (existingItem) {
         // Increment sortOrder based on the existing records with the same parent_id
         const sameParentItems = menuItems.filter((item) => item.parent_id === parentid);
@@ -60,7 +99,7 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
     } else {
       // User did not select a parent, parent_id should be 0
       parentid = 0;
-
+  
       // Calculate sortOrder when parent_id is 0
       const itemCount = menuItems.reduce((count, item) => {
         if (item.parent_id === 0) {
@@ -68,41 +107,42 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
         }
         return count;
       }, 0);
-
+  
       // The count will be used as the sortOrder
       sortOrder = itemCount + 1;
     }
-
+  
     const data = {
-      title,
+      title: arb ? "" : title, // Set title based on arb flag
+      title_arb: arb ? title : "", // Set title_arb based on arb flag
       code: "",
       sort_order: sortOrder,
-      parent_id: parentid,
+      parent_id: parentid || 0,
       creation_date: moment(Date.now()).format('YYYY-MM-DD'),
       modification_date: "",
       category_type: "",
     };
-    
-    console.log("data",data)
-    if(data.title !== ''){
+  
+    if ((arb && data.title_arb !== '') || (!arb && data.title !== '')) { // Check based on arb flag
       api
-      .post('/accountsMap/insertMenuItems', data)
-      .then((res) => {
-        setTitle(res.data.data);
-        message('Record editted successfully', 'success');
+        .post('/accountsMap/insertMenuItems', data)
+        .then((res) => {
+          // Assuming res.data.data contains the newly inserted item, you can handle it accordingly
+          console.log(res.data.data);
+          message('Record added successfully', 'success');
           setTimeout(() => {
-              window.location.reload();
-            }, 300);
-      })
-      .catch(() => {
-        message('Menu Item Data Not inserted', 'info');
-      });
-    }else {
+            window.location.reload();
+          }, 300);
+        })
+        .catch(() => {
+          message('Menu Item Data Not inserted', 'info');
+        });
+    } else {
       message('Please fill all required fields', 'warning');
     }
-    
   };
-
+  
+  
   const getGroup = () => {
     api.get('/accountsMap/getParentItem').then((res) => {
       setParentOptions(res.data.data);
@@ -167,7 +207,7 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
           <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
             {hasChildren ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
           </span>
-          &nbsp;<span onClick={() => handleChildTitleClick(item)}> {item.title} </span>
+          &nbsp;<span onClick={() => handleChildTitleClick(item)}>{arb ? item.title_arb : item.title}</span>
         </div>
         {hasChildren && isOpen && (
           <ul style={{ listStyle: 'none' }}>
@@ -203,8 +243,11 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Parent</Label>
-                      <Input type="select" name="title" onChange={handleInputs}>
+    
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Parent')?.[genLabel]}
+                      </Label>
+                      {/* <Input type="select" name="parent_id" onChange={handleInputs}>
                         <option value="">Please Select</option>
 
                         {parentOptions?.map((option) => (
@@ -212,17 +255,32 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
                             {option.title}
                           </option>
                         ))}
-                      </Input>
+                      </Input> */}
+                     <Input type="select" name="parent_id" onChange={handleInputs}>
+                          <option value="">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
+
+                          {parentOptions && parentOptions
+                            .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
+                            .map(option => (
+                              <option key={option.acc_category_id} value={`${option.acc_category_id},${option.sort_order}`}>
+                                {arb ? option.title_arb : option.title}
+                              </option>
+                            ))}
+                        </Input>
+
+
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Title <span className="required"> *</span></Label>
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Ttile')?.[genLabel]}<span className="required"> *</span>
+                      </Label>
                       <Input
                         type="text"
-                        name="title"
+                        name={arb ? 'title_arb' : 'title'}
                         onChange={(e) => setTitle(e.target.value)}
                       />
                     </FormGroup>
@@ -231,7 +289,9 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Code</Label>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Code')?.[genLabel]}
+                      </Label>
                       <Input
                         type="text"
                         name="code"
@@ -242,7 +302,9 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Please Select</Label>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Customer')?.[genLabel]}
+                      </Label>
                       <Input type="select" name="company_id" onChange={handleInputs}>
                         <option>Select Customer</option>
                         <option value="Bank Account">Bank Account</option>

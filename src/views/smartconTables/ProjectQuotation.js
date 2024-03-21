@@ -17,7 +17,11 @@ import CommonTable from '../../components/CommonTable';
 const ProjectQuotation = () => {
   const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getTenders = () => {
     api
       .get('/projectquote/getProjectquote')
@@ -36,10 +40,39 @@ const ProjectQuotation = () => {
         setLoading(false);
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/projectquote/getTranslationForProjectQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
   useEffect(() => {
     getTenders();
+    getArabicCompanyName();
   }, []);
 
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const columns = [
     {
       name: '#',
@@ -58,47 +91,47 @@ const ProjectQuotation = () => {
       sortable: false,
     },
     {
-      name: 'Quotation Code',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Enquiry Code')?.[genLabel],
       selector: 'quote_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Date')?.[genLabel],
       selector: 'quote_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Customer')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Reference')?.[genLabel],
       selector: 'ref_no_quote',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Enquiry Code',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Enquiry Code')?.[genLabel],
       selector: 'enquiry_code',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Status')?.[genLabel],
       selector: 'quote_status',
       sortable: true,
       width: 'auto',
     },
     {
-        name: 'Net Amount',
+        name: arabic.find(item => item.key_text === 'mdProjectQuote.Net Total')?.[genLabel],
         selector: 'total_amount',
         sortable: true,
         width: 'auto',
@@ -141,7 +174,7 @@ const ProjectQuotation = () => {
                     <td>{element.quote_code}</td>
                     <td>{element.quote_date}</td>
                     <td>{element.company_name}</td>
-                    <td>{element.ref_no_quote}</td>
+                    <td>{arb && element.ref_no_quote_arb ?element.ref_no_quote_arb : element.ref_no_quote}</td>
                     <td>{element.enquiry_code}</td>
                     <td>{element.quote_status}</td>
                     <td>{element.total_amount}</td>
