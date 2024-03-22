@@ -165,15 +165,18 @@ if (arb === true) {
                                   onChange={handleAddNewContact}
                                   value={
                                     arb
-                                      ? newContactData && newContactData.first_name_arb
-                                      : newContactData && newContactData.first_name
+                                      ? (
+                                          newContactData && newContactData.first_name_arb ? newContactData.first_name_arb :
+                                          (newContactData && newContactData.first_name_arb !== null ? '' : newContactData && newContactData.first_name)
+                                        )
+                                      : (newContactData && newContactData.first_name)
                                   }
                                   name={arb ? 'first_name_arb' : 'first_name'}
                                   className={`form-control ${
-                                    formSubmitted && newContactData && newContactData.first_name.trim() && newContactData.first_name.trim() === '' ? 'highlight' : ''
+                                    formSubmitted && newContactData && newContactData.first_name_arb.trim() && newContactData.first_name.trim() === '' ? 'highlight' : ''
                                   }`}
                                 />
-                                 {formSubmitted && newContactData && newContactData.first_name.trim() === '' && (
+                                 {formSubmitted && newContactData && newContactData.first_name_arb.trim()&& newContactData.first_name.trim() === '' && (
                 <div className="error-message">Please Enter</div>
               )}
                               </FormGroup>

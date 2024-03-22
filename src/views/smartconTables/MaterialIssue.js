@@ -20,6 +20,37 @@ const MaterialIssue = () => {
   const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/materialissue/getTranslationForMaterialIssue')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   // get Leave
   const getPlanning = () => {
     api
@@ -48,6 +79,7 @@ const MaterialIssue = () => {
 
   useEffect(() => {
     getPlanning();
+    getArabicCompanyName();
   }, []);
   //  stucture of leave list view
   const columns = [
@@ -69,21 +101,21 @@ const MaterialIssue = () => {
     },
 
     {
-      name: 'Project Name',
+      name: arabic.find(item => item.key_text === 'mdMaterialIssue.Project Name')?.[genLabel],
       selector: 'project_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Material Code',
+      name: arabic.find(item => item.key_text === 'mdMaterialIssue.Code')?.[genLabel],
       selector: 'material_request_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Issue Date',
+      name: arabic.find(item => item.key_text === 'mdMaterialIssue.Issue Date')?.[genLabel],
       selector: 'material_issue_date',
       sortable: true,
       grow: 2,

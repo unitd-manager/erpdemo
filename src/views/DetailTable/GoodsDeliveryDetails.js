@@ -16,6 +16,7 @@ const GoodsDeliveryDetails = () => {
   const navigate = useNavigate();
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  
   //Api call for getting Enquiry dropdown
   const getOrderCode = () => {
     api.get('/goodsdelivery/getOrderCode').then((res) => {

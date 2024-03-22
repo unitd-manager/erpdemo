@@ -49,7 +49,6 @@ const PurchaseRequestEdit = () => {
       setActiveTab(tab);
     }
   };
-
   const tabs = [
     { id: '1', name: 'Purchase Invoice Items' },
     { id: '2', name: 'Attachment' },
@@ -173,7 +172,7 @@ const PurchaseRequestEdit = () => {
   //UseEffect
   useEffect(() => {
     getPurchaseInvoiceById(); 
-  }, [id]);
+    }, [id]);
 
   return (
     <>

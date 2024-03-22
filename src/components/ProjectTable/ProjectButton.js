@@ -3,12 +3,13 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ProjectButton({ UpdateData, applyChanges, backToList, navigate }) {
+export default function ProjectButton({ UpdateData, applyChanges, backToList, navigate,arb }) {
   ProjectButton.propTypes = {
     UpdateData: PropTypes.any,
     navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
+    arb: PropTypes.any,
   };
   return (
     <Form>
@@ -24,7 +25,7 @@ export default function ProjectButton({ UpdateData, applyChanges, backToList, na
                   navigate('/Project');
                 }}
               >
-                Save
+               {arb ?'يحفظ':'Save'} 
               </Button>
             </Col>
             <Col>
@@ -36,7 +37,7 @@ export default function ProjectButton({ UpdateData, applyChanges, backToList, na
                   applyChanges();
                 }}
               >
-                Apply
+               {arb ?'يتقدم':'Apply'}
               </Button>
             </Col>
 
@@ -48,7 +49,7 @@ export default function ProjectButton({ UpdateData, applyChanges, backToList, na
                   backToList();
                 }}
               >
-                Back to List
+               {arb ?'الرجوع للقائمة':'Back to List'}
               </Button>
             </Col>
           </Row>

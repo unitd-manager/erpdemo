@@ -9,7 +9,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; 
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -47,7 +47,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const arb =selectedLanguage === 'Arabic'
 
   // const eng =selectedLanguage === 'English'
-  
+   
 
   const getArabicCompanyName = () => {
       api
@@ -173,7 +173,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     </td>
                     <td>{element.quote_code}</td>
                     <td>{element.quote_date}</td>
-                    <td>{element.company_name}</td>
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
                     <td>{arb && element.ref_no_quote_arb ?element.ref_no_quote_arb : element.ref_no_quote}</td>
                     <td>{element.enquiry_code}</td>
                     <td>{element.quote_status}</td>

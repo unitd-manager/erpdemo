@@ -191,35 +191,67 @@ if (arb === true) {
   };
 
   // Rendering logic for menu items
-
   const renderMenuItem = (item) => {
-    const hasChildren = menuItems.some((childItem) => childItem.parent_id === item.acc_category_id);
     const isOpen = openItems.includes(item.acc_category_id);
-
+  
     const handleChildTitleClick = (clickedItem) => {
       setClickedMenuItem(clickedItem);
       toggle();
     };
-
+  
+    // Filter menuItems based on language selection
+    const filteredMenuItems = menuItems.filter((menuItem) => {
+      if (arb) {
+        return menuItem.title_arb && menuItem.parent_id === item.acc_category_id;
+      }
+      return menuItem.title && menuItem.parent_id === item.acc_category_id;
+    });
+  
     return (
-      <li key={item.acc_category_id}>
-        <div className={`menu-item ${hasChildren ? 'open' : 'closed'}`}>
-          <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
-            {hasChildren ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
-          </span>
-          &nbsp;<span onClick={() => handleChildTitleClick(item)}>{arb ? item.title_arb : item.title}</span>
-        </div>
-        {hasChildren && isOpen && (
-          <ul style={{ listStyle: 'none' }}>
-            {menuItems
-              .filter((childItem) => childItem.parent_id === item.acc_category_id)
-              .map((childItem) => renderMenuItem(childItem))}
-          </ul>
+      <>
+        {arb ? (
+          <li key={item.acc_category_id}>
+            <div className={`menu-item ${filteredMenuItems.length > 0 ? 'open' : 'closed'}`}>
+              <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
+                {filteredMenuItems.length > 0 ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
+              </span>
+              
+              {item.title_arb && <span onClick={() => handleChildTitleClick(item)}>{item.title_arb}</span>}
+            </div>
+            {filteredMenuItems.length > 0 && isOpen && (
+              <ul style={{ listStyle: 'none' }}>
+                {filteredMenuItems.map((childItem) => (
+                  <li key={childItem.acc_category_id}>
+                    {childItem.title_arb && <span onClick={() => handleChildTitleClick(childItem)}>{childItem.title_arb}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ) : (
+          <li key={item.acc_category_id}>
+            <div className={`menu-item ${filteredMenuItems.length > 0 ? 'open' : 'closed'}`}>
+              <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
+                {filteredMenuItems.length > 0 ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
+              </span>
+              {item.title && <span onClick={() => handleChildTitleClick(item)}>{item.title}</span>}
+            </div>
+            {filteredMenuItems.length > 0 && isOpen && (
+              <ul style={{ listStyle: 'none' }}>
+                {filteredMenuItems.map((childItem) => (
+                  <li key={childItem.acc_category_id}>
+                    {childItem.title && <span onClick={() => handleChildTitleClick(childItem)}>{childItem.title}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
         )}
-      </li>
+      </>
     );
   };
-
+  
+  
   return (
     <>
     <ToastContainer></ToastContainer>
@@ -256,7 +288,7 @@ if (arb === true) {
                           </option>
                         ))}
                       </Input> */}
-                     <Input type="select" name="parent_id" onChange={handleInputs}>
+                     <Input type="select" name={arb ? 'parent_id' : 'parent_id'} onChange={handleInputs}>
                           <option value="">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
 
                           {parentOptions && parentOptions
@@ -301,18 +333,17 @@ if (arb === true) {
                 </Row>
                 <Row>
                   <Col md="12">
-                    <FormGroup>
-                    <Label dir="rtl" style={{ textAlign: 'right' }}>
-                        {arabic.find((item) => item.key_text === 'mdAccMap.Customer')?.[genLabel]}
-                      </Label>
-                      <Input type="select" name="company_id" onChange={handleInputs}>
-                        <option>Select Customer</option>
-                        <option value="Bank Account">Bank Account</option>
-                        <option value="Cash Account">Cash Account</option>
-                        <option value="Sundry Creditor / Debtor">Sundry Creditor / Debtor</option>
-                        <option value="Counter">Counter</option>
-                      </Input>
-                    </FormGroup>
+                  <FormGroup>
+                    <Label>{arb === true ? 'يرجى اختيار' : 'Please Select'}</Label>
+                    <Input type="select" name={arb ? 'category_type_arb' : 'category_type'}
+                        onChange={handleInputs} >
+                        <option>{arb === true ? 'حدد العميل' : 'Select Customer'}</option>
+                        <option value={arb === true ? 'حساب بنكي' : "Bank Account"}>{arb === true ? 'حساب بنكي' : 'Bank Account'}</option>
+                        <option value={arb === true ? 'حساب نقدي' : 'Cash Account'}>{arb === true ? 'حساب نقدي' : 'Cash Account'}</option>
+                        <option value={arb === true ? 'دائن / مدين متنوع' : 'Sundry Creditor / Debtor'}>{arb === true ? 'دائن / مدين متنوع' : 'Sundry Creditor / Debtor'}</option>
+                        <option value={arb === true ? 'عداد' : 'Counter'}>{arb === true ? 'عداد' : 'Counter'}</option>
+                    </Input>
+                </FormGroup>
                   </Col>
                 </Row>
               </Form>
@@ -351,6 +382,7 @@ if (arb === true) {
         setEditMenuItemModal={setEditMenuItemModal}
         menuItems={menuItems}
         clickedMenuItem={clickedMenuItem}
+        arb={arb}
       />
 
     </>

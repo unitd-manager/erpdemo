@@ -267,7 +267,7 @@ const OpportunityEdit = () => {
   ];
 
   useEffect(() => {
-    editTenderById();
+    editTenderById(); 
     getLineItem();
     getIncharge();
     getCompany();

@@ -26,6 +26,9 @@ const QuoteLineItem = ({
   quoteLine,
   tenderDetails,
   getLineItem,
+  arb,
+  arabic,
+  genLabel
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
@@ -33,6 +36,9 @@ const QuoteLineItem = ({
     quoteLine: PropTypes.any,
     tenderDetails: PropTypes.any,
     getLineItem: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const { loggedInuser } = React.useContext(AppContext);
@@ -176,7 +182,7 @@ const QuoteLineItem = ({
     <>
       <Modal size="xl" isOpen={addLineItemModal}>
         <ModalHeader>
-          Add Quote Items
+          {arb?'إضافة عناصر الاقتباس':'Add Quote Items'}
           <Button
             className="shadow-none"
             color="secondary"
@@ -211,13 +217,13 @@ const QuoteLineItem = ({
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Description </th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Qty</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Amount</th>
-                          <th scope="col">Remarks</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Title')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Description')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Qty')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit Price')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Amount')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Remarks')?.[genLabel]},</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
