@@ -5,9 +5,9 @@ import axios from 'axios';
 let baseURL;
 
 if (process.env.NODE_ENV === 'production') {
-  baseURL = 'http://43.228.126.245:5001';
+  baseURL = 'https://erpardemo.unitdtechnologies.com:2006';
 } else {
-  baseURL = 'http://localhost:5001';
+  baseURL = 'http://localhost:2005';
 }
 
 console.log('NODE_ENV:', process.env.NODE_ENV);

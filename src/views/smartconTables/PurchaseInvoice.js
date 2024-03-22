@@ -19,6 +19,11 @@ const PurchaseInvoice = () => {
   const [purchaseinvoicedata, setPurchaseInvoiceData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //Get data from Training table
   const getPurchaseInvoice= () => {
     api
@@ -44,11 +49,35 @@ const PurchaseInvoice = () => {
         setLoading(false);
       });
   };
+ const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseinvoice/getTranslationForPurchaseInvoiceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
 
   useEffect(() => {
     getPurchaseInvoice();
+    getArabicCompanyName();
   }, []);
   //structure of Training list view
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const columns = [
     {
       name: 'id',
@@ -70,28 +99,28 @@ const PurchaseInvoice = () => {
       sortable: false,
     },
     {
-      name: 'Invoice Code',
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Invoice Code')?.[genLabel],
       selector: 'purchase_invoice_code',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-        name: 'Project Title',
+        name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Project Title')?.[genLabel],
         selector: 'title',
         grow: 0,
         wrap: true,
         width: '4%',
       },
       {
-        name: 'Client Name',
+        name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Client Name')?.[genLabel],
         selector: 'company_name',
         sortable: true,
         grow: 0,
         wrap: true,
       },
     {
-      name: 'Invoice Date',
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Invoice Date')?.[genLabel],
       selector: 'purchse_invoice_date',
       grow: 0,
       wrap: true,
@@ -99,21 +128,21 @@ const PurchaseInvoice = () => {
     },
 
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Amount')?.[genLabel],
       selector: 'invoice_amount',
       sortable: true,
       grow: 0,
       wrap: true,
     },
       {
-        name: ' Due Date',
+        name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Due Date')?.[genLabel],
         selector: 'due_date',
         sortable: true,
         grow: 0,
         wrap: true,
       },
       {
-        name: 'Status',
+        name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Status')?.[genLabel],
         selector: 'status',
         sortable: true,
         grow: 0,
