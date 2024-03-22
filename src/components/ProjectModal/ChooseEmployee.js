@@ -10,11 +10,12 @@ import message from '../Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
-const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId }) => {
+const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId,arb }) => {
   ChooseEmployee.propTypes = {
     chooseEmp: PropTypes.bool,
     setChooseEmp: PropTypes.func,
     ProposalId: PropTypes.any,
+    arb: PropTypes.any,
   };
 
   const { id } = useParams();
@@ -120,7 +121,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId }) => {
     <>
       <Modal size="s" isOpen={chooseEmp}>
         <ModalHeader>
-          Add Employee
+         {arb?'إضافة موظف':'Add Employee'} 
           <Button
             color="secondary"
             onClick={() => {
@@ -142,7 +143,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId }) => {
                   AddNewLineItem();
                 }}
               >
-                Linked Employee
+                {arb?'الموظف المرتبط':'Linked Employee'}
               </Button>
             </Col>
           </Row>
@@ -151,7 +152,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId }) => {
             <table className="lineitem newemp border border-secondary rounded">
               <thead>
                 <tr>
-                  <th scope="col">Employee Name</th>
+                  <th scope="col">{arb?'اسم الموظف':'Employee Name'}</th>
                 </tr>
               </thead>
               <tbody>

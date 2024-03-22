@@ -2,13 +2,16 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,formSubmitted }) => {
+const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,formSubmitted,arabic,genLabel,arb }) => {
   ProjectEditForm.propTypes = {
     projectDetail: PropTypes.any,
     setProjectDetail: PropTypes.any,
     contact: PropTypes.any,
     incharge: PropTypes.any,
     formSubmitted:PropTypes.any,
+    arb:PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel:PropTypes.any,
   };
   // Edit Project
   const handleInputs = (e) => {
@@ -24,11 +27,21 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Title</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Title')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                   <Input
                     type="text"
-                    name="title"
-                    defaultValue={projectDetail && projectDetail.title}
+                    defaultValue={
+                      arb
+                        ? (
+                            projectDetail && projectDetail.title_arb ? projectDetail.title_arb :
+                            (projectDetail && projectDetail.title_arb !== null ? '' : projectDetail && projectDetail.title)
+                          )
+                        : (projectDetail && projectDetail.title)
+                    }
+                    name={arb ? 'title_arb': 'title'}
                     onChange={handleInputs}
                   />
                 </FormGroup>
@@ -36,9 +49,10 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
 
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Category <span className="required"> *</span>{' '}
-                  </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Category')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                   <Input
                     type="select"
                     name="category"
@@ -64,7 +78,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Status </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Status')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="status"
@@ -86,12 +102,21 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Company</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Company')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     disabled
-                    name="company_name"
-                    defaultValue={projectDetail && projectDetail.company_name}
+                    defaultValue={
+                      arb
+                        ? (
+                            projectDetail && projectDetail.company_name_arb ? projectDetail.company_name_arb :
+                            (projectDetail && projectDetail.company_name_arb !== null ? '' : projectDetail && projectDetail.company_name)
+                          )
+                        : (projectDetail && projectDetail.company_name)
+                    }
+                    name={arb ? 'company_name_arb': 'company_name'}
                     onChange={handleInputs}
                   />
                 </FormGroup>
@@ -101,7 +126,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Contact</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Contact')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="contact_id"
@@ -113,7 +140,7 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
                       contact.map((ele) => {
                         return (
                           <option key={ele.contact_id} value={ele.contact_id}>
-                            {ele.first_name}
+                            {arb?ele.first_name_arb:ele.first_name}
                           </option>
                         );
                       })}
@@ -123,7 +150,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Start Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Start Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     name="start_date"
@@ -134,7 +163,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Estimated Finish Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Estimated Finish Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     name="estimated_finish_date"
@@ -145,11 +176,20 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Description</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Description')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
-                    name="description"
-                    defaultValue={projectDetail && projectDetail.description}
+                    defaultValue={
+                      arb
+                        ? (
+                            projectDetail && projectDetail.description_arb ? projectDetail.description_arb :
+                            (projectDetail && projectDetail.description_arb !== null ? '' : projectDetail && projectDetail.description)
+                          )
+                        : (projectDetail && projectDetail.description)
+                    }
+                    name={arb ? 'description_arb': 'description'}
                     onChange={handleInputs}
                   />
                 </FormGroup>
@@ -158,7 +198,9 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Project Manager</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProject.Project Manager')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="project_manager_id"
@@ -170,7 +212,7 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
                       incharge.map((ele) => {
                         return (
                           <option value={ele.employee_id} key={ele.first_name}>
-                            {ele.first_name}
+                            {arb?ele.first_name_arb:ele.first_name}
                           </option>
                         );
                       })}

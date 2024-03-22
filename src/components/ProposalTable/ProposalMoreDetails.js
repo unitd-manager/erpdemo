@@ -20,7 +20,8 @@ export default function ProposalMoreDetails({
   companyhandleInputs,
   projectManager,
   formSubmitted,
-  
+  arabic,
+  arb,
   //setAddContactModal,
   allCountries,
 }) {
@@ -40,7 +41,16 @@ export default function ProposalMoreDetails({
     getContact: PropTypes.object,
     allCountries: PropTypes.object,
     formSubmitted: PropTypes.object,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       {' '}
@@ -51,9 +61,10 @@ export default function ProposalMoreDetails({
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Quote Code <span className="required"> *</span>
-                  </Label>
+                
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Quotation Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -65,7 +76,10 @@ export default function ProposalMoreDetails({
               </Col>
               <Col md="3">
               <FormGroup>
-                  <Label>Proposal Code</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Proposal Code')?.[genLabel]}
+              </Label>
                   <Input
                     value={proposalDetails && proposalDetails.proposal_code}
                     type="text"
@@ -78,30 +92,39 @@ export default function ProposalMoreDetails({
               
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Title <span className="required"> *</span>
-                  </Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Title')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
                     className={`form-control ${
                       formSubmitted && proposalDetails.title.trim() === '' ? 'highlight' : ''
                     }`}
-                    value={proposalDetails && proposalDetails.title}
-                    name="title"
+                    value={
+                      arb
+                        ? (
+                            proposalDetails && proposalDetails.title_arb ? proposalDetails.title_arb :
+                            (proposalDetails && proposalDetails.title_arb !== null ? '' : proposalDetails && proposalDetails.title)
+                          )
+                        : (proposalDetails && proposalDetails.title)
+                    }
+                    name={arb ? 'title_arb': 'title'}
                   />
                 </FormGroup>
-                {formSubmitted && proposalDetails.title.trim() === '' && (
+                {formSubmitted && proposalDetails.title_arb.trim() &&proposalDetails.title.trim() === '' && (
                       <div className="error-message">Please enter Title</div>
                     )}
               </Col>
               
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Company Name 
-                    
-                  </Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Company Name')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={(e) => {
@@ -118,7 +141,7 @@ export default function ProposalMoreDetails({
                         return (
                           <option key={e.company_id} value={e.company_id}>
                             {' '}
-                            {e.company_name}{' '}
+                            {arb? e.company_name_arb:e.company_name}{' '}
                           </option>
                         );
                       })}
@@ -160,7 +183,7 @@ export default function ProposalMoreDetails({
                       contact.map((e) => {
                         return (
                           <option key={e.contact_id} value={e.contact_id}>
-                            {e.first_name}
+                            {arb?e.first_name_arb:e.first_name}
                           </option>
                         );
                       })}
@@ -176,7 +199,10 @@ export default function ProposalMoreDetails({
               
               <Col md="3">
               <FormGroup>
-                  <Label>Est Start_Date</Label>
+             
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Est Start_Date')?.[genLabel]}
+              </Label> 
                   <Input
                     type="date"
                     value={proposalDetails && proposalDetails.est_start_date}
@@ -187,7 +213,10 @@ export default function ProposalMoreDetails({
               </Col>
               <Col md="3">
               <FormGroup>
-                  <Label>Est End_Date</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Est End_Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     value={proposalDetails && proposalDetails.est_end_date}
@@ -198,12 +227,22 @@ export default function ProposalMoreDetails({
               </Col>
               <Col md="3">
               <FormGroup>
-                  <Label>Budget</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Budget')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={proposalDetails && proposalDetails.budget}
-                    name="budget"
+                    value={
+                      arb
+                        ? (
+                            proposalDetails && proposalDetails.budget_arb ? proposalDetails.budget_arb :
+                            (proposalDetails && proposalDetails.budget_arb !== null ? '' : proposalDetails && proposalDetails.budget)
+                          )
+                        : (proposalDetails && proposalDetails.budget)
+                    }
+                    name={arb ? 'budget_arb': 'budget'}
                   />
                 </FormGroup>
               </Col>
@@ -212,7 +251,10 @@ export default function ProposalMoreDetails({
             <Row>
             <Col md="3">
             <FormGroup>
-                  <Label>Project Manager</Label>
+                
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Project Manager')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -226,7 +268,7 @@ export default function ProposalMoreDetails({
                       projectManager.map((e) => {
                         return (
                           <option key={e.employee_id} value={e.employee_id}>
-                            {e.first_name}
+                            {arb?e.first_name_arb:e.first_name}
                           </option>
                         );
                       })}
@@ -235,12 +277,22 @@ export default function ProposalMoreDetails({
               </Col>
             <Col md="3">
                 <FormGroup>
-                  <Label>Description</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Description')?.[genLabel]}
+              </Label>
                   <Input
-                    value={proposalDetails && proposalDetails.description}
                     type="text"
                     onChange={handleInputs}
-                    name="description"
+                    value={
+                      arb
+                        ? (
+                            proposalDetails && proposalDetails.description_arb ? proposalDetails.description_arb :
+                            (proposalDetails && proposalDetails.description_arb !== null ? '' : proposalDetails && proposalDetails.description)
+                          )
+                        : (proposalDetails && proposalDetails.description)
+                    }
+                    name={arb ? 'description_arb': 'description'}
                   />
                 </FormGroup>
               </Col>
@@ -248,10 +300,10 @@ export default function ProposalMoreDetails({
               
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    {' '}
-                    Status 
-                  </Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Status')?.[genLabel]}
+              </Label>
                   <Input
                     value={proposalDetails && proposalDetails.status}
                     type="select"
@@ -275,12 +327,22 @@ export default function ProposalMoreDetails({
               </Col>
               <Col md="3">
               <FormGroup>
-                  <Label>No of Employees</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.No of Employees')?.[genLabel]}
+              </Label>
                   <Input
-                    value={proposalDetails && proposalDetails.no_of_employees}
                     type="text"
                     onChange={handleInputs}
-                    name="no_of_employees"
+                    value={
+                      arb
+                        ? (
+                            proposalDetails && proposalDetails.no_of_employees_arb ? proposalDetails.no_of_employees_arb :
+                            (proposalDetails && proposalDetails.no_of_employees_arb !== null ? '' : proposalDetails && proposalDetails.no_of_employees)
+                          )
+                        : (proposalDetails && proposalDetails.no_of_employees)
+                    }
+                    name={arb ? 'no_of_employees_arb': 'no_of_employees'}
                   />
                 </FormGroup>
               </Col>
@@ -288,9 +350,10 @@ export default function ProposalMoreDetails({
               <Row>
             <Col md="3">
             <FormGroup>
-                  <Label>
-                    Date 
-                  </Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdproposal.Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}

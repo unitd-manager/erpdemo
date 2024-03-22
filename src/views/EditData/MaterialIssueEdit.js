@@ -21,6 +21,7 @@ import api from '../../constants/api';
 import PlanningMainDetails from '../../components/MaterialIssue/PriceMainDetails';
 import PlanningButton from '../../components/MaterialIssue/PriceButton';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const MaterialIssueEdit = () => {
   //Const Variables
@@ -32,6 +33,38 @@ const MaterialIssueEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/materialissue/getTranslationForMaterialIssue')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -46,6 +79,10 @@ const MaterialIssueEdit = () => {
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
       {id:'1',name:'Attachment'},
+    ];
+    const tabsArb = [
+      { id: '1', name: 'مرفق' },
+     
     ];
     const toggle = (tab) => {
       setActiveTab(tab);
@@ -98,6 +135,7 @@ const MaterialIssueEdit = () => {
 
   useEffect(() => {
     PlanningById();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -110,19 +148,28 @@ const MaterialIssueEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
        ></PlanningButton>
        
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
+        arb={arb}
+        arabic={arabic}
+        genLabel={genLabel}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      <Tab toggle={toggle} tabs={tabs} />
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+      
 
         <TabContent className="p-4" activeTab={activeTab}>
         

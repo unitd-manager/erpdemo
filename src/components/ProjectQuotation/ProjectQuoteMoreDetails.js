@@ -109,7 +109,7 @@ export default function ProjectQuoteMoreDetails({
                         return (
                           <option key={e.company_id} value={e.company_id}>
                             {' '}
-                            {e.company_name}{' '}
+                            {arb?e.company_name_arb :e.company_name}{' '}
                           </option>
                         );
                       })}
@@ -148,7 +148,7 @@ export default function ProjectQuoteMoreDetails({
                       contact.map((e) => {
                         return (
                           <option key={e.contact_id} value={e.contact_id}>
-                            {e.first_name}
+                            {arb?e.first_name_arb:e.first_name}
                           </option>
                         );
                       })}

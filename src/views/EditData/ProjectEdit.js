@@ -13,6 +13,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AddEmployee from '../../components/ProjectTabContent/AddEmployee';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
 import ProjectMaterialLineItem from '../../components/project/ProjectMaterialLineItem';
 import EditProjectMaterialLineItemModal from '../../components/project/EditProjectMaterialLineItemModal'
@@ -25,6 +26,38 @@ const ProjectEdit = () => {
   const backToList = () => {
     navigate('/Project');
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/project/getTranslationForProject')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const [projectDetail, setProjectDetail] = useState();
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
@@ -53,10 +86,16 @@ const ProjectEdit = () => {
   // Start for tab refresh navigation #Renuka 31-05-23
   const tabs = [
    
-    { id: '1', name: 'Quote' },
+    { id: '1', name: 'Quotation' },
     { id: '2', name: 'Material Needed' },
     { id: '3', name: 'Project Team' },
     { id: '4', name: 'Job Order' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'اقتباس ' },
+    { id: '2', name: 'المواد المطلوبة ' },
+    { id: '3', name: 'فريق المشروع' },
+    { id: '4', name: 'أمر الوظيفة' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -66,19 +105,22 @@ const ProjectEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdProject.Amount')?.[genLabel],
     },
   ];
 
@@ -87,25 +129,25 @@ const ProjectEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdProject.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name: arabic.find(item => item.key_text === 'mdProject.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdProject.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdProject.Amount')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdProject.Updated By')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdProject.Action')?.[genLabel],
     },
   ];
   const [tenders, setTenders] = useState(null);
@@ -132,34 +174,34 @@ const ProjectEdit = () => {
     },
 
     {
-      name: 'Job Order No',
+      name: arabic.find(item => item.key_text === 'mdProject.Job Order No')?.[genLabel],
       selector: 'job_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Job Order Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Job Order Title')?.[genLabel],
       selector: 'job_title',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdProject.Date')?.[genLabel],
       selector: 'job_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
+      name: arabic.find(item => item.key_text === 'mdProject.Customer')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdProject.Reference')?.[genLabel],
       selector: 'ref_no_job',
       sortable: true,
       width: 'auto',
@@ -167,13 +209,13 @@ const ProjectEdit = () => {
     },
   
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdProject.Status')?.[genLabel],
       selector: 'job_status',
       sortable: true,
       width: 'auto',
     },
     {
-        name: 'Net Amount',
+        name: arabic.find(item => item.key_text === 'mdProject.Net Amount')?.[genLabel],
         selector: 'total_amount',
         sortable: true,
         width: 'auto',
@@ -263,6 +305,7 @@ const ProjectEdit = () => {
     getIncharge();
     getLineItem();
     getMaterialItem();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -273,6 +316,7 @@ const ProjectEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></ProjectButton>
 
       <ProjectEditForm
@@ -281,13 +325,22 @@ const ProjectEdit = () => {
         contact={contact}
         incharge={incharge}
         formSubmitted={formSubmitted}
+        arb={arb}
+        arabic={arabic}
+        genLabel={genLabel}
       />
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
 
         {/* Call Modal's */}
-    <Tab toggle={toggle} tabs={tabs} />
+    {/* <Tab toggle={toggle} tabs={tabs} /> */}
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Start Tab Content 1 */}
@@ -343,7 +396,7 @@ const ProjectEdit = () => {
                   to=""
                   onClick={addMaterialItemsToggle.bind(null)}
                 >
-                  Add Material Items
+                {arb?'إضافة عناصر المواد':'Add Material Items'}
                 </Button>
               </Col>
             </Row>
@@ -403,6 +456,9 @@ const ProjectEdit = () => {
               getMaterialItem={getMaterialItem}
               setViewMaterialModal={setViewMaterialModal}
               projectDetail={projectDetail}
+              arb={arb}
+              arabic={arabic}
+              genLabel={genLabel}
               //insertquote={insertquote}
             ></EditProjectMaterialLineItemModal>
             {addMaterialItemModal && (
@@ -411,12 +467,15 @@ const ProjectEdit = () => {
                 addMaterialItemModal={addMaterialItemModal}
                 setAddMaterialItemModal={setAddMaterialItemModal}
                 projectLine={id}
+                arb={arb}
+                arabic={arabic}
+                genLabel={genLabel}
               ></ProjectMaterialLineItem>
             )}
           </TabPane>
           <TabPane tabId="3" eventkey="addEmployee">
             <Row>
-              <AddEmployee ProposalId ={ProposalId}projectId={id}/>
+              <AddEmployee ProposalId ={ProposalId}projectId={id}arb={arb}arabic={arabic}genLabel={genLabel}/>
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   className="shadow-none"

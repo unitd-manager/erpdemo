@@ -149,7 +149,7 @@ export default function TenderMoreDetails({
                         return (
                           <option key={e.company_id} value={e.company_id}>
                             {' '}
-                            {e.company_name}{' '}
+                            {arb?e.company_name_arb:e.company_name}{' '}
                           </option>
                         );
                       })}

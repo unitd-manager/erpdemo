@@ -17,6 +17,34 @@ import CommonTable from '../../components/CommonTable';
 
 const Proposal = () => {
   const [proposals, setProposals] = useState(null);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+  const arb =selectedLanguage === 'Arabic'
+  
+  const getArabicCompanyName = () => {
+      api
+      .get('/proposal/getTranslationForProposal')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const getProposals = () => {
     api.get('/proposal/getProposal').then((res) => {
       setProposals(res.data.data);
@@ -41,6 +69,7 @@ const Proposal = () => {
     }, 1000);
 
     getProposals();
+    getArabicCompanyName();
   }, []);
 
   const columns = [
@@ -62,35 +91,35 @@ const Proposal = () => {
     },
 
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdproposal.Title')?.[genLabel],
       selector: 'proposal_title',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Quote Code',
+      name: arabic.find(item => item.key_text === 'mdproposal.Quotation Code')?.[genLabel],
       selector: 'quote_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Company',
+      name: arabic.find(item => item.key_text === 'mdproposal.Company Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Contact',
+      name: arabic.find(item => item.key_text === 'mdproposal.Contact')?.[genLabel],
       selector: 'first_name',
       sortable: true,
       grow: 0,
     },
 
     {
-      name: 'Status',
+     name: arabic.find(item => item.key_text === 'mdproposal.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -131,8 +160,7 @@ const Proposal = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.title}</td>
-
+                    <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
                     <td>{element.quote_code}</td>
                     <td>{element.company_name}</td>
                     <td>{element.first_name}</td>

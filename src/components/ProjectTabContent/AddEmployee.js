@@ -8,10 +8,13 @@ import ChooseEmployee from '../ProjectModal/ChooseEmployee';
 import api from '../../constants/api';
 import PdfEmpTimesheet from '../PDF/PdfEmpTimesheet';
 
-const AddEmployee = ({ProposalId,projectId}) => {
+const AddEmployee = ({ProposalId,projectId,arb,arabic,genLabel}) => {
   AddEmployee.propTypes = {
     ProposalId: PropTypes.any,
     projectId: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
   };
 
   const { id } = useParams();
@@ -88,7 +91,7 @@ console.log('getemployeeLinked',getemployeeLinked)
              return (
              <tr>
               <td>{i+1}</td>
-              <td>{e.first_name}</td>
+              <td>{arb?e.first_name_arb:e.first_name}</td>
               <td>
                   <Button color="primary" className="shadow-none" 
                   onClick={() => { 
@@ -103,7 +106,7 @@ console.log('getemployeeLinked',getemployeeLinked)
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp}ProposalId={ProposalId} />
+     <ChooseEmployee chooseEmp={chooseEmp}arb={arb}genlabel={genLabel}arabic={arabic} setChooseEmp={setChooseEmp}ProposalId={ProposalId} />
     <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 
     getSingleEmployeeData={getSingleEmployeeData} 
     setSingleEmployeeData={setSingleEmployeeData} />

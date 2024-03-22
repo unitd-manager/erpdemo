@@ -13,9 +13,8 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
         purchaseinvoiceeditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
         editPurchaseInvoiceData: PropTypes.any,  
-        id: PropTypes.bool     
-  };
-  
+        id: PropTypes.bool,
+       };
   
   // Navigation and Parameter Constants
   const navigate = useNavigate();
@@ -32,7 +31,10 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
              <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Purchase Invoice Code </Label>
+                <Label >
+                Purchase Invoice Code
+              </Label>
+                 
                   <Input
                     type="text"
                     onChange={handleInputs}

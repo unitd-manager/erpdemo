@@ -15,6 +15,7 @@ import ProjectQuoteButton from '../../components/ProjectJobOrder/ProjectQuoteBut
 import ProjectQuoteMoreDetails from '../../components/ProjectJobOrder/ProjectQuoteMoreDetails';
 import JobOrderAttachment from '../../components/ProjectJobOrder/JobOrderAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/ProjectJobOrder/QuoteLineItem';
 import EditLineItemModal from '../../components/ProjectJobOrder/EditLineItemModal';
 import AppContext from '../../context/AppContext';
@@ -45,6 +46,38 @@ const ProjectJobOrderEdit = () => {
 
   const { loggedInuser } = useContext(AppContext);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/joborder/getTranslationForJopOrder')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -65,6 +98,11 @@ const ProjectJobOrderEdit = () => {
   const tabs = [
     { id: '1', name: 'JobOrder' },
     { id: '2', name: 'Attachment' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'أمر الوظيفة' },
+    { id: '2', name: 'مرفق' },
+   
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -169,6 +207,7 @@ const ProjectJobOrderEdit = () => {
     editTenderById();
     getLineItem();
     getCompany();
+    getArabicCompanyName();
     // getAllCountries();
   }, [id]);
 
@@ -177,25 +216,25 @@ const ProjectJobOrderEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Amount')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Updated By')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Action')?.[genLabel],
     },
   ];
   const deleteRecord = (deleteID) => {
@@ -225,6 +264,7 @@ const ProjectJobOrderEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></ProjectQuoteButton>
       <Col md="4">
         <Label>
@@ -243,12 +283,20 @@ const ProjectJobOrderEdit = () => {
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
         getContact={getContact}
+        arb={arb}
+        arabic={arabic}
+        genLabel={genLabel}
       ></ProjectQuoteMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
@@ -259,7 +307,7 @@ const ProjectJobOrderEdit = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                {arb?'إضافة عناصر الاقتباس':'Add Quote Items'}
                 </Button>
               </Col>
             </Row>
@@ -336,6 +384,8 @@ const ProjectJobOrderEdit = () => {
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
               setViewLineModal={setViewLineModal}
+              arabic={arabic}
+              genLabel={genLabel}
             ></EditLineItemModal>
             {addLineItemModal && (
               <QuoteLineItem
@@ -343,6 +393,9 @@ const ProjectJobOrderEdit = () => {
                 addLineItemModal={addLineItemModal}
                 setAddLineItemModal={setAddLineItemModal}
                 quoteLine={id}
+                arb={arb}
+                arabic={arabic}
+                genLabel={genLabel}
               ></QuoteLineItem>
             )}
           </TabPane>
