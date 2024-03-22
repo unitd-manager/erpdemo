@@ -16,6 +16,11 @@ import CommonTable from '../../components/CommonTable';
 const Project = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(null);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   const getProject = () => {
     api
@@ -41,9 +46,37 @@ const Project = () => {
         setLoading(false);
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/project/getTranslationForProject')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
   useEffect(() => {
     getProject();
+    getArabicCompanyName();
   }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   const columns = [
     {
@@ -70,48 +103,48 @@ const Project = () => {
     //   wrap: true,
     // },
     {
-      name: 'Project Code',
+      name: arabic.find(item => item.key_text === 'mdProject.Project Code')?.[genLabel],
       selector: 'project_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Proposal Code',
+      name: arabic.find(item => item.key_text === 'mdProject.Proposal Code')?.[genLabel],
       selector: 'proposal_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Title')?.[genLabel],
       selector: 'title',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Company',
+      name: arabic.find(item => item.key_text === 'mdProject.Company')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Contact',
+      name: arabic.find(item => item.key_text === 'mdProject.Contact')?.[genLabel],
       selector: 'contact_name',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Category',
+      name: arabic.find(item => item.key_text === 'mdProject.Category')?.[genLabel],
       selector: 'category',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdProject.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -160,9 +193,9 @@ const Project = () => {
                     </td> */}
                     <td>{element.project_code}</td>
                     <td>{element.proposal_code}</td>
-                    <td>{element.title}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.contact_name}</td>
+                    <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
+                    <td>{arb && element.contact_name_arb ?element.contact_name_arb : element.contact_name}</td>
                     <td>{element.category}</td>
                     <td>{element.status}</td>
                   </tr>

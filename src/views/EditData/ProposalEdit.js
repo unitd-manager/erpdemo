@@ -18,6 +18,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import ProposalMoreDetails from '../../components/ProposalTable/ProposalMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AppContext from '../../context/AppContext';
@@ -51,7 +52,13 @@ const [projectManager, seProjectManager] = useState()
     { id: '3', name: 'Project Team' },
     { id: '4', name: 'Attachment' },
   ];
-
+  
+  const tabsArb = [
+    { id: '1', name: 'اقتباس ' },
+    { id: '2', name: 'المواد المطلوبة ' },
+    { id: '3', name: 'فريق المشروع' },
+    { id: '4', name: 'مرفق' },
+  ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -76,6 +83,37 @@ const [projectManager, seProjectManager] = useState()
   //     quote_code: '',
   //   });
   const { loggedInuser } = useContext(AppContext);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/proposal/getTranslationForProposal')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -264,19 +302,20 @@ const [projectManager, seProjectManager] = useState()
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdproposal.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdproposal.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      
+      name: arabic.find(item => item.key_text === 'mdproposal.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdproposal.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdproposal.Amount')?.[genLabel],
     },
   ];
 
@@ -295,6 +334,7 @@ const [projectManager, seProjectManager] = useState()
     getCompany();
     getMaterialItem();
     getAllCountries();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -305,6 +345,7 @@ const [projectManager, seProjectManager] = useState()
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></ProposalButtons>
        <Col md="4">
         <Label>
@@ -332,13 +373,21 @@ const [projectManager, seProjectManager] = useState()
         getContact={getContact}
         projectManager={projectManager}
         formSubmitted={formSubmitted}
-        
+        arb={arb}
+        eng={eng}
+        arabic={arabic}
+        genLabel={genLabel}
       ></ProposalMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             

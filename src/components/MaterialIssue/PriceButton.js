@@ -3,12 +3,13 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ClientButton({ editData, navigate, applyChanges, backToList }) {
+export default function ClientButton({ editData, navigate, applyChanges, backToList,arb }) {
   ClientButton.propTypes = {
     editData: PropTypes.any,
     navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
+    arb: PropTypes.any,
   };
   return (
     <Form>
@@ -25,7 +26,7 @@ export default function ClientButton({ editData, navigate, applyChanges, backToL
                   navigate('/MaterialIssue');
                 }}
               >
-                Save
+                {arb ?'يحفظ':'Save'}
               </Button>
             </Col>
             <Col>
@@ -37,7 +38,7 @@ export default function ClientButton({ editData, navigate, applyChanges, backToL
                   applyChanges();
                 }}
               >
-                Apply
+                {arb ?'يتقدم':'Apply'}
               </Button>
             </Col>
             <Col>
@@ -48,7 +49,7 @@ export default function ClientButton({ editData, navigate, applyChanges, backToL
                   backToList();
                 }}
               >
-                Back to List
+                {arb ?'الرجوع للقائمة':'Back to List'}
               </Button>
             </Col>
           </Row>

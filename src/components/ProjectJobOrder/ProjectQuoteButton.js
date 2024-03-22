@@ -3,12 +3,13 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ProjectQuoteButton({ editTenderData, applyChanges, backToList, navigate }) {
+export default function ProjectQuoteButton({ editTenderData, applyChanges, backToList, navigate,arb }) {
     ProjectQuoteButton.propTypes = {
     editTenderData: PropTypes.func,
     navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
+    arb: PropTypes.any,
   };
   return (
     <Form>
@@ -24,7 +25,7 @@ export default function ProjectQuoteButton({ editTenderData, applyChanges, backT
                   navigate('/ProjectJobOrder');
                 }}
               >
-                Save
+            {arb ?'يحفظ':'Save'}
               </Button>
             </Col>
             <Col>
@@ -36,7 +37,7 @@ export default function ProjectQuoteButton({ editTenderData, applyChanges, backT
                   applyChanges();
                 }}
               >
-                Apply
+               {arb ?'يتقدم':'Apply'}
               </Button>
             </Col>
             <Col>
@@ -47,7 +48,7 @@ export default function ProjectQuoteButton({ editTenderData, applyChanges, backT
                   backToList();
                 }}
               >
-                Back to List
+               {arb ?'الرجوع للقائمة':'Back to List'}
               </Button>
             </Col>
           </Row>

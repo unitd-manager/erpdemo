@@ -173,7 +173,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     </td>
                     <td>{element.quote_code}</td>
                     <td>{element.quote_date}</td>
-                    <td>{element.company_name}</td>
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
                     <td>{arb && element.ref_no_quote_arb ?element.ref_no_quote_arb : element.ref_no_quote}</td>
                     <td>{element.enquiry_code}</td>
                     <td>{element.quote_status}</td>
