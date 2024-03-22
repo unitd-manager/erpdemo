@@ -47,6 +47,11 @@ const EquipmentIssueEdit = () => {
     navigate('/EquipmentIssue');
   };
   const { loggedInuser } = useContext(AppContext);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
@@ -55,7 +60,30 @@ const EquipmentIssueEdit = () => {
     const toggle = (tab) => {
       setActiveTab(tab);
     };
-   
+
+    const [arabic, setArabic] = useState([]);
+    const arb =selectedLanguage === 'Arabic'
+    const eng =selectedLanguage === 'English'
+
+    let genLabel = '';
+
+    if (arb === true) {
+      genLabel = 'arb_value';
+    } else {
+      genLabel = 'value';
+    }
+  
+    const getArabicCompanyName = () => {
+      api
+      .get('/EquipmentIssue/getTranslationForEquipmentIssue')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+    };
+  
   // Get Leaves By Id
   const PlanningById = () => {
     api
@@ -104,6 +132,7 @@ const EquipmentIssueEdit = () => {
 
   useEffect(() => {
     PlanningById();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -122,6 +151,10 @@ const EquipmentIssueEdit = () => {
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
+        arabic={arabic}
+        arb={arb}
+        eng={eng}
+        genLabel={genLabel}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
