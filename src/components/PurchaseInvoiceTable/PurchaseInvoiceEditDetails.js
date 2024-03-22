@@ -8,17 +8,25 @@ import ComponentCard from '../ComponentCard';
 import PurchaseInvoiceEditButton from './PurchaseInvoiceEditButton';
 
 //purchaseinvoiceeditdetails From PO Product Edit
-const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, editPurchaseInvoiceData, id}) => {
+const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, editPurchaseInvoiceData, id,arabic,arb}) => {
     PurchaseInvoiceEditDetails.propTypes = {
         purchaseinvoiceeditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
         editPurchaseInvoiceData: PropTypes.any,  
         id: PropTypes.bool,
+        arabic: PropTypes.any,
+        arb: PropTypes.any,
        };
   
   // Navigation and Parameter Constants
   const navigate = useNavigate();
+  let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <> 
      <BreadCrumbs/>
@@ -31,10 +39,9 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
              <Row>
               <Col md="3">
                 <FormGroup>
-                <Label >
-                Purchase Invoice Code
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Purchase Invoice Code')?.[genLabel]}
               </Label>
-                 
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -46,31 +53,49 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>   Project Name </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.title}
-                    name="title"
-                    disabled
-                  />
+                
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Project Name')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.title_arb
+                    : purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.title
+                }
+                name={arb ? 'title_arb' : 'title'}
+                disabled
+              />
+                  
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>   Supplier Name </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.company_name}
-                    name="company_name"
-                    disabled
-                  />
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Supplier Name')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.company_name_arb
+                    : purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.company_name
+                }
+                name={arb ? 'company_name_arb' : 'company_name'}
+                disabled
+              />
+                 
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Invoice Date <span className="required"> *</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Invoice Date')?.[genLabel]}<span className="required"> *</span>
+              </Label>
+              
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -85,7 +110,10 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Due Date </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Due Date')?.[genLabel]}
+              </Label>
+                  
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -98,7 +126,10 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Total Amount </Label>
+        
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Total Amount')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -109,7 +140,10 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Mode of Payment </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Mode of Payment')?.[genLabel]}
+              </Label>
+                  
                   <Input
                     value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.mode_of_payment}
                     type="select"
@@ -125,7 +159,10 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Status </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Status')?.[genLabel]}
+              </Label>
+                 
                   <Input
                     value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.status}
                     type="select"
@@ -142,13 +179,21 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
               </Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Terms and Condition </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.terms_and_condition}
-                    name="terms_and_condition"
-                  />
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Terms and Condition')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.terms_and_condition_arb
+                    : purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.terms_and_condition
+                }
+                name={arb ? 'terms_and_condition_arb' : 'terms_and_condition'}
+                
+              />
+                 
                 </FormGroup>
               </Col>
               </ComponentCard>

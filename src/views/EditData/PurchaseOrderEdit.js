@@ -46,7 +46,34 @@ const PurchaseOrderEdit = () => {
   const [gTotal, setGtotal] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+  // const eng =selectedLanguage === 'English'
+  const getArabicValue = () => {
+    api
+    .get('/purchaseorder/getTranslationForPurchaseOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  
 
   //const applyChanges = () => {};
   const backToList = () => {
@@ -239,6 +266,7 @@ const PurchaseOrderEdit = () => {
     getPoProduct();
     getPurchaseOrderId();
     getSupplier();
+    getArabicValue();
   }, [id]);
   useEffect(() => {
     if (purchaseDetails && purchaseDetails.supplier_id) {
@@ -269,6 +297,9 @@ const PurchaseOrderEdit = () => {
         handleInputs={handleInputs}
         purchaseDetails={purchaseDetails}
         getSupplier={getSupplier}
+        arabic={arabic}
+        arb={arb}
+        genLabel={genLabel}
       />
          <Col>
               <Button

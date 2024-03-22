@@ -21,7 +21,8 @@ import UpdateOtModal from '../../components/PayrollManagement/updateOtModal';
 import PrintPayslipModal from '../../components/PayrollManagement/PrintPayslipModal';
 // import PrintIR8AModal from '../../components/PayrollManagement/PrintIR8AModal';
 import { columns } from '../../data/PayrollHR/PayrollColumn';
-import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
+// import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
+// 
 
 const Payrollmanagement = () => {
   //state variables
@@ -658,7 +659,7 @@ const Payrollmanagement = () => {
                     </td>
                     <td>{element.employee_name}</td>
                     <td>
-                      <PdfPaySlipList payroll={element}></PdfPaySlipList>
+                      {/* <PdfPaySlipList payroll={element}></PdfPaySlipList> */}
                     </td>
                     <td>{element.payroll_month}</td>
                     <td>{element.payroll_year}</td>
