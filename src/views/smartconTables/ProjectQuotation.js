@@ -9,7 +9,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
 // import 'datatables.net-buttons/js/buttons.print';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; 
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -47,7 +47,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const arb =selectedLanguage === 'Arabic'
 
   // const eng =selectedLanguage === 'English'
-  
+   
 
   const getArabicCompanyName = () => {
       api

@@ -32,7 +32,7 @@ export default function TenderMoreDetails({
   }
 
   return (
-    <div>
+    <div> 
       {' '}
       <Form>
         <FormGroup>

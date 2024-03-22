@@ -15,6 +15,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
 import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
 import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
@@ -39,6 +40,10 @@ const GoodsDeliveryEdit = () => {
     { id: '1', name: 'Goods Delivery ' },
     { id: '2', name: 'Attachment' },
   ];
+  const tabsArb = [ 
+    { id: '1', name: 'تسليم جيد' },
+    { id: '2', name: 'مرفق' },
+  ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -55,6 +60,54 @@ const GoodsDeliveryEdit = () => {
       setCompany(res.data.data);
     });
   };
+  const [companyInsertData, setCompanyInsertData] = useState({
+    company_name: '',
+    address_street: '',
+    address_town: '',
+    address_country: '',
+    address_po_code: '',
+    phone: '',
+    fax: '',
+    website: '',
+    supplier_type: '',
+    industry: '',
+    company_size: '',
+    source: '',
+  });
+  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+  const companyhandleInputs = (e) => {
+    setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  };
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/goodsdelivery/getTranslationforTradingGoods')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   const getgoodsdeliveryById = () => {
     api.post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id }).then((res) => {
@@ -114,7 +167,7 @@ const GoodsDeliveryEdit = () => {
                 } else {
                   // Insert the order item
                   const DeliveryItemsData = {
-                    creation_date: creationdatetime,
+                    creation_date: creationdatetime, 
                     modified_by: loggedInuser.first_name,
                     goods_delivery_id: id,
                     order_id: DeliveryItem.order_id,
@@ -124,7 +177,7 @@ const GoodsDeliveryEdit = () => {
                     unit_price: DeliveryItem.unit_price,
                     amount: DeliveryItem.cost_price,
                     description: DeliveryItem.description,
-                    quantity: DeliveryItem.qty,
+                    quantity: DeliveryItem.qty, 
                   };
                   console.log(`Inserting order item ${index + 1}:`, DeliveryItemsData);
                   // Send a POST request to your /goodsdelivery/insertGoodsDeliveryItems API with the current DeliveryItemsData
@@ -184,7 +237,9 @@ const GoodsDeliveryEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
+    {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+     {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} />*/}
       <GoodsDeliveryButton
         editGoodsDelivery={editGoodsDelivery}
         navigate={navigate}
@@ -194,15 +249,24 @@ const GoodsDeliveryEdit = () => {
         id={id}
       ></GoodsDeliveryButton>
       <GoodsDeliveryMoreDetails
+      arb={arb}
+      arabic={arabic}
         handleInputs={handleInputs}
         company={company}
         tenderDetails={tenderDetails}
+        companyhandleInputs={companyhandleInputs}
+
       ></GoodsDeliveryMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+        {eng === true &&
 
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
