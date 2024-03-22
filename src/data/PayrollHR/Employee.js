@@ -2,43 +2,43 @@
 export const jicolumns = [
         
        
-    {
-      name: "#",
-     
-    },
+  {
+    name: "#",
+   
+  },
+  
+  {
+    name: "Basic Pay",
+   
+  },
+  {
+    name: "From Date",
     
-    {
-      name: "Basic Pay",
+  },
+  {
+      name: "To Date",
      
-    },
-    {
-      name: "From Date",
-      
-    },
-    {
-        name: "To Date",
-       
-      }
-  ]
+    }
+]
 
- export const tlcolumns = [
-      
-     
-    {
-      name: "#",
-     
-    },
+export const tlcolumns = [
     
-    {
-      name: "Course Title",
-     
-    },
-    {
-      name: "From Date",
-      
-    },
-    {
-        name: "To Date",
-      }
-  ]
+   
+  {
+    name: "#",
+   
+  },
+  
+  {
+    name: "Course Title",
+   
+  },
+  {
+    name: "From Date",
+    
+  },
+  {
+      name: "To Date",
+    }
+]
 

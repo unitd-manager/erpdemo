@@ -86,7 +86,7 @@ export default function TenderMoreDetails({
                     <span className="required">*</span>
                   </Label>
                   <Input
-                    type="d"
+                    type="text"
                     onChange={handleInputs}
                     value={
                       arb

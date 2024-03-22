@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import api from '../../constants/api';
 import message from '../../components/Message';
 
@@ -12,7 +13,7 @@ const JobInformationDetails = () => {
   const [employee, setEmployee] = useState();
   const [jobForms, setJobForms] = useState({
     employee_id: '',
-    first_name: '',
+    employee_name: '',
     fin_no: '',
     status: 'current',
   });
@@ -24,6 +25,7 @@ const JobInformationDetails = () => {
     api
       .get('/jobinformation/getEmployee')
       .then((res) => {
+        console.log(res.data.data);
         setEmployee(res.data.data);
       })
       .catch(() => {});
@@ -34,22 +36,23 @@ const JobInformationDetails = () => {
   };
   //inserting data of job information
   const insertJobInformation = () => {
-    if(jobForms.employee_id !==''){
-    api
-      .post('/jobinformation/insertjob_information', jobForms)
-      .then((res) => {
-        const insertedDataId = res.data.data.insertId;
-        message('Job Information inserted successfully.', 'success');
-        setTimeout(() => {
-          navigate(`/JobInformationEdit/${insertedDataId}`);
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });}
-      else{
-        message('Please Select the employee', 'warning');
-      }
+    if (jobForms.employee_id !== '') {
+      api
+        .post('/jobinformation/insertjob_information', jobForms)
+        .then((res) => {
+          const insertedDataId = res.data.data.insertId;
+          console.log(insertedDataId);
+          message('Job Information inserted successfully.', 'success');
+          setTimeout(() => {
+            navigate(`/JobInformationEdit/${insertedDataId}?tab=1`);
+          }, 300);
+        })
+        .catch(() => {
+          message('Unable to edit record.', 'error');
+        });
+    } else {
+      message('Please fill all required fields', 'error');
+    }
   };
   useEffect(() => {
     editJobById();
@@ -64,28 +67,32 @@ const JobInformationDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Label>Employee Name <span style={{color:'red'}}>*</span> </Label>
-                  <Input
-                    type="select"
-                    name="employee_id"
-                    onChange={(e) => {
-                      handleInputs(e);
-                    }}
-                  >
-                    <option value="" selected>
-                      Please Select
-                    </option>
-                    {employee &&
-                      employee.map((ele) => {
-                        return (
-                          ele.e_count === 0 && (
-                            <option key={ele.employee_id} value={ele.employee_id}>
-                              {ele.first_name}
-                            </option>
-                          )
-                        );
-                      })}
-                  </Input>
+                  <Col md="10">
+                    <FormGroup>
+                      <Label>Employee Name <span className='required'>*</span></Label>
+                      <Input
+                        type="select"
+                        name="employee_id"
+                        onChange={(e) => {
+                          handleInputs(e);
+                        }}
+                      >
+                        <option value="" selected>
+                          Please Select
+                        </option>
+                        {employee &&
+                          employee.map((ele) => {
+                            return (
+                              ele.e_count === 0 && (
+                                <option key={ele.employee_id} value={ele.employee_id}>
+                                  {ele.employee_name}
+                                </option>
+                              )
+                            );
+                          })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                 </Row>
 
                 <FormGroup>
@@ -102,13 +109,19 @@ const JobInformationDetails = () => {
                         Save & Continue
                       </Button>
                       <Button
+                        className="shadow-none"
+                        color="dark"
                         onClick={() => {
-                          navigate('/JobInformation');
+                          if (
+                            window.confirm(
+                              'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                            )
+                          ) {
+                            navigate(-1);
+                          }
                         }}
-                        type="button"
-                        className="btn btn-dark shadow-none"
                       >
-                        Go to List
+                        Cancel
                       </Button>
                     </div>
                   </Row>
