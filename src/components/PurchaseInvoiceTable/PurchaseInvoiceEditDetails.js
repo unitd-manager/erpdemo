@@ -8,23 +8,14 @@ import ComponentCard from '../ComponentCard';
 import PurchaseInvoiceEditButton from './PurchaseInvoiceEditButton';
 
 //purchaseinvoiceeditdetails From PO Product Edit
-const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, editPurchaseInvoiceData, id, arb, arabic}) => {
+const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, editPurchaseInvoiceData, id}) => {
     PurchaseInvoiceEditDetails.propTypes = {
         purchaseinvoiceeditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
         editPurchaseInvoiceData: PropTypes.any,  
         id: PropTypes.bool,
-        arabic: PropTypes.any,
-        arb: PropTypes.any,
-  };
+       };
   
-  let genLabel = '';
-
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
   // Navigation and Parameter Constants
   const navigate = useNavigate();
 
@@ -40,8 +31,8 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
              <Row>
               <Col md="3">
                 <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdProjectQuote.Purchase Invoice Code')?.[genLabel]}
+                <Label >
+                Purchase Invoice Code
               </Label>
                  
                   <Input
