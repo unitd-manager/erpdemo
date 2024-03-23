@@ -15,8 +15,11 @@ const PurchaseRequestDetails = () => {
   const navigate = useNavigate();
   const [purchaserequestdetails, setPurchaseRequestDetails] = useState({
     purchase_request_date: '',
+    purchase_request_date_arb: '',
     purchase_delivery_date: '',
-    department:''
+    purchase_delivery_date_arb: '',
+    department:'',
+    department_arb:''
   });
   //setting data in ProductDetails
   const handleInputs = (e) => {
@@ -110,7 +113,7 @@ const PurchaseRequestDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
@@ -121,9 +124,13 @@ const PurchaseRequestDetails = () => {
                     <Input
                       type="date"
                       onChange={handleInputs}
-                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
-                      name="purchase_request_date"
-                    />
+                      value={
+                        arb
+                          ? purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date_arb).format('YYYY-MM-DD')
+                          : purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')
+                      }
+                      name={arb ? 'purchase_request_date_arb' : 'purchase_request_date'}
+                      />
                   </Col>
                 </Row>
                 <Row>
@@ -135,8 +142,12 @@ const PurchaseRequestDetails = () => {
                       type="date"
                       onChange={handleInputs}
                       min={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
-                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date).format('YYYY-MM-DD')}
-                      name="purchase_delivery_date"
+                      value={
+                        arb
+                          ? purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date_arb).format('YYYY-MM-DD')
+                          : purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date).format('YYYY-MM-DD')
+                      }
+                      name={arb ? 'purchase_delivery_date_arb' : 'purchase_delivery_date'}
                     />
                   </Col>
                 </Row>

@@ -16,11 +16,12 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 //receiptitemseditmodal From VehicleEdit
-const GoodsReceiptEditModal = ({ receiptitemseditmodal, setReceiptItemsEditModal, PurchaseOrderId }) => {
+const GoodsReceiptEditModal = ({ receiptitemseditmodal, setReceiptItemsEditModal, PurchaseOrderId,arb }) => {
     GoodsReceiptEditModal.propTypes = {
     receiptitemseditmodal: PropTypes.bool,
     setReceiptItemsEditModal: PropTypes.func,
-    PurchaseOrderId: PropTypes.any
+    PurchaseOrderId: PropTypes.any,
+    arb: PropTypes.any
   };
 
   // All State Variable
@@ -86,7 +87,7 @@ const { loggedInuser } = useContext(AppContext);
     <>
       <Modal size="xl" isOpen={receiptitemseditmodal}>
         <ModalHeader>
-          Goods Receipt Items
+        {arb ?'بنود استلام البضائع':'Goods Receipt Items'}
           <Button
             color="secondary"
             onClick={() => {
@@ -102,14 +103,14 @@ const { loggedInuser } = useContext(AppContext);
             <Table bordered className="lineitem">
               <thead>
                 <tr>
-                  <th scope="col">PO Code</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Ordered Quantity</th>
-                  <th scope="col">Received Date</th>
-                  <th scope="col">Received Quantity</th>
-                  <th scope="col">Unit Price</th>
-                  <th scope="col">Total Cost</th>
+                  <th scope="col">{arb ?'رمز الشراء':'PO Code'}</th>
+                  <th scope="col">{arb ?'عنوان':'Title'}</th>
+                  <th scope="col">{arb ?'وحدة':'Unit'}</th>
+                  <th scope="col">{arb ?'الكمية المطلوبة':'Ordered Quantity'}</th>
+                  <th scope="col">{arb ?'تاريخ الحصول عليه':'Received Date'}</th>
+                  <th scope="col">{arb ?'الكمية المستلمة':'Received Quantity'}</th>
+                  <th scope="col">{arb ?'سعر الوحدة':'Unit Price'}</th>
+                  <th scope="col">{arb ?'التكلفة الإجمالية':'Total Cost'}</th>
                 </tr>
               </thead>
               <tbody>  
@@ -205,7 +206,7 @@ const { loggedInuser } = useContext(AppContext);
               }, 100);
             }}
           >
-            Submit
+            {arb ?'يُقدِّم':'Submit'}
           </Button>
           <Button
             color="secondary"
@@ -213,7 +214,7 @@ const { loggedInuser } = useContext(AppContext);
               setReceiptItemsEditModal(false);
             }}
           >
-            Cancel
+            {arb ?'يلغي':'Cancel'}
           </Button>
         </ModalFooter>
       </Modal>

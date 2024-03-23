@@ -19,6 +19,39 @@ const GoodsReceipt = () => {
   const [goodsreceipt, setGoodsReceipt] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/goodsreceipt/getTranslationForGoodsReceipt')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //Get data from Training table
   const getGoodsReceipt= () => {
     api
@@ -47,6 +80,7 @@ const GoodsReceipt = () => {
 
   useEffect(() => {
     getGoodsReceipt();
+    getArabicCompanyName();
   }, []);
   //structure of Training list view
   const columns = [
@@ -70,7 +104,7 @@ const GoodsReceipt = () => {
       sortable: false,
     },
     {
-      name: 'PO Code',
+      name: arabic.find((item) => item.key_text === 'mdGoodsReceipt.PO Code')?.[genLabel],
       selector: 'po_code',
       grow: 0,
       wrap: true,
@@ -78,7 +112,7 @@ const GoodsReceipt = () => {
     },
 
     {
-      name: 'Supplier Name',
+      name: arabic.find((item) => item.key_text === 'mdGoodsReceipt.Supplier Name')?.[genLabel],
       selector: 'company_name',
       grow: 0,
       wrap: true,
@@ -86,14 +120,14 @@ const GoodsReceipt = () => {
     },
 
     {
-      name: 'Goods Received Date',
+      name: arabic.find((item) => item.key_text === 'mdGoodsReceipt.Goods Received Date')?.[genLabel],
       selector: 'goods_received_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Total Amount',
+      name: arabic.find((item) => item.key_text === 'mdGoodsReceipt.Total Amount')?.[genLabel],
       selector: 'total_amount',
       sortable: true,
       grow: 0,

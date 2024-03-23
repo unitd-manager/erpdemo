@@ -403,7 +403,7 @@ console.error('Error fetching quote items', error);
                       supplier.map((e) => {
                         return (
                           <option key={e.supplier_id} value={e.supplier_id}>
-                            {e.company_name}
+                            {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}

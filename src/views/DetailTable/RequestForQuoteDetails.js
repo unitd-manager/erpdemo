@@ -113,7 +113,7 @@ const RequestForQuoteDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
@@ -135,7 +135,7 @@ const RequestForQuoteDetails = () => {
                         return (
                          
                             <option key={ele.purchase_request_id} value={ele.purchase_request_id}>
-                              {ele.purchase_request_code}
+                              {arb?ele.purchase_request_code_arb:ele.purchase_request_code}{}
                             </option>
                           
                         );
