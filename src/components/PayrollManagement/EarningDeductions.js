@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col, Form} from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
-import Earnings from './Earnings';
 import Deductions from './Deductions';
+import Earnings from './Earnings';
 
 function EarningDeductions({
   payroll,
@@ -12,9 +12,12 @@ function EarningDeductions({
   handleEarnings,
   handleOtAmount,
   setLoanPaymentHistoryModal,
-  totalMonthPay,
+  newTotalMonthPay,
   totalDeductions,
-  otAmount
+  otAmount,
+  finalGrossPay,
+  calculateBasicPayPercentage
+  
 }) {
   EarningDeductions.propTypes = {
     payroll: PropTypes.object,
@@ -23,10 +26,11 @@ function EarningDeductions({
     handleInputs: PropTypes.func,
     handleOtAmount: PropTypes.func,
     setLoanPaymentHistoryModal: PropTypes.func,
+    finalGrossPay: PropTypes.number,
     totalDeductions: PropTypes.any,
-    totalMonthPay: PropTypes.any,
     otAmount: PropTypes.any,
-
+    calculateBasicPayPercentage:PropTypes.any,
+    newTotalMonthPay:PropTypes.any,
   };
   return (
     <div>
@@ -41,9 +45,11 @@ function EarningDeductions({
               handleEarnings={handleEarnings}
               handleOtAmount={handleOtAmount}
               setLoanPaymentHistoryModal={setLoanPaymentHistoryModal}
-              totalMonthPay={totalMonthPay}
+              newTotalMonthPay={newTotalMonthPay}
               totalDeductions={totalDeductions}
               otAmount={otAmount}
+              finalGrossPay={finalGrossPay}
+              calculateBasicPayPercentage={calculateBasicPayPercentage}
               />
             </ComponentCard>
           </Col>
@@ -54,11 +60,12 @@ function EarningDeductions({
                handleInputs={handleInputs}
                handleDeductions={handleDeductions}
                handleEarnings={handleEarnings}
-               handleOtAmount={handleOtAmount}
+               newTotalMonthPay={newTotalMonthPay}
+               //handleOtAmount={handleOtAmount}
                setLoanPaymentHistoryModal={setLoanPaymentHistoryModal}
-               totalMonthPay={totalMonthPay}
+               //totalMonthPay={totalMonthPay}
                totalDeductions={totalDeductions}
-               otAmount={otAmount}
+               //otAmount={otAmount}
               />
             </ComponentCard>
           </Col>

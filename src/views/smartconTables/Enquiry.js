@@ -36,7 +36,7 @@ const arb =selectedLanguage === 'Arabic'
 
   const getArabicCompanyName = () => {
     api
-    .get('/translation/getTranslationforTradingEnq')
+    .get('/enquiry/getTranslationforTradingEnq')
     .then((res) => {
       setArabic(res.data.data);
     })
@@ -95,6 +95,7 @@ if (arb === true) {
       width: '4%',
     },
     {
+      
       name: 'Edit',
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
@@ -105,34 +106,34 @@ if (arb === true) {
     },
     
     {
-      name: 'Code',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Enquiry Code')?.[genLabel],
       selector: 'opportunity_code',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Enquiry Date',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Enquiry Date')?.[genLabel],
       selector: 'enquiry_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Client',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.CompanyName')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Reference')?.[genLabel],
       selector: 'office_ref_no',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Expiry Date',
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Expiry Date')?.[genLabel],
       selector: 'project_end_date',
       sortable: true,
       grow: 2,
@@ -140,7 +141,7 @@ if (arb === true) {
     },
     
     {
-      name: arabic.find(item => item.key_text === 'mdTradingEnq.Enquiry status')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdTradingEnq.Enquiry Status')?.[genLabel],
       // name: 'Enquiry Status',
       selector: 'status',
       sortable: true,
@@ -154,11 +155,12 @@ if (arb === true) {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Enquiry List"
+          
+          title={arb ?'إضافة عناصر الاقتباس':"Enquiry List"}
           Button={
             <Link to="/EnquiryDetails">
               <Button color="primary" className="shadow-none">
-                Add New
+              {arb ?'إضافة عناصر الاقتباس':'Add New'}
               </Button>
             </Link>
           }

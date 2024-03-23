@@ -236,30 +236,38 @@ const OpportunityEdit = () => {
       setallCountries(res.data.data);
     });
   };
+  let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const columns1 = [
     {
       name: '#',
     },
     {
-      name: 'Title',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel],
+    },
+
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel],
     },
     {
-      name: 'Description',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel],
     },
-    {
-      name: 'Amount',
-    },
+    
   ];
 
   useEffect(() => {
-    editTenderById();
+    editTenderById(); 
     getLineItem();
     getIncharge();
     getCompany();
@@ -333,7 +341,8 @@ const OpportunityEdit = () => {
                         return (
                           <tr key={e.opportunity_id}>
                             <td>{index + 1}</td>
-                            <td data-label="Title">{e.title}</td>
+                            {/* <td data-label="Title">{e.title}</td> */}
+                            <td>{arb && e.title_arb ? e.title_arb : e.title}</td>
                             <td data-label="Description">{e.description}</td>
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>

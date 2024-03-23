@@ -60,17 +60,17 @@ export default function PreviousEarlierLoan({ loan ,loanDetails}) {
                     <td>{index + 1}</td>
                     <td>{element.type}</td>
                     <td>{element.status}</td>
-                    <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
+                    <td>{element.date ? moment(element.date).format('DD-MM-YYYY') : ''}</td>
                     <td>
                       {element.loan_start_date
-                        ? moment(element.loan_start_date).format('YYYY-MM-DD')
+                        ? moment(element.loan_start_date).format('DD-MM-YYYY')
                         : ''}
                     </td>
                     <td>{element.amount}</td>
                     <td>{element.month_amount}</td>
                     <td>
                       {element.loan_closing_date
-                        ? moment(element.loan_closing_date).format('YYYY-MM-DD')
+                        ? moment(element.loan_closing_date).format('DD-MM-YYYY')
                         : ''}
                     </td>
                   </tr>

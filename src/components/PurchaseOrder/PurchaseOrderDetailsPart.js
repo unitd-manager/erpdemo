@@ -4,14 +4,24 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, request }) {
+function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, request,arabic,arb }) {
   PurchaseOrderDetailsPart.propTypes = {
     purchaseDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     supplier: PropTypes.array,
     request: PropTypes.array,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
   };
   
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       <Form>
@@ -42,14 +52,21 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Po Code</Label>
+                  
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.PO Code')?.[genLabel]}
+              </Label>
                   <br></br>
                   <span>{purchaseDetails && purchaseDetails.po_code}</span>
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Title</Label>
+                   
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Title')?.[genLabel]}
+              </Label>
+                
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -60,7 +77,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Status</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Status')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     value={purchaseDetails && purchaseDetails.status}
@@ -80,7 +99,10 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Supplier Name</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Supplier Name')?.[genLabel]}
+              </Label>
+                
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -101,7 +123,10 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
   <FormGroup>
-    <Label>RQ CODE</Label>
+   
+    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ CODE')?.[genLabel]}
+              </Label>
     <Input
       type="select"
       value={purchaseDetails && purchaseDetails.purchase_quote_id}
@@ -125,7 +150,10 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Priority</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Priority')?.[genLabel]}
+              </Label>
+                
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -137,7 +165,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>PO Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.PO Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -151,7 +181,10 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Follow Up Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Follow Up Date')?.[genLabel]}
+              </Label>
+                 
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -165,7 +198,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Notes To Supplier</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Notes To Supplier')?.[genLabel]}
+              </Label>
                   <Input
                     type="textarea"
                     value={purchaseDetails && purchaseDetails.notes}
@@ -176,8 +211,10 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Delivery Terms</Label>
-                  <Input
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Delivery Terms')?.[genLabel]}
+              </Label>
+                   <Input
                     type="textarea"
                     value={purchaseDetails && purchaseDetails.delivery_terms}
                     name="delivery_terms"
@@ -187,7 +224,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Payment Terms</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Payment Terms')?.[genLabel]}
+              </Label>
                   <Input
                     type="textarea"
                     value={purchaseDetails && purchaseDetails.payment_terms}
@@ -198,7 +237,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Payment Status</Label>
+                 <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Payment Status')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     value={purchaseDetails && purchaseDetails.payment_status}
@@ -215,7 +256,9 @@ function PurchaseOrderDetailsPart({ purchaseDetails, handleInputs, supplier, req
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>supplier Invoice Code</Label>
+                 <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.supplier Invoice Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     value={purchaseDetails && purchaseDetails.supplier_inv_code}

@@ -18,6 +18,33 @@ const PurchaseInvoiceDetails = () => {
   });
   const [purchaseorder, setPurchaseOrder] = useState();
   const [purchaseorderdetails, setPurchaseOrderDetails] = useState();
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseinvoice/getTranslationForPurchaseInvoiceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //navigation and params
   const navigate = useNavigate();
   //supplierData in supplier details
@@ -91,6 +118,7 @@ const getPoCode = () => {
   useEffect(() => {
     getPurchaseOrderById(purchaseinvoicedetails.purchase_order_id);
     getPoCode();
+    getArabicCompanyName();
   }, [ purchaseinvoicedetails.purchase_order_id],[]);
 
     
@@ -106,10 +134,13 @@ const getPoCode = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
+                    {/* <Label>
                       {' '}
                        PO Code <span className="required"> *</span>{' '}
-                    </Label>
+                    </Label> */}
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.PO Code')?.[genLabel]}
+              </Label>
                     <Input
                           type="select"
                           onChange={handleInputs}
@@ -130,7 +161,10 @@ const getPoCode = () => {
 
                     <Col md="12">
                       <FormGroup>
-                        <Label>Invoice Date<span className="required"> *</span>{' '}</Label>
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Invoice Date')?.[genLabel]}
+              </Label>
+                       
                         <Input
                           type="date"
                           onChange={handleInputs}

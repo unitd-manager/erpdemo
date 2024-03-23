@@ -64,54 +64,48 @@ const OpportunityDetails = () => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
 
-  
-
   const handleInputsTenderForms = (e) => {
     setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
   };
 
-
   const insertCompany = () => {
-    
     if (
       companyInsertData.company_name !== '' &&
       companyInsertData.address_street !== '' &&
       companyInsertData.address_po_code !== '' &&
       companyInsertData.address_country !== ''
-    ) 
-    {
+    ) {
       // Check if the entered company name already exists in the company list
-      const isCompanyExists = company && company.some((comp) => comp.company_name === companyInsertData.company_name);
-  
+      const isCompanyExists =
+        company && company.some((comp) => comp.company_name === companyInsertData.company_name);
+
       if (isCompanyExists) {
         message('Company already exists.', 'error');
-      } else
-    {
-      api
-        .post('/company/insertCompany', companyInsertData)
-        .then((res) => {
-          message('Company inserted successfully.', 'success');
-          getCompany();
-          console.log('rescomp',res.data.data)
-          const newlyAddedCompanyId = res.data.data.insertId;
-          setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
-          setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
-          toggle();
-          
-          //window.location.reload();
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
+      } else {
+        api
+          .post('/company/insertCompany', companyInsertData)
+          .then((res) => {
+            message('Company inserted successfully.', 'success');
+            getCompany();
+            console.log('rescomp', res.data.data);
+            const newlyAddedCompanyId = res.data.data.insertId;
+            setTenderForms({ ...tenderForms, company_id: newlyAddedCompanyId });
+            setTenderForms({ ...tenderForms, company_id: res.data.data.insertId }); // Set selected company ID after insertion
+            toggle();
+
+            //window.location.reload();
+          })
+          .catch(() => {
+            message('Network connection error.', 'error');
+          });
       }
     } else {
-      setAddFormSubmitted(true)
+      setAddFormSubmitted(true);
       message('Please fill all required fields.', 'warning');
     }
   };
 
   //Logic for adding tender in db
-  
 
   //Api for getting all countries
   const getAllCountries = () => {
@@ -136,7 +130,6 @@ const OpportunityDetails = () => {
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
-    
     if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
       tenderForms.opportunity_code = code;
       tenderForms.creation_date = creationdatetime;
@@ -185,13 +178,55 @@ const OpportunityDetails = () => {
   }, [id]);
 
   const inputClass = `form-control ${
-    formSubmitted && (!tenderForms.company_id || tenderForms.company_id === 'Please Select') ? 'highlight' : ''
+    formSubmitted && (!tenderForms.company_id || tenderForms.company_id === 'Please Select')
+      ? 'highlight'
+      : ''
   }`;
 
   const inputClass1 = `form-control ${
-    formSubmitted && (!tenderForms.category || tenderForms.category === 'Please Select') ? 'highlight' : ''
+    formSubmitted && (!tenderForms.category || tenderForms.category === 'Please Select')
+      ? 'highlight'
+      : ''
   }`;
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
 
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/enquiry/getTranslationforTradingEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -202,7 +237,30 @@ const OpportunityDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Col md="9">
+                <Col md="9">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  <span className="required"> *</span>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                   
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderForms && tenderForms.title_arb
+                          ? tenderForms.title_arb
+                          : tenderForms && tenderForms.title_arb !== null
+                          ? ''
+                          : tenderForms && tenderForms.title
+                        : tenderForms && tenderForms.title
+                    }
+                  ></Input>
+                </FormGroup>
+              </Col>
+                  {/* <Col md="9">
                     <Label>
                       {' '}
                       Title <span className="required"> *</span>{' '}
@@ -210,20 +268,49 @@ const OpportunityDetails = () => {
                     <Input
                       type="text"
                       name="title"
-                      
                       onChange={handleInputsTenderForms}
-                      className={`form-control ${formSubmitted && tenderForms && tenderForms.title.trim() === '' ? 'highlight' : ''
-                        }`}
+                      className={`form-control ${
+                        formSubmitted && tenderForms && tenderForms.title.trim() === ''
+                          ? 'highlight'
+                          : ''
+                      }`}
                     />
                     {formSubmitted && tenderForms && tenderForms.title.trim() === '' && (
                       <div className="error-message">Please Enter</div>
                     )}
-                  </Col>
+                  </Col> */}
                 </Row>
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="9">
+                <Col md="9">
+                <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdTradingEnq.Client')?.[genLabel]}
+                  <span className="required"> *</span>
+                  <Input
+                    type="select"
+                    onChange={(e) => {
+                      setTenderForms({ ...tenderForms, company_id: e.target.value });
+                      handleInputsTenderForms(e);
+                    }}
+                    className={inputClass}
+                    value={tenderForms?.company_id || ''}
+                    name="company_id"
+                  >
+                    <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb?e.company_name_arb:e.company_name}{' '}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
+                  {/* <Col md="9">
                     <Label>
                       Client <span className="required"> *</span>{' '}
                     </Label>
@@ -234,35 +321,31 @@ const OpportunityDetails = () => {
                       //value={tenderForms && tenderForms.company_id}
                       value={tenderForms?.company_id || ''}
                       onChange={(e) => {
-                setTenderForms({ ...tenderForms, company_id: e.target.value });
-                handleInputsTenderForms(e);
-              }}
-              
+                        setTenderForms({ ...tenderForms, company_id: e.target.value });
+                        handleInputsTenderForms(e);
+                      }}
                     >
                       <option value="" selected="selected">
-                      Please Select
-                    </option>
+                        Please Select
+                      </option>
                       {company &&
                         company.map((ele) => {
                           return (
                             <option key={ele.company_id} value={ele.company_id}>
                               {ele.company_name}
                             </option>
-                            
                           );
                         })}
                     </Input>
-                    
-                  </Col>
+                  </Col> */}
                   <Col md="3" className="addNew">
-                    
                     <Button color="primary" className="shadow-none" onClick={toggle.bind(null)}>
-                      Add New
+                        {arb ?'اضف جديد':'Add New'}
                     </Button>
                   </Col>
-                  {(formSubmitted && !tenderForms.company_id) && (
-      <div className="error-message">Please Select</div>
-    )}
+                  {formSubmitted && !tenderForms.company_id && (
+                    <div className="error-message">Please Select</div>
+                  )}
                 </Row>
                 {/* <FormGroup>
                   <Label>
@@ -304,7 +387,31 @@ const OpportunityDetails = () => {
                 tenderForms={tenderForms}
               ></TenderCompanyDetails>
               <FormGroup>
-                <Col md="9">
+              <Col md="9">
+                <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdTradingEnq.Category')?.[genLabel]}
+                  <span className="required"> *</span>
+                  <Input
+                  type="select"
+                  onChange={handleInputsTenderForms}
+                  value={tenderForms && tenderForms.category}
+                  name="category"
+                  className={inputClass1}
+                  >
+                    <option value="selected">Please Select</option>
+                    {categoryLinked &&
+                      categoryLinked.map((e) => {
+                        return (
+                          <option key={e.value} value={e.value}>
+                            {' '}
+                            {arb?e.value_arb:e.value}{' '}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
+                {/* <Col md="9">
                   <Label>
                     Category <span className="required"> *</span>
                   </Label>
@@ -323,10 +430,10 @@ const OpportunityDetails = () => {
                         return <option value={ele.value}>{ele.value}</option>;
                       })}
                   </Input>
-                  {(formSubmitted && !tenderForms.category) && (
-      <div className="error-message">Please Select</div>
-    )}
-                </Col>
+                  {formSubmitted && !tenderForms.category && (
+                    <div className="error-message">Please Select</div>
+                  )}
+                </Col> */}
               </FormGroup>
               <Row>
                 <div className="pt-3 mt-3 d-flex align-items-center gap-2">

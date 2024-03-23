@@ -18,7 +18,11 @@ import CommonTable from '../../components/CommonTable';
 const GoodsDelivery = () => {
   const [gdelivery, setGDelivery] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getTenders = () => {
     api
       .get('/goodsdelivery/getgoodsdelivery')
@@ -43,16 +47,48 @@ const GoodsDelivery = () => {
         setLoading(false);
       });
   };
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/goodsdelivery/getTranslationforTradingGoods')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
   useEffect(() => {
     getTenders();
+    getArabicCompanyName();
+
   }, []);
 
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const columns = [
     {
       name: '#',
+      selector: '',
+      grow: 0,
+      wrap: true,
+      width: '4%',
     },
     {
-      name: 'Edit',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Edit')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -61,31 +97,66 @@ const GoodsDelivery = () => {
       sortable: false,
     },
     {
-      name: 'Delivery Code',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Delivery Code')?.[genLabel],
+      selector: 'goods_delivery_id ',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Date')?.[genLabel],
+      selector: 'goods_delivery_date',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Order Code',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel],
+      selector: 'order_id',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Customer',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Company Name')?.[genLabel],
+      selector: 'company_name ',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'department',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Department')?.[genLabel],
+      selector: 'department',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'salesman',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Salesman')?.[genLabel],
+      selector: 'sales_man',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Reference')?.[genLabel],
+      selector: 'goods_ref_no',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'PO Code',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[genLabel],
+      selector: 'po_no',
+      sortable: true,
+      grow: 0,
+      wrap: true,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdTradingGoods.Status\r\n')?.[genLabel],
+      selector: 'goods_delivery_status',
+      sortable: true,
+      width: 'auto',
     },
   ];
 

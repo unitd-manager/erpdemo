@@ -2,13 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 
-export default function JobProbation({ handleInputsJobInformation, job, handleRadioGst }) {
+export default function JobProbation({
+  handleInputsJobInformation,
+  job,
+  handleRadioGst,
+  // overTimeRate,
+}) {
   JobProbation.propTypes = {
     handleInputsJobInformation: PropTypes.any,
     job: PropTypes.any,
     handleRadioGst: PropTypes.any,
+    // overTimeRate: PropTypes.any,
   };
+
+
   return (
+    <>
       <FormGroup>
         <Row>
           <Col md="4">
@@ -33,7 +42,7 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
             <FormGroup>
               <Label>Date(s) of Salary Payment</Label>
               <Input
-                type="text"
+                type="date"
                 onChange={handleInputsJobInformation}
                 value={job && job.salary_payment_dates}
                 name="salary_payment_dates"
@@ -44,14 +53,30 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
             <FormGroup>
               <Label>Date(s) of Overtime Payment (if different)</Label>
               <Input
-                type="text"
+                type="date"
                 onChange={handleInputsJobInformation}
                 value={job && job.overtime_payment_dates}
                 name="overtime_payment_dates"
               />
             </FormGroup>
           </Col>
-
+{job&&job.payment_type ==="hourly"&& <Col md="4">
+            <FormGroup>
+              <Label>
+                {' '}
+                Hourly Pay <span className="required"> *</span>{' '}
+              </Label>
+              <Input
+                type="numbers"
+                onChange={(e) => {
+                  handleInputsJobInformation(e);
+                  handleRadioGst(job.over_time_rate, e.target.value, job.overtime);
+                }}
+                value={job && job.hourly_pay}
+                name="hourly_pay"
+              />
+            </FormGroup>
+          </Col> }
           <Col md="4">
             <FormGroup>
               <Label>
@@ -93,6 +118,7 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
               <Label> Overtime Applicable</Label>
               <br></br>
               <Label> Yes </Label>
+              &nbsp;
               <Input
                 name="overtime"
                 value="1"
@@ -106,6 +132,7 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
               &nbsp;
               &nbsp;
               <Label> No </Label>
+              &nbsp;
               <Input
                 name="overtime"
                 value="0"
@@ -144,8 +171,14 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
           <Col md="4">
             <FormGroup>
               <Label>Overtime Pay Rate/ Hour</Label>
-              <br></br>
-              <span>{job && job.overtime_pay_rate}</span>
+              {/* <br />
+              <span>{job && job.overtime_pay_rate?job.overtime_pay_rate:''}</span> */}
+              <Input
+                type="numbers"
+                onChange={handleInputsJobInformation}
+                value={job && job.overtime_pay_rate}
+                name="overtime_pay_rate"
+              />
             </FormGroup>
           </Col>
 
@@ -262,5 +295,6 @@ export default function JobProbation({ handleInputsJobInformation, job, handleRa
           </Col>
         </Row>
       </FormGroup>
+    </>
   );
 }
