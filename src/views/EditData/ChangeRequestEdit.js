@@ -149,7 +149,7 @@ const ChangeRequestEdit = () => {
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdChangeRequest.Title')?.[genLabel]}
-                    <span className='required'>*</span></Label>
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
