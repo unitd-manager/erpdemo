@@ -8,6 +8,9 @@ export default function TradingQuoteMoreDetails({
   handleInputs,
   handleStatusChange,
   status,
+  arb,
+  arabic,
+  genLabel,
  
 }) {
   TradingQuoteMoreDetails.propTypes = {
@@ -15,6 +18,9 @@ export default function TradingQuoteMoreDetails({
     handleInputs: PropTypes.object,
     handleStatusChange: PropTypes.object,
     status: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
   };
   const isApproved = tenderDetails && tenderDetails.material_status === 'Approved';
   return (
@@ -26,9 +32,9 @@ export default function TradingQuoteMoreDetails({
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Request Code <span className="required"> *</span>
-                  </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Request Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -40,7 +46,9 @@ export default function TradingQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -52,23 +60,41 @@ export default function TradingQuoteMoreDetails({
              
               <Col md="3">
                 <FormGroup>
-                  <Label>Shipping Method</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Shipping Method')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.shipping_method}
-                    name="shipping_method"
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.shipping_method_arb ? tenderDetails.shipping_method_arb :
+                            (tenderDetails && tenderDetails.shipping_method_arb !== null ? '' : tenderDetails && tenderDetails.shipping_method)
+                          )
+                        : (tenderDetails && tenderDetails.shipping_method)
+                    }
+                    name={arb ? 'shipping_method_arb': 'shipping_method'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Payment Terms</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Payment Terms')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.payment_terms}
-                    name="payment_terms"
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.payment_terms_arb ? tenderDetails.payment_terms_arb :
+                            (tenderDetails && tenderDetails.payment_terms_arb !== null ? '' : tenderDetails && tenderDetails.payment_terms)
+                          )
+                        : (tenderDetails && tenderDetails.payment_terms)
+                    }
+                    name={arb ? 'payment_terms_arb': 'payment_terms'}
                   />
                 </FormGroup>
               </Col>
@@ -76,7 +102,9 @@ export default function TradingQuoteMoreDetails({
             <Row> 
               <Col md="3">
                 <FormGroup>
-                  <Label>Material Request Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Material Request Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -87,28 +115,48 @@ export default function TradingQuoteMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Site Reference</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Site Reference')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.site_reference}
-                    name="site_reference"
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.site_reference_arb ? tenderDetails.site_reference_arb :
+                            (tenderDetails && tenderDetails.site_reference_arb !== null ? '' : tenderDetails && tenderDetails.site_reference)
+                          )
+                        : (tenderDetails && tenderDetails.site_reference)
+                    }
+                    name={arb ? 'site_reference_arb': 'site_reference'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Request By</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Request By')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.request_by}
-                    name="request_by"
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.request_by_arb ? tenderDetails.request_by_arb :
+                            (tenderDetails && tenderDetails.request_by_arb !== null ? '' : tenderDetails && tenderDetails.request_by)
+                          )
+                        : (tenderDetails && tenderDetails.request_by)
+                    }
+                    name={arb ? 'request_by_arb': 'request_by'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
-                <Label>Status</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Status')?.[genLabel]}
+              </Label>
                 <Input
                   type="select"
                   onChange={handleStatusChange}
@@ -128,18 +176,30 @@ export default function TradingQuoteMoreDetails({
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Approved By</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Approved By')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.approved_by}
-                    name="approved_by"
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.approved_by_arb ? tenderDetails.approved_by_arb :
+                            (tenderDetails && tenderDetails.approved_by_arb !== null ? '' : tenderDetails && tenderDetails.approved_by)
+                          )
+                        : (tenderDetails && tenderDetails.approved_by)
+                    }
+                    name={arb ? 'approved_by_arb': 'approved_by'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Approved Date</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdMaterialRequest.Approved Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
