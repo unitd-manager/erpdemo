@@ -30,6 +30,12 @@ const RequestForQuoteDetails = () => {
   };
   const { loggedInuser } = useContext(AppContext);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
   //jobinformation data in RequestForQuoteDetails
   const handleInputs = (e) => {
     setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
@@ -69,8 +75,37 @@ const RequestForQuoteDetails = () => {
         insertJobInformation('');
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/quote/getTranslationForReqForQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     getPurchaseRequest();
+    getArabicCompanyName();
   }, [id]);
   return (
     <div>
@@ -82,7 +117,9 @@ const RequestForQuoteDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Label>Purchase Request Code <span style={{color:'red'}}>*</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
+                <span style={{color:'red'}}>*</span> </Label>
                   <Input
                     type="select"
                     name="purchase_request_id"
@@ -91,7 +128,7 @@ const RequestForQuoteDetails = () => {
                     }}
                   >
                     <option value="" selected>
-                      Please Select
+                    {arb ?'الرجاء التحديد':'Please Select'}
                     </option>
                     {purchaseReport &&
                       purchaseReport.map((ele) => {

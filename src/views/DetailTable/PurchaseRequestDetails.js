@@ -24,6 +24,14 @@ const PurchaseRequestDetails = () => {
   };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+
   //Insert Product Data
   const insertPurchaseRequestData = (PurchaseRequestCode) => {
     if (purchaserequestdetails.purchase_request_date !== '' &&
@@ -64,10 +72,36 @@ const PurchaseRequestDetails = () => {
       });
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/purchaserequest/getTranslationForPurchaseRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   //useeffect
   useEffect(() => {
-    
+    getArabicCompanyName();
   }, []);
 
   return (
@@ -81,7 +115,9 @@ const PurchaseRequestDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>Purchase Request Date <span className="required"> *</span> </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]} 
+                <span className="required"> *</span> </Label>
                     <Input
                       type="date"
                       onChange={handleInputs}
@@ -92,7 +128,9 @@ const PurchaseRequestDetails = () => {
                 </Row>
                 <Row>
                   <Col md="12">
-                    <Label>Purchase Delivery Date <span className="required"> *</span> </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]}
+                <span className="required"> *</span> </Label>
                     <Input
                       type="date"
                       onChange={handleInputs}

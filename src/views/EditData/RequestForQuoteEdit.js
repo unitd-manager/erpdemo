@@ -13,7 +13,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import DeleteButton from '../../components/DeleteButton';
 import AppContext from '../../context/AppContext';
-
+import Tabs from '../../components/project/Tabs';
 // import QuotationMoreDetails from '../../components/ProjectModal/QuotationMoreDetails';
 import Tab from '../../components/project/Tab';
 import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
@@ -28,6 +28,11 @@ const RequestForQuoteEdit = () => {
   const [orderDetails, setOrderDetails] = useState();
 
   const { loggedInuser } = useContext(AppContext);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   //navigation and parameters
   const { id } = useParams();
@@ -75,9 +80,42 @@ const RequestForQuoteEdit = () => {
   const tabs = [
     { id: '1', name: 'Request For Quotation' }
   ];
+
+  const tabsArb = [
+    { id: '1', name: 'طلب عرض أسعار' }
+  ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
+
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/quote/getTranslationForReqForQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const getOrdersByOrderId = () => {
     api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
       setOrderDetails(res.data.data);
@@ -192,6 +230,7 @@ console.error('Error fetching quote items', error);
     getTabQuoteById();
     getSupplier();
     getOrdersByOrderId();
+    getArabicCompanyName();
   }, [id]);
   
 
@@ -264,7 +303,7 @@ console.error('Error fetching quote items', error);
                     backToList();
                   }}
                 >
-                  Back to List
+                 Back to List 
                 </Button>
               </Col>
             </Row>
@@ -279,13 +318,15 @@ console.error('Error fetching quote items', error);
       {/* Setting Details */}
       <Form>
         <FormGroup>
-        <ComponentCard title="Document Details" creationModificationDate={quoteDetails}>
+        <ComponentCard title= {arb ?'تفاصيل الوثيقة':'Document Details'} creationModificationDate={quoteDetails}>
             {' '}
             <ToastContainer></ToastContainer>
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Purchase Request Code</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
+                  </Label>
                   <br></br>
                   <span>{quoteDetails && quoteDetails.purchase_request_code}</span>
                   
@@ -293,7 +334,9 @@ console.error('Error fetching quote items', error);
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Request For Quote Code</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Request For Quote Code')?.[genLabel]}
+                </Label>
                   <br></br>
                   <span>{quoteDetails && quoteDetails.rq_code}</span>
                   
@@ -301,24 +344,28 @@ console.error('Error fetching quote items', error);
               </Col>
                 <Col md="4">
                   <FormGroup>
-                    <Label>Status</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Status')?.[genLabel]}
+                </Label>
                     <Input
                       type="select"
                       onChange={handleInputs}
                       value={quoteDetails && quoteDetails.status}
                       name="status">
-                      <option value="">Please Select</option>
-                        <option value="New">New</option>
-                        <option value="Quoted">Quoted</option>
-                        <option value="Awarded">Awarded</option>
-                        <option value="NotAwarded">NotAwarded</option>
-                        <option value="Cancelled">Cancelled</option>
+                      <option value="">{arb ?'الرجاء التحديد':'Please Select'}</option>
+                        <option value="New">{arb ?'جديد':'New'}</option>
+                        <option value="Quoted">{arb ?'مقتبس':'Quoted'}</option>
+                        <option value="Awarded">{arb ?'منحت':'Awarded'}</option>
+                        <option value="NotAwarded">{arb ?'لم يتم منحها':'Not Awarded'}</option>
+                        <option value="Cancelled">{arb ?'ألغيت':'Cancelled'}</option>
                       </Input>
                   </FormGroup>
                 </Col>  
                 <Col md="4">
                     <FormGroup>
-                      <Label>Date Issued</Label>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Date Issued')?.[genLabel]}
+                </Label>
                       <Input
                         type="date"
                         onChange={handleInputs}
@@ -329,7 +376,9 @@ console.error('Error fetching quote items', error);
                   </Col>
                   <Col md="4">
                     <FormGroup>
-                      <Label>Due Date</Label>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Due Date')?.[genLabel]}
+                </Label>
                       <Input
                         type="date"
                         onChange={handleInputs}
@@ -340,14 +389,16 @@ console.error('Error fetching quote items', error);
                   </Col>
                   <Col md="3">
                 <FormGroup>
-                  <Label>Supplier Name</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Supplier Name')?.[genLabel]}
+                </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
                     value={quoteDetails && quoteDetails.supplier_id}
                     name="supplier_id"
                   >
-                    <option defaultValue="selected">Please Select</option>
+                    <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
                     {supplier &&
                       supplier.map((e) => {
                         return (
@@ -363,10 +414,15 @@ console.error('Error fetching quote items', error);
           </ComponentCard>
         </FormGroup>
       </Form>
-      <Tab toggle={toggle} tabs={tabs} />
+      {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
       <TabContent className="p-4" activeTab={activeTab}>
       <TabPane tabId="1" eventkey="MoreDetails">
-          {orderDetails && <RequestPurchase
+                {orderDetails && <RequestPurchase
   orderDetails={orderDetails}
           />
           }
