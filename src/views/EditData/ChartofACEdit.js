@@ -164,22 +164,23 @@ console.log('arabic',arabic)
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
               </Label>
-                  <Input 
-                    type="select"
-                    name="acc_category_id"
-                    value={chartofAC?.acc_category_id}
-                    onChange={handleInputs}
-                  >
-                    <option value="selected">Please Select</option>
-                    {menuItems?.map((item) => (
-                      <option
-                        key={item.acc_category_id}
-                        value={item.acc_category_id}
-                      >
-                        {item.title}
-                      </option>
-                    ))}
-                  </Input>
+                
+              <Input 
+  type="select" 
+  name={arb ? 'acc_category_arb_id' : 'acc_category_id'}  
+  value={arb ? chartofAC &&chartofAC?.acc_category_arb_id:chartofAC &&chartofAC?.acc_category_id} 
+  onChange={handleInputs}
+>
+  <option value="selected">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
+  {menuItems && menuItems
+    .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
+    .map(option => (
+      <option key={option.acc_category_id} value={option.acc_category_id}> {/* Modified value prop */}
+        {arb ? option.title_arb : option.title}
+      </option>
+    ))}
+</Input>
+
                 </FormGroup>
               </Col>
 

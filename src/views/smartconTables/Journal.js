@@ -14,6 +14,45 @@ import api from '../../constants/api';
 
 const Journal = () => {
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyJournal')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+// let genLabel = '';
+
+// if (arb === true) {
+//   genLabel = 'arb_value';
+// } else {
+//   genLabel = 'value';
+// }
+
+
+
   const columns = [
     {
       name: 'id',
@@ -129,8 +168,12 @@ const Journal = () => {
                     </td>
                     <td>{element.entry_date}</td>
                     <td>{element.acc_head}</td>
-                    <td>{element.narration_main}<br/>{element.narration}</td>
+                    <td>
+                      {arb ? (element.narrationarb_main + <br/> + element.narration_arb) : (element.narration_main + <br/> + element.narration)}
+                    </td>
                     <td>{element.debit}</td>
+
+
                     <td>{element.credit}</td>
                   </tr>
                 );

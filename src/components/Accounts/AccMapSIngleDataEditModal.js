@@ -144,8 +144,9 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
                                 <Row>
                                     <Col md="12">
                                         <FormGroup>
-                                            <Label>{arb === true ? 'يرجى اختيار' : 'Please Select'}</Label>
-                                            <Input type="select" name={arb ? 'category_type_arb' : 'category_type'}
+                                            <Label>{arb === true ? 'يرجى اختيار' : 'Customer'}</Label>
+                                            <Input type="select" name={arb ? 'category_type_arb' : 'category_type'} 
+                                                defaultValue={clickedMenuItem ? (arb === true ? clickedMenuItem.category_type_arb : clickedMenuItem.category_type) : ''}
                                                 onChange={handleInputs} >
                                                 <option>{arb === true ? 'حدد العميل' : 'Select Customer'}</option>
                                                 <option value={arb === true ? 'حساب بنكي' : "Bank Account"}>{arb === true ? 'حساب بنكي' : 'Bank Account'}</option>

@@ -219,14 +219,10 @@ if (arb === true) {
               {item.title_arb && <span onClick={() => handleChildTitleClick(item)}>{item.title_arb}</span>}
             </div>
             {filteredMenuItems.length > 0 && isOpen && (
-              <ul style={{ listStyle: 'none' }}>
-                {filteredMenuItems.map((childItem) => (
-                  <li key={childItem.acc_category_id}>
-                    {childItem.title_arb && <span onClick={() => handleChildTitleClick(childItem)}>{childItem.title_arb}</span>}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul style={{ listStyle: 'none' }}>
+              {filteredMenuItems.map((childItem) => renderMenuItem(childItem))}
+            </ul>
+          )}
           </li>
         ) : (
           <li key={item.acc_category_id}>
@@ -237,14 +233,10 @@ if (arb === true) {
               {item.title && <span onClick={() => handleChildTitleClick(item)}>{item.title}</span>}
             </div>
             {filteredMenuItems.length > 0 && isOpen && (
-              <ul style={{ listStyle: 'none' }}>
-                {filteredMenuItems.map((childItem) => (
-                  <li key={childItem.acc_category_id}>
-                    {childItem.title && <span onClick={() => handleChildTitleClick(childItem)}>{childItem.title}</span>}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul style={{ listStyle: 'none' }}>
+              {filteredMenuItems.map((childItem) => renderMenuItem(childItem))}
+            </ul>
+          )}
           </li>
         )}
       </>
