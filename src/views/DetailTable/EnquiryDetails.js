@@ -247,7 +247,8 @@ const OpportunityDetails = () => {
                   </Label>
                   <Input
                     type="text"
-                    onChange={handleInputs}
+                    onChange={handleInputsTenderForms}
+                    name="title"
                     value={
                       arb
                         ? tenderForms && tenderForms.title_arb

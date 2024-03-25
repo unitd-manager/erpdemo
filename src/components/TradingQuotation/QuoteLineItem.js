@@ -29,7 +29,9 @@ const QuoteLineItem = ({
   quoteLine,
   tenderDetails,
   getLineItem,
-  previousTenderDetails
+  previousTenderDetails,
+  arb,
+  arabic,
 }) => {
   QuoteLineItem.propTypes = {
     addLineItemModal: PropTypes.bool,
@@ -38,10 +40,18 @@ const QuoteLineItem = ({
     tenderDetails: PropTypes.any,
     getLineItem: PropTypes.any,
     previousTenderDetails:PropTypes.any,
+    arb:PropTypes.any,
+    arabic:PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addNewProductModal, setAddNewProductModal] = useState(false);
+  let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const [addLineItem, setAddLineItem] = useState([
     {
       id: random.int(1, 99),
@@ -325,13 +335,13 @@ const QuoteLineItem = ({
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Product Name </th>
-                          <th scope="col">Description </th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Qty</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Amount</th>
-                          <th scope="col">Remarks</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}</th>
+                          <th scope="col"> {arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Unit')?.[genLabel]} </th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Remarks')?.[genLabel]}</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -385,6 +395,7 @@ const QuoteLineItem = ({
                                 </td>
                                 <td data-label="Amount">
                                   <Input Value={item.amount} type="text" name="amount" disabled />
+                                  
                                 </td>
                                 <td data-label="Remarks">
                                   <Input Value={item.remarks} type="text" name="remarks" />

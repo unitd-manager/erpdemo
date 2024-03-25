@@ -1,10 +1,10 @@
-import React from 'react';
+import React,{useEffect,useState}from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
 import TenderContactDetails from './TenderContactDetails';
-
 
 export default function TradingQuoteMoreDetails({
   tenderDetails,
@@ -16,6 +16,8 @@ export default function TradingQuoteMoreDetails({
   addContactModal,
   addContactToggle,
   getContact,
+  // arb,
+  // arabic,
 }) {
   TradingQuoteMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
@@ -27,7 +29,47 @@ export default function TradingQuoteMoreDetails({
     AddNewContact: PropTypes.any,
     handleAddNewContact: PropTypes.any,
     getContact: PropTypes.any,
+    // arb: PropTypes.any,
+    // arabic: PropTypes.any,
   };
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  //const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/tradingquote/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <div>
       {' '}
@@ -35,16 +77,16 @@ export default function TradingQuoteMoreDetails({
         <FormGroup>
           <ComponentCard title="Quotation Details" creationModificationDate={tenderDetails}>
             <Row>
-            <Col md="3">
+              <Col md="3">
                 <FormGroup>
                   <Label>Enquiry Code</Label>
                   <br />
-                <td>
-                  {' '}
-                  <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
-                    {tenderDetails && tenderDetails.opportunity_code}
-                  </Link>
-                </td>
+                  <td>
+                    {' '}
+                    <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
+                      {tenderDetails && tenderDetails.opportunity_code}
+                    </Link>
+                  </td>
                   {/* <Input
                     type="text"
                     onChange={handleInputs}
@@ -54,7 +96,64 @@ export default function TradingQuoteMoreDetails({
                   /> */}
                 </FormGroup>
               </Col>
+
               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingQuote.Enquiry Code')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.opportunity_code_arb
+                          ? tenderDetails.opportunity_code_arb
+                          : tenderDetails && tenderDetails.opportunity_code_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.opportunity_code
+                        : tenderDetails && tenderDetails.opportunity_code
+                    }
+                    name={arb ? 'opportunity_code_arb' : 'opportunity_code'}
+                  ></Input>
+                </FormGroup>
+              </Col>
+
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingQuote.Quotation Code')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.quote_code_arb
+                          ? tenderDetails.quote_code_arb
+                          : tenderDetails && tenderDetails.quote_code_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.quote_code
+                        : tenderDetails && tenderDetails.quote_code
+                    }
+                    name={arb ? 'quote_code_arb' : 'quote_code'}
+                    disabled
+                  ></Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>
                     Quotation Code <span className="required"> *</span>
@@ -67,18 +166,37 @@ export default function TradingQuoteMoreDetails({
                     disabled
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
+
               <Col md="3">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingQuote.Quotation Date')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.quote_date}
-                    name="quote_date"
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.quote_date_arb
+                          ? tenderDetails.quote_date_arb
+                          : tenderDetails && tenderDetails.quote_date_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.quote_date
+                        : tenderDetails && tenderDetails.quote_date
+                    }
+                    name={arb ? 'quote_date_arb' : 'quote_date'}
+                    disabled
+                  ></Input>
                 </FormGroup>
               </Col>
+
               <Col md="3">
                 <FormGroup>
                   <Label>Company Name</Label>
@@ -103,7 +221,6 @@ export default function TradingQuoteMoreDetails({
                           </option>
                         );
                       })}
-                 
                   </Input>
                 </FormGroup>
               </Col>
@@ -144,7 +261,36 @@ export default function TradingQuoteMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
+
               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingQuote.Reference')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.office_ref_no_arb
+                          ? tenderDetails.office_ref_no_arb
+                          : tenderDetails && tenderDetails.office_ref_no_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.office_ref_no
+                        : tenderDetails && tenderDetails.office_ref_no
+                    }
+                    name={arb ? 'office_ref_no_arb' : 'office_ref_no'}
+                    disabled
+                  ></Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Reference</Label>
                   <Input
@@ -154,10 +300,44 @@ export default function TradingQuoteMoreDetails({
                     name="office_ref_no"
                   />
                 </FormGroup>
-              </Col>
-            
-
+              </Col> */}
               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingQuote.Status')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.quote_status_arb
+                          ? tenderDetails.quote_status_arb
+                          : tenderDetails && tenderDetails.quote_status_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.quote_status
+                        : tenderDetails && tenderDetails.quote_status
+                    }
+                    name={arb ? 'quote_status_arb' : 'quote_status'}
+                  >
+                    {' '}
+                    <option selected="selected" value="New">
+                      New
+                    </option>
+                    <option value="Quoted">Quoted</option>
+                    <option value="Awarded">Awarded</option>
+                    <option value="Not Awarded">Not Awarded</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Status</Label>
                   <Input
@@ -175,8 +355,7 @@ export default function TradingQuoteMoreDetails({
                     <option value="Cancelled">Cancelled</option>
                   </Input>
                 </FormGroup>
-              </Col>
-            
+              </Col> */}
             </Row>
           </ComponentCard>
         </FormGroup>

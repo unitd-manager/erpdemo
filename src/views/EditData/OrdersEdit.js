@@ -140,6 +140,39 @@ const OpportunityEdit = () => {
     setOrderDetails({ ...orderDetails, [e.target.name]: e.target.value });
   };
 
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/finance/getTranslationforTradingOrder')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+
   //Logic for edit data in db
 
   const editTenderData = (shouldNavigate) => {
@@ -214,8 +247,9 @@ const OpportunityEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={orderDetails && orderDetails.title} />
-     
+      {/* <BreadCrumbs heading={orderDetails && orderDetails.title} /> */}
+      {eng === true && <BreadCrumbs heading={orderDetails && orderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={orderDetails && orderDetails.title_arb} />}
       <OrdersButton
         editTenderData={editTenderData}
         quoteId={quoteId}
@@ -226,6 +260,8 @@ const OpportunityEdit = () => {
         orderDetails={orderDetails}
       ></OrdersButton>
       <OrdersMainDetails
+      arb={arb}
+      arabic={arabic}
         companyInsertData={companyInsertData}
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -252,6 +288,8 @@ const OpportunityEdit = () => {
         </Label>
       </Col> 
      <SalesMoreDetails   
+     arb={arb}
+     eng={eng}
         invoiceDetails={invoiceDetails}
       receiptDetails={receiptDetails}
       ordersDetails={ordersDetails}
