@@ -17,6 +17,45 @@ const Opportunity = () => {
   const [orders, setOrders] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/finance/getTranslationforTradingOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   const getOrders = () => {
     api
       .get('/finance/getFinances')
@@ -63,48 +102,54 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Order No',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Order Code')?.[genLabel],
+      
+      //name: 'Order No',
       selector: 'enquiry_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Quote Code',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Quote Code')?.[genLabel],
+      //name: 'Quote Code',
       selector: 'quote_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Order Date')?.[genLabel],
+     
       selector: 'order_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Customer',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Customer')?.[genLabel],
+      
       selector: 'company_name',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Reference',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Reference')?.[genLabel],
+     
       selector: 'office_ref_no',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Status')?.[genLabel],      
       selector: 'order_status',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Net Amount',
+      name: arabic.find(item => item.key_text === 'mdTradingOrder.Net Amount')?.[genLabel],      
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -118,11 +163,11 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Order List"
+          title={arb ?'طلب المبيعات':"Sales Order  List"}
           Button={
             <Link to="/SalesOrderDetails">
               <Button color="primary" className="shadow-none">
-                Add New
+              {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
           }
@@ -148,10 +193,14 @@ const Opportunity = () => {
                     <td>{element.order_code}</td>
                     <td>{element.quote_code}</td>
                     <td>{element.order_date}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.office_ref_no}</td>
-                    <td>{element.order_status }</td>
+                    <td>{arb && element.company_name_arb ? element.company_name_arb : element.company_name}</td>
+                    <td>{arb && element.office_ref_no_arb ? element.office_ref_no_arb : element.office_ref_no}</td>
+                    <td>{arb && element.order_status_arb ? element.order_status_arb : element.order_status}</td>
                     <td>{element.amount}</td>
+                    {/* <td>{element.company_name}</td>
+                    <td>{element.office_ref_no}</td> */}
+                    {/* <td>{element.order_status }</td>
+                    <td>{element.amount}</td> */}
                   
                   </tr>
                 );
