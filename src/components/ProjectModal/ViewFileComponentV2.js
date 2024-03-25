@@ -5,12 +5,13 @@ import * as Icon from 'react-feather';
 import message from '../Message';
 import api from '../../constants/api';
 
-function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
+function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
   ViewFileComponentV2.propTypes = {
     moduleId: PropTypes.string,
     roomName: PropTypes.string,
     update:PropTypes.bool,
-    setUpdate:PropTypes.func
+    setUpdate:PropTypes.func,
+    arb:PropTypes.any
   };
 
   const tableStyle = {};
@@ -60,7 +61,7 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
       <table style={tableStyle}>
         <thead>
           <tr style={tableStyle}>
-            <th style={tableStyle}>File Name</th>
+            <th style={tableStyle}>{arb ?'اسم الملف':'File Name'}</th>
             <th width="5%"></th>
           </tr>
         </thead>
@@ -95,7 +96,7 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate }) {
           ) : (
             <tr>
               <td>
-                <p>no files uploaded yet</p>
+                <p>{arb ?'لم يتم تحميل أي ملفات حتى الآن':'No files uploaded yet'}</p>
               </td>
             </tr>
           )}

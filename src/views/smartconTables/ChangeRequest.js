@@ -18,6 +18,13 @@ const ChangeRequest = () => {
   //All state variable
   const [changerequest, setChangeRequest] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+  const arb =selectedLanguage === 'Arabic'
 
   //Get data from Training table
   const getChangeRequest= () => {
@@ -45,8 +52,28 @@ const ChangeRequest = () => {
       });
   };
 
+  const getArabicLabels = () => {
+    api
+    .get('/changerequest/getTranslationForChangeRequest')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     getChangeRequest();
+    getArabicLabels();
   }, []);
   //structure of Training list view
   const columns = [
@@ -70,21 +97,21 @@ const ChangeRequest = () => {
       sortable: false,
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdChangeRequest.Title')?.[genLabel],
       selector: 'change_request_title',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-        name: 'Project Title',
+      name: arabic.find(item => item.key_text === 'mdChangeRequest.ProjectTitle')?.[genLabel],
         selector: 'title',
         grow: 0,
         wrap: true,
         width: '4%',
       },
     {
-      name: 'Submission Date',
+      name: arabic.find(item => item.key_text === 'mdChangeRequest.SubmissionDate')?.[genLabel],
       selector: 'submission_date',
       grow: 0,
       wrap: true,
@@ -92,7 +119,7 @@ const ChangeRequest = () => {
     },
 
     {
-      name: 'Implementation Date',
+      name: arabic.find(item => item.key_text === 'mdChangeRequest.ImplementationDate')?.[genLabel],
       selector: 'proposed_implementation_date 	',
       sortable: true,
       grow: 0,
@@ -133,7 +160,7 @@ const ChangeRequest = () => {
                       <Icon.Edit2 />
                     </Link>
                   </td>
-                  <td>{element.change_request_title}</td>
+                  <td>{arb && element.change_request_title_arb ?element.change_request_title_arb : element.change_request_title}</td>
                   <td>{element.title}</td>
                   <td>{element.submission_date}</td>
                   <td>{moment(element.proposed_implementation_date).format('YYYY-MM-DD')}</td>

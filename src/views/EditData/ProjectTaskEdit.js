@@ -37,6 +37,37 @@ const TaskEdit = () => {
   const [update, setUpdate] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/projecttask/getTranslationForProjectTask')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   //navigation and parameters
   const { id } = useParams();
   const navigate = useNavigate();
@@ -160,12 +191,13 @@ const TaskEdit = () => {
     getTaskById();
     getProjectname();
     getEmployee();
+    getArabicCompanyName();
   }, [id]);
 
   return (
     <>
       <BreadCrumbs />
-      <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} />
+      <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} arb={arb} />
       {/* projectTask Details */}
       <ProjectTaskEditDetails
          projectTask={projectTask}
@@ -175,6 +207,9 @@ const TaskEdit = () => {
          description = {description}
          handleDataEditor = {handleDataEditor}
          setDescription = {setDescription}
+         arb={arb}
+         arabic={arabic}
+         genLabel={genLabel}
       ></ProjectTaskEditDetails>
 
       {/* Attachment Tab */}

@@ -17,10 +17,6 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-
-
-
-
 const ChangeRequestEdit = () => {
   // All state variables
 
@@ -41,6 +37,11 @@ const ChangeRequestEdit = () => {
 
   //Get Staff Details
   const { loggedInuser } = useContext(AppContext);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   // Function to toggle tabs
   const toggle = (tab) => {
@@ -63,6 +64,28 @@ const ChangeRequestEdit = () => {
   //Setting data in Change Request Edit Details
   const handleInputs = (e) => {
     setChangeRequestDetails({ ...changerequesteditdetails, [e.target.name]: e.target.value });
+  };
+
+  const [arabic, setArabic] = useState([]);
+  const arb =selectedLanguage === 'Arabic'
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/changerequest/getTranslationForChangeRequest')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
   };
 
   // Get Change Request data By Purchase Id
@@ -108,6 +131,7 @@ const ChangeRequestEdit = () => {
   useEffect(() => {
     getChangeRequestById();
     getProjectTitle();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -123,18 +147,29 @@ const ChangeRequestEdit = () => {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Title<span className='required'>*</span></Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.Title')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={changerequesteditdetails && changerequesteditdetails.change_request_title}
-                    name="change_request_title"
-                  />
+                    value={
+                      arb
+                        ? (
+                            changerequesteditdetails && changerequesteditdetails.change_request_title_arb ? changerequesteditdetails.change_request_title_arb :
+                            (changerequesteditdetails && changerequesteditdetails.change_request_title_arb !== null ? '' : changerequesteditdetails && changerequesteditdetails.change_request_title)
+                          )
+                        : (changerequesteditdetails && changerequesteditdetails.change_request_title)
+                    }
+                    name={arb ? 'change_request_title_arb': 'change_request_title'}
+                                />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Project Name </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.ProjectTitle')?.[genLabel]}
+                  </Label>
                     <Input
                           type="select"
                           onChange={handleInputs}
@@ -156,7 +191,9 @@ const ChangeRequestEdit = () => {
 
               <Col md="3">
                 <FormGroup>
-                  <Label> Submission Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.SubmissionDate')?.[genLabel]}
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -168,7 +205,9 @@ const ChangeRequestEdit = () => {
 
               <Col md="3">
                 <FormGroup>
-                  <Label> Implementation Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.ImplementationDate')?.[genLabel]}
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -182,7 +221,9 @@ const ChangeRequestEdit = () => {
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Status </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.Status')?.[genLabel]}
+                  </Label>
                   <Input
                     value={changerequesteditdetails && changerequesteditdetails.status}
                     type="select"
@@ -199,12 +240,22 @@ const ChangeRequestEdit = () => {
                   <Col md="3">
                 <FormGroup>
                   <Label> Description </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdChangeRequest.Description')?.[genLabel]}
+                  </Label>
                   <Input
-                    value={changerequesteditdetails && changerequesteditdetails.description}
-                    type="textarea"
+                    type="text"
                     onChange={handleInputs}
-                    name="description"
-                  />
+                    value={
+                      arb
+                        ? (
+                            changerequesteditdetails && changerequesteditdetails.description_arb ? changerequesteditdetails.description_arb :
+                            (changerequesteditdetails && changerequesteditdetails.description_arb !== null ? '' : changerequesteditdetails && changerequesteditdetails.description)
+                          )
+                        : (changerequesteditdetails && changerequesteditdetails.description)
+                    }
+                    name={arb ? 'description_arb': 'description'}
+                                />
                 </FormGroup>
               </Col>
               </Row>

@@ -45,8 +45,39 @@ const Test = () => {
       });
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/subcon/getTranslationForSubcon')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     getSubCon();
+    getArabicCompanyName();
   }, []);
   //structure of subcon list view
   const columns = [
@@ -66,21 +97,21 @@ const Test = () => {
       sortable: false,
     },
     {
-      name: 'Name',
+      name: arabic.find((item) => item.key_text === 'mdSubcon.Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Website',
+      name: arabic.find((item) => item.key_text === 'mdSubcon.Email')?.[genLabel],
       selector: 'email',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Telehone',
+      name: arabic.find((item) => item.key_text === 'mdSubcon.Mobile')?.[genLabel],
       selector: 'mobile',
       sortable: true,
       grow: 0,
@@ -121,9 +152,9 @@ const Test = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.company_name}</td>
-                    <td>{element.email}</td>
-                    <td>{element.mobile}</td>
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
+                    <td>{arb && element.email_arb ?element.email_arb : element.email}</td>
+                    <td>{arb && element.mobile_arb ?element.mobile_arb : element.mobile}</td>
                   </tr>
                 );
               })}

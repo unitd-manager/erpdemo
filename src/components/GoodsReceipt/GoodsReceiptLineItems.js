@@ -8,9 +8,10 @@ import message from '../Message';
 import api from '../../constants/api';
 
 //Goods Receipt Items Get Function
-export default function GoodsReceiptItemsGetFunction({PurchaseOrderId}) {
+export default function GoodsReceiptItemsGetFunction({PurchaseOrderId,arb}) {
   GoodsReceiptItemsGetFunction.propTypes =   {  
     PurchaseOrderId: PropTypes.object,
+    arb: PropTypes.object,
   };
   
   const [orderdetails, setOrderDetails] = useState();
@@ -37,15 +38,15 @@ export default function GoodsReceiptItemsGetFunction({PurchaseOrderId}) {
     <Table bordered className="lineitem">
       <thead>
         <tr>
-        <th scope="col"> S.No </th>
-        <th scope="col"> PO Code </th>
-        <th scope="col">Title </th>
-        <th scope="col">Unit </th>
-        <th scope="col">Ordered Quantity </th>
-        <th scope="col">Received Date </th>
-        <th scope="col">Received Quantity</th>
-        <th scope="col"> Unit Price</th>
-        <th scope="col"> Total Cost </th>
+        <th scope="col">#</th>
+        <th scope="col"> {arb ?'رمز الشراء':'PO Code'} </th>
+        <th scope="col">{arb ?'عنوان':'Title'} </th>
+        <th scope="col">{arb ?'وحدة':'Unit'} </th>
+        <th scope="col">{arb ?'الكمية المطلوبة':'Ordered Quantity'}</th>
+        <th scope="col">{arb ?'تاريخ الحصول عليه':'Received Date'}</th>
+        <th scope="col">{arb ?'الكمية المستلمة':'Received Quantity'}</th>
+        <th scope="col">{arb ?'سعر الوحدة':'Unit Price'}</th>
+        <th scope="col">{arb ?'التكلفة الإجمالية':'Total Cost'}</th>
         </tr>
         </thead>
         <tbody>
@@ -54,14 +55,14 @@ export default function GoodsReceiptItemsGetFunction({PurchaseOrderId}) {
           return (
             <tr>
               <td>{index+1}</td>
-              <td >{e.po_code}</td>
-              <td >{e.item_title}</td>
-              <td >{e.unit}</td>
-              <td >{e.ordered_quantity}</td>
-              <td >{e.goods_received_date}</td>
-              <td >{e.goods_received_qty}</td>
-              <td >{e.unit_price}</td>
-              <td >{e.total_cost}</td>
+              <td >{arb?e.po_code_arb:e.po_code}</td>
+              <td >{arb?e.item_title_arb:e.item_title}</td>
+              <td >{arb?e.unit_arb:e.unit}</td>
+              <td >{arb?e.ordered_quantity_arb:e.ordered_quantity}</td>
+              <td >{arb?e.goods_received_date_arb:e.goods_received_date}</td>
+              <td >{arb?e.goods_received_qty_arb:e.goods_received_qty}</td>
+              <td >{arb?e.unit_price_arb:e.unit_price}</td>
+              <td >{arb?e.total_cost_arb:e.total_cost}</td>
             </tr>
           );
           })}

@@ -10,18 +10,28 @@ import GoodsReceiptEditButton from './GoodsReceiptEditButton';
 
 
 //GoodsReceiptEditDetails From Goods Receipt Edit
-const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employee, editGoodsReceiptData, id}) => {
+const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employee, editGoodsReceiptData, id,arabic,arb}) => {
     GoodsReceiptEditDetails.propTypes = {
         goodsreceipteditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
         employee: PropTypes.any,
         editGoodsReceiptData: PropTypes.any,  
-        id: PropTypes.bool     
+        id: PropTypes.bool,
+        arabic: PropTypes.any,
+        arb: PropTypes.any,
   };
   
   
   // Navigation and Parameter Constants
   const navigate = useNavigate();
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
     <>
@@ -30,36 +40,50 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
         <FormGroup>
         <GoodsReceiptEditButton id={id} editGoodsReceiptData={editGoodsReceiptData} navigate={navigate} />
           {/* Content Details Form */}
-          <ComponentCard title="Goods Receipt Details" creationModificationDate={goodsreceipteditdetails}>
+          <ComponentCard title={arb ?'تفاصيل استلام البضائع':'Goods Receipt Details'} creationModificationDate={goodsreceipteditdetails}>
             <ToastContainer></ToastContainer>
       <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> PO Code </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.PO Code')?.[genLabel]}   
+                </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.po_code}
-                    name="po_code"
+                    value={
+                      arb
+                        ? goodsreceipteditdetails && goodsreceipteditdetails.po_code_arb
+                        : goodsreceipteditdetails && goodsreceipteditdetails.po_code
+                    }
+                    name={arb ? 'po_code_arb' : 'po_code'}
                     disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Supplier Name </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Supplier Name')?.[genLabel]}   
+                </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.company_name}
-                    name="company_name"
+                    value={
+                      arb
+                        ? goodsreceipteditdetails && goodsreceipteditdetails.company_name_arb
+                        : goodsreceipteditdetails && goodsreceipteditdetails.company_name
+                    }
+                    name={arb ? 'company_name_arb' : 'company_name'}
                     disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Goods Received Date <span className="required"> *</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Goods Received Date')?.[genLabel]} 
+                <span className="required"> *</span> </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -73,19 +97,21 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Received By</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Received By')?.[genLabel]}
+                </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
                     value={goodsreceipteditdetails && goodsreceipteditdetails.employee_id}
                     name="employee_id"
                   >
-                    <option defaultValue="selected">Please Select</option>
+                    <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
                     {employee &&
                       employee.map((e) => {
                         return (
                           <option key={e.employee_id} value={e.employee_id}>
-                            {e.first_name}
+                            {arb?e.first_name_arb:e.first_name}
                           </option>
                         );               
                       })}
@@ -96,28 +122,39 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Total Amount </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Total Amount')?.[genLabel]}</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.total_amount}
-                    name="total_amount"
+                    value={
+                      arb
+                        ? goodsreceipteditdetails && goodsreceipteditdetails.total_amount_arb
+                        : goodsreceipteditdetails && goodsreceipteditdetails.total_amount
+                    }
+                    name={arb ? 'total_amount_arb' : 'total_amount'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Status </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Status')?.[genLabel]} 
+                </Label>
                   <Input
-                    value={goodsreceipteditdetails && goodsreceipteditdetails.status}
+                  value={
+                    arb
+                      ? goodsreceipteditdetails && goodsreceipteditdetails.status_arb
+                      : goodsreceipteditdetails && goodsreceipteditdetails.status
+                  }
                     type="select"
                     onChange={handleInputs}
-                    name="status"
+                    name={arb ? 'status_arb' : 'status'}
                   >
-                    <option value="">Please Select</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
+                    <option value="">{arb ?'الرجاء التحديد':'Please Select'}</option>
+                    <option value="Pending">{arb ?'قيد الانتظار':'Pending'}</option>
+                    <option value="Approved">{arb ?'موافقة':'Approved'}</option>
+                    <option value="Rejected">{arb ?'مرفوض':'Rejected'}</option>
                   </Input>
                 </FormGroup>
               </Col>

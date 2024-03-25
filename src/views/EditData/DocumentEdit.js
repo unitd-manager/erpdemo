@@ -36,6 +36,11 @@ const DocumentEdit = () => {
 
   //Get Staff Details
   const { loggedInuser } = useContext(AppContext);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   // Function to toggle tabs
   const toggle = (tab) => {
@@ -47,6 +52,29 @@ const DocumentEdit = () => {
   const tabs = [
     { id: '1', name: 'Attachment' },
   ];
+
+  const [arabic, setArabic] = useState([]);
+  const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  const getArabicLabels = () => {
+    api
+    .get('/document/getTranslationForDocument')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+  };
 
    // Attachment
    const dataForAttachment = () => {
@@ -91,6 +119,7 @@ const DocumentEdit = () => {
   //useEffect
   useEffect(() => {
     getDocumentById();
+    getArabicLabels();
   }, [id]);
 
   return (
@@ -103,6 +132,10 @@ const DocumentEdit = () => {
            documenteditdetails={documenteditdetails}
            handleInputs={handleInputs}
            editDocumentData={editDocumentData}
+           arabic={arabic}
+           arb={arb}
+           eng={eng}
+           genLabel={genLabel}
           ></DocumentEditDetails>
           
           {/* Attachment Tab */}
