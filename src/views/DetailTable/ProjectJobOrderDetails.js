@@ -11,7 +11,7 @@ import TenderCompanyDetails from '../../components/TenderTable/TenderCompanyDeta
 import AppContext from '../../context/AppContext';
 
 const TradingJobOrderDetails = () => {
-  const [company, setCompany] = useState();
+  //const [company, setCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const [modal, setModal] = useState(false);
   const { id } = useParams();
@@ -20,13 +20,43 @@ const TradingJobOrderDetails = () => {
     setModal(!modal);
   };
   //Api call for getting company dropdown
-  const getCompany = () => {
-    api.get('/company/getCompany').then((res) => {
-      setCompany(res.data.data);
-    });
-  };
+  // const getCompany = () => {
+  //   api.get('/company/getCompany').then((res) => {
+  //     setCompany(res.data.data);
+  //   });
+  // };
+  const [project, setProject] = useState();
+   //Logic for adding tender in db
+   const [tenderForms, setTenderForms] = useState({
+    quote_code: '',
+    quote_date: '',
+    company_id: '',
+    company_name: '',
+  });
+  // const editJobById = () => {
+  //   api
+  //     .get('/labourrequest/getProjecttitle')
+  //     .then((res) => {
+  //       setProject(res.data.data);
+  //     })
+  //     .catch(() => {});
+  // };
 
- 
+  console.log("proj",project);
+ const editJobById = () => {
+  api
+    .get('/labourrequest/getProjecttitle')
+    .then((res) => {
+      const projectData = res.data.data;
+      setProject(projectData); // Set project details in state
+      const companyId = projectData && projectData.company_id; // Extract company ID
+      // Set company ID in tenderForms state
+      setTenderForms(prevState => ({ ...prevState, company_id: companyId }));
+    })
+    .catch(() => {});
+};
+
+  
 
   //Logic for adding company in db
   const [companyInsertData, setCompanyInsertData] = useState({
@@ -59,7 +89,7 @@ const TradingJobOrderDetails = () => {
         .post('/company/insertCompany', companyInsertData)
         .then(() => {
           message('Company inserted successfully.', 'success');
-          getCompany();
+          //getCompany();
           window.location.reload();
         })
         .catch(() => {
@@ -70,13 +100,7 @@ const TradingJobOrderDetails = () => {
     }
   };
 
-  //Logic for adding tender in db
-  const [tenderForms, setTenderForms] = useState({
-    quote_code: '',
-    quote_date: '',
-    company_id: '',
-    company_name: '',
-  });
+ 
 
   const handleInputsTenderForms = (e) => {
     setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
@@ -108,7 +132,12 @@ const TradingJobOrderDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.job_title !== '' && tenderForms.job_date !== '') {
+    if (
+      tenderForms.project_id !== '' &&
+      tenderForms.job_title !== '' &&
+      tenderForms.job_date !== '' 
+ 
+    ) {
       tenderForms.job_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -143,8 +172,9 @@ const TradingJobOrderDetails = () => {
   };
 
   useEffect(() => {
-    getCompany();
+    //getCompany();
     getAllCountries();
+    editJobById();
   }, [id]);
 
   return (
@@ -156,36 +186,61 @@ const TradingJobOrderDetails = () => {
           <ComponentCard title="New Project Job">
             <Form>
               <FormGroup>
-              <Col md="9">
-                    <Label>
-                      {' '}
-                      Job Title <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
-                      type="text"
-                      name="job_title"
-                      value={tenderForms && tenderForms.job_title}
-                      onChange={handleInputsTenderForms}
-                    />
-                  </Col>
+                <Col md="9">
+                  <Label>
+                    {' '}
+                    Job Title <span className="required"> *</span>{' '}
+                  </Label>
+                  <Input
+                    type="text"
+                    name="job_title"
+                    value={tenderForms && tenderForms.job_title}
+                    onChange={handleInputsTenderForms}
+                  />
+                </Col>
               </FormGroup>
               <FormGroup>
-                <Row>
-                  <Col md="9">
-                    <Label>
-                      {' '}
-                      Job Date <span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
-                      type="date"
-                      name="job_date"
-                      value={tenderForms && tenderForms.job_date}
-                      onChange={handleInputsTenderForms}
-                    />
-                  </Col>
-                </Row>
+                <Col md="9">
+                  <Label>
+                    {' '}
+                    Job Date <span className="required"> *</span>{' '}
+                  </Label>
+                  <Input
+                    type="date"
+                    name="job_date"
+                    value={tenderForms && tenderForms.job_date}
+                    onChange={handleInputsTenderForms}
+                  />
+                </Col>
               </FormGroup>
               <FormGroup>
+                <Col md="9">
+                  <Label>
+                    Project Title <span style={{ color: 'red' }}>*</span>{' '}
+                  </Label>
+                  <Input
+                    type="select"
+                    name="project_id"
+                    onChange={(e) => {
+                      handleInputsTenderForms(e);
+                    }}
+                  >
+                    <option value="" selected>
+                      Please Select
+                    </option>
+                    {project &&
+                      project.map((ele) => {
+                        return (
+                          <option key={ele.project_id} value={ele.project_id}>
+                            {ele.project_title}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </Col>
+              </FormGroup>
+
+              {/* <FormGroup>
                 <Row>
                   <Col md="9">
                     <Label>
@@ -215,7 +270,7 @@ const TradingJobOrderDetails = () => {
                     </Button>
                   </Col>
                 </Row>
-              </FormGroup>
+              </FormGroup> */}
               <TenderCompanyDetails
                 allCountries={allCountries}
                 insertCompany={insertCompany}

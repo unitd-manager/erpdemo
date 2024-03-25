@@ -19,6 +19,8 @@ import message from '../Message';
 import api from '../../constants/api';
 import moment from 'moment';
 import creationdatetime from '../../constants/creationdatetime';
+import PdfEmpTimesheet from '../PDF/PdfEmpTimesheetold';
+
 //npm audit fix
 const TimesheetModal = ({
   timesheet,
@@ -36,8 +38,11 @@ const TimesheetModal = ({
   const { id } = useParams();
   const [dateOfmonth, setDateOfMonth] = useState();
   const [selectedmonth, setSelectedMonth] = useState();
+  console.log("monthend",selectedmonth)
   const [selectedDay, setSelectedDay] = useState();
-  const [selectedYear, setSelectedYear] = useState();
+  const currentYear = moment().year();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
   const [getGroupDatas, setGroupDatas] = useState();
   const [salary, setSalary] = useState();
   const [totalEmpTimesheetRecord, setTotalEmpTimesheetRecord] = useState();
@@ -55,10 +60,15 @@ const TimesheetModal = ({
   });
 
   //handle inputs
+
+  // other code...
+
+  // handle inputs
   const handleInputs = (e) => {
     setTotalNormal({ ...totalNormal, [e.target.name]: e.target.value });
   };
 
+  
   const years = typeof selectedYear != 'number' ? parseInt(selectedYear) : selectedYear;
   const months = typeof selectedmonth != 'number' ? parseInt(selectedmonth) : selectedmonth;
 
@@ -339,52 +349,114 @@ const TimesheetModal = ({
 
   const totalNormalHrDay = (day) => {
     if (day.date === selectedDay) {
-      return totalNormal.day;
+      return totalNormalHrDay.day;
       // if any bug occure totalNormal?.normal_hours
     }
-    const totalValue =
-      totalEmpTimesheetRecord?.find(
-        (record) =>
-          record.employee_id === getSingleEmployeeData?.employee_id &&
-          record.project_id === getSingleEmployeeData?.project_id &&
-          record.day === day.date &&
-          record?.month === months &&
-          record?.year === years,
-      )?.normal_hours || '';
-    return totalValue;
+    const record = totalEmpTimesheetRecord?.find(
+      (record) =>
+        record.employee_id === getSingleEmployeeData?.employee_id &&
+        record.project_id === getSingleEmployeeData?.project_id &&
+        record.day === day.date &&
+        record?.month === months &&
+        record?.year === years
+    );
+  
+    return record?.normal_hours || ''; // Return normal_hours from the record if found
   };
-
+  
   const totalOTHr = (day) => {
-    if (day.date === selectedDay) {
-      return totalNormal.day;
-    }
-    const totalValue =
-      totalEmpTimesheetRecord?.find(
-        (record) =>
-          record.employee_id === getSingleEmployeeData?.employee_id &&
-          record.project_id === getSingleEmployeeData?.project_id &&
-          record.day === day.date &&
-          record?.month === months &&
-          record?.year === years,
-      )?.ot_hours || '';
-    return totalValue;
-  };
 
+    if (day.date === selectedDay) {
+      return totalOTHr.day;
+      // if any bug occure totalNormal?.normal_hours
+    }    const record = totalEmpTimesheetRecord?.find(
+      (record) =>
+        record.employee_id === getSingleEmployeeData?.employee_id &&
+        record.project_id === getSingleEmployeeData?.project_id &&
+        record.day === day.date &&
+        record?.month === months &&
+        record?.year === years
+    );
+  
+    return record?.ot_hours || ''; // Return ot_hours from the record if found
+  };
+  
   const totalPHHr = (day) => {
     if (day.date === selectedDay) {
-      return totalNormal.day;
+      return totalPHHr.day;
+      // if any bug occure totalNormal?.normal_hours
     }
-    const totalValue =
-      totalEmpTimesheetRecord?.find(
+    const record = totalEmpTimesheetRecord?.find(
+      (record) =>
+        record.employee_id === getSingleEmployeeData?.employee_id &&
+        record.project_id === getSingleEmployeeData?.project_id &&
+        record.day === day.date &&
+        record?.month === months &&
+        record?.year === years
+    );
+  
+    return record?.ph_hours || ''; // Return ph_hours from the record if found
+  };
+  
+  const [totalNormalHours, setTotalNormalHours] = useState(0);
+  const [totalOTHours, setTotalOTHours] = useState(0);
+  const [totalPHHours, setTotalPHHours] = useState(0);
+
+  // Function to calculate total hours
+  const calculateTotalHours = () => {
+    // Calculate total normal hours
+    const totalNormal = getTotalHours('normal_hours');
+    setTotalNormalHours(totalNormal);
+
+    // Calculate total OT hours
+    const totalOT = getTotalHours('ot_hours');
+    setTotalOTHours(totalOT);
+
+    // Calculate total PH hours
+    const totalPH = getTotalHours('ph_hours');
+    setTotalPHHours(totalPH);
+  };
+
+  const getTotalHours = (type) => {
+    let total = 0;
+    dateOfmonth && dateOfmonth.forEach((day) => {
+      const record = totalEmpTimesheetRecord?.find(
         (record) =>
           record.employee_id === getSingleEmployeeData?.employee_id &&
           record.project_id === getSingleEmployeeData?.project_id &&
           record.day === day.date &&
-          record?.month === months &&
-          record?.year === years,
-      )?.ph_hours || '';
-    return totalValue;
+          record.month === months &&
+          record.year === years
+      );
+      total += parseFloat(record?.[type] || 0);
+    });
+    return total;
   };
+  const generateMonths = (selectedYear) => {
+    const currentYear = moment().year();
+    const maxMonth = selectedYear === currentYear ? moment().month() + 1 : 12; // Get max month based on selected year
+    const months = [];
+    for (let i = 1; i <= maxMonth; i++) {
+      months.push({ value: i, label: moment().month(i - 1).format("MMMM") });
+    }
+    return months;
+  };
+  
+  
+  const generateYears = () => {
+    const currentYear = moment().year();
+    const years = [];
+    for (let i = currentYear; i >= currentYear - 1; i--) {
+      years.push(i);
+    }
+    return years;
+  };
+  
+  
+
+  useEffect(() => {
+    calculateTotalHours();
+  }, [totalEmpTimesheetRecord]);
 
   useEffect(() => {
     getDaysOfMonths(moment().year(), moment().month() + 1);
@@ -424,22 +496,33 @@ const TimesheetModal = ({
                 <Col md="4">
                   Employee Name: {getSingleEmployeeData && getSingleEmployeeData.first_name}
                 </Col>
+                <Col md="2"> <PdfEmpTimesheet getSingleEmployeeData={getSingleEmployeeData} selectedmonth={selectedmonth} selectedYear={selectedYear}  /> </Col>
+
                 <Col md="2">Total Cost: {salary?.total_cost}</Col>
                 <Col md="2">
                   <FormGroup>
                     <Label>Year: </Label>
                     <Input
-                      type="select"
-                      name="year"
-                      defaultValue={selectedYear}
-                      onChange={(e) => {
-                        setSelectedYear(e.target.value);
-                        getDaysOfMonths(e.target.value, selectedmonth);
-                      }}
-                    >
-                      <option value="2022">2022</option>
-                      <option value="2023">2023</option>
-                    </Input>
+  type="select"
+  name="year"
+  defaultValue={selectedYear}
+  onChange={(e) => {
+    const selectedYear = parseInt(e.target.value);
+    setSelectedYear(selectedYear);
+    const currentYear = moment().year();
+    const maxMonth = selectedYear === currentYear ? moment().month() + 1 : 12;
+    const currentMonth = moment().month() + 1;
+    setSelectedMonth(currentMonth <= maxMonth ? currentMonth : maxMonth);
+    getDaysOfMonths(selectedYear, selectedmonth);
+  }}
+>
+  {generateYears().map((year) => (
+    <option key={year} value={year}>
+      {year}
+    </option>
+  ))}
+</Input>
+
                   </FormGroup>
                 </Col>
                 <Col md="2">
@@ -454,19 +537,13 @@ const TimesheetModal = ({
                         getDaysOfMonths(selectedYear, e.target.value);
                       }}
                     >
-                      <option value="1">January</option>
-                      <option value="2">February</option>
-                      <option value="3">March</option>
-                      <option value="4">April</option>
-                      <option value="5">May</option>
-                      <option value="6">June</option>
-                      <option value="7">July</option>
-                      <option value="8">August</option>
-                      <option value="9">September</option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12">December</option>
+                      {generateMonths(selectedYear).map((month) => (
+                        <option key={month.value} value={month.value}>
+                          {month.label}
+                        </option>
+                      ))}
                     </Input>
+
                   </FormGroup>
                 </Col>
                 <Col md="2">
@@ -516,11 +593,11 @@ const TimesheetModal = ({
                 </th>
                 <th scope="col" colSpan="2">
                   Total Normal HRS:
-                  <Input type="text" name="Total_Normal_HRS" disabled value={TotalNormalHRS()} />
+                  <Input type="text" name="Total_Normal_HRS" disabled value={totalNormalHours} />
                 </th>
                 <th scope="col" colSpan="2">
                   Total OT HRS:
-                  <Input type="text" name="Total_OT_HRS" disabled value={TotalOTHRS()} />
+                  <Input type="text" name="Total_OT_HRS" disabled value={totalOTHours} />
                 </th>
                 <th scope="col" colSpan="2">
                   Total PH HRS:
@@ -529,7 +606,7 @@ const TimesheetModal = ({
                     name="Total_PH_HRS"
                     disabled
                     // value={salary?.total_ph_hours}
-                    value={TotalPHHRS()}
+                    value={totalPHHours}
                   />
                 </th>
                 <th scope="col">Normal Rate</th>

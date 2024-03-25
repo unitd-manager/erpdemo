@@ -34,6 +34,8 @@ const TranslationEdit = () => {
   const handleInputs = (e) => {
     setTranslationdetails({ ...translationdetails, [e.target.name]: e.target.value });
   };
+
+  console.log("value",valueType)
   //getting data from translation by Id
   const getSettingById = () => {
     api
@@ -206,7 +208,73 @@ const TranslationEdit = () => {
                   </Input>
                 </FormGroup>
               </Col>
+                {valueType && valueType === 'Text' && (
               <Col md="4">
+                <FormGroup>
+                  <Label> English Value</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={translationdetails && translationdetails.value}
+                    name="value"
+                  />
+                </FormGroup>
+              </Col>
+                )}
+
+               {valueType && valueType === 'Html Text' && ( 
+                <Row>
+                <Col>
+              <Row>
+                        <Label> English Html Text</Label>
+                        </Row>
+                        <Editor
+                            editorState={lineItem}
+                            wrapperClassName="demo-wrapper mb-0"
+                            editorClassName="demo-editor border mb-4 edi-height"
+                            // value={translationdetails && translationdetails.value}
+                            onEditorStateChange={(e)=>{
+                                handleDataEditor(e,'value')
+                                setLineItem(e)
+                            }}
+                        />
+                        </Col>
+                        </Row>
+               )} 
+               {valueType && valueType === 'Text' && (
+              <Col md="4">
+                <FormGroup>
+                  <Label>Arabic Value</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={translationdetails && translationdetails.arb_value}
+                    name="arb_value"
+                  />
+                </FormGroup>
+              </Col>
+                )}
+
+               {valueType && valueType === 'Html Text' && ( 
+                <Row>
+                <Col>
+              <Row>
+                        <Label> Arabic Html Text</Label>
+                        </Row>
+                        <Editor
+                            editorState={lineItem}
+                            wrapperClassName="demo-wrapper mb-0"
+                            editorClassName="demo-editor border mb-4 edi-height"
+                            // value={translationdetails && translationdetails.value}
+                            onEditorStateChange={(e)=>{
+                                handleDataEditor(e,'value')
+                                setLineItem(e)
+                            }}
+                        />
+                        </Col>
+                        </Row>
+               )}  
+               <Col md="4">
                   <Label>Show to user</Label>
                   <FormGroup>
                     <Input
@@ -226,40 +294,7 @@ const TranslationEdit = () => {
                     ></Input>&nbsp;&nbsp;
                     <Label>No</Label>
                   </FormGroup>
-                </Col>
-                {valueType && valueType === 'Text' && (
-              <Col md="4">
-                <FormGroup>
-                  <Label>Value</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={translationdetails && translationdetails.value}
-                    name="value"
-                  />
-                </FormGroup>
-              </Col>
-                )}
-
-               {valueType && valueType === 'Html Text' && ( 
-                <Row>
-                <Col>
-              <Row>
-                        <Label>Html Text</Label>
-                        </Row>
-                        <Editor
-                            editorState={lineItem}
-                            wrapperClassName="demo-wrapper mb-0"
-                            editorClassName="demo-editor border mb-4 edi-height"
-                            // value={translationdetails && translationdetails.value}
-                            onEditorStateChange={(e)=>{
-                                handleDataEditor(e,'value')
-                                setLineItem(e)
-                            }}
-                        />
-                        </Col>
-                        </Row>
-               )}    
+                </Col>  
             </Row>
           </ComponentCard>
         </FormGroup>

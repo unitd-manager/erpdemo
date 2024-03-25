@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, FormGroup, TabContent, TabPane, Button, Form} from 'reactstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Row, Col, FormGroup, TabContent, TabPane, Button, Form } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -16,9 +16,10 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
+
 
 const PurchaseRequestEdit = () => {
-
   // All state variables
   const [goodsreceipteditdetails, setGoodsReceiptEditDetails] = useState({});
   const [employee, setEmployee] = useState([]);
@@ -36,10 +37,32 @@ const PurchaseRequestEdit = () => {
 
   // Navigation and Parameter Constants
   const { id } = useParams();
- 
 
   // get staff details
   const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/goodsreceipt/getTranslationForGoodsReceipt')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
 
   // Setting data in goodsreceipteditdetails
   const handleInputs = (e) => {
@@ -58,8 +81,13 @@ const PurchaseRequestEdit = () => {
     { id: '2', name: 'Attachment' },
   ];
 
-   // Attachment
-   const dataForAttachment = () => {
+  const tabsArb = [
+    { id: '1', name: 'البضائع المستلمة العناصر' },
+    { id: '2', name: 'مرفق' },
+  ];
+
+  // Attachment
+  const dataForAttachment = () => {
     setDataForAttachment({
       modelType: 'attachment',
     });
@@ -71,7 +99,7 @@ const PurchaseRequestEdit = () => {
       .post('/goodsreceipt/getGoodsReceiptById', { goods_receipt_id: id })
       .then((res) => {
         setGoodsReceiptEditDetails(res.data.data[0]);
-        console.log("setGoodsReceiptEditDetails",res.data.data[0])
+        console.log('setGoodsReceiptEditDetails', res.data.data[0]);
       })
       .catch((error) => {
         console.error('Error fetching goods receipt:', error);
@@ -125,7 +153,9 @@ const PurchaseRequestEdit = () => {
   // Generate Data for Receipt Items
   const generateData = () => {
     api
-      .post('/goodsreceipt/getPurchaseOrderedById', { purchase_order_id: goodsreceipteditdetails.purchase_order_id })
+      .post('/goodsreceipt/getPurchaseOrderedById', {
+        purchase_order_id: goodsreceipteditdetails.purchase_order_id,
+      })
       .then((res) => {
         const ReceiptItems = res.data.data;
         console.log('Received items:', ReceiptItems);
@@ -137,20 +167,22 @@ const PurchaseRequestEdit = () => {
         api
           .get('/goodsreceipt/checkReceiptItems')
           .then((response) => {
-            const ExistingReceiptItemsId = response.data.data; 
+            const ExistingReceiptItemsId = response.data.data;
             const insertReceiptItems = (index) => {
               if (index < ReceiptItems.length) {
-                const ReceiptItem = ReceiptItems[index];  
+                const ReceiptItem = ReceiptItems[index];
                 // Check if the po_product_id  already exists in the ExistingReceiptItemsId array
-                if (ExistingReceiptItemsId.includes(ReceiptItem.po_product_id )) {
-                  console.warn(`Receipt item for po_product_id  ${ReceiptItem.po_product_id } already exists, skipping insertion`);
+                if (ExistingReceiptItemsId.includes(ReceiptItem.po_product_id)) {
+                  console.warn(
+                    `Receipt item for po_product_id  ${ReceiptItem.po_product_id} already exists, skipping insertion`,
+                  );
                   message('Receipt items are already Inserted', 'warning');
                   insertReceiptItems(index + 1);
                 } else {
                   // Insert the order item
                   const ReceiptItemsData = {
-                    creation_date : creationdatetime,
-                    modified_by : loggedInuser.first_name, 
+                    creation_date: creationdatetime,
+                    modified_by: loggedInuser.first_name,
                     goods_receipt_id: id,
                     product_id: ReceiptItem.product_id,
                     item_title: ReceiptItem.item_title,
@@ -159,8 +191,8 @@ const PurchaseRequestEdit = () => {
                     ordered_quantity: ReceiptItem.quantity,
                     unit: ReceiptItem.unit,
                     purchase_order_id: goodsreceipteditdetails.purchase_order_id,
-                  };  
-                  console.log(`Inserting order item ${index + 1}:`, ReceiptItemsData);  
+                  };
+                  console.log(`Inserting order item ${index + 1}:`, ReceiptItemsData);
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current ReceiptItemsData
                   api
                     .post('/goodsreceipt/insertGoodsReceiptItems', ReceiptItemsData)
@@ -168,7 +200,7 @@ const PurchaseRequestEdit = () => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
                         setTimeout(() => {
-                          window.location.reload()
+                          window.location.reload();
                         }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
@@ -186,7 +218,7 @@ const PurchaseRequestEdit = () => {
                 console.log('All order items inserted successfully');
                 // You might want to trigger a UI update here
               }
-            }; 
+            };
             // Start inserting order items from index 0
             insertReceiptItems(0);
           })
@@ -198,101 +230,125 @@ const PurchaseRequestEdit = () => {
         console.error('Error fetching quote items', error);
       });
   };
-  
+
   //UseEffect
   useEffect(() => {
     getGoodsReceiptById();
     getEmployeeName();
+    getArabicCompanyName();
     // getQuote();
-    // getProject();    
+    // getProject();
   }, [id]);
 
   return (
     <>
-            <GoodsReceiptEditDetails
-            handleInputs={handleInputs}
-            goodsreceipteditdetails={goodsreceipteditdetails}
-            employee={employee}
-            editGoodsReceiptData={editGoodsReceiptData}
-            id={id}
-            ></GoodsReceiptEditDetails>
-            <ComponentCard title="More Details">
+      <GoodsReceiptEditDetails
+        handleInputs={handleInputs}
+        goodsreceipteditdetails={goodsreceipteditdetails}
+        employee={employee}
+        editGoodsReceiptData={editGoodsReceiptData}
+        id={id}
+        arabic={arabic}
+        arb={arb}
+      ></GoodsReceiptEditDetails>
+      <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
         <ToastContainer></ToastContainer>
-        <Tab toggle={toggle} tabs={tabs} />
+        {eng === true && <Tab toggle={toggle} tabs={tabs} />}
+        {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <Row>
-          <Col md="3">
+            <Row>
+              <Col md="3">
                 <FormGroup>
-                  <Button className="shadow-none" color="primary" onClick={() => {generateData();}}>
-                    Create Receipt Items
-                 </Button>    
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      generateData();
+                    }}
+                  >
+                    {arb ?'إنشاء عناصر الاستلام':'Create Receipt Items'}
+                  </Button>
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
                   <GoodsReceiptItemsEdit
-                     receiptitemseditmodal={receiptitemseditmodal}
-                     setReceiptItemsEditModal={setReceiptItemsEditModal}
-                     PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
-                    ></GoodsReceiptItemsEdit>
-                    <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              setReceiptItemsEditModal(true);
-            }
-            }
-          >
-            Edit
-          </Button>
-        </FormGroup>
-      </Col>
-    </Row>
-        <GoodsReceiptLineItems
-          PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
-        ></GoodsReceiptLineItems>
+                    receiptitemseditmodal={receiptitemseditmodal}
+                    setReceiptItemsEditModal={setReceiptItemsEditModal}
+                    PurchaseOrderId={
+                      goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id
+                    }
+                    arabic={arabic}
+                    arb={arb}
+                  ></GoodsReceiptItemsEdit>
+                  <Button
+                    className="shadow-none"
+                    color="primary"
+                    onClick={() => {
+                      setReceiptItemsEditModal(true);
+                    }}
+                  >
+                    {arb ?'يحرر':'Edit'}
+                  </Button>
+                </FormGroup>
+              </Col>
+            </Row>
+            <GoodsReceiptLineItems
+              PurchaseOrderId={goodsreceipteditdetails && goodsreceipteditdetails.purchase_order_id}
+              arabic={arabic}
+              arb={arb}
+            ></GoodsReceiptLineItems>
           </TabPane>
           <TabPane tabId="2">
-          <Form>
+            <Form>
               <FormGroup>
-                  <Row>
-                    <Col xs="12" md="3" className="mb-3">
-                      <Button
-                        className="shadow-none"
-                        color="primary"
-                        onClick={() => {
-                          setRoomName('GoodsReceipt');
-                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
-                          dataForAttachment();
-                          setAttachmentModal(true);
-                        }}
-                      >
-                        <Icon.File className="rounded-circle" width="20" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <AttachmentModalV2
-                    moduleId={id}
-                    attachmentModal={attachmentModal}
-                    setAttachmentModal={setAttachmentModal}
-                    roomName={RoomName}
-                    fileTypes={fileTypes}
-                    altTagData="GoodsReceiptRelated Data"
-                    desc="GoodsReceiptRelated Data"
-                    recordType="RelatedPicture"
-                    mediaType={attachmentData.modelType}
-                    update={update}
-                    setUpdate={setUpdate}
-                  />
-                  <ViewFileComponentV2 moduleId={id} roomName="GoodsReceipt" recordType="RelatedPicture" update={update}
-                    setUpdate={setUpdate}/>
+                <Row>
+                  <Col xs="12" md="3" className="mb-3">
+                    <Button
+                      className="shadow-none"
+                      color="primary"
+                      onClick={() => {
+                        setRoomName('GoodsReceipt');
+                        setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                        dataForAttachment();
+                        setAttachmentModal(true);
+                      }}
+                    >
+                      <Icon.File className="rounded-circle" width="20" />
+                    </Button>
+                  </Col>
+                </Row>
+                <AttachmentModalV2
+                  moduleId={id}
+                  attachmentModal={attachmentModal}
+                  setAttachmentModal={setAttachmentModal}
+                  roomName={RoomName}
+                  fileTypes={fileTypes}
+                  altTagData="GoodsReceiptRelated Data"
+                  desc="GoodsReceiptRelated Data"
+                  recordType="RelatedPicture"
+                  mediaType={attachmentData.modelType}
+                  update={update}
+                  setUpdate={setUpdate}
+                  arabic={arabic}
+                  arb={arb}
+                />
+                <ViewFileComponentV2
+                  moduleId={id}
+                  roomName="GoodsReceipt"
+                  recordType="RelatedPicture"
+                  update={update}
+                  setUpdate={setUpdate}
+                  arabic={arabic}
+                  arb={arb}
+                />
               </FormGroup>
             </Form>
           </TabPane>
         </TabContent>
-        </ComponentCard> 
-        </>   
+      </ComponentCard>
+    </>
   );
 };
 export default PurchaseRequestEdit;

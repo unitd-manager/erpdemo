@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, TabContent,Table, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate,Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -13,9 +13,11 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AddEmployee from '../../components/ProjectTabContent/AddEmployee';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
 import ProjectMaterialLineItem from '../../components/project/ProjectMaterialLineItem';
 import EditProjectMaterialLineItemModal from '../../components/project/EditProjectMaterialLineItemModal'
+import CommonTable from '../../components/CommonTable';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -24,6 +26,38 @@ const ProjectEdit = () => {
   const backToList = () => {
     navigate('/Project');
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/project/getTranslationForProject')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const [projectDetail, setProjectDetail] = useState();
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
@@ -52,9 +86,16 @@ const ProjectEdit = () => {
   // Start for tab refresh navigation #Renuka 31-05-23
   const tabs = [
    
-    { id: '1', name: 'Quote' },
+    { id: '1', name: 'Quotation' },
     { id: '2', name: 'Material Needed' },
     { id: '3', name: 'Project Team' },
+    { id: '4', name: 'Job Order' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'اقتباس ' },
+    { id: '2', name: 'المواد المطلوبة ' },
+    { id: '3', name: 'فريق المشروع' },
+    { id: '4', name: 'أمر الوظيفة' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -64,19 +105,22 @@ const ProjectEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+     
+      name: arabic.find(item => item.key_text === 'mdProject.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdProject.Amount')?.[genLabel],
     },
   ];
 
@@ -85,27 +129,99 @@ const ProjectEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProject.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdProject.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name: arabic.find(item => item.key_text === 'mdProject.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdProject.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdProject.Amount')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdProject.Updated By')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdProject.Action')?.[genLabel],
     },
   ];
+  const [tenders, setTenders] = useState(null);
+  
+
+  const getTenders = () => {
+    api
+      .post('/joborder/getProjectJobOrderById',{project_id:id})
+      .then((res) => {
+        setTenders(res.data.data); 
+      });
+  };
+  useEffect(() => {
+    getTenders();
+  }, []);
+
+  const columns = [
+    {
+      name: '#',
+      selector: 'project_job_id',
+      grow: 0,
+      wrap: true,
+      width: '4%',
+    },
+
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Job Order No')?.[genLabel],
+      selector: 'job_code',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Job Order Title')?.[genLabel],
+      selector: 'job_title',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Date')?.[genLabel],
+      selector: 'job_date',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Customer')?.[genLabel],
+      selector: 'company_name',
+      sortable: true,
+      grow: 0,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Reference')?.[genLabel],
+      selector: 'ref_no_job',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
+  
+    {
+      name: arabic.find(item => item.key_text === 'mdProject.Status')?.[genLabel],
+      selector: 'job_status',
+      sortable: true,
+      width: 'auto',
+    },
+    {
+        name: arabic.find(item => item.key_text === 'mdProject.Net Amount')?.[genLabel],
+        selector: 'total_amount',
+        sortable: true,
+        width: 'auto',
+      },
+  ];
+
   // Get Project By Id
   const getProjectById = () => {
     api
@@ -189,6 +305,7 @@ const ProjectEdit = () => {
     getIncharge();
     getLineItem();
     getMaterialItem();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -199,6 +316,7 @@ const ProjectEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></ProjectButton>
 
       <ProjectEditForm
@@ -207,13 +325,22 @@ const ProjectEdit = () => {
         contact={contact}
         incharge={incharge}
         formSubmitted={formSubmitted}
+        arb={arb}
+        arabic={arabic}
+        genLabel={genLabel}
       />
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
 
         {/* Call Modal's */}
-    <Tab toggle={toggle} tabs={tabs} />
+    {/* <Tab toggle={toggle} tabs={tabs} /> */}
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Start Tab Content 1 */}
@@ -269,7 +396,7 @@ const ProjectEdit = () => {
                   to=""
                   onClick={addMaterialItemsToggle.bind(null)}
                 >
-                  Add Material Items
+                {arb?'إضافة عناصر المواد':'Add Material Items'}
                 </Button>
               </Col>
             </Row>
@@ -329,6 +456,9 @@ const ProjectEdit = () => {
               getMaterialItem={getMaterialItem}
               setViewMaterialModal={setViewMaterialModal}
               projectDetail={projectDetail}
+              arb={arb}
+              arabic={arabic}
+              genLabel={genLabel}
               //insertquote={insertquote}
             ></EditProjectMaterialLineItemModal>
             {addMaterialItemModal && (
@@ -337,12 +467,15 @@ const ProjectEdit = () => {
                 addMaterialItemModal={addMaterialItemModal}
                 setAddMaterialItemModal={setAddMaterialItemModal}
                 projectLine={id}
+                arb={arb}
+                arabic={arabic}
+                genLabel={genLabel}
               ></ProjectMaterialLineItem>
             )}
           </TabPane>
           <TabPane tabId="3" eventkey="addEmployee">
             <Row>
-              <AddEmployee ProposalId ={ProposalId}projectId={id}/>
+              <AddEmployee ProposalId ={ProposalId}projectId={id}arb={arb}arabic={arabic}genLabel={genLabel}/>
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   className="shadow-none"
@@ -379,7 +512,41 @@ const ProjectEdit = () => {
               setUpdate={setUpdate}
             />
           </TabPane>
-
+          <TabPane tabId="4">
+            
+            <CommonTable 
+             title="JobOrder List">
+          <thead>
+            <tr>
+              {columns.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {tenders &&
+              tenders.map((element, index) => {
+                return (
+                  <tr key={element.project_job_id}>
+                    <td>{index + 1}</td>
+                    <td>
+                    <Link to={`/ProjectJobOrderEdit/${element.project_job_id}`}>{element.job_code}</Link>
+                      {/* <Link to={`/ProjectJobOrderEdit/${element.project_job_id}?tab=1`}>
+                        <Icon.Edit2 />
+                      </Link> */}
+                    </td>
+                    <td>{element.job_title}</td>
+                    <td>{element.job_date}</td>
+                    <td>{element.company_name}</td>
+                    <td>{element.ref_no_job}</td>
+                    <td>{element.job_status}</td>
+                    <td>{element.total_amount}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </CommonTable>
+        </TabPane>
           {/* End Tab Content 12 */}
         </TabContent>
       </ComponentCard>

@@ -17,6 +17,7 @@ const ClientDetails = () => {
   //  insertClient
   const [clientForms, setClientForms] = useState({
     company_name: '',
+    company_name_arb: '',
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
     //get staff details
@@ -30,7 +31,7 @@ const ClientDetails = () => {
   // Client Insert
   const insertClient = () => {
     setFormSubmitted(true);
-    if (clientForms.company_name.trim() !== '') {
+    if (clientForms.company_name.trim() !== '' && clientForms.company_name_arb.trim() !== '') {
       clientForms.creation_date = creationdatetime;
       clientForms.created_by = loggedInuser.first_name;
       api
@@ -78,6 +79,26 @@ const ClientDetails = () => {
                     ></Input>
 
                     {formSubmitted && clientForms.company_name.trim() === '' && (
+                      <div className="error-message">Please Enter</div>
+                    )}
+                    
+                  </Col>
+                  <Col md="12">
+                    <Label>
+                      Company Name Arabic <span className="required"> *</span>{' '}
+                    </Label>
+                    
+                    <Input
+                      type="text"
+                      name="company_name_arb"
+                      onChange={handleClientForms}
+                      className={`form-control ${
+                        formSubmitted && clientForms.company_name_arb.trim() === '' ? 'highlight' : ''
+                      }`}
+                      
+                    ></Input>
+
+                    {formSubmitted && clientForms.company_name_arb.trim() === '' && (
                       <div className="error-message">Please Enter</div>
                     )}
                     

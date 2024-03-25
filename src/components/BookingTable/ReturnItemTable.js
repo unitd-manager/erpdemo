@@ -15,7 +15,7 @@ export default function ItemTable({
     // onRemoveItem: PropTypes.func.isRequired,
   };
   const hasNonZeroQuantity = returnItemDetails?.some((item) => item.qty > 0) || false;
-
+  
   const [returnModal, setReturnModal] = useState(false);
   // const [selectedItem, setSelectedItem] = useState(null);
   // const [returnQuantity, setReturnQuantity] = useState(0);
@@ -124,7 +124,7 @@ export default function ItemTable({
                     <td>{element.qty_returned}</td>
                   </tr>
                 ))
-              ) : (
+              ) : ( 
                 <tr>
                   <td colSpan={invoiceTableColumns.length}>No items available</td>
                 </tr>

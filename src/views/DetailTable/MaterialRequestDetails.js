@@ -22,7 +22,7 @@ const MaterialRequestDetails = () => {
 
   const editJobById = () => {
     api
-      .get('/labourrequest/getProject')
+      .get('/labourrequest/getProjecttitle')
       .then((res) => {
         setProject(res.data.data);
       })

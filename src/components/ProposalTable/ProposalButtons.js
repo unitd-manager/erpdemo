@@ -3,12 +3,13 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ProposalButtons({ editProposalData, applyChanges,navigate, backToList, }) {
+export default function ProposalButtons({ editProposalData, applyChanges,navigate, backToList, arb}) {
   ProposalButtons.propTypes = {
     editProposalData: PropTypes.func,
     applyChanges: PropTypes.func,
     navigate: PropTypes.any,
     backToList: PropTypes.func,
+    arb: PropTypes.any,
   };
   return (
     <Form>
@@ -25,7 +26,7 @@ export default function ProposalButtons({ editProposalData, applyChanges,navigat
 
                 }}
               >
-                Save
+                {arb ?'يحفظ':'Save'} 
               </Button>
             </Col>
             <Col>
@@ -37,7 +38,7 @@ export default function ProposalButtons({ editProposalData, applyChanges,navigat
                   applyChanges();
                 }}
               >
-                Apply
+               {arb ?'يتقدم':'Apply'}
               </Button>
             </Col>
             <Col>
@@ -48,7 +49,7 @@ export default function ProposalButtons({ editProposalData, applyChanges,navigat
                   backToList();
                 }}
               >
-                Back to List
+                {arb ?'الرجوع للقائمة':'Back to List'}
               </Button>
             </Col>
           </Row>

@@ -9,7 +9,6 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-
 // import PurchaseInvoiceItemsEdit from '../../components/PurchaseInvoiceTable/PurchaseInvoiceItemsEdit';
 import PurchaseInvoiceLineItems from '../../components/PurchaseInvoiceTable/PurchaseInvoiceLineItems'
 import PurchaseInvoiceEditDetails from '../../components/PurchaseInvoiceTable/PurchaseInvoiceEditDetails';
@@ -17,6 +16,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const PurchaseRequestEdit = () => {
 
@@ -31,7 +31,17 @@ const PurchaseRequestEdit = () => {
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
+  // const eng =selectedLanguage === 'English'
   // Navigation and Parameter Constants
   const { id } = useParams();
 
@@ -43,18 +53,37 @@ const PurchaseRequestEdit = () => {
     setPurchaseInvoiceEditDetails({ ...purchaseinvoiceeditdetails, [e.target.name]: e.target.value });
   };
 
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseinvoice/getTranslationForPurchaseInvoiceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   // Function to toggle tabs
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
     }
   };
-
   const tabs = [
     { id: '1', name: 'Purchase Invoice Items' },
     { id: '2', name: 'Attachment' },
   ];
-
+  const tabsArb = [
+    { id: '1', name: 'عناصر فاتورة الشراء' },
+    { id: '2', name: 'مرفق' },
+  ];
    // Attachment
    const dataForAttachment = () => {
     setDataForAttachment({
@@ -173,8 +202,9 @@ const PurchaseRequestEdit = () => {
   //UseEffect
   useEffect(() => {
     getPurchaseInvoiceById(); 
-  }, [id]);
-
+    getArabicCompanyName();
+    }, [id]);
+   
   return (
     <>
             <PurchaseInvoiceEditDetails
@@ -182,10 +212,19 @@ const PurchaseRequestEdit = () => {
             purchaseinvoiceeditdetails={purchaseinvoiceeditdetails}
             editPurchaseInvoiceData={editPurchaseInvoiceData}
             id={id}
+            arabic={arabic}
+        arb={arb}
+        genLabel={genLabel}
             ></PurchaseInvoiceEditDetails>
             <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+  
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
           <Row>

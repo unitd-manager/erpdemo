@@ -11,7 +11,9 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
 
   return (
     <div>
-      <Col md="3">
+      <Row>
+     
+      <Col md="4">
         <FormGroup>
           <Label>
             Pass Type <span style={{ color: 'red' }}>*</span>
@@ -35,7 +37,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
         </FormGroup>
       </Col>
       {tabPassTypeDetails.citizen === 'Citizen' && (
-        <Col md="6">
+        <Col md="4">
           <FormGroup>
             <Label>
               NRIC No <span style={{ color: 'red' }}>*</span>
@@ -49,10 +51,11 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </FormGroup>
         </Col>
       )}
+      </Row>
       {tabPassTypeDetails.citizen === 'SP' && (
         <Row>
           {' '}
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>
                 Fin No <span style={{ color: 'red' }}>*</span>
@@ -65,7 +68,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
               />
             </FormGroup>
           </Col>
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>Fin No Expiry date</Label>
               <Input
@@ -83,7 +86,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
       {tabPassTypeDetails.citizen === 'EP' && (
         <Row>
           {' '}
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>
                 Fin No <span style={{ color: 'red' }}>*</span>
@@ -96,7 +99,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
               />
             </FormGroup>
           </Col>
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>Fin No Expiry date</Label>
               <Input
@@ -114,7 +117,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
       {tabPassTypeDetails.citizen === 'PR' && (
         <Row>
           {' '}
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>
                 NRIC No <span style={{ color: 'red' }}>*</span>
@@ -127,7 +130,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
               />
             </FormGroup>
           </Col>
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>SPR Year</Label>
               <Input
@@ -149,7 +152,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
       {tabPassTypeDetails.citizen === 'DP' && (
         <Row>
           {' '}
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>
                 Fin No <span style={{ color: 'red' }}>*</span>
@@ -162,7 +165,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
               />
             </FormGroup>
           </Col>
-          <Col md="3">
+          <Col md="4">
             <FormGroup>
               <Label>Fin No Expiry date </Label>
               <Input
@@ -177,14 +180,14 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </Col>
         </Row>
       )}
-      {tabPassTypeDetails.citizen === 'WP' && (
+      {tabPassTypeDetails.citizen === 'WP'  && (
         <>
           {' '}
           <Row>
-            <Col md="3">
+            <Col md="4">
               <FormGroup>
                 <Label>
-                  Fin No <span style={{ color: 'red' }}>*</span>
+                  Fin No 
                 </Label>
                 <Input
                   name="fin_no"
@@ -194,7 +197,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
                 />
               </FormGroup>
             </Col>
-            <Col md="3">
+            {/* <Col md="4">
               <FormGroup>
                 <Label>Fin No Expiry date </Label>
                 <Input
@@ -206,12 +209,12 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
                   onChange={handlePassTypeInputs}
                 />
               </FormGroup>
-            </Col>
+            </Col> */}
           </Row>
           <Row>
-            <Col md="3">
+            <Col md="4">
               <FormGroup>
-                <Label>Work Permit No </Label>
+                <Label>Work Permit No <span style={{ color: 'red' }}>*</span> </Label>
                 <Input
                   name="work_permit"
                   value={tabPassTypeDetails && tabPassTypeDetails.work_permit}
@@ -220,7 +223,7 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
                 />
               </FormGroup>
             </Col>
-            <Col md="3">
+            {/* <Col md="4">
               <FormGroup>
                 <Label>Work Expiry date </Label>
                 <Input
@@ -232,10 +235,45 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
                   onChange={handlePassTypeInputs}
                 />
               </FormGroup>
-            </Col>
+            </Col> */}
+            {/* <Col md="3">
+              <FormGroup>
+                <Label>Work Permit Expiry date</Label>
+                <Input
+                  type="date"
+                  onChange={handlePassTypeInputs}
+                  name="work_permit_expiry_date"
+                  value={moment(
+                    tabPassTypeDetails && tabPassTypeDetails.work_permit_expiry_date,
+                  ).format('YYYY-MM-DD')}
+                  // value={
+                  //   tabPassTypeDetails && moment(tabPassTypeDetails.work_permit_expiry_date).format('YYYY-MM-DD')
+                  // }
+                  min={moment().format('YYYY-MM-DD')}
+                />
+              </FormGroup>
+            </Col> */}
+            
           </Row>
         </>
       )}
+       <Col md="4">
+              <FormGroup>
+                <Label>Work Permit Expiry date</Label>
+                <Input
+                  type="date"
+                  onChange={handlePassTypeInputs}
+                  name="work_permit_expiry_date"
+                  value={moment(
+                    tabPassTypeDetails && tabPassTypeDetails.work_permit_expiry_date,
+                  ).format('YYYY-MM-DD')}
+                  // value={
+                  //   tabPassTypeDetails && moment(tabPassTypeDetails.work_permit_expiry_date).format('YYYY-MM-DD')
+                  // }
+                  min={moment().format('YYYY-MM-DD')}
+                />
+              </FormGroup>
+            </Col>
     </div>
   );
 }

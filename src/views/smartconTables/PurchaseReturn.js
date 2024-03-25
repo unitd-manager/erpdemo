@@ -18,6 +18,39 @@ const PurchaseReturn = () => {
   const [tenders, setTenders] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/purchasereturn/getTranslationForPurchaseReturn')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   const getTenders = () => {
     api
       .get('/purchasereturn/getPurchaseReturn')
@@ -44,6 +77,7 @@ const PurchaseReturn = () => {
   };
   useEffect(() => {
     getTenders();
+    getArabicCompanyName();
   }, []);
 
   const columns = [
@@ -64,21 +98,21 @@ const PurchaseReturn = () => {
       sortable: false,
     },
     {
-      name: 'Purchase No',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Number')?.[genLabel],
       selector: 'purchase_invoice_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Purchase Invocie Date',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Date')?.[genLabel],
       selector: 'purchase_invoice_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Return Date',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Return Date')?.[genLabel],
       selector: 'purchase_return_date',
       sortable: true,
       grow: 0,
@@ -92,7 +126,7 @@ const PurchaseReturn = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Purchase Return List"
+          title={arb ?'قائمة إرجاع المشتريات':'Purchase Return List'}
           Button={
             <Link to="/PurchaseReturnDetails">
               <Button color="primary" className="shadow-none">

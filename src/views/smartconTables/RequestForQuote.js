@@ -20,10 +20,43 @@ const RequestForQuote = () => {
   const [quote, setQuote] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/quote/getTranslationForReqForQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //Getting data from quote
   const getQuote = () => {
     api
-      .get('/quote/getTabPurcahseQuote')
+      .get('/quote/getTabPurcahseQuote') 
       .then((res) => {
         setQuote(res.data.data);
         $('#example').DataTable({
@@ -48,6 +81,7 @@ const RequestForQuote = () => {
 
   useEffect(() => {
     getQuote();
+    getArabicCompanyName();
   }, []);
   //Structure of quote list view
   const columns = [
@@ -67,28 +101,28 @@ const RequestForQuote = () => {
       sortable: false,
     },
     {
-      name: 'Purchase Request Code',
+      name: arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel],
       selector: 'purchase_request_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Status',
+      name: arabic.find((item) => item.key_text === 'mdRequestForQuote.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Date Issued',
+      name: arabic.find((item) => item.key_text === 'mdRequestForQuote.Date Issued')?.[genLabel],
       selector: 'date_issued',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Due Date',
+      name: arabic.find((item) => item.key_text === 'mdRequestForQuote.Due Date')?.[genLabel],
       selector: 'due_date',
       sortable: true,
       width: 'auto',

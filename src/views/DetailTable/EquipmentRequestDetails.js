@@ -1,28 +1,30 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import message from '../../components/Message';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import AppContext from '../../context/AppContext';
 import creationdatetime from '../../constants/creationdatetime';
 
 const EquipmentRequestDetails = () => {
   //Navigation and Parameter Constants
   const navigate = useNavigate();
-
+  const { loggedInuser } = useContext(AppContext);
   //Logic for adding Planning in db
   const [planningForms, setPlanningForms] = useState({
     request_date: '',
-    project_id:'',
+    project_id: '',
   });
   const [project, setProject] = useState();
   const { id } = useParams();
 
   const editJobById = () => {
     api
-      .get('/labourrequest/getProject')
+      .get('/labourrequest/getProjecttitle')
       .then((res) => {
         setProject(res.data.data);
       })
@@ -37,6 +39,7 @@ const EquipmentRequestDetails = () => {
   const insertPlanning = (code) => {
     if (planningForms.project_id !== '') {
       planningForms.creation_date = creationdatetime;
+      planningForms.created_by = loggedInuser.first_name;
       planningForms.equipment_request_code = code;
 
       api
@@ -78,8 +81,11 @@ const EquipmentRequestDetails = () => {
           <ComponentCard title="Key Details">
             <Form>
               <FormGroup>
-              <Row>
-                  <Label>Title <span style={{color:'red'}}>*</span> </Label>
+                <Row>
+                  <Col md="10">
+                  <Label>
+                    Title <span style={{ color: 'red' }}>*</span>{' '}
+                  </Label>
                   <Input
                     type="select"
                     name="project_id"
@@ -93,13 +99,13 @@ const EquipmentRequestDetails = () => {
                     {project &&
                       project.map((ele) => {
                         return (
-                            <option key={ele.project_id} value={ele.project_id}>
-                              {ele.project_title}
-                            </option>
-                          
+                          <option key={ele.project_id} value={ele.project_id}>
+                            {ele.project_title}
+                          </option>
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
               </FormGroup>
               <FormGroup>

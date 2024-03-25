@@ -23,18 +23,26 @@ const OpportunityDetails = () => {
       setQuote(res.data.data);
     });
   };
+
+  const getOrdersByOrderId = () => {
+    api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
+      setInsertQuote(res.data.data);
+    
+    });
+  };
   const handleInputs = (e) => {
     setInsertQuote({ ...insertQuote, [e.target.name]: e.target.value });
   };
 
 
   //console.log(tenderDetails);
- const insertOrder = (code) => {
+ const insertOrder = (orderCode,companyId) => {
   console.log('insertQuote.quote_id:', insertQuote.quote_id);
   if (insertQuote.quote_id !== '') {
-    insertQuote.order_code = code;
+    insertQuote.order_code = orderCode;
     insertQuote.creation_date = creationdatetime;
     insertQuote.created_by = loggedInuser.first_name;
+    insertQuote.company_id = companyId;
     api
       .post('/finance/insertOrder', insertQuote)
       .then((res) => {
@@ -55,19 +63,47 @@ const OpportunityDetails = () => {
   }
 };
   //QUTO GENERATED CODE
+  // const generateCode = () => {
+  //   api
+  //     .post('/commonApi/getCodeValue', { type: 'orders' })
+  //     .then((res) => {
+  //       insertOrder(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       insertOrder('');
+  //     });
+  // };
+
   const generateCode = () => {
-    api
-      .post('/commonApi/getCodeValue', { type: 'orders' })
+    api.post('/commonApi/getCodeValue', { type: 'orders' })
       .then((res) => {
-        insertOrder(res.data.data);
+        const orderCode = res.data.data;
+  
+        // Fetch company_id based on quote_id
+        const selectedQuote = quote.find((quotes) => quotes.quote_id === insertQuote.quote_id);
+        console.log('Selected Quote:', selectedQuote);
+        console.log('Selected Quote:', selectedQuote);
+        if (selectedQuote) {
+          const companyId = selectedQuote.company_id;
+          console.log('Company ID:', companyId);
+          
+          // Call insertOrder with quote code and company ID
+          insertOrder(orderCode, companyId);
+        } else {
+          console.error('Selected quote not found');
+          insertOrder(orderCode, ''); // If company_id not found, pass empty string
+        }
       })
-      .catch(() => {
-        insertOrder('');
+      .catch((error) => {
+        console.error('Error fetching code value:', error);
+        insertOrder('', ''); // If error, pass empty string for quote code and company_id
       });
   };
 
+
   useEffect(() => {
     getQuote();
+    getOrdersByOrderId();
     
   }, [id]);
 

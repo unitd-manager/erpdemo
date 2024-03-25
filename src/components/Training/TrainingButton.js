@@ -38,7 +38,7 @@ export default function TrainingButton({ applyChanges, backToList, insertTrainin
                 onClick={() => {
                   insertTrainingData();
                   applyChanges();
-                }}
+                  }}
               >
                 Apply
               </Button>

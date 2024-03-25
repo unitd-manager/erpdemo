@@ -7,9 +7,9 @@ import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
-import 'datatables.net-buttons/js/buttons.flash';
+// import 'datatables.net-buttons/js/buttons.flash';
 // import 'datatables.net-buttons/js/buttons.html5';
-// import 'datatables.net-buttons/js/buttons.print';
+import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -21,6 +21,7 @@ const Loan = () => {
   const [loading, setLoading] = useState(false);
   //getting loan data in db
   const getLoan = () => {
+    setLoading(true);
     api
       .get('/loan/getLoan')
       .then((res) => {
@@ -30,13 +31,13 @@ const Loan = () => {
           pageLength: 20,
           processing: true,
           dom: 'Bfrtip',
-          // buttons: [
-          //   {
-          //     extend: 'print',
-          //     text: 'Print',
-          //     className: 'shadow-none btn btn-primary',
-          //   },
-          // ],
+          buttons: [
+            {
+              extend: 'print',
+              text: 'Print',
+              className: 'shadow-none btn btn-primary',
+            },
+          ],
         });
         setLoading(false);
       })
@@ -152,7 +153,7 @@ const Loan = () => {
                       </Link>
                     </td>
                     <td>{element.employee_name}</td>
-                    <td>{element.date ? moment(element.date).format('YYYY-MM-DD') : ''}</td>
+                    <td>{element.date ? moment(element.date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.amount}</td>
                     <td>{element.month_amount}</td>
                     <td>{element.total_repaid_amount}</td>

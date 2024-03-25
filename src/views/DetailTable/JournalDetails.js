@@ -22,13 +22,51 @@ const JournalDetails = () => {
   const navigate = useNavigate();
   const [journalEntry, setJournalEntry] = useState('');
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyJournal')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+
+
   const getJournalEntry = () => {
     api
       .get('/journal/getAccHeadTitle')
       .then((res) => {
         const options = res.data.data.map(item => ({
-          value: item.title,
-          label: item.title,
+          value: arb ? item.title_arb : item.title,
+          label: arb ? item.title_arb : item.title,
           id: item.acc_head_id,
         }));
         setJournalEntry(options);
@@ -38,6 +76,7 @@ const JournalDetails = () => {
   const [journalDetail, setJournalDetail] = useState({
     entry_date: moment(Date.now()).format('YYYY-MM-DD'),
     narration_main: '',
+    narrationarb_main: '',
     acc_head1: null,
     acc_head2: null,
     debit1: 0,
@@ -46,6 +85,8 @@ const JournalDetails = () => {
     credit2: 0,
     narration1: '',
     narration2: '',
+    narrationarb1: '',
+    narrationarb2: '',
   });
 
     // Handle changes in input fields and select elements
@@ -84,20 +125,23 @@ const JournalDetails = () => {
         entry_date: journalDetail.entry_date,
         voucher_type: 'Journal',
         narration: journalDetail.narration_main,
+        narration_arb: journalDetail.narrationarb_main,
         creation_date: journalDetail.entry_date,
         modification_date: journalDetail.entry_date,
         acc_head_id_1: journalDetail.acc_head1,
         debit_1: journalDetail.debit1,
         credit_1: journalDetail.credit1,
-        debit_base_1: 'your_debit_base_1',
-        credit_base_1: 'your_credit_base_1',
+        debit_base_1: 0,
+        credit_base_1: 0,
         narration_1: journalDetail.narration1,
+        narrationarb_1: journalDetail.narrationarb1,
         acc_head_id_2: journalDetail.acc_head2,
         debit_2: journalDetail.debit2,
         credit_2: journalDetail.credit2,
-        debit_base_2: 'your_debit_base_2',
-        credit_base_2: 'your_credit_base_2',
+        debit_base_2:0,
+        credit_base_2:0,
         narration_2: journalDetail.narration2,
+        narrationarb_2: journalDetail.narrationarb2,
       };
 
       try {
@@ -151,7 +195,7 @@ const JournalDetails = () => {
                   <Col md="8">
                     <FormGroup>
                       <Label>Narration</Label>
-                      <Input type="text" name="narration_main" onChange={handleInputs} />
+                      <Input type="text" name={arb ? 'narrationarb_main' : 'narration_main'} onChange={handleInputs} />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -165,7 +209,7 @@ const JournalDetails = () => {
                       <th>
                         <Row>
                           <Col md="8">
-                            Account
+                          {arabic.find((item) => item.key_text === 'mdJournal.Account')?.[genLabel]}
                           </Col>
                           <Col md="2">
                             Debit
@@ -194,7 +238,7 @@ const JournalDetails = () => {
                                 options={journalEntry}
                               />
                               <Label></Label>
-                              <Input type="text" name="narration1" placeholder="Narration"
+                              <Input type="text" name={arb ? 'narrationarb1' : 'narration1'} placeholder="Narration"
                                 onChange={handleInputs}
                               />
                             </FormGroup>
@@ -227,7 +271,7 @@ const JournalDetails = () => {
                                 options={journalEntry}
                               />
                               <Label></Label>
-                              <Input type="text" name="narration2" placeholder="Narration" onChange={handleInputs} />
+                              <Input type="text" name={arb ? 'narrationarb2' : 'narration2'} placeholder="Narration" onChange={handleInputs} />
                             </FormGroup>
                           </Col>
                           <Col md="2">

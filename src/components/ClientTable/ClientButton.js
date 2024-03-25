@@ -3,7 +3,7 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted}) {
+export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted,arb}) {
   ClientButton.propTypes = {
     editClientsData: PropTypes.any,
     applyChanges: PropTypes.func,
@@ -11,6 +11,8 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
     setFormSubmitted: PropTypes.any,
     clientsDetails: PropTypes.any,
     navigate: PropTypes.any,
+    arb: PropTypes.any,
+  
   };
   const handleSave = () => {
     console.log('Handling Save...');
@@ -47,13 +49,13 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
                 onClick={() => {
                   console.log('Clicked Save');
                   handleSave();
-    // console.log('formSubmitted:', formSubmitted);
-    setFormSubmitted(true);
-    // editClientsData();
-    // navigate('/Client')
-                }}
+                  // console.log('formSubmitted:', formSubmitted);
+                  setFormSubmitted(true);
+                  // editClientsData();
+                   // navigate('/Client')
+                  }}
               >
-                Save
+             {arb ?'يحفظ':'Save'}  
               </Button>
             </Col>
             <Col>
@@ -66,7 +68,7 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
                   applyChanges();
                 }}
               >
-                Apply
+                {arb ?'يتقدم':'Apply'}  
               </Button>
             </Col>
             <Col>
@@ -77,7 +79,8 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
                   backToList();
                 }}
               >
-                Back to List
+                   {arb ?'الرجوع للقائمة':'Back to List'}  
+
               </Button>
             </Col>
           </Row>

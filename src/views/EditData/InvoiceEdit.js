@@ -21,6 +21,7 @@ import PartialINvoiceEdit from '../../components/BookingTable/PartialINvoiceEdit
 import GoodsItemTable from '../../components/BookingTable/GoodsItemTable';
 import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoiceGoodsEdit';
 import AppContext from '../../context/AppContext';
+import PdfCreateInvoice from '../../components/PDF/PdfCreateInvoice';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({
@@ -32,7 +33,7 @@ const InvoiceEdit = () => {
   const [partialgoodsinvoiceeditmodal, setPartialGoodsInvoiceEditModal] = useState(false);
   const [orderitemDetails, setOrderItemDetails] = useState([]);
   const { insertedDataId, orderId } = useParams();
-  
+  //const [salesOrderDisabled, setSalesOrderDisabled] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
@@ -44,7 +45,7 @@ const InvoiceEdit = () => {
 
   const { id } = useParams();
   const { loggedInuser } = useContext(AppContext);
-  console.log('order ID:', orderId);
+  console.log('Invoiceid:', insertedDataId);
   const navigate = useNavigate();
   const [orderdropdown, setOrderDropdown] = useState();
     const [goodsdeliverydropdown, setGoodsDeliveryDropdown] = useState();
@@ -646,6 +647,15 @@ const toggle = (tab) => {
           message('Invoice cancelled successfully', 'success');
           window.location.reload();
           editBookingById(); // Refresh the invoice details after updating
+          api
+          .post(`/finance/updateCancelledStatus/${orderId}`, { order_status: 'Cancelled' })
+          .then(() => {
+            message('Sales order status updated successfully', 'success');
+            //setSalesOrderDisabled(true);
+          })
+          .catch(() => {
+            message('Unable to update sales order status.', 'error');
+          });
         })
         .catch(() => {
           message('Unable to cancel invoice.', 'error');
@@ -673,7 +683,7 @@ const toggle = (tab) => {
       <ToastContainer/>
       <ComponentCardV2>
       <Row>
-      
+      <Col>         <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
          <Col>
               <Button
                 color="primary"
@@ -880,39 +890,7 @@ const toggle = (tab) => {
           </TabPane>
         </TabContent>
         </ComponentCard>
-      {/* <InvoiceItem
-        editInvoiceItemData={editInvoiceItemData}
-        setEditInvoiceItemData={setEditInvoiceItemData}
-        invoiceInfo={insertedDataId}
-        ></InvoiceItem> */}
-      {/* <ComponentCard title="Invoice Items">
-      <Col>
-          <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              setEditInvoiceItemData(true);
-            }}
-          >
-            Add Items
-          </Button>
-        </Col>
-        <Row className="border-bottom mb-3">
-         <ItemTable
-        itemDetails={itemDetails}
-        invoiceInfo={insertedDataId}
-       />
-      </Row>
-      </ComponentCard> */}
-      {/* <ComponentCard title="Order Items">
      
-        <Row className="border-bottom mb-3">
-         <OrderItemTable
-        orderitemDetails={orderitemDetails}
-        
-       />
-      </Row>
-      </ComponentCard> */}
     </>
   );
 };

@@ -15,6 +15,7 @@ import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteBu
 import ProjectQuoteMoreDetails from '../../components/ProjectQuotation/ProjectQuoteMoreDetails';
 import QuotationAttachment from '../../components/ProjectQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/ProjectQuotation/QuoteLineItem';
 import EditLineItemModal from '../../components/ProjectQuotation/EditLineItemModal';
 import EditMaterialLineItemModal from '../../components/ProjectQuotation/EditMaterialLineItemModal';
@@ -59,7 +60,11 @@ const ProjectQuotationEdit = () => {
 
 
   const { loggedInuser } = useContext(AppContext);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -91,6 +96,11 @@ const ProjectQuotationEdit = () => {
     { id: '2', name: 'Material Needed ' },
     { id: '3', name: 'Attachment' },
   ];
+  const tabsArb = [
+    { id: '1', name: 'اقتباس ' },
+    { id: '2', name: 'المواد المطلوبة ' },
+    { id: '3', name: 'مرفق' },
+  ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -102,8 +112,32 @@ const ProjectQuotationEdit = () => {
     });
   };
 
+  const [arabic, setArabic] = useState([]);
 
 
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/projectquote/getTranslationForProjectQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   // Get Tenders By Id
 
   const editTenderById = () => {
@@ -207,6 +241,7 @@ const ProjectQuotationEdit = () => {
     getLineItem();
     getMaterialItem();
     getCompany();
+    getArabicCompanyName();
   }, [id]);
 
   const columns1 = [
@@ -214,25 +249,25 @@ const ProjectQuotationEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Amount')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Updated By')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdProjectQuote.Action')?.[genLabel],
     },
   ];
   const deleteRecord = (deleteID) => {
@@ -283,6 +318,7 @@ const ProjectQuotationEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></ProjectQuoteButton>
       <Col md="4">
         <Label>
@@ -301,12 +337,18 @@ const ProjectQuotationEdit = () => {
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
         getContact={getContact}
+        arabic={arabic}
+        arb={arb}
       ></ProjectQuoteMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">
             <Row>
@@ -317,7 +359,7 @@ const ProjectQuotationEdit = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                  {arb ?'إضافة عناصر الاقتباس':'Add Quote Items'} 
                 </Button>
               </Col>
             </Row>
@@ -397,6 +439,9 @@ const ProjectQuotationEdit = () => {
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
               setViewLineModal={setViewLineModal}
+              arb={arb}
+              arabic={arabic}
+              genLabel={genLabel}
               //insertquote={insertquote}
             ></EditLineItemModal>
             {addLineItemModal && (
@@ -405,6 +450,9 @@ const ProjectQuotationEdit = () => {
                 addLineItemModal={addLineItemModal}
                 setAddLineItemModal={setAddLineItemModal}
                 quoteLine={id}
+                arb={arb}
+                arabic={arabic}
+                genLabel={genLabel}
               ></QuoteLineItem>
             )}
           </TabPane>
@@ -417,7 +465,7 @@ const ProjectQuotationEdit = () => {
                   to=""
                   onClick={addMaterialItemsToggle.bind(null)}
                 >
-                  Add Material Items
+                  {arb ?'إضافة عناصر المواد':'Add Material Items'}
                 </Button>
               </Col>
             </Row>
@@ -480,6 +528,9 @@ const ProjectQuotationEdit = () => {
               getMaterialItem={getMaterialItem}
               setViewMaterialModal={setViewMaterialModal}
               tenderDetails={tenderDetails}
+              arb={arb}
+              arabic={arabic}
+              genLabel={genLabel}
               //insertquote={insertquote}
             ></EditMaterialLineItemModal>
             {addMaterialItemModal && (
@@ -488,6 +539,9 @@ const ProjectQuotationEdit = () => {
                 addMaterialItemModal={addMaterialItemModal}
                 setAddMaterialItemModal={setAddMaterialItemModal}
                 quoteLine={id}
+                arb={arb}
+                arabic={arabic}
+                genLabel={genLabel}
               ></MaterialLineItem>
             )}
           </TabPane>

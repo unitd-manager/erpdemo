@@ -24,6 +24,15 @@ const ChartofACEdit = () => {
     navigate('/ChartOfAccounts');
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
   // Get Leaves By Id
   const ChartofACById = () => {
     api
@@ -41,6 +50,28 @@ const ChartofACEdit = () => {
       setMenuItems(res.data.data);
     });
   };
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForCompanyAcc')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   // Handle Data
   const handleInputs = (e) => {
@@ -66,6 +97,14 @@ const ChartofACEdit = () => {
     getGroup();
   }, [id]);
 
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   return (
     <>
       {/* BreadCrumbs */}
@@ -86,19 +125,31 @@ const ChartofACEdit = () => {
           <FormGroup>
             <Row>
               <Col md="4">
-                <FormGroup>
-                  <Label>Title</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={chartofAC?.title}
-                    name="title"
-                  />
-                </FormGroup>
-              </Col>
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Title')?.[genLabel]}
+              </Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+             
+                value={
+                  arb
+                    ? (
+                        chartofAC && chartofAC.title_arb ? chartofAC.title_arb :
+                        (chartofAC && chartofAC.title_arb !== null ? '' : chartofAC && chartofAC.title)
+                      )
+                    : (chartofAC && chartofAC.title)
+                }
+                name={arb ? 'title_arb' : 'title'}
+              />
+            </FormGroup>
+          </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Code</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -110,23 +161,26 @@ const ChartofACEdit = () => {
 
               <Col md="4">
                 <FormGroup>
-                  <Label>Category</Label>
-                  <Input 
-                    type="select"
-                    name="acc_category_id"
-                    value={chartofAC?.acc_category_id}
-                    onChange={handleInputs}
-                  >
-                    <option value="selected">Please Select</option>
-                    {menuItems?.map((item) => (
-                      <option
-                        key={item.acc_category_id}
-                        value={item.acc_category_id}
-                      >
-                        {item.title}
-                      </option>
-                    ))}
-                  </Input>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
+              </Label>
+                
+              <Input 
+  type="select" 
+  name={arb ? 'acc_category_arb_id' : 'acc_category_id'}  
+  value={arb ? chartofAC &&chartofAC?.acc_category_arb_id:chartofAC &&chartofAC?.acc_category_id} 
+  onChange={handleInputs}
+>
+  <option value="selected">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
+  {menuItems && menuItems
+    .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
+    .map(option => (
+      <option key={option.acc_category_id} value={option.acc_category_id}> {/* Modified value prop */}
+        {arb ? option.title_arb : option.title}
+      </option>
+    ))}
+</Input>
+
                 </FormGroup>
               </Col>
 

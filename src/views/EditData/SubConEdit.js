@@ -27,6 +27,39 @@ const SubConEdit = () => {
   const [allCountries, setAllCountries] = useState();
   const [editWorkOrderLinked, setEditWorkOrderLinked] = useState(false);
   const [subconStatus, setSubconStatus] = useState();
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/subcon/getTranslationForSubcon')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,7 +80,8 @@ const SubConEdit = () => {
   };
   //Logic for edit data in db
   const editSubConData = () => {
-    if (subCon.company_name !== ''){
+    
+    if (subCon.company_name !== '' && subCon.address_flat !== ''){
       subCon.modification_date = creationdatetime;
 
       api
@@ -59,6 +93,7 @@ const SubConEdit = () => {
           message('Unable to edit record.', 'error');
         });
       }else {
+        setFormSubmitted(true);
       message('Please fill all required fields.', 'error');
     }
   };
@@ -77,7 +112,7 @@ const SubConEdit = () => {
 
   useEffect(() => {
     getsubCon();
-    
+    getArabicCompanyName();
   }, [id]);
 
   
@@ -136,7 +171,7 @@ const SubConEdit = () => {
                     navigate('/Subcon');
                   }}
                 >
-                  Save
+                  {arb ?'يحفظ':'Save'}
                 </Button>
               </Col>
               <Col>
@@ -147,7 +182,7 @@ const SubConEdit = () => {
                     editSubConData();
                   }}
                 >
-                  Apply
+                  {arb ?'يتقدم':'Apply'}
                 </Button>
               </Col>
               <Col>
@@ -158,7 +193,7 @@ const SubConEdit = () => {
                     navigate('/Subcon');
                   }}
                 >
-                  Back to List
+                  {arb ?'الرجوع للقائمة':'Back to List'}
                 </Button>
               </Col>
             </Row>
@@ -168,36 +203,71 @@ const SubConEdit = () => {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>
-                    Name <span className="required"> *</span>
-                  </Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Name')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.company_name}
-                    name="company_name"
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.company_name_arb ? subCon.company_name_arb :
+                            (subCon && subCon.company_name_arb !== null ? '' : subCon && subCon.company_name)
+                          )
+                        : (subCon && subCon.company_name)
+                    }
+                    name={arb ? 'company_name_arb': 'company_name'}
+                    className={`form-control ${
+                      formSubmitted && subCon.company_name_arb.trim() && subCon.company_name.trim() === '' ? 'highlight' : ''
+                    }`}
+                  />
+                </FormGroup>
+                {formSubmitted &&  subCon.company_name_arb.trim()&&subCon.company_name.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )}
+              </Col>
+              <Col md="4">
+                <FormGroup>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Email')?.[genLabel]}
+              </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.email_arb ? subCon.email_arb :
+                            (subCon && subCon.email_arb !== null ? '' : subCon && subCon.email)
+                          )
+                        : (subCon && subCon.email)
+                    }
+                    name={arb ? 'email_arb': 'email'}
                   />
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Email</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Fax')?.[genLabel]}
+              </Label> 
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.email}
-                    name="email"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="4">
-                <FormGroup>
-                  <Label>Fax</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={subCon && subCon.fax}
-                    name="fax"
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.fax_arb ? subCon.fax_arb :
+                            (subCon && subCon.fax_arb !== null ? '' : subCon && subCon.fax)
+                          )
+                        : (subCon && subCon.fax)
+                    }
+                    name={arb ? 'fax_arb': 'fax'}
                   />
                 </FormGroup>
               </Col>
@@ -205,18 +275,31 @@ const SubConEdit = () => {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Mobile</Label>
+               
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Mobile')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.mobile}
-                    name="mobile"
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.mobile_arb ? subCon.mobile_arb :
+                            (subCon && subCon.mobile_arb !== null ? '' : subCon && subCon.mobile)
+                          )
+                        : (subCon && subCon.mobile)
+                    }
+                    name={arb ? 'mobile_arb': 'mobile'}
                   />
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Status</Label>
+                
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Status')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="status"
@@ -245,25 +328,52 @@ const SubConEdit = () => {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>
-                    Address 1 <span className="required"> *</span>
-                  </Label>
+               
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Address 1')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
+                 
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.address_flat}
-                    name="address_flat"
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.address_flat_arb ? subCon.address_flat_arb :
+                            (subCon && subCon.address_flat_arb !== null ? '' : subCon && subCon.address_flat)
+                          )
+                        : (subCon && subCon.address_flat)
+                    }
+                    name={arb ? 'address_flat_arb': 'address_flat'}
+                    className={`form-control ${
+                      formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' ? 'highlight' : ''
+                    }`}
                   />
                 </FormGroup>
+                {formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )}
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Address 2</Label>
+               
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Address 2')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.address_street}
-                    name="address_street"
+            
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.address_street_arb ? subCon.address_street_arb :
+                            (subCon && subCon.address_street_arb !== null ? '' : subCon && subCon.address_street)
+                          )
+                        : (subCon && subCon.address_street)
+                    }
+                    name={arb ? 'address_street_arb': 'address_street'}
                   />
                 </FormGroup>
               </Col>
@@ -271,7 +381,10 @@ const SubConEdit = () => {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Country</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Country')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="address_country"
@@ -290,12 +403,22 @@ const SubConEdit = () => {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Postal Code</Label>
+                 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubcon.Postal Code')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={subCon && subCon.address_state}
-                    name="address_state"
+                    value={
+                      arb
+                        ? (
+                            subCon && subCon.address_state_arb ? subCon.address_state_arb :
+                            (subCon && subCon.address_state_arb !== null ? '' : subCon && subCon.address_state)
+                          )
+                        : (subCon && subCon.address_state)
+                    }
+                    name={arb ? 'address_state_arb': 'address_state'}
                   />
                 </FormGroup>
               </Col>

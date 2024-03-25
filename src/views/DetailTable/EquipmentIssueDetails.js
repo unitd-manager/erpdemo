@@ -1,16 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import AppContext from '../../context/AppContext';
 import creationdatetime from '../../constants/creationdatetime';
 
 const EquipmentIssueDetails = () => {
   //Navigation and Parameter Constants
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   //Logic for adding Planning in db
   const [planningForms, setPlanningForms] = useState({
@@ -24,7 +27,7 @@ const EquipmentIssueDetails = () => {
 
   const editJobById = () => {
     api
-      .get('/labourrequest/getProject')
+      .get('/labourrequest/getProjecttitle')
       .then((res) => {
         setProject(res.data.data);
       })
@@ -46,8 +49,9 @@ const EquipmentIssueDetails = () => {
 
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.equipment_issue_date !== '' && planningForms.project_id !== '') {
+    if (planningForms.equipment_issue_date !== '' && planningForms.project_id !== '' && planningForms.equipment_request_id!=='') {
       planningForms.creation_date = creationdatetime;
+      planningForms.created_by = loggedInuser.first_name;
       api
         .post('/equipmentissue/insertEquipmentIssue', planningForms)
         .then((res) => {
@@ -78,6 +82,7 @@ const EquipmentIssueDetails = () => {
             <Form>
               <FormGroup>
               <Row>
+              <Col md="10">
                   <Label>Title <span style={{color:'red'}}>*</span> </Label>
                   <Input
                     type="select"
@@ -101,10 +106,12 @@ const EquipmentIssueDetails = () => {
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
               </FormGroup>
               <FormGroup>
               <Row>
+              <Col md="10">
                   <Label>Code <span style={{color:'red'}}>*</span> </Label>
                   <Input
                     type="select"
@@ -126,11 +133,12 @@ const EquipmentIssueDetails = () => {
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="12">
+                  <Col md="10">
                     <Label>
                       Issue Date
                     </Label>

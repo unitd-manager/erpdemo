@@ -20,6 +20,7 @@ import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 
 const ClientsEdit = () => {
@@ -34,6 +35,15 @@ const ClientsEdit = () => {
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -50,6 +60,12 @@ const ClientsEdit = () => {
     { id: '2', name: 'Invoice Linked' },
     { id: '3', name: ' Attachment' },
     { id: '4', name: 'Add notes' },
+  ];
+  const tabsArb =  [
+    {id:'1',name:'جهات الاتصال المرتبطة'},
+    {id:'2',name:'فاتورة لينكد إن'},
+    {id:'3',name:'مرفق'},
+    {id:'4',name:'أضف ملاحظات'},
   ];
 
   const toggle = (tab) => {
@@ -79,10 +95,10 @@ const ClientsEdit = () => {
   const editClientsData = () => {
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(clientsDetails.email)) {
       message('Invalid email address', 'warning');
-    } else if (clientsDetails.company_name !== '') {
+    } else if (clientsDetails.company_name !== '' && 
+    clientsDetails.email !== '') {
       clientsDetails.modification_date = creationdatetime;
       clientsDetails.modified_by = loggedInuser.first_name;
-      
       api
         .post('/clients/editClients', clientsDetails)
         .then(() => {
@@ -138,16 +154,42 @@ const ClientsEdit = () => {
     }
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationForCompany')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  console.log('arabic',arabic)
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
   // insert Contact
   const [newContactData, setNewContactData] = useState({
-    salutation: '',
+    salutation: 'Mr',
     first_name: '',
+    first_name_arb: '',
     email: '',
     position: '',
     department: '',
     phone_direct: '',
     fax: '',
     mobile: '',
+
   });
 
   const handleAddNewContact = (e) => {
@@ -155,12 +197,17 @@ const ClientsEdit = () => {
   };
 
   const AddNewContact = () => {
+    setFormSubmitted(true);
     const newContactWithCompanyId = newContactData;
     newContactWithCompanyId.company_id = id;
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
       message('Invalid email address', 'warning');
     }
-    else if (newContactWithCompanyId.salutation !== '' && newContactWithCompanyId.first_name !== '' && newContactWithCompanyId.email !== '') {
+    else if (newContactWithCompanyId.salutation !== '' && 
+    newContactWithCompanyId.first_name !== '' && 
+    newContactWithCompanyId.email !== '') {
+      newContactWithCompanyId.creation_date = creationdatetime;
+      newContactWithCompanyId.created_by = loggedInuser.first_name;
       api
         .post('/clients/insertContact', newContactWithCompanyId)
         .then(() => {
@@ -236,7 +283,8 @@ const ClientsEdit = () => {
   return (
     <>
       {/* BreadCrumbs */}
-      <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />
+      {eng ===true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
+      { arb === true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />}
       {/* Button List */}
       <ClientButton
         editClientsData={editClientsData}
@@ -248,6 +296,8 @@ const ClientsEdit = () => {
         formSubmitted={formSubmitted}
         setFormSubmitted={setFormSubmitted}
         clientsDetails={clientsDetails}
+        arb={arb}
+        eng={eng}
       ></ClientButton>
 
       {/* Client Main details */}
@@ -257,12 +307,20 @@ const ClientsEdit = () => {
           clientsDetails={clientsDetails}
           allCountries={allCountries}
           formSubmitted={formSubmitted}
+          arb={arb}
+          arabic={arabic}
+          eng={eng}
         ></ClientMainDetails>
       </ComponentCard>
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
         {/* Nav Tab */}
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Contact Linked */}
           <TabPane tabId="1">
@@ -276,12 +334,18 @@ const ClientsEdit = () => {
               handleAddNewContact={handleAddNewContact}
               newContactData={newContactData}
               AddNewContact={AddNewContact}
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
+              arb={arb}
+              arabic={arabic}
             ></ClientContactGetAndInsert>
             {/* Contact Linked Edit modal */}
             <ContactEditModal
               editContactEditModal={editContactEditModal}
               setEditContactEditModal={setEditContactEditModal}
               contactData={contactData}
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
             />
           </TabPane>
           { /* Invoice Linked Portal */}

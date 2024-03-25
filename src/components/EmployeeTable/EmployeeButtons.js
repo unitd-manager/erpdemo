@@ -7,13 +7,14 @@ export default function EmployeeButtons({
   applyChanges,
   backToList,
   editEmployeeData,
-  saveChanges,
+  saveChanges
 }) {
   EmployeeButtons.propTypes = {
     applyChanges: PropTypes.func,
     saveChanges: PropTypes.func,
     backToList: PropTypes.func,
-    editEmployeeData: PropTypes.any,
+    editEmployeeData: PropTypes.any
+   
   };
   return (
     <Form>
@@ -21,8 +22,7 @@ export default function EmployeeButtons({
         <ComponentCardV2>
           <Row>
             <Col>
-              <Button
-                className="shadow-none"
+              <Button className='shadow-none'
                 color="primary"
                 onClick={() => {
                   editEmployeeData();
@@ -32,10 +32,9 @@ export default function EmployeeButtons({
                 Save
               </Button>
             </Col>
-
+            
             <Col>
-              <Button
-                className="shadow-none"
+              <Button className='shadow-none'
                 color="primary"
                 onClick={() => {
                   editEmployeeData();
@@ -45,9 +44,9 @@ export default function EmployeeButtons({
                 Apply
               </Button>
             </Col>
+           
             <Col>
-              <Button
-                className="shadow-none"
+              <Button className='shadow-none'
                 color="dark"
                 onClick={() => {
                   backToList();

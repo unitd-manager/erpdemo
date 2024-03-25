@@ -15,8 +15,11 @@ const PurchaseRequestDetails = () => {
   const navigate = useNavigate();
   const [purchaserequestdetails, setPurchaseRequestDetails] = useState({
     purchase_request_date: '',
+    purchase_request_date_arb: '',
     purchase_delivery_date: '',
-    department:''
+    purchase_delivery_date_arb: '',
+    department:'',
+    department_arb:''
   });
   //setting data in ProductDetails
   const handleInputs = (e) => {
@@ -24,6 +27,14 @@ const PurchaseRequestDetails = () => {
   };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+
   //Insert Product Data
   const insertPurchaseRequestData = (PurchaseRequestCode) => {
     if (purchaserequestdetails.purchase_request_date !== '' &&
@@ -64,10 +75,36 @@ const PurchaseRequestDetails = () => {
       });
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/purchaserequest/getTranslationForPurchaseRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   //useeffect
   useEffect(() => {
-    
+    getArabicCompanyName();
   }, []);
 
   return (
@@ -76,29 +113,41 @@ const PurchaseRequestDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>Purchase Request Date <span className="required"> *</span> </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]} 
+                <span className="required"> *</span> </Label>
                     <Input
                       type="date"
                       onChange={handleInputs}
-                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
-                      name="purchase_request_date"
-                    />
+                      value={
+                        arb
+                          ? purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date_arb).format('YYYY-MM-DD')
+                          : purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')
+                      }
+                      name={arb ? 'purchase_request_date_arb' : 'purchase_request_date'}
+                      />
                   </Col>
                 </Row>
                 <Row>
                   <Col md="12">
-                    <Label>Purchase Delivery Date <span className="required"> *</span> </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]}
+                <span className="required"> *</span> </Label>
                     <Input
                       type="date"
                       onChange={handleInputs}
                       min={purchaserequestdetails && moment(purchaserequestdetails.purchase_request_date).format('YYYY-MM-DD')}
-                      value={purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date).format('YYYY-MM-DD')}
-                      name="purchase_delivery_date"
+                      value={
+                        arb
+                          ? purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date_arb).format('YYYY-MM-DD')
+                          : purchaserequestdetails && moment(purchaserequestdetails.purchase_delivery_date).format('YYYY-MM-DD')
+                      }
+                      name={arb ? 'purchase_delivery_date_arb' : 'purchase_delivery_date'}
                     />
                   </Col>
                 </Row>

@@ -26,6 +26,9 @@ const ProjectMaterialLineItem = ({
   projectLine,
   projectDetail,
   getMaterialItem,
+  arb,
+  arabic,
+  genLabel
 }) => {
   ProjectMaterialLineItem.propTypes = {
     addMaterialItemModal: PropTypes.bool,
@@ -33,6 +36,9 @@ const ProjectMaterialLineItem = ({
     projectLine: PropTypes.any,
     projectDetail: PropTypes.any,
     getMaterialItem: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addLineItem, setAddLineItem] = useState([
@@ -190,7 +196,7 @@ const ProjectMaterialLineItem = ({
     <>
       <Modal size="xl" isOpen={addMaterialItemModal}>
         <ModalHeader>
-          Add Material Items
+          {arb?'إضافة عناصر المواد':'Add Material Items'}
           <Button
             className="shadow-none"
             color="secondary"
@@ -216,7 +222,7 @@ const ProjectMaterialLineItem = ({
                           AddNewLineItem();
                         }}
                       >
-                        Add Line Item
+                       {arb?'إضافة عنصر السطر':'Add Line Item'} 
                       </Button>
                     </Col>
                   </Row>
@@ -225,13 +231,13 @@ const ProjectMaterialLineItem = ({
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Description </th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Qty</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Amount</th>
-                          <th scope="col">Remarks</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Title')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Description')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Unit')?.[genLabel]} </th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Qty ')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Unit Price')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Amount')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Remarks')?.[genLabel]}</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>

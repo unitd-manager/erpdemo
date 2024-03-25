@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../assets/scss/layout/updateOTModal.scss'
 import {
   Input,
   Card,
@@ -13,14 +14,18 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import * as $ from 'jquery';
+import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import message from '../Message';
 
-function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
+function UpdateOtModal({ updateOtModal, setUpdateOtModal}) {
   UpdateOtModal.propTypes = {
     updateOtModal: PropTypes.bool,
     setUpdateOtModal: PropTypes.func,
+  
+    
   };
+
   const [payrollManagementsData, setPayrollManagementsData] = useState([]);
 
   //get all records
@@ -31,17 +36,18 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
         setPayrollManagementsData(res.data.data);
       })
       .catch(() => {
-        message('Payrollmanagement Data Not Found', 'info');
+        //message('Payrollmanagement Data Not Found', 'info');
       });
   };
 
   //editlineitem
-  const editLineItemApi = (obj) => {
+  const editLineItemApi = (obj, i, arrLength) => {
     console.log(obj);
     api
       .post('/payrollmanagement/updateOt', {
         payroll_management_id: obj.payroll_management_id,
         employee_name: obj.employee_name,
+        overtime_pay_rate: obj.overtime_pay_rate?parseFloat(obj.overtime_pay_rate).toFixed(2):0.00,
         ot_hours: obj.ot_hours?parseFloat(obj.ot_hours).toFixed(2):0.00,
         ot_amount:obj.ot_amount?parseFloat(obj.ot_amount).toFixed(2):0.00,
         allowance1: obj.allowance1?parseFloat(obj.allowance1).toFixed(2):0.00,
@@ -55,13 +61,25 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
         deduction4: obj.deduction4?parseFloat(obj.deduction4).toFixed(2):0.00,
       })
       .then(() => {
-        message('OT Details Edited Successfully', 'sucess');
+        if (i+1 === arrLength) {
+          message('OT Details Edited Successfully', 'success');
+        }
       })
       .catch(() => {
         message('Cannot Edit OT Details', 'error');
       });
   };
-
+  const handleOtAmount = (otRate, otHours, index) => {
+    if (!otRate) otRate = 0;
+    if (!otHours) otHours = 0;
+  
+    const updatedData = [...payrollManagementsData];
+    const otAmount = parseFloat(otRate) * parseFloat(otHours);
+    updatedData[index] = { ...updatedData[index], ot_amount: otAmount };
+    
+    setPayrollManagementsData(updatedData);
+  };
+  
   // getall values
   const getAllValues = () => {
     // const result = [];
@@ -86,9 +104,9 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
       result.push(allValues);
     })
     console.log(result);
-    result.forEach((ob) => {
+    result.forEach((ob, i) => {
       if (ob.payroll_management_id !== '') {
-        editLineItemApi(ob);
+        editLineItemApi(ob, i, result.length);
       } else {
         alert('No payrollManagement Id');
       }
@@ -101,12 +119,14 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
   return (
     <>
       <Modal size="xl" isOpen={updateOtModal}>
+        <ToastContainer></ToastContainer>
         <ModalHeader>
           Update OT{' '}
           <Button
             className="shadow-none"
             color="dark"
             onClick={() => {
+              getAllValues();
               setUpdateOtModal(false);
             }}
           >
@@ -116,15 +136,15 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
         <ModalBody>
           <Row>
             <Col md="12">
-              <Card className="shadow-none overflow-auto">
+              <Card className="shadow-none overflow-auto updateOTModalTableCard">
                 <Table className="display">
                   <thead>
                     <tr>
                       <th scope="col">Id</th>
                       <th scope="col">Name</th>
                       <th scope="col">OT hr/rt</th>
-                     <th scope="col">OT Rate</th>
-                      <th scope="col">OT Hrs</th>
+                     <th scope="col">OverTime Rate</th>
+                      <th scope="col">OverTime Hours</th>
                       <th scope="col">Over Time Amount</th>
                       <th scope="col">Transport</th>
                       <th scope="col">Entertainment</th>
@@ -138,7 +158,7 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
                     </tr>
                   </thead>
                   <tbody style={{overflowY:'scroll'}}>
-                    {payrollManagementsData.map((item) => {
+                    {payrollManagementsData.map((item,index) => {
                       return (
                         <tr key={item.payroll_management_id}>
                           <td data-label="payroll_management_id">
@@ -152,7 +172,7 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
                           </td>
                           <td data-label="employee_name">
                             <Input
-                              defaultValue={item.first_name}
+                              defaultValue={item.employee_name}
                               className="w-auto"
                               type="text"
                               name="employee_name"
@@ -160,14 +180,33 @@ function UpdateOtModal({ updateOtModal, setUpdateOtModal }) {
                             />
                           </td>
 
-                          <td data-label="ot_hours">
-                            <Input defaultValue={item.ot_hours} type="text" name="ot_hours" />
+                          <td >
                           </td>
-                          <td data-label="overtime_pay_rate">{item.overtime_pay_rate}</td>
-                          <td data-label="ot_hours">
-                            <Input defaultValue={item.ot_hours} type="text" name="ot_hours" />
-                          </td>
-                          <td data-label="ot_amount">{item.ot_amount}</td>
+                          <td data-label="overtime_pay_rate"><Input
+                              defaultValue={item.overtime_pay_rate}
+                              type="text"
+                              name="overtime_pay_rate"
+                              disabled
+                            />
+                            </td>
+                            <td data-label="ot_hours">
+                              <Input
+                                type="text"
+                                name="ot_hours"
+                                defaultValue={item.ot_hours}
+                                onChange={(e) => {
+                                  handleOtAmount(e.target.value, item.overtime_pay_rate, index);
+                                }}
+                              ></Input>
+                            </td>
+                            <td data-label="ot_amount">
+                              <Input
+                                value={item.ot_amount}
+                                type="text"
+                                name="ot_amount"
+                                disabled
+                              />
+                            </td>
                           <td data-label="allowance1">
                             <Input
                               type="text"

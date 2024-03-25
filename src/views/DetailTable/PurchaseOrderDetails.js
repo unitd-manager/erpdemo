@@ -15,7 +15,33 @@ const PurchaseOrderDetails = () => {
     supplier_id: '',
     company_name: '',
   });
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
 
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const getArabicValue= () => {
+    api
+    .get('/purchaseorder/getTranslationForPurchaseOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //Navigation and Parameters
   const { id } = useParams();
   const navigate = useNavigate();
@@ -68,6 +94,7 @@ const PurchaseOrderDetails = () => {
 
   useEffect(() => {
     editPurchaseById();
+    getArabicValue();
   }, [id]);
   return (
     <div>
@@ -79,7 +106,10 @@ const PurchaseOrderDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Label>supplier Name </Label>
+                <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Supplier Name')?.[genLabel]}
+              </Label>
+         
                   <Input
                     type="select"
                     name="supplier_id"

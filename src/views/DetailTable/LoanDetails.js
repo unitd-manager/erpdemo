@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
@@ -47,14 +48,14 @@ const LoanDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Loan inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/LoanEdit/${insertedDataId}`);
+            navigate(`/LoanEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
     } else {
-      message('Please fill all required fields', 'warning');
+      message('Please fill all required fields', 'error');
     }
   };
 
@@ -135,13 +136,19 @@ const LoanDetails = () => {
                       Save & Continue
                     </Button>
                     <Button
+                      className="shadow-none"
+                      color="dark"
                       onClick={() => {
-                        navigate(-1);
+                        if (
+                          window.confirm(
+                            'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                          )
+                        ) {
+                          navigate(-1);
+                        }
                       }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

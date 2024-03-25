@@ -3,12 +3,23 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }) {
+export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, arb,
+  arabic }) {
   GoodsDeliveryMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
-   // company: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    // company: PropTypes.object,
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   return (
     <div>
       {' '}
@@ -18,116 +29,233 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs }
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>
-                    Delivery Code <span className="required"> *</span>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Delivery Code')?.[
+                      genLabel
+                      ]
+                    }{' '}
+                    <span className="required"> *</span>
                   </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.goods_delivery_code}
-                    name="goods_delivery_code"
-                    disabled
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.goods_delivery_code_arb
+                          ? tenderDetails.goods_delivery_code_arb
+                          : tenderDetails && tenderDetails.goods_delivery_code_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.goods_delivery_code
+                        : tenderDetails && tenderDetails.goods_delivery_code
+                    }
+                    name={arb ? 'goods_delivery_code_arb' : 'goods_delivery_code'} />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Date')?.[genLabel]}{' '}
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.goods_delivery_date}
-                    name="goods_delivery_date"
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.goods_delivery_date_arb
+                          ? tenderDetails.goods_delivery_date_arb
+                          : tenderDetails && tenderDetails.goods_delivery_date_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.goods_delivery_date
+                        : tenderDetails && tenderDetails.goods_delivery_date
+                    } />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Order Code</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[
+                      genLabel
+                      ]
+                    }{' '}</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.order_code}
-                    name="order_code"
-                    disabled
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.order_code_arb
+                          ? tenderDetails.order_code_arb
+                          : tenderDetails && tenderDetails.order_code_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.order_code
+                        : tenderDetails && tenderDetails.order_code
+                    }
+                    name={arb ? 'order_code_arb' : 'order_code'}
+
+                  ></Input>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Company Name')?.[
+                      genLabel
+                      ]
+                    }{' '}</Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={ 
+                      arb
+                        ? tenderDetails && tenderDetails.company_name_arb
+                          ? tenderDetails.company_name_arb
+                          : tenderDetails && tenderDetails.company_name_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.company_name
+                        : tenderDetails && tenderDetails.company_name
+                    }
+                    name={arb ? 'company_name_arb' : 'company_name'}
+                  />
+
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Department')?.[
+                      genLabel
+                      ]
+                    }{' '}</Label>
+
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.department_arb
+                          ? tenderDetails.department_arb
+                          : tenderDetails && tenderDetails.department_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.department
+                        : tenderDetails && tenderDetails.department
+                    }
+                    name={arb ? 'department_arb' : 'department'}
+
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                <Label>
-                    Company Name 
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Salesman')?.[
+                      genLabel
+                      ]
+                    }{' '}
+
                   </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.company_name}
-                    name="company_name"
-                    disabled
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.sales_man_arb
+                          ? tenderDetails.sales_man_arb
+                          : tenderDetails && tenderDetails.sales_man_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.sales_man
+                        : tenderDetails && tenderDetails.sales_man
+                    }
+                    name={arb ? 'sales_man_arb' : 'sales_man'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Department</Label>
-                  <Input
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Reference')?.[
+                      genLabel
+                      ]
+                    }{' '}
+
+                  </Label>
+                                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.department}
-                    name="department"
+                    value={                    
+                      arb
+                        ? tenderDetails && tenderDetails.office_ref_no_arb
+                          ? tenderDetails.office_ref_no_arb
+                          : tenderDetails && tenderDetails.office_ref_no_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.office_ref_no
+                        : tenderDetails && tenderDetails.office_ref_no
+                    }
+                    name={arb ? 'office_ref_no_arb' : 'office_ref_no'}
+                 
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Salesman</Label>
-                  <Input
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[
+                        genLabel
+                      ]
+                    }{' '}</Label>
+                                    <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.sales_man}
-                    name="sales_man"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Reference</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.office_ref_no}
-                    name="office_ref_no"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>PO Code</Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.po_no}
-                    name="po_no"
+                    value={
+                    arb
+                        ? tenderDetails && tenderDetails.po_no_arb
+                          ? tenderDetails.po_no_arb
+                          : tenderDetails && tenderDetails.po_no_arb !== null
+                            ? ''
+                            : tenderDetails && tenderDetails.po_no
+                        : tenderDetails && tenderDetails.po_no
+                    }
+                    name={arb ? 'po_no_arb' : 'po_no'}
+                 
                   />
                 </FormGroup>
               </Col>
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Status</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Status\r\n')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                 </Label>                 
                   <Input
                     type="select"
-                    value={tenderDetails && tenderDetails.goods_delivery_status}
-                    onChange={handleInputs}
-                    name="goods_delivery_status"
+                    value={
+                    arb
+                    ? tenderDetails && tenderDetails.goods_delivery_status_arb
+                      ? tenderDetails.goods_delivery_status_arb
+                      : tenderDetails && tenderDetails.goods_delivery_status_arb !== null
+                      ? ''
+                      : tenderDetails && tenderDetails.goods_delivery_status
+                    : tenderDetails && tenderDetails.goods_delivery_status
+                }
+                name={arb ? 'goods_delivery_status_arb' : 'goods_delivery_status'}
+              
                   >
-                    <option selected="selected" value="New">
-                      New
-                    </option>
-                    <option value="Invoiced">Invoiced</option>
-                    <option value="Delivered">Delivered</option>
+                    <option value="New">{arb ?'جديد':'New'}</option>
+                    <option value="Invoiced">{arb ?'مفوترة':'New'}</option>
+                    <option value="Delivered">{arb ?'تم التوصيل':'New'}</option>
+                    
                   </Input>
-                </FormGroup>
+                </FormGroup> 
               </Col>
             </Row>
           </ComponentCard>

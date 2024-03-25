@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +7,7 @@ import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const RequestForQuoteDetails = () => {
   //All state variables
@@ -27,6 +28,14 @@ const RequestForQuoteDetails = () => {
       })
       .catch(() => {});
   };
+  const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
   //jobinformation data in RequestForQuoteDetails
   const handleInputs = (e) => {
     setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
@@ -36,6 +45,8 @@ const RequestForQuoteDetails = () => {
     if(requestForQuote.purchase_request_id !==''){
       requestForQuote.rq_code = code;
       requestForQuote.creation_date = creationdatetime;
+      requestForQuote.created_by = loggedInuser.first_name;
+
     api
       .post('/quote/insertQuote', requestForQuote)
       .then((res) => {
@@ -64,8 +75,37 @@ const RequestForQuoteDetails = () => {
         insertJobInformation('');
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/quote/getTranslationForReqForQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     getPurchaseRequest();
+    getArabicCompanyName();
   }, [id]);
   return (
     <div>
@@ -73,11 +113,13 @@ const RequestForQuoteDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
-                  <Label>Purchase Request Code <span style={{color:'red'}}>*</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
+                <span style={{color:'red'}}>*</span> </Label>
                   <Input
                     type="select"
                     name="purchase_request_id"
@@ -86,14 +128,14 @@ const RequestForQuoteDetails = () => {
                     }}
                   >
                     <option value="" selected>
-                      Please Select
+                    {arb ?'الرجاء التحديد':'Please Select'}
                     </option>
                     {purchaseReport &&
                       purchaseReport.map((ele) => {
                         return (
                          
                             <option key={ele.purchase_request_id} value={ele.purchase_request_id}>
-                              {ele.purchase_request_code}
+                              {arb?ele.purchase_request_code_arb:ele.purchase_request_code}{}
                             </option>
                           
                         );

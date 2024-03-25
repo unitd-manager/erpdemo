@@ -15,6 +15,7 @@ import TradingQuoteButton from '../../components/MaterialRequest/TradingQuoteBut
 import TradingQuoteMoreDetails from '../../components/MaterialRequest/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/MaterialRequest/QuotationAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/MaterialRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/MaterialRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
@@ -38,6 +39,37 @@ const MaterialRequestEdit = () => {
 
   const { loggedInuser } = useContext(AppContext);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/materialrequest/getTranslationForMaterialRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -58,6 +90,10 @@ const MaterialRequestEdit = () => {
   const tabs = [
     { id: '1', name: 'Material Request' },
     { id: '2', name: 'Attachment' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'طلب المواد' },
+    { id: '2', name: 'مرفق' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -184,6 +220,7 @@ const MaterialRequestEdit = () => {
     editTenderById();
     getLineItem();
     getCompany();
+    getArabicCompanyName();
     // getAllCountries();
   }, [id]);
 
@@ -191,31 +228,31 @@ const MaterialRequestEdit = () => {
     {
       name: '#',
     },
-   
+    
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Description')?.[genLabel],
     },
     {
-      name: 'Brand',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Brand')?.[genLabel],
     },
     {
-      name: 'Supplier',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Supplier')?.[genLabel],
     },
     {
-      name: 'Qty',
+      
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
-    },
- 
-    {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Amount')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Updated By')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdMaterialRequest.Action')?.[genLabel],
     },
   ];
   const deleteRecord = (deleteID) => {
@@ -245,6 +282,7 @@ const MaterialRequestEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></TradingQuoteButton>
      
       <TradingQuoteMoreDetails
@@ -261,12 +299,21 @@ const MaterialRequestEdit = () => {
         getContact={getContact}
         handleStatusChange={handleStatusChange}
         status={status}
+        arb={arb}
+        eng={eng}
+        arabic={arabic}
+        genLabel={genLabel}
       ></TradingQuoteMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
@@ -277,7 +324,7 @@ const MaterialRequestEdit = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Quote Items
+                  {arb?'إضافة عناصر الاقتباس':'Add Quote Items'}
                 </Button>
               </Col>
             </Row>
@@ -343,6 +390,9 @@ const MaterialRequestEdit = () => {
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
               setViewLineModal={setViewLineModal}
+              genLabel={genLabel}
+              arabic={arabic}
+              arb={arb}
             ></EditLineItemModal>
             {addLineItemModal && (
               <QuoteLineItem
@@ -352,6 +402,9 @@ const MaterialRequestEdit = () => {
                 setAddLineItemModal={setAddLineItemModal}
                 handleInputs={handleInputs}
                 quoteLine={id}
+                arabic={arabic}
+                arb={arb}
+                genLabel={genLabel}
               ></QuoteLineItem>
             )}
           </TabPane>

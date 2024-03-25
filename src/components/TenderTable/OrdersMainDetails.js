@@ -89,15 +89,17 @@ export default function TenderMoreDetails({
                 <FormGroup>
                   <Label>Status</Label>
                   <Input
-                    type="select"
+                    type="text"
                     onChange={handleInputs}
                     value={orderDetails && orderDetails.order_status}
                     name="order_status"
+                    disabled
                   >
                    <option defaultValue="selected">
                 please Select
               </option>
               <option value="new">New</option>
+              <option value="Invoiced">Invoiced</option>
               <option value="paid">Paid</option>
              <option value="Cancelled">Cancelled</option>
         

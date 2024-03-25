@@ -1,29 +1,44 @@
 import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+// import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-export default function TenderMoreDetails({ tenderDetails, handleInputs, company, formSubmitted }) {
+export default function TenderMoreDetails({
+  tenderDetails,
+  handleInputs,
+  //formSubmitted,
+  arb,
+  arabic,
+}) {
   TenderMoreDetails.propTypes = {
     tenderDetails: PropTypes.object,
-    company: PropTypes.object,
+    //company: PropTypes.object,
     handleInputs: PropTypes.object,
-    formSubmitted: PropTypes.object,
+    //formSubmitted: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
   console.log('tender', tenderDetails);
   //  const getCurrentDate = () => {
   //   return moment().format('YYYY-MM-DD');
   // };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
-    <div>
+    <div> 
       {' '}
       <Form>
         <FormGroup>
           <ComponentCard title="Enquiry Details" creationModificationDate={tenderDetails}>
             <Row>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>Enquiry Code</Label>
                   <Input
@@ -34,9 +49,58 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
                     readOnly
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
 
               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingEnq.Enquiry Code')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.opportunity_code_arb
+                          ? tenderDetails.opportunity_code_arb
+                          : tenderDetails && tenderDetails.opportunity_code_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.opportunity_code
+                        : tenderDetails && tenderDetails.opportunity_code
+                    }
+                    name={arb ? 'opportunity_code_arb' : 'opportunity_code'}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.title_arb
+                          ? tenderDetails.title_arb
+                          : tenderDetails && tenderDetails.title_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.title
+                        : tenderDetails && tenderDetails.title
+                    }
+                  ></Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                 <FormGroup>
                   <Label>
                     Title<span className="required"> *</span>
@@ -54,34 +118,59 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
                 {formSubmitted && tenderDetails.title.trim() === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
-              </Col>
-
+              </Col> */}
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingEnq.Enquiry Date')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
                     value={
-                      tenderDetails &&
-                      (tenderDetails.enquiry_date
-                        ? moment(tenderDetails.enquiry_date).format('YYYY-MM-DD')
-                        : moment(new Date()).format('YYYY-MM-DD'))
+                      arb
+                        ? tenderDetails && tenderDetails.enquiry_date_arb
+                          ? tenderDetails.enquiry_date_arb
+                          : tenderDetails && tenderDetails.enquiry_date_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.enquiry_date
+                        : tenderDetails && tenderDetails.enquiry_date
                     }
-                    //defaultValue={getCurrentDate()}
-                    name="enquiry_date"
-                  />
+                    name={arb ? 'enquiry_date_arb' : 'enquiry_date'}
+                  ></Input>
                 </FormGroup>
               </Col>
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Status</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingEnq.Enquiry Status')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
                     type="select"
-                    value={tenderDetails && tenderDetails.status}
                     onChange={handleInputs}
-                    name="status"
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.status_arb
+                          ? tenderDetails.status_arb
+                          : tenderDetails && tenderDetails.status_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.status
+                        : tenderDetails && tenderDetails.status
+                    }
+                    name={arb ? 'status_arb' : 'status'}
                   >
                     <option value="">Please Select</option>
                     <option value="In Progress">In Progress</option>
@@ -93,20 +182,45 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
               </Col>
 
               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Client')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.company_name_arb
+                          ? tenderDetails.company_name_arb
+                          : tenderDetails && tenderDetails.company_name_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.company_name
+                        : tenderDetails && tenderDetails.company_name
+                    }
+                    
+                    name={arb ? 'company_name_arb' : 'company_name'}
+                    disabled
+                  ></Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
                 <Label>
                   Client <span className="required"> *</span>{' '}
                 </Label>
                 <Input
-                  type="select"
-                  name="company_id"
-                  value={tenderDetails && tenderDetails.company_id}
+                  type="text"
+                  name="company_name"
+                  value={tenderDetails && tenderDetails.company_name}
                   // className={`form-control ${
                   //   formSubmitted && tenderDetails.company_id.trim() === '' ? 'highlight' : ''
                   // }`}
                   onChange={handleInputs}
                   disabled
-                >
-                  <option>Please Select</option>
+                > */}
+              {/* <option>Please Select</option>
                   {company &&
                     company.map((ele) => {
                       return (
@@ -114,43 +228,84 @@ export default function TenderMoreDetails({ tenderDetails, handleInputs, company
                           {ele.company_name}
                         </option>
                       );
-                    })}
-                </Input>
-                {/* {formSubmitted && tenderDetails.company_id.trim() === '' && (
+                    })} */}
+              {/* </Input> */}
+              {/* {formSubmitted && tenderDetails.company_id.trim() === '' && (
                       <div className="error-message">Please Select Client</div>
                     )} */}
-              </Col>
+              {/* </Col> */}
+
               <Col md="3">
                 <FormGroup>
-                  <Label>Reference</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Reference')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.office_ref_no}
-                    name="office_ref_no"
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.office_ref_no_arb
+                          ? tenderDetails.office_ref_no_arb
+                          : tenderDetails && tenderDetails.office_ref_no_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.office_ref_no
+                        : tenderDetails && tenderDetails.office_ref_no
+                    }
+                    name={arb ? 'office_ref_no_arb' : 'office_ref_no'}
+                  ></Input>
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Expiry Date</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdTradingEnq.Expiry Date')?.[
+                        genLabel
+                      ]
+                    }{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.project_end_date}
-                    name="project_end_date"
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.project_end_date_arb
+                          ? tenderDetails.project_end_date_arb
+                          : tenderDetails && tenderDetails.project_end_date_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.project_end_date
+                        : tenderDetails && tenderDetails.project_end_date
+                    }
+                    name={arb ? 'project_end_date_arb' : 'project_end_date'}
+                  ></Input>
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Notes</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Notes')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    <span className="required">*</span>
+                  </Label>
                   <Input
-                    value={tenderDetails && tenderDetails.services}
                     type="textarea"
                     onChange={handleInputs}
-                    name="services"
-                  />
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.service_arb
+                          ? tenderDetails.service_arb
+                          : tenderDetails && tenderDetails.service_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.services
+                        : tenderDetails && tenderDetails.services
+                    }
+                    name={arb ? 'service_arb' : 'services'}
+                  ></Input>
                 </FormGroup>
               </Col>
             </Row>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Card,
+  // Card,
   Row,
   Col,
   Form,
@@ -26,6 +26,9 @@ const QuoteLineItem = ({
   addLineItemModal,
   setAddLineItemModal,
   quoteLine,
+  arb,
+  arabic,
+  genLabel
   //tenderDetails,
   //getLineItem,
 }) => {
@@ -33,6 +36,9 @@ const QuoteLineItem = ({
     addLineItemModal: PropTypes.bool,
     setAddLineItemModal: PropTypes.func,
     quoteLine: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
+    genLabel: PropTypes.any,
     //tenderDetails: PropTypes.any,
     //getLineItem: PropTypes.any,
   };
@@ -255,7 +261,7 @@ const QuoteLineItem = ({
     <>
       <Modal size="xl" isOpen={addLineItemModal}>
         <ModalHeader>
-          Add Quote Items
+          {arb?'إضافة عناصر المعدات':'Add Equipment Items'}
           <Button
             className="shadow-none"
             color="secondary"
@@ -281,22 +287,24 @@ const QuoteLineItem = ({
                           AddNewLineItem();
                         }}
                       >
-                        Add Line Item
+                        {arb?'إضافة عنصر السطر':'Add Line Item'}
                       </Button>
                     </Col>
+                    <br/>
                   </Row>
+                 
                   {/* Invoice Item */}
-                  <Card>
+                  {/* <Card> */}
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Supplier</th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Qty</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Amount</th>
-                          <th scope="col">Remarks</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Title')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Supplier')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Unit')?.[genLabel]} </th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Qty')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Unit Price')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Amount')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdEquipmentRequest.Remarks')?.[genLabel]}</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -376,7 +384,7 @@ const QuoteLineItem = ({
                           })}
                       </tbody>
                     </table>
-                  </Card>
+                  {/* </Card> */}
                   <ModalFooter>
                     <Button
                       className="shadow-none"

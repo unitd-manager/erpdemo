@@ -24,9 +24,8 @@ import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
+import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 
-
-// import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 //geting data from invoice
 const InvoiceData = () => {
   //State variable
@@ -34,10 +33,10 @@ const InvoiceData = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState();
+  const [selectOrderId, setSelectOrderId] = useState(null);
   const [secondModalOpen, setSecondModalOpen] = useState(false);
-  const [selectedReceiptId, setSelectedReceiptId] = useState(null);
-  const [selectReceiptId, setSelectReceiptId] = useState(null);
+//   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
+//   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
 
   const navigate = useNavigate();
@@ -111,20 +110,16 @@ const InvoiceData = () => {
       width: 'auto',
       grow: 3,
     },
-    // {
-    //   name: 'Print',
-    //   sortable: true,
-    //   width: 'auto',
-    //   grow: 3,
-    // },
+    {
+      name: 'Print',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
   ];
 
   const handleBookingInputs = (e) => {
-    const { name, value } = e.target;
-    setBookingDetails({ ...bookingDetails, [name]: value });
-
-    // Fetch bookings for the selected company
-   
+    setSelectOrderId(e.target.value);
   };
 
 
@@ -143,41 +138,7 @@ const InvoiceData = () => {
 
   //Logic for adding Booking in db
 
-  const insertReceipt = (code) =>{
-    const insertedOrderId = bookingDetails.order_id;
-    if (bookingDetails.company_id !== '' && bookingDetails.booking_id !== '') {
-
-      bookingDetails.receipt_code=code;
-      api
-        .post('/finance/insertreceipt', bookingDetails)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          setSelectedReceiptId(insertedDataId); // Store the receiptId 
-          setSelectReceiptId(insertedOrderId)
-          message('Booking inserted successfully.', 'success');
-     
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
-    } else {
-      message('Please fill all required fields', 'warning');
-    }
-  };
-  const generateCode = () => {
-    api
-      .post('/commonApi/getCodeValue', { type: 'receipt' })
-      .then((res) => {
-      setModalOpen(false); // Close the first modal
-      setSecondModalOpen(true); // Open the second modal
-      insertReceipt(res.data.data); 
-   
-      })
-      .catch(() => {
-        insertReceipt('');
-       
-      });
-  };
+  
   useEffect(() => {
     getCompany();
     getInvoice();
@@ -211,7 +172,7 @@ const InvoiceData = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={element.receipt_id}>
                     <td>{index + 1}</td>
 
                     <td>{element.order_code}</td>
@@ -220,9 +181,9 @@ const InvoiceData = () => {
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
-                    {/* <td>  
+                    <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
- </td> */}
+ </td>
                   </tr>
                 );
               })}
@@ -239,7 +200,7 @@ const InvoiceData = () => {
                       <Row>
                         <Col md="10">
                           <Label>Orders</Label>
-                          <Input type="select" name="order_id" onChange={handleBookingInputs}>
+                          <Input type="select" name="order_id" onChange={handleBookingInputs} value={selectOrderId}>
                             <option>Select Customer</option>
                             {company &&
                               company.map((e) => {
@@ -261,7 +222,7 @@ const InvoiceData = () => {
                           <Button
                             color="primary"
                             onClick={() => {
-                              generateCode();
+                              setSecondModalOpen(true);
                              
                             }}
                             type="button"
@@ -294,8 +255,7 @@ const InvoiceData = () => {
           </ModalHeader>
           <ModalBody>
        <ReceiptCreate 
-       receiptId={selectedReceiptId}
-       orderId={ selectReceiptId}
+       orderId={ selectOrderId}
        ></ReceiptCreate>
           </ModalBody>
         </Modal>

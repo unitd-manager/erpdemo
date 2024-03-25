@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { TabContent, TabPane,Table, Row } from 'reactstrap';
+import { TabContent, TabPane, Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -13,6 +13,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/TenderTable/TenderMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 
 const OpportunityEdit = () => {
@@ -28,7 +29,7 @@ const OpportunityEdit = () => {
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
-   const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
@@ -38,13 +39,15 @@ const OpportunityEdit = () => {
   const tabs = [
     { id: '1', name: 'Quotation' },
     { id: '2', name: 'Attachment' },
-
+  ];
+  const tabsArb = [
+    { id: '1', name: 'جهات الاتصال المرتبطة' },
+    { id: '2', name: 'مرفق' },
   ];
 
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-
 
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
@@ -59,7 +62,6 @@ const OpportunityEdit = () => {
       setCompany(res.data.data);
     });
   };
-
 
   //Logic for adding company in db
 
@@ -77,10 +79,39 @@ const OpportunityEdit = () => {
     company_size: '',
     source: '',
   });
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
 
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
   const companyhandleInputs = (e) => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/enquiry/getTranslationforTradingEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   // Insert Company
   const insertCompany = () => {
@@ -134,24 +165,23 @@ const OpportunityEdit = () => {
 
   const editTenderData = () => {
     setFormSubmitted(true);
-    
-    if (tenderDetails.title !== '' && tenderDetails.company_id!== '')
-    // setFormSubmitted(true);
-    // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '') 
-    {
-    tenderDetails.modification_date = creationdatetime;
-    tenderDetails.modified_by = loggedInuser.first_name;
-    api
-      .post('/tender/edit-Tenders', tenderDetails)
-      .then(() => {
-        message('Record editted successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
+
+    if (tenderDetails.title !== '' && tenderDetails.company_id !== '') {
+      // setFormSubmitted(true);
+      // if (tenderDetails.company_id.trim() !== '' && tenderDetails.title.trim() !== '')
+      tenderDetails.modification_date = creationdatetime;
+      tenderDetails.modified_by = loggedInuser.first_name;
+      api
+        .post('/tender/edit-Tenders', tenderDetails)
+        .then(() => {
+          message('Record editted successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        })
+        .catch(() => {
+          message('Unable to edit record.', 'error');
+        });
     } else {
       message('Please fill all required fields', 'warning');
     }
@@ -164,7 +194,7 @@ const OpportunityEdit = () => {
     });
   };
 
-   // Add new Contact
+  // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
     salutation: '',
@@ -182,14 +212,9 @@ const OpportunityEdit = () => {
   };
 
   const AddNewContact = () => {
-    
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -205,44 +230,44 @@ const OpportunityEdit = () => {
     }
   };
 
-   //Api for getting all countries
-   const getAllCountries = () => {
+  //Api for getting all countries
+  const getAllCountries = () => {
     api.get('/clients/getCountry').then((res) => {
       setallCountries(res.data.data);
     });
   };
-  
+  let genLabel = '';
 
-  
-
-
-
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const columns1 = [
     {
       name: '#',
     },
     {
-      name: 'Title',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel],
+    },
+
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel],
     },
     {
-      name: 'Description',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel],
     },
-    {
-      name: 'Amount',
-    },
+    
   ];
 
-  
-
-
   useEffect(() => {
-    editTenderById();
+    editTenderById(); 
     getLineItem();
     getIncharge();
     getCompany();
@@ -251,14 +276,20 @@ const OpportunityEdit = () => {
 
   return (
     <>
-      <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
+      {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+      {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
       <TenderButtons
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        tenderDetails={tenderDetails}
+        setFormSubmitted={setFormSubmitted}
       ></TenderButtons>
-     <TenderMoreDetails
+      <TenderMoreDetails
+        arb={arb}
+        arabic={arabic}
         companyInsertData={companyInsertData}
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -279,15 +310,20 @@ const OpportunityEdit = () => {
         setAddCompanyModal={setAddCompanyModal}
         getContact={getContact}
         formSubmitted={formSubmitted}
-        
       ></TenderMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-            
             <br />
             <Row>
               <div className="container">
@@ -305,7 +341,8 @@ const OpportunityEdit = () => {
                         return (
                           <tr key={e.opportunity_id}>
                             <td>{index + 1}</td>
-                            <td data-label="Title">{e.title}</td>
+                            {/* <td data-label="Title">{e.title}</td> */}
+                            <td>{arb && e.title_arb ? e.title_arb : e.title}</td>
                             <td data-label="Description">{e.description}</td>
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
@@ -319,9 +356,9 @@ const OpportunityEdit = () => {
             </Row>
           </TabPane>
           <TabPane tabId="2">
-            <TenderAttachment ></TenderAttachment>
-            </TabPane>
-            </TabContent>
+            <TenderAttachment></TenderAttachment>
+          </TabPane>
+        </TabContent>
       </ComponentCard>
     </>
   );

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'reactstrap';
 import ComponentCardV2 from '../ComponentCardV2';
 
-function PojectTaskEditButton({ editTask, navigate }) {
+function PojectTaskEditButton({ editTask, navigate,arb }) {
     PojectTaskEditButton.propTypes = {
     editTask: PropTypes.any,
     navigate: PropTypes.any,
+    arb: PropTypes.any,
   };
   return (
     <div>
@@ -23,7 +24,7 @@ function PojectTaskEditButton({ editTask, navigate }) {
                   }, 800);
                 }}
               >
-                Save
+                {arb ?'يحفظ':'Save'}
               </Button>
           </Col>
           <Col>
@@ -34,7 +35,7 @@ function PojectTaskEditButton({ editTask, navigate }) {
                 editTask();
               }}
             >
-              Apply
+             {arb ?'يتقدم':'Apply'}
             </Button>
           </Col>
          
@@ -46,7 +47,7 @@ function PojectTaskEditButton({ editTask, navigate }) {
                 navigate('/ProjectTask');
               }}
             >
-              Back to List
+             {arb ?'الرجوع للقائمة':'Back to List'}
             </Button>
           </Col>
         </Row>

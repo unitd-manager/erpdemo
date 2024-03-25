@@ -18,11 +18,15 @@ import creationdatetime from '../../constants/creationdatetime';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import AddEmployee from '../../components/LabourRequest/AddEmployee';
 import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
 import PlanningButton from '../../components/LabourRequest/PriceButton';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
+import ComponentCardV2 from '../../components/ComponentCardV2';
+import PdfLabourRequest from '../../components/PDF/PdfLabourRequest';
 
 
 const PriceListEdit = () => {
@@ -35,6 +39,37 @@ const PriceListEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/labourrequest/getTranslationForLabourRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
+  
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -49,6 +84,9 @@ const PriceListEdit = () => {
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
       {id:'1',name:'Attachment'},
+    ];
+    const tabsArb = [
+      { id: '1', name: 'مرفق' },
     ];
     const toggle = (tab) => {
       setActiveTab(tab);
@@ -106,6 +144,7 @@ const PriceListEdit = () => {
 
   useEffect(() => {
     PlanningById();
+    getArabicCompanyName();
   }, [id]);
 
   return (
@@ -118,26 +157,38 @@ const PriceListEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
        ></PlanningButton>
-       
+       <ComponentCardV2>
+        <PdfLabourRequest></PdfLabourRequest>
+       </ComponentCardV2>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
+        arb={arb}
+        eng={eng}
+        arabic={arabic}
+        genLabel={genLabel}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      <Tab toggle={toggle} tabs={tabs} />
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+   
 
         <TabContent className="p-4" activeTab={activeTab}>
         
           {/* Start Tab Content 10 */}
           <TabPane tabId="1" eventkey="addEmployee">
             <Row>
-              <AddEmployee />
+              <AddEmployee  arb={arb}/>
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   color="primary"

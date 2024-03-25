@@ -40,7 +40,7 @@ const PdfQuotation = ({id,quoteId}) => {
       .post('/projectquote/getProjectquoteById', { project_quote_id: id })
       .then((res) => {
         setTenderDetails(res.data.data[0]);
-        console.log(res);
+        console.log("ooooo",tenderDetails);
       })
       .catch(() => {});
   };

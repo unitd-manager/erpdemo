@@ -175,6 +175,8 @@ const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/Invoi
 
 // const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
 const ProfitLossReport = Loadable(lazy(() => import('../views/Reports/ProfitLossReport')));
+const BalanceSheetReport = Loadable(lazy(() => import('../views/Reports/BalanceSheetReport')));
+
 
 
 
@@ -415,11 +417,11 @@ const Routernew = () => {
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
           <Route path="/ProjectQuotationEdit/:id" name="clienttdata" element={<ProjectQuotationEdit />}></Route>
           <Route path="/ProjectJobOrderEdit/:id" name="clienttdata" element={<ProjectJobOrderEdit />}></Route>
-          <Route path="/GoodsDeliveryEdit/:insertedDataId/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
+          <Route path="/GoodsDeliveryEdit/:id/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
           <Route path="/ProjectTaskEdit/:id" name="tenderdata" element={<ProjectTaskEdit />}></Route>
           <Route path="/GoodsReceiptEdit/:id" name="tenderdata" element={<GoodsReceiptEdit />}></Route>
           <Route path="/TradingQuotationEdit/:id" name="clienttdata" element={<TradingQuotationEdit />}></Route>
-          <Route path="/GoodsDeliveryEdit/:id" name="clienttdata" element={<GoodsDeliveryEdit />}></Route>
+          {/* <Route path="/GoodsDeliveryEdit/:id/:OrderId" name="clienttdata" element={<GoodsDeliveryEdit />}></Route> */}
           <Route path="/ChangeRequestEdit/:id" name="tenderdata" element={<ChangeRequestEdit />}></Route>
           <Route path="/DocumentEdit/:id" name="tenderdata" element={<DocumentEdit />}></Route>
           <Route path="/PurchaseInvoiceEdit/:id" name="tenderdata" element={<PurchaseInvoiceEdit />}></Route>
@@ -797,6 +799,8 @@ const Routernew = () => {
           <Route path="/InvoiceByMonth" name="clienttdata" element={<InvoiceByMonth />}></Route>
               
           <Route path="/ProfitLossReport" name="clienttdata" element={<ProfitLossReport />}></Route>
+          <Route path="/BalanceSheetReport" name="clienttdata" element={<BalanceSheetReport />}></Route>
+
 
           <Route
             path="/PurchaseGstReport"

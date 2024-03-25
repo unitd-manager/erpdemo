@@ -37,7 +37,7 @@ const PdfRequestForQuote = ({id,quoteId}) => {
 
   const getCompany = () => {
     api
-      .post('/quote/getProjectquoteById', { project_quote_id: id })
+      .post('/projectquote/getProjectquoteById', { project_quote_id: id })
       .then((res) => {
         setTenderDetails(res.data.data[0]);
         console.log(res);
@@ -47,14 +47,14 @@ const PdfRequestForQuote = ({id,quoteId}) => {
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/quote/getProjectquoteById', { project_quote_id: id }).then((res) => {
+    api.post('quote/getPurchaseQuotepdf', { purchase_quote_id: id }).then((res) => {
       setQuote(res.data.data[0]);
       console.log('quote', res.data.data[0]);
     });
   };
   const getQuoteById = () => {
     api
-      .post('/quote/getQuoteLineItemsById', { project_quote_id: quoteId })
+      .post('/quote/getRequestLineItempdf', { purchase_quote_id: quoteId })
       .then((res) => {
         setLineItem(res.data.data);
         console.log('quote1', res.data.data);
@@ -95,6 +95,16 @@ const PdfRequestForQuote = ({id,quoteId}) => {
           text: 'Description',
           style: 'tableHead',
         },
+        
+        {
+          text: 'Unit',
+          style: 'tableHead',
+        },
+    
+        {
+          text: 'Qty',
+          style: 'tableHead',
+        },
     
         {
           text: 'Amount S$',
@@ -112,16 +122,24 @@ const PdfRequestForQuote = ({id,quoteId}) => {
           border: [false, false, false, true],
         },
         {
-          text: `${element.title}`,
+          text: `${element.title ||''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-          text: `${element.description}`,
+          text: `${element.description ||''}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
-      
+        {
+          text: `${element.unit}`,
+          border: [false, false, false, true],
+          style: 'tableBody',
+        },{
+          text: `${element.quantity}`,
+          border: [false, false, false, true],
+          style: 'tableBody',
+        },
         {
           text: `${element.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
           border: [false, false, false, true],
@@ -215,16 +233,17 @@ const PdfRequestForQuote = ({id,quoteId}) => {
             },
           ],
         },
-
+ 
         {
           text: `Date :   ${(quote.quote_date)? moment(quote.quote_date).format('DD-MM-YYYY'):''}
-           Quote Code :  ${quote.quote_code ? quote.quote_code : ''
+           Quote Code :  ${quote.quote_code ? quote.quote_code : ''}
+          Purchase Request Code : ${quote.purchase_request_code ? quote.purchase_request_code : ''
           }\n \n  `,
           style: ['invoiceAdd', 'textSize'],
-          margin:[0,-60,0,0]
+          margin:[30,-60,0,0]
         },
 
-        '\n\n\n',
+        '\n',
         {
           text: `Att : ${tenderDetails.first_name ? tenderDetails.first_name : ''}`,
           style: ['notesText', 'textSize'],
@@ -292,7 +311,7 @@ const PdfRequestForQuote = ({id,quoteId}) => {
           },
           table: {
             headerRows: 1,
-            widths: [95, 120, 105, 100],
+            widths: [75, 100, '*', '*', 55, 45],
 
             body: lineItemBody,
           },
@@ -419,5 +438,6 @@ const PdfRequestForQuote = ({id,quoteId}) => {
     </>
   );
 };
-
+ 
 export default PdfRequestForQuote;
+ 
