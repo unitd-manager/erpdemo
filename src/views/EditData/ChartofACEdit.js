@@ -132,14 +132,10 @@ console.log('arabic',arabic)
               <Input
                 type="text"
                 onChange={handleInputs}
-             
                 value={
                   arb
-                    ? (
-                        chartofAC && chartofAC.title_arb ? chartofAC.title_arb :
-                        (chartofAC && chartofAC.title_arb !== null ? '' : chartofAC && chartofAC.title)
-                      )
-                    : (chartofAC && chartofAC.title)
+                    ? (chartofAC && chartofAC.title_arb ? chartofAC && chartofAC.title_arb : chartofAC && chartofAC.title)
+                    : chartofAC && chartofAC.title
                 }
                 name={arb ? 'title_arb' : 'title'}
               />
@@ -164,23 +160,22 @@ console.log('arabic',arabic)
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
               </Label>
-                
-              <Input 
-  type="select" 
-  name={arb ? 'acc_category_arb_id' : 'acc_category_id'}  
-  value={arb ? chartofAC &&chartofAC?.acc_category_arb_id:chartofAC &&chartofAC?.acc_category_id} 
-  onChange={handleInputs}
->
-  <option value="selected">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
-  {menuItems && menuItems
-    .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
-    .map(option => (
-      <option key={option.acc_category_id} value={option.acc_category_id}> {/* Modified value prop */}
-        {arb ? option.title_arb : option.title}
-      </option>
-    ))}
-</Input>
-
+                  <Input 
+                    type="select"
+                    name={arb ? 'acc_category_id' : 'acc_category_id'}  
+                    value={arb ? chartofAC && chartofAC?.acc_category_id:chartofAC && chartofAC?.acc_category_id} 
+                    onChange={handleInputs}
+                  >
+                    <option value="selected">Please Select</option>
+                    {menuItems?.map((item) => (
+                      <option
+                        key={item.acc_category_id}
+                        value={item.acc_category_id}
+                      >
+                         {arb ? item.title_arb : item.title}
+                      </option>
+                    ))}
+                  </Input>
                 </FormGroup>
               </Col>
 

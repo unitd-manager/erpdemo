@@ -167,10 +167,16 @@ getArabicCompanyName();
                       </Link>
                     </td>
                     <td>{element.entry_date}</td>
-                    <td>{element.acc_head}</td>
+                    <td>{arb && element.acc_head_arb ? element.acc_head_arb : element.acc_head}</td>
+
                     <td>
-                      {arb ? (element.narrationarb_main + <br/> + element.narration_arb) : (element.narration_main + <br/> + element.narration)}
+                        {arb ? (
+                          <span>{element.narrationarb_main}<br />{element.narration_arb}</span>
+                        ) : (
+                          <span>{element.narration_main}<br />{element.narration}</span>
+                        )}
                     </td>
+
                     <td>{element.debit}</td>
 
 

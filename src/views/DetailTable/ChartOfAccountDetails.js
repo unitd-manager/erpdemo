@@ -82,8 +82,7 @@ if (arb === true) {
   //Api for insertPlanning
   const insertChartOfAccount = () => {
 
-    if (chartOfAccountForms.title !== '' || chartOfAccountForms.title_arb !== ''  && chartOfAccountForms.acc_category_id !== '') {
-      chartOfAccountForms.creation_date = creationdatetime;
+    if ((chartOfAccountForms.title !== '' || chartOfAccountForms.title_arb !== '') && chartOfAccountForms.acc_category_id !== '') {      chartOfAccountForms.creation_date = creationdatetime;
       api
         .post('/chartOfAccounts/insertChartAc', chartOfAccountForms)
         .then((res) => {
@@ -132,11 +131,9 @@ if (arb === true) {
                         {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
                       </Label>
                  
-                      <Input type="select" name={arb ? 'acc_category_arb_id' : 'acc_category_id'} onChange={handleChartOfAccountForms}>
+                      <Input type="select" name={arb ? 'acc_category_id' : 'acc_category_id'} onChange={handleChartOfAccountForms}>
                           <option value="">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
-                          {category && category
-                            .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
-                            .map(option => (
+                          {category?.map(option => (
                               <option key={option.acc_category_id} value={`${option.acc_category_id}`}>
                                 {arb ? option.title_arb : option.title}
                               </option>
