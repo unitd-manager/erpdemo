@@ -18,6 +18,34 @@ const ProjectTask = () => {
   //All state variable
   const [projectTask, setProjectTask] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+  const arb =selectedLanguage === 'Arabic'
+  
+  const getArabicCompanyName = () => {
+      api
+      .get('/projecttask/getTranslationForProjectTask')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
 
   //Get data from Training table
   const getProjectTask= () => {
@@ -47,6 +75,7 @@ const ProjectTask = () => {
 
   useEffect(() => {
     getProjectTask();
+    getArabicCompanyName();
   }, []);
   //structure of Training list view
   const columns = [
@@ -70,21 +99,24 @@ const ProjectTask = () => {
       sortable: false,
     },
     {
-      name: 'Task Title',
+   
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Task Title')?.[genLabel],
       selector: 'task_title',
       sortable: true,
       grow: 0,
 
     },
     {
-      name: 'Job Order Title',
+    
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Job Order Title')?.[genLabel],
       selector: 'job_order_title',
       sortable: true,
       grow: 0,
       
     },
     {
-      name: 'Project Name',
+    
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Project Name')?.[genLabel],
       selector: 'title',
       sortable: true,
       grow: 0,
@@ -105,35 +137,40 @@ const ProjectTask = () => {
       
     // },
     {
-      name: 'Staff Name',
+     
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Staff Name')?.[genLabel],
       selector: 'first_name',
       sortable: true,
       grow: 0,
       
     },
     {
-      name: 'Start date',
+     
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Start Date')?.[genLabel], 
       selector: 'start_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'End Date',
+     
+      name: arabic.find(item => item.key_text === 'mdProjectTask.End Date')?.[genLabel],
       selector: 'end_date',
       sortable: true,
       grow: 0,
       
     },
     {
-      name: 'Completion',
+    
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Completion')?.[genLabel],
       selector: 'completion',
       sortable: true,
       grow: 0,
       
     },
     {
-      name: 'Status',
+      
+      name: arabic.find(item => item.key_text === 'mdProjectTask.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 0,
@@ -173,16 +210,16 @@ const ProjectTask = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.task_title}</td>
-                    <td>{element.job_order_title}</td>
-                    <td>{element.title}</td>
+                    <td>{arb && element.task_title_arb ?element.task_title_arb : element.task_title}</td>
+                    <td>{arb && element.job_order_title_arb ?element.job_order_title_arb : element.job_order_title}</td>
+                    <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.job_order_code}</td> */}
-                    <td>{element.first_name}</td>
+                    <td>{arb && element.first_name_arb ?element.first_name_arb : element.first_name}</td>
                     <td>{element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.completion}</td>
-                    <td>{element.status}</td> 
+                    <td>{arb && element.completion_arb ?element.completion_arb : element.completion}</td> 
+                    <td>{arb && element.status_arb ?element.status_arb : element.status}</td>
                   </tr>
                 );
               })}

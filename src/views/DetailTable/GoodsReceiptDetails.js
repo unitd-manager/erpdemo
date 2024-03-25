@@ -25,6 +25,12 @@ const GoodsReceiptDetails = () => {
   };
    //get staff details
    const { loggedInuser } = useContext(AppContext);
+
+   const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //inserting supplier data
   const insertGoodsReceipt = () => {
     if (goodsreceiptforms.purchase_order_id !== '' &&
@@ -63,8 +69,36 @@ const GoodsReceiptDetails = () => {
       };
 
 
+      const [arabic, setArabic] = useState([]);
+
+
+      const arb =selectedLanguage === 'Arabic'
+    
+      //const eng =selectedLanguage === 'English'
+      
+    
+      const getArabicCompanyName = () => {
+          api
+          .get('/goodsreceipt/getTranslationForGoodsReceipt')
+          .then((res) => {
+            setArabic(res.data.data);
+          })
+          .catch(() => {
+            // Handle error if needed
+          });   
+      };
+    
+      let genLabel = '';
+    
+      if (arb === true) {
+        genLabel = 'arb_value';
+      } else {
+        genLabel = 'value';
+      }
+
    useEffect(() => {
     getPoCode();
+    getArabicCompanyName();
      }, []);
     return (
     <div>
@@ -73,14 +107,15 @@ const GoodsReceiptDetails = () => {
       <Row>
         <Col md="6" xs="12">
           {/* Key Details */}
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
           <Form>
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.PO Code')?.[genLabel]}
                       {' '}
-                       PO Code <span className="required"> *</span>{' '}
+                        <span className="required"> *</span>{' '}
                     </Label>
                     <Input
                           type="select"
@@ -88,12 +123,12 @@ const GoodsReceiptDetails = () => {
                           value={goodsreceiptforms && goodsreceiptforms.purchase_order_id}
                           name="purchase_order_id"
                         >
-                          <option defaultValue="selected">Please Select</option>
+                          <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
                           {purchaseorderdetails &&
                             purchaseorderdetails.map((e) => {
                               return (
                                 <option key={e.purchase_order_id} value={e.purchase_order_id}>
-                                  {e.po_code}
+                                  {arb?e.po_code_arb:e.po_code}{' '}
                                 </option>
                               );
                             })}
@@ -102,7 +137,8 @@ const GoodsReceiptDetails = () => {
 
                     <Col md="12">
                       <FormGroup>
-                        <Label>Goods Received Date<span className="required"> *</span>{' '}</Label>
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdGoodsReceipt.Goods Received Date')?.[genLabel]}<span className="required"> *</span>{' '}</Label>
                         <Input
                           type="date"
                           onChange={handleInputs}

@@ -100,6 +100,7 @@ const handleInputs = (e, journalMasterId, journalId) => {
     entry_date: '',
     voucher_type: '',
     narration_main: '',
+    narrationarb_main: '',
     ledger_authorized: '',
     creation_date: '',
     modification_date: ''

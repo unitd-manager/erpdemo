@@ -184,8 +184,8 @@ const PurchaseInvoice = () => {
                     </Link>
                   </td>
                   <td>{element.purchase_invoice_code}</td>
-                  <td>{element.title}</td>
-                  <td>{element.company_name}</td>
+                  <td>{arb ? element.title_arb : element.title}</td>
+                  <td>{arb ? element.company_name_arb : element.company_name}</td>
                   <td>{moment(element.purchse_invoice_date).format('YYYY-MM-DD')}</td>
                   <td>{element.invoice_amount}</td>
                   <td>{element.due_date}</td>

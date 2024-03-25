@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, TabContent, TabPane, Button} from 'reactstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Row, Col, Form, FormGroup, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -19,6 +19,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const PurchaseRequestEdit = () => {
   // All state variables
@@ -26,7 +27,7 @@ const PurchaseRequestEdit = () => {
   const [purchaserequesteditdetails, setPurchaseRequestEditDetails] = useState();
   const [customername, setCustomerName] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
-  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState(); 
+  const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
   const [addPurchaseOrderEditModal, setAddPurchaseOrderEditModal] = useState();
   const [project, setProject] = useState([]);
   const [quote, setQuote] = useState({});
@@ -37,7 +38,29 @@ const PurchaseRequestEdit = () => {
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
- 
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/purchaserequest/getTranslationForPurchaseRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -54,8 +77,13 @@ const PurchaseRequestEdit = () => {
     { id: '2', name: 'Attachment' },
   ];
 
-   // Attachment
-   const dataForAttachment = () => {
+  const tabsArb = [
+    { id: '1', name: 'عنصر طلب الشراء ' },
+    { id: '2', name: 'مرفق' },
+  ];
+
+  // Attachment
+  const dataForAttachment = () => {
     setDataForAttachment({
       modelType: 'attachment',
     });
@@ -66,26 +94,27 @@ const PurchaseRequestEdit = () => {
 
   //Setting data in purchaserequesteditdetails
   const handleInputs = (e) => {
-    setPurchaseRequestEditDetails({ ...purchaserequesteditdetails, [e.target.name]: e.target.value });
+    setPurchaseRequestEditDetails({
+      ...purchaserequesteditdetails,
+      [e.target.name]: e.target.value,
+    });
   };
 
   // Get Purchase data By Purchase Id
   const getPurchaseRequestDataById = () => {
-    api
-      .post('/purchaserequest/getPurchaseRequestById', { purchase_request_id: id })
-      .then((res) => {
-        setPurchaseRequestEditDetails(res.data.data[0]);
-      })
+    api.post('/purchaserequest/getPurchaseRequestById', { purchase_request_id: id }).then((res) => {
+      setPurchaseRequestEditDetails(res.data.data[0]);
+    });
   };
   //Edit PurchaseRequestData
   const editPurchaseRequestData = () => {
-    if (purchaserequesteditdetails.purchase_request_date !== '' &&
-    purchaserequesteditdetails.purchase_delivery_date !== '' &&
-    purchaserequesteditdetails.department !== ''
-    )
-    {
+    if (
+      purchaserequesteditdetails.purchase_request_date !== '' &&
+      purchaserequesteditdetails.purchase_delivery_date !== '' &&
+      purchaserequesteditdetails.department !== ''
+    ) {
       purchaserequesteditdetails.modification_date = creationdatetime;
-      purchaserequesteditdetails.modified_by= loggedInuser.first_name; 
+      purchaserequesteditdetails.modified_by = loggedInuser.first_name;
       api
         .post('/purchaserequest/editPurchaseRequest', purchaserequesteditdetails)
         .then(() => {
@@ -111,7 +140,6 @@ const PurchaseRequestEdit = () => {
       });
   };
 
-
   const getProject = () => {
     api.get('project/getOppProject').then((res) => {
       setProject(res.data.data);
@@ -122,7 +150,7 @@ const PurchaseRequestEdit = () => {
     api.post('/tender/getQuoteById', { opportunity_id: id }).then((res) => {
       setQuote(res.data.data[0]);
     });
-  }; 
+  };
 
   //useEffect
   useEffect(() => {
@@ -130,31 +158,41 @@ const PurchaseRequestEdit = () => {
     getCustomerName();
     getQuote();
     getProject();
+    getArabicCompanyName();
   }, [id]);
 
   return (
     <>
-          <BreadCrumbs/>
-          <PurchaseEditButton id={id} editPurchaseRequestData={editPurchaseRequestData} navigate={navigate} />
-          {/* Content Details Form */}
-          <PurchaseRequestEditDetails
-            purchaserequesteditdetails={purchaserequesteditdetails}
-            handleInputs={handleInputs}
-            customername={customername}
-          ></PurchaseRequestEditDetails>
-          
-        <ComponentCard title="More Details">
+      <BreadCrumbs />
+      <PurchaseEditButton
+        id={id}
+        editPurchaseRequestData={editPurchaseRequestData}
+        navigate={navigate}
+      />
+      {/* Content Details Form */}
+      <PurchaseRequestEditDetails
+        purchaserequesteditdetails={purchaserequesteditdetails}
+        handleInputs={handleInputs}
+        customername={customername}
+        arabic={arabic}
+        arb={arb}
+      ></PurchaseRequestEditDetails>
+
+      <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
         <ToastContainer></ToastContainer>
-        <Tab toggle={toggle} tabs={tabs} />
+        {eng === true && <Tab toggle={toggle} tabs={tabs} />}
+        {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <PurchaseRequestItemModal
-          PurchaseRequestId={id}
-          addPurchaseOrderModal={addPurchaseOrderModal}
-          setAddPurchaseOrderModal={setAddPurchaseOrderModal}
-        />
-          <Row className="mb-4">
-          {/* <Col md="2">
+            <PurchaseRequestItemModal
+              PurchaseRequestId={id}
+              addPurchaseOrderModal={addPurchaseOrderModal}
+              setAddPurchaseOrderModal={setAddPurchaseOrderModal}
+              arabic={arabic}
+              arb={arb}
+            />
+            <Row className="mb-4">
+              {/* <Col md="2">
             <Button
               color="primary"
               onClick={() => {
@@ -164,72 +202,82 @@ const PurchaseRequestEdit = () => {
               Add Product
             </Button>
           </Col> */}
-          <Col md="2">
-                
-                  <PurchaseRequestItemsEdit
-                     addPurchaseOrderEditModal={addPurchaseOrderEditModal}
-                     setAddPurchaseOrderEditModal={setAddPurchaseOrderEditModal}
-                     PurchaseRequestID={id}
-                    ></PurchaseRequestItemsEdit>
-                    <Button
-            className="shadow-none"
-            color="primary"
-            onClick={() => {
-              setAddPurchaseOrderEditModal(true);
-            }
-            }
-          >
-            Edit
-          </Button>
-        
-      </Col>
-          </Row>        
-        <PurchaseRequestLineItems
-        PurchaseRequestID={id}
-        project={project}
-        quote={quote}
-        />
+              <Col md="2">
+                <PurchaseRequestItemsEdit
+                  addPurchaseOrderEditModal={addPurchaseOrderEditModal}
+                  setAddPurchaseOrderEditModal={setAddPurchaseOrderEditModal}
+                  PurchaseRequestID={id}
+                  arabic={arabic}
+                  arb={arb}
+                ></PurchaseRequestItemsEdit>
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  onClick={() => {
+                    setAddPurchaseOrderEditModal(true);
+                  }}
+                >
+                  {arb ?'يحرر':'Edit'}
+                </Button>
+              </Col>
+            </Row>
+            <PurchaseRequestLineItems
+              PurchaseRequestID={id}
+              project={project}
+              quote={quote}
+              arabic={arabic}
+              arb={arb}
+            />
           </TabPane>
           <TabPane tabId="2">
-          <Form>
+            <Form>
               <FormGroup>
-                  <Row>
-                    <Col xs="12" md="3" className="mb-3">
-                      <Button
-                        className="shadow-none"
-                        color="primary"
-                        onClick={() => {
-                          setRoomName('PurchaseRequest');
-                          setFileTypes(['JPG','JPEG', 'PNG', 'GIF', 'PDF']);
-                          dataForAttachment();
-                          setAttachmentModal(true);
-                        }}
-                      >
-                        <Icon.File className="rounded-circle" width="20" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <AttachmentModalV2
-                    moduleId={id}
-                    attachmentModal={attachmentModal}
-                    setAttachmentModal={setAttachmentModal}
-                    roomName={RoomName}
-                    fileTypes={fileTypes}
-                    altTagData="PurchaseRequestRelated Data"
-                    desc="PurchaseRequestRelated Data"
-                    recordType="RelatedPicture"
-                    mediaType={attachmentData.modelType}
-                    update={update}
-                    setUpdate={setUpdate}
-                  />
-                  <ViewFileComponentV2 moduleId={id} roomName="PurchaseRequest" recordType="RelatedPicture" update={update}
-                    setUpdate={setUpdate}/>
+                <Row>
+                  <Col xs="12" md="3" className="mb-3">
+                    <Button
+                      className="shadow-none"
+                      color="primary"
+                      onClick={() => {
+                        setRoomName('PurchaseRequest');
+                        setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+                        dataForAttachment();
+                        setAttachmentModal(true);
+                      }}
+                    >
+                      <Icon.File className="rounded-circle" width="20" />
+                    </Button>
+                  </Col>
+                </Row>
+                <AttachmentModalV2
+                  moduleId={id}
+                  attachmentModal={attachmentModal}
+                  setAttachmentModal={setAttachmentModal}
+                  roomName={RoomName}
+                  fileTypes={fileTypes}
+                  altTagData="PurchaseRequestRelated Data"
+                  desc="PurchaseRequestRelated Data"
+                  recordType="RelatedPicture"
+                  mediaType={attachmentData.modelType}
+                  update={update}
+                  setUpdate={setUpdate}
+                  arabic={arabic}
+                  arb={arb}
+                />
+                <ViewFileComponentV2
+                  moduleId={id}
+                  roomName="PurchaseRequest"
+                  recordType="RelatedPicture"
+                  update={update}
+                  setUpdate={setUpdate}
+                  arabic={arabic}
+                  arb={arb}
+                />
               </FormGroup>
-            </Form>  
+            </Form>
           </TabPane>
         </TabContent>
-        </ComponentCard>
-  </>   
+      </ComponentCard>
+    </>
   );
 };
 export default PurchaseRequestEdit;

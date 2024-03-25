@@ -17,28 +17,6 @@ const ChartOfAccounts = () => {
   const [chartofaccounts, setChartOfAccounts] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // get Chart Of Accounts List
-  const getChartOfAccounts = () => {
-    api
-      .get('/chartofaccounts/getChartOfAccounts')
-      .then((res) => {
-        setChartOfAccounts(res.data.data);
-        $('#example').DataTable({
-          pagingType: 'full_numbers',
-          pageLength: 20,
-          processing: true,
-          dom: 'Bfrtip',
-        });
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    getChartOfAccounts();
-  }, []);
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
@@ -76,6 +54,31 @@ if (arb === true) {
 } else {
   genLabel = 'value';
 }
+
+
+  // get Chart Of Accounts List
+  const getChartOfAccounts = (language) => {
+    api
+      .get('/chartofaccounts/getChartOfAccounts', { params: { language } })
+      .then((res) => {
+        setChartOfAccounts(res.data.data);
+        $('#example').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 20,
+          processing: true,
+          dom: 'Bfrtip',
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getChartOfAccounts(selectedLanguage);
+  }, [selectedLanguage]);
+
 
 
   //  stucture of Chart Of Accounts list view
@@ -164,7 +167,7 @@ if (arb === true) {
                       </Link>
                     </td>
                     <td>{arb && element.title_arb ? element.title_arb : element.title}</td>
-                    <td>{element.category}</td>
+                    <td>{arb && element.category_arb ? element.category_arb : element.category}</td>
                     <td>{element.code}</td>
                     </tr>
                 );

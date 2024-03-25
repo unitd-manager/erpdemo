@@ -14,7 +14,7 @@ export default function TenderQuotation({
     quote,
     project,
     PurchaseRequestID,
-   
+    arb
 
   }) {
     TenderQuotation.propTypes = {
@@ -22,7 +22,7 @@ export default function TenderQuotation({
       project: PropTypes.object,
       quote: PropTypes.object,
       PurchaseRequestID: PropTypes.object,
-    
+      arb: PropTypes.any,
     };
 
     const [vehicleinsurancegetdetails, setVehicleInsuranceGetDetails] = useState();
@@ -72,13 +72,13 @@ return (
 <Table bordered className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">  S.No </th>
-                          <th scope="col">Title </th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Quantity </th>
-                          <th scope="col">Created By </th>
-                          <th scope="col">Updated By </th>
-                          <th scope="col">Action</th>
+                          <th scope="col">  # </th>
+                          <th scope="col">{arb ?'عنوان':'Title'}</th>
+                          <th scope="col">{arb ?'وحدة':'Unit'}</th>
+                          <th scope="col">{arb ?'كمية':'Quantity'}</th>
+                          <th scope="col">{arb ?'انشأ من قبل':'Created By'}</th>
+                          <th scope="col">{arb ?'تم التحديث بواسطة':'Updated By'}</th>
+                          <th scope="col">{arb ?'وحفعلدة':'Action'}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -87,11 +87,11 @@ return (
                             return (
                               <tr>
                                 <td data-label="S.No">{index + 1}</td>
-                                <td data-label="Title">{e.title}</td>
-                                <td data-label="Unit">{e.unit || 'N/A'}</td>
-                                <td data-label="Quantity">{e.purchase_request_qty}</td>
-                                <td data-label="Created By">{e.created_by}</td>
-                                <td data-label="Updated By">{e.modified_by}</td>
+                                <td data-label="Title">{arb?e.title_arb:e.title}</td>
+                                <td data-label="Unit">{arb?e.unit_arb:e.unit || 'N/A'}</td>
+                                <td data-label="Quantity">{arb?e.purchase_request_qty_arb:e.purchase_request_qty}</td>
+                                <td data-label="Created By">{arb?e.created_by_arb:e.created_by}</td>
+                                <td data-label="Updated By">{arb?e.modified_by_arb:e.modified_by}</td>
                                 {quote && QuoteProject === undefined && (
                                   <td data-label="Actions">
                                     {/* <span

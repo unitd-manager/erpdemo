@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import { Row, Col, Button } from 'reactstrap';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as Icon from 'react-feather';
 import Swal from 'sweetalert2';
 import CommonTable from '../CommonTable';
@@ -9,7 +10,12 @@ import ChooseEmployee from '../ProjectModal/ChooseEmployee';
 import api from '../../constants/api';
 import MonthYear from '../ProjectModal/MonthYear';
 
-const AddEmployee = () => {
+
+  export default function AddEmployee({ arb }) {
+    AddEmployee.propTypes = {
+      arb: PropTypes.any,
+      
+    };
 
   const { id } = useParams();
 
@@ -112,7 +118,7 @@ const AddEmployee = () => {
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} />
+     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} arb={arb}/>
      <MonthYear chooseMonthYear={chooseMonthYear} setChooseMonthYear={setChooseMonthYear} getSingleEmployeeData={getSingleEmployeeData} 
     setSingleEmployeeData={setSingleEmployeeData} />
     <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 
@@ -122,4 +128,3 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;

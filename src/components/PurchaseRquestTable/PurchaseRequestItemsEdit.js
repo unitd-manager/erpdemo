@@ -16,11 +16,12 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 //addPurchaseOrderEditModal From VehicleEdit
-const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurchaseOrderEditModal, PurchaseRequestID }) => {
+const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurchaseOrderEditModal, PurchaseRequestID,arb }) => {
     PurchaseRequestItemsEditModal.propTypes = {
     addPurchaseOrderEditModal: PropTypes.bool,
     setAddPurchaseOrderEditModal: PropTypes.func,
-    PurchaseRequestID: PropTypes.any
+    PurchaseRequestID: PropTypes.any,
+    arb: PropTypes.any
   };
 
   // All State Variable
@@ -82,7 +83,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
     <>
       <Modal size="xl" isOpen={addPurchaseOrderEditModal}>
         <ModalHeader>
-          Purchase Request Items
+        {arb ?'عناصر طلب الشراء':'Purchase Request Items'} 
           <Button
             color="secondary"
             onClick={() => {
@@ -98,9 +99,9 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
             <Table bordered className="lineitem">
               <thead>
                 <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Quantity</th>
+                  <th scope="col">{arb ?'عنوان':'Title'}</th>
+                  <th scope="col">{arb ?'وحدة':'Unit'}</th>
+                  <th scope="col">{arb ?'كمية':'Quantity'}</th>
                 </tr>
               </thead>
               <tbody>  
@@ -153,7 +154,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
               }, 100);
             }}
           >
-            Submit
+            {arb ?'يُقدِّم':'Submit'}
           </Button>
           <Button
             color="secondary"
@@ -161,7 +162,7 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
               setAddPurchaseOrderEditModal(false);
             }}
           >
-            Cancel
+            {arb ?'يلغي':'Cancel'}
           </Button>
         </ModalFooter>
       </Modal>

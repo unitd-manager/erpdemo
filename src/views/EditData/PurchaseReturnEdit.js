@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent,  Table, Row} from 'reactstrap';
+import { TabPane, TabContent, Table, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -17,6 +17,7 @@ import QuotationAttachment from '../../components/PurchaseReturn/QuotationAttach
 import ReturnInvoiceItemTable from '../../components/PurchaseReturn/ReturnInvoiceItemTable';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
+import Tabs from '../../components/project/Tabs';
 
 const PurchaseReturnEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -35,6 +36,29 @@ const PurchaseReturnEdit = () => {
   //   const [addCompanyModal, setAddCompanyModal] = useState(false);
 
   const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/purchasereturn/getTranslationForPurchaseReturn')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
 
   const [activeTab, setActiveTab] = useState('1');
   const { insertedDataId, purchaseInvoiceId } = useParams();
@@ -58,6 +82,13 @@ const PurchaseReturnEdit = () => {
     { id: '2', name: 'Purchase Return' },
     { id: '3', name: 'Attachment' },
   ];
+
+  const tabsArb = [
+    { id: '1', name: 'إرجاع العناصر' },
+    { id: '2', name: 'عودة شراء' },
+    { id: '3', name: 'مرفق' },
+  ];
+
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -65,10 +96,8 @@ const PurchaseReturnEdit = () => {
     setSelectedCompany(companyId);
     api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
       setContact(res.data.data);
-
     });
   };
-
 
   const getReturnInvoiceItemById = () => {
     api
@@ -76,21 +105,17 @@ const PurchaseReturnEdit = () => {
       .then((res) => {
         setReturnInvoiceItemDetails(res.data.data);
       })
-      .catch(() => {
-       
-      });
+      .catch(() => {});
   };
 
   // Get Tenders By Id
-   const editTenderById = () => {
+  const editTenderById = () => {
     api
       .post('/purchasereturn/getPurchaseReturnById', { purchase_return_id: insertedDataId })
       .then((res) => {
         setTenderDetails(res.data.data[0]);
       })
-      .catch(() => {
-        
-      });
+      .catch(() => {});
   };
 
   const handleInputs = (e) => {
@@ -106,7 +131,6 @@ const PurchaseReturnEdit = () => {
       .post('/purchasereturn/editpurchasereturn', tenderDetails)
       .then(() => {
         message('Record editted successfully', 'success');
-       
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -121,14 +145,16 @@ const PurchaseReturnEdit = () => {
   };
   // Get Line Item
   const getLineItem = () => {
-    api.post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: insertedDataId }).then((res) => {
-      setLineItem(res.data.data);
-      //setAddLineItemModal(true);
-    });
+    api
+      .post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: insertedDataId })
+      .then((res) => {
+        setLineItem(res.data.data);
+        //setAddLineItemModal(true);
+      });
   };
-   // Add new Contact
+  // Add new Contact
 
-   const [newContactData, setNewContactData] = useState({
+  const [newContactData, setNewContactData] = useState({
     salutation: '',
     first_name: '',
     email: '',
@@ -146,11 +172,7 @@ const PurchaseReturnEdit = () => {
   const AddNewContact = () => {
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -165,12 +187,21 @@ const PurchaseReturnEdit = () => {
       message('All fields are required.', 'info');
     }
   };
- 
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     editTenderById();
     getLineItem();
     getCompany();
     getReturnInvoiceItemById();
+    getArabicCompanyName();
     // getAllCountries();
   }, [insertedDataId]);
 
@@ -179,25 +210,25 @@ const PurchaseReturnEdit = () => {
       name: '#',
     },
     {
-      name: 'Title',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Title')?.[genLabel],
     },
     {
-      name: 'Description',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Description')?.[genLabel],
     },
     {
-      name: 'Qty',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Amount')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Updated By')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Action')?.[genLabel],
     },
   ];
   const deleteRecord = (deleteID) => {
@@ -228,7 +259,7 @@ const PurchaseReturnEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></ProjectQuoteButton>
-     
+
       <ProjectQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -241,19 +272,23 @@ const PurchaseReturnEdit = () => {
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
         getContact={getContact}
+        arabic={arabic}
+        arb={arb}
       ></ProjectQuoteMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
 
-        <Tab toggle={toggle} tabs={tabs} />
+        {eng === true && <Tab toggle={toggle} tabs={tabs} />}
+        {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
         <TabContent className="p-4" activeTab={activeTab}>
-         
           <TabPane tabId="1">
-            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} />
+            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} 
+            arabic={arabic}
+            arb={arb}
+            />
           </TabPane>
           <TabPane tabId="2">
-            
             <br />
             <Row>
               <div className="container">
@@ -278,7 +313,6 @@ const PurchaseReturnEdit = () => {
                             <td data-label="Amount">{e.total_cost}</td>
                             <td data-label="Updated By">{e.updated_by}</td>
                             <td data-label="Actions">
-                             
                               <span
                                 className="addline"
                                 onClick={() => {
@@ -296,11 +330,12 @@ const PurchaseReturnEdit = () => {
               </div>
             </Row>
             {/* End View Line Item Modal */}
-           
-           
           </TabPane>
           <TabPane tabId="3">
-            <QuotationAttachment></QuotationAttachment>
+            <QuotationAttachment
+            arabic={arabic}
+            arb={arb}
+            ></QuotationAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

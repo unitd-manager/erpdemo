@@ -7,62 +7,98 @@ import ComponentCard from '../ComponentCard';
 
 
 
-function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs, customername}) {
+function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs, customername,arabic,arb}) {
     PurchaseRequestEditDetails.propTypes = {
         purchaserequesteditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
         customername: PropTypes.bool,
+        arabic: PropTypes.any,
+        arb: PropTypes.any,
   };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   return (
     <div>   
       <Form>
         <FormGroup>
-        <ComponentCard title="Purchase Request Details" creationModificationDate={purchaserequesteditdetails}>
+        <ComponentCard title={arb ?'تفاصيل طلب الشراء':'Purchase Request Details'} creationModificationDate={purchaserequesteditdetails}>
             <ToastContainer></ToastContainer>
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Purchase Request code </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request code')?.[genLabel]}  
+                </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code}
-                    name="purchase_request_code"
+                    value={
+                      arb
+                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code_arb
+                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code
+                    }
+                    name={arb ? 'purchase_request_code_arb' : 'purchase_request_code'}
                     disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Purchase Request Date <span className="required"> *</span> </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]}  <span className="required"> *</span> 
+                </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
-                    value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_request_date).format('YYYY-MM-DD')}
-                    name="purchase_request_date"
+                    value={
+                      arb
+                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date_arb
+                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date
+                    }
+                    name={arb ? 'purchase_request_date_arb' : 'purchase_request_date'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Purchase Delivery Date <span className="required"> *</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]} <span className="required"> *</span> 
+                </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
                     min={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_request_date).format('YYYY-MM-DD')}
-                    value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_delivery_date).format('YYYY-MM-DD')}
+                    value={
+                      arb
+                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date_arb
+                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date
+                    }
+                    //value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_delivery_date).format('YYYY-MM-DD')}
                     name="purchase_delivery_date"
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Department <span className="required"> *</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel]}<span className="required"> *</span> 
+                </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.department}
-                    name="department"
+                    value={
+                      arb
+                        ? purchaserequesteditdetails && purchaserequesteditdetails.department_arb
+                        : purchaserequesteditdetails && purchaserequesteditdetails.department
+                    }
+                    name={arb ? 'department_arb' : 'department'}
                   />
                 </FormGroup>
               </Col>
@@ -70,19 +106,20 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Customer Name</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Customer Name')?.[genLabel]}</Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
                     value={purchaserequesteditdetails && purchaserequesteditdetails.company_id}
                     name="company_id"
                   >
-                    <option defaultValue="selected">Please Select</option>
+                    <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
                     {customername &&
                       customername.map((e) => {
                         return (
                           <option key={e.company_id} value={e.company_id}>
-                            {e.company_name}
+                            {arb?e.company_name_arb:e.company_name}
                           </option>
                         );               
                       })}
@@ -91,30 +128,42 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Status </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Status')?.[genLabel]} </Label>
                   <Input
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.status}
+                    value={
+                      arb
+                        ? purchaserequesteditdetails && purchaserequesteditdetails.status_arb
+                        : purchaserequesteditdetails && purchaserequesteditdetails.status
+                    }
+                    //value={purchaserequesteditdetails && purchaserequesteditdetails.status}
                     type="select"
                     onChange={handleInputs}
-                    name="status"
+                    name={arb ? 'status_arb' : 'status'}
                   >
-                    <option value="">Please Select</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
+                    <option value="">{arb ?'الرجاء التحديد':'Please Select'}</option>
+                    <option value="Pending">{arb ?'قيد الانتظار':'Pending'}</option>
+                    <option value="Approved">{arb ?'موافقة':'Approved'}</option>
+                    <option value="Rejected">{arb ?'مرفوض':'Rejected'}</option>
                   </Input>
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Priority </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Priority')?.[genLabel]} 
+                </Label>
                   <Input
-                    value={purchaserequesteditdetails && purchaserequesteditdetails.priority}
+                  value={
+                    arb
+                      ? purchaserequesteditdetails && purchaserequesteditdetails.priority_arb
+                      : purchaserequesteditdetails && purchaserequesteditdetails.priority
+                  }
                     type="select"
                     onChange={handleInputs}
-                    name="priority"
+                    name={arb ? 'priority_arb' : 'priority'}
                   >
-                    <option value="">Please Select</option>
+                    <option value="">{arb ?'الرجاء التحديد':'Please Select'}</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

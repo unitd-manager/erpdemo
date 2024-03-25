@@ -39,6 +39,7 @@ const NewMenuItemModal = ({ menuItemModal, setMenuItemModal }) => {
   const toggle = () => {
     setEditMenuItemModal(!editMenuItemModal);
   };
+
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -77,33 +78,44 @@ if (arb === true) {
   genLabel = 'value';
 }
 
+
   //  insert parent Item 
   const SaveData = () => {
     let parentid = 0;
     let sortOrder = 1;
   
     if (selectedParent !== null && selectedParent !== "") {
+      // Convert selectedParent to a number
       parentid = parseInt(selectedParent, 10);
-      const existingItem = menuItems.find((item) => item.parent_id === parentid);
+  
+      // Check if a record with the same parent_id (acc_category_id) exists
+      const existingItem = menuItems.find((item) => item.acc_category_id === parentid);
+  
       if (existingItem) {
+        // Increment sortOrder based on the existing records with the same parent_id
         const sameParentItems = menuItems.filter((item) => item.parent_id === parentid);
         sortOrder = sameParentItems.length + 1;
       }
     } else {
+      // User did not select a parent, parent_id should be 0
       parentid = 0;
+  
+      // Calculate sortOrder when parent_id is 0
       const itemCount = menuItems.reduce((count, item) => {
         if (item.parent_id === 0) {
           return count + 1;
         }
         return count;
       }, 0);
+  
+      // The count will be used as the sortOrder
       sortOrder = itemCount + 1;
     }
   
     const data = {
-      title,
-      title_arb: document.querySelector('input[name="title_arb"]').value, // Adding title_arb from input field
-      code: document.querySelector('input[name="code"]').value, // Adding code from input field
+      title: arb ? "" : title, // Set title based on arb flag
+      title_arb: arb ? title : "", // Set title_arb based on arb flag
+      code: "",
       sort_order: sortOrder,
       parent_id: parentid || 0,
       creation_date: moment(Date.now()).format('YYYY-MM-DD'),
@@ -111,23 +123,25 @@ if (arb === true) {
       category_type: "",
     };
   
-    if(data.title !== '' && data.title_arb !== '') { // Check both title and title_arb
+    if ((arb && data.title_arb !== '') || (!arb && data.title !== '')) { // Check based on arb flag
       api
-      .post('/accountsMap/insertMenuItems', data)
-      .then((res) => {
-        setTitle(res.data.data);
-        message('Record edited successfully', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      })
-      .catch(() => {
-        message('Menu Item Data Not inserted', 'info');
-      });
+        .post('/accountsMap/insertMenuItems', data)
+        .then((res) => {
+          // Assuming res.data.data contains the newly inserted item, you can handle it accordingly
+          console.log(res.data.data);
+          message('Record added successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        })
+        .catch(() => {
+          message('Menu Item Data Not inserted', 'info');
+        });
     } else {
       message('Please fill all required fields', 'warning');
     }
   };
+  
   
   const getGroup = () => {
     api.get('/accountsMap/getParentItem').then((res) => {
@@ -177,35 +191,59 @@ if (arb === true) {
   };
 
   // Rendering logic for menu items
-
   const renderMenuItem = (item) => {
-    const hasChildren = menuItems.some((childItem) => childItem.parent_id === item.acc_category_id);
     const isOpen = openItems.includes(item.acc_category_id);
-
+  
     const handleChildTitleClick = (clickedItem) => {
       setClickedMenuItem(clickedItem);
       toggle();
     };
-
+  
+    // Filter menuItems based on language selection
+    const filteredMenuItems = menuItems.filter((menuItem) => {
+      if (arb) {
+        return menuItem.title_arb && menuItem.parent_id === item.acc_category_id;
+      }
+      return menuItem.title && menuItem.parent_id === item.acc_category_id;
+    });
+  
     return (
-      <li key={item.acc_category_id}>
-        <div className={`menu-item ${hasChildren ? 'open' : 'closed'}`}>
-          <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
-            {hasChildren ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
-          </span>
-          &nbsp;<span onClick={() => handleChildTitleClick(item)}> {arb?item.title_arb:item.title} </span>
-        </div>
-        {hasChildren && isOpen && (
-          <ul style={{ listStyle: 'none' }}>
-            {menuItems
-              .filter((childItem) => childItem.parent_id === item.acc_category_id)
-              .map((childItem) => renderMenuItem(childItem))}
-          </ul>
+      <>
+        {arb ? (
+          <li key={item.acc_category_id}>
+            <div className={`menu-item ${filteredMenuItems.length > 0 ? 'open' : 'closed'}`}>
+              <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
+                {filteredMenuItems.length > 0 ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
+              </span>
+              
+              {item.title_arb && <span onClick={() => handleChildTitleClick(item)}>{item.title_arb}</span>}
+            </div>
+            {filteredMenuItems.length > 0 && isOpen && (
+            <ul style={{ listStyle: 'none' }}>
+              {filteredMenuItems.map((childItem) => renderMenuItem(childItem))}
+            </ul>
+          )}
+          </li>
+        ) : (
+          <li key={item.acc_category_id}>
+            <div className={`menu-item ${filteredMenuItems.length > 0 ? 'open' : 'closed'}`}>
+              <span onClick={(e) => { e.stopPropagation(); toggleItem(item.acc_category_id); }}>
+                {filteredMenuItems.length > 0 ? (isOpen ? <Icon.MinusSquare size={20} color='blue' /> : <Icon.PlusSquare size={20} color='blue' />) : ''}
+              </span>
+              {item.title && <span onClick={() => handleChildTitleClick(item)}>{item.title}</span>}
+            </div>
+            {filteredMenuItems.length > 0 && isOpen && (
+            <ul style={{ listStyle: 'none' }}>
+              {filteredMenuItems.map((childItem) => renderMenuItem(childItem))}
+            </ul>
+          )}
+          </li>
         )}
-      </li>
+      </>
     );
   };
-
+  
+  
   return (
     <>
     <ToastContainer></ToastContainer>
@@ -229,30 +267,44 @@ if (arb === true) {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+    
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
                         {arabic.find((item) => item.key_text === 'mdAccMap.Parent')?.[genLabel]}
                       </Label>
-                      <Input type="select" name={arb ? 'parent_id' : 'parent_id'} onChange={handleInputs}>
+                      {/* <Input type="select" name="parent_id" onChange={handleInputs}>
                         <option value="">Please Select</option>
 
                         {parentOptions?.map((option) => (
                           <option key={option.acc_category_id} value={`${option.acc_category_id},${option.sort_order}`}>
-                            {arb ? option.title_arb : option.title}
+                            {option.title}
                           </option>
                         ))}
-                      </Input>
+                      </Input> */}
+                     <Input type="select" name={arb ? 'parent_id' : 'parent_id'} onChange={handleInputs}>
+                          <option value="">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
+
+                          {parentOptions && parentOptions
+                            .filter(option => arb ? option.title_arb : option.title) // Filter based on selected language
+                            .map(option => (
+                              <option key={option.acc_category_id} value={`${option.acc_category_id},${option.sort_order}`}>
+                                {arb ? option.title_arb : option.title}
+                              </option>
+                            ))}
+                        </Input>
+
+
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
                         {arabic.find((item) => item.key_text === 'mdAccMap.Ttile')?.[genLabel]}<span className="required"> *</span>
                       </Label>
                       <Input
                         type="text"
-                        name="title"
+                        name={arb ? 'title_arb' : 'title'}
                         onChange={(e) => setTitle(e.target.value)}
                       />
                     </FormGroup>
@@ -262,19 +314,8 @@ if (arb === true) {
                   <Col md="12">
                     <FormGroup>
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
-                        {arabic.find((item) => item.key_text === 'mdAccMap.Ttile')?.[genLabel]}<span className="required"> *</span>
-                      </Label>                     
-                       <Input
-                        type="text"
-                        name="title_arb"
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md="12">
-                    <FormGroup>
-                      <Label>Code</Label>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Code')?.[genLabel]}
+                      </Label>
                       <Input
                         type="text"
                         name="code"
@@ -284,16 +325,17 @@ if (arb === true) {
                 </Row>
                 <Row>
                   <Col md="12">
-                    <FormGroup>
-                      <Label>Please Select</Label>
-                      <Input type="select" name="company_id" onChange={handleInputs}>
-                        <option>Select Customer</option>
-                        <option value="Bank Account">Bank Account</option>
-                        <option value="Cash Account">Cash Account</option>
-                        <option value="Sundry Creditor / Debtor">Sundry Creditor / Debtor</option>
-                        <option value="Counter">Counter</option>
-                      </Input>
-                    </FormGroup>
+                  <FormGroup>
+                    <Label>{arb === true ? 'يرجى اختيار' : 'Please Select'}</Label>
+                    <Input type="select" name={arb ? 'category_type_arb' : 'category_type'}
+                        onChange={handleInputs} >
+                        <option>{arb === true ? 'حدد العميل' : 'Select Customer'}</option>
+                        <option value={arb === true ? 'حساب بنكي' : "Bank Account"}>{arb === true ? 'حساب بنكي' : 'Bank Account'}</option>
+                        <option value={arb === true ? 'حساب نقدي' : 'Cash Account'}>{arb === true ? 'حساب نقدي' : 'Cash Account'}</option>
+                        <option value={arb === true ? 'دائن / مدين متنوع' : 'Sundry Creditor / Debtor'}>{arb === true ? 'دائن / مدين متنوع' : 'Sundry Creditor / Debtor'}</option>
+                        <option value={arb === true ? 'عداد' : 'Counter'}>{arb === true ? 'عداد' : 'Counter'}</option>
+                    </Input>
+                </FormGroup>
                   </Col>
                 </Row>
               </Form>

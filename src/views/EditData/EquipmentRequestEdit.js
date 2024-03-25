@@ -16,6 +16,7 @@ import TradingQuoteButton from '../../components/EquipmentRequest/TradingQuoteBu
 import TradingQuoteMoreDetails from '../../components/EquipmentRequest/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/EquipmentRequest/QuotationAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/EquipmentRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/EquipmentRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
@@ -37,6 +38,37 @@ const EquipmentRequestEdit = () => {
 
   const { loggedInuser } = useContext(AppContext);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/equipmentrequest/getTranslationForEquipmentRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -57,6 +89,10 @@ const EquipmentRequestEdit = () => {
   const tabs = [
     { id: '1', name: 'Equipment Request' },
     { id: '2', name: 'Attachment' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'طلب المعدات' },
+    { id: '2', name: 'مرفق' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -185,7 +221,7 @@ const EquipmentRequestEdit = () => {
     editTenderById();
     getLineItem();
     getCompany();
-   
+    getArabicCompanyName();
     // getAllCountries();
   }, [id]);
 
@@ -195,29 +231,29 @@ const EquipmentRequestEdit = () => {
     },
    
     {
-      name: 'Description',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Description')?.[genLabel],
     },
     {
-      name: 'Brand',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Brand')?.[genLabel],
     },
     {
-      name: 'Supplier',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Supplier')?.[genLabel],
     },
     {
-      name: 'Qty',
+      
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Qty')?.[genLabel],
     },
     {
-      name: 'Unit Price',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Unit Price')?.[genLabel],
     },
     {
-      name: 'Amount',
-    },
- 
-    {
-      name: 'Updated By ',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Amount')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Updated By')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Action')?.[genLabel],
     },
   ];
   const deleteRecord = (deleteID) => {
@@ -248,6 +284,7 @@ const EquipmentRequestEdit = () => {
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
       ></TradingQuoteButton>
      <ComponentCardV2> <PdfEquipmentRequest ProjectID={id}></PdfEquipmentRequest></ComponentCardV2>
       <TradingQuoteMoreDetails
@@ -264,12 +301,23 @@ const EquipmentRequestEdit = () => {
         getContact={getContact}
         handleStatusChange={handleStatusChange}
         status={status}
+        arb={arb}
+        eng={eng}
+        arabic={arabic}
+        genLabel={genLabel}
       ></TradingQuoteMoreDetails>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
+          
 
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
@@ -280,7 +328,7 @@ const EquipmentRequestEdit = () => {
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Equipment Items
+                  {arb?'إضافة عناصر المعدات':'Add Equipment Items'}
                 </Button>
               </Col>
             </Row>
@@ -346,6 +394,9 @@ const EquipmentRequestEdit = () => {
               FetchLineItemData={editLineModelItem}
               getLineItem={getLineItem}
               setViewLineModal={setViewLineModal}
+              genLabel={genLabel}
+              arabic={arabic}
+              arb={arb}
             ></EditLineItemModal>
             {addLineItemModal && (
               <QuoteLineItem
@@ -355,6 +406,9 @@ const EquipmentRequestEdit = () => {
                 setAddLineItemModal={setAddLineItemModal}
                 handleInputs={handleInputs}
                 quoteLine={id}
+                arabic={arabic}
+                arb={arb}
+                genLabel={genLabel}
               ></QuoteLineItem>
             )}
           </TabPane>

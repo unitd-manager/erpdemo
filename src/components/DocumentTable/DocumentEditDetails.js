@@ -5,11 +5,14 @@ import { ToastContainer } from 'react-toastify';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
+function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, genLabel }) {
     DocumentEditDetails.propTypes = {
         documenteditdetails: PropTypes.bool,
         handleInputs: PropTypes.func,
-  };
+        arabic:PropTypes.any,
+        arb:PropTypes.any,
+        genLabel:PropTypes.any,
+    };
   return (
     <div>
         
@@ -21,7 +24,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>DOC Code</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.DOC Code')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -33,18 +38,29 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>DOC Title<span className='required'>*</span></Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.DOC Title')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={documenteditdetails && documenteditdetails.document_title}
-                    name="document_title"
+                    value={
+                      arb
+                        ? (
+                            documenteditdetails && documenteditdetails.document_title_arb ? documenteditdetails.document_title_arb :
+                            (documenteditdetails && documenteditdetails.document_title_arb !== null ? '' : documenteditdetails && documenteditdetails.document_title)
+                          )
+                        : (documenteditdetails && documenteditdetails.document_title)
+                    }
+                    name={arb ? 'document_title_arb': 'document_title'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Project Name </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Project Title')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -56,7 +72,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Project Start Date </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Project Start Date')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -70,7 +88,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Budget </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Budget')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -82,7 +102,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Company Name</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Company Name')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -94,7 +116,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Contact Name</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Contact Name')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -106,7 +130,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Quote Status </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Quote Status')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -120,7 +146,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Project End Date </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Project End Date')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -140,7 +168,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Company Name</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Company Name')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -152,7 +182,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Website</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Website')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -164,7 +196,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Email</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Email')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -176,7 +210,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Address</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Address')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -190,7 +226,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Phone Number</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Phone Number')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -202,7 +240,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>PO Code</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.PO Code')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -214,7 +254,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> State </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.State')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -226,7 +268,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Country</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Country')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -245,7 +289,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Contact Name</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Contact Name')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -257,7 +303,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Position</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Position')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -269,7 +317,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Email</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Email')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -281,7 +331,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Address</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Address')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -295,7 +347,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Phone Number</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Phone Number')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -307,7 +361,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>PO Code</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.PO Code')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -319,7 +375,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> State </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.State')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}
@@ -331,7 +389,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Country</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdDocument.Country')?.[genLabel]}
+                  </Label>
                     <Input
                           type="text"
                           onChange={handleInputs}

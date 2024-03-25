@@ -17,13 +17,13 @@ import moment from 'moment';
 import message from '../Message';
 import api from '../../constants/api';
 
-const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, clickedMenuItem, menuItems,arb }) => {
+const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, clickedMenuItem, menuItems, arb }) => {
     AccMapSIngleDataEditModal.propTypes = {
         editMenuItemModal: PropTypes.bool,
         setEditMenuItemModal: PropTypes.func,
         clickedMenuItem: PropTypes.object,
         menuItems: PropTypes.any,
-        arb: PropTypes.string,
+        arb: PropTypes.string, // Pass arb as a prop
     };
 
     const [formData, setFormData] = useState({
@@ -36,7 +36,6 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
         category_type_arb: '',
         acc_category_id: ''
     });
-
 
     useEffect(() => {
         if (editMenuItemModal && clickedMenuItem) {
@@ -62,7 +61,6 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
         }
     };
 
-
     const UpdateData = () => {
         api
             .post('/accountsMap/editMenuItems', formData)
@@ -81,7 +79,7 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
         <>
             <Modal size="1" isOpen={editMenuItemModal}>
                 <ModalHeader>
-                    New Menu Item
+                    {arb === true ? 'عنصر قائمة جديد' : 'New Menu Item'}
                     <Button
                         color="secondary"
                         onClick={() => {
@@ -100,16 +98,16 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
                                     <Col md="12">
 
                                         <FormGroup>
-                                        <Label>{arb === true ? 'الأصل' : 'Parent'}</Label>
+                                            <Label>{arb === true ? 'الأصل' : 'Parent'}</Label>
                                             <Input type="select" name="acc_category_id" defaultValue={clickedMenuItem ? clickedMenuItem?.parent_id : ''} onChange={handleInputs} >
-                                                <option value="">Please Select</option>
-                                                {menuItems?.map((item) => (
+                                                <option value="">{arb === true ? 'يرجى الاختيار' : 'Please Select'}</option>
+                                                {menuItems?.filter(option => arb ? option.title_arb : option.title).map((item) => (
                                                     <option
                                                         key={item.acc_category_id}
                                                         value={item.acc_category_id}
                                                         selected={item?.acc_category_id === clickedMenuItem?.parent_id}
                                                     >
-                                                       {arb === true ? item?.title_arb : item?.title}
+                                                        {arb === true ? item?.title_arb : item?.title}
                                                     </option>
                                                 ))}
                                             </Input>
@@ -120,11 +118,11 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
                                 <Row>
                                     <Col md="12">
                                         <FormGroup>
-                                           <Label>{arb === true ? 'العنوان' : 'Title'}</Label>
+                                            <Label>{arb === true ? 'العنوان' : 'Title'}</Label>
                                             <Input
                                                 type="text"
-                                                name="title"
-                                                defaultValue={clickedMenuItem ? clickedMenuItem.title : ''}
+                                                name={arb ? 'title_arb' : 'title'}
+                                                defaultValue={clickedMenuItem ? (arb === true ? clickedMenuItem.title_arb : clickedMenuItem.title) : ''}
                                                 onChange={handleInputs}
                                             />
                                         </FormGroup>
@@ -133,20 +131,7 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
                                 <Row>
                                     <Col md="12">
                                         <FormGroup>
-                                        <Label>{arb === true ? 'العان' : 'TitleArb'}</Label>
-                                            <Input
-                                                type="text"
-                                                name="title_arb"
-                                                defaultValue={clickedMenuItem ? clickedMenuItem.title_arb : ''}
-                                                onChange={handleInputs}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md="12">
-                                        <FormGroup>
-                                            <Label>Code</Label>
+                                            <Label>{arb === true ? 'الرمز' : 'Code'}</Label>
                                             <Input
                                                 type="text"
                                                 name="code"

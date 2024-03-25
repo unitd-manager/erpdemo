@@ -20,6 +20,35 @@ const EquipmentRequest = () => {
   const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+  const arb =selectedLanguage === 'Arabic'
+  
+  const getArabicCompanyName = () => {
+      api
+      .get('/equipmentrequest/getTranslationForEquipmentRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
   // get Leave
   const getPlanning = () => {
     api
@@ -48,6 +77,7 @@ const EquipmentRequest = () => {
 
   useEffect(() => {
     getPlanning();
+    getArabicCompanyName();
   }, []);
   //  stucture of leave list view
   const columns = [
@@ -69,21 +99,23 @@ const EquipmentRequest = () => {
     },
 
     {
-      name: 'Project Name',
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Project Name')?.[genLabel],
       selector: 'project_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Equipment Code',
+      
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Request Code')?.[genLabel],
       selector: 'equipment_request_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Requested Date',
+     
+      name: arabic.find(item => item.key_text === 'mdEquipmentRequest.Equipment Request Date')?.[genLabel],
       selector: 'equipment_request_date',
       sortable: true,
       grow: 2,

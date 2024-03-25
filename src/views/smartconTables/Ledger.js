@@ -9,6 +9,44 @@ import ExportReport from '../../components/Report/ExportReport';
 
 function Ledger() {
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+//const eng =selectedLanguage === 'English'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyAcc')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+const arabicCompanyName = arabic.find((item) => item.key_text === 'mdChartAcc.Title')?.[genLabel];
   const columns = [
     {
       name: 'S.No',
@@ -20,12 +58,12 @@ function Ledger() {
       cell: () => <Icon.Edit2 />,
     },
     {
-      name: 'Date',
+      name: arabicCompanyName,
       selector: 'entry_date',
     },
     {
       name: 'Narration',
-      selector: 'narration_main',
+      selector:arb ? 'narrationarb_main' : 'narration_main',
     },
     {
       name: 'Debit',
@@ -35,14 +73,11 @@ function Ledger() {
       name: 'Credit',
       selector: 'credit',
     },
-    {
-      name: 'Balance',
-      selector: 'total_cpf',
-    },
-    {
-      name: 'Id',
-      selector: 'total_cpf',
-    },
+    // {
+    //   name: 'Balance',
+    //   selector: 'total_cpf',
+    // },
+  
   ];
 
   // New 
@@ -58,8 +93,8 @@ function Ledger() {
       .get('/journal/getAccHeadTitle')
       .then((res) => {
         const options = res.data.data.map(item => ({
-          value: item.title,
-          label: item.title,
+          value: arb ? item.title_arb : item.title,
+          label: arb ? item.title_arb : item.title,
           id: item.acc_head_id,
         }));
         setJournalEntry(options);
@@ -195,11 +230,17 @@ function Ledger() {
                         </Link>
                       </td>
                       <td>{element.entry_date}</td>
-                      <td>{element.narration_main}<br />{element.narration}</td>
+                      <td>
+                        {arb ? (
+                          <span>{element.narrationarb_main}<br />{element.narration_arb}</span>
+                        ) : (
+                          <span>{element.narration_main}<br />{element.narration}</span>
+                        )}
+                    </td>
                       <td>{element.debit}</td>
                       <td>{element.credit}</td>
-                      <td></td>
-                      <td></td>
+                      {/* <td></td> */}
+                 
                     </tr>
                   );
                 })}

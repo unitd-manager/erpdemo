@@ -11,8 +11,59 @@ import api from '../../constants/api';
 export default function PurchaseInvoiceGetFunction({PurchaseOrderId}) {
   PurchaseInvoiceGetFunction.propTypes =   {  
     PurchaseOrderId: PropTypes.object,
+
   };
-  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+  const arb =selectedLanguage === 'Arabic'
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseinvoice/getTranslationForPurchaseInvoiceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+  //structure of Training list view
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  const columns1 = [
+    {
+      name: '#',
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Title')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Unit')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Ordered Quantity')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Unit Price')?.[genLabel],
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseInvoice.Total Cost')?.[genLabel],
+    },
+   
+  ];
   const [orderdetails, setOrderDetails] = useState();
   
   //Api call for getting Goods Receipt Items 
@@ -36,14 +87,11 @@ export default function PurchaseInvoiceGetFunction({PurchaseOrderId}) {
   <FormGroup>
     <Table bordered className="lineitem">
       <thead>
-        <tr>
-        <th scope="col"> S.No </th>
-        <th scope="col">Title </th>
-        <th scope="col">Unit </th>
-        <th scope="col">Ordered Quantity </th>
-        <th scope="col"> Unit Price</th>
-        <th scope="col"> Total Cost </th>
-        </tr>
+      <tr>
+                      {columns1.map((cell) => {
+                        return <td key={cell.name}>{cell.name}</td>;
+                      })}
+                    </tr>
         </thead>
         <tbody>
         {orderdetails &&

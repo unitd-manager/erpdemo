@@ -24,9 +24,49 @@ const ChartOfAccountDetails = () => {
     getGroup();
   }, []);
 
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+//const eng =selectedLanguage === 'English'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyAcc')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+
   //Logic for adding Planning in db
   const [chartOfAccountForms, setChartOfAccountForms] = useState({
     title: '',
+    title_arb: '',
     acc_category_id: '',
     opening_balance_credit: '0.0000',
     opening_balance_debit:'0.0000',
@@ -42,8 +82,7 @@ const ChartOfAccountDetails = () => {
   //Api for insertPlanning
   const insertChartOfAccount = () => {
 
-    if (chartOfAccountForms.title !== '' && chartOfAccountForms.acc_category_id !== '') {
-      chartOfAccountForms.creation_date = creationdatetime;
+    if ((chartOfAccountForms.title !== '' || chartOfAccountForms.title_arb !== '') && chartOfAccountForms.acc_category_id !== '') {      chartOfAccountForms.creation_date = creationdatetime;
       api
         .post('/chartOfAccounts/insertChartAc', chartOfAccountForms)
         .then((res) => {
@@ -72,12 +111,13 @@ const ChartOfAccountDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
-                      Title<span className="required"> *</span>
-                    </Label>
+                
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdChartAcc.Title')?.[genLabel]}<span className="required"> *</span>
+                      </Label>
                     <Input
                       type="text"
-                      name="title"
+                      name=  {arb ? 'title_arb' : 'title'}
                       onChange={handleChartOfAccountForms} 
                     />
                   </Col>
@@ -86,18 +126,20 @@ const ChartOfAccountDetails = () => {
                 <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
-                      Category
-                    </Label>
-                    <Input type="select" name="acc_category_id" onChange={handleChartOfAccountForms} >
-                        <option value="">Please Select</option>
+                  
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdChartAcc.Category')?.[genLabel]}
+                      </Label>
+                 
+                      <Input type="select" name={arb ? 'acc_category_id' : 'acc_category_id'} onChange={handleChartOfAccountForms}>
+                          <option value="">{arb ? 'الرجاء التحديد' : 'Please Select'}</option>
+                          {category?.map(option => (
+                              <option key={option.acc_category_id} value={`${option.acc_category_id}`}>
+                                {arb ? option.title_arb : option.title}
+                              </option>
+                            ))}
+                        </Input>
 
-                        {category?.map((option) => (
-                          <option key={option.acc_category_id} value={`${option.acc_category_id}`}>
-                            {option.title}
-                          </option>
-                        ))}
-                      </Input>
                   </Col>
                 </Row>
               </FormGroup>

@@ -18,6 +18,13 @@ const Document = () => {
   //All state variable
   const [documentdata, setDocumentData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+  const arb =selectedLanguage === 'Arabic'
 
   //Get data from Training table
   const getDocument= () => {
@@ -45,8 +52,28 @@ const Document = () => {
       });
   };
 
+  const getArabicLabels = () => {
+    api
+    .get('/document/getTranslationForDocument')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     getDocument();
+    getArabicLabels();
   }, []);
   //structure of Training list view
   const columns = [
@@ -70,35 +97,35 @@ const Document = () => {
       sortable: false,
     },
     {
-      name: 'DOC Code',
+      name: arabic.find(item => item.key_text === 'mdDocument.DOC Code')?.[genLabel],
       selector: 'document_code',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-      name: 'DOC Title',
+      name: arabic.find(item => item.key_text === 'mdDocument.DOC Title')?.[genLabel],
       selector: 'document_title',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-        name: 'Project Title',
+        name: arabic.find(item => item.key_text === 'mdDocument.Project Title')?.[genLabel],
         selector: 'title',
         grow: 0,
         wrap: true,
         width: '4%',
       },
       {
-        name: 'Project Start Date',
+        name: arabic.find(item => item.key_text === 'mdDocument.Project Start Date')?.[genLabel],
         selector: 'start_date',
         sortable: true,
         grow: 0,
         wrap: true,
       },
     {
-      name: 'Quote Status',
+      name: arabic.find(item => item.key_text === 'mdDocument.Quote Status')?.[genLabel],
       selector: 'quote_status',
       grow: 0,
       wrap: true,
@@ -106,14 +133,14 @@ const Document = () => {
     },
 
     {
-      name: 'Budget',
+      name: arabic.find(item => item.key_text === 'mdDocument.Budget')?.[genLabel],
       selector: 'budget_inhouse 	',
       sortable: true,
       grow: 0,
       wrap: true,
     },
       {
-        name: 'Project End Date',
+        name: arabic.find(item => item.key_text === 'mdDocument.Project End Date')?.[genLabel],
         selector: 'estimated_finish_date',
         sortable: true,
         grow: 0,

@@ -33,12 +33,16 @@ import api from '../../constants/api';
 export default function PurchaseRequestItemModal({
   PurchaseRequestId,
   addPurchaseOrderModal,
-  setAddPurchaseOrderModal
+  setAddPurchaseOrderModal,
+  arabic,
+  arb
 }) {
   PurchaseRequestItemModal.propTypes = {
     PurchaseRequestId: PropTypes.any,
     addPurchaseOrderModal: PropTypes.bool,
-    setAddPurchaseOrderModal: PropTypes.func
+    setAddPurchaseOrderModal: PropTypes.func,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
   };
   // const [setPlanData] = useState();
   // const [ setPlanEditModal] = useState(false);
@@ -96,7 +100,13 @@ const getUnit = () => {
   });
 };
 
+let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
  
 
 // const deleteRecord = (deleteID) => {
@@ -358,10 +368,10 @@ const insertProduct = (ProductCode, ItemCode) => {
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
-              Add New Product{' '}
+            {arb ?'إضافة منتج جديد':'Add New Product'}{' '}
             </Button>
             <Modal size="lg" isOpen={addPurchaseOrderModal} toggle={addContactToggle.bind(null)}>
-              <ModalHeader toggle={addContactToggle.bind(null)}>Purchase request Items </ModalHeader>
+              <ModalHeader toggle={addContactToggle.bind(null)}>{arb ?'عناصر طلب الشراء':'Purchase request Items'} </ModalHeader>
               <ModalBody>
               <FormGroup>
                 <Row>
@@ -375,7 +385,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                         setAddNewProductModal(true);
                       }}
                     >
-                      Add New Product
+                      {arb ?'إضافة منتج جديد':'Add New Product'}
                     </Button>
                   </Col>
                     <Col md="3">
@@ -387,7 +397,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                           AddNewLineItem();
                         }}
                       >
-                        Add Line Item
+                        {arb ?'إضافة عنصر السطر':'Add Line Item'}
                       </Button>
                     </Col>
                     </Row>
@@ -401,9 +411,9 @@ const insertProduct = (ProductCode, ItemCode) => {
             <Table bordered className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Unit </th>
-                          <th scope="col">Quantity</th>
+                          <th scope="col">{arb ?'عنوان':'Title'} </th>
+                          <th scope="col">{arb ?'وحدة':'Unit'} </th>
+                          <th scope="col">{arb ?'كمية':'Quantity'}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -511,14 +521,14 @@ const insertProduct = (ProductCode, ItemCode) => {
                     //addPurchaseOrderModal(false);
                   }}
                 >
-                  Submit
+                 {arb ?'يُقدِّم':'Submit'} 
                 </Button>
                 <Button
                   color="secondary"
                   className="shadow-none"
                   onClick={addContactToggle.bind(null)}
                 >
-                  Cancel
+                  {arb ?'يلغي':'Cancel'}
                 </Button>
               </ModalFooter>
             </Modal>
@@ -527,7 +537,7 @@ const insertProduct = (ProductCode, ItemCode) => {
       </Row>
       {/* Add New Product Modal */}
       <Modal isOpen={addNewProductModal}>
-        <ModalHeader > {' '} Add New Products {' '} </ModalHeader>
+        <ModalHeader > {' '} {arb ?'إضافة منتجات جديدة':'Add New Products'} {' '} </ModalHeader>
 
         <ModalBody>
           <FormGroup>
@@ -536,8 +546,9 @@ const insertProduct = (ProductCode, ItemCode) => {
                 <Row>
                   <FormGroup>
                     <Row>
-                      <Label sm="3">
-                        Product Name <span className="required"> *</span>{' '}
+                      <Label sm="3" dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Product Name')?.[genLabel]}
+                        <span className="required"> *</span>{' '}
                       </Label>
                       <Col sm="8">
                         <Input
@@ -567,7 +578,7 @@ const insertProduct = (ProductCode, ItemCode) => {
               // }, 300);
             }}
           >
-            Submit
+            {arb ?'يُقدِّم':'Submit'}
           </Button>
           <Button
             color="secondary"
@@ -576,7 +587,7 @@ const insertProduct = (ProductCode, ItemCode) => {
               setAddNewProductModal(false);
             }}
           >
-            Cancel
+            {arb ?'يلغي':'Cancel'}
           </Button>
         </ModalFooter>
       </Modal>

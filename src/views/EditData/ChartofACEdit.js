@@ -132,14 +132,10 @@ console.log('arabic',arabic)
               <Input
                 type="text"
                 onChange={handleInputs}
-             
                 value={
                   arb
-                    ? (
-                        chartofAC && chartofAC.title_arb ? chartofAC.title_arb :
-                        (chartofAC && chartofAC.title_arb !== null ? '' : chartofAC && chartofAC.title)
-                      )
-                    : (chartofAC && chartofAC.title)
+                    ? (chartofAC && chartofAC.title_arb ? chartofAC && chartofAC.title_arb : chartofAC && chartofAC.title)
+                    : chartofAC && chartofAC.title
                 }
                 name={arb ? 'title_arb' : 'title'}
               />
@@ -166,8 +162,8 @@ console.log('arabic',arabic)
               </Label>
                   <Input 
                     type="select"
-                    name="acc_category_id"
-                    value={chartofAC?.acc_category_id}
+                    name={arb ? 'acc_category_id' : 'acc_category_id'}  
+                    value={arb ? chartofAC && chartofAC?.acc_category_id:chartofAC && chartofAC?.acc_category_id} 
                     onChange={handleInputs}
                   >
                     <option value="selected">Please Select</option>
@@ -176,7 +172,7 @@ console.log('arabic',arabic)
                         key={item.acc_category_id}
                         value={item.acc_category_id}
                       >
-                        {item.title}
+                         {arb ? item.title_arb : item.title}
                       </option>
                     ))}
                   </Input>

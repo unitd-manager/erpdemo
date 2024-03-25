@@ -20,6 +20,11 @@ const PurchaseOrder = () => {
   //All state variable
   const [purchaseOrder, setPurchaseOrder] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //Getting data from purchaseorder
   const getpurchaseorder = () => {
     setLoading(true);
@@ -34,6 +39,21 @@ const PurchaseOrder = () => {
         message('Unable to get Purchase Data');
       });
   };
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseorder/getTranslationForPurchaseOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
   useEffect(() => {
     setTimeout(() => {
       $('#example').DataTable({
@@ -51,7 +71,15 @@ const PurchaseOrder = () => {
       });
     }, 1000);
     getpurchaseorder();
+    getArabicCompanyName();
   }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //Structure of purchaseorder list view
   const columns = [
     {
@@ -70,48 +98,48 @@ const PurchaseOrder = () => {
       sortable: false,
     },
     {
-      name: 'PO Code',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.PO Code')?.[genLabel],
       selector: 'po_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Title')?.[genLabel],
       selector: 'title',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Po Value',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Po Value')?.[genLabel],
       selector: 'po_value',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'PO Date',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.PO Date')?.[genLabel],
       selector: 'purchase_order_date',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Supplier Invoice Code',
-      selector: 'supplier_inv_code',
+       name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Supplier Invoice Code')?.[genLabel],
+       selector: 'supplier_inv_code',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Creation Date',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Creation Date')?.[genLabel],
       selector: 'creation_date',
       sortable: true,
       width: 'auto',

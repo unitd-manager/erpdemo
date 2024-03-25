@@ -3,11 +3,13 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function PlanningMainDetails({ handleInputs, plannings }) {
+export default function PlanningMainDetails({ handleInputs, plannings, arabic, arb, genLabel }) {
   PlanningMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     plannings: PropTypes.object,
-    
+    arabic:PropTypes.any,
+    arb:PropTypes.any,
+    genLabel:PropTypes.any,
   };
   return (
     <>
@@ -17,18 +19,23 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Project Name</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.ProjectName')?.[genLabel]}
+                  </Label>
                   <br />
                   <Input
                   type="text"
                   onChange={handleInputs}
                   value={plannings && plannings.proj_title}
-                  name="proj_title" disabled
+                  name="proj_title" 
+                  disabled
                 />                </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Code</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.EquipmentCode')?.[genLabel]}
+                  </Label>
                   <br />
                   <Input
                   type="text"
@@ -41,7 +48,9 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Issue Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.IssueDate')?.[genLabel]}
+                  </Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -52,13 +61,22 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Reason For Issue</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.ReasonForIssue')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={plannings && plannings.reason_for_issue}
-                    name="reason_for_issue"
-                  />
+                    value={
+                      arb
+                        ? (
+                            plannings && plannings.reason_for_issue_arb ? plannings.reason_for_issue_arb :
+                            (plannings && plannings.reason_for_issue_arb !== null ? '' : plannings && plannings.reason_for_issue)
+                          )
+                        : (plannings && plannings.reason_for_issue)
+                    }
+                    name={arb ? 'reason_for_issue_arb': 'reason_for_issue'}
+                                />
                 </FormGroup>
               </Col>
             </Row>
@@ -66,23 +84,41 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
          
               <Col md="3">
                 <FormGroup>
-                  <Label>Authorized By</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.AuthorizedBy')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={plannings && plannings.authorized_by}
-                    name="authorized_by"
+                    value={
+                      arb
+                        ? (
+                            plannings && plannings.authorized_by_arb ? plannings.authorized_by_arb :
+                            (plannings && plannings.authorized_by_arb !== null ? '' : plannings && plannings.authorized_by)
+                          )
+                        : (plannings && plannings.authorized_by)
+                    }
+                    name={arb ? 'authorized_by_arb': 'authorized_by'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Notes</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.Notes')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={plannings && plannings.notes}
-                    name="notes"
+                    value={
+                      arb
+                        ? (
+                            plannings && plannings.notes_arb ? plannings.notes_arb :
+                            (plannings && plannings.notes_arb !== null ? '' : plannings && plannings.notes)
+                          )
+                        : (plannings && plannings.notes)
+                    }
+                    name={arb ? 'notes_arb': 'notes'}
                   />
                 </FormGroup>
               </Col>

@@ -22,6 +22,39 @@ const PurchaseRequest = () => {
   const [purchaserequest, setPurchaseRequest] = useState(null);
   const [loading, setLoading] = useState(false)
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/purchaserequest/getTranslationForPurchaseRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //getting data from purchaserequest
   const getPurchaseRequest = () => {
     setLoading(true)
@@ -47,7 +80,7 @@ const PurchaseRequest = () => {
     };
 
   useEffect(() => {
-
+    getArabicCompanyName();
     getPurchaseRequest();
   }, []);
   //structure of purchaserequest list view
@@ -69,42 +102,42 @@ const PurchaseRequest = () => {
       sortable: false,
     },
     {
-      name: 'Purchase Request Code',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request code')?.[genLabel],
       selector: 'purchase_request_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Purchase Request Date',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel],
       selector: 'purchase_request_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Purchase Delivery Date',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel],
       selector: 'purchase_delivery_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Customer Name',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Customer Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-        name: 'Department',
+        name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel],
         selector: 'department',
         sortable: true,
         grow: 0,
         wrap: true,
       },  
     {
-      name: 'Status',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 0,

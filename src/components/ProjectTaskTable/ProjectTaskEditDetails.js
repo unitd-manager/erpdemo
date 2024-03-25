@@ -6,7 +6,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { ToastContainer } from 'react-toastify';
 import ComponentCard from '../ComponentCard';
 
-function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails, employeeProject, description, handleDataEditor, setDescription}) {
+function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails, employeeProject, description, handleDataEditor, setDescription,arb,arabic,genLabel}) {
     PurchaseRequestEditDetails.propTypes = {
         projectTask: PropTypes.bool,
         handleInputs: PropTypes.func,
@@ -15,6 +15,9 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
         description: PropTypes.bool,
         handleDataEditor: PropTypes.func,
         setDescription: PropTypes.bool,
+        arb: PropTypes.any,
+        arabic: PropTypes.any,
+        genLabel: PropTypes.any,
   };
   return (
     <div>   
@@ -26,18 +29,32 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                   <Row>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Task Title <span className="required"> *</span></Label>
+                      
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Task Title')?.[genLabel]}
+                <span className="required"> *</span>
+              </Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.task_title}
-                          name="task_title"
+                          value={
+                            arb
+                              ? (
+                                  projectTask && projectTask.task_title_arb ? projectTask.task_title_arb :
+                                  (projectTask && projectTask.task_title_arb !== null ? '' : projectTask && projectTask.task_title)
+                                )
+                              : (projectTask && projectTask.task_title)
+                          }
+                          name={arb ? 'task_title_arb': 'task_title'}
                         />
                       </FormGroup>
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Job Order Title</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Job Order Title')?.[genLabel]}
+              </Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
@@ -49,7 +66,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Job Order Code</Label>
+                       
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Job Order Code')?.[genLabel]}
+              </Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
@@ -61,7 +81,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Project Name</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Project Name')?.[genLabel]}
+              </Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
@@ -73,7 +96,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                             projectdetails.map((e) => {
                               return (
                                 <option key={e.project_id} value={e.project_id}>
-                                  {e.title}
+                                  {arb?e.title_arb:e.title}
                                 </option>
                               );
                             })}
@@ -104,7 +127,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     
                     <Col md="3">
                       <FormGroup>
-                        <Label>Staff Name</Label>
+                       
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Staff Name')?.[genLabel]}
+              </Label>
                         <Input
                           type="select"
                           name="employee_id"
@@ -116,7 +142,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                             employeeProject.map((ele) => {
                               return (
                                 <option key={ele.employee_id} value={ele.employee_id}>
-                                  {ele.first_name}
+                                  {arb?ele.first_name_arb:ele.first_name}
                                 </option>
                               );
                             })}
@@ -126,7 +152,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
 
                     <Col md="3">
                       <FormGroup>
-                        <Label>Start Date</Label>
+                      
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Start Date')?.[genLabel]}
+              </Label>
                         <Input
                           type="date"
                           onChange={handleInputs}
@@ -138,7 +167,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     
                     <Col md="3">
                       <FormGroup>
-                        <Label>End Date</Label>
+                       
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.End Date')?.[genLabel]}
+              </Label>
                         <Input
                           type="date"
                           onChange={handleInputs}
@@ -149,7 +181,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Actual Comp Date</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Actual Comp Date')?.[genLabel]}
+              </Label>
                         <Input
                           type="date"
                           onChange={handleInputs}
@@ -161,7 +196,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     
                     <Col md="3">
                       <FormGroup>
-                        <Label>Status</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Status')?.[genLabel]}
+              </Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
@@ -181,7 +219,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Task Type</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Task Type')?.[genLabel]}
+              </Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
@@ -200,7 +241,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Priority</Label>
+                       
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Priority')?.[genLabel]}
+              </Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
@@ -221,35 +265,65 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Completion</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Completion')?.[genLabel]}
+              </Label>
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.completion}
-                          name="completion"
+                          value={
+                            arb
+                              ? (
+                                  projectTask && projectTask.completion_arb ? projectTask.completion_arb :
+                                  (projectTask && projectTask.completion_arb !== null ? '' : projectTask && projectTask.completion)
+                                )
+                              : (projectTask && projectTask.completion)
+                          }
+                          name={arb ? 'completion_arb': 'completion'}
                         />
                       </FormGroup>
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Estimated Hours</Label>
+                      
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Estimated Hours')?.[genLabel]}
+              </Label>
                         <Input
                           type="number"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.estimated_hours}
-                          name="estimated_hours"
+                          value={
+                            arb
+                              ? (
+                                  projectTask && projectTask.estimated_hours_arb ? projectTask.estimated_hours_arb :
+                                  (projectTask && projectTask.estimated_hours_arb !== null ? '' : projectTask && projectTask.estimated_hours)
+                                )
+                              : (projectTask && projectTask.estimated_hours)
+                          }
+                          name={arb ? 'estimated_hours_arb': 'estimated_hours'}
                         />
                       </FormGroup>
                     </Col>
 
                     <Col md="3">
                       <FormGroup>
-                        <Label>Actual Hours</Label>
+                        
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectTask.Actual Hours')?.[genLabel]}
+              </Label>
                         <Input
                           type="number"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.actual_hours}
-                          name="actual_hours"
+                          value={
+                            arb
+                              ? (
+                                  projectTask && projectTask.actual_hours_arb ? projectTask.actual_hours_arb :
+                                  (projectTask && projectTask.actual_hours_arb !== null ? '' : projectTask && projectTask.estimated_hours)
+                                )
+                              : (projectTask && projectTask.estimated_hours)
+                          }
+                          name={arb ? 'actual_hours_arb': 'estimated_hours'}
                         />
                       </FormGroup>
                     </Col>

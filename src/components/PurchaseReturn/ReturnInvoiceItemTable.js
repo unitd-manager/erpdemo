@@ -4,23 +4,34 @@ import { Form, Table } from 'reactstrap';
 
 export default function ItemTable({
   returnInvoiceItemDetails,
+  arabic,
+  arb
   // onRemoveItem,
 }) {
   ItemTable.propTypes = {
     returnInvoiceItemDetails: PropTypes.array,
+    arabic: PropTypes.array,
+    arb: PropTypes.array,
     // onRemoveItem: PropTypes.func.isRequired,
      };
   
-     
+     let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //Structure of Invoice table
   const invoiceTableColumns = [
-    { name: 'Item' },
-    { name: 'Quantity' },
+    { name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Item')?.[genLabel]},
+    { name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Quantity')?.[genLabel]},
    
-    { name: 'Total' },
+    { name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Total')?.[genLabel]},
     // { name: 'Remove' },
   ];
 
+  
 
   return (
     // Invoice Tab
@@ -64,7 +75,7 @@ export default function ItemTable({
           })
         ) : (
           <tr>
-            <td colSpan={invoiceTableColumns.length}>No items available</td>
+            <td colSpan={invoiceTableColumns.length}>{arb ?'لا توجد عناصر متاحة':'No items available'}</td>
           </tr>
         )}
       </tbody>
