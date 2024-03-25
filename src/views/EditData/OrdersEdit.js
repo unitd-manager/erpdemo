@@ -34,6 +34,7 @@ const OpportunityEdit = () => {
   const { insertedDataId, quoteId } = useParams();
   const { loggedInuser } = useContext(AppContext);
   console.log('Quote ID:', quoteId);
+  console.log('insertedDataId:', insertedDataId);
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
   };

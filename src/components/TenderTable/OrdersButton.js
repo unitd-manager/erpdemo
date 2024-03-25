@@ -33,6 +33,8 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
             .get('/finance/checkOrderItems')
             .then((response) => {
               const ExistingOrderItemsId = response.data.data;
+              console.log('ExistingOrderItemsId',response.data.data)
+              console.log('quoteitems',quoteItems)
               const insertOrderItems = (index) => {
                 if (index < quoteItems.length) {
                   const QuoteItem = quoteItems[index];
@@ -78,7 +80,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                   }
                 } else {
                   console.log('All order items inserted successfully');
-                  window.location.reload(); // Reload the page after all order
+                 // window.location.reload(); // Reload the page after all order
                   // You might want to trigger a UI update here
                 }
               };
