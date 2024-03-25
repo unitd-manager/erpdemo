@@ -43,26 +43,33 @@ useEffect(() => {
 getArabicCompanyName();
 }, []);
 
-// let genLabel = '';
+let genLabel = '';
 
-// if (arb === true) {
-//   genLabel = 'arb_value';
-// } else {
-//   genLabel = 'value';
-// }
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
 
+const arabicCompanyName = arabic.find((item) => item.key_text === 'mdJournal.EntryDate')?.[genLabel];
+const arabicEdit = arabic.find((item) => item.key_text === 'mdJournal.Edit')?.[genLabel];
+const arabicId = arabic.find((item) => item.key_text === 'mdJournal.Id')?.[genLabel];
+const arabicAccount = arabic.find((item) => item.key_text === 'mdJournal.Account')?.[genLabel];
+const arabicNarration = arabic.find((item) => item.key_text === 'mdJournal.Narration')?.[genLabel];
+const arabicDebit = arabic.find((item) => item.key_text === 'mdJournal.Debit')?.[genLabel];
+const arabicCredit = arabic.find((item) => item.key_text === 'mdJournal.Credit')?.[genLabel];
 
 
   const columns = [
     {
-      name: 'id',
+      name: arabicId,
       selector: 'journal_id',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-      name: 'Edit',
+      name: arabicEdit,
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -71,34 +78,34 @@ getArabicCompanyName();
       sortable: false,
     },
     {
-      name: 'Date',
+      name: arabicCompanyName,
       selector: 'date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Account',
+      name: arabicAccount,
       selector: 'account',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Narration',
+      name: arabicNarration,
       selector: 'narration',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Debit',
+      name: arabicDebit,
       selector: 'debit',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Credit',
+      name: arabicCredit,
       selector: 'credit',
       sortable: true,
       grow: 2,

@@ -274,7 +274,9 @@ if (arb === true) {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Code</Label>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Code')?.[genLabel]}
+                      </Label> 
                       <Input
                         type="text"
                         name="code"
@@ -285,16 +287,17 @@ if (arb === true) {
                 <Row>
                   <Col md="12">
                     <FormGroup>
-                      <Label>Please Select</Label>
-                      <Input type="select" name="company_id" onChange={handleInputs}>
-                        <option>Select Customer</option>
-                        <option value="Bank Account">Bank Account</option>
-                        <option value="Cash Account">Cash Account</option>
-                        <option value="Sundry Creditor / Debtor">Sundry Creditor / Debtor</option>
-                        <option value="Counter">Counter</option>
-                      </Input>
+                        <Label>{arb === true ? 'يرجى اختيار' : 'Customer'}</Label>
+                        <Input type="select" name={arb ? 'category_type_arb' : 'category_type'} 
+                            onChange={handleInputs} >
+                            <option>{arb === true ? 'حدد العميل' : 'Select Customer'}</option>
+                            <option value={arb === true ? 'حساب بنكي' : "Bank Account"}>{arb === true ? 'حساب بنكي' : 'Bank Account'}</option>
+                            <option value={arb === true ? 'حساب نقدي' : 'Cash Account'}>{arb === true ? 'حساب نقدي' : 'Cash Account'}</option>
+                            <option value={arb === true ? 'دائن / متنوع متنوع' : 'Sundry Creditor / Debtor'}>{arb === true ? 'دائن / مدين متنوع' : 'Sundry Creditor / Debtor'}</option>
+                            <option value={arb === true ? 'عداد' : 'Counter'}>{arb === true ? 'عداد' : 'Counter'}</option>
+                        </Input>
                     </FormGroup>
-                  </Col>
+                </Col>
                 </Row>
               </Form>
             </Col>

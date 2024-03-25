@@ -17,14 +17,52 @@ import moment from 'moment';
 import message from '../Message';
 import api from '../../constants/api';
 
-const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, clickedMenuItem, menuItems,arb }) => {
+const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, clickedMenuItem, menuItems }) => {
     AccMapSIngleDataEditModal.propTypes = {
         editMenuItemModal: PropTypes.bool,
         setEditMenuItemModal: PropTypes.func,
         clickedMenuItem: PropTypes.object,
         menuItems: PropTypes.any,
-        arb: PropTypes.string,
+       
     };
+
+    const getSelectedLanguageFromLocalStorage = () => {
+        return localStorage.getItem('selectedLanguage') || '';
+      };
+      
+    const selectedLanguage = getSelectedLanguageFromLocalStorage();
+    
+    // Use the selected language value as needed
+    console.log('Selected language from localStorage:', selectedLanguage);
+    
+    const [arabic, setArabic] = useState([]);
+    
+    const arb =selectedLanguage === 'Arabic'
+    //const eng =selectedLanguage === 'English'
+    
+    const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationForCompanyAccMap')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+    };
+    
+    console.log('arabic',arabic)
+    useEffect(() => {
+    getArabicCompanyName();
+    }, []);
+    
+    let genLabel = '';
+    
+    if (arb === true) {
+      genLabel = 'arb_value';
+    } else {
+      genLabel = 'value';
+    }
 
     const [formData, setFormData] = useState({
         title: '',
@@ -146,7 +184,9 @@ const AccMapSIngleDataEditModal = ({ editMenuItemModal, setEditMenuItemModal, cl
                                 <Row>
                                     <Col md="12">
                                         <FormGroup>
-                                            <Label>Code</Label>
+                                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.Code')?.[genLabel]}
+                      </Label> 
                                             <Input
                                                 type="text"
                                                 name="code"

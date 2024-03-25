@@ -37,7 +37,7 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
     
     const getArabicCompanyName = () => {
       api
-      .get('/translation/getTranslationForCompanyAcc')
+      .get('/translation/getTranslationForCompanyJournal')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -77,6 +77,7 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
     useEffect(() => {
         getJournalEntry();
     }, []);
+    const arabicNarration = arabic.find((item) => item.key_text === 'mdJournal.Narration')?.[genLabel];
 
     return (
         <>
@@ -93,9 +94,10 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
                                 <Row>
                                     <Col md="4">
                                         <FormGroup>
-                                            <Label>
-                                                Entry Date <span className="required"> *</span>
-                                            </Label>
+                                          
+                                         <Label >
+                                            {arabic.find((item) => item.key_text === 'mdJournal.EntryDate')?.[genLabel]}<span className="required"> *</span>
+                                        </Label>
                                             <Input type="date" name="entry_date" onChange={handleInputsMaster}
                                                 value={moment(journalMasterData?.entry_date, 'YYYY-MM-DD').format('YYYY-MM-DD')}
                                             />
@@ -104,7 +106,7 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
                                     <Col md="8">
                                         <FormGroup>
                                         <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdChartAcc.Code')?.[genLabel]}
+                {arabic.find((item) => item.key_text === 'mdJournal.Narration')?.[genLabel]}
               </Label>
                                             <Input type="text" name={arb ? 'narration_arb' : 'narration'}  onChange={handleInputsMaster} defaultValue={arb ?journalMasterData.narration_arb:journalMasterData.narration} />
                                         </FormGroup>
@@ -120,13 +122,18 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
                                             <th>
                                                 <Row>
                                                     <Col md="8">
-                                                        Account
+                                                        
+                                        
+                                            {arabic.find((item) => item.key_text === 'mdJournal.Account')?.[genLabel]}<span className="required"> *</span>
+                                        
                                                     </Col>
                                                     <Col md="2">
-                                                        Debit
+                                                    {arabic.find((item) => item.key_text === 'mdJournal.Debit')?.[genLabel]}<span className="required"> *</span>
+
                                                     </Col>
                                                     <Col md="2">
-                                                        Credit
+                                                    {arabic.find((item) => item.key_text === 'mdJournal.Credit')?.[genLabel]}<span className="required"> *</span>
+
                                                     </Col>
                                                 </Row>
                                             </th>
@@ -156,7 +163,7 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
                                                                     ))}
                                                             </Input>
                                                             <Label></Label>
-                                                            <Input type="text" name={arb ? 'narration_arb' : 'narration'}  placeholder="Narration"
+                                                            <Input type="text" name={arb ? 'narration_arb' : 'narration'}  placeholder={arabicNarration}
                                                                 onChange={(e) => handleInputs(e, journalData[0]?.journal_master_id, journalData[0]?.journal_id)} defaultValue={arb?journalData[0]?.narration_arb:journalData[0]?.narration}
                                                             />
                                                         </FormGroup>
@@ -198,7 +205,7 @@ const JournalEditDetails = ({ journalData, handleInputs, journalMasterData, hand
                                                             </Input>
 
                                                             <Label></Label>
-                                                            <Input type="text" name={arb ? 'narration_arb' : 'narration'}  placeholder="Narration" onChange={(e) => handleInputs(e, journalData[1]?.journal_master_id, journalData[1]?.journal_id)} defaultValue={arb?journalData[1]?.narration_arb:journalData[1]?.narration} />
+                                                            <Input type="text" name={arb ? 'narration_arb' : 'narration'}  placeholder={arabicNarration} onChange={(e) => handleInputs(e, journalData[1]?.journal_master_id, journalData[1]?.journal_id)} defaultValue={arb?journalData[1]?.narration_arb:journalData[1]?.narration} />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="2">
