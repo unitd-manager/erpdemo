@@ -41,8 +41,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                     onChange={handleInputs}
                     value={
                       arb
-                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code_arb
-                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code
+                        ? (
+                            purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code_arb ? purchaserequesteditdetails.purchase_request_code_arb :
+                            (purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code)
+                          )
+                        : (purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_code)
                     }
                     name={arb ? 'purchase_request_code_arb' : 'purchase_request_code'}
                     disabled
@@ -59,8 +62,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                     onChange={handleInputs}
                     value={
                       arb
-                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date_arb
-                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date
+                        ? (
+                            purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date_arb ? purchaserequesteditdetails.purchase_request_date_arb :
+                            (purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date)
+                          )
+                        : (purchaserequesteditdetails && purchaserequesteditdetails.purchase_request_date)
                     }
                     name={arb ? 'purchase_request_date_arb' : 'purchase_request_date'}
                   />
@@ -77,8 +83,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                     min={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_request_date).format('YYYY-MM-DD')}
                     value={
                       arb
-                        ? purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date_arb
-                        : purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date
+                        ? (
+                            purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date_arb ? purchaserequesteditdetails.purchase_delivery_date_arb :
+                            (purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date)
+                          )
+                        : (purchaserequesteditdetails && purchaserequesteditdetails.purchase_delivery_date)
                     }
                     //value={purchaserequesteditdetails && moment(purchaserequesteditdetails.purchase_delivery_date).format('YYYY-MM-DD')}
                     name="purchase_delivery_date"
@@ -95,8 +104,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                     onChange={handleInputs}
                     value={
                       arb
-                        ? purchaserequesteditdetails && purchaserequesteditdetails.department_arb
-                        : purchaserequesteditdetails && purchaserequesteditdetails.department
+                        ? (
+                            purchaserequesteditdetails && purchaserequesteditdetails.department_arb ? purchaserequesteditdetails.department_arb :
+                            (purchaserequesteditdetails && purchaserequesteditdetails.department_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.department)
+                          )
+                        : (purchaserequesteditdetails && purchaserequesteditdetails.department)
                     }
                     name={arb ? 'department_arb' : 'department'}
                   />
@@ -133,8 +145,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                   <Input
                     value={
                       arb
-                        ? purchaserequesteditdetails && purchaserequesteditdetails.status_arb
-                        : purchaserequesteditdetails && purchaserequesteditdetails.status
+                        ? (
+                            purchaserequesteditdetails && purchaserequesteditdetails.status_arb ? purchaserequesteditdetails.status_arb :
+                            (purchaserequesteditdetails && purchaserequesteditdetails.status_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.status)
+                          )
+                        : (purchaserequesteditdetails && purchaserequesteditdetails.status)
                     }
                     //value={purchaserequesteditdetails && purchaserequesteditdetails.status}
                     type="select"
@@ -156,8 +171,11 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
                   <Input
                   value={
                     arb
-                      ? purchaserequesteditdetails && purchaserequesteditdetails.priority_arb
-                      : purchaserequesteditdetails && purchaserequesteditdetails.priority
+                      ? (
+                          purchaserequesteditdetails && purchaserequesteditdetails.priority_arb ? purchaserequesteditdetails.priority_arb :
+                          (purchaserequesteditdetails && purchaserequesteditdetails.priority_arb !== null ? '' : purchaserequesteditdetails && purchaserequesteditdetails.priority)
+                        )
+                      : (purchaserequesteditdetails && purchaserequesteditdetails.priority)
                   }
                     type="select"
                     onChange={handleInputs}

@@ -43,8 +43,11 @@ export default function ProjectQuoteMoreDetails({
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.purchase_invoice_code_arb
-                        : tenderDetails && tenderDetails.purchase_invoice_code
+                        ? (
+                            tenderDetails && tenderDetails.purchase_invoice_code_arb ? tenderDetails.purchase_invoice_code_arb :
+                            (tenderDetails && tenderDetails.purchase_invoice_code_arb !== null ? '' : tenderDetails && tenderDetails.purchase_invoice_code)
+                          )
+                        : (tenderDetails && tenderDetails.purchase_invoice_code)
                     }
                     name={arb ? 'purchase_invoice_code_arb' : 'purchase_invoice_code'}
                     disabled
@@ -72,14 +75,17 @@ export default function ProjectQuoteMoreDetails({
                     type="select"
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.status_arb
-                        : tenderDetails && tenderDetails.status
+                        ? (
+                            tenderDetails && tenderDetails.status_arb ? tenderDetails.status_arb :
+                            (tenderDetails && tenderDetails.status_arb !== null ? '' : tenderDetails && tenderDetails.status)
+                          )
+                        : (tenderDetails && tenderDetails.status)
                     }
                     onChange={handleInputs}
                     name={arb ? 'status_arb' : 'status'}
                   >
                     <option selected="selected" value="New">
-                      New
+                    {arb ?'جديد':'New'} 
                     </option>
                     <option value="Returned">{arb ?'عاد':'Returned'}</option>
                     <option value="Not Returned">{arb ?'لا يسترجع':'Not Returned'}</option>
