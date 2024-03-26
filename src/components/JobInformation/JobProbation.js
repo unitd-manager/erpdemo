@@ -8,12 +8,21 @@ import moment from 'moment';
 //import api from '../../constants/api';
 
 
-export default function JobProbation({ handleInputsJobInformation, job }) {
+export default function JobProbation({ handleInputsJobInformation, job, arb,arabic }) {
   JobProbation.propTypes = {
     handleInputsJobInformation: PropTypes.any,
     job: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
 
   };
+  let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //const {id}=useParams();
 
 //   const[position,setPosition]=useState();
@@ -52,7 +61,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
         <Row>
           <Col md="4">
             <FormGroup>
-              <Label> Under Probation</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Under Probation')?.[genLabel]}
+              </Label>
+              
               <br></br>
               <Label> Yes </Label>
               <Input
@@ -77,7 +89,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
           {job && job.probationary === '1' && (
             <Col md="4">
               <FormGroup>
-                <Label>Length of Probation</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Length of Probation')?.[genLabel]}
+              </Label>
+               
                 <Input
                   type="text"
                   onChange={handleInputsJobInformation}
@@ -89,7 +104,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
           )}
           {job && job.probationary === '1' && (
             <Col md="4">
-              <Label>Probation Start Date</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Probation Start Date')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
@@ -100,7 +118,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
           )}
           {job && job.probationary === '1' && (
             <Col md="4">
-              <Label>Probation End Date</Label>
+             
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Probation End Date')?.[genLabel]}
+              </Label>
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
@@ -112,7 +133,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
 
           <Col md="4">
             <FormGroup>
-              <Label>Employment Type</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Employment Type')?.[genLabel]}
+              </Label>
+              
               <Input
                 type="select"
                 value={job && job.emp_type}
@@ -128,7 +152,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Designation</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Designation')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="select"
                 value={job && job.position}
@@ -176,7 +203,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
               </Col> */}
           <Col md="4">
             <FormGroup>
-              <Label>Department</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Department')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="select"
                 value={job && job.department}
@@ -193,9 +223,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
 
           <Col md="4">
             <FormGroup>
-              <Label>
-                Joined/Arrival Date<span className="required"> *</span>{' '}
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Joined/Arrival Date ')?.[genLabel]} <span className="required"> *</span>{' '}
               </Label>
+            
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
@@ -206,7 +237,10 @@ export default function JobProbation({ handleInputsJobInformation, job }) {
           </Col>
           <Col md="4">
           <FormGroup>
-            <Label>Status</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Status')?.[genLabel]} <span className="required"> *</span>{' '}
+              </Label>
+          
             <Input
               type="select"
               defaultValue={job && job.status}

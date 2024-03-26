@@ -6,23 +6,37 @@ export default function JobProbation({
   handleInputsJobInformation,
   job,
   handleRadioGst,
+  arb,
+  arabic
+  
   // overTimeRate,
 }) {
   JobProbation.propTypes = {
     handleInputsJobInformation: PropTypes.any,
     job: PropTypes.any,
     handleRadioGst: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
     // overTimeRate: PropTypes.any,
   };
 
+  let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <>
       <FormGroup>
         <Row>
           <Col md="4">
             <FormGroup>
-              <Label>Salary Period</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Salary Period')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="select"
                 value={job && job.payment_type}
@@ -40,7 +54,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Date(s) of Salary Payment</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Date(s) of Salary Payment')?.[genLabel]}
+              </Label>
+              
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
@@ -51,7 +68,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Date(s) of Overtime Payment (if different)</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Date(s) of Overtime Payment (if different)')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
@@ -62,9 +82,9 @@ export default function JobProbation({
           </Col>
 {job&&job.payment_type ==="hourly"&& <Col md="4">
             <FormGroup>
-              <Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {' '}
-                Hourly Pay <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Hourly Pay')?.[genLabel]} <span className="required"> *</span>{' '}
               </Label>
               <Input
                 type="numbers"
@@ -79,10 +99,11 @@ export default function JobProbation({
           </Col> }
           <Col md="4">
             <FormGroup>
-              <Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {' '}
-                Working Calendar(No of Days/Week)(KET)<span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Working Calendar(No of Days/Week)(KET)')?.[genLabel]} <span className="required"> *</span>{' '}
               </Label>
+             
               <Input
                 type="select"
                 value={job && job.working_days}
@@ -98,10 +119,11 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {' '}
-                Basic Pay <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel]} <span className="required"> *</span>{' '}
               </Label>
+             
               <Input
                 type="numbers"
                 onChange={(e) => {
@@ -115,7 +137,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label> Overtime Applicable</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Overtime Applicable')?.[genLabel]}
+              </Label>
+             
               <br></br>
               <Label> Yes </Label>
               &nbsp;
@@ -148,10 +173,11 @@ export default function JobProbation({
           {job && job.overtime === '1' && (
             <Col md="4">
               <FormGroup>
-                <Label>
-                  {' '}
-                  Over Time Rate<span className="required"> *</span>{' '}
-                </Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Over Time Rate')?.[genLabel]} <span className="required"> *</span>{' '}
+              </Label>
+                
                 <Input
                   type="select"
                   value={job && job.over_time_rate}
@@ -170,7 +196,10 @@ export default function JobProbation({
           )}
           <Col md="4">
             <FormGroup>
-              <Label>Overtime Pay Rate/ Hour</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Overtime Pay Rate/ Hour')?.[genLabel]}
+              </Label>
+             
               {/* <br />
               <span>{job && job.overtime_pay_rate?job.overtime_pay_rate:''}</span> */}
               <Input
@@ -184,7 +213,10 @@ export default function JobProbation({
 
           <Col md="4">
             <FormGroup>
-              <Label>Transport</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Transport')?.[genLabel]}
+              </Label>
+            
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -195,7 +227,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Entertainment</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Entertainment')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -206,7 +241,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Food</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Food')?.[genLabel]}
+              </Label>
+              
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -217,7 +255,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Shift Allowance</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Shift Allowance')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -228,7 +269,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Others</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Others')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -240,7 +284,10 @@ export default function JobProbation({
 
           <Col md="4">
             <FormGroup>
-              <Label>Housing</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Housing')?.[genLabel]}
+              </Label>
+            
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -251,7 +298,9 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Transportation</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Transportation')?.[genLabel]}
+              </Label>           
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -262,7 +311,9 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Others</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Others')?.[genLabel]}
+              </Label>   
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -273,7 +324,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Food</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Food')?.[genLabel]}
+              </Label>   
+             
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}
@@ -284,7 +338,10 @@ export default function JobProbation({
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Levy</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Levy')?.[genLabel]}
+              </Label>   
+            
               <Input
                 type="numbers"
                 onChange={handleInputsJobInformation}

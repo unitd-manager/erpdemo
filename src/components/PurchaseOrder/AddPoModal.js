@@ -34,7 +34,38 @@ const AddPoModal = ({
     setAddPurchaseOrderModal: PropTypes.func,
   };
   const [unitdetails, setUnitDetails] = useState();
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicLabel = () => {
+    api
+    .get('/purchaseorder/getTranslationForPurchaseOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   const getUnit = () => {
     api.get('/product/getUnitFromValueList').then((res) => {
       const items = res.data.data;
@@ -182,7 +213,7 @@ const AddPoModal = ({
 };
 
 const insertProduct = (ProductCode, ItemCode) => {
-  if (productDetail.title !== '') {
+  if (productDetail.title !== '' || productDetail.title_arb !== ''){
     productDetail.product_code = ProductCode;
     productDetail.item_code = ItemCode;
     productDetail.creation_date = creationdatetime;
@@ -259,6 +290,7 @@ const insertProduct = (ProductCode, ItemCode) => {
       .post('/purchaseorder/insertPoProduct', {
         purchase_order_id: PurchaseOrderId,
         item_title: itemObj.title,
+        item_title_arb: itemObj.title_arb,
         quantity: itemObj.qty,
         unit: itemObj.unit,
         amount: 0,
@@ -333,6 +365,7 @@ const insertProduct = (ProductCode, ItemCode) => {
   useEffect(() => {
      getProduct();
     TabMaterialsPurchased();
+    getArabicLabel();
   }, []);
   useEffect(() => {
     setMoreItem([
@@ -400,6 +433,33 @@ const insertProduct = (ProductCode, ItemCode) => {
       }),
     );
   };
+  const columns = [
+  
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Item')?.[genLabel],
+  
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Unit')?.[genLabel],
+  
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Quantity')?.[genLabel],
+   
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Cost Price')?.[genLabel],
+    
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Selling Price')?.[genLabel],
+  
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.VAT')?.[genLabel],
+     
+    },
+  ];
   useEffect(() => {
     getUnit();
     
@@ -444,17 +504,11 @@ const insertProduct = (ProductCode, ItemCode) => {
 
             <table className="lineitem">
               <thead>
-                <tr className="">
-                  <th width="20%" scope="col">
-                    Item
-                  </th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Cost Price (without VAT)</th>
-                  <th scope="col">Selling Price (without VAT)</th>
-                  <th scope="col">VAT</th>
-                  <th scope="col"></th>
-                </tr>
+              <tr>
+              {columns.map((col) => (
+                <th key={col.selector}>{col.name}</th>
+              ))}
+            </tr>
               </thead>
               <tbody>
                 {addMoreItem.map((item, index) => {
@@ -463,7 +517,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                       <td data-label="title">
                         <Select
                           key={item.id}
-                          defaultValue={{ value: item.product_id, label: item.title }}
+                         defaultValue={{ value: item.product_id, label: arb ? item.title_arb : item.title }}
                           onChange={(e) => {
                             onchangeItem(e, item.id);
                           }}
@@ -593,16 +647,25 @@ const insertProduct = (ProductCode, ItemCode) => {
                 <Row>
                   <FormGroup>
                     <Row>
-                      <Label sm="3">
-                        Product Name <span className="required"> *</span>
-                      </Label>
+                    <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Product Name')?.[genLabel]}<span className="required"> *</span>
+              </Label>
+                    
                       <Col sm="8">
-                        <Input
-                          type="text"
-                          name="title"
-                          onChange={handleNewProductDetails}
-                          value={productDetail.title}
-                        />
+                      <Input
+                type="text"
+                onChange={handleNewProductDetails}
+                value={
+                  arb
+                    ? (
+                        productDetail && productDetail.title_arb ? productDetail.title_arb :
+                        (productDetail && productDetail.title_arb !== null ? '' : productDetail && productDetail.title)
+                      )
+                    : (productDetail && productDetail.title)
+                }
+                name={arb ? 'title_arb': 'title'}
+              />
+                       
                       </Col>
                     </Row>
                   </FormGroup>

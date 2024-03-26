@@ -4,12 +4,46 @@ import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 import ViewAnnualLeaveModal from './AnnualLeaveModal';
 import ViewMonthlyLeaveModal from './MonthlyLeaveModal';
+import api from '../../constants/api';
 
 function PayrollLeaveSummary({leave}) {
   PayrollLeaveSummary.propTypes = {
     leave: PropTypes.array,
   };
- 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicLabels = () => {
+      api
+      .get('/translation/getTranslationForPayrollManagement')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  useEffect(() => {
+  
+    getArabicLabels();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const [absentLeaves, setAbsentLeaves] = useState();
   const [hospitalLeaves, setHospitalLeaves] = useState();
   const [sickLeaves, setSickLeaves] = useState();
@@ -108,39 +142,38 @@ function PayrollLeaveSummary({leave}) {
                 <Table>
                   <thead>
                     <tr>
-                      <td>ANNUAL LEAVE AS PER MOM</td>
+                      <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.ANNUAL LEAVE AS PER MOM')?.[genLabel]}</td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
-                        <span>1st year: 7 days</span>
-                      </td>
-                      <td>
-                        <span>2nd year: 8 days</span>
-                      </td>
-                      <td>
-                        <span>3rd year: 9 days</span>
-                      </td>
+                      
+                      <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.1st year: 7 days')?.[genLabel]}</td>
+                   
+                    
+                    
+                      <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.2nd year: 8 days')?.[genLabel]}</td>
+
+                      <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.3rd year: 9 days')?.[genLabel]}</td>
+
+                    
+                     
                     </tr>
                     <tr>
-                      <td>
-                        <span>4th year: 10 days</span>
-                      </td>
-                      <td>
-                        <span>5th year: 11 days</span>
-                      </td>
-                      <td>
-                        <span>6th year: 12 days</span>
-                      </td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.4th year: 10 days')?.[genLabel]}</td>
+
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.5th year: 11 days')?.[genLabel]}</td>
+
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.6th year: 12 days')?.[genLabel]}</td>
+
+                      
                     </tr>
                     <tr>
-                      <td>
-                        <span>7th year: 13 days</span>
-                      </td>
-                      <td>
-                        <span>8th year thereafter: 14 days</span>
-                      </td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.7th year: 13 days')?.[genLabel]}</td>
+
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.8th year thereafter: 14 days')?.[genLabel]}</td>
+
+                     
                       <td></td>
                     </tr>
                   </tbody>
@@ -148,27 +181,25 @@ function PayrollLeaveSummary({leave}) {
                 <Table>
                   <thead>
                     <tr>
-                      <td>SICK LEAVE AS PER MOM</td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.SICK LEAVE AS PER MOM')?.[genLabel]}</td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
-                        <span>After 3 months: 5 days</span>
-                      </td>
-                      <td>
-                        <span>After 4 months: 8 days</span>
-                      </td>
-                      <td></td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.After 3 months: 5 days')?.[genLabel]}</td>
+
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.After 4 months: 8 days')?.[genLabel]}</td>
+
+                     
+                      
                     </tr>
                     <tr>
-                      <td>
-                        <span>After 5 months: 11 days</span>
-                      </td>
-                      <td>
-                        <span>6 months and thereafter: 14 days</span>
-                      </td>
-                      <td></td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.After 5 months: 11 days')?.[genLabel]}</td>
+
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.6 months and thereafter: 14 days')?.[genLabel]}</td>
+
+                     
+                     
                     </tr>
                   </tbody>
                 </Table>
@@ -177,14 +208,16 @@ function PayrollLeaveSummary({leave}) {
                 <Table>
                   <thead>
                     <tr>
-                      <td>Total No of leave taken this year</td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Total No of leave taken this year')?.[genLabel]}</td>
+
+                      
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Annual leave')?.[genLabel]}
                         <span>
-                          Annual leave :{' '}
+                           :{' '}
                           <span
                             onClick={() => {
                               setAnnualLeaveModal(true);
@@ -196,10 +229,11 @@ function PayrollLeaveSummary({leave}) {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Sick leave')?.[genLabel]}
+
                         {' '}
                         <span>
-                          Sick leave :{' '}
+                           :{' '}
                           <span
                             onClick={() => {
                               setAnnualLeaveModal(true);
@@ -211,10 +245,10 @@ function PayrollLeaveSummary({leave}) {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Hospitalization leave')?.[genLabel]}
                         {' '}
                         <span>
-                          Hospitalization leave :{' '}
+                           :{' '}
                           <span
                             onClick={() => {
                               setAnnualLeaveModal(true);
@@ -226,9 +260,9 @@ function PayrollLeaveSummary({leave}) {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                    <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Absent leave')?.[genLabel]}
                         <span>
-                          Absent leave :{' '}
+                           :{' '}
                           <span
                             onClick={() => {
                               setAnnualLeaveModal(true);
@@ -246,15 +280,17 @@ function PayrollLeaveSummary({leave}) {
                 <Table>
                 <thead>
                   <tr>
-                    <td>Total No of leave taken this Month</td>
+                  <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Total No of leave taken this Month')?.[genLabel]}
+
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
+                  <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Annual leave')?.[genLabel]}
                       {' '}
                       <span>
-                        Annual leave :{' '}
+                         :{' '}
                         <span
                           onClick={() => {
                             setMonthlyLeaveModal(true);
@@ -266,10 +302,10 @@ function PayrollLeaveSummary({leave}) {
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                  <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Sick leave')?.[genLabel]}
                       {' '}
                       <span>
-                        Sick leave :{' '}
+                         :{' '}
                         <span
                           onClick={() => {
                             setMonthlyLeaveModal(true);
@@ -281,10 +317,11 @@ function PayrollLeaveSummary({leave}) {
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                  <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Hospitalization leave')?.[genLabel]}
+
                       {' '}
                       <span>
-                        Hospitalization leave :{' '}
+                         :{' '}
                         <span
                           onClick={() => {
                             setMonthlyLeaveModal(true);
@@ -296,9 +333,10 @@ function PayrollLeaveSummary({leave}) {
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                  <td>{arabic.find(item => item.key_text === 'mdPayrollManagement.Absent leave')?.[genLabel]}
+
                       <span>
-                        Absent leave :{' '}
+                         :{' '}
                         <span
                           onClick={() => {
                             setMonthlyLeaveModal(true);

@@ -20,7 +20,31 @@ const JobInformation = () => {
   const [jobInformation, setJobInformation] = useState(null);
   const [empWithoutJobInfo, setEmpWithoutJobInfo] = useState([]);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicLabels = () => {
+    api
+    .get('/translation/getTranslationForJobInformation')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
  //getting employee list not having jobinformation record
  const getEmployeesWithoutJobInformation = () => {
   api
@@ -33,7 +57,13 @@ const JobInformation = () => {
       
     });
 };
+let genLabel = '';
 
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //getting data from jobinformation
   const getJobInformation = () => {
     api
@@ -62,6 +92,7 @@ const JobInformation = () => {
   useEffect(() => {
     getJobInformation();
     getEmployeesWithoutJobInformation();
+    getArabicLabels();
   }, []);
   //structure of jobinformation list view
   const columns = [
@@ -81,13 +112,13 @@ const JobInformation = () => {
       sortable: false,
     },
     {
-      name: 'EMP code',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.EMP Code')?.[genLabel],
       selector: 'emp_code',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Full Name',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.Full Name')?.[genLabel],
       selector: 'employee_name',
       sortable: true,
       grow: 0,
@@ -101,48 +132,48 @@ const JobInformation = () => {
     //   wrap: true,
     // },
     {
-      name: 'S Pass No',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.S Pass No')?.[genLabel],
       selector: 'spass_no',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'FIN No',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.FIN No')?.[genLabel],
       selector: 'fin_no',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'NRIC No',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.NRIC No')?.[genLabel],
       selector: 'nric_no',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'DOB',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.DOB')?.[genLabel],
       selector: 'date_of_birth',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Basic Pay',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel],
       selector: 'basic_pay',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Pass Type',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.Pass Type')?.[genLabel],
       selector: 'citizen',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'id',
+      name: arabic.find(item => item.key_text === 'mdJobInformation.id')?.[genLabel],
       selector: 'job_information_id',
       grow: 0,
       wrap: true,
@@ -198,7 +229,11 @@ const JobInformation = () => {
                         </Link>
                       </td>
                       <td>{element.emp_code}</td>
-                      <td>{element.employee_name ||element.first_name}</td>
+                      
+                      <td>{arb 
+    ? (element.employee_name_arb ? element.employee_name_arb : element.first_name_arb)
+    : (element.employee_name ? element.employee_name : element.first_name)
+  }</td>
                       {/* <td>{element.department}</td> */}
                       <td>{element.passport}</td>
                       <td>{element.fin_no}</td>

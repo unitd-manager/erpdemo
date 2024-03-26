@@ -2,19 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 
-export default function JobBank({ handleInputsJobInformation, job, allBank }) {
+export default function JobBank({ handleInputsJobInformation, job, allBank, arabic,arb }) {
   JobBank.propTypes = {
     handleInputsJobInformation: PropTypes.any,
     job: PropTypes.any,
     allBank: PropTypes.any,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
+
   };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
       <FormGroup>
         <Row>
           <Col md="4">
             <FormGroup>
-              <Label>Mode of Payment</Label>
-
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Mode of Payment')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="select"
                 value={job && job.mode_of_payment}
@@ -30,7 +43,10 @@ export default function JobBank({ handleInputsJobInformation, job, allBank }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Account No</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Account No')?.[genLabel]}
+              </Label>
+              
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}
@@ -41,7 +57,11 @@ export default function JobBank({ handleInputsJobInformation, job, allBank }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Bank Name</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Bank Name')?.[genLabel]}
+              </Label>
+              
+             
               <Input
                 type="select"
                 name="bank_name"
@@ -60,7 +80,10 @@ export default function JobBank({ handleInputsJobInformation, job, allBank }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Bank Code</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Bank Code')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}
@@ -71,7 +94,10 @@ export default function JobBank({ handleInputsJobInformation, job, allBank }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Branch Code</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Branch Code')?.[genLabel]}
+              </Label>
+            
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}

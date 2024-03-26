@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import api from '../../constants/api';
 
 function Earnings({
   payroll,
@@ -20,7 +21,40 @@ function Earnings({
     finalGrossPay: PropTypes.number,
     calculateBasicPayPercentage: PropTypes.any,
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicLabels = () => {
+      api
+      .get('/translation/getTranslationForPayrollManagement')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  useEffect(() => {
+  
+    getArabicLabels();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const [grossPay, setGrossPay] = useState(0);
 
   // Calculate and update Gross Pay whenever relevant fields change
@@ -52,7 +86,9 @@ function Earnings({
   return (
     <div>
       <Row>
-        <Col md="9">Gross Pay</Col>{' '}
+     
+        <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Gross Pay')?.[genLabel]}</Col>{' '}
         <Col md="3">
           <Input
             disabled
@@ -75,7 +111,8 @@ function Earnings({
         </Col>{' '}
       </Row>
       <Row>
-        <Col md="9">Overtime Pay Rate/ Hour</Col>
+        <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Overtime Pay Rate/ Hour')?.[genLabel]}</Col>
         <Col md="3">
           <Input
             name="overtime"
@@ -87,7 +124,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">OT Hrs</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.OT Hrs')?.[genLabel]}</Col>
+    
         <Col md="3">
           <Input
             name="ot_hours"
@@ -101,7 +140,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Overtime Amount</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Overtime Amount')?.[genLabel]}</Col>
+       
         <Col md="3">
           <Input
             name="ot_amount"
@@ -124,7 +165,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Transport</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Transport')?.[genLabel]}</Col>
+       
         <Col md="3">
           <Input
             name="allowance1"
@@ -146,7 +189,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Entertainment</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Entertainment')?.[genLabel]}</Col>
+        
         <Col md="3">
           <Input
             name="allowance2"
@@ -168,7 +213,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Food</Col>
+       
+        <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Food')?.[genLabel]}</Col>
         <Col md="3">
           <Input
             name="allowance3"
@@ -190,7 +237,8 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Shift Allowance</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Shift Allowance')?.[genLabel]}</Col>
         <Col md="3">
           <Input
             name="allowance4"
@@ -212,7 +260,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Others</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Others')?.[genLabel]}</Col>
+        
         <Col md="3">
           <Input
             name="allowance5"
@@ -234,9 +284,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">
-          <b>Gross Pay</b>
-        </Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Gross Pay')?.[genLabel]}</Col>
+        
         <Col md="3">
           <Input
             name="total_basic_pay_for_month"
@@ -251,13 +301,15 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">
-          <b>Other Additional Payment</b>
-        </Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Other Additional Payment')?.[genLabel]}</Col>
+      
         <Col md="3"></Col>
       </Row>
       <Row>
-        <Col md="9">Reimbursement</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Reimbursement')?.[genLabel]}</Col>
+       
         <Col md="3">
           <Input
             name="reimbursement"
@@ -268,7 +320,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Director Fees</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Director Fees')?.[genLabel]}</Col>
+      
         <Col md="3">
           <Input
             name="director_fee"
@@ -279,9 +333,9 @@ function Earnings({
         </Col>
       </Row>
       <Row>
-        <Col md="9">
-          <b>NET PAY</b>
-        </Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Net Pay')?.[genLabel]}</Col>
+        
         <Col md="3"></Col>
       </Row>
     </div>

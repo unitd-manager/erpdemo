@@ -3,13 +3,22 @@ import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import moment from 'moment';
-//import ComponentCard from '../ComponentCard';
 
-export default function JobInformationKeyDetails({ handleInputs, jobModal }) {
+export default function JobInformationKeyDetails({ handleInputs, jobModal, arabic, arb }) {
   JobInformationKeyDetails.propTypes = {
     handleInputs: PropTypes.object,
     jobModal: PropTypes.object,
+    arabic: PropTypes.any,
+    arb: PropTypes.any,
+
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
  <>
        <ToastContainer></ToastContainer>
@@ -17,7 +26,10 @@ export default function JobInformationKeyDetails({ handleInputs, jobModal }) {
         <Row>
           <Col md="3">
             <FormGroup>
-              <Label>Employment Start/Commencement Date</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Employment Start/Commencement Date ')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="date"
                 onChange={handleInputs}
@@ -28,7 +40,10 @@ export default function JobInformationKeyDetails({ handleInputs, jobModal }) {
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Duties & Responsibility</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Duties & Responsibility')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputs}
@@ -39,7 +54,10 @@ export default function JobInformationKeyDetails({ handleInputs, jobModal }) {
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Duration of Employment(only for employees on fixed term contract)</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Duration of Employment(only for employees on fixed term contract)')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputs}
@@ -50,7 +68,10 @@ export default function JobInformationKeyDetails({ handleInputs, jobModal }) {
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Place of Work(if different from companys registered address)</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Place of Work(if different from companys registered address)')?.[genLabel]}
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputs}

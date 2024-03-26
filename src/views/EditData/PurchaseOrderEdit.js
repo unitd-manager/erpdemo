@@ -18,6 +18,7 @@ import ViewHistoryModal from '../../components/PurchaseOrder/ViewHistoryModal';
 import PurchaseOrderDetailsPart from '../../components/PurchaseOrder/PurchaseOrderDetailsPart';
 import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
 import PdfPurchaseOrder from '../../components/PDF/PdfPurchaseOrder';
 import ComponentCardV2 from '../../components/ComponentCardV2';
@@ -55,6 +56,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
 
   const arb =selectedLanguage === 'Arabic'
+  const eng =selectedLanguage === 'English'
   // const eng =selectedLanguage === 'English'
   const getArabicValue = () => {
     api
@@ -239,9 +241,12 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
-    // { id: '1', name: 'Delivery order' },
-    { id: '2', name: 'Attachments' },
-    { id: '3', name: 'Notes' },
+    { id: '1', name: 'Attachments' },
+    { id: '2', name: 'Notes' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'مرفق' },
+    { id: '2', name: 'ملحوظات' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -377,10 +382,14 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
      
       <ComponentCard title="More Details">
+      {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
-        <TabContent className="p-4" activeTab={activeTab}>
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }        <TabContent className="p-4" activeTab={activeTab}>
        
-          <TabPane tabId="2">
+          <TabPane tabId="1">
             <Row>
               <AttachmentTab
                 dataForPicture={dataForPicture}
@@ -393,7 +402,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
               />
             </Row>
           </TabPane>
-          <TabPane tabId="3">
+          <TabPane tabId="2">
             <Row>
               <AddNote recordId={id} roomName="PurchaseOrderEdit" />
               <ViewNote recordId={id} roomName="PurchaseOrderEdit" />
