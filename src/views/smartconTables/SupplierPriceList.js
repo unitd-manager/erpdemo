@@ -19,7 +19,44 @@ const Leaves = () => {
   //Const Variables
   const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForSupplierPriceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   // get Leave
   const getPlanning = () => {
     api
@@ -69,7 +106,7 @@ const Leaves = () => {
     },
 
     {
-      name: 'Customer Name',
+      name: arabic.find(item => item.key_text === 'mdClient.Customer Name')?.[genLabel],
       selector: 'customer_name',
       sortable: true,
       grow: 0,
@@ -83,7 +120,7 @@ const Leaves = () => {
       width: 'auto',
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdClient.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -125,7 +162,7 @@ const Leaves = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.customer_name}</td>
+                    <td>{arb?element.customer_name_arb:element.customer_name}</td>
                     <td>{(element.effective_date)?moment(element.effective_date).format('DD-MM-YYYY'):''}</td>
                     <td>{element.status}</td>
                     </tr>

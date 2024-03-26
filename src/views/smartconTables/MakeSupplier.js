@@ -43,7 +43,44 @@ const MakeSupplier = () => {
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForMakeSupplier')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //getting data from invoice table
   const getInvoice = () => {
     api
@@ -68,20 +105,20 @@ const MakeSupplier = () => {
 
   
     {
-      name: 'Receipt Code',
+      name:'Receipt Code',
       selector: 'supplier_receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Mode of Payment',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.ModeOfPayment')?.[genLabel],
       selector: 'mode_of_payment',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Status')?.[genLabel],
       selector: 'receipt_status',
       sortable: true,
       grow: 2,
@@ -89,7 +126,7 @@ const MakeSupplier = () => {
     },
 
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -219,7 +256,9 @@ const MakeSupplier = () => {
                     <FormGroup>
                       <Row>
                         <Col md="10">
-                          <Label>Purchase Orders</Label>
+                          <Label>Purchase Orders
+                          {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
+                          </Label>
                           <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
                             <option>Select Customer</option>
                             {company &&
@@ -277,6 +316,8 @@ const MakeSupplier = () => {
        <PurchaseorderSupplier 
        receiptId={selectedReceiptId}
        orderId={ selectReceiptId}
+       arb={arb}
+              arabic={arabic}
        ></PurchaseorderSupplier>
           </ModalBody>
         </Modal>

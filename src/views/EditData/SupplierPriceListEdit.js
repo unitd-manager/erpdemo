@@ -24,6 +24,7 @@ import PlanningButton from '../../components/SupplierPriceList/PriceButton';
 import PlanningCpanel from '../../components/SupplierPriceList/PriceListItem';
 import PlanEditModal from '../../components/SupplierPriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const SupplierPriceListEdit = () => {
   //Const Variables
@@ -58,10 +59,48 @@ const SupplierPriceListEdit = () => {
     navigate('/SupplierPriceList');
   };
 
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+const [arabic, setArabic] = useState([]);
+
+
+const arb =selectedLanguage === 'Arabic'
+
+const eng =selectedLanguage === 'English'
+
+
+const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForSupplierPriceList')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
       {id:'1',name:'Supplier Price List Item'},
       {id:'2',name:'Attachment'},
+    ];
+
+    const tabsArb =  [
+      {id:'1',name:'عنصر قائمة أسعار الموردين'},
+      {id:'2',name:'مرفق'},
     ];
     const toggle = (tab) => {
       setActiveTab(tab);
@@ -141,26 +180,37 @@ const handleAddNewPlanning = (e) => {
   return (
     <>
       {/* BreadCrumbs */}
-      <BreadCrumbs />
+      {eng ===true && <BreadCrumbs heading={plannings && plannings.company_name} />}
+      { arb === true && <BreadCrumbs heading={plannings && plannings.company_name_arb} />}
       {/* Button */}
       <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
+        arb={arb}
+        arabic={arabic}
+        eng={eng}
        ></PlanningButton>
        
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
+        arb={arb}
+        arabic={arabic}
+        eng={eng}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      <Tab toggle={toggle} tabs={tabs} />
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
 
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">
@@ -174,6 +224,9 @@ const handleAddNewPlanning = (e) => {
            addContactToggle={addContactToggle}
            setPlanData={setPlanData}
            setPlanEditModal={setPlanEditModal}
+           arb={arb}
+        arabic={arabic}
+        eng={eng}
            ></PlanningCpanel>
            {/* Cpanel Linked Edit modal */}
            <PlanEditModal

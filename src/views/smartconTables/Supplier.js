@@ -19,7 +19,44 @@ const Test = () => {
   //All state variable
   const [supplier, setSupplier] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForSupplier')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //getting data from supplier
   const getSupplier = () => {
     api
@@ -68,21 +105,21 @@ const Test = () => {
       sortable: false,
     },
     {
-      name: 'Name',
+      name: arabic.find(item => item.key_text === 'mdClient.Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Website',
+      name: arabic.find(item => item.key_text === 'mdClient.Website')?.[genLabel],
       selector: 'email',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Telehone',
+      name: arabic.find(item => item.key_text === 'mdClient.Telephone')?.[genLabel],
       selector: 'mobile',
       sortable: true,
       grow: 0,
@@ -124,9 +161,9 @@ const Test = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.company_name}</td>
-                    <td>{element.email}</td>
-                    <td>{element.mobile}</td>
+                    <td>{arb?element.company_name_arb:element.company_name}</td>
+                    <td>{arb?element.email_arb:element.email}</td>
+                    <td>{arb?element.mobile_arb:element.mobile}</td>
                   </tr>
                 );
               })}
