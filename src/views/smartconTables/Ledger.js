@@ -9,40 +9,86 @@ import ExportReport from '../../components/Report/ExportReport';
 
 function Ledger() {
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const [arabic, setArabic] = useState([]);
+
+const arb =selectedLanguage === 'Arabic'
+//const eng =selectedLanguage === 'English'
+
+const getArabicCompanyName = () => {
+  api
+  .get('/translation/getTranslationForCompanyLedger')
+  .then((res) => {
+    setArabic(res.data.data);
+  })
+  .catch(() => {
+    // Handle error if needed
+  });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
+const arabicCompanyName = arabic.find((item) => item.key_text === 'mdLedger.EntryDate')?.[genLabel];
+const arabicEdit = arabic.find((item) => item.key_text === 'mdLedger.Edit')?.[genLabel];
+const arabicSNo = arabic.find((item) => item.key_text === 'mdLedger.SNo')?.[genLabel];
+const arabicNarration = arabic.find((item) => item.key_text === 'mdLedger.Narration')?.[genLabel];
+const arabicDebit = arabic.find((item) => item.key_text === 'mdLedger.Debit')?.[genLabel];
+const arabicCredit = arabic.find((item) => item.key_text === 'mdLedger.Credit')?.[genLabel];
+const arabicplease = arabic.find((item) => item.key_text === 'mdLedger.please')?.[genLabel];
+const arabicAccount = arabic.find((item) => item.key_text === 'mdLedger.Account')?.[genLabel];
+const arabicLedger = arabic.find((item) => item.key_text === 'mdLedger.Ledger')?.[genLabel];
+const arabicTotal = arabic.find((item) => item.key_text === 'mdLedger.Total')?.[genLabel];
+const arabicGo = arabic.find((item) => item.key_text === 'mdLedger.Go')?.[genLabel];
+
   const columns = [
     {
-      name: 'S.No',
+      name: arabicSNo,
       selector: 'journal_id',
     },
     {
-      name: 'Edit',
+      name: arabicEdit,
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
     },
     {
-      name: 'Date',
+      name: arabicCompanyName,
       selector: 'entry_date',
     },
     {
-      name: 'Narration',
-      selector: 'narration_main',
+      name: arabicNarration,
+      selector:arb ? 'narrationarb_main' : 'narration_main',
     },
     {
-      name: 'Debit',
+      name: arabicDebit,
       selector: 'debit',
     },
     {
-      name: 'Credit',
+      name: arabicCredit,
       selector: 'credit',
     },
-    {
-      name: 'Balance',
-      selector: 'total_cpf',
-    },
-    {
-      name: 'Id',
-      selector: 'total_cpf',
-    },
+    // {
+    //   name: 'Balance',
+    //   selector: 'total_cpf',
+    // },
+  
   ];
 
   // New 
@@ -58,8 +104,8 @@ function Ledger() {
       .get('/journal/getAccHeadTitle')
       .then((res) => {
         const options = res.data.data.map(item => ({
-          value: item.title,
-          label: item.title,
+          value: arb ? item.title_arb : item.title,
+          label: arb ? item.title_arb : item.title,
           id: item.acc_head_id,
         }));
         setJournalEntry(options);
@@ -104,7 +150,7 @@ function Ledger() {
     <div className="">
       <ToastContainer></ToastContainer>
       <div className="card p-2 shadow-none">
-        <Row><Label className="p-2 text-center"> Please select account name and click GO</Label></Row>
+        <Row><Label className="p-2 text-center"> {arabicplease}</Label></Row>
         <Row>
           <Col></Col>
           <Col md="8">
@@ -124,17 +170,17 @@ function Ledger() {
                 getAccountsData();
               }}
             >
-              Go
+              {arabicGo}
             </Button>
           </Col>
           <Col></Col>
         </Row>
         <Row className='m-4'>
           <Col md="6">
-            <b>Account:</b> &nbsp; <span>{selectedAccount}</span>
+            <b>{arabicAccount}:</b> &nbsp; <span>{selectedAccount}</span>
           </Col>
           <Col md="6">
-            <b>Ledger Bal.:</b> &nbsp; <span>{ledgerBal}</span>
+            <b>{arabicLedger}.:</b> &nbsp; <span>{ledgerBal}</span>
           </Col>
         </Row>
       </div>
@@ -169,7 +215,7 @@ function Ledger() {
                   <b></b>
                 </td>
                 <td>
-                  <b>Total</b>
+                  <b>{arabicTotal}</b>
                 </td>
                 <td>
                   <b>-{totalDebit}</b>
@@ -195,11 +241,17 @@ function Ledger() {
                         </Link>
                       </td>
                       <td>{element.entry_date}</td>
-                      <td>{element.narration_main}<br />{element.narration}</td>
+                      <td>
+                        {arb ? (
+                          <span>{element.narrationarb_main}<br />{element.narration_arb}</span>
+                        ) : (
+                          <span>{element.narration_main}<br />{element.narration}</span>
+                        )}
+                    </td>
                       <td>{element.debit}</td>
                       <td>{element.credit}</td>
-                      <td></td>
-                      <td></td>
+                      {/* <td></td> */}
+                 
                     </tr>
                   );
                 })}

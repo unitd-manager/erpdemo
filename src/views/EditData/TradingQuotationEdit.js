@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Col, Button, Table, Row ,Label} from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -16,6 +16,7 @@ import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteBu
 import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/TradingQuotation/QuoteLineItem';
 import QuoteDiscount from '../../components/TradingQuotation/QuoteDiscount';
 import ViewQuoteLogModal from '../../components/TradingQuotation/ViewQuoteLogModal';
@@ -38,10 +39,9 @@ const TradingQuotationEdit = () => {
   const { loggedInuser } = useContext(AppContext);
   const [quotationsModal, setQuotationsModal] = useState(false);
   const [previousTenderDetails, setPreviousTenderDetails] = useState(null);
-const toggleQuotationsModal = () => {
-  setQuotationsModal(!quotationsModal);
-};
-
+  const toggleQuotationsModal = () => {
+    setQuotationsModal(!quotationsModal);
+  };
 
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
@@ -66,6 +66,11 @@ const toggleQuotationsModal = () => {
   const tabs = [
     { id: '1', name: 'Quotation ' },
     { id: '2', name: 'Attachment' },
+  ];
+
+  const tabsArb = [
+    { id: '1', name: 'اقتباس' },
+    { id: '2', name: 'مرفق' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -93,7 +98,6 @@ const toggleQuotationsModal = () => {
         message('Unable to fetch data.', 'error');
       });
   };
-  
 
   // Get Tenders By Id
 
@@ -105,18 +109,18 @@ const toggleQuotationsModal = () => {
     });
   };
 
- // Function to handle changes in tenderDetails
- const handleInputs = (e) => {
-  // Update only the current state (tenderDetails)
-  setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
-};
+  // Function to handle changes in tenderDetails
+  const handleInputs = (e) => {
+    // Update only the current state (tenderDetails)
+    setTenderDetails({ ...tenderDetails, [e.target.name]: e.target.value });
+  };
 
-// Function to save the current details as previousTenderDetails
-const saveCurrentDetails = () => {
-  setPreviousTenderDetails({ ...tenderDetails });
-};
+  // Function to save the current details as previousTenderDetails
+  const saveCurrentDetails = () => {
+    setPreviousTenderDetails({ ...tenderDetails });
+  };
 
-const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleIconMouseOver = () => {
     console.log('Mouse over icon'); // Log when mouse over icon
@@ -140,10 +144,9 @@ const [showTooltip, setShowTooltip] = useState(false);
 
   console.log('showTooltip:', showTooltip); // Log the showTooltip state
 
-
   //Logic for edit data in db
   const insertquote = () => {
-      const quoteData = {
+    const quoteData = {
       quote_date: previousTenderDetails.quote_date,
       quote_status: previousTenderDetails.quote_status,
       quote_code: previousTenderDetails.quote_code,
@@ -151,13 +154,12 @@ const [showTooltip, setShowTooltip] = useState(false);
       created_by: loggedInuser.first_name,
       creation_date: creationdatetime,
     };
-   
 
     api.post('/project/insertLog', quoteData).then((res) => {
       message('quote inserted successfully.', 'success');
       lineItem.forEach((element) => {
         element.quote_log_id = res.data.data.insertId;
-        
+
         api.post('/project/insertLogLine', element).then(() => {
           window.location.reload();
         });
@@ -202,9 +204,9 @@ const [showTooltip, setShowTooltip] = useState(false);
       //setAddLineItemModal(true);
     });
   };
-   // Add new Contact
+  // Add new Contact
 
-   const [newContactData, setNewContactData] = useState({
+  const [newContactData, setNewContactData] = useState({
     salutation: '',
     first_name: '',
     email: '',
@@ -214,18 +216,14 @@ const [showTooltip, setShowTooltip] = useState(false);
     fax: '',
     mobile: '',
   });
- const handleAddNewContact = (e) => {
+  const handleAddNewContact = (e) => {
     setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
   };
 
   const AddNewContact = () => {
     const newDataWithCompanyId = newContactData;
     newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
+    if (newDataWithCompanyId.salutation !== '' && newDataWithCompanyId.first_name !== '') {
       api
         .post('/tender/insertContact', newDataWithCompanyId)
         .then(() => {
@@ -241,10 +239,6 @@ const [showTooltip, setShowTooltip] = useState(false);
     }
   };
 
-
- 
-  
- 
   useEffect(() => {
     editTenderById();
     getLineItem();
@@ -253,33 +247,8 @@ const [showTooltip, setShowTooltip] = useState(false);
     // getAllCountries();
   }, [id]);
 
-  const columns1 = [
-    {
-      name: '#',
-    },
-    {
-      name: 'Title',
-    },
-    {
-      name: 'Description',
-    },
-    {
-      name: 'Qty',
-    },
-    {
-      name: 'Unit Price',
-    },
-    {
-      name: 'Amount',
-    },
-    {
-      name: 'Updated By ',
-    },
-    {
-      name: 'Action ',
-    },
-  ];
-  const deleteRecord = (deleteID) => {
+
+   const deleteRecord = (deleteID) => {
     Swal.fire({
       title: `Are you sure?`,
       text: "You won't be able to revert this!",
@@ -297,15 +266,87 @@ const [showTooltip, setShowTooltip] = useState(false);
       }
     });
   };
-  const netTotal =  Number.isNaN(tenderDetails && tenderDetails.totalamount)
-  ? 0
-  : tenderDetails && tenderDetails.totalamount - (Number.isNaN(tenderDetails && tenderDetails.discount) ? 0 : tenderDetails.discount);
+  const netTotal = Number.isNaN(tenderDetails && tenderDetails.totalamount)
+    ? 0
+    : tenderDetails &&
+      tenderDetails.totalamount -
+        (Number.isNaN(tenderDetails && tenderDetails.discount) ? 0 : tenderDetails.discount);
 
- 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/enquiry/getTranslationforTradingEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
+   
+  const columns1 = [
+    {
+      name: '#',
+    },
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel],
+    },
+
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel],
+    },
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel],
+    },
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel],
+    },
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel],
+    },
+    {
+      name: 'Updated By ',
+    },
+    {
+      name: 'Action ',
+    },
+  ];
 
   return (
     <>
-      <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
+      {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
+      {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+
       <TradingQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
@@ -314,7 +355,7 @@ const [showTooltip, setShowTooltip] = useState(false);
         id={id}
         insertquote={insertquote}
       ></TradingQuoteButton>
-     
+
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -327,24 +368,28 @@ const [showTooltip, setShowTooltip] = useState(false);
         AddNewContact={AddNewContact}
         addContactToggle={addContactToggle}
         getContact={getContact}
+        arb={arb}
+        arabic={arabic}
       ></TradingQuoteMoreDetails>
 
-      <ComponentCard title="More Details">
+      <ComponentCard title={arb ? 'المزيد من التفاصيل' : 'More Details'}>
         <ToastContainer></ToastContainer>
-
+{/* Nav Tab */}
+{eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <Row>
-            <Col md="2">
-            <Button
-  className="shadow-none"
-  color="primary"
-  onClick={toggleQuotationsModal}
->
-  View Quote
-</Button>
-</Col>
+              <Col md="2">
+                <Button className="shadow-none" color="primary" onClick={toggleQuotationsModal}>
+                  {arb ? 'عرض الاقتباس' : 'View Quote'}
+                </Button>
+              </Col>
               <Col md="2">
                 <Button
                   className="shadow-none"
@@ -352,7 +397,7 @@ const [showTooltip, setShowTooltip] = useState(false);
                   to=""
                   onClick={addQuoteItemsToggle.bind(null)}
                 >
-                  Add Items
+                  {arb ? 'إضافة عناصر' : 'Add Items'}
                 </Button>
               </Col>
               <Col md="2">
@@ -362,21 +407,32 @@ const [showTooltip, setShowTooltip] = useState(false);
                   to=""
                   onClick={addDiscountToggle.bind(null)}
                 >
-                  Discount
+                  {arb ? 'تخفيض' : 'Discount'}
                 </Button>
               </Col>
               <Col md="2">
                 <div className="discount">
-                  <span className="label"> <Label><b> Discount:</b></Label>{tenderDetails && tenderDetails.discount}</span>
+                  <span className="label">
+                    {' '}
+                    <Label>
+                      <b> {arb ? 'تخفيض' : 'Discount :'}</b>
+                    </Label>
+                    {tenderDetails && tenderDetails.discount}
+                  </span>
                 </div>
               </Col>
 
               <Col md="2">
                 <div className="net-total">
-                  <span className="label"> <Label><b>Net Total:</b></Label>{netTotal}</span>
+                  <span className="label">
+                    {' '}
+                    <Label>
+                      <b> {arb ? 'صافي المجموع' : 'Net Total :'}</b>
+                    </Label>
+                    {netTotal}
+                  </span>
                 </div>
               </Col>
-
             </Row>
             <br />
             <Row>
@@ -401,50 +457,49 @@ const [showTooltip, setShowTooltip] = useState(false);
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
                             <td data-label="Updated By">
-      <tooltip title={`${e.created_by} on ${e.creation_date}`}>
-        <span
-          onMouseOver={handleIconMouseOver} 
-        onMouseOut={handleIconMouseOut}
-        onFocus={handleIconFocus}
-        onBlur={handleIconBlur}
-          style={{
-            position: 'relative',
-            display: 'inline-block',
-          }}
-        >
-          created by
-        </span>
-      </tooltip>
-    </td>
-                 <td data-label="Actions">
-                            {subExpenseRec.data ? null : (
-    <>
-      {console.log('Condition:', subExpenseRec.data)}
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  setEditLineModelItem(e);
-                                  setEditLineModal(true);
-                                }}
-                              >
-                                <Icon.Edit2 />
-                              </span>
-                              
-                              </>
-                            )}
-                             {subExpenseRec.data ? null : (
-    <>
-      {console.log('Condition:', subExpenseRec.data)}
-                              <span
-                                className="addline"
-                                onClick={() => {
-                                  deleteRecord(e.quote_items_id);
-                                }}
-                              >
-                                <Icon.Trash2 />
-                              </span>
-                              </>
-                             )}
+                              <tooltip title={`${e.created_by} on ${e.creation_date}`}>
+                                <span
+                                  onMouseOver={handleIconMouseOver}
+                                  onMouseOut={handleIconMouseOut}
+                                  onFocus={handleIconFocus}
+                                  onBlur={handleIconBlur}
+                                  style={{
+                                    position: 'relative',
+                                    display: 'inline-block',
+                                  }}
+                                >
+                                  created by
+                                </span>
+                              </tooltip>
+                            </td>
+                            <td data-label="Actions">
+                              {subExpenseRec.data ? null : (
+                                <>
+                                  {console.log('Condition:', subExpenseRec.data)}
+                                  <span
+                                    className="addline"
+                                    onClick={() => {
+                                      setEditLineModelItem(e);
+                                      setEditLineModal(true);
+                                    }}
+                                  >
+                                    <Icon.Edit2 />
+                                  </span>
+                                </>
+                              )}
+                              {subExpenseRec.data ? null : (
+                                <>
+                                  {console.log('Condition:', subExpenseRec.data)}
+                                  <span
+                                    className="addline"
+                                    onClick={() => {
+                                      deleteRecord(e.quote_items_id);
+                                    }}
+                                  >
+                                    <Icon.Trash2 />
+                                  </span>
+                                </>
+                              )}
                             </td>
                           </tr>
                         );
@@ -454,13 +509,15 @@ const [showTooltip, setShowTooltip] = useState(false);
               </div>
             </Row>
             {quotationsModal && (
-  <ViewQuoteLogModal
-    quotationsModal={quotationsModal}
-    setQuotationsModal={setQuotationsModal}
-    toggleQuotationsModal={toggleQuotationsModal}
-    quoteId={id}
-  />
-)}
+              <ViewQuoteLogModal
+              arabic={arabic}
+              arb={arb}
+                quotationsModal={quotationsModal}
+                setQuotationsModal={setQuotationsModal}
+                toggleQuotationsModal={toggleQuotationsModal}
+                quoteId={id}
+              />
+            )}
 
             {/* End View Line Item Modal */}
             <EditLineItemModal
@@ -473,6 +530,8 @@ const [showTooltip, setShowTooltip] = useState(false);
             ></EditLineItemModal>
             {addLineItemModal && (
               <QuoteLineItem
+              arb={arb}
+              arabic={arabic}
                 //projectInfo={tenderId}
                 previousTenderDetails={previousTenderDetails}
                 addLineItemModal={addLineItemModal}

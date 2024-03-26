@@ -85,7 +85,7 @@ if (arb === true) {
   const columns = [
 
     {
-      name: 'Id',
+      name: arabic.find(item => item.key_text === 'mdChartAcc.Id')?.[genLabel],
       selector: 'acc_head_id',
       grow: 0,
       wrap: true,
@@ -93,7 +93,7 @@ if (arb === true) {
     },
   
     {
-      name: 'Edit',
+      name: arabic.find(item => item.key_text === 'mdChartAcc.Edit')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,

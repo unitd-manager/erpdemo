@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Input, Button,Label } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
@@ -24,6 +25,44 @@ const OpportunityDetails = () => {
     });
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/finance/getTranslationforTradingOrder')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const getOrdersByOrderId = () => {
     api.post('/finance/getFinanceById', { order_id: id }).then((res) => {
       setInsertQuote(res.data.data);
@@ -120,7 +159,7 @@ const OpportunityDetails = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="9">
+                  {/* <Col md="9">
                     <Label>
                     Quote Code <span className="required"> *</span>{' '}
                     </Label>
@@ -140,7 +179,37 @@ const OpportunityDetails = () => {
                           );
                         })}
                     </Input>
-                  </Col>
+                  </Col> */}
+
+                  <Col md="9">
+                <FormGroup>
+                  <Label>
+                  {arabic.find((item) => item.key_text === 'mdTradingOrder.Quote Code')?.[genLabel]}
+                  <span className="required"> *</span>
+                  </Label>
+                  <Input
+                    type="select"
+                    onChange={(e) => {
+                      setInsertQuote({ ...insertQuote, quote_id: e.target.value });
+                      handleInputs(e);
+                    }}
+                    
+                    value={insertQuote?.quote_id || ''}
+                    name="quote_id"
+                  >
+                    <option value="selected">Please Select</option>
+                    {quote &&
+                      quote.map((e) => {
+                        return (
+                          <option key={e.quote_id} value={e.quote_id}>
+                            {' '}
+                            {arb?e.quote_code_arb:e.quote_code}{' '}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
                  
                 </Row>
                

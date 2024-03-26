@@ -17,11 +17,12 @@ import api from '../../constants/api';
 //import QuoteLogViewLineItem from './QuoteLogViewLineItem';
 import PdfProjectQuoteLog from '../PDF/PdfProjectQuoteLog';
 
-const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) => {
+const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId,}) => {
   ViewQuoteLogModal.propTypes = {
     quotationsModal: PropTypes.bool,
     toggleQuotationsModal: PropTypes.any,
     quoteId: PropTypes.any,
+
   };
  
   const [quoteLogViewLineItem, setQuoteLogViewLineItem] = useState(false);
@@ -34,7 +35,45 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) =
       })
       .catch(() => {});
   };
+  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
 
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/tradingquote/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const [quotation, setQuotelogLineItems] = useState();
   const QuotationViewLineItem = (logId) => {
     api
@@ -57,7 +96,7 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) =
     <>
       <Modal size="xl" isOpen={quotationsModal}>
         <ModalHeader>
-          <div>Quote History</div>
+          <div>{arb ? 'تاريخ الاقتباس' : 'Quote History:'}</div>
           <Button
             color="secondary"
             onClick={() => {
@@ -80,29 +119,29 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) =
                   </Col> */}
                   <Col>
                     <FormGroup>
-                      <Label>Quote Code</Label>
+                      <Label>{arabic.find(item => item.key_text === 'mdTradingQuote.Quotation Code')?.[genLabel]}</Label>
                     </FormGroup>
                   </Col>
                   <Col>
                     <FormGroup>
-                      <Label>Quote Date</Label>
+                      <Label>{arabic.find(item => item.key_text === 'mdTradingQuote.Quotation Date')?.[genLabel]}</Label>
                     </FormGroup>
                   </Col>
                   <Col>
                     <FormGroup>
-                      <Label>Quote Status</Label>
+                      <Label>{arabic.find(item => item.key_text === 'mdTradingQuote.Status')?.[genLabel]}</Label>
                     </FormGroup>
                   </Col>
                  
                   <Col>
                     <FormGroup>
-                      <Label>Amount</Label>
+                      <Label>{arabic.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel]}</Label>
                     </FormGroup>
                   </Col>
                   <Col></Col>
                   <Col>
                     <FormGroup>
-                      <Label>Action</Label>{' '}
+                      <Label> {arb ? 'فعل' : 'Action'}</Label>{' '}
                     </FormGroup>
                   </Col>
                 </Row>
@@ -151,23 +190,23 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId}) =
                                   QuotationViewLineItem(element.quote_log_id);
                                 }}
                               >
-                                <u>View Line Items</u>
+                                <u>{arb ? 'عرض عناصر السطر' : 'View Line Items'}</u>
                               </span>
                             </Label>
 
                             <Modal size="xl" isOpen={quoteLogViewLineItem}>
-                              <ModalHeader>View Quote Log Line Items</ModalHeader>
+                              <ModalHeader>{arb ? 'عرض عناصر سطر سجل الأسعار' : 'View Quote Log Line Items'}</ModalHeader>
                               <ModalBody>
                                 <FormGroup>
                                   <table className="lineitem">
                                     <thead>
                                       <tr>
-                                        <th scope="col">Title </th>
-                                        <th scope="col">Description </th>
-                                        <th scope="col">Qty </th>
-                                        <th scope="col">Unit Price </th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Updated By</th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Title')?.[genLabel]} </th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Description')?.[genLabel]} </th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Quantity')?.[genLabel]} </th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Unit Price')?.[genLabel]}</th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel]}</th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Updated By')?.[genLabel]}</th>
                                       </tr>
                                     </thead>
                                     <tbody>
