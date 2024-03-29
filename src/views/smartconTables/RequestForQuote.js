@@ -163,8 +163,8 @@ const RequestForQuote = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.purchase_request_code}</td>
-                    <td>{element.status}</td>
+                    <td>{arb?element.purchase_request_code_arb:element.purchase_request_code}</td>
+                    <td>{arb?element.status_arb:element.status}</td>
                     <td>{element.date_issued}</td>
                     <td>{element.due_date}</td>
                   </tr>

@@ -179,12 +179,12 @@ const PurchaseRequest = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.purchase_request_code}</td>
+                    <td>{arb?element.purchase_request_code_arb:element.purchase_request_code}</td>
                     <td>{element.purchase_request_date ? moment(element.purchase_request_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.purchase_delivery_date ? moment(element.purchase_delivery_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.department}</td>
-                    <td>{element.status}</td>
+                    <td>{arb?element.company_name_arb:element.company_name}</td>
+                    <td>{arb?element.department_arb:element.department}</td>
+                    <td>{arb?element.status_arb:element.status}</td>
                   </tr>
                 );
               })}

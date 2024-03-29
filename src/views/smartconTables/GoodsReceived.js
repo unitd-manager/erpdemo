@@ -166,10 +166,10 @@ const GoodsReceipt = () => {
                       <Icon.Edit2 />
                     </Link>
                   </td>
-                  <td>{element.po_code}</td>
-                  <td>{element.company_name}</td>
+                  <td>{arb?element.po_code_arb:element.po_code}</td>
+                  <td>{arb?element.company_name_arb:element.company_name}</td>
                   <td>{moment(element.goods_received_date).format('YYYY-MM-DD')}</td>
-                  <td>{element.total_amount}</td>
+                  <td>{arb?element.total_amount_arb:element.total_amount}</td>
                 </tr>
               );
             })}
