@@ -21,8 +21,9 @@ function JournalButton({ navigate,editJournalData,editJournalMasterData }) {
                   editJournalData()
                   editJournalMasterData()
                   setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
+                    navigate('/Journal');
+                    //window.location.reload();
+                  }, 800);
                 }}
               >
                 Save
