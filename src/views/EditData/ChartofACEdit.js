@@ -134,8 +134,12 @@ console.log('arabic',arabic)
                 onChange={handleInputs}
                 value={
                   arb
-                    ? (chartofAC && chartofAC.title_arb ? chartofAC && chartofAC.title_arb : chartofAC && chartofAC.title)
-                    : chartofAC && chartofAC.title
+                    ? (chartofAC && chartofAC.title_arb ? chartofAC && chartofAC.title_arb : 
+                      (chartofAC && chartofAC.title_arb !== null ? '' : chartofAC && chartofAC.title)
+
+                      )
+                    : (chartofAC && chartofAC.title)
+            
                 }
                 name={arb ? 'title_arb' : 'title'}
               />
