@@ -132,7 +132,7 @@ if (arb === true) {
       wrap: true,
     },
     {
-      name: 'History',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.History')?.[genLabel],
     },
   ];
   return (
@@ -209,7 +209,7 @@ if (arb === true) {
                         }}
                       >
                         <b>
-                          <u>View History</u>
+                          <u>{arabic.find(item => item.key_text === 'mdPurchaseOrder.View History')?.[genLabel]}</u>
                         </b>
                       </div>
                     </td>

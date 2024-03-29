@@ -196,6 +196,7 @@ export default function ProjectQuoteMoreDetails({
                     <option value="Awarded">Awarded</option>
                     <option value="Not Awarded">Not Awarded</option>
                     <option value="Cancelled">Cancelled</option>
+                    <option value="Cancelled">Completed</option>
                   </Input>
                 </FormGroup>
               </Col>

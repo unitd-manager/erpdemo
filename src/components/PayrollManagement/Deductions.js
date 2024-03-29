@@ -126,7 +126,7 @@ function Deductions({
     <div>
       <Row>
       <Col md="9">
-        {arabic.find(item => item.key_text === 'mdPayrollManagement.CPF Employee')?.[genLabel]}</Col>{' '}
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.CPF(Employee)')?.[genLabel]}</Col>{' '}
       
         <Col md="3">
           <Input

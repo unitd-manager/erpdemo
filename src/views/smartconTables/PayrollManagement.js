@@ -658,10 +658,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
         <Card style={{ padding: '10px' }}>
           <div>
-            <h5>
-              Please create Job information records for the below employees to make them appear in
-              payroll.
-            </h5>
+          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Please create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
+
             {empWithoutJobInfo.map((el) => {
               return (
                 <span style={{ marginRight: '5px' }}>
@@ -798,7 +796,9 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.employee_name}</td>
+                    {/* <td>{element.employee_name}</td> */}
+                    <td>{arb ? element.employee_name_arb : element.employee_name}</td>
+
                     <td>
                       {/* <PdfPaySlipList payroll={element}></PdfPaySlipList> */}
                     </td>

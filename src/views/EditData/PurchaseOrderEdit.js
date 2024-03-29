@@ -348,7 +348,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           </Col>
        
           <Col md="3">
-            <b color="primary">Grand Total:{gTotal}</b>
+            <b color="primary">{arabic.find(item => item.key_text === 'mdPurchaseOrder.Grand Total')?.[genLabel]}:{gTotal}</b>
           </Col>
         </Row>
      
