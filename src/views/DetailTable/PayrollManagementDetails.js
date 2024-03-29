@@ -38,6 +38,7 @@ import ApiButton from '../../components/ApiButton';
 //import Loan from '../smartconTables/Loan';
 
 function PayrollManagementDetails() {
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [payroll, setPayroll] = useState({

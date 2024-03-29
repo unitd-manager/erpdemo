@@ -3,18 +3,28 @@ import PropTypes from 'prop-types';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 
 
-export default function JobSalary({ handleInputsJobInformation, job }) {
+export default function JobSalary({ handleInputsJobInformation, job,arb, arabic }) {
   JobSalary.propTypes = {
     handleInputsJobInformation: PropTypes.any,
     job: PropTypes.any,
-    
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <FormGroup>
         <Row>
           <Col md="4">
             <FormGroup>
-              <Label> CPF Applicable</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.CPF Applicable')?.[genLabel]}
+              </Label>
               <br></br>
               <Label>Yes</Label>
               <Input
@@ -38,9 +48,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>
-                Govt donation<span className="required"> *</span>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Govt donation')?.[genLabel]}   <span className="required"> *</span>
               </Label>
+            
               <Input
                 type="select"
                 value={job && job.govt_donation}
@@ -57,8 +68,11 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           </Col>
           {job && job.govt_donation === 'pay_cdac' && (
             <Col md="4">
-              <FormGroup>
-                <Label>Pay CDAC</Label>
+              <FormGroup>  
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Pay CDAC')?.[genLabel]}   
+              </Label>
+                
                 <Input
                   type="numbers"
                   onChange={handleInputsJobInformation}
@@ -71,7 +85,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           {job && job.govt_donation === 'pay_sinda' && (
             <Col md="4">
               <FormGroup>
-                <Label>Pay SINDA</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Pay SINDA')?.[genLabel]}   
+              </Label>
+               
                 <Input
                   type="numbers"
                   onChange={handleInputsJobInformation}
@@ -84,7 +101,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           {job && job.govt_donation === 'pay_mbmf' && (
             <Col md="4">
               <FormGroup>
-                <Label>Pay MBMF</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Pay MBMF')?.[genLabel]}   
+              </Label>
+                
                 <Input
                   type="numbers"
                   onChange={handleInputsJobInformation}
@@ -97,7 +117,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           {job && job.govt_donation === 'pay_eucf' && (
             <Col md="3">
               <FormGroup>
-                <Label>Pay EUCF</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Pay EUCF')?.[genLabel]}   
+              </Label>
+              
                 <Input
                   type="numbers"
                   onChange={handleInputsJobInformation}
@@ -109,7 +132,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           )}
           <Col md="4">
             <FormGroup>
-              <Label>Income Tax No</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Income Tax No')?.[genLabel]}   
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}
@@ -120,7 +146,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Income Tax Amount</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Income Tax Amount')?.[genLabel]}   
+              </Label>
+         
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}
@@ -131,7 +160,10 @@ export default function JobSalary({ handleInputsJobInformation, job }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>CPF No</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.CPF No')?.[genLabel]}   
+              </Label>
+             
               <Input
                 type="text"
                 onChange={handleInputsJobInformation}

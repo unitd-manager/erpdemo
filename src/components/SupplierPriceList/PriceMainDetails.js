@@ -3,12 +3,22 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function PlanningMainDetails({ handleInputs, plannings }) {
+export default function PlanningMainDetails({ handleInputs, plannings,arb,
+  arabic }) {
   PlanningMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     plannings: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
     
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <>
       <ComponentCard title="Price List Edit">
@@ -17,31 +27,41 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Customer Name<span style={{ color: 'red' }}>*</span></Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Customer Name')?.[genLabel]}<span style={{ color: 'red' }}>*</span></Label>
                   <br />
                   <Input
                   type="text"
                   onChange={handleInputs}
-                  value={plannings && plannings.customer_name}
-                  name="customer_name"
+                  
+                  value={
+                    arb
+                      ? plannings && plannings.customer_name_arb
+                      : plannings && plannings.customer_name
+                  }
+                  name={arb ? 'customer_name_arb' : 'customer_name'}
                   disabled
                 />                </FormGroup>
               </Col>
              
             <Col md="4">
               <FormGroup>
-                <Label>Notes </Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Notes')?.[genLabel]} </Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={plannings && plannings.notes}
-                  name="notes"
+                 
+                  value={
+                    arb
+                      ? plannings && plannings.notes_arb
+                      : plannings && plannings.notes
+                  }
+                  name={arb ? 'notes_arb' : 'notes'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
                 <FormGroup>
-                  <Label>Effective Date</Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Effective Date')?.[genLabel]}</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -55,7 +75,7 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
             
               <Col md="4">
                 <FormGroup>
-                  <Label> Expiry Date</Label>
+                  <Label> {arabic.find((item) => item.key_text === 'mdSupplierPriceList.Expiry Date')?.[genLabel]}</Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}
@@ -65,12 +85,17 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                 </FormGroup>
               </Col>
               <Col md="4">
-                <Label>Status</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Status')?.[genLabel]}</Label>
                 <Input
                   type="select"
                   onChange={handleInputs}
-                  value={plannings && plannings.status}
-                  name="status"
+                 
+                  value={
+                    arb
+                      ? plannings && plannings.status_arb
+                      : plannings && plannings.status
+                  }
+                  name={arb ? 'status_arb' : 'status'}
                 >
                   <option defaultValue="selected">Please Select</option>
                   <option value="Approved">Approved</option>

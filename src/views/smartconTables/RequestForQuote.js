@@ -136,7 +136,7 @@ const RequestForQuote = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Quote List"
+          title= {arb ?'قائمة الاقتباسات':'Quote List'}
           Button={
             <Link to="/RequestForQuoteDetails">
               <Button color="primary" className="shadow-none">

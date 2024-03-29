@@ -13,8 +13,9 @@ const ProjectTaskDetails = () => {
   //All const variables
   const navigate = useNavigate();
   const [projecttaskdetails, setProjectTaskDetails] = useState({
-    job_order_id:'',
+    project_job_id:'',
     task_title: '',
+    project_id:'',
   });
   const [joborder, setJobOrder] = useState('');
   //setting data in ProductDetails
@@ -37,10 +38,10 @@ const ProjectTaskDetails = () => {
 
   //Insert Product Data
   const insertPurchaseRequestData = () => {
-    if (projecttaskdetails.task_title !== '' &&
-    projecttaskdetails.job_order_id !== ''
-    )
-    {
+    // if (projecttaskdetails.task_title !== '' &&
+    // projecttaskdetails.job_order_id !== ''
+    // )
+ 
       projecttaskdetails.creation_date = creationdatetime;
       projecttaskdetails.created_by= loggedInuser.first_name;   
       api
@@ -55,9 +56,10 @@ const ProjectTaskDetails = () => {
         .catch(() => {
           message('Unable to insert record.', 'error');
         });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
+
+    // } else {
+    //   message('Please fill all required fields.', 'warning');
+    // }
   };
 
   //useeffect
@@ -82,15 +84,15 @@ const ProjectTaskDetails = () => {
                         <Input
                           type="select"
                           onChange={handleInputs}
-                          value={projecttaskdetails && projecttaskdetails.job_order_id}
-                          name="job_order_id"
+                          value={projecttaskdetails && projecttaskdetails.project_job_id}
+                          name="project_job_id"
                         >
                           <option defaultValue="selected">Please Select</option>
                           {joborder &&
                             joborder.map((e) => {
                               return (
-                                <option key={e.job_order_id} value={e.job_order_id}>
-                                  {e.job_order_title}
+                                <option key={e.project_job_id} value={e.project_job_id}>
+                                  {e.job_title}
                                 </option>
                               );
                             })}

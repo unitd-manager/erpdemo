@@ -17,6 +17,35 @@ const JobInformationDetails = () => {
     fin_no: '',
     status: 'current',
   });
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+
+  const getArabicLabels = () => {
+    api
+    .get('/translation/getTranslationForJobInformation')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //Navigation and Parameters
   const { id } = useParams();
   const navigate = useNavigate();
@@ -56,6 +85,7 @@ const JobInformationDetails = () => {
   };
   useEffect(() => {
     editJobById();
+    getArabicLabels();
   }, [id]);
   return (
     <div>
@@ -69,7 +99,11 @@ const JobInformationDetails = () => {
                 <Row>
                   <Col md="10">
                     <FormGroup>
-                      <Label>Employee Name <span className='required'>*</span></Label>
+                    <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Employee Name')?.[genLabel]}
+                <span className='required'>*</span>
+              </Label>
+                    
                       <Input
                         type="select"
                         name="employee_id"
@@ -85,7 +119,7 @@ const JobInformationDetails = () => {
                             return (
                               ele.e_count === 0 && (
                                 <option key={ele.employee_id} value={ele.employee_id}>
-                                  {ele.employee_name}
+                                  {arb?ele.employee_name_arb :ele.employee_name}{' '}
                                 </option>
                               )
                             );

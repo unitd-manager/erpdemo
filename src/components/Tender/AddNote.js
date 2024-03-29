@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Input } from 'reactstrap';
 import message from '../Message';
 import api from '../../constants/api';
 import AppContext from '../../context/AppContext';
@@ -15,12 +15,19 @@ function AddNote({ recordId, roomName }) {
   const { loggedInuser } = useContext(AppContext);
   const [addNoteData, setAddNoteData] = useState({
     comments: '',
+    comments_arb:'',
     room_name: roomName,
     record_id: recordId,
     creation_date: creationdatetime,
     created_by: loggedInuser.first_name,
   });
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+ 
+  const arb =selectedLanguage === 'Arabic'
   const handleData = (e) => {
     setAddNoteData({ ...addNoteData, [e.target.name]: e.target.value });
   };
@@ -37,7 +44,17 @@ function AddNote({ recordId, roomName }) {
   return (
     <>
       <Row>
-        <textarea id="note" name="comments" rows="4" cols="50" onChange={handleData} />
+        {/* <textarea id="note" name="comments" rows="4" cols="50" onChange={handleData} /> */}
+        <Input
+                type="textarea"
+                onChange={handleData}
+                value={
+                  arb
+                    ? addNoteData && addNoteData.comments_arb
+                    : addNoteData && addNoteData.comments
+                }
+                name={arb ? 'comments_arb' : 'comments'}
+              />
       </Row>
       <Row className="mb-2"></Row>
       <Row className="mb-1">

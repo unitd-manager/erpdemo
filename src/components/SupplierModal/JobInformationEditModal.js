@@ -44,6 +44,9 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
   const { id } = useParams();
   const [overTimeRateModal, setOverTimeRateModal] = useState('');
   const [allBankModal, setAllBankModal] = useState();
+ 
+ 
+
   // Get jobinformation By Id
   const editJobByIds = () => {
     api
@@ -127,6 +130,7 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
   useEffect(() => {
     editJobByIds();
     BankDetails();
+  
   }, [id]);
   return (
     <>
@@ -194,6 +198,8 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
             <ComponentCard title="Details of Employment (KET)">
               <ToastContainer></ToastContainer>
               <JobInformationKeyDetails
+            
+             
                 handleInputs={handleInputs}
                 jobModal={jobModal}
               ></JobInformationKeyDetails>

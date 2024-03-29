@@ -154,6 +154,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     purchase_invoice_id: id,
                     po_product_id: InvoiceItem.po_product_id,
                     item_title: InvoiceItem.item_title,
+                    item_title_arb: InvoiceItem.item_title_arb,
                     ordered_quantity: InvoiceItem.quantity,
                     cost_price: InvoiceItem.cost_price,
                     total_cost: InvoiceItem.cost_price*InvoiceItem.quantity,

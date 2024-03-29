@@ -19,6 +19,12 @@ function ViewNote({ roomName, recordId }) {
   };
 
   const [getNote, setGetNote] = useState(null);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const arb =selectedLanguage === 'Arabic'
 
   const getNotes = () => {
     api
@@ -96,7 +102,9 @@ function ViewNote({ roomName, recordId }) {
                           </p> */}
                         </div>
                       </Media>
-                      {e.comments}
+                      
+                      {arb ? e.comments_arb : e.comments}
+
                     </Media>
                   </Media>
                 ) : (
@@ -136,7 +144,7 @@ function ViewNote({ roomName, recordId }) {
                             </p> */}
                           </div>
                         </Media>
-                        {e.comments}
+                        {arb ? e.comments_arb : e.comments}
                       </Media>
                     </Media>
                   </Media>

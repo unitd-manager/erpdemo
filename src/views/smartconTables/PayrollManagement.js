@@ -20,7 +20,7 @@ import TerminatingPayslipModal from '../../components/PayrollManagement/Terminat
 import UpdateOtModal from '../../components/PayrollManagement/updateOtModal';
 import PrintPayslipModal from '../../components/PayrollManagement/PrintPayslipModal';
 // import PrintIR8AModal from '../../components/PayrollManagement/PrintIR8AModal';
-import { columns } from '../../data/PayrollHR/PayrollColumn';
+// import { columns } from '../../data/PayrollHR/PayrollColumn';
 // import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
 // 
 
@@ -34,9 +34,43 @@ const Payrollmanagement = () => {
   const [printPayslipModal, setPrintPayslipModal] = useState(false);
   //const [printIR8AModal,setPrintIR8AModal]= useState(false);
   const [loading, setLoading] = useState(false);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [empWithoutJobInfo, setEmpWithoutJobInfo] = useState([]);
   //handleinputs
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicLabels = () => {
+      api
+      .get('/translation/getTranslationForPayrollManagement')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  useEffect(() => {
+  
+    getArabicLabels();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   const handleInputs = (e) => {
     setPayrollManagementsdata({ ...payrollManagementsdata, [e.target.name]: e.target.value });
@@ -508,7 +542,114 @@ const Payrollmanagement = () => {
       }
     };
   }, [filterPeriod]);
-
+  const columns = [
+    {
+      name: '#',
+      selector: 'id',
+      sortable: true,
+      grow: 0,
+      width: 'auto',
+    },
+    {
+      name: 'edit',
+      selector: 'edit',
+      sortable: true,
+      grow: 0,
+      width: 'auto',
+      wrap: true,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Employee Name')?.[genLabel],
+     
+      selector: 'code',
+      sortable: true,
+      grow: 1,
+    },
+    {
+    
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Payslip print')?.[genLabel],
+      selector: 'code',
+      sortable: true,
+      grow: 1,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Month')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Year')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Basic Pay')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.OT')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.CPF(Employer)')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.CPF(Employee)')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Allowance')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Deductions')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Net Pay')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.Status')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdPayrollManagement.ID')?.[genLabel],
+      selector: 'project',
+      sortable: true,
+      grow: 1,
+      cell: (d) => <span>{d.closing.join(', ')}</span>,
+    },
+  ];
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
@@ -517,10 +658,8 @@ const Payrollmanagement = () => {
 
         <Card style={{ padding: '10px' }}>
           <div>
-            <h5>
-              Please create Job information records for the below employees to make them appear in
-              payroll.
-            </h5>
+          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Please create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
+
             {empWithoutJobInfo.map((el) => {
               return (
                 <span style={{ marginRight: '5px' }}>
@@ -657,7 +796,9 @@ const Payrollmanagement = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.employee_name}</td>
+                    {/* <td>{element.employee_name}</td> */}
+                    <td>{arb ? element.employee_name_arb : element.employee_name}</td>
+
                     <td>
                       {/* <PdfPaySlipList payroll={element}></PdfPaySlipList> */}
                     </td>

@@ -35,6 +35,7 @@ import AddNote from '../../components/Tender/AddNote';
 import JobTermination from '../../components/JobInformation/JobInformationTermination';
 import JobBank from '../../components/JobInformation/Job';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const JobInformationEdit = () => {
   //All state variable
@@ -50,7 +51,31 @@ const JobInformationEdit = () => {
   const [roomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState();
   const [update, setUpdate] = useState(false);
+  const [arabic, setArabic] = useState([]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+const getArabicLabels = () => {
+  api
+    .get('/translation/getTranslationForJobInformation')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });
+};
+
+useEffect(() => {
+  getArabicLabels();
+}, []);
+  
   //navigation and parameters
   const { id } = useParams();
   const navigate = useNavigate();
@@ -228,6 +253,17 @@ const JobInformationEdit = () => {
     { id: '8', name: 'Attachment' },
     { id: '9', name: 'Add a note' },
   ];
+  const tabsArb =  [
+    {id:'1',name:'ساعات العمل'},
+    {id:'2',name:'الإجازة والطبية'},
+    {id:'3',name:'تفاصيل الاختبار (KET)'},
+    {id:'4',name:'معلومات الراتب'},
+    {id:'5',name:'معلومات CPF'},
+    {id:'6',name:'المعلومات المصرفية'},
+    {id:'7',name:'معلومات الإنهاء'},
+    {id:'8',name:'مرفق'},
+    {id:'9',name:'أضف ملاحظة'},
+  ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -275,6 +311,7 @@ const JobInformationEdit = () => {
   useEffect(() => {
     BankDetails();
     editJobById();
+  
   }, [id]);
 
   return (
@@ -303,6 +340,7 @@ const JobInformationEdit = () => {
 
       <ToastContainer></ToastContainer>
       <Jobinformationedit
+     
         editJobData={editJobData}
         // id={id}
         applyChanges={applyChanges}
@@ -325,28 +363,41 @@ const JobInformationEdit = () => {
           ></JobKeyDetails>
 
           <ComponentCard title="More Details">
-            <Tab toggle={toggle} tabs={tabs} />
+          {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
             <TabContent className="p-4" activeTab={activeTab}>
               <TabPane tabId="1">
                 <JobWorkingHours
+                arb={arb}
+                arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                 ></JobWorkingHours>
               </TabPane>
               <TabPane tabId="2">
                 <JobLeaveandMedical
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                 ></JobLeaveandMedical>
               </TabPane>
               <TabPane tabId="3">
                 <JobProbation
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                 ></JobProbation>
               </TabPane>
               <TabPane tabId="4">
                 <JobInformationSalary
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   handleRadioGst={handleRadioGst}
                   job={job}
@@ -355,12 +406,16 @@ const JobInformationEdit = () => {
               </TabPane>
               <TabPane tabId="5">
                 <JobSalary
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                 ></JobSalary>
               </TabPane>
               <TabPane tabId="6">
                 <JobBank
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                   allBank={allBank}
@@ -368,6 +423,8 @@ const JobInformationEdit = () => {
               </TabPane>
               <TabPane tabId="7">
                 <JobTermination
+                  arb={arb}
+                  arabic={arabic}
                   handleInputsJobInformation={handleInputsJobInformation}
                   job={job}
                 ></JobTermination>
