@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SimpleBar from 'simplebar-react';
@@ -14,6 +14,8 @@ import {
   Button,
   Label
 } from 'reactstrap';
+import axios from 'axios';
+import { ErrorOutlineSharp } from '@material-ui/icons';
 // import { MessageSquare } from 'react-feather';
 // import * as Icon from 'react-feather';
 // import LogoWhite from '../../assets/images/logos/logo.png';
@@ -22,7 +24,7 @@ import {
 // import NotificationDD from './NotificationDD';
 import user1 from '../../assets/images/users/user1.jpg';
 import Language from './Language';
-
+import api from '../../constants/api';
 import { ToggleMiniSidebar, ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
 import ProfileDD from './ProfileDD';
 
@@ -30,6 +32,9 @@ import ProfileDD from './ProfileDD';
 const Header = () => {
   const isDarkMode = useSelector((state) => state.customizer.isDark);
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
+
+  const [convertedText, setConvertedText] = useState('');
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const logout=()=>{
     localStorage.clear()
@@ -37,6 +42,60 @@ const Header = () => {
       window.location.reload()
     },200)
   }
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+
+ 
+
+  // Fetch translation when selectedLanguage or plannings changes
+  const fetchTranslation = async () => {
+    api.get('/translation/getTranslation')
+    .then((res) => {
+      res.data.data.forEach(async (cell) => {
+    if (!selectedLanguage) return; // Don't make API call if language not selected
+    try {
+      const response = await axios.post(
+        'https://translation.googleapis.com/language/translate/v2',
+        {},
+        {
+          params: {
+            q: cell.value,
+            target: "ar",
+            key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4' // Replace with your Google Translate API key
+          }
+        }
+      );
+      await api.post('/translation/editTranslationArb', {
+        translation_id: cell.translation_id,
+        arb_value1: response.data.data.translations[0].translatedText,
+        
+      });
+      console.log('id',cell.translation_id)
+      console.log('trabsss',response.data.data.translations[0].translatedText)
+      setConvertedText(response.data.data.translations[0].translatedText);
+      setError('');
+    } catch (errors) {
+      setError('Translation failed. Please try again later.');
+      console.error('Translation error:', ErrorOutlineSharp);
+    }
+  })
+})
+  };
+
+//   useEffect(() => {
+//   fetchTranslation();
+// }, [selectedLanguage]);
+
+    
+   
+ 
+
+console.log('convertedText',convertedText)
+
+console.log('error',error)
 
   return (
     <Navbar
@@ -148,9 +207,17 @@ const Header = () => {
         {/**********Profile DD**********/}
         {/******************************/}
         <UncontrolledDropdown className="mx-1">
+        <DropdownToggle color={topbarColor}className="shadow-none"
+                onClick={() => {
+                  fetchTranslation();
+                }}>
+              Arabic Language update
+          </DropdownToggle>
+          </UncontrolledDropdown>
+        <UncontrolledDropdown className="mx-1">
           <DropdownToggle color={topbarColor}>
             {/* <MessageSquare size={18} /> */}
-           Language
+           Language : {selectedLanguage}
           </DropdownToggle>
           <DropdownMenu className="ddWidth">
             <DropdownItem header>

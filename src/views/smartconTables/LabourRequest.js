@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import { Button } from 'reactstrap';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -19,7 +20,88 @@ const LabourRequest = () => {
   //Const Variables
   const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+
+const fetchTranslation = async () => {
+  try {
+    const res2 = await api.get('/labourrequest/getLabourRequest');
+    res2.data.data.forEach(async (itemId) => {
+       console.log('LabourId',itemId.labour_request_id)
+    
+    const res1 = await api.get('/labourrequest/getTranslationColumn');
+    res1.data.data.forEach(async (item) => {
+      const columnNames = item.COLUMN_NAME_TRUNCATED;
+      
+      console.log('columnNames',columnNames)
+      const res = await api.post('/labourrequest/getLabourTranslation', { labour_request_id: itemId.labour_request_id, columnNames });
+     
+        console.log('resss',res.data.data)
+      res.data.data.forEach(async (cell) => {
+        Object.keys(cell).forEach(async(property) => {
+          console.log('colm', cell[property]);
+      
+
+        try {
+          const response = await axios.post(
+            'https://translation.googleapis.com/language/translate/v2',
+            {},
+            {
+              params: {
+                q:cell[property],
+                target: 'ar',
+                key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
+              },
+            }
+          );
+           console.log(property,'_arb')
+           console.log('trabsss', response.data.data.translations[0].translatedText);
+           await api.post('/labourrequest/editLabourRequestArb', {
+              
+            labour_request_id:itemId.labour_request_id,
+            [`${property}_arb`]: response.data.data.translations[0].translatedText,
+            value: response.data.data.translations[0].translatedText,
+        columnName:`${property}_arb`
+          });
+        } catch (error) {
+          console.error('Error occurred during translation:', error);
+        }
+      });
+    });
+    });
+  });
+  
+  } catch (error) { 
+    console.error('Error fetching translation column names:', error);
+  }
+};
+const [arabic, setArabic] = useState([]);
+
+  const arb =selectedLanguage === 'Arabic'
+  
+  const getArabicCompanyName = () => {
+      api
+      .get('/labourrequest/getTranslationForLabourRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   // get Leave
   const getPlanning = () => {
     api
@@ -48,6 +130,8 @@ const LabourRequest = () => {
 
   useEffect(() => {
     getPlanning();
+    getArabicCompanyName();
+    // fetchTranslation();
   }, []);
   //  stucture of leave list view
   const columns = [
@@ -69,35 +153,40 @@ const LabourRequest = () => {
     },
 
     {
-      name: 'Project Name',
+     
+      name: arabic.find(item => item.key_text === 'mdLabourRequest.Project Name')?.[genLabel],
       selector: 'project_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Project Code',
+     
+      name: arabic.find(item => item.key_text === 'mdLabourRequest.Code')?.[genLabel],
       selector: 'project_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Requested Date',
+     
+      name: arabic.find(item => item.key_text === 'mdLabourRequest.Request Date')?.[genLabel],
       selector: 'request_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Start Date',
+     
+      name: arabic.find(item => item.key_text === 'mdLabourRequest.Start Date')?.[genLabel],
       selector: 'request_start_date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'End Date',
+     
+      name: arabic.find(item => item.key_text === 'mdLabourRequest.End Date')?.[genLabel],
       selector: 'request_end_date',
       sortable: true,
       grow: 2,
@@ -110,6 +199,11 @@ const LabourRequest = () => {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
+        <Button color="primary" className="shadow-none"  onClick={() => {
+                  fetchTranslation();
+                }}>
+                Update Arb
+              </Button>
         <CommonTable
           loading={loading}
           title="Labour Request"
