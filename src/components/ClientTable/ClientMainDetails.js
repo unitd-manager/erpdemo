@@ -6,7 +6,7 @@ export default function ClientMainDetails({
   handleInputs,
   clientsDetails,
   allCountries,
-  formSubmitted,
+  // formSubmitted,
   arb,
   arabic,
 }) {
@@ -14,7 +14,7 @@ export default function ClientMainDetails({
     handleInputs: PropTypes.func,
     clientsDetails: PropTypes.any,
     allCountries: PropTypes.any,
-    formSubmitted: PropTypes.any,
+    // formSubmitted: PropTypes.any,
     arb: PropTypes.any,
     arabic: PropTypes.any,
   };
@@ -32,27 +32,40 @@ export default function ClientMainDetails({
       <FormGroup>
         <Row>
           <Col md="3">
-          <FormGroup>
-          <Label dir="rtl" style={{ textAlign: 'right' }}>
+            <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdClient.companyName')?.[genLabel]}
               </Label>
-          <Input
+              <Input
                 type="text"
                 onChange={handleInputs}
                 value={
                   arb
                     ? clientsDetails && clientsDetails.company_name_arb
+                      ? clientsDetails.company_name_arb
+                      : clientsDetails && clientsDetails.company_name_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.company_name
                     : clientsDetails && clientsDetails.company_name
                 }
                 name={arb ? 'company_name_arb' : 'company_name'}
-                className={`form-control ${
-                  formSubmitted && clientsDetails &&clientsDetails && clientsDetails.company_name_arb.trim() && clientsDetails.company_name.trim() === '' ? 'highlight' : ''
-                }`}
-                />
-          {formSubmitted && clientsDetails && clientsDetails.company_name_arb.trim() && clientsDetails.company_name.trim() === '' && (
-                <div className="error-message">Please Enter</div>
-              )}
-          </FormGroup>
+                // className={`form-control ${
+                //   formSubmitted &&
+                //   clientsDetails &&
+                //   clientsDetails &&
+                //   clientsDetails.company_name_arb.trim() &&
+                //   clientsDetails.company_name.trim() === ''
+                //     ? 'highlight'
+                //     : ''
+                // }`}
+              />
+              {/* {formSubmitted &&
+                clientsDetails &&
+                clientsDetails.company_name_arb.trim() &&
+                clientsDetails.company_name.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )} */}
+            </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
@@ -65,6 +78,10 @@ export default function ClientMainDetails({
                 value={
                   arb
                     ? clientsDetails && clientsDetails.phone_arb
+                      ? clientsDetails.phone_arb
+                      : clientsDetails && clientsDetails.phone_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.phone
                     : clientsDetails && clientsDetails.phone
                 }
                 name={arb ? 'phone_arb' : 'phone'}
@@ -82,15 +99,20 @@ export default function ClientMainDetails({
                 value={
                   arb
                     ? clientsDetails && clientsDetails.website_arb
+                      ? clientsDetails.website_arb
+                      : clientsDetails && clientsDetails.website_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.website
                     : clientsDetails && clientsDetails.website
                 }
+               
                 name={arb ? 'website_arb' : 'website'}
               />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdClient.email')?.[genLabel]}
               </Label>
               <Input
@@ -99,18 +121,30 @@ export default function ClientMainDetails({
                 value={
                   arb
                     ? clientsDetails && clientsDetails.email_arb
+                      ? clientsDetails.email_arb
+                      : clientsDetails && clientsDetails.email_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.email
                     : clientsDetails && clientsDetails.email
                 }
                 name={arb ? 'email_arb' : 'email'}
-                className={`form-control ${
-                  formSubmitted &&clientsDetails && clientsDetails.email_arb.trim()&& clientsDetails && clientsDetails.email.trim() === ''
-                    ? 'highlight'
-                    : ''
-                }`}
+                // className={`form-control ${
+                //   formSubmitted &&
+                //   clientsDetails &&
+                //   clientsDetails.email_arb.trim() &&
+                //   clientsDetails &&
+                //   clientsDetails.email.trim() === ''
+                //     ? 'highlight'
+                //     : ''
+                // }`}
               />
-              {formSubmitted && clientsDetails && clientsDetails.email_arb.trim() && clientsDetails && clientsDetails.email.trim() === '' && (
-                <div className="error-message">Please Enter</div>
-              )}
+              {/* {formSubmitted &&
+                clientsDetails &&
+                clientsDetails.email_arb.trim() &&
+                clientsDetails &&
+                clientsDetails.email.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+                )} */}
             </FormGroup>
           </Col>
           <Col md="3">
@@ -121,9 +155,14 @@ export default function ClientMainDetails({
               <Input
                 type="text"
                 onChange={handleInputs}
+                
                 value={
                   arb
                     ? clientsDetails && clientsDetails.fax_arb
+                      ? clientsDetails.fax_arb
+                      : clientsDetails && clientsDetails.fax_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.fax
                     : clientsDetails && clientsDetails.fax
                 }
                 name={arb ? 'fax_arb' : 'fax'}
@@ -138,9 +177,14 @@ export default function ClientMainDetails({
               <Input
                 type="text"
                 onChange={handleInputs}
+                
                 value={
                   arb
                     ? clientsDetails && clientsDetails.address_flat_arb
+                      ? clientsDetails.address_flat_arb
+                      : clientsDetails && clientsDetails.address_flat_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.address_flat
                     : clientsDetails && clientsDetails.address_flat
                 }
                 name={arb ? 'address_flat_arb' : 'address_flat'}
@@ -155,9 +199,14 @@ export default function ClientMainDetails({
               <Input
                 type="text"
                 onChange={handleInputs}
+               
                 value={
                   arb
                     ? clientsDetails && clientsDetails.address_street_arb
+                      ? clientsDetails.address_street_arb
+                      : clientsDetails && clientsDetails.address_street_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.address_street
                     : clientsDetails && clientsDetails.address_street
                 }
                 name={arb ? 'address_street_arb' : 'address_street'}
@@ -199,6 +248,10 @@ export default function ClientMainDetails({
                 value={
                   arb
                     ? clientsDetails && clientsDetails.address_po_code_arb
+                      ? clientsDetails.address_po_code_arb
+                      : clientsDetails && clientsDetails.address_po_code_arb !== null
+                      ? ''
+                      : clientsDetails && clientsDetails.address_po_code
                     : clientsDetails && clientsDetails.address_po_code
                 }
                 name={arb ? 'address_po_code_arb' : 'address_po_code'}
