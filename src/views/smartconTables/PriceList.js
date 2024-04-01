@@ -20,6 +20,13 @@ const Leaves = () => {
   const [planning, setPlanning] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+
   // get Leave
   const getPlanning = () => {
     api
@@ -49,6 +56,39 @@ const Leaves = () => {
   useEffect(() => {
     getPlanning();
   }, []);
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForPriceList = () => {
+      api
+      .get('/pricelistitem/getTranslationForPriceList')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+
+  useEffect(() => {
+    getTranslationForPriceList();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //  stucture of leave list view
   const columns = [
     {
@@ -59,7 +99,7 @@ const Leaves = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+      name: arabic.find(item => item.key_text === 'mdPriceList.Edit')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -69,21 +109,21 @@ const Leaves = () => {
     },
 
     {
-      name: 'Customer Name',
+      name: arabic.find(item => item.key_text === 'mdPriceList.CustomerName')?.[genLabel], 
       selector: 'customer_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Effective Date',
+      name: arabic.find(item => item.key_text === 'mdPriceList.EffectiveDate')?.[genLabel],
       selector: 'effective_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdPriceList.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -98,7 +138,7 @@ const Leaves = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Price List"
+          title={arb ? 'قائمة الاسعار': 'Price List'}
           Button={
             <Link to="/PriceListDetails">
               <Button color="primary" className="shadow-none">
@@ -125,9 +165,9 @@ const Leaves = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.customer_name}</td>
+                    <td>{arb && element.customer_name_arb ?element.customer_name_arb : element.customer_name}</td>
                     <td>{(element.effective_date)?moment(element.effective_date).format('DD-MM-YYYY'):''}</td>
-                    <td>{element.status}</td>
+                    <td>{arb && element.status_arb ?element.status_arb : element.status}</td>
                     </tr>
                 );
               })}

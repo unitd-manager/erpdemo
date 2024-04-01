@@ -171,7 +171,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     </td>
                     <td>{element.enquiry_code}</td>
                     <td>{arb && element.services_arb ?element.services_arb : element.services}</td>
-                    <td>{element.company_name}</td>
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
                     <td>{arb && element.office_ref_no_arb ?element.office_ref_no_arb : element.office_ref_no}</td>
                     <td>{element.project_end_date ? moment(element.project_end_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.status}</td>
