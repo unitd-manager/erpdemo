@@ -135,6 +135,7 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
                     onChange={handleInputs}
                     value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.invoice_amount}
                     name="invoice_amount"
+                    disabled
                   />
                 </FormGroup>
               </Col>

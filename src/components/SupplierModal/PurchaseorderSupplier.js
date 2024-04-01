@@ -201,7 +201,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
             <Row>
             <Col md="12">
         <FormGroup>
-          <Label>Amount</Label>
+          <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Amount')?.[genLabel]}</Label>
           <Input
               type="text"
               onChange={handleInputreceipt}
@@ -212,7 +212,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
       </Col>
               <Col md="12">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Date')?.[genLabel]}</Label>
                   <Input
                     type="date"
                     onChange={handleInputreceipt}
@@ -264,7 +264,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
                 type="button"
                 className="btn btn-dark shadow-none"
               >
-                Save
+                {arb?'يحفظ':'Save'}
               </Button>
             </FormGroup>
           </Form>

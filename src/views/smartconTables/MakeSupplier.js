@@ -4,7 +4,7 @@ import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import {
   Button,
   Col,
@@ -38,7 +38,7 @@ const MakeSupplier = () => {
   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
 
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const [company, setCompany] = useState();
   const toggleModal = () => {
     setModalOpen(!modalOpen);
@@ -105,7 +105,7 @@ if (arb === true) {
 
   
     {
-      name:'Receipt Code',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.ReceiptCode')?.[genLabel],
       selector: 'supplier_receipt_code',
       sortable: true,
       grow: 0,
@@ -134,7 +134,7 @@ if (arb === true) {
     },
 
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Date')?.[genLabel],
       selector: 'receipt_date',
       sortable: true,
       width: 'auto',
@@ -241,13 +241,13 @@ if (arb === true) {
                     <td>{element.mode_of_payment}</td>
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
-                    <td>{moment(element.date).format('YYYY-MM-DD')}</td>                  </tr>
+                    <td>{element.date?moment(element.date).format('YYYY-MM-DD'):''}</td>                  </tr>
                 );
               })}
           </tbody>
         </CommonTable>
         <Modal isOpen={modalOpen} toggle={toggleModal}>
-          <ModalHeader toggle={toggleModal}>Add New Receipt</ModalHeader>
+          <ModalHeader toggle={toggleModal}>{arb?'إضافة إيصال جديد':'Add New Receipt'}</ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
@@ -256,7 +256,7 @@ if (arb === true) {
                     <FormGroup>
                       <Row>
                         <Col md="10">
-                          <Label>Purchase Orders
+                          <Label>
                           {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
                           </Label>
                           <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
@@ -287,16 +287,18 @@ if (arb === true) {
                             type="button"
                             className="btn mr-2 shadow-none"
                           >
-                            Save & Continue
+                            {arb?'حفظ ومتابعة':'Save & Continue'}
                           </Button>
                           <Button
                             onClick={() => {
-                              navigate(-1);
+                              //navigate(-1);
+                              toggleModal()
                             }}
                             type="button"
                             className="btn btn-dark shadow-none"
                           >
-                            Go to List
+                            
+                            {arb?'اذهب إلى القائمة':'Go to List'}
                           </Button>
                         </div>
                       </Row>

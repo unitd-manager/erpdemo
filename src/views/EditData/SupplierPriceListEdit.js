@@ -203,7 +203,7 @@ const handleAddNewPlanning = (e) => {
         ></PlanningMainDetails>
 
       {/* Nav tab */}
-      <ComponentCard title="More Details">
+      <ComponentCard title={arb?"المزيد من التفاصيل":"More Details"}>
         <ToastContainer></ToastContainer>
         {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
@@ -233,6 +233,8 @@ const handleAddNewPlanning = (e) => {
            planData={planData}
            editPlanEditModal={editPlanEditModal}
            setPlanEditModal={setPlanEditModal}
+           arb={arb}
+           arabic={arabic}
            ></PlanEditModal>
           </TabPane>
           {/* Attachment */}

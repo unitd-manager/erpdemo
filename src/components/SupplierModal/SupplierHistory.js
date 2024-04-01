@@ -18,6 +18,44 @@ import api from '../../constants/api';
 const SupplierHistory = () => {
   const [history, setHistory] = useState();
   const { id } = useParams();
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForSupplier')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   // Get  By Id
   const getHistoryById = () => {
     api
@@ -36,16 +74,20 @@ const SupplierHistory = () => {
 
   const supplierHistoryColumn = [
     {
-      name: 'Date',
+      
+      name: arabic.find(item => item.key_text === 'mdSupplier.Date')?.[genLabel],
     },
     {
-      name: 'Amount',
+  
+      name: arabic.find(item => item.key_text === 'mdSupplier.Amount')?.[genLabel],
     },
     {
-      name: 'Mode Of Payment',
+     
+      name: arabic.find(item => item.key_text === 'mdSupplier.ModeOfPayment')?.[genLabel],
     },
     {
-      name: 'Cancel',
+  
+      name: arabic.find(item => item.key_text === 'mdSupplier.Cancel')?.[genLabel],
     },
   ];
 
@@ -95,7 +137,7 @@ const SupplierHistory = () => {
               {element.receipt_status !== 'Cancelled' ? (
                 <Link to="">
                 <span onClick={() => Supplier(element.supplier_receipt_id,element.purchase_order_id,element.supplier_id)}>
-                  <u>Cancel</u>
+                  <u>{arb?'يلغي':'Cancel'}</u>
                   </span>
                   </Link>
               ) : (

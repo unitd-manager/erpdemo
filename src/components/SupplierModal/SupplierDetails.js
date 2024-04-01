@@ -34,7 +34,7 @@ export default function SupplierDetails({
   return (
     <Form>
       <FormGroup>
-        <ComponentCard title="Supplier Details">
+      
           <Row>
             <Col md="4">
               <FormGroup>
@@ -179,7 +179,7 @@ export default function SupplierDetails({
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Contact Person')?.[genLabel]}</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.ContactPerson')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
@@ -194,10 +194,10 @@ export default function SupplierDetails({
               </FormGroup>
             </Col>
           </Row>
-        </ComponentCard>
+        
       </FormGroup>
       <FormGroup>
-        <ComponentCard title="Address">
+        <ComponentCard title={arb?"عنوان":"Address"}>
           <Row>
             <Col md="4">
               <FormGroup>

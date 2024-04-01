@@ -106,21 +106,21 @@ if (arb === true) {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdClient.Customer Name')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.CustomerName')?.[genLabel],
       selector: 'customer_name',
       sortable: true,
       grow: 0,
       wrap: true, 
     },
     {
-      name: 'Effective Date',
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.EffectiveDate')?.[genLabel],
       selector: 'effective_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: arabic.find(item => item.key_text === 'mdClient.Status')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,

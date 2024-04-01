@@ -215,7 +215,7 @@ useEffect(() => {
                     navigate('/Supplier');
                   }}
                 >
-                  Save
+                   {arb ?'يحفظ':'Save'}  
                 </Button>
               </Col>
               <Col>
@@ -229,7 +229,7 @@ useEffect(() => {
                     }, 800);
                   }}
                 >
-                  Apply
+                  {arb ?'يتقدم':'Apply'}  
                 </Button>
               </Col>
               <Col>
@@ -242,14 +242,14 @@ useEffect(() => {
 
                   }}
                 >
-                  Back to List
+                  {arb ?'الرجوع للقائمة':'Back to List'}  
                 </Button>
               </Col>
             </Row>
           </ComponentCardV2>
         </FormGroup>
       </Form>
-      <ComponentCard title="Supplier Details" creationModificationDate={supplier}>
+      <ComponentCard title={arb?"تفاصيل المورد":"Supplier Details"} creationModificationDate={supplier}>
 
       <SupplierDetails
         handleInputs={handleInputs}
@@ -271,7 +271,10 @@ useEffect(() => {
         eng={eng}
       ></PurchaseOrderLinked>
       <ToastContainer></ToastContainer>
-      <SupplierTable purchaseOrder={purchaseOrder}></SupplierTable>
+      <SupplierTable purchaseOrder={purchaseOrder}
+       arb={arb}
+       arabic={arabic}
+       eng={eng}></SupplierTable>
 
 
        {/* Attachment Tab */}
