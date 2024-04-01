@@ -276,7 +276,7 @@ const PurchaseReturnEdit = () => {
         arb={arb}
       ></ProjectQuoteMoreDetails>
 
-      <ComponentCard title="More Details">
+      <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
         <ToastContainer></ToastContainer>
 
         {eng === true && <Tab toggle={toggle} tabs={tabs} />}

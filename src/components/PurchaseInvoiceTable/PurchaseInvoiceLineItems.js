@@ -99,7 +99,7 @@ export default function PurchaseInvoiceGetFunction({PurchaseOrderId}) {
           return (
             <tr>
               <td>{index+1}</td>
-              <td >{e.item_title}</td>
+              <td>{arb ? e.item_title_arb : e.item_title}</td>
               <td >{e.unit}</td>
               <td >{e.ordered_quantity}</td>
               <td >{e.cost_price}</td>

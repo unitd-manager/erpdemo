@@ -328,7 +328,7 @@ console.error('Error fetching quote items', error);
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
                   </Label>
                   <br></br>
-                  <span>{quoteDetails && quoteDetails.purchase_request_code}</span>
+                  <span>{arb?quoteDetails && quoteDetails.purchase_request_code_arb:quoteDetails && quoteDetails.purchase_request_code}</span>
                   
                 </FormGroup>
               </Col>
@@ -338,7 +338,7 @@ console.error('Error fetching quote items', error);
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Request For Quote Code')?.[genLabel]}
                 </Label>
                   <br></br>
-                  <span>{quoteDetails && quoteDetails.rq_code}</span>
+                  <span>{arb?quoteDetails && quoteDetails.rq_code_arb:quoteDetails && quoteDetails.rq_code}</span>
                   
                 </FormGroup>
               </Col>

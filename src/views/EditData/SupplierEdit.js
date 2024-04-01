@@ -24,6 +24,7 @@ import SupplierTable from '../../components/SupplierModal/SupplierTable';
 import SupplierDetails from '../../components/SupplierModal/SupplierDetails';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 
 const SupplierEdit = () => {
@@ -56,10 +57,44 @@ const SupplierEdit = () => {
     }
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+const [arabic, setArabic] = useState([]);
+
+
+const arb =selectedLanguage === 'Arabic'
+
+const eng =selectedLanguage === 'English'
+
+
+const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForSupplier')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
   const tabs = [
     { id: '1', name: 'Attachment' },
   ];
-
+  const tabsArb =  [
+    {id:'1',name:'مرفق'},
+  ];
    // Attachment
    const dataForAttachment = () => {
     setDataForAttachment({
@@ -164,7 +199,9 @@ const SupplierEdit = () => {
 
   return (
     <>
-      <BreadCrumbs/>
+     {eng ===true && <BreadCrumbs heading={supplier && supplier.company_name} />}
+      { arb === true && <BreadCrumbs heading={supplier && supplier.company_name_arb} />}
+      
       <Form>
         <FormGroup>
           <ComponentCardV2>
@@ -178,7 +215,7 @@ const SupplierEdit = () => {
                     navigate('/Supplier');
                   }}
                 >
-                  Save
+                   {arb ?'يحفظ':'Save'}  
                 </Button>
               </Col>
               <Col>
@@ -192,7 +229,7 @@ const SupplierEdit = () => {
                     }, 800);
                   }}
                 >
-                  Apply
+                  {arb ?'يتقدم':'Apply'}  
                 </Button>
               </Col>
               <Col>
@@ -205,14 +242,14 @@ const SupplierEdit = () => {
 
                   }}
                 >
-                  Back to List
+                  {arb ?'الرجوع للقائمة':'Back to List'}  
                 </Button>
               </Col>
             </Row>
           </ComponentCardV2>
         </FormGroup>
       </Form>
-      <ComponentCard title="Supplier Details" creationModificationDate={supplier}>
+      <ComponentCard title={arb?"تفاصيل المورد":"Supplier Details"} creationModificationDate={supplier}>
 
       <SupplierDetails
         handleInputs={handleInputs}
@@ -221,20 +258,34 @@ const SupplierEdit = () => {
         supplierStatus={supplierStatus}
         status={status}
         setEditPurchaseOrderLinked={setEditPurchaseOrderLinked}
+        arb={arb}
+        arabic={arabic}
+        eng={eng}
       ></SupplierDetails>
   </ComponentCard>
       <PurchaseOrderLinked
         editPurchaseOrderLinked={editPurchaseOrderLinked}
         setEditPurchaseOrderLinked={setEditPurchaseOrderLinked}
+        arb={arb}
+        arabic={arabic}
+        eng={eng}
       ></PurchaseOrderLinked>
       <ToastContainer></ToastContainer>
-      <SupplierTable purchaseOrder={purchaseOrder}></SupplierTable>
+      <SupplierTable purchaseOrder={purchaseOrder}
+       arb={arb}
+       arabic={arabic}
+       eng={eng}></SupplierTable>
 
 
        {/* Attachment Tab */}
        <ComponentCard title="More Details">
            <ToastContainer></ToastContainer>
-           <Tab toggle={toggle} tabs={tabs} />
+           {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
            <TabContent className="p-4" activeTab={activeTab}>
            <TabPane tabId="1">
            <Form>

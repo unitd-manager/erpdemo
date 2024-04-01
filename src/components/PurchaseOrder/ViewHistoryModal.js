@@ -26,7 +26,43 @@ function ViewHistoryModal({ viewHistoryModal, setViewHistoryModal, productId, su
 
   const [fromSame, setFromSame] = useState([]);
   const [fromOthers, setFromOthers] = useState([]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/purchaseorder/getTranslationForPurchaseOrder')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //get history from same supplier
   const getProductsFromSameSupplier = () => {
     api
@@ -57,19 +93,24 @@ function ViewHistoryModal({ viewHistoryModal, setViewHistoryModal, productId, su
   };
   const supplierColumn = [
     {
-      name: 'PO Code	',
+    
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.PO Code')?.[genLabel],
+
     },
     {
-      name: 'Supplier Name	',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Supplier Name')?.[genLabel],
     },
     {
-      name: 'Date	',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Date')?.[genLabel],
     },
     {
-      name: 'Price',
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Price')?.[genLabel],
+
     },
     {
-      name: 'Qty	',
+ 
+      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Qty')?.[genLabel],
+
     },
   ];
   useEffect(() => {
@@ -100,7 +141,7 @@ function ViewHistoryModal({ viewHistoryModal, setViewHistoryModal, productId, su
                             return (
                               <tr key={element.product_id}>
                                 <td>{element.po_code}</td>
-                                <td>{element.supplier_name}</td>
+                                <td>{arb ? element.supplier_name_arb : element.supplier_name}</td>
                                 <td>{moment(element.po_date).format('YYYY-MM-DD')}</td>
                                 <td>{element.cost_price}</td>
                                 <td>{element.qty}</td>
@@ -128,7 +169,7 @@ function ViewHistoryModal({ viewHistoryModal, setViewHistoryModal, productId, su
                             return (
                               <tr key={element.product_id}>
                                 <td>{element.po_code}</td>
-                                <td>{element.supplier_name}</td>
+                                <td>{arb ? element.supplier_name_arb : element.supplier_name}</td>
                                 <td>{moment(element.po_date).format('YYYY-MM-DD')}</td>
                                 <td>{element.cost_price}</td>
                                 <td>{element.qty}</td>

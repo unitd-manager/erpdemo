@@ -22,6 +22,7 @@ function JournalButton({ navigate,editJournalData,editJournalMasterData }) {
                   editJournalMasterData()
                   setTimeout(() => {
                     navigate('/Journal');
+                    //window.location.reload();
                   }, 800);
                 }}
               >

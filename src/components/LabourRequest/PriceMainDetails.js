@@ -103,7 +103,8 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,arb
                   <Label dir="rtl" style={{ textAlign: 'left' }}>
                 {arabic.find((item) => item.key_text === 'mdLabourRequest.Job Description')?.[genLabel]}
               </Label>
-                  <textarea
+                  <Input
+                  type="textarea"
                     onChange={handleInputs}
                     value={
                       arb
@@ -201,7 +202,8 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,arb
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdLabourRequest.Skills Required')?.[genLabel]}
               </Label>
-                    <textarea
+                    <Input
+                      type="textarea"
                       onChange={handleInputs} 
                       value={
                         arb
@@ -219,7 +221,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,arb
 
               <Col md="3">
                 <FormGroup>
-                  <Label>Department</Label>
+                
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdLabourRequest.Department')?.[genLabel]}
               </Label>

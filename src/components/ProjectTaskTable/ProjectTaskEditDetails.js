@@ -82,9 +82,10 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                     <Col md="3">
                       <FormGroup>
                         
-                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                        {/* <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdProjectTask.Project Name')?.[genLabel]}
-              </Label>
+              </Label> */}
+              <Label>Project Name</Label>
                         <Input
                           type="select"
                           onChange={handleInputs}

@@ -111,9 +111,43 @@ const Cards = () => {
     }
   };
 
+  // const getSelectedLanguageFromLocalStorage = () => {
+  //   return localStorage.getItem('selectedLanguage') || '';
+  // };
+  
+  // const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  // const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/employeeModule/getTranslationForEmployee')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  // let genLabel = '';
+
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else {
+  //   genLabel = 'value';
+  // }
+
 
   useEffect(() => {
     getAllEmployees();
+    getArabicCompanyName();
   }, []);
 
   return (
@@ -170,7 +204,7 @@ const Cards = () => {
                   onClick={`/EmployeeEdit/${blg.employee_id_duplicate}?tab=1`}
                   image={Image}
                   id={blg.employee_id_duplicate}
-                  title={blg.employee_name.split(' ').shift().toUpperCase()} // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
+                  title= {blg.first_name.split(' ').shift().toUpperCase()} // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
                   projectDesignation={blg.project_designation}
@@ -179,6 +213,7 @@ const Cards = () => {
                   empCode={blg.emp_code}
                   email={blg.login_email}
                   joinDate={blg.act_join_date}
+                  arabic={arabic}
                 />
               </Col>
             )

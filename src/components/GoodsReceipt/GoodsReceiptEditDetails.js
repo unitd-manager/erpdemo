@@ -53,8 +53,11 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
                     onChange={handleInputs}
                     value={
                       arb
-                        ? goodsreceipteditdetails && goodsreceipteditdetails.po_code_arb
-                        : goodsreceipteditdetails && goodsreceipteditdetails.po_code
+                        ? (
+                            goodsreceipteditdetails && goodsreceipteditdetails.po_code_arb ? goodsreceipteditdetails.po_code_arb :
+                            (goodsreceipteditdetails && goodsreceipteditdetails.po_code_arb !== null ? '' : goodsreceipteditdetails && goodsreceipteditdetails.po_code)
+                          )
+                        : (goodsreceipteditdetails && goodsreceipteditdetails.po_code)
                     }
                     name={arb ? 'po_code_arb' : 'po_code'}
                     disabled
@@ -71,9 +74,14 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
                     onChange={handleInputs}
                     value={
                       arb
-                        ? goodsreceipteditdetails && goodsreceipteditdetails.company_name_arb
-                        : goodsreceipteditdetails && goodsreceipteditdetails.company_name
+                        ? (
+                            goodsreceipteditdetails && goodsreceipteditdetails.company_name_arb ? goodsreceipteditdetails.company_name_arb :
+                            (goodsreceipteditdetails && goodsreceipteditdetails.company_name_arb !== null ? '' : goodsreceipteditdetails && goodsreceipteditdetails.company_name)
+                          )
+                        : (goodsreceipteditdetails && goodsreceipteditdetails.company_name)
                     }
+              
+              
                     name={arb ? 'company_name_arb' : 'company_name'}
                     disabled
                   />
@@ -129,8 +137,11 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
                     onChange={handleInputs}
                     value={
                       arb
-                        ? goodsreceipteditdetails && goodsreceipteditdetails.total_amount_arb
-                        : goodsreceipteditdetails && goodsreceipteditdetails.total_amount
+                        ? (
+                            goodsreceipteditdetails && goodsreceipteditdetails.total_amount_arb ? goodsreceipteditdetails.total_amount_arb :
+                            (goodsreceipteditdetails && goodsreceipteditdetails.total_amount_arb !== null ? '' : goodsreceipteditdetails && goodsreceipteditdetails.total_amount)
+                          )
+                        : (goodsreceipteditdetails && goodsreceipteditdetails.total_amount)
                     }
                     name={arb ? 'total_amount_arb' : 'total_amount'}
                   />
@@ -144,8 +155,11 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
                   <Input
                   value={
                     arb
-                      ? goodsreceipteditdetails && goodsreceipteditdetails.status_arb
-                      : goodsreceipteditdetails && goodsreceipteditdetails.status
+                      ? (
+                          goodsreceipteditdetails && goodsreceipteditdetails.status_arb ? goodsreceipteditdetails.status_arb :
+                          (goodsreceipteditdetails && goodsreceipteditdetails.status_arb !== null ? '' : goodsreceipteditdetails && goodsreceipteditdetails.status)
+                        )
+                      : (goodsreceipteditdetails && goodsreceipteditdetails.status)
                   }
                     type="select"
                     onChange={handleInputs}

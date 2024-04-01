@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
+import api from '../../constants/api';
 
 function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
   PayslipSummary.propTypes = {
@@ -10,7 +11,40 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
     handleInputs: PropTypes.func,
     workingDaysInMonth: PropTypes.any,
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicLabels = () => {
+      api
+      .get('/translation/getTranslationForPayrollManagement')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  useEffect(() => {
+  
+    getArabicLabels();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   // const calculateDaysInRange = () => {
   //   const startDate = moment(payroll.payslip_start_date);
   //   const endDate = moment(payroll.payslip_end_date);
@@ -44,13 +78,14 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>
-                    Start Date{' '}
-                    <span className="required" style={{ color: 'red' }}>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Start Date')?.[genLabel]}
+                <span className="required" style={{ color: 'red' }}>
                       {' '}
                       *
                     </span>
-                  </Label>
+              </Label>
+                  
                   <Input
                     type="date"
                     value={payroll && payroll.payslip_start_date}
@@ -62,7 +97,9 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>End Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.End Date')?.[genLabel]}
+              </Label>
                   <Input
                     type="Date"
                     value={payroll && moment(payroll.payslip_end_date).format('YYYY-MM-DD')}
@@ -74,7 +111,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Working Days in Month</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Working Days in Month')?.[genLabel]}
+              </Label>
+                
                   <Input
                     type="text"
                     value={workingDaysInMonth}
@@ -88,7 +128,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Actual worked days in month</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Actual worked days in month')?.[genLabel]}
+              </Label>
+                  
                   <Input
                     type="text"
                     value={payroll && payroll.actual_working_days}
@@ -100,7 +143,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Mode Of Payment</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Mode Of Payment')?.[genLabel]}
+              </Label>
+                  
                   <Input
                     type="select"
                     value={payroll && payroll.mode_of_payment}
@@ -117,7 +163,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
 
               <Col md="4">
                 <FormGroup>
-                  <Label>Employee Name(DOB)</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Employee Name(DOB)')?.[genLabel]}
+              </Label>
+                 
                   <Input
                     type="text"
                     value={
@@ -135,7 +184,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Generated Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Generated Date')?.[genLabel]}
+              </Label>
+                  
                   <Input
                     type="Date"
                     value={moment(payroll && payroll.generated_date).format('YYYY-MM-DD')}
@@ -146,7 +198,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Basic Pay</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Basic Pay')?.[genLabel]}
+              </Label>
+                 
                   <Input
                     type="text"
                     value={payroll && payroll.basic_pay}
@@ -158,7 +213,10 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Status</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Status')?.[genLabel]}
+              </Label>
+                 
                   <Input
                     type="select"
                     onChange={handleInputs}

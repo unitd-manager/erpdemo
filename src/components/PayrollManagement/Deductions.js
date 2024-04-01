@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import api from '../../constants/api';
 
 function Deductions({
   payroll,
@@ -19,7 +20,40 @@ function Deductions({
     setLoanPaymentHistoryModal: PropTypes.func,
     newTotalMonthPay:PropTypes.func,
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicLabels = () => {
+      api
+      .get('/translation/getTranslationForPayrollManagement')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  useEffect(() => {
+  
+    getArabicLabels();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   // Function to calculate the total deduction based on default values
   const [totalDeductionsAmount, setTotalDeductionsAmount] = useState(0);
 
@@ -91,7 +125,9 @@ function Deductions({
   return (
     <div>
       <Row>
-        <Col md="9">CPF-Employee</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.CPF(Employee)')?.[genLabel]}</Col>{' '}
+      
         <Col md="3">
           <Input
             disabled
@@ -146,15 +182,18 @@ function Deductions({
         </Col>
       </Row>
       <Row>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Advance / Loan')?.[genLabel]}</Col>{' '}
         <Col md="9">
-          Advance / Loan{' '}
+          {' '}
           <Link
             to=""
             onClick={() => {
               setLoanPaymentHistoryModal(true);
             }}
           >
-            View loan breakup
+             {arabic.find(item => item.key_text === 'mdPayrollManagement.View loan breakup')?.[genLabel]}
+            
           </Link>
         </Col>
         <Col md="3">
@@ -184,7 +223,9 @@ function Deductions({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Income Tax</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Income Tax')?.[genLabel]}</Col>{' '}
+        
         <Col md="3">
           <Input
             name="income_tax_amount"
@@ -211,7 +252,9 @@ function Deductions({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Housing</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Housing')?.[genLabel]}</Col>{' '}
+       
         <Col md="3">
           <Input
             name="deduction1"
@@ -238,7 +281,9 @@ function Deductions({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Transportation</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Transportation')?.[genLabel]}</Col>{' '}
+       
         <Col md="3">
           <Input
             name="deduction2"
@@ -265,7 +310,9 @@ function Deductions({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Others</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Others')?.[genLabel]}</Col>{' '}
+      
         <Col md="3">
           <Input
             name="deduction3"
@@ -292,7 +339,9 @@ function Deductions({
         </Col>
       </Row>
       <Row>
-        <Col md="9">Food</Col>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Food')?.[genLabel]}</Col>{' '}
+       
         <Col md="3">
           <Input
             name="deduction4"
@@ -326,7 +375,9 @@ function Deductions({
       </Row>
       {payroll && payroll.govt_donation === 'pay_eucf' && (
         <Row>
-          <Col md="9">Pay EUCF</Col>
+            <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Pay EUCF')?.[genLabel]}</Col>{' '}
+         
           <Col md="3">
             <Input
               name="pay_eucf"
@@ -355,7 +406,9 @@ function Deductions({
       )}
       {payroll && payroll.govt_donation === 'pay_sinda' && (
         <Row>
-          <Col md="9">Pay SINDA</Col>
+            <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Pay SINDA')?.[genLabel]}</Col>{' '}
+        
           <Col md="3">
             <Input
               name="pay_sinda"
@@ -384,7 +437,9 @@ function Deductions({
       )}
       {payroll && payroll.govt_donation === 'pay_cdac' && (
         <Row>
-          <Col md="9">Pay CDAC</Col>
+          <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Pay CDAC')?.[genLabel]}</Col>{' '}
+          
           <Col md="3">
             <Input
               name="pay_cdac"
@@ -413,7 +468,9 @@ function Deductions({
       )}
       {payroll && payroll.govt_donation === 'pay_mbmf' && (
         <Row>
-          <Col md="9">Pay MBMF</Col>
+          <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Pay MBMF')?.[genLabel]}</Col>{' '}
+         
           <Col md="3">
             <Input
               name="pay_mbmf"
@@ -441,8 +498,10 @@ function Deductions({
         </Row>
       )}
       <Row>
+      <Col md="9">
+        {arabic.find(item => item.key_text === 'mdPayrollManagement.Total Deductions')?.[genLabel]}</Col>{' '}
         <Col md="9">
-          <b>Total Deductions</b>
+          <b></b>
         </Col>
         <Col md="3">
           <Input

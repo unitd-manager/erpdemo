@@ -124,11 +124,13 @@ const PurchaseOrderDetails = () => {
                       supplier.map((ele) => {
                         return (
                           <option key={ele.supplier_id} value={ele.supplier_id}>
-                            {ele.company_name}
+                           {arb?ele.company_name_arb :ele.company_name}{' '}
                           </option>
                         );
                       })}
-                  </Input>
+
+
+                </Input>
                 </Row>
 
                 <FormGroup>

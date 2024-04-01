@@ -154,7 +154,7 @@ const PurchaseReturn = () => {
                       </Link>
                     </td>
                    
-                    <td>{element.purchase_invoice_code}</td>
+                    <td>{arb?element.purchase_invoice_code_arb:element.purchase_invoice_code}</td>
                     <td>{element.purchase_invoice_date}</td>
                     <td>{element.purchase_return_date}</td>
                    

@@ -4,11 +4,20 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import api from '../../constants/api';
 
-const PurchaseorderSupplier = ({ receiptId, orderId }) => {
+const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
   PurchaseorderSupplier.propTypes = {
     receiptId: PropTypes.any,
     orderId: PropTypes.any,
+    arb:PropTypes.any,
+    arabic:PropTypes.any
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //All const Variable
   console.log('orderId',orderId);
   const [invoiceReceipt, setInvoiceReceipt] = useState();
@@ -192,7 +201,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId }) => {
             <Row>
             <Col md="12">
         <FormGroup>
-          <Label>Amount</Label>
+          <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Amount')?.[genLabel]}</Label>
           <Input
               type="text"
               onChange={handleInputreceipt}
@@ -203,7 +212,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId }) => {
       </Col>
               <Col md="12">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Date')?.[genLabel]}</Label>
                   <Input
                     type="date"
                     onChange={handleInputreceipt}
@@ -216,7 +225,8 @@ const PurchaseorderSupplier = ({ receiptId, orderId }) => {
                 <FormGroup>
                   <Label>
                     {' '}
-                    Mode Of Payment <span className="required">*</span>{' '}
+                 
+                    {arabic.find((item) => item.key_text === 'mdMakeSupplier.ModeOfPayment')?.[genLabel]}<span className="required">*</span>{' '}
                   </Label>
                   <Input type="select" name="mode_of_payment" onChange={handleInputreceipt}>
                   
@@ -229,12 +239,19 @@ const PurchaseorderSupplier = ({ receiptId, orderId }) => {
             
               <Col md="12">
                 <FormGroup>
-                  <Label>Notes</Label>
+                  <Label>
+                  {arabic.find((item) => item.key_text === 'mdMakeSupplier.Notes')?.[genLabel]}
+                  </Label>
                   <Input
                     type="text"
                     onChange={handleInputreceipt}
-                    defaultValue={createReceipt && createReceipt.remarks}
-                    name="remarks"
+                    
+                  value={
+                    arb
+                      ? createReceipt && createReceipt.remarks_arb
+                      : createReceipt && createReceipt.remarks
+                  }
+                  name={arb ? 'remarks_arb' : 'remarks'}
                   />
                 </FormGroup>
               </Col>
@@ -247,7 +264,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId }) => {
                 type="button"
                 className="btn btn-dark shadow-none"
               >
-                Save
+                {arb?'يحفظ':'Save'}
               </Button>
             </FormGroup>
           </Form>

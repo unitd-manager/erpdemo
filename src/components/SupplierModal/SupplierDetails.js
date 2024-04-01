@@ -8,6 +8,8 @@ export default function SupplierDetails({
   supplier,
   allCountries,
   supplierStatus,
+  arb,
+  arabic,
   
   // setEditPurchaseOrderLinked,
 }) {
@@ -17,46 +19,70 @@ export default function SupplierDetails({
     allCountries: PropTypes.object,
     supplierStatus: PropTypes.object,
     status: PropTypes.object,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
     // setEditPurchaseOrderLinked: PropTypes.bool,
   };
 
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   return (
     <Form>
       <FormGroup>
-        <ComponentCard title="Supplier Details">
+      
           <Row>
             <Col md="4">
               <FormGroup>
                 <Label>
-                  Name <span className="required"> *</span>
+                  {/* Name <span className="required"> *</span> */}
+                  {arabic.find((item) => item.key_text === 'mdSupplier.Name')?.[genLabel]}
                 </Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.company_name}
-                  name="company_name"
+                  value={
+                    arb
+                      ? supplier && supplier.company_name_arb
+                      : supplier && supplier.company_name
+                  }
+                  name={arb ? 'company_name_arb' : 'company_name'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Email</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Email')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.email}
-                  name="email"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.email_arb
+                      : supplier && supplier.email
+                  }
+                  name={arb ? 'email_arb' : 'email'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Fax</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Fax')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.fax}
-                  name="fax"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.fax_arb
+                      : supplier && supplier.fax
+                  }
+                  name={arb ? 'fax_arb' : 'fax'}
                 />
               </FormGroup>
             </Col>
@@ -64,23 +90,33 @@ export default function SupplierDetails({
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>Mobile</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Mobile')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.mobile}
-                  name="mobile"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.mobile_arb
+                      : supplier && supplier.mobile
+                  }
+                  name={arb ? 'mobile_arb' : 'mobile'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Status</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Status')?.[genLabel]}</Label>
                 <Input
                   type="select"
-                  name="status"
                   onChange={handleInputs}
-                  value={supplier && supplier.status}
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.status_arb
+                      : supplier && supplier.status
+                  }
+                  name={arb ? 'status_arb' : 'status'}
                 >
                   <option defaultValue="selected">Please Select</option>
                   <option value="current">Current</option>
@@ -94,12 +130,16 @@ export default function SupplierDetails({
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>GST NO</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.GST NO')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.gst_no}
-                  name="gst_no"
+                  value={
+                    arb
+                      ? supplier && supplier.gst_no_arb
+                      : supplier && supplier.gst_no
+                  }
+                  name={arb ? 'gst_no_arb' : 'gst_no'}
                 />
               </FormGroup>
             </Col>
@@ -107,73 +147,103 @@ export default function SupplierDetails({
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>Payment Details</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Payment Details')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.payment_details}
-                  name="payment_details"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.payment_details_arb
+                      : supplier && supplier.payment_details
+                  }
+                  name={arb ? 'payment_details_arb' : 'payment_details'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Terms</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Terms')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.terms}
-                  name="terms"
+                 
+                  value={
+                    arb
+                      ? supplier && supplier.terms_arb
+                      : supplier && supplier.terms
+                  }
+                  name={arb ? 'terms_arb' : 'terms'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Contact Person</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.ContactPerson')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.contact_person}
-                  name="contact_person"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.contact_person_arb
+                      : supplier && supplier.contact_person
+                  }
+                  name={arb ? 'contact_person_arb' : 'contact_person'}
                 />
               </FormGroup>
             </Col>
           </Row>
-        </ComponentCard>
+        
       </FormGroup>
       <FormGroup>
-        <ComponentCard title="Address">
+        <ComponentCard title={arb?"عنوان":"Address"}>
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>Address 1</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Address 1')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.address_flat}
-                  name="address_flat"
+                 
+                  value={
+                    arb
+                      ? supplier && supplier.address_flat_arb
+                      : supplier && supplier.address_flat
+                  }
+                  name={arb ? 'address_flat_arb' : 'address_flat'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Address 2</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Address 2')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.address_street}
-                  name="address_street"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.address_street_arb
+                      : supplier && supplier.address_street
+                  }
+                  name={arb ? 'address_street_arb' : 'address_street'}
                 />
               </FormGroup>
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>State/Zip</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.State/Zip')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.address_state}
-                  name="address_state"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.address_state_arb
+                      : supplier && supplier.address_state
+                  }
+                  name={arb ? 'address_state_arb' : 'address_state'}
                 />
               </FormGroup>
             </Col>
@@ -181,12 +251,18 @@ export default function SupplierDetails({
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>Country</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Country')?.[genLabel]}</Label>
                 <Input
                   type="select"
-                  name="address_country"
+                  
                   onChange={handleInputs}
-                  value={supplier && supplier.address_country}
+                 
+                  value={
+                    arb
+                      ? supplier && supplier.address_country_arb
+                      : supplier && supplier.address_country
+                  }
+                  name={arb ? 'address_country_arb' : 'address_country'}
                 >
                   <option defaultValue="selected">Please Select</option>
                   {allCountries &&
@@ -198,12 +274,17 @@ export default function SupplierDetails({
             </Col>
             <Col md="4">
               <FormGroup>
-                <Label>Pin Code</Label>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Pin Code')?.[genLabel]}</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={supplier && supplier.address_po_code}
-                  name="address_po_code"
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.address_po_code_arb
+                      : supplier && supplier.address_po_code
+                  }
+                  name={arb ? 'address_po_code_arb' : 'address_po_code'}
                 />
               </FormGroup>
             </Col>

@@ -197,7 +197,7 @@ const PurchaseOrder = () => {
                       </Link>
                     </td>
                     <td>{element.po_code}</td>
-                    <td>{element.title}</td>
+                    <td>{arb ? element.title_arb : element.title}</td>
                     <td>{element.po_value}</td>
                     <td>{element.status}</td>
                     <td>

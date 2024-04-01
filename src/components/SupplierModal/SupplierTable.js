@@ -5,29 +5,43 @@ import { Link } from 'react-router-dom';
 import { Form, Table } from 'reactstrap';
 import ComponentCard from '../ComponentCard';
 
-export default function SupplierTable({ purchaseOrder }) {
+export default function SupplierTable({ purchaseOrder,arb,arabic }) {
   SupplierTable.propTypes = {
     purchaseOrder: PropTypes.array,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
+  let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   // structure of makesupplier payment tables
   const supplierTableColumn = [
     {
-      name: 'PO Date',
+      name: arabic.find(item => item.key_text === 'mdSupplier.PoDate')?.[genLabel],
     },
     {
-      name: 'PO CODE',
+     
+      name: arabic.find(item => item.key_text === 'mdSupplier.PoCode')?.[genLabel],
     },
     {
-      name: 'PO value',
+   
+      name: arabic.find(item => item.key_text === 'mdSupplier.PoValue')?.[genLabel],
     },
     {
-      name: 'Balance',
+      
+      name: arabic.find(item => item.key_text === 'mdSupplier.Balance')?.[genLabel],
     },
     {
-      name: 'Payment Status',
+      
+      name: arabic.find(item => item.key_text === 'mdSupplier.PaymentStatus')?.[genLabel],
     },
     {
-      name: 'History',
+      
+      name: arabic.find(item => item.key_text === 'mdSupplier.History')?.[genLabel],
     },
   ];
 
@@ -49,7 +63,7 @@ export default function SupplierTable({ purchaseOrder }) {
                   purchaseOrder.map((element) => {
                     return (
                       <tr key={element.purchase_order_id}>
-                        <td>{moment(element.po_date).format('YYYY-MM-DD')}</td>
+                        <td>{element.po_date?moment(element.po_date).format('YYYY-MM-DD'):''}</td>
                         <td>
                           <Link to={`/PurchaseOrderEdit/${element.purchase_order_id}`}>
                             {element.po_code}
@@ -64,7 +78,7 @@ export default function SupplierTable({ purchaseOrder }) {
                         <td>{element.payment_status}</td>
                         <td>
                           <Link to={`/SupplierHistory/${element.purchase_order_id}`}>
-                            View History
+                           {arb?'عرض السجل':'View History'}
                           </Link>
                         </td>
                       </tr>

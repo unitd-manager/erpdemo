@@ -30,7 +30,40 @@ const getValueListName = () => {
       message('Unable to edit record.', 'error');
     });
 };
+const [arabic, setArabic] = useState([]);
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationForSupplierPriceList')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+  
+    getArabicCompanyName();
+  }, []);
   //setting data in PlanningForms
   const handlePlanningForms = (e) => {
     setPlanningForms({ ...planningForms, [e.target.name]: e.target.value });
@@ -68,13 +101,13 @@ const getValueListName = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb?'التفاصيل الرئيسية':'Key Details'}>
             <Form>
             <FormGroup>
                 <Row>
                   <Col md="12">
                     <Label>
-                      Supplier List Name <span className="required"> *</span>
+                     {arabic.find((item) => item.key_text === 'mdSupplierPriceList.SupplierListName')?.[genLabel]} <span className="required"> *</span>
                     </Label>
                     <Input
                       type="select"
@@ -107,7 +140,7 @@ const getValueListName = () => {
                       type="button"
                       className="btn mr-2 shadow-none"
                     >
-                      Save & Continue
+                     {arb ?'حفظ ومتابعة':'Save & Continue'}
                     </Button>
                     <Button
                       onClick={() => {
@@ -116,7 +149,7 @@ const getValueListName = () => {
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                        {arb ?'اذهب إلى القائمة':' Go to List'}
                     </Button>
                   </div>
                 </Row>

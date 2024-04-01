@@ -36,6 +36,8 @@ export default function PlanningCpanel({
   //newPlanningData,
   setNewPlanningData,
   quoteLine,
+  arb,
+ arabic
 }) {
   PlanningCpanel.propTypes = {
     setPlanData: PropTypes.func,
@@ -47,6 +49,8 @@ export default function PlanningCpanel({
    // handleAddNewPlanning: PropTypes.func,
     //newPlanningData: PropTypes.object,
     quoteLine: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
 
 
@@ -147,7 +151,13 @@ const handleUnitChange = (itemId, newUnit) => {
     unit: newUnit,
   }));
 };
+let genLabel = '';
 
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
 
 const handlePriceChange = (itemId, newPrice) => {
   const updatedItems = addMoreItem.map((item) => {
@@ -205,27 +215,27 @@ const loadOptions = (inputValue, callback) => {
     //   wrap: true,
     // },
     {
-      name: 'Name',
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.Name')?.[genLabel],
       selector: 'title',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Price',
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.Price')?.[genLabel],
       selector: 'price',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Unit',
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.Unit')?.[genLabel],
       selector: 'unit',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Action',
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.Action')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -241,7 +251,7 @@ const loadOptions = (inputValue, callback) => {
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
-              Add New Item{' '}
+              {arb?'أضف أداة جديدة':'Add New Item'}{' '}
             </Button>
             <Modal size="lg" isOpen={addContactModal} toggle={addContactToggle.bind(null)}>
               <ModalHeader toggle={addContactToggle.bind(null)}>New Item </ModalHeader>
@@ -257,7 +267,8 @@ const loadOptions = (inputValue, callback) => {
                           AddNewLineItem();
                         }}
                       >
-                        Add Line Item
+                       
+                        {arb?'إضافة عنصر السطر':' Add Line Item'}
                       </Button>
                     </Col>
                   </Row>
@@ -265,9 +276,9 @@ const loadOptions = (inputValue, callback) => {
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Unit </th>
+                          <th scope="col">{arb?'عنوان':'Title' }</th>
+                          <th scope="col">{arb?'سعر':'Price' }</th>
+                          <th scope="col">{arb?'وحدة':'Unit'} </th>
                          
                           <th scope="col"></th>
                         </tr>
@@ -339,14 +350,16 @@ const loadOptions = (inputValue, callback) => {
                     //addContactModal(false);
                   }}
                 >
-                  Submit
+                  
+                  {arb?'يُقدِّم':'Submit' }
                 </Button>
                 <Button
                   color="secondary"
                   className="shadow-none"
                   onClick={addContactToggle.bind(null)}
                 >
-                  Cancel
+                  
+                  {arb?'يلغي':'Cancel' }
                 </Button>
               </ModalFooter>
             </Modal>

@@ -4,7 +4,7 @@ import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import {
   Button,
   Col,
@@ -38,12 +38,49 @@ const MakeSupplier = () => {
   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
 
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const [company, setCompany] = useState();
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const [arabic, setArabic] = useState([]);
+
+  const getArabicCompanyName = () => {
+    api
+    .get('/translation/getTranslationForMakeSupplier')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
+
+let genLabel = '';
+
+if (arb === true) {
+  genLabel = 'arb_value';
+} else {
+  genLabel = 'value';
+}
   //getting data from invoice table
   const getInvoice = () => {
     api
@@ -68,20 +105,20 @@ const MakeSupplier = () => {
 
   
     {
-      name: 'Receipt Code',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.ReceiptCode')?.[genLabel],
       selector: 'supplier_receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Mode of Payment',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.ModeOfPayment')?.[genLabel],
       selector: 'mode_of_payment',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Status')?.[genLabel],
       selector: 'receipt_status',
       sortable: true,
       grow: 2,
@@ -89,7 +126,7 @@ const MakeSupplier = () => {
     },
 
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -97,7 +134,7 @@ const MakeSupplier = () => {
     },
 
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdMakeSupplier.Date')?.[genLabel],
       selector: 'receipt_date',
       sortable: true,
       width: 'auto',
@@ -204,13 +241,13 @@ const MakeSupplier = () => {
                     <td>{element.mode_of_payment}</td>
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
-                    <td>{moment(element.date).format('YYYY-MM-DD')}</td>                  </tr>
+                    <td>{element.date?moment(element.date).format('YYYY-MM-DD'):''}</td>                  </tr>
                 );
               })}
           </tbody>
         </CommonTable>
         <Modal isOpen={modalOpen} toggle={toggleModal}>
-          <ModalHeader toggle={toggleModal}>Add New Receipt</ModalHeader>
+          <ModalHeader toggle={toggleModal}>{arb?'إضافة إيصال جديد':'Add New Receipt'}</ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
@@ -219,7 +256,9 @@ const MakeSupplier = () => {
                     <FormGroup>
                       <Row>
                         <Col md="10">
-                          <Label>Purchase Orders</Label>
+                          <Label>
+                          {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
+                          </Label>
                           <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
                             <option>Select Customer</option>
                             {company &&
@@ -248,16 +287,18 @@ const MakeSupplier = () => {
                             type="button"
                             className="btn mr-2 shadow-none"
                           >
-                            Save & Continue
+                            {arb?'حفظ ومتابعة':'Save & Continue'}
                           </Button>
                           <Button
                             onClick={() => {
-                              navigate(-1);
+                              //navigate(-1);
+                              toggleModal()
                             }}
                             type="button"
                             className="btn btn-dark shadow-none"
                           >
-                            Go to List
+                            
+                            {arb?'اذهب إلى القائمة':'Go to List'}
                           </Button>
                         </div>
                       </Row>
@@ -277,6 +318,8 @@ const MakeSupplier = () => {
        <PurchaseorderSupplier 
        receiptId={selectedReceiptId}
        orderId={ selectReceiptId}
+       arb={arb}
+              arabic={arabic}
        ></PurchaseorderSupplier>
           </ModalBody>
         </Modal>

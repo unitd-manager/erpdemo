@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
+import api from '../../constants/api';
 
 function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies, team }) {
   EmployeePart.propTypes = {
@@ -60,6 +61,42 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
   const totalExperience = calculateTotalExperience(employeeDetails.act_join_date);
 
   console.log('all countries', allCountries);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  //const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/purchaserequest/getTranslationForPurchaseRequest')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+     getArabicCompanyName();
+  }, []);
+
   return (
     <div>
       <FormGroup>
@@ -67,10 +104,18 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
           <Row>
             <Col md="3">
               <FormGroup>
-                <Label>Code</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Code')?.[genLabel]}</Label>
                 <Input
-                  name="emp_code"
-                  value={employeeDetails && employeeDetails.emp_code}
+                  value={
+                    arb
+                      ? (
+                        employeeDetails && employeeDetails.emp_code_arb ? employeeDetails.emp_code_arb :
+                          (employeeDetails && employeeDetails.emp_code_arb !== null ? '' : employeeDetails && employeeDetails.emp_code)
+                        )
+                      : (employeeDetails && employeeDetails.emp_code)
+                  }
+                  name={arb ? 'emp_code_arb' : 'emp_code'}
                   onChange={handleInputChange}
                   type="text"
                 />
@@ -78,12 +123,20 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
-                <Label>
-                  Full Name <span style={{ color: 'red' }}>*</span>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Full Name')?.[genLabel]}
+                   <span style={{ color: 'red' }}>*</span>
                 </Label>
                 <Input
-                  name="employee_name"
-                  value={employeeDetails && employeeDetails.employee_name}
+                  value={
+                    arb
+                      ? (
+                        employeeDetails && employeeDetails.employee_name_arb ? employeeDetails.employee_name_arb :
+                          (employeeDetails && employeeDetails.employee_name_arb !== null ? '' : employeeDetails && employeeDetails.employee_name)
+                        )
+                      : (employeeDetails && employeeDetails.employee_name)
+                  }
+                  name={arb ? 'employee_name_arb' : 'employee_name'}
                   onChange={handleInputChange}
                   type="text"
                 />
@@ -91,34 +144,54 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
-                <Label>Salutation</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Salutation')?.[genLabel]}</Label>
                 <Input
-                  name="salutation"
-                  value={employeeDetails && employeeDetails.salutation}
+                name={arb ? 'salutation_arb' : 'salutation'}
+                  
+                  value={
+                    arb
+                      ? (
+                        employeeDetails && employeeDetails.salutation_arb ? employeeDetails.salutation_arb :
+                          (employeeDetails && employeeDetails.salutation_arb !== null ? '' : employeeDetails && employeeDetails.salutation)
+                        )
+                      : (employeeDetails && employeeDetails.salutation)
+                  }
+                  
                   onChange={handleInputChange}
                   type="select"
                 >
-                  <option defaultValue="selected">Please Select</option>
-                  <option value="Mr">Mr</option>
-                  <option value="Mrs">Mrs</option>
-                  <option value="Ms">Ms</option>
+                  <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
+                  <option value="Mr">{arb ?'السيد':'Mr'}</option>
+                  <option value="Mrs">{arb ?'السّيدة':'Mrs'}</option>
+                  <option value="Ms">{arb ?'آنسة':'Ms'}</option>
                 </Input>
               </FormGroup>
             </Col>
             <Col md="3">
               <FormGroup>
-                <Label>
-                  Gender <span style={{ color: 'red' }}>*</span>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Gender')?.[genLabel]}
+                   <span style={{ color: 'red' }}>*</span>
                 </Label>
                 <Input
-                  name="gender"
-                  value={employeeDetails && employeeDetails.gender}
+                  
+                  name={arb ? 'gender_arb' : 'gender'}
+                  value={
+                    arb
+                      ? (
+                        employeeDetails && employeeDetails.gender_arb ? employeeDetails.gender_arb :
+                          (employeeDetails && employeeDetails.gender_arb !== null ? '' : employeeDetails && employeeDetails.gender)
+                        )
+                      : (employeeDetails && employeeDetails.gender)
+                  }
+                  
                   onChange={handleInputChange}
                   type="select"
                 >
-                  <option defaultValue="selected">Please Select</option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
+                  <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
+                  <option value="Female">{arb ?'أنثى':'Female'}</option>
+                  <option value="Male">{arb ?'ذكر':'Male'}</option>
                 </Input>
               </FormGroup>
             </Col>
@@ -126,7 +199,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
           <Row>
             <Col md="3">
               <FormGroup>
-                <Label>Status</Label>
+                <Label>{arb ?'حالة':'Status'}</Label>
                 <Input
                   name="status"
                   value={employeeDetails && employeeDetails.status}
@@ -134,17 +207,17 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   type="select"
                 >
                   <option defaultValue="selected" value="Current">
-                    Current
+                  {arb ?'حاضِر':'Current'} 
                   </option>
-                  <option value="Archive">Archive</option>
-                  <option value="Cancel">Cancel</option>
+                  <option value="Archive">{arb ?'أرشيف':'Archive'} </option>
+                  <option value="Cancel">{arb ?'يلغي':'Cancel'}</option>
                 </Input>
               </FormGroup>
             </Col>
             <Col md="3">
               <FormGroup>
                 <Label>
-                  Date of Birth <span style={{ color: 'red' }}>*</span>
+                {arb ?'تاريخ الميلاد':'Date of Birth'} <span style={{ color: 'red' }}>*</span>
                 </Label>
                 <Input
                   type="date"
@@ -159,7 +232,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
-                <Label>Passport No</Label>
+                <Label>{arb ?'رقم جواز السفر':'Passport No'}</Label>
                 <Input
                   name="passport"
                   value={employeeDetails && employeeDetails.passport}

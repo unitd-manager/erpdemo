@@ -60,6 +60,39 @@ const InvoiceData = () => {
       });
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/creditnote/getTranslationForCreditNote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //Structure of Invoice list view
   const columns = [
     {
@@ -70,27 +103,27 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Order No',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Order No')?.[genLabel],
       selector: 'order_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Code',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Code')?.[genLabel],
       selector: 'credit_note_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Mode of Payment',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Mode of Payment')?.[genLabel],
       selector: 'mode_of_payment',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Status',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Status')?.[genLabel],
       selector: 'credit_note_status',
       sortable: true,
       grow: 2,
@@ -98,7 +131,7 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Amount',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -106,7 +139,7 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Date',
+      name: arabic.find((item) => item.key_text === 'mdCreditNote.Date')?.[genLabel],
       selector: 'credit_note_date',
       sortable: true,
       width: 'auto',
@@ -193,6 +226,7 @@ const InvoiceData = () => {
   useEffect(() => {
     getCompany();
     getInvoice();
+    getArabicCompanyName();
   }, [id]);
 
 
@@ -204,7 +238,7 @@ const InvoiceData = () => {
 
         <CommonTable
           loading={loading}
-          title="Credit Note List"
+          title= {arb ?'قائمة مذكرة الائتمان':'Credit Note List'}
           Button={
             // Open the modal on button click
             <Button color="primary" className="shadow-none" onClick={toggleModal}>
@@ -226,11 +260,11 @@ const InvoiceData = () => {
                   <tr key={element.invoice_id}>
                     <td>{index + 1}</td>
 
-                    <td>{element.order_code}</td>
-                    <td>{element.credit_note_code}</td>
-                    <td>{element.mode_of_payment}</td>
-                    <td>{element.credit_note_status}</td>
-                    <td>{element.amount}</td>
+                    <td>{arb?element.order_code_arb:element.order_code}</td>
+                    <td>{arb?element.credit_note_code_arb:element.credit_note_code}</td>
+                    <td>{arb?element.mode_of_payment_arb:element.mode_of_payment}</td>
+                    <td>{arb?element.credit_note_status_arb:element.credit_note_status}</td>
+                    <td>{arb?element.amount_arb:element.amount}</td>
                     <td>{(element.credit_note_date)?moment(element.credit_note_date).format('DD-MM-YYYY'):''}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
@@ -241,18 +275,19 @@ const InvoiceData = () => {
           </tbody>
         </CommonTable>
         <Modal isOpen={modalOpen} toggle={toggleModal}>
-          <ModalHeader toggle={toggleModal}>Add New Receipt</ModalHeader>
+          <ModalHeader toggle={toggleModal}>{arb ?'إضافة إيصال جديد':'Add New Receipt'}</ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
-                <ComponentCard title="Receipt Details">
+                <ComponentCard title= {arb ?'تفاصيل الاستلام':'Receipt Details'}>
                   <Form>
                     <FormGroup>
                       <Row>
                       <Col md="10">
-                          <Label>Invoice</Label>
+                      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCreditNote.Invoice')?.[genLabel]} </Label>
                           <Input type="select" name="order_id" onChange={handleBookingInputs}>
-                            <option>Select Invoice</option>
+                            <option>{arb ?'حدد الفاتورة':'Select Invoice'}</option>
                             {invoiveId &&
                               invoiveId.map((e) => {
                                 return (
@@ -264,9 +299,11 @@ const InvoiceData = () => {
                           </Input>
                         </Col>
                         <Col md="10">
-                          <Label>Orders</Label>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCreditNote.Orders')?.[genLabel]} 
+                </Label>
                           <Input type="select" name="order_id" onChange={handleBookingInputs}>
-                            <option>Select Order</option>
+                            <option>{arb ?'اختر طلبا':'Select Order'}</option>
                             {order &&
                               order.map((e) => {
                                 return (
@@ -316,7 +353,7 @@ const InvoiceData = () => {
 
         <Modal isOpen={secondModalOpen} toggle={() => setSecondModalOpen(!secondModalOpen)}>
           <ModalHeader toggle={() => setSecondModalOpen(!secondModalOpen)}>
-            Create receipt
+          {arb ?'إنشاء إيصال':'Create receipt'}
           </ModalHeader>
           <ModalBody>
        <ReceiptCreate 

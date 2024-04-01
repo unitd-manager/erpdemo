@@ -23,6 +23,9 @@ export default function AccountMapButton({ editData, navigate, applyChanges, bac
                 onClick={() => {
                     editData();
                   navigate('/ChartOfAccounts');
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 300);
                 }}
               >
                 Save
