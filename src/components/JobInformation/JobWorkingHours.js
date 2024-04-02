@@ -44,11 +44,15 @@ if (arb === true) {
                 {arabic.find((item) => item.key_text === 'mdJobInformation.Rest day per Week')?.[genLabel]}
               </Label>
             
-            <Input
+              <Input
               type="text"
               onChange={handleInputsJobInformation}
-              value={job && job.rest_day_per_week}
-              name="rest_day_per_week"
+              value={
+                arb
+                  ? job && job.rest_day_per_week_arb
+                  : job && job.rest_day_per_week
+              }
+              name={arb ? 'rest_day_per_week_arb' : 'rest_day_per_week'}
             />
           </FormGroup>
         </Col>
