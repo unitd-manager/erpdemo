@@ -47,10 +47,14 @@ const OpportunityDetails = () => {
   //Logic for adding company in db
   const [companyInsertData, setCompanyInsertData] = useState({
     company_name: '',
+    company_name_arb:'',
     address_street: '',
-    address_town: '',
+    address_street_arb:'',
+    address_flat: '',
+    address_flat_arb: '',
     address_country: '',
     address_po_code: '',
+    address_po_code_arb: '',
     phone: '',
     fax: '',
     website: '',
@@ -59,6 +63,47 @@ const OpportunityDetails = () => {
     company_size: '',
     source: '',
   });
+
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/enquiry/getTranslationforTradingEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   const handleInputs = (e) => {
     setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
@@ -69,19 +114,19 @@ const OpportunityDetails = () => {
   };
 
   const insertCompany = () => {
-    if (
-      companyInsertData.company_name !== '' &&
-      companyInsertData.address_street !== '' &&
-      companyInsertData.address_po_code !== '' &&
-      companyInsertData.address_country !== ''
-    ) {
-      // Check if the entered company name already exists in the company list
-      const isCompanyExists =
-        company && company.some((comp) => comp.company_name === companyInsertData.company_name);
+    if ((arb && companyInsertData.company_name_arb.trim() !== '') || (!arb && companyInsertData.company_name.trim() !== '') &&
+    (arb && companyInsertData.address_flat_arb.trim() !== '') || (!arb && companyInsertData.address_flat.trim() !== '') &&
+    (arb && companyInsertData.address_po_code_arb.trim() !== '') || (!arb && companyInsertData.address_po_code.trim() !== ''))
+ {
+      // // Check if the entered company name already exists in the company list
+      // const isCompanyExists =
+      //   company && company.some((comp) => comp.company_name === companyInsertData.company_name ||
+      //                                    comp.company_name_arb === companyInsertData.company_name_arb);
 
-      if (isCompanyExists) {
-        message('Company already exists.', 'error');
-      } else {
+
+      // if (isCompanyExists) {
+      //   message('Company already exists.', 'error');
+      // } else {
         api
           .post('/company/insertCompany', companyInsertData)
           .then((res) => {
@@ -99,10 +144,11 @@ const OpportunityDetails = () => {
             message('Network connection error.', 'error');
           });
       }
-    } else {
       setAddFormSubmitted(true);
-      message('Please fill all required fields.', 'warning');
-    }
+    // } else {
+    //   setAddFormSubmitted(true);
+    //   message('Please fill all required fields.', 'warning');
+    // }
   };
 
   //Logic for adding tender in db
@@ -130,7 +176,7 @@ const OpportunityDetails = () => {
   };
   //console.log(tenderDetails);
   const insertTender = (code) => {
-    if (tenderForms.company_id !== '' && tenderForms.title !== '' && tenderForms.category !== '') {
+    if ( (arb && tenderForms.title_arb.trim() !== '') || (!arb && tenderForms.title.trim() !== '') ) {
       tenderForms.opportunity_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -177,56 +223,18 @@ const OpportunityDetails = () => {
     getAllCountries();
   }, [id]);
 
-  const inputClass = `form-control ${
-    formSubmitted && (!tenderForms.company_id || tenderForms.company_id === 'Please Select')
-      ? 'highlight'
-      : ''
-  }`;
+  // const inputClass = `form-control ${
+  //   formSubmitted && (!tenderForms.company_id || tenderForms.company_id === 'Please Select')
+  //     ? 'highlight'
+  //     : ''
+  // }`;
 
-  const inputClass1 = `form-control ${
-    formSubmitted && (!tenderForms.category || tenderForms.category === 'Please Select')
-      ? 'highlight'
-      : ''
-  }`;
-  const getSelectedLanguageFromLocalStorage = () => {
-    return localStorage.getItem('selectedLanguage') || '';
-  };
-
-  const selectedLanguage = getSelectedLanguageFromLocalStorage();
-
-  // Use the selected language value as needed
-  console.log('Selected language from localStorage:', selectedLanguage);
+  // const inputClass1 = `form-control ${
+  //   formSubmitted && (!tenderForms.category || tenderForms.category === 'Please Select')
+  //     ? 'highlight'
+  //     : ''
+  // }`;
  
-
-  const [arabic, setArabic] = useState([]);
-
-  const arb = selectedLanguage === 'Arabic';
-
-  // const eng = selectedLanguage === 'English';
-
-  const getArabicCompanyName = () => {
-    api
-      .get('/enquiry/getTranslationforTradingEnq')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });
-  };
-
-  console.log('arabic', arabic);
-  useEffect(() => {
-    getArabicCompanyName();
-  }, []);
-
-  let genLabel = '';
-
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
   return (
     <div>
       <BreadCrumbs />
@@ -237,30 +245,49 @@ const OpportunityDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                <Col md="9">
-                <FormGroup>
-                  <Label dir="rtl" style={{ textAlign: 'right' }}>
-                  <span className="required"> *</span>
-                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}{' '}
-                    {/*Access the value property */}
-                   
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputsTenderForms}
-                    name="title"
-                    value={
-                      arb
-                        ? tenderForms && tenderForms.title_arb
-                          ? tenderForms.title_arb
-                          : tenderForms && tenderForms.title_arb !== null
-                          ? ''
-                          : tenderForms && tenderForms.title
-                        : tenderForms && tenderForms.title
-                    }
-                  ></Input>
-                </FormGroup>
-              </Col>
+                
+              <Col md="9">
+                        <FormGroup>
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {
+                              arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[
+                                genLabel
+                              ]
+                            }
+                          </Label>
+                          <span className="required">*</span>
+                          <Input
+                            type="text"
+                            onChange={handleInputsTenderForms}
+                            value={
+                              arb
+                                ? tenderForms && tenderForms.title_arb
+                                  ? tenderForms.title_arb
+                                  : tenderForms && tenderForms.title_arb !== null
+                                  ? ''
+                                  : tenderForms && tenderForms.title
+                                : tenderForms && tenderForms.title
+                            }
+                            name={arb ? 'title_arb' : 'title'}
+                            className={`form-control ${
+                              formSubmitted &&
+                              ((arb && tenderForms.title_arb.trim() === '') ||
+                                (!arb && tenderForms.title.trim() === ''))
+                                ? 'highlight'
+                                : ''
+                            }`}
+                          />
+
+                          {formSubmitted &&
+                            ((arb &&
+                              tenderForms &&
+                              tenderForms.title_arb.trim() === '') ||
+                              (!arb && tenderForms.title.trim() === '')) && (
+                              <div className="error-message">Please Enter</div>
+                            )}
+                        </FormGroup>
+                      </Col>
+              
                   {/* <Col md="9">
                     <Label>
                       {' '}
@@ -294,7 +321,7 @@ const OpportunityDetails = () => {
                       setTenderForms({ ...tenderForms, company_id: e.target.value });
                       handleInputsTenderForms(e);
                     }}
-                    className={inputClass}
+                    //className={inputClass}
                     value={tenderForms?.company_id || ''}
                     name="company_id"
                   >
@@ -344,9 +371,7 @@ const OpportunityDetails = () => {
                         {arb ?'اضف جديد':'Add New'}
                     </Button>
                   </Col>
-                  {formSubmitted && !tenderForms.company_id && (
-                    <div className="error-message">Please Select</div>
-                  )}
+              
                 </Row>
                 {/* <FormGroup>
                   <Label>
@@ -388,6 +413,7 @@ const OpportunityDetails = () => {
                 tenderForms={tenderForms}
               ></TenderCompanyDetails>
               <FormGroup>
+                
               <Col md="9">
                 <FormGroup>
                   {arabic.find((item) => item.key_text === 'mdTradingEnq.Category')?.[genLabel]}
@@ -397,7 +423,7 @@ const OpportunityDetails = () => {
                   onChange={handleInputsTenderForms}
                   value={tenderForms && tenderForms.category}
                   name="category"
-                  className={inputClass1}
+                  //className={inputClass1}
                   >
                     <option value="selected">Please Select</option>
                     {categoryLinked &&
