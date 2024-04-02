@@ -63,6 +63,19 @@ const ValueListEditDetails = ({ valuelisteditdetails, handleInputs, valuelistnam
             </Col>
             <Col md="4">
               <FormGroup>
+                <Label>
+                  Value Arb <span className="required"> *</span>
+                </Label>
+                <Input
+                  type="textarea"
+                  onChange={handleInputs}
+                  value={valuelisteditdetails && valuelisteditdetails.value_arb}
+                  name="value_arb"
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
                 <Label>Code</Label>
                 <Input
                   type="text"

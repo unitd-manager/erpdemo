@@ -135,11 +135,12 @@ export default function TenderMoreDetails({
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.enquiry_date_arb
+                        ? (tenderDetails && tenderDetails.enquiry_date_arb
                           ? tenderDetails.enquiry_date_arb
-                          : tenderDetails && tenderDetails.enquiry_date_arb !== null
+                          : (tenderDetails && tenderDetails.enquiry_date_arb !== null
                           ? ''
-                          : tenderDetails && tenderDetails.enquiry_date
+                          : tenderDetails && tenderDetails.enquiry_date)
+                        )
                         : tenderDetails && tenderDetails.enquiry_date
                     }
                     name={arb ? 'enquiry_date_arb' : 'enquiry_date'}
@@ -181,11 +182,11 @@ export default function TenderMoreDetails({
                 </FormGroup>
               </Col>
 
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingEnq.Client')?.[genLabel]}{' '}
-                    {/*Access the value property */}
+                    
                     <span className="required">*</span>
                   </Label>
                   <Input
@@ -205,7 +206,7 @@ export default function TenderMoreDetails({
                     disabled
                   ></Input>
                 </FormGroup>
-              </Col>
+              </Col> */}
               {/* <Col md="3">
                 <Label>
                   Client <span className="required"> *</span>{' '}
