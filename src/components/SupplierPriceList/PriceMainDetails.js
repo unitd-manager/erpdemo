@@ -27,7 +27,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arb,
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Customer Name')?.[genLabel]}<span style={{ color: 'red' }}>*</span></Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.CustomerName')?.[genLabel]}<span style={{ color: 'red' }}>*</span></Label>
                   <br />
                   <Input
                   type="text"
@@ -61,7 +61,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arb,
             </Col>
             <Col md="4">
                 <FormGroup>
-                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Effective Date')?.[genLabel]}</Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.EffectiveDate')?.[genLabel]}</Label>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -75,7 +75,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arb,
             
               <Col md="4">
                 <FormGroup>
-                  <Label> {arabic.find((item) => item.key_text === 'mdSupplierPriceList.Expiry Date')?.[genLabel]}</Label>
+                  <Label> {arabic.find((item) => item.key_text === 'mdSupplierPriceList.ExpiryDate')?.[genLabel]}</Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}

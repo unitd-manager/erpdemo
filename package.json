@@ -15,6 +15,7 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.10",
+    "@mui/x-data-grid": "^7.1.0",
     "@permify/react-role": "^0.5.3",
     "@react-pdf/renderer": "3.0.0",
     "@reduxjs/toolkit": "^1.6.2",
@@ -113,7 +114,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.3",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
     "@types/datatables.net-buttons": "^1.4.7",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -153,7 +157,10 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ]
   }
 }
