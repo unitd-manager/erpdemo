@@ -88,7 +88,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       width: '4%',
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Edit')?.[genLabel],
+      name: arb ? 'يحرر' : 'Edit' ,
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -166,11 +166,11 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Goods Delivery List"
+          title={arb?'قائمة تسليم البضائع':'Goods Delivery List'}
           Button={
             <Link to="/GoodsDeliveryDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none"> 
+              {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
           }

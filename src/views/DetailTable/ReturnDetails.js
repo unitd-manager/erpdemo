@@ -56,7 +56,46 @@ const ReturnDetails = () => {
 
   useEffect(() => {
     getQuote();
+    
   }, [id]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/goodsdelivery/getTranslationforTradingGoods')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  // let genLabel = '';
+
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else { 
+  //   genLabel = 'value';
+  // }
 
   return (
     <div>
@@ -64,27 +103,31 @@ const ReturnDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Return">
+          <ComponentCard title={ arb ? 'عودة جديدة' :'New Return'}>
             <Form>
               <FormGroup></FormGroup>
               <FormGroup>
                 <Row>
                   <Col md="9">
-                    <Label>
-                      Invoices<span className="required"> *</span>{' '}
-                    </Label>
-                    <Input
+                  <Label>
+                  {arb ? 'الفواتير' : ' Invoices'}
+                      <span className="required"> *</span>{' '}
+                    </Label>  
+                  <Input
                       type="select"
                       name="invoice_id"
                       value={insertReturn.invoice_id}
                       onChange={handleInputs}
                     >
-                      <option>Please Select</option>
+                      <option>
+                      { arb ? 'الرجاء التحديد' : 'Please Select' }</option>
                       {invoice &&
                         invoice.map((ele) => {
                           return (
                             <option key={ele.invoice_id} value={ele.invoice_id}>
-                              {ele.invoice_code}
+                              {' '}
+                            {arb?ele.invoice_code_arb:ele.invoice_code}{' '}
+
                             </option>
                           );
                         })}
@@ -103,7 +146,7 @@ const ReturnDetails = () => {
                       insertOrder();
                     }}
                   >
-                    Save & Continue
+                    {arb ?'حفظ ومتابعة':'Save & Continue'}
                   </Button>
                   <Button
                     className="shadow-none"
@@ -111,6 +154,7 @@ const ReturnDetails = () => {
                     onClick={() => {
                       if (
                         window.confirm(
+                         
                           'Are you sure you want to cancel  \n  \n You will lose any changes made',
                         )
                       ) {
@@ -118,7 +162,7 @@ const ReturnDetails = () => {
                       }
                     }}
                   >
-                    Cancel
+                    {arb ?'يلغي':'Cancel'}
                   </Button>
                 </div>
               </Row>

@@ -3,23 +3,21 @@ import PropTypes from 'prop-types';
 import { Form, Table } from 'reactstrap';
 
 export default function ItemTable({
-  orderitemDetails
- 
-}) {
+  orderitemDetails,arb}) {
   ItemTable.propTypes = {
     orderitemDetails: PropTypes.array,
-    
+    arb:PropTypes.any,
      };
 
   //Structure of Invoice table
   const invoiceTableColumns = [
-    { name: 'Title' },
-    { name: 'Unit' },
-    { name: 'Unit Price' },
-    { name: 'Ordered Quantity' },
-    { name: 'Invoice Quantity' },
-    { name: 'Total Cost' },
-    { name: 'Updated By' },
+    { name:arb ? 'عنوان': 'Title' },
+    { name:arb ? 'وحدة': 'Unit' },
+    { name:arb ? 'سعر الوحدة': 'Unit Price' },
+    { name:arb ? 'الكمية المطلوبة': 'Ordered Quantity' },
+    { name:arb ? 'كمية الفاتورة': 'Invoice Quantity' },
+    { name:arb ? 'المبلغ الإجمالي': 'Total Amount' },
+    { name:arb ? 'تم التحديث بواسطة': 'Updated By' },
   ];
  
 
@@ -54,7 +52,8 @@ export default function ItemTable({
           })
         ) : (
           <tr>
-            <td colSpan={invoiceTableColumns.length}>No items available</td>
+            <td colSpan={invoiceTableColumns.length}>
+              {arb?'لا توجد عناصر متاحة':'No items available'}</td>
           </tr>
         )}
       </tbody>
