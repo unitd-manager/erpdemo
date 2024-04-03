@@ -96,6 +96,39 @@ const EmployeeEdit = () => {
   //   },1800)
 
   // };
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/employeeModule/getTranslationForEmployee')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  // let genLabel = '';
+
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else {
+  //   genLabel = 'value';
+  // }
   const backToList = () => {
     navigate('/Employee');
   };
@@ -408,6 +441,7 @@ const EmployeeEdit = () => {
       await getQualifications();
       await getAllCompanies();
       await getTeams();
+      await getArabicCompanyName()
     };
     getAlldata();
   }, [id]);
@@ -444,6 +478,8 @@ const EmployeeEdit = () => {
           handleInputChange={handleInputChange}
           allCountries={allCountries}
           companies={companies}
+          arabic={arabic}
+          arb={arb}
         />
       </Row>
       <ComponentCard title="More Details">
@@ -453,6 +489,8 @@ const EmployeeEdit = () => {
             <LoginDetailsTab
               employeeDetails={employeeDetails}
               handleInputChange={handleInputChange}
+              arabic={arabic}
+          arb={arb}
             />
           </TabPane>
           <TabPane tabId="2">
@@ -460,6 +498,8 @@ const EmployeeEdit = () => {
               <TabPassTypeTab
                 tabPassTypeDetails={tabPassTypeDetails}
                 handlePassTypeInputs={handlePassTypeInputs}
+                arabic={arabic}
+          arb={arb}
               />
             </Row>
           </TabPane>
@@ -469,6 +509,8 @@ const EmployeeEdit = () => {
                 educationalQualificationDetails={educationalQualificationDetails}
                 qualifications={qualifications}
                 handleEduInputs={handleEduInputs}
+                arabic={arabic}
+          arb={arb}
               />
             </Row>
           </TabPane>
@@ -477,6 +519,8 @@ const EmployeeEdit = () => {
               <ContactInformationTab
                 contactInformationDetails={contactInformationDetails}
                 handleCiInputs={handleCiInputs}
+                arabic={arabic}
+          arb={arb}
               />
             </Row>
           </TabPane>
@@ -485,6 +529,8 @@ const EmployeeEdit = () => {
               <EmergencyContactTab
                 emergencyContactDetails={emergencyContactDetails}
                 handleEcInputs={handleEcInputs}
+                arabic={arabic}
+          arb={arb}
               />
             </Row>
           </TabPane>
@@ -499,6 +545,8 @@ const EmployeeEdit = () => {
                 setAttachmentModal={setAttachmentModal}
                 pictureData={pictureData}
                 attachmentData={attachmentData}
+                arabic={arabic}
+          arb={arb}
               />
             </Row>
           </TabPane>
@@ -508,6 +556,7 @@ const EmployeeEdit = () => {
                 id={id}
                 employeeDetails={employeeDetails}
                 handleInputChange={handleInputChange}
+                arb={arb}
               />
             </Row>
           </TabPane>
