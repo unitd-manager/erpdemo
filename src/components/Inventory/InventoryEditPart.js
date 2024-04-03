@@ -7,12 +7,22 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
 import ComponentCardV2 from '../ComponentCardV2';
 
-function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }) {
+function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, eng, arb, arabic }) {
   InventoryEditPart.propTypes = {
     inventoryDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     editinventoryData: PropTypes.func,
+    eng: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //navigation
   const navigate = useNavigate();
   // Route Change
@@ -23,7 +33,8 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }
   return (
     <div>
       <Row>
-        <BreadCrumbs heading={inventoryDetails && inventoryDetails.title} disabled />
+        {eng ===true && <BreadCrumbs heading={inventoryDetails && inventoryDetails.title} />}
+      { arb === true && <BreadCrumbs heading={inventoryDetails && inventoryDetails.title_arb} />}
         <ToastContainer></ToastContainer>
         <Form>
           <FormGroup>
@@ -68,108 +79,135 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }
               </Row>
             </ComponentCardV2>
 
-            <ComponentCard
-              title="Product Details"
-              righttitle={
-                <Row>
-                  <Col className="fs-10 small">
-                    <small>Creation :</small>
-                    <small>
-                      {inventoryDetails && inventoryDetails.created_by}
-                      {inventoryDetails && inventoryDetails.creation_date}
-                    </small>
-                  </Col>
-
-                  <Col className="fs-10 small">
-                    <small>Modification :</small>
-
-                    <small>
-                      {inventoryDetails && inventoryDetails.modified_by}
-                      {inventoryDetails && inventoryDetails.modification_date}
-                    </small>
-                  </Col>
-                </Row>
-              }
-            >
+            <ComponentCard  title={arb ? 'تفاصيل المخزون': 'Inventory Details'} creationModificationDate={inventoryDetails}>
               <Row>
                 <Col md="3">
                   <FormGroup>
-                    <Label>Inventory Code</Label>
-                    <Input
-                      type="text"
-                      value={inventoryDetails && inventoryDetails.inventory_code}
-                      name="inventory_code"
-                      disabled
-                    />
+                    {/* <Label>Inventory Code</Label> */}
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.InventoryCode')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.inventory_code_arb
+                    : inventoryDetails && inventoryDetails.inventory_code
+                }
+                name={arb ? 'inventory_code_arb' : 'inventory_code'}
+                disabled
+                />
                   </FormGroup>
                 </Col>
                 <Col md="3">
                   <FormGroup>
-                    <Label>Product Name</Label>
-                    <Input
-                      type="text"
-                      value={inventoryDetails && inventoryDetails.product_name}
-                      onChange={handleInputs}
-                      name="product_name"
-                      disabled
-                    />
+                    {/* <Label>Product Name</Label> */}
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.ProductName')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.product_name_arb
+                    : inventoryDetails && inventoryDetails.product_name
+                }
+                name={arb ? 'product_name_arb' : 'product_name'}
+                disabled
+                />
                   </FormGroup>
                 </Col>
                 <Col md="3">
                   <FormGroup>
-                    <Label>Product Type</Label>
-                    <Input
-                      type="text"
-                      value={inventoryDetails && inventoryDetails.product_type}
-                      name="product_type"
-                      disabled
-                    />
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.ProductType')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.product_type_arb
+                    : inventoryDetails && inventoryDetails.product_type
+                }
+                name={arb ? 'product_type_arb' : 'product_type'}
+                disabled
+                />
+                    
                   </FormGroup>
                 </Col>
                 <Col md="3">
                   <FormGroup>
-                    <Label>Item Code</Label>
-                    <Input
-                      type="text"
-                      value={inventoryDetails && inventoryDetails.item_code}
-                      name="item_code"
-                      disabled
-                    />
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.ItemCode')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.item_code_arb
+                    : inventoryDetails && inventoryDetails.item_code
+                }
+                name={arb ? 'item_code_arb' : 'item_code'}
+                disabled
+                />
                   </FormGroup>
                 </Col>
               </Row>
               <Row>
                 <Col md="3">
                   <FormGroup>
-                    <Label>UOM</Label>
-                    <Input
-                      type="text"
-                      value={inventoryDetails && inventoryDetails.unit}
-                      name="unit"
-                      disabled
-                    />
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.ItemCode')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.item_code_arb
+                    : inventoryDetails && inventoryDetails.item_code
+                }
+                name={arb ? 'item_code_arb' : 'item_code'}
+                disabled
+                />
+               </FormGroup>
+                </Col>
+                <Col md="3">
+                  <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.MOL')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.minimum_order_level_arb
+                    : inventoryDetails && inventoryDetails.minimum_order_level
+                }
+                name={arb ? 'minimum_order_level_arb' : 'minimum_order_level'}
+                />
                   </FormGroup>
                 </Col>
                 <Col md="3">
                   <FormGroup>
-                    <Label>MOL</Label>
-                    <Input
-                      type="text"
-                      defaultValue={inventoryDetails && inventoryDetails.minimum_order_level}
-                      onChange={handleInputs}
-                      name="minimum_order_level"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md="3">
-                  <FormGroup>
-                    <Label>Notes</Label>
-                    <Input
-                      onChange={handleInputs}
-                      type="textarea"
-                      defaultValue={inventoryDetails && inventoryDetails.notes}
-                      name="notes"
-                    ></Input>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdInventory.Notes')?.[genLabel]}
+              </Label>
+          <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? inventoryDetails && inventoryDetails.notes_arb
+                    : inventoryDetails && inventoryDetails.notes
+                }
+                name={arb ? 'notes_arb' : 'notes'}
+                />
                   </FormGroup>
                 </Col>
               </Row>

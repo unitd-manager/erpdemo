@@ -3,35 +3,55 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function CategoryDetailComp({ categoryDetails, handleInputs, section, valuelist }) {
+export default function CategoryDetailComp({ categoryDetails, handleInputs, section, valuelist, genLabel,arabic, formSubmitted, arb }) {
   CategoryDetailComp.propTypes = {
     categoryDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     section: PropTypes.array,
     valuelist: PropTypes.array,
+    genLabel: PropTypes.any,
+    arabic: PropTypes.any,
+    formSubmitted: PropTypes.any,
+    arb: PropTypes.any,
   };
   return (
     <>
       <Form>
         <FormGroup>
-          <ComponentCard title="Category Details" creationModificationDate={categoryDetails}>
+          <ComponentCard title={arb ? 'تفاصيل الفئة': 'Category Details'} creationModificationDate={categoryDetails}>
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>
-                    Title <span className="required"> *</span>
-                  </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={categoryDetails && categoryDetails.category_title}
-                    name="category_title"
-                  />
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.category_title_arb ? categoryDetails.category_title_arb :
+                            (categoryDetails && categoryDetails.category_title_arb !== null ? '' : categoryDetails && categoryDetails.category_title)
+                          )
+                        : (categoryDetails && categoryDetails.category_title)
+                    }
+                    name={arb ? 'category_title_arb' : 'category_title'}
+                    className={`form-control ${
+                      formSubmitted && (categoryDetails.category_title_arb.trim() === '' || categoryDetails.category_title.trim() === '') ? 'highlight' : ''
+                  }`}
+              />
+              
+              {formSubmitted && categoryDetails && categoryDetails.category_title_arb.trim() === '' && categoryDetails.category_title.trim() === '' && (
+                  <div className="error-message">Please Enter</div>
+              )}
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Section</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.Section')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
@@ -43,7 +63,7 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
                       section.map((e) => {
                         return (
                           <option key={e.section_id} value={e.section_id}>
-                            {e.section_title}
+                            {arb?e.section_title_arb :e.section_title}
                           </option>
                         );
                       })}
@@ -52,12 +72,21 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Category Type</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.CategoryType')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
-                    value={categoryDetails && categoryDetails.category_type}
-                    name="category_type"
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.category_type_arb ? categoryDetails.category_type_arb :
+                            (categoryDetails && categoryDetails.category_type_arb !== null ? '' : categoryDetails && categoryDetails.category_type)
+                          )
+                        : (categoryDetails && categoryDetails.category_type)
+                    }
+                    name={arb ? 'category_type_arb' : 'category_type'}
                   >
                     <option defaultValue="selected">Please Select</option>
                     {valuelist &&
@@ -75,19 +104,43 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Internal Link</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.InternalLink')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
-                    value={categoryDetails && categoryDetails.internal_link}
                     onChange={handleInputs}
-                    name="internal_link"
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.internal_link_arb ? categoryDetails.internal_link_arb :
+                            (categoryDetails && categoryDetails.internal_link_arb !== null ? '' : categoryDetails && categoryDetails.internal_link)
+                          )
+                        : (categoryDetails && categoryDetails.internal_link)
+                    }
+                    name={arb ? 'internal_link_arb' : 'internal_link'}
                   ></Input>
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Published</Label>
-                  <br></br>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.InternalLink')?.[genLabel]}
+              </Label>
+              <br></br>
+                  {/* <Input
+                    type="radio"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.published_arb ? categoryDetails.published_arb :
+                            (categoryDetails && categoryDetails.published_arb !== null ? '' : categoryDetails && categoryDetails.published)
+                          )
+                        : (categoryDetails && categoryDetails.published)
+                    }
+                    name={arb ? 'published_arb' : 'published'}></Input> */}
+                  
                   <Input
                     name="published"
                     value="1"
@@ -108,52 +161,88 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
               </Col>
             </Row>
           </ComponentCard>
-          <ComponentCard title="Page Meta Data">
+          <ComponentCard title={arb ? 'بيانات تعريف الصفحة': 'Page Meta Data'} >
             <Row>
               <Col md="6">
                 <FormGroup>
-                  <Label>Page Title</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.PageTitle')?.[genLabel]}
+              </Label>
+              <br></br>
                   <Input
-                    value={categoryDetails && categoryDetails.meta_title}
-                    type="text"
+                    type="textarea"
                     onChange={handleInputs}
-                    name="meta_title"
-                  />
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.meta_title_arb ? categoryDetails.meta_title_arb :
+                            (categoryDetails && categoryDetails.meta_title_arb !== null ? '' : categoryDetails && categoryDetails.meta_title)
+                          )
+                        : (categoryDetails && categoryDetails.meta_title)
+                    }
+                    name={arb ? 'meta_title_arb' : 'meta_title'}></Input>
                 </FormGroup>
               </Col>
               <Col md="6">
                 <FormGroup>
-                  <Label>Page Description</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.PageDescription')?.[genLabel]}
+              </Label>
+              <br></br>
                   <Input
-                    value={categoryDetails && categoryDetails.meta_description}
                     type="textarea"
                     onChange={handleInputs}
-                    name="meta_description"
-                  />
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.meta_description_arb ? categoryDetails.meta_description_arb :
+                            (categoryDetails && categoryDetails.meta_description_arb !== null ? '' : categoryDetails && categoryDetails.meta_description)
+                          )
+                        : (categoryDetails && categoryDetails.meta_description)
+                    }
+                    name={arb ? 'meta_description_arb' : 'meta_description'}></Input>
                 </FormGroup>
               </Col>
             </Row>
             <Row>
               <Col md="6">
                 <FormGroup>
-                  <Label>Page Keywords</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.PageKeywords')?.[genLabel]}
+              </Label>
+              <br></br>
                   <Input
-                    value={categoryDetails && categoryDetails.meta_keyword}
                     type="textarea"
                     onChange={handleInputs}
-                    name="meta_keyword"
-                  />
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.meta_keyword_arb ? categoryDetails.meta_keyword_arb :
+                            (categoryDetails && categoryDetails.meta_keyword_arb !== null ? '' : categoryDetails && categoryDetails.meta_keyword)
+                          )
+                        : (categoryDetails && categoryDetails.meta_keyword)
+                    }
+                    name={arb ? 'meta_keyword_arb' : 'meta_keyword'}></Input>
                 </FormGroup>
               </Col>
               <Col md="6">
                 <FormGroup>
-                  <Label>SEO Title</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.SEOTitle')?.[genLabel]}
+              </Label>
+              <br></br>
                   <Input
-                    value={categoryDetails && categoryDetails.seo_title}
                     type="text"
                     onChange={handleInputs}
-                    name="seo_title"
-                  />
+                    value={
+                      arb
+                        ? (
+                            categoryDetails && categoryDetails.seo_title_arb ? categoryDetails.seo_title_arb :
+                            (categoryDetails && categoryDetails.seo_title_arb !== null ? '' : categoryDetails && categoryDetails.seo_title)
+                          )
+                        : (categoryDetails && categoryDetails.meta_keyword)
+                    }
+                    name={arb ? 'seo_title_arb' : 'seo_title'}></Input>
                 </FormGroup>
               </Col>
             </Row>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,6 +7,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const CategoryDetails = () => {
   //Navigation and Parameter Constants
@@ -15,17 +16,61 @@ const CategoryDetails = () => {
   //Logic for adding category in db
   const [categoryForms, setCategoryForms] = useState({
     category_title: '',
+    category_title_arb: '',
   });
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   //setting data in categoryForms
   const handleCategoryForms = (e) => {
     setCategoryForms({ ...categoryForms, [e.target.name]: e.target.value });
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForCategory = () => {
+      api
+      .get('/category/getTranslationForCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+    getTranslationForCategory();
+  }, []);
+
+
   //Api for insertCategory
   const insertCategory = () => {
-    if (categoryForms.category_title !== '') {
+    setFormSubmitted(true);
+    if ((arb && categoryForms.category_title_arb.trim() !== '') || (!arb && categoryForms.category_title.trim() !== ''))
+    {
       categoryForms.creation_date = creationdatetime;
+      categoryForms.created_by = loggedInuser.first_name;
       api
         .post('/category/insertCategory', categoryForms)
         .then((res) => {
@@ -43,26 +88,41 @@ const CategoryDetails = () => {
     }
   };
 
+  
   return (
     <div>
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ? 'التفاصيل الرئيسية': 'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
-                      Title<span className="required"> *</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      name="category_title"
-                      onChange={handleCategoryForms}
-                      value={categoryForms && categoryForms.category_title}
-                    ></Input>
+                    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel]}
+              </Label><span className='required'>*</span>
+                  <Input
+                    type="text"
+                    onChange={handleCategoryForms}
+                    value={
+                      arb
+                        ? (
+                            categoryForms && categoryForms.category_title_arb ? categoryForms.category_title_arb :
+                            (categoryForms && categoryForms.category_title_arb !== null ? '' : categoryForms && categoryForms.category_title)
+                          )
+                        : (categoryForms && categoryForms.category_title)
+                    }
+                    name={arb ? 'category_title_arb' : 'category_title'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && categoryForms.category_title_arb.trim() === '') || (!arb && categoryForms.category_title.trim() === '')) ? 'highlight' : ''
+                  }`}
+              />
+              
+              {formSubmitted && ((arb && categoryForms && categoryForms.category_title_arb.trim() === '') || (!arb && categoryForms.category_title.trim() === '' ))&& (
+                  <div className="error-message">Please Enter</div>
+              )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -81,12 +141,18 @@ const CategoryDetails = () => {
                     </Button>
                     <Button
                       onClick={() => {
+                      if (
+                        window.confirm(
+                          'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                        )
+                      ) {
                         navigate(-1);
-                      }}
+                      }
+                    }}
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>
