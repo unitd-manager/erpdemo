@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalBody,
@@ -16,6 +16,7 @@ import {
   Button,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import api from '../../constants/api';
 
 export default function TenderCompanyDetails({
   handleInputs,
@@ -24,7 +25,7 @@ export default function TenderCompanyDetails({
   modal,
   toggle,
   companyInsertData,
-  addFormSubmitted
+  addFormSubmitted,
 }) {
   TenderCompanyDetails.propTypes = {
     handleInputs: PropTypes.any,
@@ -41,6 +42,74 @@ export default function TenderCompanyDetails({
     setModal1(!modal1);
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/translation/getTranslationForCompany')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  const [categoryLinked, setCategoryLinked] = useState();
+  const [supplierLinked, setSupplierLinked] = useState();
+  const [IndustryLinked, setIndustryLinked] = useState();
+  const [companySizeLinked, setcompanySizeLinked] = useState();
+  const getCategory = () => {
+    api.get('/tender/getCompanySourceFromValueList', categoryLinked).then((res) => {
+      setCategoryLinked(res.data.data);
+    });
+  };
+
+  const getSupplierFromValueList = () => {
+    api.get('/tender/getSupplierFromValueList', categoryLinked).then((res) => {
+      setSupplierLinked(res.data.data);
+    });
+  };
+  const getIndustryFromValueList = () => {
+    api.get('/tender/getIndustryFromValueList', categoryLinked).then((res) => {
+      setIndustryLinked(res.data.data);
+    });
+  };
+  const getCompanySizeFromValueList = () => {
+    api.get('/tender/getCompanySizeFromValueList', categoryLinked).then((res) => {
+      setcompanySizeLinked(res.data.data);
+    });
+  };
+  useEffect(() => {
+    getCategory();
+    getSupplierFromValueList();
+    getIndustryFromValueList();
+    getCompanySizeFromValueList();
+  }, []);
   return (
     <div>
       <Modal size="lg" isOpen={modal} toggle={toggle.bind(null)}>
@@ -54,19 +123,143 @@ export default function TenderCompanyDetails({
                     <Row>
                       <Col md="4">
                         <FormGroup>
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {
+                              arabic.find((item) => item.key_text === 'mdClient.companyName')?.[
+                                genLabel
+                              ]
+                            }
+                          </Label>
+                          <span className="required">*</span>
+                          <Input
+                            type="text"
+                            onChange={handleInputs}
+                            value={
+                              arb
+                                ? companyInsertData && companyInsertData.company_name_arb
+                                  ? companyInsertData.company_name_arb
+                                  : companyInsertData && companyInsertData.company_name_arb !== null
+                                  ? ''
+                                  : companyInsertData && companyInsertData.company_name
+                                : companyInsertData && companyInsertData.company_name
+                            }
+                            name={arb ? 'company_name_arb' : 'company_name'}
+                            className={`form-control ${
+                              addFormSubmitted &&
+                              ((arb && companyInsertData.company_name_arb.trim() === '') ||
+                                (!arb && companyInsertData.company_name.trim() === ''))
+                                ? 'highlight'
+                                : ''
+                            }`}
+                          />
+
+                          {addFormSubmitted &&
+                            ((arb &&
+                              companyInsertData &&
+                              companyInsertData.company_name_arb.trim() === '') ||
+                              (!arb && companyInsertData.company_name.trim() === '')) && (
+                              <div className="error-message">Please Enter</div>
+                            )}
+                        </FormGroup>
+                      </Col>
+                      {/*  */}
+                      {/* <Col md="4">
+                        <FormGroup>
                           <Label>
                             Company Name <span className="required"> *</span>
                           </Label>
-                          <Input type="text" name="company_name" onChange={handleInputs}
-                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.company_name.trim() === '' ? 'highlight' : ''
-                        }`}
+                          <Input
+                            type="text"
+                            name="company_name"
+                            onChange={handleInputs}
+                            className={`form-control ${
+                              addFormSubmitted &&
+                              companyInsertData &&
+                              companyInsertData.company_name.trim() === ''
+                                ? 'highlight'
+                                : ''
+                            }`}
                           />
-                          {addFormSubmitted && companyInsertData && companyInsertData.company_name.trim() === '' && (
-                      <div className="error-message">Please Enter</div>
-                    )}
+                          {addFormSubmitted &&
+                            companyInsertData &&
+                            companyInsertData.company_name.trim() === '' && (
+                              <div className="error-message">Please Enter</div>
+                            )}
+                        </FormGroup>
+                      </Col> */}
+
+                      <Col md="4">
+                        <FormGroup>
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {
+                              arabic.find((item) => item.key_text === 'mdClient.Website')?.[
+                                genLabel
+                              ]
+                            }{' '}
+                            {/*Access the value property */}
+                          </Label>
+                          <Input
+                            type="text"
+                            onChange={handleInputs}
+                            name={arb ? 'website_arb' : 'website'}
+                            value={
+                              arb
+                                ? companyInsertData && companyInsertData.website_arb
+                                  ? companyInsertData.website_arb
+                                  : companyInsertData && companyInsertData.website_arb !== null
+                                  ? ''
+                                  : companyInsertData && companyInsertData.website
+                                : companyInsertData && companyInsertData.website
+                            }
+                          ></Input>
                         </FormGroup>
                       </Col>
                       <Col md="4">
+                        <FormGroup>
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdClient.phone')?.[genLabel]}
+                          </Label>
+
+                          <Input
+                            type="number"
+                            onChange={handleInputs}
+                            value={
+                              arb
+                                ? companyInsertData && companyInsertData.phone_arb
+                                  ? companyInsertData.phone_arb
+                                  : companyInsertData && companyInsertData.phone_arb !== null
+                                  ? ''
+                                  : companyInsertData && companyInsertData.phone
+                                : companyInsertData && companyInsertData.phone
+                            }
+                            name={arb ? 'phone_arb' : 'phone'}
+                          />
+                        </FormGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <FormGroup>
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdClient.Fax')?.[genLabel]}{' '}
+                            {/*Access the value property */}
+                          </Label>
+                          <Input
+                            type="text"
+                            onChange={handleInputs}
+                            name={arb ? 'fax_arb' : 'fax'}
+                            value={
+                              arb
+                                ? companyInsertData && companyInsertData.fax_arb
+                                  ? companyInsertData.fax_arb
+                                  : companyInsertData && companyInsertData.fax_arb !== null
+                                  ? ''
+                                  : companyInsertData && companyInsertData.fax
+                                : companyInsertData && companyInsertData.fax
+                            }
+                          ></Input>
+                        </FormGroup>
+                      </Col>
+                      {/* <Col md="4">
                         <FormGroup>
                           <Label>Website</Label>
                           <Input type="text" name="website" onChange={handleInputs} />
@@ -77,13 +270,23 @@ export default function TenderCompanyDetails({
                           <Label>
                             Main Phone <span className="required"> *</span>
                           </Label>
-                          <Input type="text" name="phone" onChange={handleInputs} 
-                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.phone.trim() === '' ? 'highlight' : ''
-                        }`}
+                          <Input
+                            type="text"
+                            name="phone"
+                            onChange={handleInputs}
+                            className={`form-control ${
+                              addFormSubmitted &&
+                              companyInsertData &&
+                              companyInsertData.phone.trim() === ''
+                                ? 'highlight'
+                                : ''
+                            }`}
                           />
-                          {addFormSubmitted && companyInsertData && companyInsertData.phone.trim() === '' && (
-                      <div className="error-message">Please Enter</div>
-                    )}
+                          {addFormSubmitted &&
+                            companyInsertData &&
+                            companyInsertData.phone.trim() === '' && (
+                              <div className="error-message">Please Enter</div>
+                            )}
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -91,7 +294,7 @@ export default function TenderCompanyDetails({
                           <Label>Main Fax</Label>
                           <Input type="text" name="fax" onChange={handleInputs} />
                         </FormGroup>
-                      </Col>
+                      </Col> */}
                     </Row>
                   </Form>
                 </CardBody>
@@ -104,55 +307,133 @@ export default function TenderCompanyDetails({
                   <Row>
                     <Col md="4">
                       <FormGroup>
-                        <Label>Address 1<span className="required"> *</span></Label>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          <span className="required"> *</span>
+                          {arabic.find((item) => item.key_text === 'mdClient.Address1')?.[genLabel]}
+                        </Label>
+                        <span className="required">*</span>
                         <Input
                           type="text"
-                          name="address_street"
-                          placeholder=" "
                           onChange={handleInputs}
-                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_street.trim() === '' ? 'highlight' : ''
-                        }`}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.address_flat_arb
+                                ? companyInsertData.address_flat_arb
+                                : companyInsertData && companyInsertData.address_flat_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.address_flat
+                              : companyInsertData && companyInsertData.address_flat
+                          }
+                          name={arb ? 'address_flat_arb' : 'address_flat'}
+                          className={`form-control ${
+                            addFormSubmitted &&
+                            ((arb && companyInsertData.address_flat_arb.trim() === '') ||
+                              (!arb && companyInsertData.address_flat.trim() === ''))
+                              ? 'highlight'
+                              : ''
+                          }`}
                         />
-                         {addFormSubmitted && companyInsertData && companyInsertData.address_street.trim() === '' && (
-                      <div className="error-message">Please Enter</div>
-                    )}
+
+                        {addFormSubmitted &&
+                          ((arb &&
+                            companyInsertData &&
+                            companyInsertData.address_flat_arb.trim() === '') ||
+                            (!arb && companyInsertData.address_flat.trim() === '')) && (
+                            <div className="error-message">Please Enter</div>
+                          )}
+                      </FormGroup>
+                    </Col>
+
+                    <Col md="4">
+                      <FormGroup>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          {arabic.find((item) => item.key_text === 'mdClient.Address2')?.[genLabel]}{' '}
+                          {/*Access the value property */}
+                        </Label>
+                        <Input
+                          type="text"
+                          onChange={handleInputs}
+                          name={arb ? 'address_street_arb' : 'address_street'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.address_street_arb
+                                ? companyInsertData.address_street_arb
+                                : companyInsertData && companyInsertData.address_street_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.address_street
+                              : companyInsertData && companyInsertData.address_street
+                          }
+                        ></Input>
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
-                        <Label>Address 2</Label>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          <span className="required"> *</span>
+                          {
+                            arabic.find((item) => item.key_text === 'mdClient.Postal Code')?.[
+                              genLabel
+                            ]
+                          }
+                        </Label>
+                        <span className="required">*</span>
                         <Input
                           type="text"
-                          name="address_town"
-                          placeholder=""
                           onChange={handleInputs}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.address_po_code_arb
+                                ? companyInsertData.address_po_code_arb
+                                : companyInsertData &&
+                                  companyInsertData.address_po_code_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.address_po_code
+                              : companyInsertData && companyInsertData.address_po_code
+                          }
+                          name={arb ? 'address_po_code_arb' : 'address_po_code'}
+                          className={`form-control ${
+                            addFormSubmitted &&
+                            ((arb && companyInsertData.address_po_code_arb.trim() === '') ||
+                              (!arb && companyInsertData.address_po_code.trim() === ''))
+                              ? 'highlight'
+                              : ''
+                          }`}
                         />
+
+                        {addFormSubmitted &&
+                          ((arb &&
+                            companyInsertData &&
+                            companyInsertData.address_po_code_arb.trim() === '') ||
+                            (!arb && companyInsertData.address_po_code.trim() === '')) && (
+                            <div className="error-message">Please Enter</div>
+                          )}
                       </FormGroup>
                     </Col>
+
                     <Col md="4">
                       <FormGroup>
-                        <Label>Post Code<span className="required"> *</span></Label>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          <span className="required"> *</span>
+                          {
+                            arabic.find((item) => item.key_text === 'mdClient.Country')?.[genLabel]
+                          }{' '}
+                          {/*Access the value property */}
+                        </Label>
                         <Input
                           type="text"
-                          name="address_po_code"
-                          placeholder=""
                           onChange={handleInputs}
-                          className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_po_code.trim() === '' ? 'highlight' : ''
-                        }`}
-                        />
-                         {addFormSubmitted && companyInsertData && companyInsertData.address_po_code.trim() === '' && (
-                      <div className="error-message">Please Enter</div>
-                    )}
-                      </FormGroup>
-                    </Col>
-                    <Col md="4">
-                      <FormGroup>
-                        {' '}
-                        <Label>Country<span className="required"> *</span></Label>
-                        <Input type="select" name="address_country" onChange={handleInputs}
-                        className={`form-control ${addFormSubmitted && companyInsertData && companyInsertData.address_country.trim() === '' ? 'highlight' : ''
-                      }`}
-                      >
+                          name={arb ? 'address_country_arb' : 'address_country'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.address_country_arb
+                                ? companyInsertData.address_country_arb
+                                : companyInsertData &&
+                                  companyInsertData.address_country_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.address_country
+                              : companyInsertData && companyInsertData.address_country
+                          }
+                        >
                           <option defaultValue="selected" value="">
                             Please Select
                           </option>
@@ -163,38 +444,253 @@ export default function TenderCompanyDetails({
                               </option>
                             ))}
                         </Input>
-                        {addFormSubmitted && companyInsertData && companyInsertData.address_country.trim() === '' && (
-                      <div className="error-message">Please Select</div>
-                    )}
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
-                        <Label>Company Source</Label>
-                        <Input type="select" name="source" onChange={handleInputs}>
-                          <option defaultValue="selected">Please Select</option>
-                          <option value="Agency">Agency</option>
-                          <option value="Direct">Direct</option>
-                          <option value="Referral">Referral</option>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          {
+                            arabic.find((item) => item.key_text === 'mdClient.Company Source')?.[
+                              genLabel
+                            ]
+                          }{' '}
+                          {/*Access the value property */}
+                        </Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          name={arb ? 'source_arb' : 'source'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.source_arb
+                                ? companyInsertData.source_arb
+                                : companyInsertData && companyInsertData.source_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.source
+                              : companyInsertData && companyInsertData.source
+                          }
+                        >
+                          {' '}
+                          <option value="selected">Please Select</option>
+                          {categoryLinked &&
+                            categoryLinked.map((e) => {
+                              return (
+                                <option key={e.value} value={e.value}>
+                                  {' '}
+                                  {arb ? e.value_arb : e.value}{' '}
+                                </option>
+                              );
+                            })}
                         </Input>
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
-                        <Label>Supplier Type</Label>
-                        <Input type="select" name="supplier_type" onChange={handleInputs}>
-                          <option defaultValue="selected">Please Select</option>
-                          <option value="2nd middle man">2nd middle man</option>
-                          <option value="3rd middle man">3rd middle man</option>
-                          <option value="Broker">Broker</option>
-                          <option value="Retailer">Retailer</option>
-                          <option value="Wholesaler">Wholesaler</option>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          {
+                            arabic.find((item) => item.key_text === 'mdClient.Supplier Type')?.[
+                              genLabel
+                            ]
+                          }{' '}
+                          {/*Access the value property */}
+                        </Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          name={arb ? 'supplier_type_arb' : 'supplier_type'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.supplier_type_arb
+                                ? companyInsertData.supplier_type_arb
+                                : companyInsertData && companyInsertData.supplier_type_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.supplier_type
+                              : companyInsertData && companyInsertData.supplier_type
+                          }
+                        >
+                          {' '}
+                          <option value="selected">Please Select</option>
+                          {supplierLinked &&
+                            supplierLinked.map((e) => {
+                              return (
+                                <option key={e.value} value={e.value}>
+                                  {' '}
+                                  {arb ? e.value_arb : e.value}{' '}
+                                </option>
+                              );
+                            })}
                         </Input>
                       </FormGroup>
                     </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          {arabic.find((item) => item.key_text === 'mdClient.Industry')?.[genLabel]}{' '}
+                          {/*Access the value property */}
+                        </Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          name={arb ? 'industry_arb' : 'industry'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.industry_arb
+                                ? companyInsertData.industry_arb
+                                : companyInsertData && companyInsertData.industry_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.industry
+                              : companyInsertData && companyInsertData.industry
+                          }
+                        >
+                          <option value="selected">Please Select</option>
+                          {IndustryLinked &&
+                            IndustryLinked.map((e) => {
+                              return (
+                                <option key={e.value} value={e.value}>
+                                  {' '}
+                                  {arb ? e.value_arb : e.value}{' '}
+                                </option>
+                              );
+                            })}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                          {
+                            arabic.find((item) => item.key_text === 'mdClient.Company Size')?.[
+                              genLabel
+                            ]
+                          }{' '}
+                          {/*Access the value property */}
+                        </Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          name={arb ? 'company_size_arb' : 'company_size'}
+                          value={
+                            arb
+                              ? companyInsertData && companyInsertData.company_size_arb
+                                ? companyInsertData.company_size_arb
+                                : companyInsertData && companyInsertData.company_size_arb !== null
+                                ? ''
+                                : companyInsertData && companyInsertData.company_size
+                              : companyInsertData && companyInsertData.company_size
+                          }
+                        >
+                          <option value="selected">Please Select</option>
+                          {companySizeLinked &&
+                            companySizeLinked.map((e) => {
+                              return (
+                                <option key={e.value} value={e.value}>
+                                  {' '}
+                                  {arb ? e.value_arb : e.value}{' '}
+                                </option>
+                              );
+                            })}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    {/* <Col md="4">
+                      <FormGroup>
+                        <Label>
+                          Address 1<span className="required"> *</span>
+                        </Label>
+                        <Input
+                          type="text"
+
+                          name="address_flat"
+                          placeholder=" "
+                          onChange={handleInputs}
+                          className={`form-control ${
+                            addFormSubmitted &&
+                            companyInsertData &&
+                            companyInsertData.address_flat.trim() === ''
+                              ? 'highlight'
+                              : ''
+                          }`}
+                        />
+                        {addFormSubmitted &&
+                          companyInsertData &&
+                          companyInsertData.address_flat.trim() === '' && (
+                            <div className="error-message">Please Enter</div>
+                          )}
+                      </FormGroup>
+                    </Col> */}
+                    {/* <Col md="4">
+                      <FormGroup>
+                        <Label>Address 2</Label>
+                        <Input
+                          type="text"
+                          name="address_street"
+                          placeholder=""
+                          onChange={handleInputs}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label>
+                          Post Code<span className="required"> *</span>
+                        </Label>
+                        <Input
+                          type="text"
+                          name="address_po_code"
+                          placeholder=""
+                          onChange={handleInputs}
+                          className={`form-control ${
+                            addFormSubmitted &&
+                            companyInsertData &&
+                            companyInsertData.address_po_code.trim() === ''
+                              ? 'highlight'
+                              : ''
+                          }`}
+                        />
+                        {addFormSubmitted &&
+                          companyInsertData &&
+                          companyInsertData.address_po_code.trim() === '' && (
+                            <div className="error-message">Please Enter</div>
+                          )}
+                      </FormGroup>
+                    </Col> */}
+                    {/* <Col md="4">
+                      <FormGroup>
+                        {' '}
+                        <Label>
+                          Country<span className="required"> *</span>+
+                        </Label>
+                        <Input
+                          type="select"
+                          name="address_country"
+                          onChange={handleInputs}
+                          className={`form-control ${
+                            addFormSubmitted &&
+                            companyInsertData &&
+                            companyInsertData.address_country.trim() === ''
+                              ? 'highlight'
+                              : ''
+                          }`}
+                        >
+                          <option defaultValue="selected" value="">
+                            Please Select
+                          </option>
+                          {allCountries &&
+                            allCountries.map((country) => (
+                              <option key={country.country_code} value={country.name}>
+                                {country.name}
+                              </option>
+                            ))}
+                        </Input>
+                        {addFormSubmitted &&
+                          companyInsertData &&
+                          companyInsertData.address_country.trim() === '' && (
+                            <div className="error-message">Please Select</div>
+                          )}
+                      </FormGroup>
+                    </Col> */}
                   </Row>
-                  <Row>
-                   
+                  {/* <Row>
                     <Col md="4">
                       <FormGroup>
                         <Label>Industry</Label>
@@ -223,19 +719,8 @@ export default function TenderCompanyDetails({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col md="4">
-                      <FormGroup>
-                        <Label>Company Size</Label>
-                        <Input type="select" name="company_size" onChange={handleInputs}>
-                          <option defaultValue="selected">Please Select</option>
-                          <option value="Large">Large</option>
-                          <option value="Medium">Medium</option>
-                          <option value="Small">Small</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
                     
-                  </Row>
+                  </Row> */}
                 </CardBody>
               </Card>
             </Col>

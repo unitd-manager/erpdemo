@@ -19,13 +19,21 @@ import '../../views/form-editor/editor.scss';
 
 import api from '../../constants/api';
 
-const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
+const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal,arb,arabic }) => {
   PlanEditModal.propTypes = {
     planData: PropTypes.object,
     editPlanEditModal: PropTypes.bool,
     setPlanEditModal: PropTypes.func,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
+  let genLabel = '';
 
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   const [PlaniEdit, setPlanEdit] = useState(null);
 
   const handleInputs = (e) => {
@@ -72,7 +80,9 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
           <Row>
                            <Col md="4">
                               <FormGroup>
-                                <Label>Product Nmae</Label>
+                                <Label>
+                                {arabic.find((item) => item.key_text === 'mdSupplierPriceList.ProductName')?.[genLabel]}
+                                </Label>
                                 <Input
                                   type="text"
                                   name="title"
@@ -84,7 +94,7 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Price</Label>
+                                <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Price')?.[genLabel]}</Label>
                                 <Input
                                   type="text"
                                   name="price"
@@ -95,7 +105,7 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Unit</Label>
+                                <Label>{arabic.find((item) => item.key_text === 'mdSupplierPriceList.Unit')?.[genLabel]}</Label>
                                 <Input
                                   type="select"
                                   name="unit"
@@ -124,7 +134,8 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                   editCpanelsData();
                 }}
               >
-                Submit
+                
+                {arb?'يُقدِّم':'Submit'}
               </Button>
               <Button
                 color="secondary"
@@ -132,7 +143,8 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                   setPlanEditModal(false);
                 }}
               >
-                Cancel
+                
+                {arb?'يلغي':'Cancel'}
               </Button>
         </ModalFooter>
       </Modal>

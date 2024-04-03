@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -6,7 +6,7 @@ import {
   Input,
   Button,
   Modal,
-FormGroup,
+  FormGroup,
   Label,
   ModalHeader,
   ModalBody,
@@ -21,7 +21,6 @@ import api from '../../constants/api';
 import message from '../Message';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
-
 
 const QuoteLineItem = ({
   addLineItemModal,
@@ -39,9 +38,9 @@ const QuoteLineItem = ({
     quoteLine: PropTypes.any,
     tenderDetails: PropTypes.any,
     getLineItem: PropTypes.any,
-    previousTenderDetails:PropTypes.any,
-    arb:PropTypes.any,
-    arabic:PropTypes.any,
+    previousTenderDetails: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
   const [totalAmount, setTotalAmount] = useState(0);
   const [addNewProductModal, setAddNewProductModal] = useState(false);
@@ -65,8 +64,8 @@ const QuoteLineItem = ({
       description: '',
     },
   ]);
-    //get staff details
-    const { loggedInuser } = useContext(AppContext);
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
 
   //Add new line item
   const AddNewLineItem = () => {
@@ -97,10 +96,9 @@ const QuoteLineItem = ({
         message('Line Item Added Successfully', 'sucess');
         window.location.reload();
         getLineItem(tenderDetails.quote_id);
-        
       })
       .catch(() => {
-       // message('Cannot Add Line Items', 'error');
+        // message('Cannot Add Line Items', 'error');
       });
   };
   //Invoice item values
@@ -139,112 +137,107 @@ const QuoteLineItem = ({
 
   const [unitdetails, setUnitDetails] = useState();
   // Fetch data from API
-    const getUnit = () => {
-      api.get('/product/getUnitFromValueList', unitdetails)
-        .then((res) => {
-          const items = res.data.data
-          const finaldat = []
-          items.forEach(item => {
-            finaldat.push({ value: item.value, label: item.value })
-          })
-          setUnitDetails(finaldat)
-        })
-    }
-    //onchange function
-    const onchangeItem = (selectedValue) => {
-      const updatedItems = addLineItem.map((item) => {
-        if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
-          return {
-            ...item,
-            unit: selectedValue.value,  // Update the unit with the selected option's value
-            value: selectedValue.value  // Update the value with the selected option's value
-          };
-        }
-        return item;
+  const getUnit = () => {
+    api.get('/product/getUnitFromValueList', unitdetails).then((res) => {
+      const items = res.data.data;
+      const finaldat = [];
+      items.forEach((item) => {
+        finaldat.push({ value: item.value, label: item.value });
       });
-    
-      setAddLineItem(updatedItems);
-    };
-    const [productDetail, setProductDetail] = useState({
-      category_id: null,
-      sub_category_id: null,
-      title: '',
-      product_code: '',
-      qty_in_stock: null,
-      price: null,
-      published: 1,
+      setUnitDetails(finaldat);
     });
-    const handleNewProductDetails = (e) => {
-      setProductDetail({ ...productDetail, [e.target.name]: e.target.value });
-    };
-    const insertProduct = (ProductCode, ItemCode) => {
-      if (productDetail.title !== '') {
-        productDetail.product_code = ProductCode;
-        productDetail.item_code = ItemCode;
-        productDetail.creation_date = creationdatetime;
-        productDetail.created_by= loggedInuser.first_name; 
-        api
-          .post('/purchaseorder/insertPurchaseProduct', productDetail)
-          .then(() => {
-            message('Product inserted successfully.', 'success');
-           
-              })
-          .catch(() => {
-            message('Unable to insert product.', 'error');
-          });
-        } else {
-          message('Please fill the Product Name ', 'warning');
-        }
-      };
-    
-      //Auto generation code
+  };
+  //onchange function
+  const onchangeItem = (selectedValue) => {
+    const updatedItems = addLineItem.map((item) => {
+      if (item.unit === selectedValue.value) {
+        // Compare with selectedValue.value
+        return {
+          ...item,
+          unit: selectedValue.value, // Update the unit with the selected option's value
+          value: selectedValue.value, // Update the value with the selected option's value
+        };
+      }
+      return item;
+    });
+
+    setAddLineItem(updatedItems);
+  };
+  const [productDetail, setProductDetail] = useState({
+    category_id: null,
+    sub_category_id: null,
+    title: '',
+    product_code: '',
+    qty_in_stock: null,
+    price: null,
+    published: 1,
+  });
+  const handleNewProductDetails = (e) => {
+    setProductDetail({ ...productDetail, [e.target.name]: e.target.value });
+  };
+  const insertProduct = (ProductCode, ItemCode) => {
+    if (productDetail.title !== '') {
+      productDetail.product_code = ProductCode;
+      productDetail.item_code = ItemCode;
+      productDetail.creation_date = creationdatetime;
+      productDetail.created_by = loggedInuser.first_name;
+      api
+        .post('/purchaseorder/insertPurchaseProduct', productDetail)
+        .then(() => {
+          message('Product inserted successfully.', 'success');
+        })
+        .catch(() => {
+          message('Unable to insert product.', 'error');
+        });
+    } else {
+      message('Please fill the Product Name ', 'warning');
+    }
+  };
+
+  //Auto generation code
   const generateCode = () => {
     api
       .post('/product/getCodeValue', { type: 'ProductCode' })
       .then((res) => {
-        const ProductCode = res.data.data
-      api
-      .post('/product/getCodeValue', { type: 'ItemCode' })
-      .then((response) => {
-        const ItemCode = response.data.data
-        insertProduct(ProductCode, ItemCode);
-      })
+        const ProductCode = res.data.data;
+        api.post('/product/getCodeValue', { type: 'ItemCode' }).then((response) => {
+          const ItemCode = response.data.data;
+          insertProduct(ProductCode, ItemCode);
+        });
       })
       .catch(() => {
         insertProduct('');
       });
   };
 
-    const onchangeItems = (selectedProduct, itemId) => {
-      const updatedItems = addLineItem.map((item) => {
-        if (item.id === itemId) {
-          return {
-            ...item,
-            product_id: selectedProduct.value.toString(),
-            title: selectedProduct.label,
-            type: selectedProduct.type,
-          };
-        }
-        return item;
-      });
-      setAddLineItem(updatedItems);
-    };
-    
-    
-    
-    const loadOptions = (inputValue, callback) => {
-      api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
-    .then((res) => {
+  const onchangeItems = (selectedProduct, itemId) => {
+    const updatedItems = addLineItem.map((item) => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          product_id: selectedProduct.value.toString(),
+          title: selectedProduct.label,
+          type: selectedProduct.type,
+        };
+      }
+      return item;
+    });
+    setAddLineItem(updatedItems);
+  };
+
+  const loadOptions = (inputValue, callback) => {
+    api
+      .get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
+      .then((res) => {
         const items = res.data.data;
         const options = items.map((item) => ({
           value: item.product_id,
           label: item.title,
           type: item.type,
-        
         }));
         callback(options);
       });
-    };
+  };
 
   //Invoice Items Calculation
   const calculateTotal = () => {
@@ -319,104 +312,149 @@ const QuoteLineItem = ({
                       </Button>
                     </Col>
                     <Col md="3">
-                    <Button
-                      color="primary"
-                      className="shadow-none"
-                      onClick={() => {
-                        setAddNewProductModal(true);
-                      }}
-                    >
-                      Add New Product
-                    </Button>
-                  </Col>
+                      <Button
+                        color="primary"
+                        className="shadow-none"
+                        onClick={() => {
+                          setAddNewProductModal(true);
+                        }}
+                      >
+                        Add New Product
+                      </Button>
+                    </Col>
                   </Row>
                   {/* Invoice Item */}
-                  
-                    <table className="lineitem">
-                      <thead>
-                        <tr>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}</th>
-                          <th scope="col"> {arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel]}</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Unit')?.[genLabel]} </th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel]}</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel]}</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel]}</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdTradingEnq.Remarks')?.[genLabel]}</th>
-                          <th scope="col"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {addLineItem &&
-                          addLineItem.map((item) => {
-                            return (
-                              <tr key={item.id}>
-                                <td>
-                                <div style={{ width: '130px' }}> 
-                  <AsyncSelect
-                    defaultValue={{
-                      value: item.product_id,
-                      label: item.title,
-                      price: item.price,
-                      unit: item.unit,
-                    }}
-                    onChange={(selectedOption) => {
-                      onchangeItems(selectedOption, item.id); // Pass item.id as the itemId
-                    }}
-                    loadOptions={loadOptions}
-                  />
-                  <Input value={item.product_id} type="hidden" name="product_id"></Input>
-                  <Input value={item.title} type="hidden" name="title"></Input>
-                  </div> 
-                </td>
-                                <td data-label="Description">
-                                  <Input   type="textarea" name="description" />
-                                </td>
-                                <td data-label="Unit">
-                                  <Select
-                                    name="unit"
+
+                  <table className="lineitem">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {' '}
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.Description')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {arabic.find((item) => item.key_text === 'mdTradingEnq.Unit')?.[genLabel]}{' '}
+                        </th>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.Quantity')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.UnitPrice')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.Amount')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingEnq.Remarks')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {addLineItem &&
+                        addLineItem.map((item) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>
+                                <div style={{ width: '130px' }}>
+                                  <AsyncSelect
+                                    defaultValue={{
+                                      value: item.product_id,
+                                      label: item.title,
+                                      price: item.price,
+                                      unit: item.unit,
+                                    }}
                                     onChange={(selectedOption) => {
-                                      onchangeItem(selectedOption);
+                                      onchangeItems(selectedOption, item.id); // Pass item.id as the itemId
                                     }}
-                                    options={unitdetails}
+                                    loadOptions={loadOptions}
                                   />
-                                </td>
-                                <td data-label="Qty">
-                                  <Input Value={item.quantity} type="number" name="quantity" />
-                                </td>
-                                <td data-label="Unit Price">
                                   <Input
-                                    Value={item.unit_price}
-                                    onBlur={() => {
-                                      calculateTotal();
-                                    }}
-                                    type="number"
-                                    name="unit_price"
-                                  />
-                                </td>
-                                <td data-label="Amount">
-                                  <Input Value={item.amount} type="text" name="amount" disabled />
-                                  
-                                </td>
-                                <td data-label="Remarks">
-                                  <Input Value={item.remarks} type="text" name="remarks" />
-                                </td>
-                                <td data-label="Action">
-                                  <Input type="hidden" name="id" Value={item.id}></Input>
-                                  <span
-                                    className="addline"
-                                    onClick={() => {
-                                      ClearValue(item);
-                                    }}
-                                  >
-                                    Clear
-                                  </span>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  
+                                    value={item.product_id}
+                                    type="hidden"
+                                    name="product_id"
+                                  ></Input>
+                                  <Input value={item.title} type="hidden" name="title"></Input>
+                                </div>
+                              </td>
+                              <td data-label="Description">
+                                <Input
+                                  type="textarea"
+                                  name={arb ? 'description_arb' : 'description'}
+                                />
+                              </td>
+                              <td data-label="Unit">
+                                <Select
+                                  name="unit"
+                                  onChange={(selectedOption) => {
+                                    onchangeItem(selectedOption);
+                                  }}
+                                  options={unitdetails}
+                                />
+                              </td>
+                              <td data-label="Qty">
+                                <Input Value={item.quantity} type="number" name="quantity" />
+                              </td>
+                              <td data-label="Unit Price">
+                                <Input
+                                  Value={item.unit_price}
+                                  onBlur={() => {
+                                    calculateTotal();
+                                  }}
+                                  type="number"
+                                  name="unit_price"
+                                />
+                              </td>
+                              <td data-label="Amount">
+                                <Input Value={item.amount} type="text" name="amount" disabled />
+                              </td>
+                              <td data-label="Remarks">
+                                <Input Value={item.remarks} type="text" name="remarks" />
+                              </td>
+                              <td data-label="Action">
+                                <Input type="hidden" name="id" Value={item.id}></Input>
+                                <span
+                                  className="addline"
+                                  onClick={() => {
+                                    ClearValue(item);
+                                  }}
+                                >
+                                  Clear
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+
                   <ModalFooter>
                     <Button
                       className="shadow-none"
@@ -445,9 +483,9 @@ const QuoteLineItem = ({
           </Row>
         </ModalBody>
       </Modal>
-       {/* Add New Product Modal */}
-       <Modal isOpen={addNewProductModal}>
-        <ModalHeader > {' '} Add New Products {' '} </ModalHeader>
+      {/* Add New Product Modal */}
+      <Modal isOpen={addNewProductModal}>
+        <ModalHeader> Add New Products </ModalHeader>
 
         <ModalBody>
           <FormGroup>

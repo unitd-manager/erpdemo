@@ -181,10 +181,43 @@ const InvoiceEdit = () => {
     getReturnItemById();
     getReturnInvoiceItemById();
   }, [insertedDataId]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/finance/getTranslationforTradingSalesReturn')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   return (
     <>
-      <BreadCrumbs />
+     {eng === true && <BreadCrumbs heading={returnDetails && returnDetails.title} />}
+    {arb === true && <BreadCrumbs heading={returnDetails && returnDetails.title_arb} />}
+     
+      {/* <BreadCrumbs /> */}
       <FormGroup>
         <ToastContainer />
         <ComponentCardV2>
@@ -202,7 +235,7 @@ const InvoiceEdit = () => {
                 
                 }}
               >
-                Save
+              Save
               </Button>
             </Col>
             <Col>
@@ -214,7 +247,8 @@ const InvoiceEdit = () => {
                   editInvoiceItemData();
                 }}
               >
-                Apply
+              Apply
+
               </Button>
             </Col>
           
@@ -226,7 +260,8 @@ const InvoiceEdit = () => {
                   backToList();
                 }}
               >
-                Back to List
+             Back to List
+
               </Button>
             </Col>
           </Row>
@@ -234,11 +269,15 @@ const InvoiceEdit = () => {
       </FormGroup>
 
       {/*Main Details*/}
-      <ComponentCard title="Invoice Details" creationModificationDate={returnDetails}>
-        <ReturnDetailComp returnDetails={returnDetails} handleInputs={handleInputs} />
+      <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
+        <ReturnDetailComp 
+         arb={arb}
+         arabic={arabic}
+        returnDetails={returnDetails} 
+        handleInputs={handleInputs} />
       </ComponentCard>
 
-      <ComponentCard title="Invoice Items">
+      <ComponentCard title={arb ? 'عناصر الفاتورة' : 'Invoice Items' }>
         <Nav tabs>
         <NavItem>
       <NavLink
@@ -248,7 +287,7 @@ const InvoiceEdit = () => {
         }}
         id="invoiceItemLink"
       >
-        Invoice Item
+        {arb ? 'عنصر الفاتورة' : 'Invoice Item' }
       </NavLink>
       <Tooltip
         placement="right"
@@ -256,7 +295,8 @@ const InvoiceEdit = () => {
         target="invoiceItemLink"
         toggle={toggleTooltip}
       >
-        Remove the invoice item if you do not wish to return it.
+         { arb ? 'قم بإزالة عنصر الفاتورة إذا كنت لا ترغب في إعادته.' : 'Remove the invoice item if you do not wish to return it.'}
+
       </Tooltip>
     </NavItem>
           <NavItem>
@@ -266,7 +306,8 @@ const InvoiceEdit = () => {
                 toggle('2');
               }}
             > 
-              Return History
+              {arb ? 'تاريخ العودة' : ' Return History' }
+
             </NavLink>
           </NavItem>
         </Nav>
@@ -279,11 +320,15 @@ const InvoiceEdit = () => {
                 invoiceInfo={insertedDataId}
                 onRemoveItem={handleRemoveItem}
                 invoiceStatus={returnDetails.invoice_status} // Pass the invoice status as a prop
+                arb={arb}
+                arabic={arabic}
               />
             </Row>
           </TabPane>
           <TabPane tabId="2">
-            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} />
+            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails}
+             arb={arb}
+             arabic={arabic} />
           </TabPane>
           {/* ADD NODE */}
         </TabContent>

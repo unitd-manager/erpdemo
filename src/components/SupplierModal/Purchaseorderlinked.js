@@ -20,10 +20,14 @@ import moment from 'moment';
 import api from '../../constants/api';
 import message from '../Message';
 
-const PurchaseOrderLinked = ({ editPurchaseOrderLinked, setEditPurchaseOrderLinked }) => {
+const PurchaseOrderLinked = ({ editPurchaseOrderLinked, setEditPurchaseOrderLinked,
+  //arb,arabic 
+}) => {
   PurchaseOrderLinked.propTypes = {
     editPurchaseOrderLinked: PropTypes.bool,
     setEditPurchaseOrderLinked: PropTypes.func,
+   // arb: PropTypes.any,
+   // arabic: PropTypes.any,
   };
   //All const Variable
   const { id } = useParams();

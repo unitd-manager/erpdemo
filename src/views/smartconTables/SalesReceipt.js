@@ -38,12 +38,17 @@ const InvoiceData = () => {
 //   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
 //   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
 
   const navigate = useNavigate();
   const [company, setCompany] = useState();
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   //getting data from invoice table
   const getInvoice = () => {
@@ -57,7 +62,32 @@ const InvoiceData = () => {
         setLoading(false);
       });
   };
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/invoice/getTranslationforTradingSalesReceipt')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+ 
   //Structure of Invoice list view
   const columns = [
     {
@@ -68,27 +98,27 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Order No',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Order No')?.[genLabel],
       selector: 'order_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Receipt Code',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Receipt Code')?.[genLabel],
       selector: 'receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Mode of Payment',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Mode of Payment')?.[genLabel],
       selector: 'mode_of_payment',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Status')?.[genLabel],
       selector: 'receipt_status',
       sortable: true,
       grow: 2,
@@ -96,7 +126,7 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Amount',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -104,14 +134,14 @@ const InvoiceData = () => {
     },
 
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Date')?.[genLabel],
       selector: 'receipt_date',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Print',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Print')?.[genLabel],
       sortable: true,
       width: 'auto',
       grow: 3,
@@ -142,6 +172,8 @@ const InvoiceData = () => {
   useEffect(() => {
     getCompany();
     getInvoice();
+    getArabicCompanyName();
+
   }, [id]);
 
 
@@ -153,11 +185,11 @@ const InvoiceData = () => {
 
         <CommonTable
           loading={loading}
-          title="Receipt List"
+          title= {arb?'قائمة الاستلام': 'Receipt List'}
           Button={
             // Open the modal on button click
             <Button color="primary" className="shadow-none" onClick={toggleModal}>
-              Add New
+              {arb ?'اضف جديد':'Add New'}
             </Button>
           }
         >
@@ -190,23 +222,28 @@ const InvoiceData = () => {
           </tbody>
         </CommonTable>
         <Modal isOpen={modalOpen} toggle={toggleModal}>
-          <ModalHeader toggle={toggleModal}>Add New Receipt</ModalHeader>
+          <ModalHeader toggle={toggleModal}>{arb ?'إضافة إيصال جديد':'Add New Receipt'} </ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
-                <ComponentCard title="Receipt Details">
+                <ComponentCard title= {arb ?'تفاصيل الاستلام':'Receipt Details'}>
                   <Form>
                     <FormGroup>
                       <Row>
                         <Col md="10">
-                          <Label>Orders</Label>
-                          <Input type="select" name="order_id" onChange={handleBookingInputs} value={selectOrderId}>
+                          <Label>{arb ?'طلبات':'Orders'}</Label>
+                          <Input 
+                          type="select" 
+                          name="order_id" 
+                          onChange={handleBookingInputs} 
+                          value={selectOrderId}>
                             <option>Select Customer</option>
                             {company &&
                               company.map((e) => {
                                 return (
                                   <option key={e.order_id} value={e.order_id}>
-                                    {e.order_code}
+                                    {' '}
+                                   {arb?e.order_code_arb:e.order_code}{' '}
                                   </option>
                                 );
                               })}
@@ -228,7 +265,7 @@ const InvoiceData = () => {
                             type="button"
                             className="btn mr-2 shadow-none"
                           >
-                            Save & Continue
+                          {arb?'حفظ ومتابعة': 'Save & Continue'}
                           </Button>
                           <Button
                             onClick={() => {
@@ -237,8 +274,8 @@ const InvoiceData = () => {
                             type="button"
                             className="btn btn-dark shadow-none"
                           >
-                            Go to List
-                          </Button>
+                      {arb?'اذهب إلى القائمة': 'Go to List'}
+                           </Button>
                         </div>
                       </Row>
                     </FormGroup>
@@ -251,7 +288,7 @@ const InvoiceData = () => {
 
         <Modal isOpen={secondModalOpen} toggle={() => setSecondModalOpen(!secondModalOpen)}>
           <ModalHeader toggle={() => setSecondModalOpen(!secondModalOpen)}>
-            Create receipt
+          {arb?'إنشاء إيصال': 'Create receipt'}
           </ModalHeader>
           <ModalBody>
        <ReceiptCreate 

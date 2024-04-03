@@ -105,21 +105,21 @@ if (arb === true) {
       sortable: false,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdClient.Name')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplier.Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdClient.Website')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplier.Website')?.[genLabel],
       selector: 'email',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdClient.Telephone')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplier.Telephone')?.[genLabel],
       selector: 'mobile',
       sortable: true,
       grow: 0,
@@ -163,7 +163,7 @@ if (arb === true) {
                     </td>
                     <td>{arb?element.company_name_arb:element.company_name}</td>
                     <td>{arb?element.email_arb:element.email}</td>
-                    <td>{arb?element.mobile_arb:element.mobile}</td>
+                    <td>{element.mobile}</td>
                   </tr>
                 );
               })}

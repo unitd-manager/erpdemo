@@ -93,7 +93,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
       remarks: createReceipt.remarks,
       payment_status: 'Paid',
     };
-  
+  if(createReceipt.amount){
     // Define the promises for updating receipt and invoice status
     const updateReceiptPromise = api.post('/supplier/edit-SupplierReceipt', updatedReceiptData);
   
@@ -132,7 +132,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
           // Handle error (you might want to show an error message)
           console.error('Error updating receipt', error);
         });
-    }
+    }}
   };
   
   const deleteCreatedReceipt = () => {
@@ -201,7 +201,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
             <Row>
             <Col md="12">
         <FormGroup>
-          <Label>Amount</Label>
+          <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Amount')?.[genLabel]}</Label>
           <Input
               type="text"
               onChange={handleInputreceipt}
@@ -212,7 +212,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
       </Col>
               <Col md="12">
                 <FormGroup>
-                  <Label>Date</Label>
+                  <Label>{arabic.find((item) => item.key_text === 'mdMakeSupplier.Date')?.[genLabel]}</Label>
                   <Input
                     type="date"
                     onChange={handleInputreceipt}
@@ -264,7 +264,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
                 type="button"
                 className="btn btn-dark shadow-none"
               >
-                Save
+                {arb?'يحفظ':'Save'}
               </Button>
             </FormGroup>
           </Form>

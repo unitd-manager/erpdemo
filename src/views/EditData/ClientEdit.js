@@ -200,12 +200,12 @@ console.log('Selected language from localStorage:', selectedLanguage);
     setFormSubmitted(true);
     const newContactWithCompanyId = newContactData;
     newContactWithCompanyId.company_id = id;
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
-      message('Invalid email address', 'warning');
-    }
-    else if (newContactWithCompanyId.salutation !== '' && 
-    newContactWithCompanyId.first_name !== '' && 
-    newContactWithCompanyId.email !== '') {
+    // if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
+    //   message('Invalid email address', 'warning');
+    // }
+    // else
+    //  if (newContactWithCompanyId.salutation !== '' && 
+    // newContactWithCompanyId.first_name !== '' ) {
       newContactWithCompanyId.creation_date = creationdatetime;
       newContactWithCompanyId.created_by = loggedInuser.first_name;
       api
@@ -217,9 +217,9 @@ console.log('Selected language from localStorage:', selectedLanguage);
         .catch(() => {
           message('Network connection error.', 'error');
         });
-    } else {
-      message('Please fill all required fields', 'warning');
-    }
+    // } else {
+    //   message('Please fill all required fields', 'warning');
+    // }
   };
 
   //  deleteRecord

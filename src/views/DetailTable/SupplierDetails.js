@@ -42,6 +42,40 @@ const SupplierDetails = () => {
       message('Please fill all required fields.', 'error');
     }
   };
+  const [arabic, setArabic] = useState([]);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const arb =selectedLanguage === 'Arabic'
+
+  //const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/translation/getTranslationForSupplier')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+  
+    getArabicCompanyName();
+  }, []);
   useEffect(() => {}, []);
   return (
     <div>
@@ -57,7 +91,7 @@ const SupplierDetails = () => {
                   <Col md="12">
                     <Label>
                       {' '}
-                      Supplier Name <span className="required"> *</span>{' '}
+                      {arabic.find((item) => item.key_text === 'mdSupplier.SupplierName')?.[genLabel]} <span className="required"> *</span>{' '}
                     </Label>
                     <Input type="text" name="company_name" onChange={handleInputsSupplierForms} />
                     </Col>
@@ -72,7 +106,8 @@ const SupplierDetails = () => {
               }}
               type="button"
               className="btn mr-2 shadow-none"  >
-              Save & Continue
+                {arb ?'حفظ ومتابعة':'Save & Continue'}
+              
             </Button>
             <Button
               onClick={() => {
@@ -80,7 +115,8 @@ const SupplierDetails = () => {
               }}
               type="button"
               className="btn btn-dark shadow-none" >
-              Go to List
+             
+              {arb ?'اذهب إلى القائمة':' Go to List'}
             </Button>
             </div>
                 </Row>
