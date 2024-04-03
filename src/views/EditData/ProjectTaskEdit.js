@@ -19,7 +19,8 @@ import api from '../../constants/api';
 import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
 import ProjectTaskEditDetails from '../../components/ProjectTaskTable/ProjectTaskEditDetails';
 import AppContext from '../../context/AppContext';
-
+import ProjectTimeSheet from '../../components/JobOrderTable.js/ProjectTimesheet';
+import ProjectTimeSheetEdit from '../../components/JobOrderTable.js/ProjectTImeSheetEdit';
 
 const TaskEdit = () => {
   //All state variable
@@ -27,20 +28,24 @@ const TaskEdit = () => {
   const [employeeProject, setEmployeeProject] = useState();
   const [projectdetails, setProjectDetails] = useState();
   // const [companydetails, setCompanyDetails] = useState();
+  const [contactDatass, setContactDatass] = useState();
   const [description, setDescription] = useState('');
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [RoomName, setRoomName] = useState('');
+  const [editTimeSheetModal, setEditTimeSheetEditModal] = useState(false);
   const [fileTypes, setFileTypes] = useState('');
+  const [projecttime, setProjectTime] = useState();
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
   const [update, setUpdate] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
+  const { id } = useParams();
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 const [arabic, setArabic] = useState([]);
 
@@ -58,7 +63,14 @@ const [arabic, setArabic] = useState([]);
         // Handle error if needed
       });   
   };
-  
+  const getTimeSheetById = () => {
+    api
+      .post('/projecttask/getTimeSheetProjectTaskById', { project_task_id: id })
+      .then((res) => {
+        setProjectTime(res.data.data);
+      })
+      .catch(() => { });
+  };
   let genLabel = '';
 
   if (arb === true) {
@@ -69,7 +81,6 @@ const [arabic, setArabic] = useState([]);
 
 
   //navigation and parameters
-  const { id } = useParams();
   const navigate = useNavigate();
 
    // Function to toggle tabs
@@ -80,7 +91,8 @@ const [arabic, setArabic] = useState([]);
   };
 
   const tabs = [
-    { id: '1', name: 'Attachment' },
+    { id: '1', name: 'Timesheet' },
+    { id: '2', name: 'Attachment' }
   ];
 
    // Attachment
@@ -191,6 +203,7 @@ const [arabic, setArabic] = useState([]);
     getTaskById();
     getProjectname();
     getEmployee();
+    getTimeSheetById();
     getArabicCompanyName();
   }, [id]);
 
@@ -218,6 +231,26 @@ const [arabic, setArabic] = useState([]);
            <Tab toggle={toggle} tabs={tabs} />
            <TabContent className="p-4" activeTab={activeTab}>
            <TabPane tabId="1">
+           <Form>
+              <FormGroup>
+              <ProjectTimeSheet
+               setContactDatass={setContactDatass}
+              id={id}
+              setEditTimeSheetEditModal={setEditTimeSheetEditModal}
+
+            />
+              <ProjectTimeSheetEdit
+              contactDatass={contactDatass}
+              projecttime={projecttime}
+              id={id}
+              editTimeSheetModal={editTimeSheetModal}
+              setEditTimeSheetEditModal={setEditTimeSheetEditModal}
+              getTimeSheetById={getTimeSheetById}
+            ></ProjectTimeSheetEdit>
+               </FormGroup>
+            </Form>
+          </TabPane>
+          <TabPane tabId="2">
            <Form>
               <FormGroup>
                   <Row>

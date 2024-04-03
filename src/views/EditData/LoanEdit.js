@@ -18,7 +18,7 @@ import ApiButton from '../../components/ApiButton';
 const LoanEdit = () => {
   //All state variables
   const [loan, setLoan] = useState(null);
-  const [activeTab, setActiveTab] = useState('1');
+  const [activeTab, setActiveTab] = useState('1'); 
   const [loanDetails, setLoanDetails] = useState([]);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [paymentdetails, setPaymentDetails] = useState();
@@ -266,25 +266,59 @@ const LoanEdit = () => {
     getPaymentById();
     getPreviousEarlierLoan();
   }, [id]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
 
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/loan/getTranslationforHRLoan')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  
   const columns1 = [
     {
       name: '#',
     },
     {
-      name: 'Date',
+      name: arb?'تاريخ': 'Date',
     },
     {
-      name: 'Amount',
+      name: arb?'كمية': 'Amount',
     },
     {
-      name: 'Remarks',
+      name:  arb?'ملاحظات':'Remarks',
     },
   ];
 
   return (
     <>
-      <BreadCrumbs />
+    {eng === true && <BreadCrumbs heading={loanDetails && loanDetails.title} />}
+    {arb === true && <BreadCrumbs heading={loanDetails && loanDetails.title_arb} />}
+    
+      {/* <BreadCrumbs /> */}
       <Form>
         <FormGroup>
           <ToastContainer></ToastContainer>
@@ -307,6 +341,8 @@ const LoanEdit = () => {
         handleInputs={handleInputs}
         loanStatus={loanStatus}
         loanDetails={loanDetails}
+        arb={arb}
+       arabic={arabic}
       ></LoanDetailComp>
       <LoanMoreDetails
         isStatusActive={isStatusActive}
@@ -326,6 +362,8 @@ const LoanEdit = () => {
         addpaymentModal={addpaymentModal}
         loan={loan}
         loanDetails={loanDetails}
+        arb={arb}
+       arabic={arabic}
       ></LoanMoreDetails>
     </>
   );

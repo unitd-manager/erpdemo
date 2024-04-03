@@ -93,7 +93,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
       remarks: createReceipt.remarks,
       payment_status: 'Paid',
     };
-  
+  if(createReceipt.amount){
     // Define the promises for updating receipt and invoice status
     const updateReceiptPromise = api.post('/supplier/edit-SupplierReceipt', updatedReceiptData);
   
@@ -132,7 +132,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
           // Handle error (you might want to show an error message)
           console.error('Error updating receipt', error);
         });
-    }
+    }}
   };
   
   const deleteCreatedReceipt = () => {

@@ -1,32 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+
 import moment from 'moment';
+import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
 
 export default function LeaveMainDetails({ handleInputs, leavesDetails,difference }) {
   LeaveMainDetails.propTypes = {
     handleInputs: PropTypes.func,
-    leavesDetails: PropTypes.object,
+    leavesDetails: PropTypes.object, 
     difference: PropTypes.any,
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/leave/getTranslationforHRLeave')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  useEffect(() => {
+    
+    getArabicCompanyName();
+
+  }, []);
+
+ 
   return (
     <>
-      <ComponentCard title="Leave Edit">
+      <ComponentCard title= {arb? 'اترك التعديل': "Leave Edit"}>
         <Form>
           <FormGroup>
             <Row>
               <Col md="4">
                 <FormGroup>
-                  <Label>Employee Name</Label>
+                  <Label> {arabic.find((item) => item.key_text === 'mdHRLeave.Employee Name')?.[genLabel]}
+</Label>
                   <br />
                   <span>{leavesDetails && leavesDetails.employee_name}</span>
                 </FormGroup>
               </Col>
               <Col md="4">
                 <FormGroup>
-                  <Label>Designation</Label>
-                  <br />
+                <Label> {arabic.find((item) => item.key_text === 'mdHRLeave.Designation')?.[genLabel]}
+</Label>                  <br />
                   <span>{leavesDetails && leavesDetails.position}</span>
                 </FormGroup>
               </Col>

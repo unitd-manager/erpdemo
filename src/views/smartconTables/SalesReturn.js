@@ -14,6 +14,10 @@ import CommonTable from '../../components/CommonTable';
 const SalesInvoice = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   const getOrders = () => {
     api
@@ -26,8 +30,36 @@ const SalesInvoice = () => {
         setLoading(false);
       });
   };
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/finance/getTranslationforTradingSalesReturn')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+ 
   useEffect(() => {
     getOrders();
+    getArabicCompanyName();
+
   }, []);
 
   const columns = [
@@ -39,7 +71,8 @@ const SalesInvoice = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+       name: arb ? 'يحرر' : 'Edit' ,
+
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -48,17 +81,31 @@ const SalesInvoice = () => {
       sortable: false,
     },
     {
-      name: 'Invoice No',
+      name: arabic.find(item => item.key_text === 'mdTradingSalesReturn.Invoice Code')?.[genLabel],
+      selector: 'invoice_id',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+      
     
     },
    
     {
-      name: 'Date',
+    name: arabic.find(item => item.key_text === 'mdTradingSalesReturn.Date')?.[genLabel],
+    selector: 'return_date',
+    sortable: true,
+    grow: 0,
+    wrap: true,
+    
     
     },
     {
-      name: 'Status',
-    
+    name: arabic.find(item => item.key_text === 'mdTradingSalesReturn.Status')?.[genLabel],
+    selector: 'status',
+    sortable: true,
+    grow: 0,
+    wrap: true,
+           
     },
 
   ];
@@ -69,11 +116,11 @@ const SalesInvoice = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Return List"
+          title={arb ?'قائمة إرجاع المبيعات':'Sales Return List'}
           Button={
             <Link to="/ReturnDetails">
               <Button color="primary" className="shadow-none">
-                Add New
+              {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
           }

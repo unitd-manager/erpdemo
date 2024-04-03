@@ -56,6 +56,44 @@ const TrainingDetails = () => {
     getTraining();
     console.log(training)
   }, []);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/training/getTranslationforHRTraining')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else { 
+    genLabel = 'value';
+  }
 
   return (
     <>
@@ -68,13 +106,28 @@ const TrainingDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>Title <span style={{ color: 'red' }}>*</span></Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  <span className="required"> *</span>
+                    {arabic.find((item) => item.key_text === 'mdHRTraining.Title')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                   
+                  </Label>
                     <Input
                       type="text"
                       onChange={handleInputs}
-                      value={trainingDetails && trainingDetails.title}
-                      name="title"
-                    />
+                      value={
+                        arb
+                        ? trainingDetails && trainingDetails.title_arb
+                          ? trainingDetails.title_arb
+                          : trainingDetails && trainingDetails.title_arb !== null
+                          ? ''
+                          : trainingDetails && trainingDetails.title
+                        : trainingDetails && trainingDetails.title
+                    }
+                    name={arb ? 'title_arb' : 'title'}
+        
+                        
+                      />
                   </Col>
                 </Row>
               </FormGroup>
@@ -88,7 +141,7 @@ const TrainingDetails = () => {
                         insertTrainingDetailData();
                       }}
                     >
-                      Save & Continue
+                      {arb?'حفظ ومتابعة':'Save & Continue'}
                     </Button>
                     <Button
                       onClick={() => {
@@ -97,7 +150,7 @@ const TrainingDetails = () => {
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                     {arb?'اذهب إلى القائمة': 'Go to List'}
                     </Button>
                   </div>
                 </Row>

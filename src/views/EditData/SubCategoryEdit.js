@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
-import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import SubCategoryButton from '../../components/SubCategoryTable/SubCategoryButton';
 import SubCategoryEditDetails from '../../components/SubCategoryTable/SubCategoryEditDetails';
@@ -11,6 +10,8 @@ import SubCategoryPageMetaData from '../../components/SubCategoryTable/SubCatego
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+
 
 const SubCategoryEdit = () => {
   // All state variables
@@ -22,6 +23,43 @@ const SubCategoryEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForSubCategory = () => {
+      api
+      .get('/subcategory/getTranslationForSubCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
+
   //All Functions/Methods
 
   //Setting Data in SubCategory Edit Details
@@ -32,10 +70,9 @@ const SubCategoryEdit = () => {
   // Route Change
   const applyChanges = () => {};
   const saveChanges = () => {
-    if (subcategoryeditdetails.sub_category_title !== '') {
+    if ((arb && subcategoryeditdetails.sub_category_title_arb.trim() !== '') || (!arb && subcategoryeditdetails.sub_category_title.trim() !== '')) {
       navigate('/SubCategory');
     }
-    window.location.reload();
   };
   const backToList = () => {
     navigate('/SubCategory');
@@ -81,11 +118,14 @@ const SubCategoryEdit = () => {
       });
   };
 
+  
+
   //Api call for Editing SubCategory Details
   const editSubCategoryData = () => {
-    subcategoryeditdetails.modification_date = moment().format('DD-MM-YYYY');
-    if (subcategoryeditdetails.sub_category_title !== '') {
+    setFormSubmitted(true);
+    if ((arb && subcategoryeditdetails.sub_category_title_arb.trim() !== '') || (!arb && subcategoryeditdetails.sub_category_title.trim() !== '')) {
       subcategoryeditdetails.modification_date = creationdatetime;
+      subcategoryeditdetails.modified_by = loggedInuser.first_name;
       api
         .post('/subcategory/editSubCategory', subcategoryeditdetails)
         .then(() => {
@@ -112,10 +152,13 @@ const SubCategoryEdit = () => {
       });
   };
 
+  
+
   useEffect(() => {
     editSubCategoryById();
     getCategory();
     getSubCategoryType();
+    getTranslationForSubCategory();
   }, [id]);
 
   return (
@@ -131,6 +174,8 @@ const SubCategoryEdit = () => {
         deleteSubCategoryData={deleteSubCategoryData}
         navigate={navigate}
         id={id}
+        formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted}
       ></SubCategoryButton>
 
       {/* Sub Category  Details */}
@@ -140,12 +185,19 @@ const SubCategoryEdit = () => {
         handleInputs={handleInputs}
         category={category}
         subcategorytypedetails={subcategorytypedetails}
+        arb={arb}
+        formSubmitted={formSubmitted}
+        arabic={arabic}
+        genLabel={genLabel}
       ></SubCategoryEditDetails>
 
       {/* Page Meta Data Details */}
       <SubCategoryPageMetaData
         subcategoryeditdetails={subcategoryeditdetails}
         handleInputs={handleInputs}
+        arb={arb}
+        arabic={arabic}
+        genLabel={genLabel}
       ></SubCategoryPageMetaData>
     </>
   );

@@ -7,11 +7,14 @@ import api from '../../constants/api';
 export default function ItemTable({
   returnItemDetails,
   invoiceStatus,
+  arb
   // onRemoveItem,
 }) {
   ItemTable.propTypes = {
     returnItemDetails: PropTypes.array,
     invoiceStatus: PropTypes.array,
+    arb: PropTypes.any,
+
     // onRemoveItem: PropTypes.func.isRequired,
   };
   const hasNonZeroQuantity = returnItemDetails?.some((item) => item.qty > 0) || false;
@@ -25,11 +28,11 @@ export default function ItemTable({
 
   // Structure of Invoice table
   const invoiceTableColumns = [
-    { name: 'Item' },
-    { name: 'Quantity' },
-    { name: 'Unit Price' },
-    { name: 'Total' },
-    { name: 'Qty Returned' },
+    { name: arb ? 'غرض' : 'Item' },
+    { name: arb ? 'كمية' :'Quantity' },
+    { name: arb ? 'سعر الوحدة' :'Unit Price' },
+    { name: arb ? 'المجموع' :'Total' },
+    { name: arb ? 'الكمية التي تم إرجاعها' :'Qty Returned' }
    
   ];
 
@@ -98,7 +101,7 @@ export default function ItemTable({
     <Form>
       {hasNonZeroQuantity && invoiceStatus !== 'Cancelled' && ( // Check invoice status here
               <Button color="primary" onClick={openReturnModal}>
-                Sales Return
+                { arb ? 'عائد المبيعات' : 'Sales Return'}
               </Button>
             )}
       <div className="MainDiv">
@@ -123,10 +126,11 @@ export default function ItemTable({
                     <td>{element.total_cost}</td>
                     <td>{element.qty_returned}</td>
                   </tr>
+                  
                 ))
               ) : ( 
                 <tr>
-                  <td colSpan={invoiceTableColumns.length}>No items available</td>
+                  <td colSpan={invoiceTableColumns.length}>{arb? 'لا توجد عناصر متاحة' : 'No items available'}</td>
                 </tr>
               )}
             </tbody>
@@ -136,15 +140,16 @@ export default function ItemTable({
 
       {/* Return Modal */}
       <Modal isOpen={returnModal} toggle={toggleReturnModal}>
-  <ModalHeader toggle={toggleReturnModal}>Return Quantity</ModalHeader>
+  <ModalHeader toggle={toggleReturnModal}>
+   { arb?'كمية العودة' : 'Return Quantity'}</ModalHeader>
   <ModalBody>
     <Table>
       <thead>
         <tr>
-          <th>Item</th>
-          <th>Current Quantity</th>
-          <th>Return Quantity</th>
-          <th>Qty Returned</th> {/* New column for displaying qty_returned */}
+          <th>{ arb?' غرض' : 'Item'}</th>
+          <th>{ arb?'الكمية الحالية' : 'Current Quantity'} </th>
+          <th>{ arb?'كمية العودة' : 'Return Quantity'}</th>
+          <th>{ arb?' الكمية التي تم إرجاعها' : 'Qty Returned '} </th> {/* New column for displaying qty_returned */}
         </tr>
       </thead>
       <tbody>

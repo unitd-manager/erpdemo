@@ -25,7 +25,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
       {' '}
       <Form>
         <FormGroup>
-          <ComponentCard title="Goods Delivery Details" creationModificationDate={tenderDetails}>
+          <ComponentCard title={arb ? 'تفاصيل تسليم البضائع' : 'Goods Delivery Details'} creationModificationDate={tenderDetails}>
             <Row>
               <Col md="3">
                 <FormGroup>
@@ -94,7 +94,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     }
                     name={arb ? 'order_code_arb' : 'order_code'}
 
-                  ></Input>
+                  ></Input> 
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -238,7 +238,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                  </Label>                 
                   <Input
                     type="select"
-                    value={
+                    value={ 
                     arb
                     ? tenderDetails && tenderDetails.goods_delivery_status_arb
                       ? tenderDetails.goods_delivery_status_arb

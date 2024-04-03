@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
-import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import CategoryButton from '../../components/CategoryTable/CategoryButton';
 import CategoryDetailComp from '../../components/CategoryTable/CategoryDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const CategoryEdit = () => {
   //All state variables
@@ -31,6 +31,16 @@ const CategoryEdit = () => {
   const backToList = () => {
     navigate('/Category');
   };
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
 
   //Api call for getting section dropdown
   const getSection = () => {
@@ -74,9 +84,10 @@ const CategoryEdit = () => {
 
   //Logic for edit data in db
   const editCategoryData = () => {
-    categoryDetails.modification_date =  moment().format('DD-MM-YYYY');
-    if (categoryDetails.category_title !== '') {
+    setFormSubmitted(true);
+    if (categoryDetails.category_title !== '' ||  categoryDetails.category_title_arb !== '' ) {
       categoryDetails.modification_date = creationdatetime;
+      categoryDetails.modified_by = loggedInuser.first_name;
 
       api
         .post('/category/edit-Category', categoryDetails)
@@ -103,10 +114,37 @@ const CategoryEdit = () => {
       });
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForCategory = () => {
+      api
+      .get('/category/getTranslationForCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   useEffect(() => {
     CategoryById();
     getSection();
     getValuelist();
+    getTranslationForCategory();
   }, [id]);
 
   return (
@@ -123,6 +161,7 @@ const CategoryEdit = () => {
         deleteCategoryData={deleteCategoryData}
         backToList={backToList}
         id={id}
+        setFormSubmitted={setFormSubmitted}
       ></CategoryButton>
 
       {/* More details*/}
@@ -131,6 +170,10 @@ const CategoryEdit = () => {
         handleInputs={handleInputs}
         section={section}
         valuelist={valuelist}
+        arb={arb}
+        formSubmitted={formSubmitted}
+        arabic={arabic}
+        genLabel={genLabel}
       ></CategoryDetailComp>
     </>
   );

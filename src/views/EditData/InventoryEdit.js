@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form } from 'reactstrap';
+import { Row, Col, Form, TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
@@ -13,8 +13,14 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import ComponentCard from '../../components/ComponentCard';
 import InventoryEditPart from '../../components/Inventory/InventoryEditPart';
-import InventoryEditTables from '../../components/Inventory/InventoryEditTables';
+// import InventoryEditTables from '../../components/Inventory/InventoryEditTables';
+import PurchaseOrderLinkedTable from '../../components/Inventory/PurchaseOrderLinkedTable';
 import creationdatetime from '../../constants/creationdatetime';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
+import ClientAttachmentPortal from '../../components/ClientTable/ClientAttachmentPortal';
+import ProjectLinkedTable from '../../components/Inventory/ProjectLinkedTable';
+
 
 const Test = () => {
   //state variables
@@ -34,9 +40,34 @@ const Test = () => {
     notes: '',
     product_code: '',
   });
+  const [activeTab, setActiveTab] = useState('1');
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
 
   //params and routing
   const { id } = useParams();
+
+  const tabs = [
+    { id: '1', name: 'Purchase Orders Linked' },
+    { id: '2', name: 'Projects Linked' },
+    { id: '3', name: ' Attachment' },
+  ];
+  const tabsArb =  [
+    {id:'1',name:'أوامر الشراء مرتبطة'},
+    {id:'2',name:'المشاريع المرتبطة'},
+    {id:'3',name:'مرفق'},
+  ];
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
 
   //handle input change
   const handleInputs = (e) => {
@@ -119,6 +150,29 @@ const Test = () => {
     }
   }, [inventoryDetails]);
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicInventory = () => {
+      api
+      .get('/inventory/getTranslationForInventory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+  console.log('arabic',arabic)
+  useEffect(() => {
+    getArabicInventory();
+  }, []);
 
 
   return (
@@ -128,23 +182,31 @@ const Test = () => {
           inventoryDetails={inventoryDetails}
           handleInputs={handleInputs}
           editinventoryData={editinventoryData}
+          arb={arb}
+          eng={eng}
+          arabic={arabic}
         />
         <Row>
           <Form>
-            <ComponentCard title="Stock Details">
+            <ComponentCard title={arb ? 'تفاصيل المخزون': 'Stock Details'}>
               <Row>
                 <Col xs="12" md="4">
                   <Row>
-                    <h5>Total Purchased quantity</h5>
+                   <h5> {arb ?'إجمالي الكمية المشتراة':'Total Purchased Quantity'} </h5>
                   </Row>
-                  <span>{productQty && productQty.materials_purchased}</span>
+                  {/* <span>{productQty && productQty.materials_purchased}</span> */}
+                  <span>{eng ===true  && productQty.materials_purchased} 
+                  { arb === true && productQty.materials_purchased_arb}</span>
                   <Row></Row>
                 </Col>
                 <Col xs="12" md="4">
                   <Row>
-                    <h5>Sold quantity</h5>
+                  <h5> {arb ?'الكمية المباعة':'Sold Quantity'} </h5>
                   </Row>
-                  <span>{productQty && productQty.materials_used}</span>
+                  <span>
+                  {eng ===true  && productQty.materials_used} 
+                  { arb === true && productQty.materials_used_arb} 
+                   </span>
                   <Row></Row>
                 </Col>
                 {/* <Col xs="12" md="3">
@@ -158,21 +220,60 @@ const Test = () => {
                 </Col> */}
                 <Col xs="12" md="4">
                   <Row>
-                    <h5>Available Quantity in Stock</h5>
+                    <h5> {arb ?'الكمية المتوفرة في المخزون':'Available Quantity in Stock'} </h5>
                   </Row>
-                  <span>
+                  {/* <span>
                   {productQty && productQty.actual_stock}
-  </span>
+  </span> */}
+                 <span>
+                  { eng ===true  && productQty.actual_stock} 
+                  { arb === true && productQty.actual_stock_arb} 
+                 </span>
                   <Row></Row>
                 </Col>
               </Row>
             </ComponentCard>
           </Form>
         </Row>
-        <InventoryEditTables
+        <ComponentCard title= {arb ? 'المزيد من التفاصيل':'More Details'} >
+        <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        <TabContent className="p-4" activeTab={activeTab}>
+          {/* Contact Linked */}
+          <TabPane tabId="1">
+          <PurchaseOrderLinkedTable
           tabPurchaseOrdersLinked={tabPurchaseOrdersLinked}
           projectsLinked={projectsLinked}
+          eng={eng}
+          arb={arb}
+          arabic={arabic}
         />
+          </TabPane>
+          { /* Invoice Linked Portal */}
+           <TabPane tabId="2">
+           <ProjectLinkedTable
+          projectsLinked={projectsLinked}
+          eng={eng}
+          arb={arb}
+          arabic={arabic}
+        />
+          </TabPane>
+          { /* Attachment Portal */ }
+          <TabPane tabId="3">
+          <ClientAttachmentPortal
+          ClientId={id}
+          />
+          </TabPane>
+        </TabContent>
+      </ComponentCard>
+
+       
       </>
   );
 };
