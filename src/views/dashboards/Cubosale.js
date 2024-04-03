@@ -1,6 +1,6 @@
 import { Row, Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
+import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
 import TenderSummary from '../../components/dashboard/TenderSummary';
@@ -14,6 +14,8 @@ import LabourSummary from '../../components/dashboard/LabourSummary';
 import MaterialPurchaseSummary from '../../components/dashboard/MaterialPurchaseSummary';
 import MaterialIssueChart from '../../components/dashboard/MaterialIssueChart';
 import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
+ import QuotationChart from '../../components/dashboard/QuotationChart';
+ import CustomerChart from '../../components/dashboard/CustomerChart';
 
 const Classic = () => {
   return (
@@ -21,7 +23,7 @@ const Classic = () => {
       <Row>
         <Col lg="12">
           {/* <TestChart/> */}
-          <TenderSummaryCard />
+           <TenderSummaryCard />
           <ProjectSummaryChart />
           <TaskSummary/>
           <LabourSummary/>
@@ -34,7 +36,9 @@ const Classic = () => {
           <MaterialPurchaseSummary/>
           <MaterialIssueChart/>
           <RequestForQuotePie/>
-          {/* <SalesOverview /> */}
+         < QuotationChart/> 
+         <CustomerChart/>
+           <SalesOverview /> 
         </Col>
       </Row>
     </>

@@ -225,14 +225,14 @@ const GoodsDeliveryEdit = () => {
 
   //Structure of Invoice table
   const columns1 = [
-    { name: 'SN.No' },
-    { name: 'Item Title' },
-    { name: 'Description' },
-    { name: 'Unit' },
-    { name: 'Ordered Quantity' },
-    { name: 'Delivered Quantity' },
-    { name: 'Unit Price' },
-    { name: 'Total Amount ' },
+    { name:arb ? 'رقم لا' : 'SN.No' },
+    { name:arb ? 'عنوان البند' : 'Item Title' },
+    { name:arb ? 'وصف' : 'Description' },
+    { name:arb ? 'وحدة' : 'Unit' },
+    { name:arb ? 'الكمية المطلوبة' : 'Ordered Quantity' },
+    { name:arb ? 'كمية تسليمها' : 'Delivered Quantity' },
+    { name:arb ? 'سعر الوحدة' : 'Unit Price' },
+    { name:arb ? 'المبلغ الإجمالي' : 'Total Amount ' },
   ];
 
   return (
@@ -258,7 +258,7 @@ const GoodsDeliveryEdit = () => {
 
       ></GoodsDeliveryMoreDetails>
 
-      <ComponentCard title="More Details">
+      <ComponentCard title={arb ? 'المزيد من التفاصيل' : 'More Details'}>
         <ToastContainer></ToastContainer>
         {eng === true &&
 
@@ -279,7 +279,7 @@ const GoodsDeliveryEdit = () => {
                       generateData();
                     }}
                   >
-                    Generate Delivery Item
+                    {arb?'إنشاء عنصر التسليم': 'Generate Delivery Item'} 
                   </Button>
                 </FormGroup>
               </Col>
@@ -292,7 +292,8 @@ const GoodsDeliveryEdit = () => {
                       setEditModal(true);
                     }}
                   >
-                    Edit
+            {arb?'يحرر': 'Edit'} 
+ 
                   </Button>
                 </FormGroup>
               </Col>

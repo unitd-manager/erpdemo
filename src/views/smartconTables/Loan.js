@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import moment from 'moment';
 import { Button } from 'reactstrap';
@@ -19,6 +19,11 @@ const Loan = () => {
   //state variale
   const [loan, setLoan] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
   //getting loan data in db
   const getLoan = () => {
     setLoading(true);
@@ -49,7 +54,38 @@ const Loan = () => {
   useEffect(() => {
     getLoan();
   }, []);
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/loan/getTranslationforHRLoan')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  useEffect(() => {
+    
+    getArabicCompanyName();
+
+  }, []);
+
+ 
   //  stucture of loan list view
   const columns = [
     {
@@ -60,7 +96,7 @@ const Loan = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+      name:arb ? 'يحرر' : 'Edit' ,
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -69,48 +105,48 @@ const Loan = () => {
       sortable: false,
     },
     {
-      name: 'Employee Name',
+      name: arabic.find(item => item.key_text === 'mdHRLoan.Employee Name')?.[genLabel],
       selector: 'employee_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Loan Application Date',
+      name: arabic.find(item => item.key_text === 'mdHRLoan.Loan Application Date')?.[genLabel],
       selector: 'date',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Total Loan Amount',
+      name: arabic.find(item => item.key_text === 'mdHRLoan.Total Loan Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Amount Payable(per month)',
+      name:arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payable(per month)')?.[genLabel],
       selector: 'month_amount',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Total Amount Paid',
+      name: arabic.find(item => item.key_text ===  'mdHRLoan.Total Amount Paid')?.[genLabel],
       selector: 'total_repaid_amount',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Amount Payable',
+      name: arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payable	')?.[genLabel],
       selector: 'amount_payable',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdHRLoan.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       width: 'auto',
@@ -125,12 +161,11 @@ const Loan = () => {
 
         <CommonTable
           loading={loading}
-          title="Loan List"
+          title= {arb ?'لائحة القروض':'Loan List'}
           Button={
             <Link to="/LoanDetails">
               <Button color="primary" className="shadow-none">
-                Add New
-              </Button>
+              {arb ?'اضف جديد':'Add New'}              </Button>
             </Link>
           }
         >
