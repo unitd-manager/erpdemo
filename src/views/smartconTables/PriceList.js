@@ -92,7 +92,7 @@ const Leaves = () => {
   //  stucture of leave list view
   const columns = [
     {
-      name: 'id',
+      name:arabic.find(item => item.key_text === 'mdPriceList.ID')?.[genLabel],
       selector: 'price_list_id',
       grow: 0,
       wrap: true,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,6 +7,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const PriceListDetails = () => {
   //Navigation and Parameter Constants
@@ -15,6 +16,7 @@ const PriceListDetails = () => {
   //Logic for adding Planning in db
   const [planningForms, setPlanningForms] = useState({
     customer_name: '',
+    customer_name_arb: '',
   });
 
   //setting data in PlanningForms
@@ -22,10 +24,52 @@ const PriceListDetails = () => {
     setPlanningForms({ ...planningForms, [e.target.name]: e.target.value });
   };
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+  
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForPriceList = () => {
+      api
+      .get('/pricelistitem/getTranslationForPriceList')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+    getTranslationForPriceList();
+  }, []);
+
+
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.customer_name !== '') {
+    setFormSubmitted(true);
+    if ((arb && planningForms.customer_name_arb.trim() !== '') || (!arb && planningForms.customer_name.trim() !== ''))
+   {
       planningForms.creation_date = creationdatetime;
+      planningForms.created_by = loggedInuser.first_name;
       api
         .post('/pricelistitem/insertPriceList', planningForms)
         .then((res) => {
@@ -49,20 +93,34 @@ const PriceListDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ? 'التفاصيل الرئيسية': 'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>
-                      Title<span className="required"> *</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      name="customer_name"
-                      onChange={handlePlanningForms}
-                      value={planningForms && planningForms.customer_name}
-                    ></Input>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.CustomerName')?.[genLabel]}
+              </Label><span className='required'>*</span>
+                  <Input
+                    type="text"
+                    onChange={handlePlanningForms}
+                    value={
+                      arb
+                        ? (
+                            planningForms && planningForms.customer_name_arb ? planningForms.customer_name_arb :
+                            (planningForms && planningForms.customer_name_arb !== null ? '' : planningForms && planningForms.customer_name)
+                          )
+                        : (planningForms && planningForms.customer_name)
+                    }
+                    name={arb ? 'customer_name_arb' : 'customer_name'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && planningForms.customer_name_arb.trim() === '') || (!arb && planningForms.customer_name.trim() === '')) ? 'highlight' : ''
+                  }`}
+              />
+              
+              {formSubmitted && ((arb && planningForms && planningForms.customer_name_arb.trim() === '') || (!arb && planningForms.customer_name.trim() === '' ))&& (
+                  <div className="error-message">Please Enter</div>
+              )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -81,12 +139,18 @@ const PriceListDetails = () => {
                     </Button>
                     <Button
                       onClick={() => {
+                      if (
+                        window.confirm(
+                          'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                        )
+                      ) {
                         navigate(-1);
-                      }}
+                      }
+                    }}
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

@@ -20,7 +20,11 @@ const Category = () => {
   //state variable
   const [category, setCategory] = useState();
   const [loading, setLoading] = useState(false);
-
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //get category data
   const getCategory = () => {
     api
@@ -47,10 +51,38 @@ const Category = () => {
       });
   };
 
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForCategory = () => {
+      api
+      .get('/category/getTranslationForCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+
   useEffect(() => {
     getCategory();
+    getTranslationForCategory();
   }, []);
 
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
   //  stucture of Category list view
   const columns = [
     {
@@ -61,7 +93,7 @@ const Category = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+      name:arabic.find(item => item.key_text === 'mdCategory.Edit')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -70,41 +102,41 @@ const Category = () => {
       sortable: false,
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel],
       selector: 'category_title',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Order',
+      name: arabic.find(item => item.key_text === 'mdCategory.Order')?.[genLabel],
       selector: 'sort_order',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Category Type',
+      name: arabic.find(item => item.key_text === 'mdCategory.CategoryType')?.[genLabel],
       selector: 'category_type',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Section',
+      name: arabic.find(item => item.key_text === 'mdCategory.Section')?.[genLabel],
       selector: 'section_title',
       sortable: true,
       width: 'auto',
       grow: 2,
     },
     {
-      name: 'ID',
+      name: arabic.find(item => item.key_text === 'mdCategory.ID')?.[genLabel],
       selector: 'category_id',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Published',
+      name: arabic.find(item => item.key_text === 'mdCategory.Published')?.[genLabel],
       selector: 'published',
       sortable: true,
       grow: 2,
@@ -118,8 +150,8 @@ const Category = () => {
         <BreadCrumbs />
 
         <CommonTable
-          loading={loading}
-          title="Category List"
+          loading={loading}s
+          title={arb ? 'قائمة الفئات': 'Category List'}
           Button={
             <Link to="/CategoryDetails">
               <Button color="primary" className="shadow-none">
@@ -146,7 +178,7 @@ const Category = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.category_title}</td>
+                    <td>{arb && element.category_title_arb ?element.category_title_arb : element.category_title}</td>
                     <td>
                       <SortOrder
                         idValue={element.category_id}
@@ -155,15 +187,15 @@ const Category = () => {
                         value={element.sort_order}
                       ></SortOrder>
                     </td>
-                    <td>{element.category_type}</td>
-                    <td>{element.section_title}</td>
+                    <td>{arb && element.category_type_arb ?element.category_type_arb : element.category_type}</td>
+                    <td>{arb && element.section_title_arb ?element.section_title_arb : element.section_title}</td>
                     <td>{element.category_id}</td>
                     <td>
                       <Publish
                         idColumn="category_id"
                         tablename="category"
                         idValue={element.category_id.toString()}
-                        value={element.published}
+                        value={arb && element.published_arb ?element.published_arb : element.published}
                       ></Publish>
                     </td>
                   </tr>
