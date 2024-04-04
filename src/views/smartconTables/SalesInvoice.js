@@ -8,7 +8,7 @@ import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
 import { Link } from 'react-router-dom';
-// import moment from 'moment';
+// import moment from 'moment'; 
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -16,6 +16,10 @@ import CommonTable from '../../components/CommonTable';
 const Opportunity = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   const getinvoice = () => {
     api
@@ -41,9 +45,37 @@ const Opportunity = () => {
         setLoading(false);
       });
   };
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/invoice/getTranslationforTradingSalesInvoice')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
   useEffect(() => {
     getinvoice();
+    getArabicCompanyName();
+
   }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   const columns = [
     {
@@ -54,7 +86,7 @@ const Opportunity = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+      name:arb ? 'يحرر' : 'Edit',
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -63,7 +95,7 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name: 'Code',
+      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Code')?.[genLabel], 
       selector: 'invoice_code',
       sortable: true,
       grow: 0,
@@ -77,34 +109,34 @@ const Opportunity = () => {
     //   wrap: true,
     // },
     {
-      name: 'Customer Name',
+      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'date',
+      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Date')?.[genLabel],
       selector: 'invoice_date',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Amount',
-      selector: 'InvoiceAmount',
+      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Amount')?.[genLabel],
+      selector: 'invoice_amount',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Due Date',
-      selector: 'invoice_due_date',
+      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Due Date')?.[genLabel],
+     selector: 'invoice_due_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'Status',
+      name:arb ? 'حالة' : 'Status',
       selector: 'status',
       sortable: true,
       grow: 2,
@@ -124,7 +156,7 @@ const Opportunity = () => {
           Button={
             <Link to="/InvoiceDetails">
               <Button color="primary" className="shadow-none">
-                Add New
+              {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
           }

@@ -7,34 +7,52 @@ function EducationalQualificationTab({
   educationalQualificationDetails,
   qualifications,
   handleEduInputs,
+  arabic,
+  arb
 }) {
   EducationalQualificationTab.propTypes = {
     educationalQualificationDetails: PropTypes.object,
     handleEduInputs: PropTypes.func,
     qualifications: PropTypes.array,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
     <div>
       <Row>
         <Col md="4">
           <FormGroup>
-            <Label>Qualification 1</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Qualification 1')?.[genLabel]}</Label>
             <Input
-              name="educational_qualitifcation1"
-              value={
-                educationalQualificationDetails &&
-                educationalQualificationDetails.educational_qualitifcation1
-              }
+            name= {arb ? 'educational_qualitifcation1_arb' : 'educational_qualitifcation1'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1_arb ? educationalQualificationDetails.educational_qualitifcation1_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1)
+            }
+              
               onChange={handleEduInputs}
               type="select"
             >
-              <option defaultValue="selected">Please Select</option>
+              <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
               {qualifications &&
                 qualifications.map((ele) => {
                   return (
                     <option key={ele.valuelist_id} value={ele.valuelist_id}>
-                      {ele.value}
+                      {arb?ele.value_arb:ele.value_arb}
                     </option>
                   );
                 })}
@@ -43,10 +61,19 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Degree</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Degree')?.[genLabel]}</Label>
             <Input
-              name="degree1"
-              value={educationalQualificationDetails && educationalQualificationDetails.degree1}
+            name= {arb ? 'degree1_arb' : 'degree1'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.degree1_arb ? educationalQualificationDetails.degree1_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.degree1_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.degree1)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.degree1)
+            }
+              
               onChange={handleEduInputs}
               type="text"
             />
@@ -54,7 +81,8 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Year of completion</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Year of completion')?.[genLabel]}</Label>
             <Input
               name="year_of_completion1"
               value={moment(
@@ -71,22 +99,27 @@ function EducationalQualificationTab({
       <Row>
         <Col md="4">
           <FormGroup>
-            <Label>Qualification 2</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Qualification 2')?.[genLabel]}</Label>
             <Input
-              name="educational_qualitifcation2"
-              value={
-                educationalQualificationDetails &&
-                educationalQualificationDetails.educational_qualitifcation2
-              }
+            name= {arb ? 'educational_qualitifcation2_arb' : 'educational_qualitifcation2'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation2_arb ? educationalQualificationDetails.educational_qualitifcation2_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation2_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation2)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation2)
+            }
               onChange={handleEduInputs}
               type="select"
             >
-              <option defaultValue="selected">Please Select</option>
+              <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
               {qualifications &&
                 qualifications.map((ele) => {
                   return (
                     <option key={ele.valuelist_id} value={ele.valuelist_id}>
-                      {ele.value}
+                      {arb?ele.value_arb:ele.value}
                     </option>
                   );
                 })}
@@ -95,10 +128,18 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Degree</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Degree')?.[genLabel]}</Label>
             <Input
-              name="degree2"
-              value={educationalQualificationDetails && educationalQualificationDetails.degree2}
+            name= {arb ? 'degree2_arb' : 'degree2'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.degree2_arb ? educationalQualificationDetails.degree2_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.degree2_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.degree2)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.degree2)
+            }
               onChange={handleEduInputs}
               type="text"
             />
@@ -106,7 +147,8 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Year of completion</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Year of completion')?.[genLabel]}</Label>
             <Input
               name="year_of_completion2"
               value={moment(
@@ -122,22 +164,27 @@ function EducationalQualificationTab({
       <Row>
         <Col md="4">
           <FormGroup>
-            <Label>Qualification 3</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Qualification 3')?.[genLabel]}</Label>
             <Input
-              name="educational_qualitifcation3"
-              value={
-                educationalQualificationDetails &&
-                educationalQualificationDetails.educational_qualitifcation3
-              }
+            name= {arb ? 'educational_qualitifcation3_arb' : 'educational_qualitifcation3'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation3_arb ? educationalQualificationDetails.educational_qualitifcation3_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation3_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation3)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation3)
+            }
               onChange={handleEduInputs}
               type="select"
             >
-              <option defaultValue="selected">Please Select</option>
+              <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
               {qualifications &&
                 qualifications.map((ele) => {
                   return (
                     <option key={ele.valuelist_id} value={ele.valuelist_id}>
-                      {ele.value}
+                      {arb?ele.value_arb:ele.value}
                     </option>
                   );
                 })}
@@ -146,10 +193,18 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Degree</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Degree')?.[genLabel]}</Label>
             <Input
-              name="degree3"
-              value={educationalQualificationDetails && educationalQualificationDetails.degree3}
+            name= {arb ? 'degree3_arb' : 'degree3'}
+            value={
+              arb
+                ? (
+                  educationalQualificationDetails && educationalQualificationDetails.degree3_arb ? educationalQualificationDetails.degree3_arb :
+                    (educationalQualificationDetails && educationalQualificationDetails.degree3_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.degree3)
+                  )
+                : (educationalQualificationDetails && educationalQualificationDetails.degree3)
+            }
               onChange={handleEduInputs}
               type="text"
             />
@@ -157,7 +212,8 @@ function EducationalQualificationTab({
         </Col>
         <Col md="4">
           <FormGroup>
-            <Label>Year of completion</Label>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Year of completion')?.[genLabel]}</Label>
             <Input
               name="year_of_completion3"
               value={moment(

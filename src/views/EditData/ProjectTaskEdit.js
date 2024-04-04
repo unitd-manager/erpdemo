@@ -19,7 +19,7 @@ import api from '../../constants/api';
 import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
 import ProjectTaskEditDetails from '../../components/ProjectTaskTable/ProjectTaskEditDetails';
 import AppContext from '../../context/AppContext';
-
+import ProjectTimeSheet from '../../components/JobOrderTable.js/ProjectTimesheet';
 
 const TaskEdit = () => {
   //All state variable
@@ -36,11 +36,12 @@ const TaskEdit = () => {
   });
   const [update, setUpdate] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
+  const { id } = useParams();
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 const [arabic, setArabic] = useState([]);
 
@@ -58,7 +59,7 @@ const [arabic, setArabic] = useState([]);
         // Handle error if needed
       });   
   };
-  
+ 
   let genLabel = '';
 
   if (arb === true) {
@@ -69,7 +70,6 @@ const [arabic, setArabic] = useState([]);
 
 
   //navigation and parameters
-  const { id } = useParams();
   const navigate = useNavigate();
 
    // Function to toggle tabs
@@ -80,7 +80,8 @@ const [arabic, setArabic] = useState([]);
   };
 
   const tabs = [
-    { id: '1', name: 'Attachment' },
+    { id: '1', name: 'Timesheet' },
+    { id: '2', name: 'Attachment' }
   ];
 
    // Attachment
@@ -218,6 +219,16 @@ const [arabic, setArabic] = useState([]);
            <Tab toggle={toggle} tabs={tabs} />
            <TabContent className="p-4" activeTab={activeTab}>
            <TabPane tabId="1">
+           <Form>
+              <FormGroup>
+              <ProjectTimeSheet
+              id={id}
+            />
+             
+               </FormGroup>
+            </Form>
+          </TabPane>
+          <TabPane tabId="2">
            <Form>
               <FormGroup>
                   <Row>

@@ -196,7 +196,7 @@ const PurchaseOrder = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.po_code}</td>
+                    <td>{arb ? element.po_code_arb : element.po_code}</td>
                     <td>{arb ? element.title_arb : element.title}</td>
                     <td>{element.po_value}</td>
                     <td>{element.status}</td>

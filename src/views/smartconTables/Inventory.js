@@ -14,7 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import readXlsxFile from 'read-excel-file';
 import api from '../../constants/api';
 import message from '../../components/Message';
-import { columns } from '../../data/Tender/InventoryData';
+//import { columns } from '../../data/Tender/InventoryData';
 import ViewAdjustStockHistoryModal from '../../components/Inventory/ViewAdjustStockHistoryModal';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -43,6 +43,45 @@ function Inventory() {
   });
   //navigate
   const navigate = useNavigate();
+  //Arabic
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+
+  const getArabicInventory = () => {
+    api
+    .get('/inventory/getTranslationForInventory')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+console.log('arabic',arabic)
+useEffect(() => {
+  getArabicInventory();
+}, []);
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
   // Get All inventories
   const getAllinventories = () => {
     setLoading(false)
@@ -194,6 +233,83 @@ function Inventory() {
     getAllinventories();
   }, []);
 
+  const columns = [
+    {
+      id:1,
+      name: "#",
+      selector: "id",
+      sortable: true,
+      grow: 0,
+      width: 'auto',
+    },
+    {
+      id:2,
+      name: "",
+      selector: arabic.find(item => item.key_text === 'mdInventory.Edit')?.[genLabel],
+      sortable: true,
+      grow: 0,
+      width: 'auto',
+      wrap: true
+    },
+   
+    {
+      id:3,
+      name:arabic.find(item => item.key_text === 'mdInventory.InventoryCode')?.[genLabel],
+      selector: "code",
+      sortable: true
+    },
+    {
+      id:4,
+      name:arabic.find(item => item.key_text === 'mdInventory.ProductName')?.[genLabel], 
+      selector: "code",
+      sortable: true
+    },
+    {
+      id:5,
+      name: arabic.find(item => item.key_text === 'mdInventory.ProductType')?.[genLabel],
+      selector: "project",
+      sortable: true,
+      cell: d => <span>{d.closing.join(", ")}</span>
+    },
+    {
+      id:6,
+      name: arabic.find(item => item.key_text === 'mdInventory.ItemCode')?.[genLabel],
+      selector: "ref",
+      sortable: true
+    },
+    {
+      id:7,
+      name:arabic.find(item => item.key_text === 'mdInventory.UOM')?.[genLabel],
+      selector: "ref",
+      sortable: true
+    },
+    {
+      id:8,
+      name:arabic.find(item => item.key_text === 'mdInventory.Stock')?.[genLabel],
+      selector: "ref",
+      sortable: true
+    },
+    {
+      id:9,
+      name:arabic.find(item => item.key_text === 'mdInventory.AdjustStock')?.[genLabel],
+      selector: "ref",
+      sortable: true
+    },
+    {
+      id:10,
+      name: "",
+      selector: "ref",
+      sortable: true
+    },
+    {
+      id:11,
+      name: arabic.find(item => item.key_text === 'mdInventory.MOL')?.[genLabel],
+      selector: "minimum_order_level",
+      sortable: true
+    },
+  ];
+
+
   return (
     <div className="MainDiv">
       <ToastContainer></ToastContainer>
@@ -202,7 +318,7 @@ function Inventory() {
 
         <CommonTable 
         loading={loading}
-        title="Inventory List"
+        title={arb ? 'قائمة الجرد': 'Inventory List'}
         Button={<>
         <Row>
           <Col md="6">
@@ -241,12 +357,12 @@ function Inventory() {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.inventory_code}</td>
-                    <td>{element.product_name}</td>
-                    <td>{element.product_type}</td>
+                    <td>{element.inventory_code} </td>
+                    <td>{arb && element.product_name_arb ?element.product_name_arb : element.product_name}</td>
+                    <td>{arb && element.product_type_arb ?element.product_type_arb : element.product_type}</td>
                     <td>{element.item_code}</td>
-                    <td>{element.unit}</td>
-                    <td>{element.stock}</td>
+                    <td>{arb && element.unit_arb ?element.unit_arb : element.unit}</td>
+                    <td>{arb && element.stock_arb ?element.stock_arb : element.stock}</td>
                     {stockinputOpen && stockChangeId === element.inventory_id ? (
                       <td>
                         {' '}
@@ -292,7 +408,7 @@ function Inventory() {
                       setAdjustStockHistoryModal={setAdjustStockHistoryModal}
                       inventoryId={modalId}
                     />
-                    <td>{element.minimum_order_level}</td>
+                    <td>{arb && element.minimum_order_level_arb ?element.minimum_order_level_arb : element.minimum_order_level}</td>
                   </tr>
                 );
               })}

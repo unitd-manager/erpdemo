@@ -3,10 +3,13 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-export default function ReturnDetailComp({ returnDetails, handleInputs }) {
+export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
   ReturnDetailComp.propTypes = {
     returnDetails: PropTypes.object,
     handleInputs: PropTypes.func,
+    arb: PropTypes.any,
+   // arabic: PropTypes.any,
+    
   };
 
   return (
@@ -16,7 +19,10 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
           <Row>
             <Col md="3">
               <FormGroup>
-                <Label>Invoice Code</Label>
+                <Label>
+                { arb ? 'رمز الفاتورة' : 'Invoice Code' }
+
+                </Label>
 
                 <Input
                   type="text"
@@ -29,7 +35,9 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
             </Col>
             <Col md="3">
               <FormGroup>
-                <Label>Status</Label>
+                <Label>
+                { arb ? 'حالة' : 'Status' }
+                </Label>
                 <Input
                   type="select"
                   onChange={handleInputs}
@@ -38,18 +46,20 @@ export default function ReturnDetailComp({ returnDetails, handleInputs }) {
                 >
                   {' '}
                   <option value="" selected="selected">
-                    Please Select
+                  { arb ? 'الرجاء التحديد' : 'Please Select' }
                   </option>
-                  <option value="InProgress">In Progress</option>
-                  <option value="Return">Return</option>
-                  <option value="CancelReturn">Cancel Return</option>
+                  <option value="InProgress">{ arb ? 'في تَقَدم' : 'In Progress' }</option>
+                  <option value="Return">{ arb ? 'يعود' : 'Return' }</option>
+                  <option value="CancelReturn">{ arb ? 'إلغاء العودة' : 'Cancel Return' }</option>
                 </Input>
               </FormGroup>
             </Col>
 
             <Col md="3">
               <FormGroup>
-                <Label>Date</Label>
+                <Label>
+                { arb ? 'تاريخ' : 'Date' }
+                </Label>
 
                 <Input
                   type="date"

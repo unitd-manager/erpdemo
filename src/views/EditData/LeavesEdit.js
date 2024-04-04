@@ -43,12 +43,46 @@ const LeavesEdit = () => {
   const backToList = () => {
     navigate('/Leave');
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+  // const companyhandleInputs = (e) => {
+  //   setCompanyInsertData({ ...companyInsertData, [e.target.name]: e.target.value });
+  // };
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/leave/getTranslationforHRLeave')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
 
   // Start for tab refresh navigation #Renuka 1-06-23
   const tabs = [
-    { id: '1', name: 'Attachment' },
-    { id: '2', name: 'Past Leave HIstory' },
-  ];
+
+      { id: '1', name: arb ? 'مرفق' : 'Attachment' },
+      { id: '2', name: arb ? 'تاريخ الإجازة الماضية' : 'Past Leave History' },
+    ];
+    
   const toggle = (tab) => {
     setActiveTab(tab);
   };
@@ -151,12 +185,15 @@ const LeavesEdit = () => {
       }
     });
   };
-
+  
+  
   return (
     <>
-      {/* BreadCrumbs */}
+     {eng === true && <BreadCrumbs heading={leavesDetails && leavesDetails.employee_name} />}
+      {arb === true && <BreadCrumbs heading={leavesDetails && leavesDetails.employee_name} />}
+      {/* BreadCrumbs 
       <BreadCrumbs heading={leavesDetails && leavesDetails.employee_name} />
-      {/* Button */}
+      Button */}
       <Form>
         <FormGroup>
           <ToastContainer></ToastContainer>
@@ -178,6 +215,8 @@ const LeavesEdit = () => {
         handleInputs={handleInputs}
         leavesDetails={leavesDetails}
         difference={difference}
+        arb={arb}
+      arabic={arabic}
       ></LeaveMainDetails>
 
       {/* Nav tab */}
@@ -219,6 +258,8 @@ const LeavesEdit = () => {
                   mediaType={attachmentData.modelType}
                   update={update}
                   setUpdate={setUpdate}
+                  arb={arb}
+      arabic={arabic}
                 />
                 <ViewFileComponentV2
                   moduleId={id}
@@ -226,6 +267,8 @@ const LeavesEdit = () => {
                   recordType="RelatedPicture"
                   update={update}
                   setUpdate={setUpdate}
+                  arb={arb}
+      arabic={arabic}
                 />
               </FormGroup>
             </Form>
@@ -235,6 +278,8 @@ const LeavesEdit = () => {
             <LeavePastHistory
               PastleavesDetails={PastleavesDetails}
               leavesDetails={leavesDetails}
+              arb={arb}
+      arabic={arabic}
             ></LeavePastHistory>
           </TabPane>
         </TabContent>
