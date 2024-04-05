@@ -76,11 +76,51 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
   useEffect(() => {
     getLineItem();
   }, []);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/enquiry/getTranslationforTradingEnq')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  // let genLabel = '';
+
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else {
+  //   genLabel = 'value';
+  // }
+
   return (
     <>
       <Modal size="xl" isOpen={editModal}>
         <ModalHeader>
-          Edit Delivery Items
+        {arb?'تحرير عناصر التسليم': 'Edit Delivery Items'}
           <Button
             className="shadow-none"
             color="secondary"
@@ -98,12 +138,12 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                 <table className="lineitem">
                   <thead>
                     <tr>
-                      <th scope="col">Item</th>
-                      <th scope="col">Description </th>
-                      <th scope="col">UoM</th>
-                      <th scope="col">Qty</th>
-                      <th scope="col">Delivery Qty</th>
-                      <th scope="col">Amount</th>
+                      <th scope="col">{arb?'غرض': 'Item'} </th>
+                      <th scope="col">{arb?'وصف': 'Description'} </th>
+                      <th scope="col">{arb?'جامعة م': 'UoM'}</th>
+                      <th scope="col">{arb?'الكمية': 'Qty'}</th>
+                      <th scope="col">{arb?'تسليم الكمية': 'Delivery Qty'}</th>
+                      <th scope="col">{arb?'كمية': 'Amount'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -179,7 +219,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                 }}
               >
                 {' '}
-                Submit{' '}
+                {arb?'يُقدِّم': 'Submit'}{' '}
               </Button>
               <Button
                 className="shadow-none"
@@ -188,7 +228,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                   setEditModal(false);
                 }}
               >
-                Cancel
+                {arb?'يلغي': 'Cancel'}
               </Button>
             </ModalFooter>
           </Form>

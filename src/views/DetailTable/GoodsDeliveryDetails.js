@@ -89,6 +89,44 @@ const GoodsDeliveryDetails = () => {
   useEffect(() => {
     getOrderCode();
   }, [id]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/goodsdelivery/getTranslationforTradingGoods')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else { 
+    genLabel = 'value';
+  }
 
   return (
     <div>
@@ -96,24 +134,38 @@ const GoodsDeliveryDetails = () => {
       <Row>
         <ToastContainer></ToastContainer>
         <Col md="6" xs="12">
-          <ComponentCard title="New Goods Delivery">
+          <ComponentCard title={arb ? 'تسليم بضائع جديد' : 'New Goods Delivery'}>
             <Form>
               <FormGroup>
                 <Col md="9">
-                  <Label> Order Code</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                   
+                  </Label>
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}
-                    value={tenderForms && tenderForms.order_id}
-                    name="order_id"
+                    value={
+                      arb
+                      ? tenderForms && tenderForms.order_code_arb
+                        ? tenderForms.order_code_arb
+                        : tenderForms && tenderForms.order_code_arb !== null
+                        ? ''
+                        : tenderForms && tenderForms.order_code
+                      : tenderForms && tenderForms.order_code
+                  }
+                  name={arb ? 'order_code_arb' : 'order_code'}
+
+                    //name="order_id"
                   >
                     <option>Please Select</option>
                     {enquirycode &&
                       enquirycode.map((e) => {
                         return (
-                          <option key={e.order_id} value={e.order_id}>
+                          <option key={e.order_code} value={e.order_code}>
                             {' '}
-                            {e.order_code}{' '}
+                            {arb?e.order_code_arb:e.order_code}{' '}
                           </option>
                         );
                       })}
@@ -123,10 +175,13 @@ const GoodsDeliveryDetails = () => {
               <FormGroup>
                 <Row>
                   <Col md="9">
-                    <Label>
-                      {' '}
-                      Goods Delivery Date <span className="required"> *</span>{' '}
-                    </Label>
+                   <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  <span className="required"> *</span>
+                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Date')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                   
+                  </Label>
+
                     <Input
                       type="date"
                       name="goods_delivery_date"
@@ -153,7 +208,7 @@ const GoodsDeliveryDetails = () => {
                       generateCode();
                     }}
                   >
-                    Save & Continue
+                   {arb?'حفظ ومتابعة': 'Save & Continue'}
                   </Button>
                   <Button
                     className="shadow-none"
@@ -168,7 +223,7 @@ const GoodsDeliveryDetails = () => {
                       }
                     }}
                   >
-                    Cancel
+                   {arb?'يلغي ': 'Cancel'}
                   </Button>
                 </div>
               </Row>

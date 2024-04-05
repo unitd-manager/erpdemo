@@ -6,6 +6,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Label,
   Table,
   Input,
 } from 'reactstrap';
@@ -16,7 +17,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 //partialgoodsinvoiceeditmodal From VehicleEdit
-const PurchaseRequestItemsEditModal = ({ partialgoodsinvoiceeditmodal, setPartialGoodsInvoiceEditModal, SalesInvoiceId }) => {
+const  PurchaseRequestItemsEditModal = ({ partialgoodsinvoiceeditmodal, setPartialGoodsInvoiceEditModal, SalesInvoiceId }) => {
     PurchaseRequestItemsEditModal.propTypes = {
     partialgoodsinvoiceeditmodal: PropTypes.bool,
     setPartialGoodsInvoiceEditModal: PropTypes.func,
@@ -91,12 +92,50 @@ const OrderLineItemsById = () => {
   useEffect(() => {
   OrderLineItemsById();
   }, [SalesInvoiceId]);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+  
+  
+  const [arabic, setArabic] = useState([]);
+  
+  const arb = selectedLanguage === 'Arabic';
+  
+  //const eng = selectedLanguage === 'English';
+  
+  const getArabicCompanyName = () => {
+    api
+      .get('/invoice/getTranslationforTradingSalesInvoice')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+  
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
     <>
       <Modal size="xl" isOpen={partialgoodsinvoiceeditmodal}>
         <ModalHeader>
-          Invoice Items
+          {arb?'عناصر الفاتورة' :'Invoice Items'}
           <Button
             color="secondary"
             onClick={() => {
@@ -105,90 +144,155 @@ const OrderLineItemsById = () => {
           >
             X
           </Button>
-        </ModalHeader>
+        </ModalHeader> 
 
         <ModalBody>
           <FormGroup>
             <Table bordered className="lineitem">
               <thead>
                 <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Unit</th>
-                  <th scope="col">Unit Price</th>
-                  <th scope="col">ordered Quantity</th>
-                  <th scope="col">invoice Quantity</th>
-                  <th scope="col">Total Amount</th>
-                  <th scope="col"> Update By</th>
+                  <th scope="col">{arb ? 'عنوان': 'Title' }</th>
+                  <th scope="col">{arb ? 'وحدة': 'Unit' }</th>
+                  <th scope="col">{arb ? 'سعر الوحدة': 'Unit Price' }</th>
+                  <th scope="col">{arb ? 'الكمية المطلوبة': 'Ordered Quantity' }</th>
+                  <th scope="col">{arb ? 'كمية الفاتورة': 'Invoice Quantity' }</th>
+                  <th scope="col">{arb ? 'المبلغ الإجمالي': 'Total Amount' }</th>
+                  <th scope="col">{arb ? 'تم التحديث بواسطة': 'Updated By' }</th>
 
 
                 </tr>
               </thead>
               <tbody>  
                 {partialinvoiceeditdetails &&
-                  partialinvoiceeditdetails.map((item, index)  => {
+                  partialinvoiceeditdetails.map((invoiceItem, index)  => {
                     return (
-                      <tr key={item.id}>                     
-                        <td data-label="Title">
+                      <tr key={invoiceItem.id}>                     
+                        <td >
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Title')?.[genLabel]}{' '}
+                          </Label>
                           <Input
-                            defaultValue={item.item_title}
                             type="text"
-                            name="item_title"
                             disabled
+                            defaultValue={
+                              arb
+                                ? invoiceItem && invoiceItem.item_title_arb
+                                  ? invoiceItem.item_title_arb
+                                  : invoiceItem && invoiceItem.item_title_arb !== null
+                                    ? ''
+                                    : invoiceItem && invoiceItem.item_title
+                                : invoiceItem && invoiceItem.item_title
+                            }
+                            name={arb ? 'item_title_arb' : 'item_title'}
                           />
                         </td>
-                        <td data-label="Unit">
+                        <td >
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Unit')?.[genLabel]}{' '}
+                          </Label>
                           <Input
-                            defaultValue={item.unit}
                             type="text"
-                            name="unit"
                             disabled
+                            defaultValue={
+                              arb
+                                ? invoiceItem && invoiceItem.unit_arb
+                                  ? invoiceItem.unit_arb
+                                  : invoiceItem && invoiceItem.unit_arb !== null
+                                    ? ''
+                                    : invoiceItem && invoiceItem.unit
+                                : invoiceItem && invoiceItem.unit
+                            }
+                            name={arb ? 'unit_arb' : 'unit'}
                           />
+
                         </td>
-                        <td data-label="Unit Price">
+                        <td >
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Unit Price')?.[genLabel]}{' '}
+                          </Label>
                           <Input
-                            defaultValue={item.unit_price}
                             type="text"
-                            name="unit_price"
                             onChange={(e) => {
                               updateState(index, 'unit_price', e);
-                              
+
                             }}
                             disabled
+                            defaultValue={
+                              arb
+                                ? invoiceItem && invoiceItem.unit_price_arb
+                                  ? invoiceItem.unit_price_arb
+                                  : invoiceItem && invoiceItem.unit_price_arb !== null
+                                    ? ''
+                                    : invoiceItem && invoiceItem.unit_price
+                                : invoiceItem && invoiceItem.unit_price
+                            }
+                            name={arb ? 'unit_price_arb' : 'unit_price'}
                           />
                         </td>
-                        <td data-label="Ordered Quantity">
+                        <td >
+                          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Ordered Quantity')?.[genLabel]}{' '}
+                          </Label>
                           <Input
-                            defaultValue={item.qty}
                             type="text"
-                            name="qty"
                             disabled
-                            />
-                        </td>   
-                       <td data-label="Invoice Quantity">
+                            defaultValue={
+                              arb
+                                ? invoiceItem && invoiceItem.qty_arb
+                                  ? invoiceItem.qty_arb
+                                  : invoiceItem && invoiceItem.qty_arb !== null
+                                    ? ''
+                                    : invoiceItem && invoiceItem.qty
+                                : invoiceItem && invoiceItem.qty
+                            }
+                            name={arb ? 'qty_arb' : 'qty'}
+                          />
+                        </td>
+                        <td>
+                        <Label dir="rtl" style={{ textAlign: 'right' }}>
+                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Invoice Quantity')?.[genLabel]}{' '}
+                          </Label>
                           <Input
-                             defaultValue={item.invoice_qty}
-                             type="text"
-                             name="invoice_qty"
-                             onChange={(e) => {
+                            type="text"
+                            onChange={(e) => {
                               updateState(index, 'invoice_qty', e);
-                              
                             }}
+                            defaultValue={
+                              arb
+                                ? invoiceItem && invoiceItem.invoice_qty_arb
+                                  ? invoiceItem.invoice_qty_arb
+                                  : invoiceItem && invoiceItem.invoice_qty_arb !== null
+                                    ? ''
+                                    : invoiceItem && invoiceItem.invoice_qty
+                                : invoiceItem && invoiceItem.invoice_qty
+                            }
+                            name={arb ? 'invoice_qty_arb' : 'invoice_qty'}
                           />
                         </td>  
                         <td data-label="Total Amount">
                         <Input
               type="text"
-              name="total_cost"
-              value={totalAmount || item && item.total_cost}
+              value={totalAmount || invoiceItem && invoiceItem.total_cost}
               onChange={(e) => {
                 updateState(index, 'total_cost', e);
-                handleCalc(item.invoice_qty, item.unit_price);
+                handleCalc(invoiceItem.invoice_qty, invoiceItem.unit_price);
               }}
+              defaultValue={
+                arb
+                  ? totalAmount ||invoiceItem && invoiceItem.total_cost_arb
+                    ? totalAmount ||invoiceItem.total_cost_arb
+                    : totalAmount ||invoiceItem && invoiceItem.total_cost_arb !== null
+                      ? ''
+                      : totalAmount ||invoiceItem && invoiceItem.total_cost
+                  :totalAmount || invoiceItem && invoiceItem.total_cost
+              }
+              name={arb ? 'total_cost_arb' : 'total_cost'}
+
               disabled
             />
                          
                         </td> 
-                        <td>{item.modification_date  ? `${item.modified_by} (Modified on ${item.modification_date})` : `${item.created_by} (Created on ${item.creation_date})`}</td>              
+                        <td>{invoiceItem.modification_date  ? `${invoiceItem.modified_by} (Modified on ${invoiceItem.modification_date})` : `${invoiceItem.created_by} (Created on ${invoiceItem.creation_date})`}</td>              
                       </tr>
                     );
                   })}

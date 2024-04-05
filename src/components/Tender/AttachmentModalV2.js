@@ -14,7 +14,8 @@ const AttachmentModalV2 = ({
   altTagData,
   desc,
   update,
-  setUpdate
+  setUpdate,
+  arb
 }) => {
   AttachmentModalV2.propTypes = {
     attachmentModal: PropTypes.bool,
@@ -26,6 +27,7 @@ const AttachmentModalV2 = ({
     fileTypes: PropTypes.any,
     setUpdate: PropTypes.func,
     update: PropTypes.bool,
+    arb: PropTypes.any,
   };
 
   const [file, setFile] = useState([]);
@@ -74,7 +76,7 @@ const AttachmentModalV2 = ({
   return (
     <div>
       <Modal isOpen={attachmentModal}>
-        <ModalHeader>Upload Media</ModalHeader>
+        <ModalHeader>{arb ?'تحميل الوسائط':'Upload Media'}</ModalHeader>
         <ModalBody>
           <FormGroup>
             <FileUploader multiple handleChange={handleChange} name="file" types={fileTypes} />
@@ -82,11 +84,11 @@ const AttachmentModalV2 = ({
             {handleValue ? (
               handleValue.map((e) => (
                 <div key={e.name}>
-                  <span> Name: {e.name} </span>
+                  <span> {arb ?'اسم:':'Name:'} {e.name} </span>
                 </div>
               ))
             ) : (
-              <span>No file selected</span>
+              <span>{arb ?'لم يتم اختيار اي ملف':'No file selected'}</span>
             )}
           </FormGroup>
           {uploaded && (
@@ -112,7 +114,7 @@ const AttachmentModalV2 = ({
               uploadFile();
             }}
           >
-            Upload
+            {arb ?'رفع':'Upload'}
           </Button>
           <Button
             color="secondary"
@@ -121,7 +123,7 @@ const AttachmentModalV2 = ({
               setAttachmentModal();
             }}
           >
-            Cancel
+            {arb ?'يلغي':'Cancel'}
           </Button>
         </ModalFooter>
       </Modal>

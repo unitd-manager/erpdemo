@@ -183,13 +183,13 @@ const PurchaseInvoice = () => {
                       <Icon.Edit2 />
                     </Link>
                   </td>
-                  <td>{element.purchase_invoice_code}</td>
+                  <td>{arb ? element.purchase_invoice_code_arb : element.purchase_invoice_code}</td>
                   <td>{arb ? element.title_arb : element.title}</td>
                   <td>{arb ? element.company_name_arb : element.company_name}</td>
                   <td>{moment(element.purchse_invoice_date).format('YYYY-MM-DD')}</td>
-                  <td>{element.invoice_amount}</td>
+                  <td>{arb ? element.invoice_amount_arb : element.invoice_amount}</td>
                   <td>{element.due_date}</td>
-                  <td>{element.status}</td>
+                  <td>{arb ? element.status_arb : element.status}</td>
                 </tr>
               );
             })}

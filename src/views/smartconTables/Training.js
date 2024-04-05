@@ -8,7 +8,7 @@ import $ from 'jquery';
 import moment from 'moment';
 // import 'datatables.net-buttons/js/buttons.colVis';
 // import 'datatables.net-buttons/js/buttons.flash';
-// import 'datatables.net-buttons/js/buttons.html5';
+// import 'datatables.net-buttons/js/buttons.html5'; 
 // import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -20,6 +20,10 @@ const Training = () => {
   //All state variable
   const [training, setTraining] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   //Get data from Training table
   const getTraining = () => {
@@ -46,20 +50,49 @@ const Training = () => {
         setLoading(false);
       });
   };
+  const [arabic, setArabic] = useState([]);
 
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/training/getTranslationforHRTraining')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  
   useEffect(() => {
     getTraining();
+    getArabicCompanyName();
+
   }, []);
   //structure of Training list view
   const columns = [
     {
-      name: 'id',
+      name: arb ? 'بطاقة تعريف' : 'id',
       grow: 0,
       wrap: true,
       width: '4%',
     },
     {
-      name: 'Edit',
+      name: arb ? 'يحرر' : 'Edit',
       selector: 'edit',
       cell: () => (
         <Link to="/">
@@ -72,7 +105,7 @@ const Training = () => {
       sortable: false,
     },
     {
-      name: 'Title',
+      name: arabic.find(item => item.key_text === 'mdHRTraining.Title')?.[genLabel],
       selector: 'title',
       grow: 0,
       wrap: true,
@@ -80,14 +113,14 @@ const Training = () => {
     },
 
     {
-      name: 'Trainer',
+      name: arabic.find(item => item.key_text === 'mdHRTraining.Trainer')?.[genLabel],
       selector: 'trainer',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Date',
+      name: arabic.find(item => item.key_text === 'mdHRTraining.Date')?.[genLabel],
       selector: 'from_date',
       sortable: true,
       grow: 0,
@@ -99,11 +132,11 @@ const Training = () => {
       <ToastContainer></ToastContainer>
       <CommonTable
         loading={loading}
-        title="Training List"
+        title={arb ?'قائمة التدريب':"Training List"}
         Button={
           <Link to="/TrainingDetails">
             <Button color="primary" className="shadow-none">
-              Add New
+            {arb ?'اضف جديد':'Add New'}
             </Button>
           </Link>
         }

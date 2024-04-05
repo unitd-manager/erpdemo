@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { Row, Col, Form, FormGroup, TabContent, TabPane, Button, Nav, NavItem, NavLink } from 'reactstrap';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
-import api from '../../constants/api';
+import api from '../../constants/api'; 
 import ComponentCard from '../../components/ComponentCard';
 import InvoiceDetailComp from '../../components/BookingTable/InvoiceDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
@@ -88,6 +88,38 @@ const getSalesOrderDropdown = () => {
       message('Sales Order Data not found', 'info');
     });
 }
+
+const getSelectedLanguageFromLocalStorage = () => {
+  return localStorage.getItem('selectedLanguage') || '';
+};
+
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
+
+
+const [arabic, setArabic] = useState([]);
+
+const arb = selectedLanguage === 'Arabic';
+
+//const eng = selectedLanguage === 'English';
+
+const getArabicCompanyName = () => {
+  api
+    .get('/invoice/getTranslationforTradingSalesInvoice')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });
+};
+
+console.log('arabic', arabic);
+useEffect(() => {
+  getArabicCompanyName();
+}, []);
 
 //Api call for getting customer dropdown
 const getGoodsDeliveryDropdown = () => {
@@ -636,7 +668,9 @@ const toggle = (tab) => {
         message('Unable to edit record.', 'error');
       });
   };
-
+  const backToList = () => {
+    navigate('/SalesInvoice');
+  };
   const cancelInvoice = () => {
     if (bookingDetails.status !== 'Paid') {
       bookingDetails.modification_date = creationdatetime;
@@ -683,7 +717,7 @@ const toggle = (tab) => {
       <ToastContainer/>
       <ComponentCardV2>
       <Row>
-      <Col>         <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
+      <Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
          <Col>
               <Button
                 color="primary"
@@ -717,7 +751,17 @@ const toggle = (tab) => {
         Cancel
       </Button>
             </Col>
-    
+            <Col>
+              <Button
+                className="shadow-none"
+                color="dark"
+                onClick={() => {
+                  backToList();
+                }}
+              >
+                Back to List
+              </Button>
+            </Col>
           </Row>
       </ComponentCardV2>
       
@@ -730,29 +774,38 @@ const toggle = (tab) => {
           handleInputs={handleInputs}
           orderdropdown={orderdropdown}
           goodsdeliverydropdown={goodsdeliverydropdown}
-        />
+          arb={arb}
+          arabic={arabic}
+          />
+          {/* {eng === true &&
+
+<Tab toggle={toggle} tabs={tabs} />
+}
+{ arb === true &&
+<Tabs toggle={toggle} tabsArb={tabsArb} />} */}
+
       </ComponentCard>
       
-      <ComponentCard title="More Details">
+      <ComponentCard title={arb? 'المزيد من التفاصيل' :"More Details"}>
         <ToastContainer></ToastContainer>
         <Nav tabs>
     {InvoiceSource !== 'Goods_Delivery' && (
       <NavItem>
         <NavLink onClick={() => toggle('1')} active={activeTab === '1'}>
-          Sales Invoice Item
+        {arb?'عنصر فاتورة المبيعات': 'Sales Invoice Item'}
         </NavLink>
       </NavItem>
     )}
     {InvoiceSource !== 'Sales_Order' && (
       <NavItem>
         <NavLink onClick={() => toggle('2')} active={activeTab === '2'}>
-          Goods Invoice Item
+        {arb?'بند فاتورة البضائع': 'Goods Invoice Item'} 
         </NavLink>
       </NavItem>
     )}
     <NavItem>
       <NavLink onClick={() => toggle('3')} active={activeTab === '3'}>
-        Attachment
+      {arb?'مرفق': 'Attachment'} 
       </NavLink>
     </NavItem>
   </Nav>
@@ -770,7 +823,7 @@ const toggle = (tab) => {
                   handleDisplayButtonClick();  
                 }}
               >
-              Create Full Invoice
+               {arb?'إنشاء فاتورة كاملة': 'Create Full Invoice'}
             </Button>
           )}
             </Col>
@@ -779,6 +832,8 @@ const toggle = (tab) => {
                   partialinvoiceeditmodal={partialinvoiceeditmodal}
                   setPartialInvoiceEditModal={setPartialInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
+                  arb={arb}
+          arabic={arabic}
                     ></PartialINvoiceEdit>
                     {(displayButtonVisible && ((displayButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
                       
@@ -791,7 +846,7 @@ const toggle = (tab) => {
       handleHideButtonClick();
     }}
   >
-    Create Partial Invoice
+    {arb?'إنشاء فاتورة جزئية': 'Create Partial Invoice'}
   </Button>
 )}
            
@@ -818,7 +873,7 @@ const toggle = (tab) => {
                   handleGoodsDisplayButtonClick();
                 }}
               >
-                Create Full Invoice
+               {arb?'إنشاء فاتورة كاملة': 'Create Full Invoice'} 
               </Button>
           )}
             </Col>
@@ -827,6 +882,8 @@ const toggle = (tab) => {
                   partialgoodsinvoiceeditmodal={partialgoodsinvoiceeditmodal}
                   setPartialGoodsInvoiceEditModal={setPartialGoodsInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
+                  arb={arb}
+          arabic={arabic}
                     ></PartialInvoiceGoodsEdit>
                      {(displayGoodsButtonVisible && ((displayGoodsButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
                     <Button
@@ -840,7 +897,7 @@ const toggle = (tab) => {
             }
             }
           >
-            Create Partial Invoice
+            {arb?'إنشاء فاتورة جزئية': 'Create Partial Invoice'}
           </Button>
                     )}
         
@@ -848,6 +905,8 @@ const toggle = (tab) => {
           </Row>   
           <GoodsItemTable
         orderitemDetails={orderitemDetails}
+        arb={arb}
+          arabic={arabic}
        />     
           </TabPane>
 
@@ -882,9 +941,13 @@ const toggle = (tab) => {
                     mediaType={attachmentData.modelType}
                     update={update}
                     setUpdate={setUpdate}
+                    arb={arb}
+          arabic={arabic}
                   />
                   <ViewFileComponentV2 moduleId={id} roomName="SalesInvoice" recordType="RelatedPicture" update={update}
-                    setUpdate={setUpdate}/>
+                    setUpdate={setUpdate}
+                    arb={arb}
+          arabic={arabic}/>
               </FormGroup>
             </Form>  
           </TabPane>

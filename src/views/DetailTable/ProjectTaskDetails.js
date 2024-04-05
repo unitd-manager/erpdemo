@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -10,42 +10,60 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 const ProjectTaskDetails = () => {
-  //All const variables
   const navigate = useNavigate();
-  const [projecttaskdetails, setProjectTaskDetails] = useState({
-    project_job_id:'',
-    task_title: '',
-    project_id:'',
-  });
-  const [joborder, setJobOrder] = useState('');
-  //setting data in ProductDetails
-  const handleInputs = (e) => {
-    setProjectTaskDetails({ ...projecttaskdetails, [e.target.name]: e.target.value });
-  };
-  //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const [projecttaskdetails, setProjectTaskDetails] = useState({
+    project_job_id: '',
+    task_title: '',
+    project_id: '', // This will hold the project_id
+  });
+  const [joborder, setJobOrder] = useState([]);
+
+  const handleInputs = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === "project_job_id") {
+      const selectedJobOrder = joborder.find(order => order.project_job_id === parseInt(value, 10));
+      if (selectedJobOrder) {
+        setProjectTaskDetails(prevDetails => ({
+          ...prevDetails,
+          project_job_id: value,
+          project_id: selectedJobOrder.project_id
+        }));
+      }
+    } else {
+      setProjectTaskDetails(prevDetails => ({
+        ...prevDetails,
+        [name]: value
+      }));
+    }
+  };
   const getJobOrderTitle = () => {
     api
       .get('/projecttask/getJobOrderTitle')
       .then((res) => {
-        setJobOrder(res.data.data);
-        console.log(res.data.data[0]);
+        const jobOrderData = res.data.data;
+        console.log('Job Orders:', jobOrderData); // Log joborder array
+        setJobOrder(jobOrderData);
       })
       .catch(() => {
         message('Company not found', 'info');
       });
   };
 
-  //Insert Product Data
   const insertPurchaseRequestData = () => {
-    // if (projecttaskdetails.task_title !== '' &&
-    // projecttaskdetails.job_order_id !== ''
-    // )
- 
+    if (projecttaskdetails.task_title !== '' && projecttaskdetails.project_job_id !== '') {
       projecttaskdetails.creation_date = creationdatetime;
-      projecttaskdetails.created_by= loggedInuser.first_name;   
+      projecttaskdetails.created_by = loggedInuser.first_name;
+
+      // Inserting project_id from projecttaskdetails
+      const requestData = {
+        ...projecttaskdetails,
+        project_id: projecttaskdetails.project_id, // Already set from getJobOrderTitle
+      };
+
       api
-        .post('/projecttask/insertProjectTask', projecttaskdetails)
+        .post('/projecttask/insertProjectTask', requestData)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           message('PurchaseRequest inserted successfully.', 'success');
@@ -56,16 +74,13 @@ const ProjectTaskDetails = () => {
         .catch(() => {
           message('Unable to insert record.', 'error');
         });
-
-    // } else {
-    //   message('Please fill all required fields.', 'warning');
-    // }
+    } else {
+      message('Please fill all required fields.', 'warning');
+    }
   };
 
-  //useeffect
   useEffect(() => {
     getJobOrderTitle();
-    
   }, []);
 
   return (
@@ -78,33 +93,34 @@ const ProjectTaskDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                <Col md="12">
-                      <FormGroup>
-                        <Label>Job Order Title <span className="required"> *</span></Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projecttaskdetails && projecttaskdetails.project_job_id}
-                          name="project_job_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {joborder &&
-                            joborder.map((e) => {
-                              return (
-                                <option key={e.project_job_id} value={e.project_job_id}>
-                                  {e.job_title}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
                   <Col md="12">
-                    <Label>Task Title <span className="required"> *</span> </Label>
+                    <FormGroup>
+                      <Label>
+                        Job Order Title <span className="required"> *</span>
+                      </Label>
+                      <Input
+  type="select"
+  onChange={handleInputs}
+  value={projecttaskdetails.project_job_id}
+  name="project_job_id"
+>
+  <option value="">Please Select</option>
+  {joborder.map((e) => (
+    <option key={e.project_job_id} value={e.project_job_id}>
+      {e.job_title}
+    </option>
+  ))}
+</Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="12">
+                    <Label>
+                      Task Title <span className="required"> *</span>{' '}
+                    </Label>
                     <Input
                       type="text"
                       onChange={handleInputs}
-                      value={projecttaskdetails && projecttaskdetails.purchase_request_date}
+                      value={projecttaskdetails.task_title}
                       name="task_title"
                     />
                   </Col>
@@ -116,9 +132,7 @@ const ProjectTaskDetails = () => {
                     <Button
                       className="shadow-none"
                       color="primary"
-                      onClick={() => {
-                        insertPurchaseRequestData();
-                      }}
+                      onClick={insertPurchaseRequestData}
                     >
                       Save & Continue
                     </Button>
@@ -141,4 +155,5 @@ const ProjectTaskDetails = () => {
     </div>
   );
 };
+
 export default ProjectTaskDetails;

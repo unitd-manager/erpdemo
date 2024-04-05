@@ -164,19 +164,19 @@ if (arb === true) {
                     </td>
                   
                     <td>{index + 1}</td>
-                    <td>{element.item_code}</td>
+                    <td>{arb ? element.item_code_arb : element.item_code}</td>
                     <td>{arb ? element.title_arb : element.title}</td>
-                    <td>{element.cost_price}</td>
-                    <td>{element.selling_price}</td>
-                    <td>{element.gst}</td>
+                    <td>{arb ? element.cost_price_arb : element.cost_price}</td>
+                    <td>{arb ? element.selling_price_arb : element.selling_price}</td>
+                    <td>{arb ? element.gst_arb : element.gst}</td>
                     <td>{element.qty_in_stock}</td>
-                    <td>{element.qty}</td>
-                    <td>{element.damage_qty}</td>
-                    <td>{element.qty_delivered}</td>
-                    <td>{element.qty_balance}</td>
+                    <td>{arb ? element.qty_arb : element.qty}</td>
+                    <td>{arb ? element.damage_qty_arb : element.damage_qty}</td>
+                    <td>{arb ? element.qty_delivered_arb : element.qty_delivered}</td>
+                    <td>{arb ? element.qty_balance_arb : element.qty_balance}</td>
                     <td>{arb ? element.status_arb : element.status}</td>
-                    <td>{element.po_value}</td>
-                    <td>{element.actual_value}</td>
+                    <td>{arb ? element.po_value_arb : element.po_value}</td>
+                    <td>{arb ? element.actual_value_arb : element.actual_value}</td>
 
                     <td>
                       <Button

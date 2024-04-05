@@ -14,16 +14,58 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [productDetails, setProductDetails] = useState({
     title: '',
+    title_arb: '',
   });
   //setting data in ProductDetails
   const handleInputs = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+   const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForCategory = () => {
+      api
+      .get('/category/getTranslationForCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+    getTranslationForCategory();
+  }, []);
+
   //Insert Product Data
   const insertProductData = (ProductCode, ItemCode) => {
-    if (productDetails.title.trim() !== '') {
+    setFormSubmitted(true);
+    if ((arb && productDetails.title_arb.trim() !== '') || (!arb && productDetails.title.trim() !== '')) {
       productDetails.product_code = ProductCode;
       productDetails.item_code = ItemCode;
       productDetails.creation_date = creationdatetime;
@@ -79,29 +121,40 @@ const ProductDetails = () => {
       });
   };
 
-  //useeffect
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <div>
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title={arb ? 'التفاصيل الرئيسية': 'Key Details'}>
             <Form>
               <FormGroup>
                 <Row>
                   <Col md="12">
-                    <Label>Product Name <span className="required"> *</span> </Label>
-                    <Input
-                      type="text"
-                      onChange={handleInputs}
-                      value={ProductDetails && ProductDetails.title}
-                      name="title"
-                    />
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel]}
+              </Label><span className='required'>*</span>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            ProductDetails && ProductDetails.title_arb ? ProductDetails.title_arb :
+                            (ProductDetails && ProductDetails.title_arb !== null ? '' : ProductDetails && ProductDetails.title)
+                          )
+                        : (ProductDetails && ProductDetails.title)
+                    }
+                    name={arb ? 'title_arb' : 'title'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && ProductDetails.title_arb.trim() === '') || (!arb && ProductDetails.title.trim() === '')) ? 'highlight' : ''
+                  }`}
+              />
+              
+              {formSubmitted && ((arb && ProductDetails && ProductDetails.title_arb.trim() === '') || (!arb && ProductDetails.title.trim() === '' ))&& (
+                  <div className="error-message">Please Enter</div>
+              )}
                   </Col>
                 </Row>
               </FormGroup>
@@ -119,12 +172,18 @@ const ProductDetails = () => {
                     </Button>
                     <Button
                       onClick={() => {
-                        navigate('/Product');
-                      }}
+                      if (
+                        window.confirm(
+                          'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                        )
+                      ) {
+                        navigate(-1);
+                      }
+                    }}
                       type="button"
                       className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

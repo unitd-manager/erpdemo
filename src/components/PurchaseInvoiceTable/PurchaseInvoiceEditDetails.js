@@ -42,13 +42,18 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Purchase Invoice Code')?.[genLabel]}
               </Label>
+              
                   <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails. purchase_invoice_code }
-                    name=" purchase_invoice_code "
-                    disabled
-                  />
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_invoice_code_arb
+                    : purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.purchase_invoice_code
+                }
+                name={arb ? 'purchase_invoice_code_arb' : 'purchase_invoice_code'}
+                disabled
+              />
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -130,13 +135,18 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseInvoice.Total Amount')?.[genLabel]}
               </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.invoice_amount}
-                    name="invoice_amount"
-                    disabled
-                  />
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={
+                  arb
+                    ? purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.invoice_amount_arb
+                    : purchaseinvoiceeditdetails && purchaseinvoiceeditdetails.invoice_amount
+                }
+                name={arb ? 'invoice_amount_arb' : 'invoice_amount'}
+                disabled
+              />
+                
                 </FormGroup>
               </Col>
               <Col md="3">

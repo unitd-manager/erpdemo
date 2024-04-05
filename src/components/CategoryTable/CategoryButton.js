@@ -8,12 +8,14 @@ export default function CategoryButton({
   applyChanges,
   saveChanges,
   backToList,
+  setFormSubmitted,
 }) {
   CategoryButton.propTypes = {
     editCategoryData: PropTypes.any,
     applyChanges: PropTypes.func,
     saveChanges: PropTypes.func,
     backToList: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
   };
   return (
     <Form>
@@ -25,6 +27,7 @@ export default function CategoryButton({
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                   editCategoryData();
                   saveChanges();
                 }}
@@ -37,6 +40,7 @@ export default function CategoryButton({
                 color="primary"
                 className="shadow-none"
                 onClick={() => {
+                  setFormSubmitted(true);
                   editCategoryData();
                   applyChanges();
                 }}

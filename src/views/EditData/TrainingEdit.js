@@ -336,9 +336,43 @@ const TrainingEdit = () => {
       }
     });
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/training/getTranslationforHRTraining')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
+
+  
   return (
-    <>
-      <BreadCrumbs heading={trainingDetails && trainingDetails.title} />
+    <> {eng === true && <BreadCrumbs heading={trainingDetails && trainingDetails.title} />}
+    {arb === true && <BreadCrumbs heading={trainingDetails && trainingDetails.title_arb} />}
+    
+      {/* <BreadCrumbs heading={trainingDetails && trainingDetails.title} /> */}
       <Form>
         <FormGroup>
           <ToastContainer></ToastContainer>
@@ -359,19 +393,25 @@ const TrainingEdit = () => {
 
       {/* Main Details */}
       <TrainingMainDetails
+       arb={arb}
+       arabic={arabic}
+      
         trainingDetails={trainingDetails}
         handleInputs={handleInputs}
       ></TrainingMainDetails>
 
       {/* Training Company Form */}
       <TrainingCompany
+       arb={arb}
+       arabic={arabic}
+      
         trainingDetails={trainingDetails}
         handleInputs={handleInputs}
       ></TrainingCompany>
       {/* Attachment */}
       <Form>
         <FormGroup>
-          <ComponentCard title="Attachments">
+          <ComponentCard title={arb ? 'المرفقات':"Attachments"}>
             <Row>
               <Col xs="12" md="3" className="mb-3">
                 <Button
@@ -389,6 +429,8 @@ const TrainingEdit = () => {
               </Col>
             </Row>
             <AttachmentModalV2
+            arb={arb}
+            arabic={arabic}
               moduleId={id}
               attachmentModal={attachmentModal}
               setAttachmentModal={setAttachmentModal}
@@ -402,6 +444,8 @@ const TrainingEdit = () => {
               setUpdate={setUpdate}
             />
             <ViewFileComponentV2
+            arb={arb}
+            arabic={arabic}
               moduleId={id}
               roomName="Training"
               recordType="TrainingRelatedPicture"
@@ -418,9 +462,9 @@ const TrainingEdit = () => {
           <table className="lineitem  border border-secondary rounded">
             <thead>
               <tr>
-                <th scope="col">Employee Name</th>
-                <th scope="col">From Date</th>
-                <th scope="col">To date</th>
+                <th scope="col">{arb ? 'اسم الموظف' : ' Employee Name' }</th>
+                <th scope="col">{arb ? 'من التاريخ' : ' From Date' }</th>
+                <th scope="col">{arb ? 'ان يذهب في موعد' : ' To date' }</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -462,7 +506,7 @@ const TrainingEdit = () => {
                             }
                           }}
                         >
-                          Delete
+                          {arb?'يمسح':'Delete'}
                         </Button>
                       </td>
                     </tr>
@@ -482,7 +526,7 @@ const TrainingEdit = () => {
                 AddNewLineItem();
               }}
             >
-              Linked Employee
+              {arb?'الموظف المرتبط': 'Linked Employee'}
             </Button>
           </Col>
         </Row>
@@ -491,10 +535,10 @@ const TrainingEdit = () => {
           <table className="lineitem newemp border border-secondary rounded">
             <thead>
               <tr>
-                <th scope="col">Employee Name</th>
-                <th scope="col">From Date</th>
-                <th scope="col">To date</th>
-              </tr>
+              <th scope="col">{arb ? 'اسم الموظف' : ' Employee Name' }</th>
+                <th scope="col">{arb ? 'من التاريخ' : ' From Date' }</th>
+                <th scope="col">{arb ? 'ان يذهب في موعد' : ' To date' }</th>
+                </tr>
             </thead>
             <tbody>
               {addLineItem.map((item) => {
@@ -537,7 +581,7 @@ const TrainingEdit = () => {
                             ClearValue(item);
                           }}
                         >
-                          Clear
+                         {arb?'واضح': 'Clear'}
                         </span>
                       </Link>
                     </td>

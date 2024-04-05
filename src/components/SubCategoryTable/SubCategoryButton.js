@@ -8,12 +8,14 @@ export default function SubCategoryButton({
   applyChanges,
   backToList,
   editSubCategoryData,
+  setFormSubmitted,
 }) {
   SubCategoryButton.propTypes = {
     saveChanges: PropTypes.func,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     editSubCategoryData: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
   };
   return (
     <Form>
@@ -25,6 +27,7 @@ export default function SubCategoryButton({
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                   editSubCategoryData();
                   saveChanges();
                 }}
@@ -37,6 +40,7 @@ export default function SubCategoryButton({
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                   editSubCategoryData();
                   applyChanges();
                 }}

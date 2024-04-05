@@ -19,6 +19,10 @@ const Leaves = () => {
   //Const Variables
   const [leaves, setLeaves] = useState(null);
   const [loading, setLoading] = useState(false);
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   // get Leave
   const getLeave = () => {
@@ -49,6 +53,38 @@ const Leaves = () => {
   useEffect(() => {
     getLeave();
   }, []);
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getArabicCompanyName = () => {
+      api
+      .get('/leave/getTranslationforHRLeave')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+  useEffect(() => {
+    
+    getArabicCompanyName();
+
+  }, []);
+
+ 
   //  stucture of leave list view
   const columns = [
     {
@@ -59,7 +95,7 @@ const Leaves = () => {
       width: '4%',
     },
     {
-      name: 'Edit',
+      name:arb ? 'يحرر' : 'Edit',
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -69,54 +105,54 @@ const Leaves = () => {
     },
 
     {
-      name: 'Employee Name',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.Employee Name')?.[genLabel],
       selector: 'employee_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: 'Designation',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.Designation')?.[genLabel],
       selector: 'designation',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Status',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'From date',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.From Date')?.[genLabel],
       selector: 'from_date',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'To date',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.To Date')?.[genLabel],
       selector: '	to_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name: 'No of Days(Current Month)',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.No of Days(Current Month)')?.[genLabel],
       selector: 'no_of_days',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'No of Days(Next Month)',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.No of Days(Next Month)')?.[genLabel],
       selector: 'no_of_days_next_month',
       sortable: true,
       width: 'auto',
     },
     {
-      name: 'Leave Type',
+      name: arabic.find(item => item.key_text === 'mdHRLeave.Leave Type')?.[genLabel],
       selector: 'leave_type',
       sortable: true,
       width: 'auto',
@@ -133,8 +169,9 @@ const Leaves = () => {
           Button={
             <Link to="/LeaveDetails">
               <Button color="primary" className="shadow-none">
-                Add New
-              </Button>
+              {arb ?'اضف جديد':'Add New'}             
+               </Button>
+              
             </Link>
           }
         >

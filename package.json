@@ -30,7 +30,7 @@
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.7.0",
     "caniuse-lite": "^1.0.30001517",
-    "chart.js": "2.9.4",
+    "chart.js": "^2.9.4",
     "chroma-js": "^2.1.2",
     "cors": "^2.8.5",
     "datatables.net": "^1.12.1",
@@ -114,7 +114,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.3",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
     "@types/datatables.net-buttons": "^1.4.7",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -154,7 +157,10 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ]
   }
 }
