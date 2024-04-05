@@ -1,4 +1,4 @@
-import React,{useEffect,useState}from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -79,26 +79,6 @@ export default function TradingQuoteMoreDetails({
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label>Enquiry Code</Label>
-                  <br />
-                  <td>
-                    {' '}
-                    <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
-                      {tenderDetails && tenderDetails.opportunity_code}
-                    </Link>
-                  </td>
-                  {/* <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.opportunity_code}
-                    name="opportunity_code"
-                    disabled
-                  /> */}
-                </FormGroup>
-              </Col>
-
-              <Col md="3">
-                <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
                       arabic.find((item) => item.key_text === 'mdTradingQuote.Enquiry Code')?.[
@@ -107,21 +87,17 @@ export default function TradingQuoteMoreDetails({
                     }{' '}
                     {/*Access the value property */}
                     <span className="required">*</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={
-                      arb
-                        ? tenderDetails && tenderDetails.opportunity_code_arb
-                          ? tenderDetails.opportunity_code_arb
-                          : tenderDetails && tenderDetails.opportunity_code_arb !== null
-                          ? ''
-                          : tenderDetails && tenderDetails.opportunity_code
+                  </Label>{' '}
+                  <br />
+                  <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
+                    {arb
+                      ? tenderDetails && tenderDetails.opportunity_code_arb
+                        ? tenderDetails.opportunity_code_arb
+                        : tenderDetails && tenderDetails.opportunity_code_arb !== null
+                        ? ''
                         : tenderDetails && tenderDetails.opportunity_code
-                    }
-                    name={arb ? 'opportunity_code_arb' : 'opportunity_code'}
-                  ></Input>
+                      : tenderDetails && tenderDetails.opportunity_code}
+                  </Link>
                 </FormGroup>
               </Col>
 
@@ -199,6 +175,34 @@ export default function TradingQuoteMoreDetails({
 
               <Col md="3">
                 <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdTradingQuote.Customer')?.[genLabel]}
+                  <span className="required"> *</span>
+                  <Input
+                    type="select"
+                    onChange={(e) => {
+                      handleInputs(e);
+                      getContact(e.target.value);
+                    }}
+                    //className={inputClass}
+                    value={tenderDetails?.company_id || ''}
+                    name="company_id"
+                    disabled
+                  >
+                    <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb ? e.company_name_arb : e.company_name}{' '}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
+              {/* <Col md="3">
+                <FormGroup>
                   <Label>Company Name</Label>
 
                   <Input
@@ -223,15 +227,16 @@ export default function TradingQuoteMoreDetails({
                       })}
                   </Input>
                 </FormGroup>
-              </Col>
+              </Col> */}
 
               <Col md="3">
                 <FormGroup>
                   <Label>
-                    Contact (OR){' '}
+                  {arabic.find((item) => item.key_text === 'mdTradingQuote.Contact')?.[genLabel]} (OR){' '}
                     <span className="anchor" onClick={addContactToggle.bind(null)}>
                       <b>
-                        <u>Add New Contact</u>
+                        <u>{arb ?'قائمة الاقتباس':"Add New Contact"}
+          </u>
                       </b>
                     </span>
                   </Label>
@@ -248,7 +253,7 @@ export default function TradingQuoteMoreDetails({
                       contact.map((e) => {
                         return (
                           <option key={e.contact_id} value={e.contact_id}>
-                            {e.first_name}
+                           {arb ? e.first_name_arb : e.first_name}{' '}
                           </option>
                         );
                       })}
@@ -304,11 +309,7 @@ export default function TradingQuoteMoreDetails({
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {
-                      arabic.find((item) => item.key_text === 'mdTradingQuote.Status')?.[
-                        genLabel
-                      ]
-                    }{' '}
+                    {arabic.find((item) => item.key_text === 'mdTradingQuote.Status')?.[genLabel]}{' '}
                     {/*Access the value property */}
                     <span className="required">*</span>
                   </Label>

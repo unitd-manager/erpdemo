@@ -157,8 +157,11 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     item_title_arb: InvoiceItem.item_title_arb,
                     ordered_quantity: InvoiceItem.quantity,
                     cost_price: InvoiceItem.cost_price,
+                    cost_price_arb: InvoiceItem.cost_price_arb,
                     total_cost: InvoiceItem.cost_price*InvoiceItem.quantity,
+                    total_cost_arb: InvoiceItem.cost_price_arb*InvoiceItem.quantity,
                     unit: InvoiceItem.unit,
+                    unit_arb: InvoiceItem.unit_arb,
                     purchase_order_id: purchaseinvoiceeditdetails.purchase_order_id,
                   };  
                   console.log(`Inserting order item ${index + 1}:`, InvoiceItemsData);  
