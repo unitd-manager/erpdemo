@@ -204,15 +204,19 @@ const Cards = () => {
                   onClick={`/EmployeeEdit/${blg.employee_id_duplicate}?tab=1`}
                   image={Image}
                   id={blg.employee_id_duplicate}
-                  title= {blg.first_name?.split(' ').shift().toUpperCase()} // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
+                  title= {
+                    arb?
+                    (blg.first_name_arb?.split(' ').shift().toUpperCase()?blg.first_name_arb?.split(' ').shift().toUpperCase():
+                    blg.first_name_arb !== null ? '' : blg.first_name) :blg.first_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
-                  projectDesignation={blg.project_designation}
+                  projectDesignation={arb ? blg.project_designation_arb : blg.project_designation}
                   gender={blg.gender}
                   team={blg.team}
                   empCode={blg.emp_code}
                   email={blg.login_email}
                   joinDate={blg.act_join_date}
+                  arb={arb}
                   arabic={arabic}
                 />
               </Col>

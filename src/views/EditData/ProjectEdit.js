@@ -18,6 +18,14 @@ import ProjectEditForm from '../../components/project/ProjectEditForm';
 import ProjectMaterialLineItem from '../../components/project/ProjectMaterialLineItem';
 import EditProjectMaterialLineItemModal from '../../components/project/EditProjectMaterialLineItemModal'
 import CommonTable from '../../components/CommonTable';
+import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
+import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
+import MilestoneStatsProject from '../../components/dashboard/ProjectStats/MilestoneStatsProject';
+import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
+import ActualHourStatsProject from '../../components/dashboard/ProjectStats/ActualHourStatsProject';
+import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
+import ProjectMilestones from '../../components/ProjectMilestones';
+import ProjectMilestoneEdit from '../../components/ProjectMilestoneEdit';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -67,6 +75,7 @@ const [arabic, setArabic] = useState([]);
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
+  const [editTaskEditModals, setEditTaskEditModals] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
   const [contact, setContact] = useState();
@@ -76,26 +85,36 @@ const [arabic, setArabic] = useState([]);
   const [viewMaterialModal, setViewMaterialModal] = useState(false);
   const [editMaterialModal, setEditMaterialModal] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [contactData, setContactDatas] = useState();
+  const [milestoneById, setMilestone] = useState();
+  const [addContactModals, setAddContactModals] = useState(false);
+
   const addMaterialItemsToggle = () => {
     setAddMaterialItemModal(!addMaterialItemModal);
   };
   const viewMaterialToggle = () => {
     setViewMaterialModal(!viewMaterialModal);
   };
+  const addContactToggles = () => {
+    setAddContactModals(!addContactModals);
+  };
   console.log(viewMaterialToggle);
   // Start for tab refresh navigation #Renuka 31-05-23
   const tabs = [
-   
-    { id: '1', name: 'Quotation' },
-    { id: '2', name: 'Material Needed' },
-    { id: '3', name: 'Project Team' },
-    { id: '4', name: 'Job Order' },
+    { id: '1', name: 'Analytics' },
+    { id: '2', name: 'Milestones' },
+    { id: '3', name: 'Quotation' },
+    { id: '4', name: 'Material Needed' },
+    { id: '5', name: 'Project Team' },
+    { id: '6', name: 'Job Order' },
   ];
   const tabsArb = [
-    { id: '1', name: 'اقتباس ' },
-    { id: '2', name: 'المواد المطلوبة ' },
-    { id: '3', name: 'فريق المشروع' },
-    { id: '4', name: 'أمر الوظيفة' },
+    { id: '1', name: 'التحليلات' },
+    { id: '2', name: 'معالم' },
+    { id: '3', name: 'اقتباس' },
+    { id: '4', name: 'المواد المطلوبة ' },
+    { id: '5', name: 'فريق المشروع' },
+    { id: '6', name: 'أمر الوظيفة' },
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -242,6 +261,14 @@ const [arabic, setArabic] = useState([]);
       })
       .catch(() => {});
   };
+  const getMilestoneById = () => {
+    api
+      .post('/milestone/getMilestoneProjectById', { project_id: id })
+      .then((res) => {
+        setMilestone(res.data.data);
+      })
+      .catch(() => { });
+  };
   const getMaterialItem = () => {
     api.post('/project/getProjectMaterialLineItemsById', { project_id: id }).then((res) => {
       setMaterialItem(res.data.data);
@@ -301,6 +328,7 @@ const [arabic, setArabic] = useState([]);
   
   useEffect(() => {
     getProjectById();
+    getMilestoneById();
     getContact();
     getIncharge();
     getLineItem();
@@ -344,7 +372,51 @@ const [arabic, setArabic] = useState([]);
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Start Tab Content 1 */}
+
           <TabPane tabId="1">
+            <br />
+            <Row>
+              <Col>
+                <StatsPmsProjectId id={id}></StatsPmsProjectId>
+              </Col>
+              <Col>
+                <DueStatsProject id={id}></DueStatsProject>
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col sm="4" lg="10" xl="6" xxl="6">
+                <MilestoneStatsProject id={id}></MilestoneStatsProject>
+              </Col>
+              <Col sm="4" lg="10" xl="6" xxl="6">
+                <AverageStatsProject id={id}></AverageStatsProject>
+              </Col>
+            </Row>
+            <br />
+            <ActualHourStatsProject id={id}></ActualHourStatsProject>
+            <br />
+            <PriorityStatsProject id={id}></PriorityStatsProject>
+          </TabPane>
+          <TabPane tabId="2">
+            <br />
+            <ProjectMilestones
+              setContactDatas={setContactDatas}
+              id={id}
+              addContactToggles={addContactToggles}
+              addContactModals={addContactModals}
+              setEditTaskEditModals={setEditTaskEditModals}
+              milestoneById={milestoneById}
+              getMilestoneById={getMilestoneById}
+            ></ProjectMilestones>
+            <ProjectMilestoneEdit
+              getMilestoneById={getMilestoneById}
+              contactData={contactData}
+              editTaskEditModals={editTaskEditModals}
+              setEditTaskEditModals={setEditTaskEditModals}
+            ></ProjectMilestoneEdit>
+          </TabPane>
+ 
+          <TabPane tabId="3">
             {/* <Row>
               <Col md="6">
                 <Button
@@ -387,7 +459,7 @@ const [arabic, setArabic] = useState([]);
               </div>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
+          <TabPane tabId="4">
           <Row>
                 <Col md="6">
                 <Button
@@ -473,7 +545,7 @@ const [arabic, setArabic] = useState([]);
               ></ProjectMaterialLineItem>
             )}
           </TabPane>
-          <TabPane tabId="3" eventkey="addEmployee">
+          <TabPane tabId="5" eventkey="addEmployee">
             <Row>
               <AddEmployee ProposalId ={ProposalId}projectId={id}arb={arb}arabic={arabic}genLabel={genLabel}/>
               <Col xs="12" md="3" className="mb-3">
@@ -512,7 +584,7 @@ const [arabic, setArabic] = useState([]);
               setUpdate={setUpdate}
             />
           </TabPane>
-          <TabPane tabId="4">
+          <TabPane tabId="6">
             
             <CommonTable 
              title="JobOrder List">

@@ -31,7 +31,7 @@ const ClientDetails = () => {
   // Client Insert
   const insertClient = () => {
     setFormSubmitted(true);
-    if (clientForms.company_name.trim() !== '' && clientForms.company_name_arb.trim() !== '') {
+    if (clientForms.company_name.trim() !== '') {
       clientForms.creation_date = creationdatetime;
       clientForms.created_by = loggedInuser.first_name;
       api
@@ -83,7 +83,7 @@ const ClientDetails = () => {
                     )}
                     
                   </Col>
-                  <Col md="12">
+                  {/* <Col md="12">
                     <Label>
                       Company Name Arabic <span className="required"> *</span>{' '}
                     </Label>
@@ -102,7 +102,7 @@ const ClientDetails = () => {
                       <div className="error-message">Please Enter</div>
                     )}
                     
-                  </Col>
+                  </Col> */}
                 </Row>
               </FormGroup>
               <FormGroup>

@@ -22,6 +22,10 @@ import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
  //import QuotationChart from '../../components/dashboard/QuotationChart';
  //import CustomerChart from '../../components/dashboard/CustomerChart';
 import GoodsDeliveryChart from '../../components/dashboard/GoodsDeliveryChart';
+//  import QuotationChart from '../../components/dashboard/QuotationChart';
+//  import CustomerChart from '../../components/dashboard/CustomerChart';
+// import GoodsDeliveryChart from '../../components/dashboard/GoodsDeliveryChart';
+
 
 const Classic = () => {
   return (
