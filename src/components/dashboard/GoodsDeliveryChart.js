@@ -1,62 +1,101 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col } from 'reactstrap';
 import Chart from 'react-apexcharts';
-//import api from '../../constants/api';
+// import api from '../../constants/api'; // Uncomment and import your API module here
 import ComponentCard from '../ComponentCard';
 
 const GoodsDeliveryChart = () => {
-  const [deliveryStats, setDeliveryStats] = useState(null);
+  const [deliveryData, setDeliveryData] = useState(null);
 
-  // Function to fetch Goods Delivery statistics
-  const fetchDeliveryStats = () => {
+  // Function to fetch goods delivery data
+  const fetchDeliveryData = () => {
     // Mock data for demonstration (replace with actual API call)
-    const mockData = {
-      statuses: ['On Time', 'Delayed', 'Cancelled'],
-      deliveryCount: [80, 15, 5],
-    };
-    setDeliveryStats(mockData);
+    const mockData = [
+      { x: 'Product A', y: 30, z: 20 }, // Product A delivery data (x: Product name, y: Quantity, z: Distance)
+      { x: 'Product B', y: 45, z: 25 }, // Product B delivery data
+      { x: 'Product C', y: 40, z: 20 }, // Product C delivery data
+      { x: 'Product D', y: 25, z: 18 }, // Product D delivery data
+      { x: 'Product E', y: 35, z: 18 }, // Product D delivery data
+
+    ];
+    setDeliveryData(mockData);
   };
 
   useEffect(() => {
-    fetchDeliveryStats(); // Fetch Goods Delivery statistics on component mount
+    fetchDeliveryData(); // Fetch goods delivery data on component mount
   }, []);
 
-  const optionsDonutChart = {
+  const optionsBubbleChart = {
     chart: {
-      id: 'donut-chart',
+      id: 'bubble-chart',
       fontFamily: "'Rubik', sans-serif",
-      type: 'donut',
+      type: 'bubble',
+      height: '400',
     },
-    labels: deliveryStats?.statuses || [],
+    xaxis: {
+      title: {
+        text: 'Product Name',
+        style: {
+          fontSize: '14px',
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Quantity',
+        style: {
+          fontSize: '14px',
+        },
+      },
+    },
+    fill: {
+      opacity: 0.8,
+    },
     legend: {
       show: true,
       position: 'bottom',
-      width: '50px',
+      width: '100px',
       fontFamily: "'Montserrat', sans-serif",
       labels: {
         colors: '#8898aa',
       },
     },
-    colors: ['#36a2eb', '#ff6384', '#ffce56'],
     tooltip: {
-      fillSeriesColor: false,
       theme: 'dark',
+      x: {
+        formatter(val) {
+          return `Product: ${val}`;
+        },
+      },
+      y: {
+        formatter(val) {
+          return `Quantity: ${val}`;
+        },
+      },
+      z: {
+        formatter(val) {
+          return `Distance: ${val}`;
+        },
+      },
     },
   };
 
-  const seriesDonutChart = deliveryStats
-    ? deliveryStats.deliveryCount || []
-    : [];
+  const seriesBubbleChart = [
+    {
+      name: 'Goods Delivery',
+      data: deliveryData || [],
+    },
+  ];
 
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Goods Delivery Statistics (Donut Chart)">
+        <ComponentCard title="Goods Delivery Statistics">
           <Form>
             {/* Add any form elements or filters if needed */}
           </Form>
-          {deliveryStats && (
-            <Chart options={optionsDonutChart} series={seriesDonutChart} type="donut" height="350" />
+          {deliveryData && (
+            <Chart options={optionsBubbleChart} series={seriesBubbleChart} type="bubble" height="350" />
           )}
         </ComponentCard>
       </Col>
