@@ -3,44 +3,58 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function PlanningMainDetails({ handleInputs, plannings }) {
+export default function PlanningMainDetails({ handleInputs, plannings, priceliststatus, formSubmitted, arb, arabic, genLabel}) {
   PlanningMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     plannings: PropTypes.object,
-    
+    priceliststatus: PropTypes.any,
+    formSubmitted: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,   
+    genLabel: PropTypes.any
   };
+
+ 
+
   return (
     <>
-      <ComponentCard title="Price List Edit">
+      <ComponentCard title={arb ? 'تحرير قائمة الأسعار': 'Price List Edit'} >
         <Form>
           <FormGroup>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
-                  <Label>Customer Name<span style={{ color: 'red' }}>*</span></Label>
-                  <br />
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.CustomerName')?.[genLabel]}
+              </Label><span className='required'>*</span>
                   <Input
-                  type="text"
-                  onChange={handleInputs}
-                  value={plannings && plannings.customer_name}
-                  name="customer_name"
-                />                </FormGroup>
-              </Col>
-             
-            <Col md="4">
-              <FormGroup>
-                <Label>Notes </Label>
-                <Input
-                  type="text"
-                  onChange={handleInputs}
-                  value={plannings && plannings.notes}
-                  name="notes"
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            plannings && plannings.customer_name_arb ? plannings.customer_name_arb :
+                            (plannings && plannings.customer_name_arb !== null ? '' : plannings && plannings.customer_name)
+                          )
+                        : (plannings && plannings.customer_name)
+                    }
+                    name={arb ? 'customer_name_arb' : 'customer_name'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && plannings.customer_name_arb.trim() === '') ||(!arb && plannings.customer_name.trim() === '')) ? 'highlight' : ''
+                  }`}
                 />
+                {formSubmitted && ((arb && plannings.customer_name_arb.trim() === '') || (!arb && plannings.customer_name.trim() === '')) && (
+                  <div className="error-message">Please Enter</div>
+              )}
+                 
               </FormGroup>
-            </Col>
-            <Col md="4">
+              </Col>
+            <Col md="3">
                 <FormGroup>
-                  <Label>Effective Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.EffectiveDate')?.[genLabel]}
+              </Label>
+               
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -49,12 +63,11 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-            
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
-                  <Label> Expiry Date</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.ExpiryDate')?.[genLabel]}
+              </Label>
                   <Input
                     type="Date"
                     onChange={handleInputs}
@@ -63,20 +76,51 @@ export default function PlanningMainDetails({ handleInputs, plannings }) {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
-                <Label>Status</Label>
-                <Input
-                  type="select"
-                  onChange={handleInputs}
-                  value={plannings && plannings.status}
-                  name="status"
-                >
-                  <option defaultValue="selected">Please Select</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Pending">Pending</option>
-                  
+              <Col md="3">
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdPriceList.Status')?.[genLabel]}
+                  </Label>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={plannings && plannings.category_id}
+                    name="status"
+                  >
+                    <option value="selected">Please Select</option>
+                    {priceliststatus &&
+                      priceliststatus.map((e) => {
+                        return (
+                          <option key={e.category_id} value={e.category_id}>
+                            {' '}
+                            {arb && e.status_arb ?e.status_arb : e.status}
+                            {' '}
+                          </option>
+                        );
+                      })}
                 </Input>
               </Col>
+              </Row>
+              <Row>
+              <Col md="6">
+              <FormGroup>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdPriceList.Notes ')?.[genLabel]}
+                  </Label>
+                <Input
+                  type="textarea"
+                  onChange={handleInputs}
+                  value={
+                    arb
+                      ? (
+                          plannings && plannings.notes_arb ? plannings.notes_arb :
+                          (plannings && plannings.notes_arb !== null ? '' : plannings && plannings.notes)
+                        )
+                      : (plannings && plannings.notes)
+                  }
+                  name={arb ? 'notes_arb' : 'notes'}
+              />
+              </FormGroup>
+            </Col>
             </Row>
           </FormGroup>
         </Form>
