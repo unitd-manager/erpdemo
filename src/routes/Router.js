@@ -132,6 +132,7 @@ const SalesReturn = Loadable(lazy(() => import('../views/smartconTables/SalesRet
 const SalesReceipt = Loadable(lazy(() => import('../views/smartconTables/SalesReceipt')));
 const MakeSupplier = Loadable(lazy(() => import('../views/smartconTables/MakeSupplier')));
 const OpportunityTable = Loadable(lazy(() => import('../views/smartconTables/Opportunity')));
+const ProjectSalesInvoice = Loadable(lazy(() => import('../views/smartconTables/ProjectSalesInvoice')));
 const ProjectEnquiryTable = Loadable(lazy(() => import('../views/smartconTables/ProjectEnquiry')));
 const InvoiceTable = Loadable(lazy(() => import('../views/smartconTables/Invoice')));
 const TaskTable = Loadable(lazy(() => import('../views/smartconTables/Task')));
@@ -211,6 +212,7 @@ const TimesheetDetailsTable = Loadable(lazy(() => import('../views/DetailTable/T
 const GoodsReceivedTable = Loadable(lazy(() => import('../views/smartconTables/GoodsReceived')));
 const ChangeRequestTable = Loadable(lazy(() => import('../views/smartconTables/ChangeRequest')));
 const UomDetails = Loadable(lazy(() => import('../views/DetailTable/UomDetails')));
+const ProjectSalesInvoiceDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectSalesInvoiceDetails')));
 
 // Finance Admin
 const FinanceTable = Loadable(lazy(() => import('../views/smartconTables/Finance')));
@@ -360,6 +362,7 @@ const ChangeRequestEdit = Loadable(lazy(() => import('../views/EditData/ChangeRe
 const DocumentEdit = Loadable(lazy(() => import('../views/EditData/DocumentEdit')));
 const PurchaseInvoiceEdit = Loadable(lazy(() => import('../views/EditData/PurchaseInvoiceEdit')));
 const UomEdit = Loadable(lazy(() => import('../views/EditData/UomEdit')));
+const ProjectSalesInvoiceEdit = Loadable(lazy(() => import('../views/EditData/ProjectSalesInvoiceEdit')));
 
 
 //Reports
@@ -601,6 +604,9 @@ const Routernew = () => {
           <Route path="/ChangeRequest" name="tenderdata" element={<ChangeRequestTable />}></Route>
           <Route path="/Document" name="tenderdata" element={<DocumentTable />}></Route>
           <Route path="/PurchaseInvoice" name="tenderdata" element={<PurchaseInvoiceTable />}></Route>
+          <Route path="/ProjectSalesInvoice" name="tenderdata" element={<ProjectSalesInvoice />}></Route>
+          <Route path="/ProjectSalesInvoiceDetails" name="tenderdata" element={<ProjectSalesInvoiceDetails />}></Route>
+          <Route path="/ProjectSalesInvoiceEdit" name="tenderdata" element={<ProjectSalesInvoiceEdit/>}></Route>
           
           <Route path="/Attendance" name="tenderdata" element={<Attendance />}></Route>
           <Route path="/TenderDetails" name="tenderdata" element={<TenderDetailsTable />}></Route>

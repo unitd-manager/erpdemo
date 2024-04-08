@@ -2,8 +2,9 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
+import CommonTranslationEdit from '../CommonTranslationEdit';
 
-export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted,arb}) {
+export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted,arb,id,tablevalue,whereCondition}) {
   ClientButton.propTypes = {
     editClientsData: PropTypes.any,
     applyChanges: PropTypes.func,
@@ -12,6 +13,9 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
     clientsDetails: PropTypes.any,
     navigate: PropTypes.any,
     arb: PropTypes.any,
+    id: PropTypes.any,
+    tablevalue: PropTypes.any,
+    whereCondition: PropTypes.any,
   
   };
   const handleSave = () => {
@@ -42,6 +46,7 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
         {/* Button */}
         <ComponentCardV2>
           <Row>
+          <CommonTranslationEdit tablevalue = {tablevalue} id = {id} whereCondition = {whereCondition} ></CommonTranslationEdit>
             <Col>
               <Button
                 className="shadow-none"

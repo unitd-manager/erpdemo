@@ -3,6 +3,7 @@ import { TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+// import axios from 'axios';
 import ClientButton from '../../components/ClientTable/ClientButton';
 import ClientMainDetails from '../../components/ClientTable/ClientMainDetails';
 import ContactEditModal from '../../components/Tender/ContactEditModal';
@@ -36,6 +37,86 @@ const ClientsEdit = () => {
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+   // Navigation and Parameter Constants
+   const { id } = useParams();
+   const navigate = useNavigate();
+
+  const tablevalue =  [
+    {name:'company'},
+    {name:'contact'},
+  ];
+
+  const whereCondition = 'company_id'
+    // Fetch translation when selectedLanguage or plannings changes
+    // const fetchTranslation = async () => {
+    //   try {
+    //     tablevalue.forEach(async (table) => {
+    //       console.log('tableName',table.name)
+    //       const tableNames = table.name
+    //       const res1 = await api.post('/labourrequest/getTranslationColumnFromTables',{tableNames});
+    //       res1.data.data.forEach(async (item) => {
+    //       const columnNames = item.COLUMN_NAME_TRUNCATED;
+          
+    //       console.log('columnNames',columnNames)
+    //       const whereId = id;
+    //       const whereCondition ='company_id'
+    //       console.log('whereId',whereId)
+    //       console.log('WhereCondition',whereCondition)
+    //       const res = await api.post('/labourrequest/getTableTranslation', { whereId, columnNames,tableNames,whereCondition});
+         
+    //       console.log('resss',res.data.data)
+    //       res.data.data.forEach(async (cell) => {
+  
+    //         Object.keys(cell).forEach(async(property) => {
+    //           console.log('colm', cell[property]);
+    //           const condition = `${property}_arb` 
+    //           console.log('condition',condition)
+    //           const res5 = await api.post('/labourrequest/getTableTranslationArbValue', { whereId, condition,tableNames,whereCondition});
+    //           console.log('res5',res5.data.data)
+    //           res5.data.data.forEach(async(obj) => {
+    //           console.log('obj',obj[condition])
+    //             // Assuming you want to check the value of the 'company_name_arb' property
+    //             if (obj[condition] === '' || obj[condition] === null) {
+    //                try {
+    //           const response = await axios.post(
+    //             'https://translation.googleapis.com/language/translate/v2',
+    //             {},
+    //             {
+    //               params: {
+    //                 q:cell[property],
+    //                 target: 'ar',
+    //                 key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
+    //               },
+    //             }
+    //           );
+    //            console.log('trabsss', response.data.data.translations[0].translatedText);
+    //           await api.post('/labourrequest/editRequestArb', {
+    //             tableNames,
+    //             whereId,
+    //             whereCondition,
+    //             // labour_request_id:id,
+    //             [`${property}_arb`]: response.data.data.translations[0].translatedText,
+    //             value: response.data.data.translations[0].translatedText,
+    //             columnName:`${property}_arb`
+    //           });
+    //         } catch (error) {
+    //           console.error('Error occurred during translation:', error);
+    //         }
+    //             } else {
+    //               console.log('resnull');
+    //             }
+    //           });
+           
+    //       });
+    //     });
+    //     });
+    //   });
+    //   } catch (error) {
+    //     console.error('Error fetching translation column names:', error);
+    //   }
+    // };
+  
+
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -45,9 +126,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 // Use the selected language value as needed
 console.log('Selected language from localStorage:', selectedLanguage);
 
-  // Navigation and Parameter Constants
-  const { id } = useParams();
-  const navigate = useNavigate();
+ 
   //  button
   const applyChanges = () => {};
   const backToList = () => {
@@ -288,6 +367,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
       {/* Button List */}
       <ClientButton
         editClientsData={editClientsData}
+        tablevalue={tablevalue}
         navigate={navigate}
         applyChanges={applyChanges}
         DeleteClient={DeleteClient}
@@ -298,6 +378,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
         clientsDetails={clientsDetails}
         arb={arb}
         eng={eng}
+        id={id}
+        whereCondition={whereCondition}
       ></ClientButton>
 
       {/* Client Main details */}

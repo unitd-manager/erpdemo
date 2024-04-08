@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -24,6 +24,9 @@ import PlanningButton from '../../components/PriceList/PriceButton';
 import PlanningCpanel from '../../components/PriceList/PriceListItem';
 import PlanEditModal from '../../components/PriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const PriceListEdit = () => {
   //Const Variables
@@ -47,21 +50,68 @@ const PriceListEdit = () => {
   const [addContactModal, setAddContactModal] = useState(false);
   const [planData, setPlanData] = useState();
   const [editPlanEditModal, setPlanEditModal] = useState(false);
+  const [unitdetails, setUnitDetails] = useState();
 
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
 
+  
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForPriceList = () => {
+      api
+      .get('/pricelistitem/getTranslationForPriceList')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   // Button Save Apply Back List
   const applyChanges = () => {};
+  const saveChanges = () => {
+    if ((arb && plannings.customer_name_arb.trim() !== '') || (!arb && plannings.customer_name.trim() !== '')) {
+      navigate('/PriceList');
+    }
+  };
   const backToList = () => {
     navigate('/PriceList');
   };
+
 
     // Start for tab refresh navigation #Renuka 1-06-23
     const tabs =  [
       {id:'1',name:'Price List Item'},
       {id:'2',name:'Attachment'},
+    ];
+    const tabsArb = [
+      { id: '1', name: 'عنصر قائمة الأسعار' },
+      { id: '2', name: 'مرفق' },
     ];
     const toggle = (tab) => {
       setActiveTab(tab);
@@ -96,10 +146,10 @@ const PriceListEdit = () => {
   //Logic for edit data in db
   const editplanningData = () => {
     
-    if (
-      plannings.effective_date &&
-      plannings.customer_name 
-      ) {
+    setFormSubmitted(true);
+    if ((arb && plannings.customer_name_arb.trim() !== '') || (!arb && plannings.customer_name.trim() !== '')) {
+      plannings.modification_date = creationdatetime;
+      plannings.modified_by = loggedInuser.first_name;
       api
         .post('/pricelistitem/editPriceList', plannings)
         .then(() => {
@@ -123,6 +173,17 @@ const PriceListEdit = () => {
       });
   };
   
+   //Api call for getting Staff Team From Valuelist
+   const getUnitFromValuelist = () => {
+    api
+      .get('/pricelistitem/getUnitFromValuelist')
+      .then((res) => {
+        setUnitDetails(res.data.data);
+      })
+      .catch(() => {
+        message('Unit Data Not Found', 'info');
+      });
+  };
   
   
   
@@ -136,6 +197,8 @@ const handleAddNewPlanning = (e) => {
   useEffect(() => {
     PlanningById();
     getCpanelLinked();
+    getTranslationForPriceList();
+    getUnitFromValuelist();
   }, [id]);
 
   return (
@@ -147,20 +210,32 @@ const handleAddNewPlanning = (e) => {
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
+        saveChanges={saveChanges}
         backToList={backToList}
+        id={id}
+        formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted}
        ></PlanningButton>
        
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
         plannings={plannings}
+        arb={arb}
+        formSubmitted={formSubmitted}
+        arabic={arabic}
+        genLabel={genLabel}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      <Tab toggle={toggle} tabs={tabs} />
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
 
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">
@@ -174,12 +249,21 @@ const handleAddNewPlanning = (e) => {
            addContactToggle={addContactToggle}
            setPlanData={setPlanData}
            setPlanEditModal={setPlanEditModal}
+           arb={arb}
+           arabic = {arabic}
+           genLabel={genLabel}
+           unitdetails={unitdetails}
            ></PlanningCpanel>
            {/* Cpanel Linked Edit modal */}
            <PlanEditModal
            planData={planData}
            editPlanEditModal={editPlanEditModal}
            setPlanEditModal={setPlanEditModal}
+           arb={arb}
+        formSubmitted={formSubmitted}
+        arabic={arabic}
+        genLabel={genLabel}
+        unitdetails={unitdetails}
            ></PlanEditModal>
           </TabPane>
           {/* Attachment */}

@@ -93,18 +93,54 @@ const [arabic, setArabic] = useState([]);
 const { id } = useParams();
 const navigate = useNavigate();
 
+const [tables, setTables] = useState([]);
+const [selectedTable, setSelectedTable] = useState('');
+
+console.log('tables',tables)
+console.log('selectedTable',selectedTable)
+
+useEffect(() => {
+  // API வழி டேட்டாபேஸ் பட்டியலை பெறுக
+  api.get('/labourrequest/getTables')
+    .then(response => {
+      console.log('Response from API:', response.data); // Log the response data
+      setTables(response.data.tableNames); // Update to access tableNames array
+    })
+    .catch(error => {
+      console.error('Error fetching tables:', error);
+    });
+}, []);
+
+const handleTableSelect = (event) => {
+  setSelectedTable(event.target.value);
+};
+
+
+
+const tablevalue =  [
+  {name:'labour_request'},
+  // {name:'employee'},
+];
   // Fetch translation when selectedLanguage or plannings changes
   const fetchTranslation = async () => {
     try {
-      const res1 = await api.get('/labourrequest/getTranslationColumn');
+      tablevalue.forEach(async (table) => {
+        console.log('tableName',table.name)
+        const tableNames = table.name
+      const res1 = await api.post('/labourrequest/getTranslationColumnFromTables',{tableNames});
       res1.data.data.forEach(async (item) => {
         const columnNames = item.COLUMN_NAME_TRUNCATED;
         
         console.log('columnNames',columnNames)
-        const res = await api.post('/labourrequest/getLabourTranslation', { labour_request_id: id, columnNames });
+        const whereId = id;
+        const whereCondition = [`${tableNames}_id`]
+        console.log('whereId',whereId)
+        console.log('WhereCondition',whereCondition)
+        const res = await api.post('/labourrequest/getTableTranslation', { whereId, columnNames,tableNames,whereCondition});
        
           console.log('resss',res.data.data)
         res.data.data.forEach(async (cell) => {
+
           Object.keys(cell).forEach(async(property) => {
             console.log('colm', cell[property]);
         
@@ -123,32 +159,34 @@ const navigate = useNavigate();
             );
              console.log(property,'_arb')
              console.log('trabsss', response.data.data.translations[0].translatedText);
-            await api.post('/labourrequest/editLabourRequestArb', {
-              
+            await api.post('/labourrequest/editRequestArb', {
+              tableNames,
+              whereId,
+              whereCondition,
               labour_request_id:id,
               [`${property}_arb`]: response.data.data.translations[0].translatedText,
               value: response.data.data.translations[0].translatedText,
           columnName:`${property}_arb`
             });
             
-            // const translation = JSON.parse(response.data.data.translations[0].translatedText)
-            // console.log('tran',translation);
+          //   // const translation = JSON.parse(response.data.data.translations[0].translatedText)
+          //   // console.log('tran',translation);
             
-            // const decodedJson = he.decode(response.data.data.translations[0].translatedText);
-            // const fixedJsonString =  decodedJson.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":');
-            // const fixedString = fixedJsonString.replace(/:(\s*)(\d{4}-\d{2}-\d{2})/g, ':"$2');
-            // const commastring= fixedString.replace(/،/g, ',');
-            // console.log('decoded json',decodedJson);
-            // console.log('fixedJsonString ',commastring);
-            // const newtext=JSON.parse(commastring);
-            // console.log('newtext',newtext.request_urgency);
+          //   // const decodedJson = he.decode(response.data.data.translations[0].translatedText);
+          //   // const fixedJsonString =  decodedJson.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":');
+          //   // const fixedString = fixedJsonString.replace(/:(\s*)(\d{4}-\d{2}-\d{2})/g, ':"$2');
+          //   // const commastring= fixedString.replace(/،/g, ',');
+          //   // console.log('decoded json',decodedJson);
+          //   // console.log('fixedJsonString ',commastring);
+          //   // const newtext=JSON.parse(commastring);
+          //   // console.log('newtext',newtext.request_urgency);
           } catch (error) {
             console.error('Error occurred during translation:', error);
           }
         });
       });
       });
-    
+    });
     } catch (error) {
       console.error('Error fetching translation column names:', error);
     }
@@ -267,6 +305,16 @@ const navigate = useNavigate();
 
   return (
     <>
+
+       <div>
+
+       <select id="tableSelect" onChange={handleTableSelect} value={selectedTable}>
+  <option value="">Select a table</option>
+  {tables &&tables.map(table => (
+    <option key={table} value={table}>{table}</option>
+  ))}
+</select>
+    </div>
      {/*  */}
       {/* BreadCrumbs */}
       <BreadCrumbs />
