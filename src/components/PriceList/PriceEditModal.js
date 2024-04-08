@@ -19,11 +19,16 @@ import '../../views/form-editor/editor.scss';
 
 import api from '../../constants/api';
 
-const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
+const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal, formSubmitted, arb, arabic, genLabel, unitdetails }) => {
   PlanEditModal.propTypes = {
     planData: PropTypes.object,
     editPlanEditModal: PropTypes.bool,
     setPlanEditModal: PropTypes.func,
+    formSubmitted: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,   
+    genLabel: PropTypes.any,
+    unitdetails: PropTypes.array,
   };
 
   const [PlaniEdit, setPlanEdit] = useState(null);
@@ -54,7 +59,8 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
     <>
       <Modal size="lg" isOpen={editPlanEditModal}>
         <ModalHeader>
-          PriceDetails
+        {arb ? 'تحرير قائمة الأسعار': 'Price Details'}
+          
           <Button
             color="secondary"
             onClick={() => {
@@ -72,24 +78,47 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
           <Row>
                            <Col md="4">
                               <FormGroup>
-                                <Label>Product Nmae</Label>
-                                <Input
-                                  type="text"
-                                  name="title"
-                                  onChange={handleInputs}
-                                  value={PlaniEdit && PlaniEdit.title}
-                                  disabled
-                                />
-                              </FormGroup>
+                              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.CustomerName')?.[genLabel]}
+              </Label><span className='required'>*</span>
+              <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                          PlaniEdit && PlaniEdit.title_arb ? PlaniEdit.title_arb :
+                            (PlaniEdit && PlaniEdit.title_arb !== null ? '' : PlaniEdit && PlaniEdit.title)
+                          )
+                        : (PlaniEdit && PlaniEdit.title)
+                    }
+                    name={arb ? 'title_arb' : 'title'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && PlaniEdit.title_arb.trim() === '') ||(!arb && PlaniEdit.title.trim() === '')) ? 'highlight' : ''
+                  }`}
+                />
+                {formSubmitted && ((arb && PlaniEdit.title_arb.trim() === '') || (!arb && PlaniEdit.title.trim() === '')) && (
+                  <div className="error-message">Please Enter</div>
+              )}
+                   </FormGroup>
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Price</Label>
+                              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdPriceList.Price')?.[genLabel]}
+              </Label><span className='required'>*</span>
                                 <Input
                                   type="text"
-                                  name="price"
+                                  name={arb ? 'price_arb' : 'price'}
                                   onChange={handleInputs}
-                                  value={PlaniEdit && PlaniEdit.price}
+                                  value={
+                                    arb
+                                      ? (
+                                        PlaniEdit && PlaniEdit.price_arb ? PlaniEdit.price_arb :
+                                          (PlaniEdit && PlaniEdit.price_arb !== null ? '' : PlaniEdit && PlaniEdit.price)
+                                        )
+                                      : (PlaniEdit && PlaniEdit.price)
+                                  }
                                 />
                               </FormGroup>
                             </Col>
@@ -98,16 +127,26 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal }) => {
                                 <Label>Unit</Label>
                                 <Input
                                   type="select"
-                                  name="unit"
                                   onChange={handleInputs}
-                                  value={PlaniEdit && PlaniEdit.unit}
-                                  >
-                                  <option defaultValue="selected">Please Select</option>
-                                  <option value="KGS">KGS</option>
-                                  <option value="PCS">PCS</option>
-                                  <option value="EA">EA</option>
-                                  <option value="NOS">NOS</option>
-                                  <option value="BOX">BOX</option>
+                                  value={
+                                    arb
+                                      ? (
+                                        PlaniEdit && PlaniEdit.unit_arb ? PlaniEdit.unit_arb :
+                                          (PlaniEdit && PlaniEdit.unit_arb !== null ? '' : PlaniEdit && PlaniEdit.unit)
+                                        )
+                                      : (PlaniEdit && PlaniEdit.unit)
+                                  }
+                                  name={arb ? 'unit_arb' : 'unit'}
+                                >
+                                   <option defaultValue="selected">{arb ? 'الرجاء التحديد': 'Please Select'}</option>
+                  {unitdetails &&
+                    unitdetails.map((ele) => {
+                      return (
+                        <option key={arb && ele.value_arb ?ele.value_arb : ele.value} value={arb && ele.value_arb ?ele.value_arb : ele.value}>
+                          {arb && ele.value_arb ?ele.value_arb : ele.value}
+                        </option>
+                        );
+                      })}
                                 </Input>
                               </FormGroup>
                             </Col>
