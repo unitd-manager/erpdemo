@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import { Button } from 'reactstrap';
-import axios from 'axios';
+// import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -28,58 +28,127 @@ const LabourRequest = () => {
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
 
-const fetchTranslation = async () => {
-  try {
-    const res2 = await api.get('/labourrequest/getLabourRequest');
-    res2.data.data.forEach(async (itemId) => {
-       console.log('LabourId',itemId.labour_request_id)
+// const fetchTranslations = async () => {
+//   try {
+//     const res2 = await api.get('/labourrequest/getLabourRequest');
+//     res2.data.data.forEach(async (itemId) => {
+//        console.log('LabourId',itemId.labour_request_id)
     
-    const res1 = await api.get('/labourrequest/getTranslationColumn');
-    res1.data.data.forEach(async (item) => {
-      const columnNames = item.COLUMN_NAME_TRUNCATED;
+//     const res1 = await api.get('/labourrequest/getTranslationColumn');
+//     res1.data.data.forEach(async (item) => {
+//       const columnNames = item.COLUMN_NAME_TRUNCATED;
       
-      console.log('columnNames',columnNames)
-      const res = await api.post('/labourrequest/getLabourTranslation', { labour_request_id: itemId.labour_request_id, columnNames });
+//       console.log('columnNames',columnNames)
+//       const res = await api.post('/labourrequest/getLabourTranslation', { labour_request_id: itemId.labour_request_id, columnNames });
      
-        console.log('resss',res.data.data)
-      res.data.data.forEach(async (cell) => {
-        Object.keys(cell).forEach(async(property) => {
-          console.log('colm', cell[property]);
+//         console.log('resss',res.data.data)
+//       res.data.data.forEach(async (cell) => {
+//         Object.keys(cell).forEach(async(property) => {
+//           console.log('colm', cell[property]);
       
 
-        try {
-          const response = await axios.post(
-            'https://translation.googleapis.com/language/translate/v2',
-            {},
-            {
-              params: {
-                q:cell[property],
-                target: 'ar',
-                key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
-              },
-            }
-          );
-           console.log(property,'_arb')
-           console.log('trabsss', response.data.data.translations[0].translatedText);
-           await api.post('/labourrequest/editLabourRequestArb', {
+//         try {
+//           const response = await axios.post(
+//             'https://translation.googleapis.com/language/translate/v2',
+//             {},
+//             {
+//               params: {
+//                 q:cell[property],
+//                 target: 'ar',
+//                 key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
+//               },
+//             }
+//           );
+//            console.log(property,'_arb')
+//            console.log('trabsss', response.data.data.translations[0].translatedText);
+//            await api.post('/labourrequest/editLabourRequestArb', {
               
-            labour_request_id:itemId.labour_request_id,
-            [`${property}_arb`]: response.data.data.translations[0].translatedText,
-            value: response.data.data.translations[0].translatedText,
-        columnName:`${property}_arb`
-          });
-        } catch (error) {
-          console.error('Error occurred during translation:', error);
-        }
+//             labour_request_id:itemId.labour_request_id,
+//             [`${property}_arb`]: response.data.data.translations[0].translatedText,
+//             value: response.data.data.translations[0].translatedText,
+//         columnName:`${property}_arb`
+//           });
+//         } catch (error) {
+//           console.error('Error occurred during translation:', error);
+//         }
+//       });
+//     });
+//     });
+//   });
+  
+//   } catch (error) { 
+//     console.error('Error fetching translation column names:', error);
+//   }
+// };
+const tablevalue =  [
+  {name:'labour_request'},
+  // {name:'employee'},
+];
+  // Fetch translation when selectedLanguage or plannings changes
+  const fetchTranslation = async () => {
+    try {
+      tablevalue.forEach(async (table) => {
+        console.log('tableName',table.name)
+        const tableNames = table.name
+        const whereCondition = [`${tableNames}_id`]
+        const res2 = await api.post('/labourrequest/getTranslationGetApi',{tableNames,whereCondition});
+       res2.data.data.forEach(async (itemId) => {
+       console.log('LabourId',itemId.labour_request_id)
+      const res1 = await api.post('/labourrequest/getTranslationColumnFromTables',{tableNames});
+      res1.data.data.forEach(async (item) => {
+        const columnNames = item.COLUMN_NAME_TRUNCATED;
+        
+        console.log('columnNames',columnNames)
+        const whereId = itemId.labour_request_id; 
+        // const whereCondition = [`${tableNames}_id`]
+        console.log('whereId',whereId)
+        console.log('WhereCondition',whereCondition)
+        const res = await api.post('/labourrequest/getTableTranslation', { whereId, columnNames,tableNames,whereCondition});
+       
+          console.log('resss',res.data.data)
+        res.data.data.forEach(async (cell) => {
+
+          Object.keys(cell).forEach(async(property) => {
+            console.log('colm', cell[property]);
+        
+  
+          // try {
+          //   const response = await axios.post(
+          //     'https://translation.googleapis.com/language/translate/v2',
+          //     {},
+          //     {
+          //       params: {
+          //         q:cell[property],
+          //         target: 'ar',
+          //         key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
+          //       },
+          //     }
+          //   );
+          //    console.log(property,'_arb')
+          //    console.log('trabsss', response.data.data.translations[0].translatedText);
+          //   await api.post('/labourrequest/editRequestArb', {
+          //     tableNames,
+          //     whereId,
+          //     whereCondition,
+          //     labour_request_id:itemId.labour_request_id,
+          //     [`${property}_arb`]: response.data.data.translations[0].translatedText,
+          //     value: response.data.data.translations[0].translatedText,
+          // columnName:`${property}_arb`
+          //   });
+          // } catch (error) {
+          //   console.error('Error occurred during translation:', error);
+          // }
+        });
+      });
       });
     });
-    });
   });
-  
-  } catch (error) { 
-    console.error('Error fetching translation column names:', error);
-  }
-};
+    } catch (error) {
+      console.error('Error fetching translation column names:', error);
+    }
+  };
+
+
 const [arabic, setArabic] = useState([]);
 
   const arb =selectedLanguage === 'Arabic'

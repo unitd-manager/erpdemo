@@ -235,12 +235,13 @@ if (arb === true) {
     : (element.employee_name ? element.employee_name : element.first_name)
   }</td>
                       {/* <td>{element.department}</td> */}
-                      <td>{element.passport}</td>
-                      <td>{element.fin_no}</td>
-                      <td>{element.nric_no}</td>
+                
+                      <td>{arb ? element.passport_arb : element.passport}</td>
+                      <td>{arb ? element.fin_no_arb : element.fin_no}</td>
+                      <td>{arb ? element.nric_no_arb : element.nric_no}</td>
                       <td>{element.date_of_birth ? moment(element.date_of_birth).format('DD-MM-YYYY') : ''}</td>
-                      <td>{element.basic_pay}</td>
-                      <td>{element.citizen}</td>
+                      <td>{arb ? element.basic_pay_arb : element.basic_pay}</td>
+                      <td>{arb ? element.citizen_arb : element.citizen}</td>
                       <td>{element.job_information_id}</td>
                     </tr>
                   ),

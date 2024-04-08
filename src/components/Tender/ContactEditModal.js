@@ -21,12 +21,12 @@ import creationdatetime from '../../constants/creationdatetime';
 
 import api from '../../constants/api';
 
-const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEditModal,  }) => {
+const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEditModal,formSubmitted  }) => {
   ContactEditModal.propTypes = {
     contactData: PropTypes.object,
     editContactEditModal: PropTypes.bool,
     setEditContactEditModal: PropTypes.func,
-    // formSubmitted: PropTypes.any,
+    formSubmitted: PropTypes.any,
     //  setFormSubmitted: PropTypes.any,
   };
 
@@ -40,7 +40,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
   //Logic for edit data in db
 
   const editContactsData = () => {
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(contactinsert.email)) {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(contactinsert.email) && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(contactinsert.email_arb)) {
       message('Invalid email address', 'warning');
     }
     else if (contactinsert.first_name !== '' &&
@@ -184,7 +184,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
             </FormGroup>
           </Col>
 
-          <Col md="4">
+          {/* <Col md="4">
             <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdTradingContact.Email')?.[genLabel]}
@@ -205,24 +205,32 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
                 name={arb ? 'email_arb' : 'email'}
               />
             </FormGroup>
-          </Col>
-            {/* <Col md="4">
+          </Col> */}
+            <Col md="4">
               <FormGroup>
                 <Label>Email <span className="required"> *</span></Label>
                 <Input
                   type="text"
                   onChange={handleInputs}
-                  value={contactinsert && contactinsert.email}
-                  name="email"
+                  value={
+                    arb
+                      ? contactinsert && contactinsert.email_arb
+                        ? contactinsert.email_arb
+                        : contactinsert && contactinsert.email_arb !== null
+                        ? ''
+                        : contactinsert && contactinsert.email
+                      : contactinsert && contactinsert.email
+                  }
+                  name={arb ? 'email_arb' : 'email'}
                   className={`form-control ${
-                    formSubmitted && contactinsert && contactinsert.email.trim() === '' ? 'highlight' : ''
+                    formSubmitted && contactinsert && contactinsert.email_arb.trim() && contactinsert && contactinsert.email.trim() === '' ? 'highlight' : ''
                   }`}
                 />
-                {formSubmitted && contactinsert && contactinsert.email.trim() === '' && (
+                {formSubmitted && contactinsert && contactinsert.email_arb.trim() && contactinsert && contactinsert.email.trim() === '' && (
                 <div className="error-message">Please Enter</div>
               )}
               </FormGroup>
-            </Col> */}
+            </Col>
             {/* <Col md="4">
               <FormGroup>
                 <Label>Position </Label>

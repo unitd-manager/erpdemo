@@ -319,7 +319,9 @@ const QuoteLineItem = ({
                           setAddNewProductModal(true);
                         }}
                       >
-                        Add New Product
+                        {arb ?'قائمة الاقتباس':"Add New Product"}
+
+                        
                       </Button>
                     </Col>
                   </Row>
@@ -485,7 +487,7 @@ const QuoteLineItem = ({
       </Modal>
       {/* Add New Product Modal */}
       <Modal isOpen={addNewProductModal}>
-        <ModalHeader> Add New Products </ModalHeader>
+        <ModalHeader>{arb ?'قائمة الاقتباس':"Add New Products"}  </ModalHeader>
 
         <ModalBody>
           <FormGroup>
@@ -495,7 +497,7 @@ const QuoteLineItem = ({
                   <FormGroup>
                     <Row>
                       <Label sm="3">
-                        Product Name <span className="required"> *</span>{' '}
+                      {arb ?'اسم المنتج':"Product Name"}  <span className="required"> *</span>{' '}
                       </Label>
                       <Col sm="8">
                         <Input
@@ -505,6 +507,7 @@ const QuoteLineItem = ({
                           value={productDetail.title}
                         />
                       </Col>
+                      
                     </Row>
                   </FormGroup>
                 </Row>

@@ -20,117 +20,73 @@ import moment from 'moment';
 import api from '../../constants/api';
 
 const ProjectTimeSheetEdit = ({
-  editTimeSheetModal,
-  setEditTimeSheetEditModal,
-  getTimeSheetById,
-  id,
+  editModalss,
+  setEditModalss,
+   projectTimesheetId,
 }) => {
   ProjectTimeSheetEdit.propTypes = {
-    editTimeSheetModal: PropTypes.bool,
-    setEditTimeSheetEditModal: PropTypes.func,
-    getTimeSheetById: PropTypes.func,
-    id: PropTypes.any,
+    editModalss: PropTypes.bool,
+    setEditModalss: PropTypes.func,
+    projectTimesheetId: PropTypes.any
   };
-
+console.log("projectTimesheetId",projectTimesheetId);
   //All state variable
-  const [timeSheetProject, setTimeSheetProject] = useState();
-  const [employeeTime, setEmployeeTime] = useState();
-  const [milestoneTimesheet, setMilestoneTimeSheet] = useState([]);
-  const [taskTimeSheet, setTaskTimeSheet] = useState([]);
-
-  //get staff details
-  // Gettind data from Job By Id
-  // const getStaffName = () => {
-  //   api
-  //     .get('/jobinformation/getEmployee')
-  //     .then((res) => {
-  //       console.log(res.data.data);
-  //       setEmployeeTime(res.data.data);
-  //     })
-  //     .catch(() => {});
-  // };
-  // Api call for getting milestone dropdown based on project ID
-  const getStaffName = (projectId) => {
+  const [projecttime, setProjectTime] = useState();
+ 
+  const [StaffDetail, setstaffDetail] = useState([]);
+  const getEmployee = () => {
     api
-      .post('/projecttimesheet/getStaffByID', { project_task_id: projectId })
+      .get('/projecttask/getEmployeeName')
       .then((res) => {
-        setEmployeeTime(res.data.data);
+        console.log(res.data.data);
+        setstaffDetail(res.data.data);
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   };
+ 
   //milestone data in milestone
   const handleInputs = (e) => {
-    setTimeSheetProject({ ...timeSheetProject, [e.target.name]: e.target.value });
+    setProjectTime({ ...projecttime, [e.target.name]: e.target.value });
   };
-
+  const getTimeSheetById = () => {
+    api
+      .post('/projecttask/getTimeSheetByTimesheetId', { project_timesheet_id: projectTimesheetId })
+      .then((res) => {
+        setProjectTime(res.data.data[0]);
+      })
+      .catch(() => { });
+  };
   const editTimeSheetProject = () => {
     api
-      .post('/projecttimesheet/editTimeSheet', timeSheetProject)
+      .post('/projecttask/editProjectTimesheet', projecttime)
       .then(() => {
         getTimeSheetById();
         setTimeout(() => {
-          setEditTimeSheetEditModal(false);
+          setEditModalss(false);
         }, 300);
       })
       .catch(() => {
       });
   };
 
-  // Api call for getting milestone name dropdown
-  const getMilestoneTime = () => {
-    api
-      .post('/projecttimesheet/getMilestoneTitle', { project_id: id })
-      .then((res) => {
-        setMilestoneTimeSheet(res.data.data);
-      })
-      .catch(() => {
-      });
-  };
-
-  // Api call for getting task dropdown based on project ID
-  const getTaskTime = (projectId) => {
-    api
-      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
-      .then((res) => {
-        setTaskTimeSheet(res.data.data);
-      })
-      .catch(() => {
-      });
-  };
-
+ 
   useEffect(() => {
-    getStaffName();
-    setTimeSheetProject();
-  }, []);
+       
+    getTimeSheetById();
+    getEmployee();
+  }, [projectTimesheetId]);
 
-  useEffect(() => {
-    getMilestoneTime();
-  }, [id]);
-  useEffect(() => {
-    if (timeSheetProject && timeSheetProject.project_milestone_id) {
-      // Use taskdetails.project_milestone_id directly to get the selected project ID
-      const selectedTask = timeSheetProject.project_milestone_id;
-      getTaskTime(selectedTask);
-    }
-  }, [timeSheetProject && timeSheetProject.project_milestone_id]);
 
-  useEffect(() => {
-    if (timeSheetProject && timeSheetProject.project_task_id) {
-      // Use taskdetails.project_milestone_id directly to get the selected project ID
-      const selectedStaff = timeSheetProject.project_task_id;
-      getStaffName(selectedStaff);
-    }
-  }, [timeSheetProject && timeSheetProject.project_task_id]);
+ 
   return (
     <Form>
-      <Modal size="lg" isOpen={editTimeSheetModal}>
+      <Modal size="lg" isOpen={editModalss}>
         <ModalHeader>
           Employee Details
           <Button
             color="secondary"
             onClick={() => {
-              setEditTimeSheetEditModal(false);
+              setEditModalss(false);
             }}
           >
             X
@@ -145,82 +101,22 @@ const ProjectTimeSheetEdit = ({
                 <CardBody>
                   <Form>
                     <Row>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>Title</Label>
-                          <Input
-                            type="text"
-                            onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.task_title}
-                            name="task_title"
-                          />
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="4">
-                        <Label>Milestone Title</Label>
-                        <FormGroup>
-                          <Input
-                            type="select"
-                            onChange={(e) => {
-                              handleInputs(e);
-                            }}
-                            value={timeSheetProject && timeSheetProject.project_milestone_id}
-                            name="project_milestone_id"
-                          >
-                            <option value="selected">Please Select</option>
-                            {milestoneTimesheet &&
-                              milestoneTimesheet.map((e) => {
-                                return (
-                                  <option
-                                    key={e.project_milestone_id}
-                                    value={e.project_milestone_id}
-                                  >
-                                    {' '}
-                                    {e.milestone_title}{' '}
-                                  </option>
-                                );
-                              })}
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>Task</Label>
-                          <Input
-                            type="select"
-                            onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.project_task_id}
-                            name="project_task_id"
-                          >
-                            <option value="" selected>
-                              Please Select
-                            </option>
-                            {taskTimeSheet &&
-                              taskTimeSheet.map((e) => {
-                                return (
-                                  <option key={e.project_task_id} value={e.project_task_id}>
-                                    {e.task_title}
-                                  </option>
-                                );
-                              })}
-                          </Input>
-                        </FormGroup>
-                      </Col>
+                                         
+                     
                       <Col md="4">
                         <FormGroup>
                           <Label> Staff Name</Label>
                           <Input
                             type="select"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.employee_id}
+                            value={projecttime && projecttime.employee_id}
                             name="employee_id"
                           >
                             <option value="" selected>
                               Please Select
                             </option>
-                            {employeeTime &&
-                              employeeTime.map((e) => {
+                            {StaffDetail &&
+                              StaffDetail.map((e) => {
                                 return (
                                   <option key={e.employee_id} value={e.employee_id}>
                                     {e.first_name}
@@ -237,7 +133,7 @@ const ProjectTimeSheetEdit = ({
                             type="select"
                             name="status"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.status}
+                            value={projecttime && projecttime.status}
                           >
                             {' '}
                             <option value="" selected="selected">
@@ -257,7 +153,7 @@ const ProjectTimeSheetEdit = ({
                             type="date"
                             onChange={handleInputs}
                             value={
-                              timeSheetProject && moment(timeSheetProject.date).format('YYYY-MM-DD')
+                              projecttime && moment(projecttime.date).format('YYYY-MM-DD')
                             }
                             name="date"
                           />
@@ -269,7 +165,7 @@ const ProjectTimeSheetEdit = ({
                           <Input
                             type="numbers"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.hours}
+                            value={projecttime && projecttime.hours}
                             name="hours"
                           />
                         </FormGroup>
@@ -280,7 +176,7 @@ const ProjectTimeSheetEdit = ({
                           <Input
                             type="textarea"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.description}
+                            value={projecttime && projecttime.description}
                             name="description"
                           />
                         </FormGroup>
@@ -291,7 +187,7 @@ const ProjectTimeSheetEdit = ({
                           <Input
                             type="text"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.creation_date}
+                            value={projecttime && projecttime.creation_date}
                             name="creation_date"
                           />
                         </FormGroup>
@@ -302,7 +198,7 @@ const ProjectTimeSheetEdit = ({
                           <Input
                             type="text"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.modification_date}
+                            value={projecttime && projecttime.modification_date}
                             name="modification_date"
                           />
                         </FormGroup>
@@ -328,7 +224,7 @@ const ProjectTimeSheetEdit = ({
               <Button
                 color="secondary"
                 onClick={() => {
-                  setEditTimeSheetEditModal(false);
+                  setEditModalss(false);
                 }}
               >
                 Cancel

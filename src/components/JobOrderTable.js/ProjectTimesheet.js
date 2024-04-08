@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import * as Icon from 'react-feather';
 import moment from 'moment';
 import api from '../../constants/api';
+import ProjectTimeSheetEdit from './ProjectTImeSheetEdit';
 
 
 export default function ProjectTimeSheet({
@@ -29,7 +30,16 @@ export default function ProjectTimeSheet({
 
   };
   const [addContactModalss, setAddContactModalss] = useState(false);
-
+  const [editModalss, setEditModalss] = useState(false);
+  const [projecttime, setProjectTime] = useState();
+  const getTimeSheetById = () => {
+    api
+      .post('/projecttask/getTimeSheetProjectTaskById', { project_task_id: id })
+      .then((res) => {
+        setProjectTime(res.data.data);
+      })
+      .catch(() => { });
+  };
   const [StaffDetail, setstaffDetail] = useState([]);
   const getEmployee = () => {
     api
@@ -40,7 +50,12 @@ export default function ProjectTimeSheet({
       })
       .catch(() => {});
   };
+  const [editProjectTimesheetId, setEditProjectTimesheetId] = useState(null);
 
+  // Function to set project_timesheet_id to edit
+  const setProjectTimesheetIdToEdit = (timesheetId) => {
+    setEditProjectTimesheetId(timesheetId);
+  };
   // Gettind data from Job By Id
   const editJobById = () => {
     api
@@ -80,7 +95,9 @@ export default function ProjectTimeSheet({
  
   useEffect(() => {
     editJobById();
-    getEmployee()
+    getEmployee();
+    getTimeSheetById();
+
   }, [id]);  
 
   //Structure of timeSheetById list view
@@ -94,7 +111,9 @@ export default function ProjectTimeSheet({
       cell: () => <Icon.Edit2 />,
     },
     {
-      name: 'Title',
+      name: 'Delete',
+      selector: 'edit',
+      cell: () => <Icon.Trash2 />,
     },
     {
       name: 'Staff',
@@ -105,9 +124,7 @@ export default function ProjectTimeSheet({
     {
       name: 'Hours',
     },
-    {
-      name: 'Total Hours',
-    },
+  
     {
       name: 'Status',
     },
@@ -116,6 +133,17 @@ export default function ProjectTimeSheet({
     },
 
   ];
+  const deleteTimesheet = (projectTimesheetId) => {
+    api.delete('/projecttask/deleteProjectTimesheet', { data: { project_timesheet_id: projectTimesheetId } })
+      .then(() => {
+        // Handle success
+       window.location.reload();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error('Error deleting timesheet:', error);
+      });
+  };
   return (
     <>
     <div className="MainDiv">
@@ -268,7 +296,13 @@ export default function ProjectTimeSheet({
                 </Button>
               </ModalFooter>
             </Modal>
-      <Table id="example" className="display border border-secondary rounded">
+            <ProjectTimeSheetEdit
+  setEditModalss={setEditModalss}
+  editModalss={editModalss}
+  id={id}
+  projectTimesheetId={editProjectTimesheetId} // Pass the project_timesheet_id
+></ProjectTimeSheetEdit>
+            <Table id="example" className="display border border-secondary rounded">
         <thead>
           <tr>
             {Projecttimesheetcolumn.map((cell) => {
@@ -276,7 +310,42 @@ export default function ProjectTimeSheet({
             })}
           </tr>
         </thead>
-      
+        <tbody>
+          {projecttime &&
+            projecttime.map((element, index) => {
+              return (
+                <tr key={element.projecttimesheet_id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <span
+                      onClick={() => deleteTimesheet(element.project_timesheet_id)}
+                    >
+                      <Icon.Trash2 />
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      onClick={() => {
+                        setEditModalss(true);
+                        setProjectTimesheetIdToEdit(element.project_timesheet_id);
+                      }}
+                    >
+                      <Icon.Edit2 />
+                    </span>
+                  </td>
+                                                 
+                  {/* Modify the following block for the modification date */}
+                  <td>{element.first_name}</td>
+                  <td>{element.date}</td>
+                  <td>{element.hours}</td>
+                  <td>{element.status}</td>
+                  <td>{element.description}</td>
+
+                </tr>
+              );
+            })}
+          
+        </tbody>
       </Table>
       
       </Form>

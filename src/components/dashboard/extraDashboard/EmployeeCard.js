@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import img1 from '../../../assets/images/users/user4.jpg';
 
-const EmployeeCard = ({ image, title, empId, gender,projectDesignation,joinDate }) => {
+const EmployeeCard = ({ image, title, empId, gender,projectDesignation,joinDate,arb }) => {
 
   const calculateTotalExperience = (dateJoined) => {
     if (!dateJoined) {
@@ -52,7 +52,7 @@ const EmployeeCard = ({ image, title, empId, gender,projectDesignation,joinDate 
           <CardTitle tag="h4" className="fw-bold ml-3 mt-3 mb-0 profile_detail">
             <Link to={`/EmployeeEdit/${empId}?tab=1`}>{title}</Link>
             <CardSubtitle className="text-muted mt-2" style={{fontSize:15}}>{projectDesignation}</CardSubtitle>
-            <CardSubtitle className="text-muted mt-2" style={{fontSize:15}}>Experience: {totalExperience}</CardSubtitle>
+            <CardSubtitle className="text-muted mt-2" style={{fontSize:15}}>{arb ?'خبرة':'Experience'}: {totalExperience}</CardSubtitle>
           </CardTitle>
         </CardBody>
       </Card>
@@ -67,6 +67,7 @@ EmployeeCard.propTypes = {
   projectDesignation: PropTypes.string,
   gender: PropTypes.string,
   joinDate: PropTypes.string,
+  arb: PropTypes.any,
 };
 
 export default EmployeeCard;
