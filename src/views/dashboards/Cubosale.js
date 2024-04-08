@@ -23,7 +23,6 @@ import MaterialIssueChart from '../../components/dashboard/MaterialIssueChart';
 import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
  //import QuotationChart from '../../components/dashboard/QuotationChart';
  //import CustomerChart from '../../components/dashboard/CustomerChart';
-//import GoodsDeliveryChart from '../../components/dashboard/GoodsDeliveryStackedBarChart';
 
 
 const Classic = () => {
