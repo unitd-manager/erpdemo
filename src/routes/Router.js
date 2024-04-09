@@ -128,7 +128,7 @@ const TradingDashboard = Loadable(lazy(() => import('../views/smartconTables/Tra
 const ProjectDashboard = Loadable(lazy(() => import('../views/smartconTables/ProjectDashboard')));
 const OrderTable = Loadable(lazy(() => import('../views/smartconTables/SalesOrder')));
 const SalesInvoice = Loadable(lazy(() => import('../views/smartconTables/SalesInvoice')));
-const ProjectOrder = Loadable(lazy(() => import('../views/smartconTables/Project')));
+const ProjectOrder = Loadable(lazy(() => import('../views/smartconTables/ProjectOrder')));
 const SalesReturn = Loadable(lazy(() => import('../views/smartconTables/SalesReturn')));
 const SalesReceipt = Loadable(lazy(() => import('../views/smartconTables/SalesReceipt')));
 const MakeSupplier = Loadable(lazy(() => import('../views/smartconTables/MakeSupplier')));
@@ -186,6 +186,7 @@ const BalanceSheetReport = Loadable(lazy(() => import('../views/Reports/BalanceS
 const TenderDetailsTable = Loadable(lazy(() => import('../views/DetailTable/TenderDetails')));
 const EnquiryDetails = Loadable(lazy(() => import('../views/DetailTable/EnquiryDetails')));
 const SalesOrderDetails = Loadable(lazy(() => import('../views/DetailTable/SalesOrderDetails')));
+const ProjectOrderDetails = Loadable(lazy(() => import('../views/DetailTable/ProjectOrderDetails')));
 const InvoiceDetails = Loadable(lazy(() => import('../views/DetailTable/InvoiceDetails')));
 const ReturnDetails = Loadable(lazy(() => import('../views/DetailTable/ReturnDetails')));
 const ReceiptDetails = Loadable(lazy(() => import('../views/DetailTable/ReceiptDetails')));
@@ -616,6 +617,7 @@ const Routernew = () => {
           <Route path="/Translation" name="translationdata" element={<Translation />}></Route>
           <Route path="/EnquiryDetails" name="clienttdata" element={<EnquiryDetails />}></Route>
           <Route path="/SalesOrderDetails" name="clienttdata" element={<SalesOrderDetails />}></Route>
+          <Route path="/ProjectOrderDetails" name="clienttdata" element={<ProjectOrderDetails />}></Route>
           <Route path="/InvoiceDetails" name="clienttdata" element={<InvoiceDetails />}></Route>
           <Route path="/ReturnDetails" name="clienttdata" element={<ReturnDetails />}></Route>
           <Route path="/ReceiptDetails" name="clienttdata" element={<ReceiptDetails />}></Route>
