@@ -3,11 +3,21 @@ import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
+function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs,arb,arabic }) {
   TabPassTypeTab.propTypes = {
     tabPassTypeDetails: PropTypes.object,
     handlePassTypeInputs: PropTypes.func,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,
   };
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
 
   return (
     <div>
@@ -15,36 +25,54 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
      
       <Col md="4">
         <FormGroup>
-          <Label>
-            Pass Type <span style={{ color: 'red' }}>*</span>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Pass Type')?.[genLabel]}
+             <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
-            name="citizen"
-            value={tabPassTypeDetails && tabPassTypeDetails.citizen}
+          name= {arb ? 'citizen_arb' : 'citizen'}
+          value={
+            arb
+              ? (
+                tabPassTypeDetails && tabPassTypeDetails.citizen_arb ? tabPassTypeDetails.citizen_arb :
+                  (tabPassTypeDetails && tabPassTypeDetails.citizen_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.citizen)
+                )
+              : (tabPassTypeDetails && tabPassTypeDetails.citizen)
+          }
+            
             type="select"
             onChange={handlePassTypeInputs}
           >
-            <option value="">Please Select</option>
+            <option value="">{arb ?'الرجاء التحديد':'Please Select'}</option>
             <option defaultValue="selected" value="Citizen">
-              Citizen
+            {arb ?'مواطن':'Citizen'}
             </option>
-            <option value="PR">PR</option>
-            <option value="EP">EP</option>
-            <option value="SP">SP</option>
-            <option value="WP">WP</option>
-            <option value="DP">DP</option>
+            <option value="PR">{arb ?'ص ر':'PR'}</option>
+            <option value="EP">{arb ?'إي بي':'EP'}</option>
+            <option value="SP">{arb ?'إس بي':'SP'}</option>
+            <option value="WP">{arb ?'دبليو بي':'WP'}</option>
+            <option value="DP">{arb ?'د ص':'DP'}</option>
           </Input>
         </FormGroup>
       </Col>
       {tabPassTypeDetails.citizen === 'Citizen' && (
         <Col md="4">
           <FormGroup>
-            <Label>
-              NRIC No <span style={{ color: 'red' }}>*</span>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.NRIC No')?.[genLabel]}
+               <span style={{ color: 'red' }}>*</span>
             </Label>
             <Input
-              name="nric_no"
-              value={tabPassTypeDetails && tabPassTypeDetails.nric_no}
+            name= {arb ? 'nric_no_arb' : 'nric_no'}
+            value={
+              arb
+                ? (
+                  tabPassTypeDetails && tabPassTypeDetails.nric_no_arb ? tabPassTypeDetails.nric_no_arb :
+                    (tabPassTypeDetails && tabPassTypeDetails.nric_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.nric_no)
+                  )
+                : (tabPassTypeDetails && tabPassTypeDetails.nric_no)
+            }
+              
               type="text"
               onChange={handlePassTypeInputs}
             />
@@ -57,12 +85,22 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           {' '}
           <Col md="4">
             <FormGroup>
-              <Label>
-                Fin No <span style={{ color: 'red' }}>*</span>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No')?.[genLabel]}
+                 <span style={{ color: 'red' }}>*</span>
               </Label>
               <Input
-                name="fin_no"
-                value={tabPassTypeDetails && tabPassTypeDetails.fin_no}
+              name= {arb ? 'fin_no_arb' : 'fin_no'}
+                
+              value={
+                arb
+                  ? (
+                    tabPassTypeDetails && tabPassTypeDetails.fin_no_arb ? tabPassTypeDetails.fin_no_arb :
+                      (tabPassTypeDetails && tabPassTypeDetails.fin_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                    )
+                  : (tabPassTypeDetails && tabPassTypeDetails.fin_no)
+              }
+                
                 type="text"
                 onChange={handlePassTypeInputs}
               />
@@ -70,7 +108,8 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Fin No Expiry date</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No Expiry date')?.[genLabel]}</Label>
               <Input
                 name="fin_no_expiry_date"
                 value={moment(tabPassTypeDetails && tabPassTypeDetails.fin_no_expiry_date).format(
@@ -88,12 +127,19 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           {' '}
           <Col md="4">
             <FormGroup>
-              <Label>
-                Fin No <span style={{ color: 'red' }}>*</span>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No')?.[genLabel]} <span style={{ color: 'red' }}>*</span>
               </Label>
               <Input
-                name="fin_no"
-                value={tabPassTypeDetails && tabPassTypeDetails.fin_no}
+                name= {arb ? 'fin_no_arb' : 'fin_no'}
+                value={
+                  arb
+                    ? (
+                      tabPassTypeDetails && tabPassTypeDetails.fin_no_arb ? tabPassTypeDetails.fin_no_arb :
+                        (tabPassTypeDetails && tabPassTypeDetails.fin_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                      )
+                    : (tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                }
                 type="text"
                 onChange={handlePassTypeInputs}
               />
@@ -101,7 +147,8 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Fin No Expiry date</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No Expiry date')?.[genLabel]}</Label>
               <Input
                 name="fin_no_expiry_date"
                 value={moment(tabPassTypeDetails && tabPassTypeDetails.fin_no_expiry_date).format(
@@ -119,12 +166,19 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           {' '}
           <Col md="4">
             <FormGroup>
-              <Label>
-                NRIC No <span style={{ color: 'red' }}>*</span>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.NRIC No')?.[genLabel]}<span style={{ color: 'red' }}>*</span>
               </Label>
               <Input
-                name="nric_no"
-                value={tabPassTypeDetails && tabPassTypeDetails.nric_no}
+                name= {arb ? 'nric_no_arb' : 'nric_no'}
+                value={
+                  arb
+                    ? (
+                      tabPassTypeDetails && tabPassTypeDetails.nric_no_arb ? tabPassTypeDetails.nric_no_arb :
+                        (tabPassTypeDetails && tabPassTypeDetails.nric_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.nric_no)
+                      )
+                    : (tabPassTypeDetails && tabPassTypeDetails.nric_no)
+                }
                 type="text"
                 onChange={handlePassTypeInputs}
               />
@@ -132,14 +186,24 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>SPR Year</Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.SPR Year')?.[genLabel]}</Label>
               <Input
-                name="spr_year"
-                value={tabPassTypeDetails && tabPassTypeDetails.spr_year}
+              name= {arb ? 'spr_year_arb' : 'spr_year'}
+                
+                value={
+                  arb
+                    ? (
+                      tabPassTypeDetails && tabPassTypeDetails.spr_year_arb ? tabPassTypeDetails.spr_year_arb :
+                        (tabPassTypeDetails && tabPassTypeDetails.spr_year_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.spr_year)
+                      )
+                    : (tabPassTypeDetails && tabPassTypeDetails.spr_year)
+                }
+                
                 onChange={handlePassTypeInputs}
                 type="select"
               >
-                <option defaultValue="selected">Please Select</option>
+                <option defaultValue="selected">{arb ?'الرجاء التحديد':'Please Select'}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -154,12 +218,20 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           {' '}
           <Col md="4">
             <FormGroup>
-              <Label>
-                Fin No <span style={{ color: 'red' }}>*</span>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No')?.[genLabel]}<span style={{ color: 'red' }}>*</span>
               </Label>
               <Input
-                name="fin_no"
-                value={tabPassTypeDetails && tabPassTypeDetails.fin_no}
+                name= {arb ? 'fin_no_arb' : 'fin_no'}
+                
+                value={
+                  arb
+                    ? (
+                      tabPassTypeDetails && tabPassTypeDetails.fin_no_arb ? tabPassTypeDetails.fin_no_arb :
+                        (tabPassTypeDetails && tabPassTypeDetails.fin_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                      )
+                    : (tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                }
                 type="text"
                 onChange={handlePassTypeInputs}
               />
@@ -167,7 +239,8 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           </Col>
           <Col md="4">
             <FormGroup>
-              <Label>Fin No Expiry date </Label>
+            <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No Expiry date')?.[genLabel]} </Label>
               <Input
                 name="fin_no_expiry_date"
                 value={moment(tabPassTypeDetails && tabPassTypeDetails.fin_no_expiry_date).format(
@@ -186,12 +259,20 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>
-                  Fin No 
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Fin No')?.[genLabel]}
                 </Label>
                 <Input
-                  name="fin_no"
-                  value={tabPassTypeDetails && tabPassTypeDetails.fin_no}
+                  name= {arb ? 'fin_no_arb' : 'fin_no'}
+                
+                  value={
+                    arb
+                      ? (
+                        tabPassTypeDetails && tabPassTypeDetails.fin_no_arb ? tabPassTypeDetails.fin_no_arb :
+                          (tabPassTypeDetails && tabPassTypeDetails.fin_no_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                        )
+                      : (tabPassTypeDetails && tabPassTypeDetails.fin_no)
+                  }
                   type="text"
                   onChange={handlePassTypeInputs}
                 />
@@ -214,10 +295,20 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
           <Row>
             <Col md="4">
               <FormGroup>
-                <Label>Work Permit No <span style={{ color: 'red' }}>*</span> </Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Work Permit No')?.[genLabel]} <span style={{ color: 'red' }}>*</span> </Label>
                 <Input
-                  name="work_permit"
-                  value={tabPassTypeDetails && tabPassTypeDetails.work_permit}
+                name= {arb ? 'work_permit_arb' : 'work_permit'}
+                  
+                value={
+                  arb
+                    ? (
+                      tabPassTypeDetails && tabPassTypeDetails.work_permit_arb ? tabPassTypeDetails.work_permit_arb :
+                        (tabPassTypeDetails && tabPassTypeDetails.work_permit_arb !== null ? '' : tabPassTypeDetails && tabPassTypeDetails.work_permit)
+                      )
+                    : (tabPassTypeDetails && tabPassTypeDetails.work_permit)
+                }
+                  
                   type="text"
                   onChange={handlePassTypeInputs}
                 />
@@ -259,7 +350,8 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs }) {
       )}
        <Col md="4">
               <FormGroup>
-                <Label>Work Permit Expiry date</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Work Permit Expiry date')?.[genLabel]}</Label>
                 <Input
                   type="date"
                   onChange={handlePassTypeInputs}

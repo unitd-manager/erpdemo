@@ -111,16 +111,16 @@ const Cards = () => {
     }
   };
 
-  // const getSelectedLanguageFromLocalStorage = () => {
-  //   return localStorage.getItem('selectedLanguage') || '';
-  // };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
   
-  // const selectedLanguage = getSelectedLanguageFromLocalStorage();
+   const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   const [arabic, setArabic] = useState([]);
 
 
-  // const arb =selectedLanguage === 'Arabic'
+  const arb =selectedLanguage === 'Arabic'
 
   //const eng =selectedLanguage === 'English'
   
@@ -158,7 +158,7 @@ const Cards = () => {
         <CommonTable
         
           loading={loading}
-          title="Employee    List"
+          title={arb ?'قائمة موظف':'Employee List'}
           Button={
             <>
               <Row>
@@ -172,7 +172,7 @@ const Cards = () => {
                 <Col md="4">
             {/* <Link to=""> */}
             <Button color="primary" className="shadow-none mr-2" onClick={() => importExcel()}>
-                Import
+            {arb ?'يستورد':'Import'}
               </Button>
             {/* </Link> */}
             <input type='file' style={{display: 'none'}} id="import_excel" onChange={importExcelFile} />
@@ -183,7 +183,7 @@ const Cards = () => {
                     download
                   >
                     <Button color="primary" className="shadow-none">
-                      Sample
+                    {arb ?'عينة':'Sample'}
                     </Button>
                   </a>
                 </Col>
@@ -192,7 +192,7 @@ const Cards = () => {
           }
           
         >
-        <p><b>Total Employees: {employees.length}</b></p>
+        <p><b>{arb ?'عدد الموظفي:':'Total Employees:'} {employees.length}</b></p>
         </CommonTable>
 
         <Row className="employee-img">
@@ -204,15 +204,19 @@ const Cards = () => {
                   onClick={`/EmployeeEdit/${blg.employee_id_duplicate}?tab=1`}
                   image={Image}
                   id={blg.employee_id_duplicate}
-                  title= {blg.first_name?.split(' ').shift().toUpperCase()} // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
+                  title= {
+                    arb?
+                    (blg.first_name_arb?.split(' ').shift().toUpperCase()?blg.first_name_arb?.split(' ').shift().toUpperCase():
+                    blg.first_name_arb !== null ? '' : blg.first_name) :blg.first_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
-                  projectDesignation={blg.project_designation}
+                  projectDesignation={arb ? blg.project_designation_arb : blg.project_designation}
                   gender={blg.gender}
                   team={blg.team}
                   empCode={blg.emp_code}
                   email={blg.login_email}
                   joinDate={blg.act_join_date}
+                  arb={arb}
                   arabic={arabic}
                 />
               </Col>

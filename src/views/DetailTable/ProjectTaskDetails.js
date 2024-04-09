@@ -20,22 +20,31 @@ const ProjectTaskDetails = () => {
   const [joborder, setJobOrder] = useState([]);
 
   const handleInputs = (e) => {
-    setProjectTaskDetails({ ...projecttaskdetails, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    if (name === "project_job_id") {
+      const selectedJobOrder = joborder.find(order => order.project_job_id === parseInt(value, 10));
+      if (selectedJobOrder) {
+        setProjectTaskDetails(prevDetails => ({
+          ...prevDetails,
+          project_job_id: value,
+          project_id: selectedJobOrder.project_id
+        }));
+      }
+    } else {
+      setProjectTaskDetails(prevDetails => ({
+        ...prevDetails,
+        [name]: value
+      }));
+    }
   };
-
   const getJobOrderTitle = () => {
     api
       .get('/projecttask/getJobOrderTitle')
       .then((res) => {
-        setJobOrder(res.data.data);
-        if (res.data.data.length > 0) {
-          const projectId = res.data.data[0].project_id; 
-          console.log('projectId', projectId); // This logs the projectId to the console
-          setProjectTaskDetails((prevDetails) => ({
-            ...prevDetails,
-            project_id: projectId,
-          }));
-        }
+        const jobOrderData = res.data.data;
+        console.log('Job Orders:', jobOrderData); // Log joborder array
+        setJobOrder(jobOrderData);
       })
       .catch(() => {
         message('Company not found', 'info');
@@ -46,14 +55,15 @@ const ProjectTaskDetails = () => {
     if (projecttaskdetails.task_title !== '' && projecttaskdetails.project_job_id !== '') {
       projecttaskdetails.creation_date = creationdatetime;
       projecttaskdetails.created_by = loggedInuser.first_name;
-      
+
       // Inserting project_id from projecttaskdetails
       const requestData = {
         ...projecttaskdetails,
-        project_id: projecttaskdetails.project_id // Already set from getJobOrderTitle
+        project_id: projecttaskdetails.project_id, // Already set from getJobOrderTitle
       };
-      
-      api.post('/projecttask/insertProjectTask', requestData)
+
+      api
+        .post('/projecttask/insertProjectTask', requestData)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           message('PurchaseRequest inserted successfully.', 'success');
@@ -89,18 +99,18 @@ const ProjectTaskDetails = () => {
                         Job Order Title <span className="required"> *</span>
                       </Label>
                       <Input
-                        type="select"
-                        onChange={handleInputs}
-                        value={projecttaskdetails.project_job_id}
-                        name="project_job_id"
-                      >
-                        <option defaultValue="selected">Please Select</option>
-                        {joborder.map((e) => (
-                          <option key={e.project_job_id} value={e.project_job_id}>
-                            {e.job_title}
-                          </option>
-                        ))}
-                      </Input>
+  type="select"
+  onChange={handleInputs}
+  value={projecttaskdetails.project_job_id}
+  name="project_job_id"
+>
+  <option value="">Please Select</option>
+  {joborder.map((e) => (
+    <option key={e.project_job_id} value={e.project_job_id}>
+      {e.job_title}
+    </option>
+  ))}
+</Input>
                     </FormGroup>
                   </Col>
                   <Col md="12">
