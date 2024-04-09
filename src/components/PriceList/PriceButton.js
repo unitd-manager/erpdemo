@@ -3,12 +3,13 @@ import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 
-export default function ClientButton({ editData, navigate, applyChanges, backToList }) {
+export default function ClientButton({ editData, applyChanges, saveChanges, backToList, setFormSubmitted }) {
   ClientButton.propTypes = {
     editData: PropTypes.any,
-    navigate: PropTypes.any,
     applyChanges: PropTypes.func,
     backToList: PropTypes.func,
+    setFormSubmitted: PropTypes.any,
+    saveChanges: PropTypes.any
   };
   return (
     <Form>
@@ -21,8 +22,9 @@ export default function ClientButton({ editData, navigate, applyChanges, backToL
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                     editData();
-                  navigate('/PriceList');
+                    saveChanges();
                 }}
               >
                 Save
@@ -33,6 +35,7 @@ export default function ClientButton({ editData, navigate, applyChanges, backToL
                 className="shadow-none"
                 color="primary"
                 onClick={() => {
+                  setFormSubmitted(true);
                     editData();
                   applyChanges();
                 }}

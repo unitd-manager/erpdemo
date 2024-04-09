@@ -341,7 +341,7 @@ console.log('invoiceId',invoiceId);
   return (
     <>
       <Button type="button" className="btn btn-dark mr-2" onClick={GetPdf}>
-        Print Invoice
+        Print Pdf
       </Button>
     </>
   );

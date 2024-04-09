@@ -3,7 +3,10 @@ const ColorsBg = [
     bg: "white",
   },
   {
-    bg: "dark",
+    bg: "logoColor",
+  },
+  {
+    bg: "blue",
   },
   {
     bg: "primary",
@@ -16,7 +19,7 @@ const ColorsBg = [
   },
   {
     bg: "info",
-  },
+  }
 ];
 const SidebarColorsBg = [
   {

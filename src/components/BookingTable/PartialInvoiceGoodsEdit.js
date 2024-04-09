@@ -7,7 +7,7 @@ import {
   ModalBody,
   ModalFooter,
   Label,
-  Table,
+  Table, 
   Input,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
