@@ -128,6 +128,7 @@ const TradingDashboard = Loadable(lazy(() => import('../views/smartconTables/Tra
 const ProjectDashboard = Loadable(lazy(() => import('../views/smartconTables/ProjectDashboard')));
 const OrderTable = Loadable(lazy(() => import('../views/smartconTables/SalesOrder')));
 const SalesInvoice = Loadable(lazy(() => import('../views/smartconTables/SalesInvoice')));
+const ProjectOrder = Loadable(lazy(() => import('../views/smartconTables/Project')));
 const SalesReturn = Loadable(lazy(() => import('../views/smartconTables/SalesReturn')));
 const SalesReceipt = Loadable(lazy(() => import('../views/smartconTables/SalesReceipt')));
 const MakeSupplier = Loadable(lazy(() => import('../views/smartconTables/MakeSupplier')));
@@ -585,6 +586,7 @@ const Routernew = () => {
           <Route path="/InvoiceByYear" name="clienttdata" element={<InvoiceByYearTable />}></Route>
           {/* Tender */}
           <Route path="/Enquiry" name="tenderdata" element={<TenderTable />}></Route>
+          <Route path="/ProjectOrder" name="tenderdata" element={<ProjectOrder />}></Route>
           <Route path="/TradingDashboard" name="tradingdata" element={<TradingDashboard />}></Route>
           <Route path="/ProjectDashboard" name="tradingdata" element={<ProjectDashboard />}></Route>
           <Route path="/SalesOrder" name="tenderdata" element={<OrderTable />}></Route>
