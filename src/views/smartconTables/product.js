@@ -197,9 +197,9 @@
 // };
 
 // export default Test;
-
+/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
-import { Button, Col } from 'reactstrap';
+import { Button,Card, CardBody, CardTitle, Col, Row  } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { DataGrid } from '@mui/x-data-grid';
@@ -208,6 +208,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 // import Flag from '../../components/Flag';
 // import message from '../../components/Message';
+import LottieComponent from '../../components/LottieComponent';
 
 const Test = () => {
   const [products, setProducts] = useState([]);
@@ -277,7 +278,7 @@ const Test = () => {
     <>
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
-      <CommonTable
+      {/* <CommonTable
         loading={loading}
         additionalClasses='table'
         title="Product List"
@@ -299,7 +300,38 @@ const Test = () => {
             </Col>
           </>
         }
-      >
+      > */}
+       <Card>
+        <CardBody>
+          <Row className="mb-2 title_border">
+            <Col>
+              <CardTitle tag="h5">Product List</CardTitle>
+              {/* <CardSubtitle className="mb-2 text-muted" tag="h6">
+                {props.subtitle}
+              </CardSubtitle> */}
+            </Col>
+            <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
+            <>
+            <Col>
+              <Link to="/ProductDetails">
+                <Button color="primary" className="shadow-none">
+                  Add New
+                </Button>
+              </Link>
+            </Col>
+            <Col>
+              <a href="http://43.228.126.245/pyramidapi/storage/excelsheets/Product.xlsx" download>
+                <Button color="primary" className="shadow-none">
+                  Sample
+                </Button>
+              </a>
+            </Col>
+          </>
+            </Col>
+          </Row>
+          {loading ? (
+             <LottieComponent />):
+            
         <div>
           <DataGrid
             rows={rows}
@@ -308,8 +340,10 @@ const Test = () => {
             checkboxSelection={false}
             disableSelectionOnClick
           />
-        </div>
-      </CommonTable>
+        </div>}
+        </CardBody>
+          </Card>
+      {/* </CommonTable> */}
     </>
   );
 };
