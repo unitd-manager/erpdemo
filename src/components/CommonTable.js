@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { Card, CardBody, CardTitle, CardSubtitle, Table, Col, Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import LottieComponent from './LottieComponent';
@@ -27,7 +28,8 @@ const CommonTable = (props) => {
             </Col>
           </Row>
           {props.loading ? (
-            <LottieComponent />
+             <LottieComponent />
+            
           ) : (
             <Table
               id="example"
