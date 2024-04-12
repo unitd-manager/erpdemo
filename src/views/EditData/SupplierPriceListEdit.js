@@ -20,11 +20,12 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import PlanningMainDetails from '../../components/SupplierPriceList/PriceMainDetails';
-import PlanningButton from '../../components/SupplierPriceList/PriceButton';
+//import PlanningButton from '../../components/SupplierPriceList/PriceButton';
 import PlanningCpanel from '../../components/SupplierPriceList/PriceListItem';
 import PlanEditModal from '../../components/SupplierPriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 const SupplierPriceListEdit = () => {
   //Const Variables
@@ -54,7 +55,7 @@ const SupplierPriceListEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/SupplierPriceList');
   };
@@ -183,7 +184,7 @@ const handleAddNewPlanning = (e) => {
       {eng ===true && <BreadCrumbs heading={plannings && plannings.company_name} />}
       { arb === true && <BreadCrumbs heading={plannings && plannings.company_name_arb} />}
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
@@ -191,8 +192,18 @@ const handleAddNewPlanning = (e) => {
         arb={arb}
         arabic={arabic}
         eng={eng}
-       ></PlanningButton>
-       
+       ></PlanningButton> */}
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="SupplierPriceList"
+              arb={arb}
+        arabic={arabic}
+        eng={eng}
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}

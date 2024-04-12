@@ -15,6 +15,7 @@ import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const OpportunityEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
@@ -287,6 +288,14 @@ const OpportunityEdit = () => {
         tenderDetails={tenderDetails}
         setFormSubmitted={setFormSubmitted}
       ></TenderButtons>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Enquiry"
+            ></ApiButton>
       <TenderMoreDetails
         arb={arb}
         arabic={arabic}

@@ -19,6 +19,7 @@ import Tabs from '../../components/project/Tabs';
 import QuoteLineItem from '../../components/MaterialRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/MaterialRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const MaterialRequestEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -284,7 +285,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
       ></TradingQuoteButton>
-     
+     <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="MaterialRequest"
+            ></ApiButton>
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}

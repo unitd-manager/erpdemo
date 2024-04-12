@@ -12,6 +12,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/ProjectEnquiryTable/TenderMoreDetails';
 import TenderAttachment from '../../components/ProjectEnquiryTable/TenderAttachment';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 
 const OpportunityEdit = () => {
@@ -237,6 +238,14 @@ console.log('Selected language from localStorage:', selectedLanguage);
         arb={arb}
         eng={eng}
       ></TenderButtons>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectEnquiry"
+            ></ApiButton>
      <TenderMoreDetails
         companyInsertData={companyInsertData}
         newContactData={newContactData}

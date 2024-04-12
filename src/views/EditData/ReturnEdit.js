@@ -27,6 +27,7 @@ import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
 import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
 import PdfReturn from '../../components/PDF/PdfReturn';
+import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
@@ -267,7 +268,14 @@ const InvoiceEdit = () => {
           </Row>
         </ComponentCardV2>
       </FormGroup>
-
+      <ApiButton
+              editData={editInvoiceItemData}
+              navigate={navigate}
+              applyChanges={editInvoiceItemData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Return"
+            ></ApiButton>
       {/*Main Details*/}
       <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
         <ReturnDetailComp 

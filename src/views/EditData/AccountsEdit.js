@@ -4,7 +4,7 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import moment from 'moment';
 import ComponentCard from '../../components/ComponentCard';
-import AccountsButton from '../../components/AccountTable/AccountsButton';
+//import AccountsButton from '../../components/AccountTable/AccountsButton';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -14,6 +14,7 @@ import AccountsMainEdit from '../../components/AccountTable/AccountsMainEdit';
 import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const AccountsEdit = () => {
   //Const Variables
@@ -32,7 +33,7 @@ const AccountsEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   // Button
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Accounts');
   };
@@ -145,14 +146,22 @@ const editAccountsData = () => {
     <>
       <BreadCrumbs heading={AccountsDetails && AccountsDetails.expense_id} />
       {/* Button */}
-      <AccountsButton
+      {/* <AccountsButton
         id={id}
         editAccountsData={editAccountsData}
         navigate={navigate}
         applyChanges={applyChanges}
         deleteExpense={deleteExpense}
         backToList={backToList}
-      ></AccountsButton>
+      ></AccountsButton> */}
+       <ApiButton
+              editData={editAccountsData}
+              navigate={navigate}
+              applyChanges={editAccountsData}
+              deleteData={deleteExpense}
+              backToList={backToList}
+              module="Accounts"
+            ></ApiButton>
       {/* Main Details */}
 
       <ToastContainer></ToastContainer>

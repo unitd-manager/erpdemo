@@ -4,13 +4,14 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
-import SubCategoryButton from '../../components/SubCategoryTable/SubCategoryButton';
+//import SubCategoryButton from '../../components/SubCategoryTable/SubCategoryButton';
 import SubCategoryEditDetails from '../../components/SubCategoryTable/SubCategoryEditDetails';
 import SubCategoryPageMetaData from '../../components/SubCategoryTable/SubCategoryPageMetaData';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 
 const SubCategoryEdit = () => {
@@ -68,12 +69,12 @@ const [arabic, setArabic] = useState([]);
   };
 
   // Route Change
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if ((arb && subcategoryeditdetails.sub_category_title_arb.trim() !== '') || (!arb && subcategoryeditdetails.sub_category_title.trim() !== '')) {
-      navigate('/SubCategory');
-    }
-  };
+  // const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if ((arb && subcategoryeditdetails.sub_category_title_arb.trim() !== '') || (!arb && subcategoryeditdetails.sub_category_title.trim() !== '')) {
+  //     navigate('/SubCategory');
+  //   }
+  // };
   const backToList = () => {
     navigate('/SubCategory');
   };
@@ -166,7 +167,7 @@ const [arabic, setArabic] = useState([]);
       <BreadCrumbs />
       <ToastContainer />
       {/* SubCategory Button Details */}
-      <SubCategoryButton
+      {/* <SubCategoryButton
         saveChanges={saveChanges}
         applyChanges={applyChanges}
         backToList={backToList}
@@ -176,8 +177,15 @@ const [arabic, setArabic] = useState([]);
         id={id}
         formSubmitted={formSubmitted}
         setFormSubmitted={setFormSubmitted}
-      ></SubCategoryButton>
-
+      ></SubCategoryButton> */}
+<ApiButton
+              editData={editSubCategoryData}
+              navigate={navigate}
+              applyChanges={editSubCategoryData}
+              deleteData={deleteSubCategoryData}
+              backToList={backToList}
+              module="SubCategory"
+            ></ApiButton>
       {/* Sub Category  Details */}
       <BreadCrumbs />
       <SubCategoryEditDetails

@@ -11,6 +11,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import DeleteButton from '../../components/DeleteButton';
+import ApiButton from '../../components/ApiButton';
 
 const SettingEdit = () => {
   //All state variable
@@ -126,6 +127,14 @@ const SettingEdit = () => {
           </ComponentCardV2>
         </FormGroup>
       </Form>
+      <ApiButton
+              editData={editSettingData}
+              navigate={navigate}
+              applyChanges={editSettingData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Setting"
+            ></ApiButton>
       {/* Setting Details */}
       <Form>
         <FormGroup>

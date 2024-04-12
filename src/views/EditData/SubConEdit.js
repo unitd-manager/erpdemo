@@ -18,6 +18,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
 import SubConTable from '../../components/SubConModal/SubConTable';
+import ApiButton from '../../components/ApiButton';
 
 const SubConEdit = () => {
   //all state variables
@@ -109,7 +110,9 @@ const [arabic, setArabic] = useState([]);
         message('Unable to edit record.', 'error');
       });
   };
-
+  const backToList = () => {
+    navigate('/Subcon');
+  };
   useEffect(() => {
     getsubCon();
     getArabicCompanyName();
@@ -198,7 +201,14 @@ const [arabic, setArabic] = useState([]);
               </Col>
             </Row>
           </ComponentCardV2>
-          
+          <ApiButton
+              editData={editSubConData}
+              navigate={navigate}
+              applyChanges={editSubConData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="SubCon"
+            ></ApiButton>
           <ComponentCard title="SubCon Details" creationModificationDate={subCon}>
             <Row>
               <Col md="4">

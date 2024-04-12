@@ -30,6 +30,7 @@ import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PdfLabourRequest from '../../components/PDF/PdfLabourRequest';
+import ApiButton from '../../components/ApiButton';
 
 
 
@@ -327,6 +328,14 @@ const tablevalue =  [
         backToList={backToList}
         arb={arb}
        ></PlanningButton>
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="LabourRequest"
+            ></ApiButton>
        <ComponentCardV2>
         <PdfLabourRequest></PdfLabourRequest>
        </ComponentCardV2>

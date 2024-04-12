@@ -22,6 +22,7 @@ import PlanningMainDetails from '../../components/MaterialIssue/PriceMainDetails
 import PlanningButton from '../../components/MaterialIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 const MaterialIssueEdit = () => {
   //Const Variables
@@ -150,7 +151,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
        ></PlanningButton>
-       
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="MaterialIssue"
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
