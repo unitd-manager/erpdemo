@@ -257,7 +257,7 @@ const Test = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get('https://erpardemo.unitdtechnologies.com:2006/product/getProductsPagination');
+        const res = await api.get('/product/getProductsPagination');
 
         if (res.status === 200) {
           setProducts(res.data.data);

@@ -323,13 +323,13 @@ useEffect(() => {
         {job && job.employee_name}
       </CardTitle>
       <CardTitle>
-        {job && job.fin_no ? null : (
+        {/* {job && job.fin_no ? null : (
           <>
             <Label>NRIC No:</Label>
             {job && job.nric_no}
             <br />
           </>
-        )}
+        )} */}
         {job && job.nric_no && !job.fin_no ? null : (
           <>
             <Label>FIN No:</Label>

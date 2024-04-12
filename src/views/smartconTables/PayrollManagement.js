@@ -658,7 +658,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
         <Card style={{ padding: '10px' }}>
           <div>
-          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Please create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
+          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Plase create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
 
             {empWithoutJobInfo.map((el) => {
               return (
