@@ -5,7 +5,7 @@ import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
   Button,
-  Col,
+  Col, 
   FormGroup,
   Nav,
   NavItem,
@@ -20,21 +20,21 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
-import ReturnDetailComp from '../../components/BookingTable/ReturnDetailComp';
+import ProjReturnDetailComp from '../../components/BookingTable/ProjReturnDetailComp';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
-import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
-import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
+import ProjReturnItemTable from '../../components/BookingTable/ProjReturnItemTable';
+import ProjReturnInvoiceItemTable from '../../components/BookingTable/ProjReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
 import PdfReturn from '../../components/PDF/PdfReturn';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
   const [returnItemDetails, setReturnItemDetails] = useState();
-  const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
+  const [projreturnInvoiceItemDetails, setProjReturnInvoiceItemDetails] = useState();
   const { insertedDataId, invoiceId } = useParams();
   const [removedItems, setRemovedItems] = useState([]);
-  console.log('insertedDataId:', insertedDataId);
+  console.log('insertedDataId:', insertedDataId); 
   console.log('invoiceId:', invoiceId);
   const { loggedInuser } = useContext(AppContext);
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const InvoiceEdit = () => {
   };
   const getReturnById = () => {
     api
-      .post('/invoice/getSalesReturnId', { sales_return_id: insertedDataId })
+      .post('/invoice/getSalesReturnId', { proj_sales_return_id: insertedDataId })
       .then((res) => {
         setReturnDetails(res.data.data[0]);
       })
@@ -68,7 +68,7 @@ const InvoiceEdit = () => {
     api
       .post('/invoice/getInvoiceItemsById', { invoice_id: invoiceId })
       .then((res) => {
-        setReturnItemDetails(res.data.data);
+        setProjReturnItemDetails(res.data.data);
       })
       .catch(() => {
        
@@ -79,7 +79,7 @@ const InvoiceEdit = () => {
     api
       .post('/invoice/getReturnInvoiceItemsById', { invoice_id: invoiceId })
       .then((res) => {
-        setReturnInvoiceItemDetails(res.data.data);
+        setProjReturnInvoiceItemDetails(res.data.data);
       })
       .catch(() => {
        
@@ -270,10 +270,10 @@ const InvoiceEdit = () => {
 
       {/*Main Details*/}
       <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
-        <ReturnDetailComp 
+        <ProjReturnDetailComp 
          arb={arb}
          arabic={arabic}
-        returnDetails={returnDetails} 
+        projreturnDetails={projreturnDetails} 
         handleInputs={handleInputs} />
       </ComponentCard>
 
@@ -315,8 +315,8 @@ const InvoiceEdit = () => {
           {/* Description form */}
           <TabPane tabId="1">
             <Row className="border-bottom mb-3">
-              <ReturnItemTable
-                returnItemDetails={returnItemDetails}
+              <ProjReturnItemTable
+                projreturnItemDetails={projreturnItemDetails}
                 invoiceInfo={insertedDataId}
                 onRemoveItem={handleRemoveItem}
                 invoiceStatus={returnDetails.invoice_status} // Pass the invoice status as a prop
@@ -326,7 +326,7 @@ const InvoiceEdit = () => {
             </Row>
           </TabPane>
           <TabPane tabId="2">
-            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails}
+            <ProjReturnInvoiceItemTable projreturnInvoiceItemDetails={projreturnInvoiceItemDetails}
              arb={arb}
              arabic={arabic} />
           </TabPane>
