@@ -182,8 +182,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                     <span className="required">*</span>
                   </Label>
                   <Input
-                    type="text"
-                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
+                    type="select"
                     onChange={handleInputs}
                     value={
                       arb
@@ -196,7 +195,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                     }
                     name={arb ? 'order_status_arb' : 'order_status'}
                   >
-                     <option defaultValue="selected">please Select</option>
+                     <option defaultValue="selected">Please Select</option>
                     <option value="new">New</option>
                     <option value="Invoiced">Invoiced</option>
                     <option value="paid">Paid</option>
