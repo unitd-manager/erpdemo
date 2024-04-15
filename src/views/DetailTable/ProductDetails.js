@@ -40,9 +40,9 @@ const ProductDetails = () => {
   // const eng =selectedLanguage === 'English'
    
 
-  const getTranslationForCategory = () => {
+  const getTranslationForProduct = () => {
       api
-      .get('/category/getTranslationForCategory')
+      .get('/product/getTranslationForProduct')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -59,9 +59,9 @@ const ProductDetails = () => {
   }
 
   useEffect(() => {
-    getTranslationForCategory();
+    getTranslationForProduct();
   }, []);
-
+console.log('Title',ProductDetails.title);
   //Insert Product Data
   const insertProductData = (ProductCode, ItemCode) => {
     setFormSubmitted(true);
@@ -133,7 +133,7 @@ const ProductDetails = () => {
                 <Row>
                   <Col md="12">
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel]}
+                {arabic.find((item) => item.key_text === 'mdProduct.ProductName')?.[genLabel]}
               </Label><span className='required'>*</span>
                   <Input
                     type="text"
@@ -141,18 +141,18 @@ const ProductDetails = () => {
                     value={
                       arb
                         ? (
-                            ProductDetails && ProductDetails.title_arb ? ProductDetails.title_arb :
-                            (ProductDetails && ProductDetails.title_arb !== null ? '' : ProductDetails && ProductDetails.title)
+                          productDetails && productDetails.title_arb ? productDetails.title_arb :
+                            (productDetails && productDetails.title_arb !== null ? '' : productDetails && productDetails.title)
                           )
-                        : (ProductDetails && ProductDetails.title)
+                        : (productDetails && productDetails.title)
                     }
                     name={arb ? 'title_arb' : 'title'}
                     className={`form-control ${
-                      formSubmitted && ((arb && ProductDetails.title_arb.trim() === '') || (!arb && ProductDetails.title.trim() === '')) ? 'highlight' : ''
+                      formSubmitted && ((arb && productDetails.title_arb.trim() === '') || (!arb && productDetails.title.trim() === '')) ? 'highlight' : ''
                   }`}
               />
               
-              {formSubmitted && ((arb && ProductDetails && ProductDetails.title_arb.trim() === '') || (!arb && ProductDetails.title.trim() === '' ))&& (
+              {formSubmitted && ((arb && productDetails && productDetails.title_arb.trim() === '') || (!arb && productDetails.title.trim() === '' ))&& (
                   <div className="error-message">Please Enter</div>
               )}
                   </Col>

@@ -23,7 +23,7 @@ const Opportunity = () => {
 
   const getinvoice = () => {
     api
-      .get('/projecsalesinvoicetinvoice/getInvoices')
+      .get('/projecsalesinvoice/getProjectInvoices')
       .then((res) => {
         setInvoice(res.data.data);
         $('#example').DataTable({
@@ -55,7 +55,7 @@ const Opportunity = () => {
 
   const getArabicCompanyName = () => {
       api
-      .get('/invoice/getTranslationforTradingSalesInvoice')
+      .get('/projectsalesinvoice/getTranslationforTradingSalesInvoice')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -152,9 +152,9 @@ const Opportunity = () => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Invoice List"
+          title={arb ?'قائمة فاتورة المشروع':'Project Invoice List'}
           Button={
-            <Link to="/InvoiceDetails">
+            <Link to="/ProjectSalesInvoiceDetails">
               <Button color="primary" className="shadow-none">
               {arb ?'اضف جديد':'Add New'}
               </Button>
@@ -172,25 +172,24 @@ const Opportunity = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.invoice_id}>
+                  <tr key={element.project_invoice_id }>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/InvoiceEdit/${element.invoice_id}/${element.invoice_source_id}?tab=1`}>
+                      <Link to={`/ProjectSalesInvoiceEdit/${element.project_invoice_id }/${element.project_invoice_source_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.invoice_code}</td>
+                    <td>{element.project_invoice_code}</td>
                     {/* <td>
                     {element.source_type === 'Goods_Delivery' && element.goods_delivery_code}
                       {element.source_type === 'Sales_Order' && element.order_code}
                       {!element.source_type && 'No Source'}
                     </td> */}
-                    <td>{element.company_name}</td>
-                    <td>{element.invoice_date}</td>
-                    <td>{element.invoice_amount}</td>
-                    <td>{element.invoice_due_date }</td>
-                    <td>{element.status}</td>
-                  
+                    <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
+                    <td>{arb && element.project_invoice_arb ?element.project_invoice_arb : element.project_invoice}</td>
+                    <td>{arb && element.project_invoice_amount ?element.project_invoice_amount : element.project_invoice_amount}</td>
+                    <td>{arb && element.project_invoice_due_date_arb ?element.project_invoice_due_date_arb : element.project_invoice_due_date}</td>
+                    <td>{arb && element.status_arb ?element.status_arb : element.status}</td>
                   </tr>
                 );
               })}
