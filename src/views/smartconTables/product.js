@@ -197,9 +197,9 @@
 // };
 
 // export default Test;
-
+/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
-import { Button, Col } from 'reactstrap';
+import { Button,Card, CardBody, CardTitle, Col, Row  } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { DataGrid } from '@mui/x-data-grid';
@@ -208,17 +208,58 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 // import Flag from '../../components/Flag';
 // import message from '../../components/Message';
+import LottieComponent from '../../components/LottieComponent';
 
 const Test = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForProduct = () => {
+      api
+      .get('/product/getTranslationForProduct')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+
+
+  useEffect(() => {
+    getTranslationForProduct();
+  }, []);
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+
 
   // Columns definition for DataGrid
   const columns = [
     { field: 'product_id', headerName: 'Product ID', width: 100 },
     {
       field: 'edit',
-      headerName: 'Edit',
+      headerName: arabic.find(item => item.key_text === 'mdProduct.Edit')?.[genLabel],
       width: 75,
       renderCell: (params) => (
         <Link to={`/ProductEdit/${params.row.product_id}`}>
@@ -226,13 +267,34 @@ const Test = () => {
         </Link>
       ),
     },
-    { field: 'item_code', headerName: 'Item Code', width: 150 },
-    { field: 'title', headerName: 'Title', width: 300 },
-    { field: 'product_type', headerName: 'Product Type', width: 150 },
-    { field: 'price', headerName: 'Price' , width: 100},
-    { field: 'unit', headerName: 'Unit', width: 100 },
-    { field: 'qty_in_stock', headerName: 'Qty in Stock', width: 100 },
-    { field: 'modified_by', headerName: 'Modified By', width: 125 },
+    { field: arb ? 'item_code_arb' : 'item_code' ,
+    headerName: arabic.find(item => item.key_text === 'mdProduct.ItemCode')?.[genLabel], 
+    width: 150 
+  },
+    { field: arb ? 'title_arb' : 'title' ,
+     headerName: arabic.find(item => item.key_text === 'mdProduct.ProductName')?.[genLabel],
+     width: 300 
+    },
+    { field: arb ? 'product_type_arb' : 'product_type' , 
+    headerName: arabic.find(item => item.key_text === 'mdProduct.ProductType')?.[genLabel],
+    width: 150 
+  },
+    { field: arb ? 'price_arb' : 'price' , 
+    headerName: arabic.find(item => item.key_text === 'mdProduct.Price')?.[genLabel],
+     width: 100
+    },
+    { field: arb ? 'unit_arb' : 'unit' ,
+    headerName: arabic.find(item => item.key_text === 'mdProduct.Unit')?.[genLabel],
+    width: 100 
+  },
+    { field: arb ? 'qty_in_stock_arb' : 'qty_in_stock' , 
+    headerName: arabic.find(item => item.key_text === 'mdProduct.QuantityinStock')?.[genLabel],
+    width: 100 
+  },
+    { field: arb ? 'modified_by_arb' : 'modified_by' , 
+     headerName: arabic.find(item => item.key_text === 'mdProduct.ModifiedBy')?.[genLabel],
+     width: 125 
+    },
     // {
     //   field: 'published',
     //   headerName: 'Published',
@@ -256,7 +318,7 @@ const Test = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get('https://erpardemo.unitdtechnologies.com:2006/product/getProductsPagination');
+        const res = await api.get('/product/getProductsPagination');
 
         if (res.status === 200) {
           setProducts(res.data.data);
@@ -273,11 +335,13 @@ const Test = () => {
     fetchData();
   }, []);
 
+  
+
   return (
     <>
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
-      <CommonTable
+      {/* <CommonTable
         loading={loading}
         additionalClasses='table'
         title="Product List"
@@ -299,7 +363,38 @@ const Test = () => {
             </Col>
           </>
         }
-      >
+      > */}
+       <Card>
+        <CardBody>
+          <Row className="mb-2 title_border">
+            <Col>
+              <CardTitle tag="h5">Product List</CardTitle>
+              {/* <CardSubtitle className="mb-2 text-muted" tag="h6">
+                {props.subtitle}
+              </CardSubtitle> */}
+            </Col>
+            <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
+            <>
+            <Col>
+              <Link to="/ProductDetails">
+                <Button color="primary" className="shadow-none">
+                  Add New
+                </Button>
+              </Link>
+            </Col>
+            <Col>
+              <a href="http://43.228.126.245/pyramidapi/storage/excelsheets/Product.xlsx" download>
+                <Button color="primary" className="shadow-none">
+                  Sample
+                </Button>
+              </a>
+            </Col>
+          </>
+            </Col>
+          </Row>
+          {loading ? (
+             <LottieComponent />):
+            
         <div>
           <DataGrid
             rows={rows}
@@ -308,8 +403,10 @@ const Test = () => {
             checkboxSelection={false}
             disableSelectionOnClick
           />
-        </div>
-      </CommonTable>
+        </div>}
+        </CardBody>
+          </Card>
+      {/* </CommonTable> */}
     </>
   );
 };

@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
 import ComponentCardV2 from '../ComponentCardV2';
+import ApiButton from '../ApiButton';
 
 function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, eng, arb, arabic }) {
   InventoryEditPart.propTypes = {
@@ -78,6 +79,15 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
                 </Col>
               </Row>
             </ComponentCardV2>
+            
+            <ApiButton
+              editData={editinventoryData}
+              navigate={navigate}
+              applyChanges={editinventoryData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Inventory"
+            ></ApiButton>
 
             <ComponentCard  title={arb ? 'تفاصيل المخزون': 'Inventory Details'} creationModificationDate={inventoryDetails}>
               <Row>

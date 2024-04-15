@@ -1,15 +1,19 @@
+/*eslint-disable*/
 import React from "react";
 import "./loader.scss";
-// import { Spinner } from "reactstrap";
+import { Spinner } from "reactstrap";
 import styled from "styled-components";
+//import LottieComponent from "../../components/LottieComponent";
+import GlobeLottie from "../../components/GlobeLottie";
 
 const Loader = () => (
   <div className="loader-overlay">
 
 <div className="fallback-spinner">
     <div className="loading">
-      {/* <Spinner color="primary" /> */}
-      <MainHeader>Please Wait......</MainHeader>
+      <Spinner color="primary" />
+      {/* <GlobeLottie/> */}
+      {/* <MainHeader> <Spinner color="primary" /></MainHeader> */}
     </div>
   </div>
 

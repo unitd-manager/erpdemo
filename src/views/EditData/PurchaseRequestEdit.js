@@ -20,6 +20,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 const PurchaseRequestEdit = () => {
   // All state variables
@@ -88,7 +89,9 @@ const PurchaseRequestEdit = () => {
       modelType: 'attachment',
     });
   };
-
+  const backToList = () => {
+    navigate('/PurchaseRequest');
+  };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
 
@@ -169,6 +172,14 @@ const PurchaseRequestEdit = () => {
         editPurchaseRequestData={editPurchaseRequestData}
         navigate={navigate}
       />
+      <ApiButton
+              editData={editPurchaseRequestData}
+              navigate={navigate}
+              applyChanges={editPurchaseRequestData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="PurchaseRequest"
+            ></ApiButton>
       {/* Content Details Form */}
       <PurchaseRequestEditDetails
         purchaserequesteditdetails={purchaserequesteditdetails}

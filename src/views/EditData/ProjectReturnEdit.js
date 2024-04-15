@@ -27,6 +27,7 @@ import ProjReturnItemTable from '../../components/BookingTable/ProjReturnItemTab
 import ProjReturnInvoiceItemTable from '../../components/BookingTable/ProjReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
 import PdfReturn from '../../components/PDF/PdfReturn';
+import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
@@ -266,6 +267,14 @@ const InvoiceEdit = () => {
             </Col>
           </Row>
         </ComponentCardV2>
+        <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectReturn"
+            ></ApiButton>
       </FormGroup>
 
       {/*Main Details*/}

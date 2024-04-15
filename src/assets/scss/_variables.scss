@@ -6,7 +6,8 @@ $font-family-sans-serif: 'Nunito', sans-serif;
 /*******************/
 // Theme Colors
 /********************/
-$primary: #2962ff;
+//$primary: #2962ff;
+$primary: #173f7b;
 $info: #3699ff;
 $danger: #f64e60;
 $success: #0bb7af;
@@ -14,6 +15,7 @@ $warning: #ee9d01;
 $dark: #001e3c;
 $light: #f6faff;
 $secondary: #001e3c;
+$logoColor: #173f7b;
 
 $theme-colors: (
   'primary': $primary,
@@ -24,6 +26,7 @@ $theme-colors: (
   'danger': $danger,
   'light': $light,
   'dark': $dark,
+  'logoColor':$logoColor,
   'light-primary': #d6e4f3,
   'light-success': #d5f3f2,
   'light-info': #d3edfa,

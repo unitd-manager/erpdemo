@@ -9,7 +9,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ComponentCard from '../../components/ComponentCard';
-import VehicleButton from '../../components/VehicleTable/VehicleButton';
+//import VehicleButton from '../../components/VehicleTable/VehicleButton';
 import VehicleDetailsTable from '../../components/VehicleTable/VehicleDetailsTable';
 import VehicleFuelModal from '../../components/VehicleTable/VehicleFuelModal';
 import VehicleInsuranceModal from '../../components/VehicleTable/VehicleInsuranceModal';
@@ -17,6 +17,7 @@ import VehicleServiceModal from '../../components/VehicleTable/VehicleServiceMod
 import creationdatetime from '../../constants/creationdatetime';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ApiButton from '../../components/ApiButton';
 
 const VehicleEdit = () => {
   // All state variables
@@ -42,13 +43,13 @@ const VehicleEdit = () => {
   };
 
   // Route Change
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if (vehicleeditdetails.vehicle_no !== '') {
-      navigate('/Vehicle');
-    }
-    window.location.reload();
-  };
+  // const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if (vehicleeditdetails.vehicle_no !== '') {
+  //     navigate('/Vehicle');
+  //   }
+  //   window.location.reload();
+  // };
   const backToList = () => {
     navigate('/Vehicle');
   };
@@ -112,7 +113,7 @@ const VehicleEdit = () => {
       <ToastContainer />
 
       {/* Import From Vehicle Button */}
-      <VehicleButton
+      {/* <VehicleButton
         navigate={navigate}
         saveChanges={saveChanges}
         applyChanges={applyChanges}
@@ -120,8 +121,15 @@ const VehicleEdit = () => {
         editVehicleData={editVehicleData}
         deleteVehicleData={deleteVehicleData}
         id={id}
-      ></VehicleButton>
-
+      ></VehicleButton> */}
+<ApiButton
+              editData={editVehicleData}
+              navigate={navigate}
+              applyChanges={editVehicleData}
+              deleteData={deleteVehicleData}
+              backToList={backToList}
+              module="Vehicle"
+            ></ApiButton>
       {/* Import From Vehicle Details Table */}
       <VehicleDetailsTable
         vehicleeditdetails={vehicleeditdetails}

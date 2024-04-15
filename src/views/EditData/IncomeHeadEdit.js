@@ -27,6 +27,7 @@ import IncomeButton from '../../components/IncomeHeadTable/IncomeButton';
 import IncomeHeadMainDetails from '../../components/IncomeHeadTable/IncomeHeadMainDetails';
 import IncomeHeadSubHead from '../../components/IncomeHeadTable/IncomeHeadSubHead';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const IncomeEdit = () => {
   //Const Variables
@@ -157,7 +158,14 @@ const IncomeEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></IncomeButton>
-
+<ApiButton
+              editData={editIncomeData}
+              navigate={navigate}
+              applyChanges={editIncomeData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="IncomeHead"
+            ></ApiButton>
       {/* Income Head Details */}
       <ComponentCard title="Income Head Details" creationModificationDate={incomeDetails}>
         <IncomeHeadMainDetails

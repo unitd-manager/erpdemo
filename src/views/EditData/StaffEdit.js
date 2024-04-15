@@ -13,8 +13,9 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import KeyStaffDetails from '../../components/StaffTable/KeyStaffDetails';
 import KeyStaffAddress from '../../components/StaffTable/KeyStaffAddress';
-import StaffButton from '../../components/StaffTable/StaffButton';
+//import StaffButton from '../../components/StaffTable/StaffButton';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const StaffEdit = () => {
   // All state variables
@@ -47,7 +48,7 @@ const StaffEdit = () => {
   };
 
   // Route Change
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const saveChanges = () => {
     if (!staffeditdetails.email) {
       message('Email is required', 'warning');
@@ -177,7 +178,7 @@ const StaffEdit = () => {
       <ToastContainer />
 
       {/* Staff Edit Buttons */}
-      <StaffButton
+      {/* <StaffButton
         navigate={navigate}
         saveChanges={saveChanges}
         applyChanges={applyChanges}
@@ -185,8 +186,16 @@ const StaffEdit = () => {
         editStaffData={editStaffData}
         deleteStaffData={deleteStaffData}
         id={id}
-      ></StaffButton>
-
+      ></StaffButton> */}
+<ApiButton
+              editData={editStaffData}
+              saveChanges={saveChanges}
+              navigate={navigate}
+              applyChanges={editStaffData}
+              deleteData={deleteStaffData}
+              backToList={backToList}
+              module="Staff"
+            ></ApiButton>
       {/* KeyStaffDetails */}
       <KeyStaffDetails
         stafftypedetails={stafftypedetails}

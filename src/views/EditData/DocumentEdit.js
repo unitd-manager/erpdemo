@@ -16,6 +16,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
+import ApiButton from '../../components/ApiButton';
 
 
 const DocumentEdit = () => {
@@ -64,7 +65,9 @@ const DocumentEdit = () => {
   } else {
     genLabel = 'value';
   }
-
+  const backToList = () => {
+    navigate('/Document');
+  };
   const getArabicLabels = () => {
     api
     .get('/document/getTranslationForDocument')
@@ -127,6 +130,15 @@ const DocumentEdit = () => {
           <BreadCrumbs heading={documenteditdetails && documenteditdetails.title} />
           {/* Save Apply and Back to list Buttons */}
           <DocumentButton id={id} editDocumentData={editDocumentData} navigate={navigate} />
+          
+          <ApiButton
+              editData={editDocumentData}
+              navigate={navigate}
+              applyChanges={editDocumentData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Document"
+            ></ApiButton>
           {/* Document Edit Details Details Form */}
           <DocumentEditDetails
            documenteditdetails={documenteditdetails}

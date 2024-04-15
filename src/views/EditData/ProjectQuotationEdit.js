@@ -22,6 +22,7 @@ import EditMaterialLineItemModal from '../../components/ProjectQuotation/EditMat
 import MaterialLineItem from '../../components/ProjectQuotation/MaterialLineItem';
 import AppContext from '../../context/AppContext';
 import PdfQuote from '../../components/PDF/PdfQuotation';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -320,6 +321,14 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         backToList={backToList}
         arb={arb}
       ></ProjectQuoteButton>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectQuotation"
+            ></ApiButton>
       <Col md="4">
         <Label>
           <PdfQuote id={id} quoteId={id}></PdfQuote>

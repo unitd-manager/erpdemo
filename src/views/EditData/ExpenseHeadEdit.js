@@ -27,6 +27,7 @@ import ExpenseButton from '../../components/ExpenseHeadTable/ExpenseButton';
 import ExpenseHeadMainDetails from '../../components/ExpenseHeadTable/ExpenseHeadMainDetails';
 import ExpenseHeadSubHead from '../../components/ExpenseHeadTable/ExpenseHeadSubHead';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const ExpenseEdit = () => {
   //Const Variables
@@ -179,7 +180,14 @@ const ExpenseEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></ExpenseButton>
-
+<ApiButton
+              editData={editExpenseData}
+              navigate={navigate}
+              applyChanges={editExpenseData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ExpenseHead"
+            ></ApiButton>
       {/* Expense Head Details */}
       <ComponentCard title="Expense Head Details" creationModificationDate={expenseDetails}>
         <ExpenseHeadMainDetails

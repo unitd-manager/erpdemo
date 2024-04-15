@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
 import PurchaseInvoiceEditButton from './PurchaseInvoiceEditButton';
+import ApiButton from '../ApiButton';
 
 //purchaseinvoiceeditdetails From PO Product Edit
 const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, editPurchaseInvoiceData, id,arabic,arb}) => {
@@ -20,6 +21,9 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
   
   // Navigation and Parameter Constants
   const navigate = useNavigate();
+  const backToList = () => {
+    navigate('/PurchaseInvoice');
+  };
   let genLabel = '';
 
   if (arb === true) {
@@ -33,6 +37,14 @@ const PurchaseInvoiceEditDetails = ({ purchaseinvoiceeditdetails, handleInputs, 
       <Form>
         <FormGroup>
           <PurchaseInvoiceEditButton id={id}  editPurchaseInvoiceData={editPurchaseInvoiceData} navigate={navigate} />
+          <ApiButton
+              editData={editPurchaseInvoiceData}
+              navigate={navigate}
+              applyChanges={editPurchaseInvoiceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="PurchaseInvoice"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Purchase Invoice Details" creationModificationDate={purchaseinvoiceeditdetails}>
             <ToastContainer></ToastContainer>

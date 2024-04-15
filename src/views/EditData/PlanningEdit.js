@@ -24,6 +24,7 @@ import PlanningButton from '../../components/Planning/PlanningButton';
 import PlanningCpanel from '../../components/Planning/PlanningCpanel';
 import PlanEditModal from '../../components/Planning/PlanEditModal';
 import Tab from '../../components/project/Tab';
+import ApiButton from '../../components/ApiButton';
 
 const PlanningEdit = () => {
   //Const Variables
@@ -325,7 +326,14 @@ const handleAddNewPlanning = (e) => {
         applyChanges={applyChanges}
         backToList={backToList}
        ></PlanningButton>
-       
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Planning"
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}

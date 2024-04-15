@@ -15,6 +15,7 @@ import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
 import OrderAttachment from '../../components/TenderTable/OrderAttachment';
 import AppContext from '../../context/AppContext';
 import PdfSalesOrder from '../../components/PDF/PdfSalesOrder';
+import ApiButton from '../../components/ApiButton';
 
 
 const OpportunityEdit = () => {
@@ -260,6 +261,14 @@ const OpportunityEdit = () => {
         backToList={backToList}
         orderDetails={orderDetails}
       ></OrdersButton>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+             // deleteData={deleteBookingData}
+             backToList={backToList}
+              module="Orders"
+            ></ApiButton>
       <OrdersMainDetails
       arb={arb}
       arabic={arabic}

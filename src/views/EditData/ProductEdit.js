@@ -14,10 +14,11 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProductEditButtons from '../../components/Product/ProductEditButtons';
+//import ProductEditButtons from '../../components/Product/ProductEditButtons';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 
 const ProductUpdate = () => {
@@ -45,14 +46,50 @@ const [unitdetails, setUnitDetails] = useState();
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/Product');
+  };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   //Setting data in productDetails
   const handleInputs = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForProduct = () => {
+      api
+      .get('/product/getTranslationForProduct')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   //setting data in Description Modal productDetails
   const handleDataEditor = (e, type) => {
     setProductDetails({
@@ -83,7 +120,9 @@ const [unitdetails, setUnitDetails] = useState();
   };
   //Edit Product
   const editProductData = () => {
-    if (productDetails.title !== '') {
+    setFormSubmitted(true);
+    if ((arb && productDetails.title_arb.trim() !== '') || (!arb && productDetails.title.trim() !== '')) 
+   {
       productDetails.modification_date = creationdatetime;
       productDetails.modified_by= loggedInuser.first_name; 
       api
@@ -141,6 +180,7 @@ const [unitdetails, setUnitDetails] = useState();
     getCategory();
     getProductById();
     getUnit();
+    getTranslationForProduct();
   }, [id]);
 
   return (
@@ -148,38 +188,74 @@ const [unitdetails, setUnitDetails] = useState();
       <BreadCrumbs heading={productDetails && productDetails.title} />
       <Form>
         <FormGroup>
-          <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} />
+          <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted} />
+          {/* <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} /> */}
+          <ApiButton
+              editData={editProductData}
+              navigate={navigate}
+              applyChanges={editProductData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Product"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Product Details" creationModificationDate={productDetails}>
             <ToastContainer></ToastContainer>
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Item code </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.ItemCode')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.item_code}
-                    name="item_code"
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.item_code_arb ? productDetails.item_code_arb :
+                            (productDetails && productDetails.item_code_arb !== null ? '' : productDetails && productDetails.item_code)
+                          )
+                        : (productDetails && productDetails.item_code)
+                    }
+                    name={arb ? 'item_code_arb' : 'item_code'}
                     disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Product Name <span className="required"> *</span> </Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.ProductName')?.[genLabel]}
+              </Label><span className='required'>*</span>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.title}
-                    name="title"
-                  />
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.title_arb ? productDetails.title_arb :
+                            (productDetails && productDetails.title_arb !== null ? '' : productDetails && productDetails.title)
+                          )
+                        : (productDetails && productDetails.title)
+                    }
+                    name={arb ? 'sub_category_title_arb' : 'sub_category_title'}
+                    className={`form-control ${
+                      formSubmitted && ((arb && productDetails.title_arb.trim() === '') ||(!arb && productDetails.title.trim() === '')) ? 'highlight' : ''
+                  }`}
+                />
+                {formSubmitted && ((arb && productDetails.title_arb.trim() === '') || (!arb && productDetails.title.trim() === '')) && (
+                  <div className="error-message">Please Enter</div>
+              )}
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
                   {/* Category title from Category table */}
-                  <Label>Category</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.Category')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     name="category_id"
@@ -200,12 +276,21 @@ const [unitdetails, setUnitDetails] = useState();
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label>Type</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.ProductType')?.[genLabel]}
+              </Label>
                   <Input
                     type="select"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.product_type}
-                    name="product_type"
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.product_type_arb ? productDetails.product_type_arb :
+                            (productDetails && productDetails.product_type_arb !== null ? '' : productDetails && productDetails.product_type)
+                          )
+                        : (productDetails && productDetails.product_type)
+                    }
+                    name={arb ? 'product_type_arb' : 'product_type'}
                   >
                     <option defaultValue="selected"> Please Select </option>
                     <option value="materials">Materials</option>
@@ -217,31 +302,52 @@ const [unitdetails, setUnitDetails] = useState();
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <Label> Quantity in Stock </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.QuantityinStock')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.qty_in_stock}
-                    name="qty_in_stock"
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.qty_in_stock_arb ? productDetails.qty_in_stock_arb :
+                            (productDetails && productDetails.qty_in_stock_arb !== null ? '' : productDetails && productDetails.qty_in_stock)
+                          )
+                        : (productDetails && productDetails.qty_in_stock)
+                    }
+                    name={arb ? 'qty_in_stock_arb' : 'qty_in_stock'}
                     disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> List Price </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.Price')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.price}
-                    name="price"
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.price_arb ? productDetails.price_arb :
+                            (productDetails && productDetails.price_arb !== null ? '' : productDetails && productDetails.price)
+                          )
+                        : (productDetails && productDetails.price)
+                    }
+                    name={arb ? 'price_arb' : 'price'}
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Unit </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.Unit')?.[genLabel]}
+              </Label>
                   <Input
+
                   type="select"
                   name="unit"
                   onChange={handleInputs}
@@ -267,21 +373,34 @@ const [unitdetails, setUnitDetails] = useState();
               </Col>
               <Col md="3">
                 <FormGroup>
-                  <Label> Short Description </Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.ItemCode')?.[genLabel]}
+              </Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={productDetails && productDetails.description_short}
-                    name="description_short"
+                    value={
+                      arb
+                        ? (
+                            productDetails && productDetails.description_short_arb ? productDetails.description_short_arb :
+                            (productDetails && productDetails.description_short_arb !== null ? '' : productDetails && productDetails.description_short)
+                          )
+                        : (productDetails && productDetails.description_short)
+                    }
+                    name={arb ? 'description_short_arb' : 'description_short'}
                   />
                 </FormGroup>
               </Col>
             </Row>
             <Row>
               <Col md="4">
-                <Label>Published</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.Published')?.[genLabel]}
+              </Label>
                 <FormGroup>
-                  <Label>Yes</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.PublishedYes')?.[genLabel]}
+              </Label>
                   &nbsp;
                   <Input
                     name="published"
@@ -291,7 +410,9 @@ const [unitdetails, setUnitDetails] = useState();
                     onChange={handleInputs}
                   />
                   &nbsp; &nbsp;
-                  <Label>No</Label>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProduct.PublishedNo')?.[genLabel]}
+              </Label>
                   &nbsp;
                   <Input
                     name="published"

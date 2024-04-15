@@ -22,6 +22,7 @@ import GoodsItemTable from '../../components/BookingTable/GoodsItemTable';
 import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoiceGoodsEdit';
 import AppContext from '../../context/AppContext';
 import PdfCreateInvoice from '../../components/PDF/PdfCreateInvoice';
+import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({
@@ -763,8 +764,16 @@ const toggle = (tab) => {
               </Button>
             </Col>
           </Row>
+          
       </ComponentCardV2>
-      
+      <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectSalesInvoice"
+            ></ApiButton>
       </FormGroup>
   
       {/*Main Details*/}

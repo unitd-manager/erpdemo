@@ -26,6 +26,7 @@ import ActualHourStatsProject from '../../components/dashboard/ProjectStats/Actu
 import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
 import ProjectMilestones from '../../components/ProjectMilestones';
 import ProjectMilestoneEdit from '../../components/ProjectMilestoneEdit';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -346,7 +347,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
       ></ProjectButton>
-
+<ApiButton
+              editData={UpdateData}
+              navigate={navigate}
+              applyChanges={UpdateData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Project"
+            ></ApiButton>
       <ProjectEditForm
         projectDetail={projectDetail}
         setProjectDetail={setProjectDetail}
