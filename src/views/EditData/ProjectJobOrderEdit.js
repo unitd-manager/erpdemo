@@ -20,6 +20,7 @@ import QuoteLineItem from '../../components/ProjectJobOrder/QuoteLineItem';
 import EditLineItemModal from '../../components/ProjectJobOrder/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 import PdfQuote from '../../components/PDF/PdfJobOrder';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectJobOrderEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -266,6 +267,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
       ></ProjectQuoteButton>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectJobOrder"
+            ></ApiButton>
       <Col md="4">
         <Label>
           <PdfQuote id={id} quoteId={id}></PdfQuote>

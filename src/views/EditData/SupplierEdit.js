@@ -25,6 +25,7 @@ import SupplierDetails from '../../components/SupplierModal/SupplierDetails';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 
 const SupplierEdit = () => {
@@ -101,7 +102,9 @@ useEffect(() => {
       modelType: 'attachment',
     });
   };
-
+  const backToList = () => {
+    navigate('/Supplier');
+  };
   //Handle input function
   const handleInputs = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
@@ -249,6 +252,15 @@ useEffect(() => {
           </ComponentCardV2>
         </FormGroup>
       </Form>
+      <ApiButton
+              editData={editSupplierData}
+              navigate={navigate}
+              applyChanges={editSupplierData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              arb={arb}
+              module="Supplier"
+            ></ApiButton>
       <ComponentCard title={arb?"تفاصيل المورد":"Supplier Details"} creationModificationDate={supplier}>
 
       <SupplierDetails

@@ -19,6 +19,7 @@ import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
 import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
+import ApiButton from '../../components/ApiButton';
  
 const GoodsDeliveryEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -248,6 +249,15 @@ const GoodsDeliveryEdit = () => {
         //OrderId={OrderId}
         id={id}
       ></GoodsDeliveryButton>
+
+<ApiButton
+              editData={editGoodsDelivery}
+              navigate={navigate}
+              applyChanges={editGoodsDelivery}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="GoodsDelivery"
+            ></ApiButton>
       <GoodsDeliveryMoreDetails
       arb={arb}
       arabic={arabic}

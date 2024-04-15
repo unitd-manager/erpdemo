@@ -18,6 +18,7 @@ import Tabs from '../../components/project/Tabs';
 import Tab from '../../components/project/Tab';
 import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
 import PdfRequestForQuote from '../../components/PDF/PdfRequestForQuote';
+import ApiButton from '../../components/ApiButton';
 
 
 const RequestForQuoteEdit = () => {
@@ -308,6 +309,14 @@ console.error('Error fetching quote items', error);
               </Col>
             </Row>
           </ComponentCardV2>
+          <ApiButton
+              editData={editQuoteData}
+              navigate={navigate}
+              applyChanges={editQuoteData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="RequestForQuote"
+            ></ApiButton>
           <ComponentCardV2>
           <Label>
           <PdfRequestForQuote id={id} quoteId={id}></PdfRequestForQuote>

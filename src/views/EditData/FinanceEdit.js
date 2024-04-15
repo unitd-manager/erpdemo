@@ -23,6 +23,7 @@ import FinanceDeliveryAddress from '../../components/Finance/FinanceDeliveryAddr
 import FinanceMainDetails from '../../components/Finance/FinanceMainDetails';
 import creationdatetime from '../../constants/creationdatetime';
 import Tab from '../../components/project/Tab';
+import ApiButton from '../../components/ApiButton';
 
 const FinanceEdit = () => {
   // All state variables
@@ -231,7 +232,14 @@ console.log('ids',id)
         applyChanges={applyChanges}
         backToList={backToList}
       ></FinanceButton>
-
+<ApiButton
+              editData={editFinanceData}
+              navigate={navigate}
+              applyChanges={editFinanceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Finance"
+            ></ApiButton>
       {/* Main Details */}
       <FinanceMainDetails
         financeDetails={financeDetails}

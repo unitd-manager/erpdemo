@@ -25,6 +25,7 @@ import PlanningButton from '../../components/EquipmentIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import PdfEquipmentIssue from '../../components/PDF/PdfEquipmentIssue';
+import ApiButton from '../../components/ApiButton';
 
 const EquipmentIssueEdit = () => {
   //Const Variables
@@ -146,6 +147,14 @@ const EquipmentIssueEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
        ></PlanningButton>
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="EquipmentIssue"
+            ></ApiButton>
         <ComponentCardV2> <PdfEquipmentIssue ProjectID={id}></PdfEquipmentIssue></ComponentCardV2>
        {/* Main Details */}
       <PlanningMainDetails

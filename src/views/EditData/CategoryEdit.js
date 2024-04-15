@@ -10,6 +10,7 @@ import CategoryButton from '../../components/CategoryTable/CategoryButton';
 import CategoryDetailComp from '../../components/CategoryTable/CategoryDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const CategoryEdit = () => {
   //All state variables
@@ -163,7 +164,14 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         id={id}
         setFormSubmitted={setFormSubmitted}
       ></CategoryButton>
-
+<ApiButton
+              editData={editCategoryData}
+              navigate={navigate}
+              applyChanges={editCategoryData}
+              deleteData={deleteCategoryData}
+              backToList={backToList}
+              module="Category"
+            ></ApiButton>
       {/* More details*/}
       <CategoryDetailComp
         categoryDetails={categoryDetails}

@@ -8,6 +8,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
 import AccountMapButton from '../../components/Accounts/AccountMapButton';
 import ComponentCard from '../../components/ComponentCard';
+import ApiButton from '../../components/ApiButton';
 
 const ChartofACEdit = () => {
   //Const Variables
@@ -118,7 +119,14 @@ console.log('arabic',arabic)
         applyChanges={applyChanges}
         backToList={backToList}
       ></AccountMapButton>
-
+<ApiButton
+              editData={editChartOfAcc}
+              navigate={navigate}
+              applyChanges={editChartOfAcc}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ChartofAC"
+            ></ApiButton>
       {/* Main Details */}
       <ComponentCard title="Chart of AC Edit" creationModificationDate={chartofAC}>
         <Form>

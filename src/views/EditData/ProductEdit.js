@@ -14,10 +14,11 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProductEditButtons from '../../components/Product/ProductEditButtons';
+//import ProductEditButtons from '../../components/Product/ProductEditButtons';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 
 const ProductUpdate = () => {
@@ -45,7 +46,9 @@ const [unitdetails, setUnitDetails] = useState();
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/Product');
+  };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -187,6 +190,15 @@ const [arabic, setArabic] = useState([]);
         <FormGroup>
           <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} formSubmitted={formSubmitted}
         setFormSubmitted={setFormSubmitted} />
+          {/* <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} /> */}
+          <ApiButton
+              editData={editProductData}
+              navigate={navigate}
+              applyChanges={editProductData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Product"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Product Details" creationModificationDate={productDetails}>
             <ToastContainer></ToastContainer>

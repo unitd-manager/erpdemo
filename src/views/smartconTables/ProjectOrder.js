@@ -18,47 +18,14 @@ const Opportunity = () => {
   const [loading, setLoading] = useState(false);
 
   
-  const getSelectedLanguageFromLocalStorage = () => {
-    return localStorage.getItem('selectedLanguage') || '';
-  };
   
-const selectedLanguage = getSelectedLanguageFromLocalStorage();
-
-// Use the selected language value as needed
-console.log('Selected language from localStorage:', selectedLanguage);
-
-const arb =selectedLanguage === 'Arabic'
-
-  // const eng =selectedLanguage === 'English'
-
-  const [arabic, setArabic] = useState([]);
-
-  const getArabicCompanyName = () => {
-    api
-    .get('/finance/getTranslationforTradingOrder')
-    .then((res) => {
-      setArabic(res.data.data);
-    })
-    .catch(() => {
-      // Handle error if needed
-    });   
-};
-
-console.log('arabic',arabic)
 useEffect(() => {
-  getArabicCompanyName();
 }, []);
 
-let genLabel = '';
 
-if (arb === true) {
-  genLabel = 'arb_value';
-} else {
-  genLabel = 'value';
-}
   const getOrders = () => {
     api
-      .get('/projectorder/getProjectOrder')
+      .get('/projectOrder/getProjectSalesOrder')
       .then((res) => {
         setOrders(res.data.data);
         $('#example').DataTable({
@@ -154,11 +121,11 @@ if (arb === true) {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title={arb ?'طلب المبيعات':"Sales Order  List"}
+          title="Sales Order  List"
           Button={
-            <Link to="/SalesOrderDetails">
+            <Link to="/ProjectOrderDetails">
               <Button color="primary" className="shadow-none">
-              {arb ?'اضف جديد':'Add New'}
+              Add New
               </Button>
             </Link>
           }
@@ -184,9 +151,9 @@ if (arb === true) {
                     <td>{element.order_code}</td>
                     <td>{element.quote_code}</td>
                     <td>{element.order_date}</td>
-                    <td>{arb && element.company_name_arb ? element.company_name_arb : element.company_name}</td>
-                    <td>{arb && element.office_ref_no_arb ? element.office_ref_no_arb : element.office_ref_no}</td>
-                    <td>{arb && element.order_status_arb ? element.order_status_arb : element.order_status}</td>
+                    <td>{element.company_name}</td>
+                    <td>{element.office_ref_no}</td>
+                    <td>{element.order_status}</td>
                     <td>{element.amount}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td> */}

@@ -16,6 +16,7 @@ import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeReque
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const ChangeRequestEdit = () => {
   // All state variables
@@ -34,7 +35,9 @@ const ChangeRequestEdit = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/ChangeRequest');
+  };
   //Get Staff Details
   const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
@@ -140,7 +143,14 @@ const ChangeRequestEdit = () => {
       <Form>
         <FormGroup>
           <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} />
-          
+          <ApiButton
+              editData={editChangeRequestData}
+              navigate={navigate}
+              applyChanges={editChangeRequestData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ChangeRequest"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Change request Details" creationModificationDate={changerequesteditdetails}>
             <ToastContainer></ToastContainer>

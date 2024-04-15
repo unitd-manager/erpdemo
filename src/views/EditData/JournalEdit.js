@@ -19,6 +19,7 @@ import ComponentCard from '../../components/ComponentCard';
 import Tab from '../../components/project/Tab';
 import JournalEditDetails from '../../components/Journal/JournalEditDetails';
 import message from '../../components/Message';
+import ApiButton from '../../components/ApiButton';
 
 const JournalEdit = () => {
     const navigate = useNavigate();
@@ -73,6 +74,9 @@ const handleInputs = (e, journalMasterId, journalId) => {
     }
 };
 
+const backToList = () => {
+  navigate('/Journal');
+};
   //Logic for edit data in db
   const editJournalData = () => {
     journalData.modification_date = creationdatetime;
@@ -142,6 +146,14 @@ journalMasterData.modification_date = creationdatetime;
         <>
             <BreadCrumbs heading='' />
             <JournalButton navigate={navigate} editJournalData={editJournalData} editJournalMasterData={editJournalMasterData} />
+            <ApiButton
+              editData={editJournalData}
+              navigate={navigate}
+              applyChanges={editJournalData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="JournalEdit"
+            ></ApiButton>
             <JournalEditDetails journalData={journalData} handleInputs={handleInputs} journalMasterData={journalMasterData} handleInputsMaster={handleInputsMaster} />
             <ComponentCard title="More Details">
                 <ToastContainer></ToastContainer>

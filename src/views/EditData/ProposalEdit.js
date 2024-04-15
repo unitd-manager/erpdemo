@@ -25,6 +25,7 @@ import AppContext from '../../context/AppContext';
 //import ProposalEmployee from '../../components/ProposalTabContent/AddProposalEmployee';
 //import TaskEmployee from '../../components/ProposalTabContent/ProposalEmployee';
 import AddEmployee from '../../components/ProposalTabContent/AddEmployee';
+import ApiButton from '../../components/ApiButton';
 
 const ProposalEdit = () => {
   
@@ -347,6 +348,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
       ></ProposalButtons>
+      <ApiButton
+              editData={editProposalData}
+              navigate={navigate}
+              applyChanges={editProposalData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Proposal"
+            ></ApiButton>
        <Col md="4">
         <Label>
         {proposalDetails && <PdfQuote id={proposalDetails.project_quote_id} quoteId={proposalDetails.project_quote_id}></PdfQuote>}
