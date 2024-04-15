@@ -15,13 +15,14 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import creationdatetime from '../../constants/creationdatetime';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
 import UomDetails from '../../components/UomModal/UomDetails';
+import ApiButton from '../../components/ApiButton';
 
 const UomEdit = () => {
   //all state variables
@@ -39,7 +40,7 @@ const UomEdit = () => {
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
 
   // Function to toggle tabs
   const toggle = (tab) => {
@@ -61,7 +62,9 @@ const UomEdit = () => {
   const handleInputs = (e) => {
     setUoM({ ...uom, [e.target.name]: e.target.value });
   };
-
+  const backToList = () => {
+    navigate('/UoM');
+  };
   //get staff details
   const { loggedInuser } = useContext(AppContext);
 
@@ -118,7 +121,7 @@ const UomEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <Form>
+      {/* <Form>
         <FormGroup>
           <ComponentCardV2>
             <Row>
@@ -163,7 +166,15 @@ const UomEdit = () => {
             </Row>
           </ComponentCardV2>
         </FormGroup>
-      </Form>
+      </Form> */}
+      <ApiButton
+              editData={editUomData}
+              navigate={navigate}
+              applyChanges={editUomData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="UoM"
+            ></ApiButton>
       <ComponentCard title="UoM Details" creationModificationDate={uom}>
         <UomDetails handleInputs={handleInputs} uom={uom} uomStatus={uomStatus}></UomDetails>
       </ComponentCard>

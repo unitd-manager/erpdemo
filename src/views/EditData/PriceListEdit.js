@@ -27,6 +27,7 @@ import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const PriceListEdit = () => {
   //Const Variables
@@ -216,7 +217,14 @@ const handleAddNewPlanning = (e) => {
         formSubmitted={formSubmitted}
         setFormSubmitted={setFormSubmitted}
        ></PlanningButton>
-       
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="PriceList"
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}

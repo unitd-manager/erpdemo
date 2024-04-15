@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // Changed: useNavigate to useHistory
+import { useParams,useNavigate } from 'react-router-dom'; // Changed: useNavigate to useHistory
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
@@ -10,9 +10,10 @@ import api from '../../constants/api';
 import ComponentCard from '../../components/ComponentCard';
 import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ItemTable from '../../components/BookingTable/ItemTable';
-import InvoiceButton from '../../components/BookingTable/InvoiceButton';
+//import InvoiceButton from '../../components/BookingTable/InvoiceButton';
 import ReceiptDetailComp from '../../components/BookingTable/ReceiptDetailComp';
 import InvoiceItemTable from '../../components/BookingTable/InvoiceItemTable';
+import ApiButton from '../../components/ApiButton';
 
 const ReceiptEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({});
@@ -22,6 +23,7 @@ const ReceiptEdit = () => {
   const [editModal, setEditModal] = useState(false);
   const [editInvoiceModal, setEditInvoiceModal] = useState(false);
   const { id } = useParams();
+  const navigate=useNavigate();
    const getCompany = () => {
     api
       .get('/booking/getCompanyName')
@@ -32,7 +34,9 @@ const ReceiptEdit = () => {
         message('Company not found', 'info');
       });
   };
-
+  const backToList = () => {
+    navigate('/Receipt');
+  };
   const handleInputs = (e) => {
     setBookingDetails({ ...bookingDetails, [e.target.name]: e.target.value });
   };
@@ -83,11 +87,18 @@ const ReceiptEdit = () => {
       <BreadCrumbs />
       <ToastContainer />
     {/* Button */}
-      <InvoiceButton
+      {/* <InvoiceButton
         editInvoiceData={editInvoiceData}
         id={id}
-      ></InvoiceButton>
-  
+      ></InvoiceButton> */}
+  <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Receipt"
+            ></ApiButton>
       {/*Main Details*/}
       <ComponentCard title="Receipt Details" creationModificationDate={bookingDetails}>
         <ReceiptDetailComp

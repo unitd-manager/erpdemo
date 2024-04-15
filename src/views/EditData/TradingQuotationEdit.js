@@ -12,7 +12,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
+//import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
 import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -23,6 +23,7 @@ import ViewQuoteLogModal from '../../components/TradingQuotation/ViewQuoteLogMod
 
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const TradingQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -46,7 +47,7 @@ const TradingQuotationEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/Quotation');
   };
@@ -347,15 +348,23 @@ const TradingQuotationEdit = () => {
       {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
       {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
 
-      <TradingQuoteButton
+      {/* <TradingQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         id={id}
         insertquote={insertquote}
-      ></TradingQuoteButton>
-
+      ></TradingQuoteButton> */}
+<ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              insertquote={insertquote}
+              module="TradingQuotation"
+            ></ApiButton>
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}

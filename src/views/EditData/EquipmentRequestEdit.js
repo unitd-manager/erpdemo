@@ -22,6 +22,7 @@ import EditLineItemModal from '../../components/EquipmentRequest/EditLineItemMod
 import AppContext from '../../context/AppContext';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PdfEquipmentRequest from '../../components/PDF/PdfEquipmentRequest';
+import ApiButton from '../../components/ApiButton';
 
 const EquipmentRequestEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -286,6 +287,14 @@ const [arabic, setArabic] = useState([]);
         backToList={backToList}
         arb={arb}
       ></TradingQuoteButton>
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="EquipmentRequest"
+            ></ApiButton>
      <ComponentCardV2> <PdfEquipmentRequest ProjectID={id}></PdfEquipmentRequest></ComponentCardV2>
       <TradingQuoteMoreDetails
         newContactData={newContactData}

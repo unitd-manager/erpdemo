@@ -14,7 +14,7 @@ import message from '../../components/Message';
 //import ComponentCardV2 from '../../components/ComponentCardV2';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../form-editor/editor.scss';
+import '../form-editor/editor.scss'; 
 import api from '../../constants/api';
 import LeaveMainDetails from '../../components/LeaveTable/LeaveMainDetails';
 import ApiButton from '../../components/ApiButton';

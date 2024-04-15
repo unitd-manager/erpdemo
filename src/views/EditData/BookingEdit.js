@@ -8,10 +8,11 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import BookingMoreDetails from '../../components/BookingTable/BookingMoreDetails';
-import BookingButton from '../../components/BookingTable/BookingButton';
+//import BookingButton from '../../components/BookingTable/BookingButton';
 import BookingDetailComp from '../../components/BookingTable/BookingDetailComp';
 import ComponentCard from '../../components/ComponentCard';
 import BookingEditCustomerModal from '../../components/BookingTable/BookingEditCustomerModal';
+import ApiButton from '../../components/ApiButton';
 
 const BookingEdit = () => {
   //state variables
@@ -38,7 +39,7 @@ const BookingEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Booking');
   };
@@ -153,15 +154,22 @@ const BookingEdit = () => {
       <ToastContainer />
 
       {/* Button */}
-      <BookingButton
+      {/* <BookingButton
         editBookingData={editBookingData}
         navigate={navigate}
         applyChanges={applyChanges}
         deleteBookingData={deleteBookingData}
         backToList={backToList}
         id={id}
-      ></BookingButton>
-
+      ></BookingButton> */}
+<ApiButton
+              editData={editBookingData}
+              navigate={navigate}
+              applyChanges={editBookingData}
+              deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Booking"
+            ></ApiButton>
       {/*Main Details*/}
       <ComponentCard title="Booking Details" creationModificationDate={bookingDetails}>
         <BookingDetailComp

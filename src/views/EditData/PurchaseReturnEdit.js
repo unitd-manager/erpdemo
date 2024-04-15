@@ -18,6 +18,7 @@ import ReturnInvoiceItemTable from '../../components/PurchaseReturn/ReturnInvoic
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 const PurchaseReturnEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -259,7 +260,14 @@ const PurchaseReturnEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
       ></ProjectQuoteButton>
-
+<ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="PurchaseReturn"
+            ></ApiButton>
       <ProjectQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}

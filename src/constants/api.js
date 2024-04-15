@@ -16,7 +16,7 @@ if (hostname === 'erpardemo.unitdtechnologies.com') {
   baseURL = process.env.REACT_APP_LOCAL_URL;
 }
 
-console.log('Current Hostname:', hostname);
+console.log('Current Hostname:', hostname,baseURL);
 const api = axios.create({
   baseURL,
 });
