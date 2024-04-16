@@ -185,11 +185,11 @@ const [arabic, setArabic] = useState([]);
 
   return (
     <>
-      <BreadCrumbs heading={productDetails && productDetails.title} />
+      <BreadCrumbs heading={productDetails && productDetails.title}/>
       <Form>
         <FormGroup>
-          <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} formSubmitted={formSubmitted}
-        setFormSubmitted={setFormSubmitted} />
+          {/* <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} formSubmitted={formSubmitted}
+        setFormSubmitted={setFormSubmitted} /> */}
           {/* <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} /> */}
           <ApiButton
               editData={editProductData}
