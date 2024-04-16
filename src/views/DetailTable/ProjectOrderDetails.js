@@ -13,14 +13,14 @@ import AppContext from '../../context/AppContext';
 const OpportunityDetails = () => {
   const [quote, setQuote] = useState();
   const [insertQuote, setInsertQuote] = useState({
-    quote_id: '',
+    project_quote_id: '',
   });
   const { id } = useParams();
   const navigate = useNavigate();
   const { loggedInuser } = useContext(AppContext);
   //Api call for getting company dropdown
   const getQuote = () => {
-    api.get('/projectorder/getQuote').then((res) => {
+    api.get('/projectsalesorder/getProjectQuote').then((res) => {
       setQuote(res.data.data);
     });
   };
@@ -76,21 +76,21 @@ const OpportunityDetails = () => {
 
   //console.log(tenderDetails);
  const insertOrder = (orderCode,companyId) => {
-  console.log('insertQuote.quote_id:', insertQuote.quote_id);
-  if (insertQuote.quote_id !== '') {
+  console.log('insertQuote.quote_id:', insertQuote.project_quote_id);
+  if (insertQuote.project_quote_id !== '') {
     insertQuote.order_code = orderCode;
     insertQuote.creation_date = creationdatetime;
     insertQuote.created_by = loggedInuser.first_name;
     insertQuote.company_id = companyId;
     api
-      .post('/finance/insertOrder', insertQuote)
+      .post('/projectsalesorder/insertOrder', insertQuote)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
-        const quoteId = insertQuote.quote_id;
+        const quoteId = insertQuote.project_quote_id;
 
         // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
   
-        navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
+        navigate(`/ProjectOrderEdit/${insertedDataId}/${quoteId}`);
         console.log('insertedDataId', insertedDataId);
         console.log('quoteId', quoteId);
       })
@@ -119,7 +119,7 @@ const OpportunityDetails = () => {
         const orderCode = res.data.data;
   
         // Fetch company_id based on quote_id
-        const selectedQuote = quote.find((quotes) => quotes.quote_id === insertQuote.quote_id);
+        const selectedQuote = quote.find((quotes) => quotes.project_quote_id === insertQuote.project_quote_id);
         console.log('Selected Quote:', selectedQuote);
         console.log('Selected Quote:', selectedQuote);
         if (selectedQuote) {
@@ -190,18 +190,18 @@ const OpportunityDetails = () => {
                   <Input
                     type="select"
                     onChange={(e) => {
-                      setInsertQuote({ ...insertQuote, quote_id: e.target.value });
+                      setInsertQuote({ ...insertQuote, project_quote_id: e.target.value });
                       handleInputs(e);
                     }}
                     
-                    value={insertQuote?.quote_id || ''}
-                    name="quote_id"
+                    value={insertQuote?.project_quote_id || ''}
+                    name="project_quote_id"
                   >
                     <option value="selected">Please Select</option>
                     {quote &&
                       quote.map((e) => {
                         return (
-                          <option key={e.quote_id} value={e.quote_id}>
+                          <option key={e.project_quote_id} value={e.project_quote_id}>
                             {' '}
                             {arb?e.quote_code_arb:e.quote_code}{' '}
                           </option>

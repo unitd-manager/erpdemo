@@ -145,7 +145,7 @@ const SalesInvoice = () => {
                     </td>
                     <td>{element.invoice_code}</td>
                    <td>{element.return_date}</td>
-                    <td>{element.status}</td>
+                    <td>{arb && element.status_arb ? element.status_arb : element.status}</td>
                    
                   </tr>
                 );

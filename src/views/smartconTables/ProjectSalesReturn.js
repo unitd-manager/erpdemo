@@ -136,10 +136,10 @@ const SalesInvoice = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.sales_return_id }>
+                  <tr key={element.proj_sales_return_id }>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/ReturnEdit/${element.sales_return_id }/${element.invoice_id }`}>
+                      <Link to={`/ReturnEdit/${element.proj_sales_return_id }/${element.invoice_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
