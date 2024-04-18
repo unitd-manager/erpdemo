@@ -203,7 +203,7 @@ const OpportunityDetails = () => {
                         return (
                           <option key={e.quote_id} value={e.quote_id}>
                             {' '}
-                            {arb?e.quote_code_arb:e.quote_code}{' '}
+                            {arb?e.quote_code_arb:e.quote_code} - {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}

@@ -25,7 +25,7 @@ useEffect(() => {
 
   const getOrders = () => {
     api
-      .get('/projectOrder/getProjectSalesOrder')
+      .get('/projectsalesorder/getProjectSalesOrder')
       .then((res) => {
         setOrders(res.data.data);
         $('#example').DataTable({
@@ -121,7 +121,7 @@ useEffect(() => {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title="Sales Order  List"
+          title="Project Order List"
           Button={
             <Link to="/ProjectOrderDetails">
               <Button color="primary" className="shadow-none">
@@ -141,10 +141,10 @@ useEffect(() => {
             {orders &&
               orders.map((element, index) => {
                 return (
-                  <tr key={element.opportunity_id}>
+                  <tr key={element.project_enquiry_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/OrdersEdit/${element.order_id}/${element.quote_id }`}>
+                      <Link to={`/ProjectOrderEdit/${element.project_order_id}/${element.project_quote_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

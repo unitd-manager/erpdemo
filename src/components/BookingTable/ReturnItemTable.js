@@ -120,7 +120,7 @@ export default function ItemTable({
               {Array.isArray(returnItemDetails) && returnItemDetails.length > 0 ? (
                 returnItemDetails.map((element) => (
                   <tr key={element.invoice_item_id}>
-                    <td>{element.item_title}</td>
+                    <td>{arb && element.item_title_arb ? element.item_title_arb : element.item_title}</td>
                     <td>{element.qty}</td>
                     <td>{element.unit_price}</td>
                     <td>{element.total_cost}</td>

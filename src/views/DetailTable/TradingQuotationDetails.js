@@ -126,8 +126,37 @@ const TradingQuotationDetails = () => {
       });
   };
 
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/finance/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  
   useEffect(() => {
     getEnquiryCode();
+    getArabicCompanyName();
   }, [id]);
   const inputClass = `form-control ${
     formSubmitted && (!tenderForms.opportunity_id || tenderForms.opportunity_id === 'Please Select') ? 'highlight' : ''
@@ -156,13 +185,13 @@ const TradingQuotationDetails = () => {
                         return (
                           <option key={e.opportunity_id} value={e.opportunity_id}>
                             {' '}
-                            {e.opportunity_code}{' '}
+                            {e.opportunity_code} - {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}
                   </Input>
                   {(formSubmitted && !tenderForms.opportunity_id) && (
-      <div className="error-message">Please Select the Quote Code</div>
+      <div className="error-message">Please Select</div>
     )}
                 </Col>
               </FormGroup>

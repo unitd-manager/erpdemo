@@ -210,7 +210,7 @@ const InvoiceData = () => {
                     <td>{element.order_code}</td>
                     <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
-                    <td>{element.receipt_status}</td>
+                    <td>{arb && element.receipt_status_arb ? element.receipt_status_arb : element.receipt_status}</td>
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     <td>  

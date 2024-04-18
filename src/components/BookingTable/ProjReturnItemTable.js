@@ -5,19 +5,19 @@ import api from '../../constants/api';
 
 
 export default function ItemTable({
-  returnItemDetails,
+  projreturnItemDetails,
   invoiceStatus,
   arb
   // onRemoveItem,
 }) {
   ItemTable.propTypes = {
-    returnItemDetails: PropTypes.array,
+    projreturnItemDetails: PropTypes.array,
     invoiceStatus: PropTypes.array,
     arb: PropTypes.any,
 
     // onRemoveItem: PropTypes.func.isRequired,
   };
-  const hasNonZeroQuantity = returnItemDetails?.some((item) => item.qty > 0) || false;
+  const hasNonZeroQuantity = projreturnItemDetails?.some((item) => item.qty > 0) || false;
   
   const [returnModal, setReturnModal] = useState(false);
   // const [selectedItem, setSelectedItem] = useState(null);
@@ -40,7 +40,7 @@ export default function ItemTable({
 
   const openReturnModal = () => {
     // Filter out items with qty === 0
-    const nonZeroQuantityItems = returnItemDetails.filter((item) => item.qty > 0);
+    const nonZeroQuantityItems = projreturnItemDetails.filter((item) => item.qty > 0);
     setReturnItems([...nonZeroQuantityItems]); // Create a copy of the items for editing
 
     // Check the invoice status before opening the modal
@@ -117,10 +117,10 @@ export default function ItemTable({
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(returnItemDetails) && returnItemDetails.length > 0 ? (
-                returnItemDetails.map((element) => (
+              {Array.isArray(projreturnItemDetails) && projreturnItemDetails.length > 0 ? (
+                projreturnItemDetails.map((element) => (
                   <tr key={element.invoice_item_id}>
-                    <td>{element.item_title}</td>
+                    <td>{arb && element.item_title_arb ? element.item_title_arb : element.item_title}</td>
                     <td>{element.qty}</td>
                     <td>{element.unit_price}</td>
                     <td>{element.total_cost}</td>

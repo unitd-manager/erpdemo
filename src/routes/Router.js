@@ -310,6 +310,7 @@ const PurchaseOrderDetails = Loadable(
 const TenderEdit = Loadable(lazy(() => import('../views/EditData/TenderEdit')));
 const EnquiryEdit = Loadable(lazy(() => import('../views/EditData/EnquiryEdit')));
 const OrdersEdit = Loadable(lazy(() => import('../views/EditData/OrdersEdit')));
+const ProjectOrderEdit = Loadable(lazy(() => import('../views/EditData/ProjectOrderEdit')));
 const InvoiceEdit = Loadable(lazy(() => import('../views/EditData/InvoiceEdit')));
 const ReturnEdit = Loadable(lazy(() => import('../views/EditData/ReturnEdit')));
 const ReceiptEdit = Loadable(lazy(() => import('../views/EditData/ReceiptEdit')));
@@ -397,6 +398,7 @@ const Routernew = () => {
           <Route path="/ProductEdit/:id" name="clienttdata" element={<ProductEdit />}></Route>
           <Route path="/EnquiryEdit/:id" name="clienttdata" element={<EnquiryEdit />}></Route>
           <Route path="/OrdersEdit/:insertedDataId/:quoteId" name="clienttdata" element={<OrdersEdit />}></Route>
+          <Route path="/ProjectOrderEdit/:insertedDataId/:quoteId" name="clienttdata" element={<ProjectOrderEdit />}></Route>
           <Route path="/InvoiceEdit/:insertedDataId/:orderId" name="clienttdata" element={<InvoiceEdit />}></Route>
           <Route path="/ReturnEdit/:insertedDataId/:invoiceId" name="clienttdata" element={<ReturnEdit />}></Route>
           <Route path="/PurchaseReturnEdit/:insertedDataId/:purchaseInvoiceId" name="clienttdata" element={<PurchaseReturnEdit />}></Route>

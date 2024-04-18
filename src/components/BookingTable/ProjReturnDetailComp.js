@@ -3,8 +3,8 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
-  ReturnDetailComp.propTypes = {
+export default function ProjReturnDetailComp({ projreturnDetails, handleInputs,arb }) {
+  ProjReturnDetailComp.propTypes = {
     returnDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     arb: PropTypes.any,
@@ -26,7 +26,7 @@ export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
 
                 <Input
                   type="text"
-                  value={returnDetails && returnDetails.invoice_code}
+                  value={projreturnDetails && projreturnDetails.invoice_code}
                   onChange={handleInputs}
                   name="invoice_code"
                   readOnly
@@ -41,7 +41,7 @@ export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
                 <Input
                   type="select"
                   onChange={handleInputs}
-                  value={returnDetails && returnDetails.status}
+                  value={projreturnDetails && projreturnDetails.status}
                   name="status"
                 >
                   {' '}
@@ -63,7 +63,7 @@ export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
 
                 <Input
                   type="date"
-                  value={returnDetails && moment(returnDetails.return_date).format('YYYY-MM-DD')}
+                  value={projreturnDetails && moment(projreturnDetails.return_date).format('YYYY-MM-DD')}
                   onChange={handleInputs}
                   name="return_date"
                 ></Input>

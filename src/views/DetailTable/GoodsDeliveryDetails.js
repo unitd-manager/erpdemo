@@ -165,7 +165,7 @@ console.log('arabic', arabic);
                         return (
                           <option key={e.order_code} value={e.order_code}>
                             {' '}
-                            {arb?e.order_code_arb:e.order_code}{' '}
+                            {arb?e.order_code_arb:e.order_code} - {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}
