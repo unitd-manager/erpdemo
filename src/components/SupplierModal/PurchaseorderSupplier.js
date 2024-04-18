@@ -71,7 +71,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
     if (orderId) {
-      api.post('/supplier/getMakePayment', { purchase_order_id: orderId }).then((res) => {
+      api.post('/supplier/getMakePayment', { supplier_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
            element.remainingAmount = element.prev_inv_amount - element.prev_amount ;
@@ -114,7 +114,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
           // Handle success (you might want to show a success message)
           console.log('Receipt updated successfully', receiptRes);
           console.log('Invoice status updated successfully', invoiceRes);
-          window.location.reload();
+          //window.location.reload();
         })
         .catch((error) => {
           // Handle error (you might want to show an error message)
@@ -138,12 +138,10 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
   const deleteCreatedReceipt = () => {
     if (receiptId) {
       api
-        .delete('/supplier/deleteReceipt', { data: { supplier_receipt_id: receiptId } })
+        .post('/supplier/deleteReceipt', { data: { supplier_receipt_id: receiptId } })
         .then(() => {
           console.log('Created receipt record deleted successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 800);
+          
         
         })
         .catch((error) => {
