@@ -53,7 +53,7 @@ const ProjectSalesReceipt = () => {
   //getting data from invoice table
   const getInvoice = () => {
     api
-      .get('/projectreceipts/getReceipts')
+      .get('/projectreceipts/getProjectReceipts')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
@@ -207,14 +207,14 @@ const ProjectSalesReceipt = () => {
                   <tr key={element.project_receipt_id}>
                     <td>{index + 1}</td>
 
-                    <td>{element.order_code}</td>
+                    <td>{element.project_order_code}</td>
                     <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
                     <td>{element.receipt_status}</td>
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     <td>  
-                      <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
+                      <PdfCreateListReceipt receiptId={element.project_receipt_id} invoice={invoice} />
  </td>
                   </tr>
                 );
@@ -243,7 +243,7 @@ const ProjectSalesReceipt = () => {
                                 return (
                                   <option key={e.project_order_id} value={e.project_order_id}>
                                     {' '}
-                                   {arb?e.order_code_arb:e.order_code}{' '}
+                                   {arb?e.project_order_code_arb:e.project_order_code}{' '}
                                   </option>
                                 );
                               })}

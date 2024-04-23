@@ -1,3 +1,5 @@
+
+/*eslint-disable*/
 import React, { useEffect, useState, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button , TabContent, TabPane} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
@@ -423,20 +425,20 @@ console.error('Error fetching quote items', error);
           </ComponentCard>
         </FormGroup>
       </Form>
-      {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+      <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
+     
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
       <TabContent className="p-4" activeTab={activeTab}>
       <TabPane tabId="1" eventkey="MoreDetails">
-                {orderDetails && <RequestPurchase
+                <RequestPurchase
   orderDetails={orderDetails}
           />
-          }
+          
           </TabPane>
           </TabContent>
+          </ComponentCard>
     </>
   );
 };
