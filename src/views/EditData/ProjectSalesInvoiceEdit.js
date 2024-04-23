@@ -9,17 +9,17 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api'; 
 import ComponentCard from '../../components/ComponentCard';
-import InvoiceDetailComp from '../../components/BookingTable/InvoiceDetailComp';
+import ProjectInvoiceMainDetails from '../../components/ProjectSalesInvoiceTable/ProjectInvoiceMainDetails';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 // import ItemTable from '../../components/BookingTable/ItemTable';
-import OrderItemTable from '../../components/BookingTable/OrderItemTable';
-import PartialINvoiceEdit from '../../components/BookingTable/PartialINvoiceEdit';
-import GoodsItemTable from '../../components/BookingTable/GoodsItemTable';
-import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoiceGoodsEdit';
+import ProjectOrderItemTable from '../../components/ProjectSalesInvoiceTable/ProjectOrderItemTable';
+import ProjectPartialInvoiceEdit from '../../components/ProjectSalesInvoiceTable/ProjectPartialInvoiceEdit';
+import ProjectGoodsItemTable from '../../components/ProjectSalesInvoiceTable/ProjectGoodsItemTable';
+import ProjectPartialInvoiceGoodsEdit from '../../components/ProjectSalesInvoiceTable/ProjectPartialInvoiceGoodsEdit';
 import AppContext from '../../context/AppContext';
 import PdfCreateInvoice from '../../components/PDF/PdfCreateInvoice';
 import ApiButton from '../../components/ApiButton';
@@ -226,7 +226,7 @@ const toggle = (tab) => {
   
   const generateData = () => {
     api
-      .post('/invoice/getOrderLineItemsById', { order_id: orderId })
+      .post('/invoice/getOrderLineItemsById', { project_order_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -243,8 +243,8 @@ const toggle = (tab) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
-                if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id  )) {
-                  console.warn(`Quote item for order id  ${QuoteItem.order_item_id  } already exists, skipping insertion`);
+                if (ExistingQuoteItemsId.includes(QuoteItem.project_order_item_id  )) {
+                  console.warn(`Quote item for order id  ${QuoteItem.project_order_item_id  } already exists, skipping insertion`);
                   message('Invoice items are already Inserted', 'warning');
                   insertQuoteItems(index + 1);
                 } else {
@@ -252,17 +252,17 @@ const toggle = (tab) => {
                   const QuoteItemsData = {
                     creation_date : creationdatetime,
                     created_by : loggedInuser.first_name, 
-                    invoice_id: insertedDataId,
+                    project_invoice_id: insertedDataId,
                   qty: QuoteItem.qty,
-                  invoice_qty: QuoteItem.qty,
+                  project_invoice_qty: QuoteItem.qty,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.item_title,
                   total_cost: QuoteItem.cost_price,
-                  order_id: QuoteItem.order_id,
-                  order_item_id: QuoteItem.order_item_id,
-                  invoice_source_id: bookingDetails.invoice_source_id,
+                  project_order_id: QuoteItem.project_order_id,
+                  project_order_item_id: QuoteItem.project_order_item_id,
+                  project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  project_quote_id: QuoteItem.project_quote_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -305,7 +305,7 @@ const toggle = (tab) => {
 
   const generatePartialData = () => {
     api
-      .post('/invoice/getOrderLineItemsById', { order_id: orderId })
+      .post('/invoice/getOrderLineItemsById', { project_order_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -322,8 +322,8 @@ const toggle = (tab) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
-                if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id )) {
-                  // console.warn(`Quote item for order id  ${QuoteItem.order_item_id } already exists, skipping insertion`);
+                if (ExistingQuoteItemsId.includes(QuoteItem.project_order_item_id )) {
+                  // console.warn(`Quote item for order id  ${QuoteItem.project_order_item_id } already exists, skipping insertion`);
                   // message('Invoice items are already Inserted', 'warning');
                 insertQuoteItems(index + 1);
                 } else {
@@ -331,16 +331,16 @@ const toggle = (tab) => {
                   const QuoteItemsData = {
                     creation_date : creationdatetime,
                     created_by : loggedInuser.first_name, 
-                    invoice_id: insertedDataId,
+                    project_invoice_id: insertedDataId,
                   qty: QuoteItem.qty,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.item_title,
                   total_cost: QuoteItem.cost_price,
-                  order_id: QuoteItem.order_id,
-                  order_item_id: QuoteItem.order_item_id,
-                  invoice_source_id: bookingDetails.invoice_source_id,
+                  project_order_id: QuoteItem.project_order_id,
+                  project_order_item_id: QuoteItem.project_order_item_id,
+                  project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  project_quote_id: QuoteItem.project_quote_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
@@ -383,7 +383,7 @@ const toggle = (tab) => {
 
   const generateGoodsData = () => {
     api
-      .post('/invoice/getGoodsLineItemsById', { goods_delivery_id: orderId })
+      .post('/invoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
       .then((res) => {
         console.log('getGoodsLineItemsById', orderId)
         const quoteItems = res.data.data;
@@ -401,8 +401,8 @@ const toggle = (tab) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
-                if (ExistingQuoteItemsId.includes(QuoteItem.goods_delivery_item_id )) {
-                  console.warn(`Quote item for goods_delivery_id  ${QuoteItem.goods_delivery_item_id } already exists, skipping insertion`);
+                if (ExistingQuoteItemsId.includes(QuoteItem.project_goods_delivery_item_id )) {
+                  console.warn(`Quote item for project_goods_delivery_id  ${QuoteItem.project_goods_delivery_item_id } already exists, skipping insertion`);
                   message('Goods items are already Inserted', 'warning');
                   insertQuoteItems(index + 1);
                 } else {
@@ -410,17 +410,17 @@ const toggle = (tab) => {
                   const QuoteItemsData = {
                     creation_date : creationdatetime,
                     created_by : loggedInuser.first_name, 
-                    invoice_id: insertedDataId,
+                    project_invoice_id: insertedDataId,
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
                   total_cost: QuoteItem.total_cost,
-                  invoice_qty: QuoteItem.quantity,
-                  goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
-                  goods_delivery_id : QuoteItem.goods_delivery_id,
-                  invoice_source_id: bookingDetails.invoice_source_id,
+                  project_invoice_qty: QuoteItem.quantity,
+                  project_goods_delivery_item_id: QuoteItem.project_goods_delivery_item_id,
+                  project_goods_delivery_id : QuoteItem.project_goods_delivery_id,
+                  project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  project_quote_id: QuoteItem.project_quote_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -463,7 +463,7 @@ const toggle = (tab) => {
 
   const generatePartialGoodsData = () => {
     api
-      .post('/invoice/getGoodsLineItemsById', { goods_delivery_id: orderId })
+      .post('/invoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -480,8 +480,8 @@ const toggle = (tab) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
-                if (ExistingQuoteItemsId.includes(QuoteItem.goods_delivery_item_id )) {
-                  // console.warn(`Quote item for goods_delivery_id  ${QuoteItem.goods_delivery_item_id } already exists, skipping insertion`);
+                if (ExistingQuoteItemsId.includes(QuoteItem.project_goods_delivery_item_id )) {
+                  // console.warn(`Quote item for project_goods_delivery_id  ${QuoteItem.project_goods_delivery_item_id } already exists, skipping insertion`);
                   // message('Goods items are already Inserted', 'warning');
                   insertQuoteItems(index + 1);
                 } else {
@@ -489,16 +489,16 @@ const toggle = (tab) => {
                   const QuoteItemsData = {
                     creation_date : creationdatetime,
                     created_by : loggedInuser.first_name, 
-                    invoice_id: insertedDataId,
+                    project_invoice_id: insertedDataId,
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
                   total_cost: QuoteItem.total_cost,
-                  goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
-                  goods_delivery_id : QuoteItem.goods_delivery_id,
-                  invoice_source_id: bookingDetails.invoice_source_id,
+                  project_goods_delivery_item_id: QuoteItem.project_goods_delivery_item_id,
+                  project_goods_delivery_id : QuoteItem.project_goods_delivery_id,
+                  project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  project_quote_id: QuoteItem.project_quote_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -542,12 +542,12 @@ const toggle = (tab) => {
   
   // ... (rest of the code)
   // const generateData = () => {
-  //   // Step 1: Delete old order items by quote_id
+  //   // Step 1: Delete old order items by project_quote_id
   //   api
   //     .delete(`/finance/deleteinvoice_item/${insertedDataId}`)
   //     .then(() => {
   //       api
-  //         .post('/invoice/getOrderLineItemsById', { order_id: orderId })
+  //         .post('/invoice/getOrderLineItemsById', { project_order_id: orderId })
   //         .then((res) => {
   //           const quoteItems = res.data.data;
     
@@ -565,7 +565,7 @@ const toggle = (tab) => {
     
   //               // Insert the order item
   //               const orderItemData = {
-  //                invoice_id: insertedDataId,
+  //                project_invoice_id: insertedDataId,
   //                 qty: quoteItem.qty,
   //                 unit_price: quoteItem.unit_price,
   //                 item_title: quoteItem.item_title,
@@ -612,7 +612,7 @@ const toggle = (tab) => {
   // };
   const editBookingById = () => {
     api
-      .post('/invoice/getInvoiceById', { invoice_id: insertedDataId })
+      .post('/invoice/getInvoiceById', { project_invoice_id: insertedDataId })
       .then((res) => {
         setBookingDetails(res.data.data[0]);
       })
@@ -623,7 +623,7 @@ const toggle = (tab) => {
  
   // const editItemById = () => {
   //   api
-  //     .post('/invoice/getInvoiceByItemId', { invoice_id: insertedDataId })
+  //     .post('/invoice/getInvoiceByItemId', { project_invoice_id: insertedDataId })
   //     .then((res) => {
   //       setItemDetails(res.data.data);
   //     })
@@ -634,13 +634,13 @@ const toggle = (tab) => {
 
   const getOrderItemById = () => {
     api
-      .post('/invoice/getInvoiceByOrderItemId', { invoice_id: insertedDataId })
+      .post('/invoice/getInvoiceByOrderItemId', { project_invoice_id: insertedDataId })
       .then((res) => {
 
         setOrderItemDetails(res.data.data);
         console.log('setOrderItemDetails',res.data.data)
         const qtymatch=res.data.data.filter((el)=>{
-          return el.qty !== el.invoice_qty
+          return el.qty !== el.project_invoice_qty
         })
         setQtyMatch(qtymatch);
         console.log('qtymatch',qtymatch)
@@ -764,21 +764,20 @@ const toggle = (tab) => {
               </Button>
             </Col>
           </Row>
-          
       </ComponentCardV2>
       <ApiButton
               editData={editInvoiceData}
               navigate={navigate}
               applyChanges={editInvoiceData}
-             // deleteData={deleteBookingData}
+              //deleteData={deleteBookingData}
               backToList={backToList}
-              module="ProjectSalesInvoice"
+              module="Invoice"
             ></ApiButton>
       </FormGroup>
   
       {/*Main Details*/}
       <ComponentCard title="Invoice Details" creationModificationDate={bookingDetails}>
-        <InvoiceDetailComp
+        <ProjectInvoiceMainDetails
           bookingDetails={bookingDetails}
           handleInputs={handleInputs}
           orderdropdown={orderdropdown}
@@ -837,13 +836,13 @@ const toggle = (tab) => {
           )}
             </Col>
           <Col md="3">
-                  <PartialINvoiceEdit
+                  <ProjectPartialInvoiceEdit
                   partialinvoiceeditmodal={partialinvoiceeditmodal}
                   setPartialInvoiceEditModal={setPartialInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
                   arb={arb}
           arabic={arabic}
-                    ></PartialINvoiceEdit>
+                    ></ProjectPartialInvoiceEdit>
                     {(displayButtonVisible && ((displayButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
                       
   <Button
@@ -862,10 +861,9 @@ const toggle = (tab) => {
         
       </Col>
           </Row>   
-          <OrderItemTable
+          <ProjectOrderItemTable
         orderitemDetails={orderitemDetails}
-        qtyMatch={qtyMatch}
-        
+        qtyMatch={qtyMatch} 
        />     
           </TabPane>
 
@@ -887,13 +885,13 @@ const toggle = (tab) => {
           )}
             </Col>
           <Col md="3">
-                  <PartialInvoiceGoodsEdit
+                  <ProjectPartialInvoiceGoodsEdit
                   partialgoodsinvoiceeditmodal={partialgoodsinvoiceeditmodal}
                   setPartialGoodsInvoiceEditModal={setPartialGoodsInvoiceEditModal}
                   SalesInvoiceId={insertedDataId}
                   arb={arb}
           arabic={arabic}
-                    ></PartialInvoiceGoodsEdit>
+                    ></ProjectPartialInvoiceGoodsEdit>
                      {(displayGoodsButtonVisible && ((displayGoodsButtonVisible &&orderitemDetails.length ===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
                     <Button
             className="shadow-none"
@@ -912,7 +910,7 @@ const toggle = (tab) => {
         
       </Col>
           </Row>   
-          <GoodsItemTable
+          <ProjectGoodsItemTable
         orderitemDetails={orderitemDetails}
         arb={arb}
           arabic={arabic}
