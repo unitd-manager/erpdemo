@@ -15,8 +15,9 @@ const BookingDetails = () => {
     const [invoicedetails, setInvoiceDetails] = useState({
       company_id: '',
       source_type: '',
-      order_id:'',
-      goods_delivery_id:'',
+      source_type_arb: '',
+      project_order_id:'',
+      project_goods_delivery_id:'',
     });
     const [customerdropdown, setCustomerDropdown] = useState();
     const [orderdropdown, setOrderDropdown] = useState();
@@ -29,12 +30,43 @@ const BookingDetails = () => {
      //get staff details
      const { loggedInuser } = useContext(AppContext);
     //  const { id } = useParams();
+    const getSelectedLanguageFromLocalStorage = () => {
+      return localStorage.getItem('selectedLanguage') || '';
+    };
+  
+    const selectedLanguage = getSelectedLanguageFromLocalStorage();
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+  const getTranslationforProjectSalesInvoice = () => {
+    api
+    .get('/projectsalesinvoice/getTranslationforProjectSalesInvoice')
+    .then((res) => {
+      setArabic(res.data.data);
+    })
+    .catch(() => {
+      // Handle error if needed
+    });   
+};
+
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
+  useEffect(() => {
+    getTranslationforProjectSalesInvoice();
+  }, []);
     //inserting supplier data
-    const insertSalesInvoice = (code) => {
+    const insertProjectSalesInvoice = (code) => {
       setFormSubmitted(true);
-      if (invoicedetails.company_id !== '' &&
-      invoicedetails.source_type !== ''
-      )
+      if (invoicedetails.company_id !== '' && (arb && invoicedetails.source_type.trim() !== '') || (!arb && invoicedetails.source_type_arb.trim() !== '')) 
       {
       invoicedetails.creation_date = creationdatetime;
       invoicedetails.created_by= loggedInuser.first_name;
@@ -120,10 +152,10 @@ const handleInputs = (e) => {
               api
                 .post('/commonApi/getCodeValue', { type: 'invoice' })
                 .then((res) => {
-                  insertSalesInvoice(res.data.data);
+                  insertProjectSalesInvoice(res.data.data);
                 })
                 .catch(() => {
-                  insertSalesInvoice('');
+                  insertProjectSalesInvoice('');
                 });
             };
      useEffect(() => {
@@ -137,29 +169,42 @@ const handleInputs = (e) => {
         <ToastContainer />
         <Row>
       <Col md="6" xs="12">
-          <ComponentCard title="Invoice Details">
+          <ComponentCard title={arb ? 'تفاصيل الفاتورة': 'Invoice Details'}>
             <Form>
               <FormGroup>
                 <Row>
                 <Col md="12">
-            <Label>Customer Name <span className="required"> *</span>{' '}</Label>
-            <Input 
-            type="select" 
-            name="company_id" 
-            onChange={handleInputs}>
-              className={`form-control ${
-                        formSubmitted && invoicedetails.company_id.trim() === '' ? 'highlight' : ''
-                      }`}
-              <option>Select Customer</option>
-              {customerdropdown &&
-                customerdropdown.map((e) => {
-                  return (
-                    <option key={e.company_id} value={e.company_id}>
-                      {e.company_name}
-                    </option>
-                  );
-                })}
-            </Input>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.CompanyName')?.[genLabel]}
+              </Label><span className='required'>*</span>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            invoicedetails && invoicedetails.sub_category_title_arb ? invoicedetails.sub_category_title_arb :
+                            (invoicedetails && invoicedetails.sub_category_title_arb !== null ? '' : invoicedetails && invoicedetails.sub_category_title)
+                          )
+                        : (invoicedetails && invoicedetails.sub_category_title)
+                    }
+                    name="company_id"
+                    className={`form-control ${
+                      formSubmitted && invoicedetails.company_id.trim() === '' ? 'highlight' : ''
+                    }`}
+                    >
+                      <option value="selected">Please Select</option>
+                    {customerdropdown &&
+                      customerdropdown.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb && e.company_name_arb ?e.company_name : e.company_name}
+                            {' '}
+                          </option>
+                        );
+                      })}
+                      </Input>
             {formSubmitted && invoicedetails.company_id.trim() === '' && (
                       <div className="error-message">Please Enter</div>
                     )}
@@ -170,39 +215,52 @@ const handleInputs = (e) => {
                 <Row>
                 <Col md="12">
               <FormGroup>
-                <Label>Invoice Source</Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.InvoiceSource')?.[genLabel]}
+                  </Label>
                 <br></br>
                 
                 <Input
-                  name="source_type"
+                  name={arb ? 'source_type_arb' : 'source_type'}
                   value="Sales_Order"
                   type="radio"
-                  defaultChecked={invoicedetails && invoicedetails.source_type === 'Sales Order' && true}
+                  defaultChecked={
+                    ( (invoicedetails && invoicedetails.source_type === 'Sales Order') ||
+                    (invoicedetails && invoicedetails.source_type_arb === 'Sales Order') ) && true
+                   }
                   onChange={handleInputs}
                 />
-                <Label style={{ marginRight: '50px' }}>Sales Order</Label>
+                 <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.SalesOrder')?.[genLabel]}
+                  </Label>
                 <Input
-                  name="source_type"
+                  name={arb ? 'source_type_arb' : 'source_type'}
                   value="Goods_Delivery"
                   type="radio"
-                  defaultChecked={invoicedetails && invoicedetails.source_type === 'Goods Delivery' && true}
+                  defaultChecked={
+                    ( (invoicedetails && invoicedetails.source_type === 'Goods_Delivery') ||
+                    (invoicedetails && invoicedetails.source_type_arb === 'Goods_Delivery') ) && true
+                   }
                   onChange={handleInputs}
                 />
-                <Label style={{ marginRight: '10px' }}>Goods Delivery</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.GoodsDelivery')?.[genLabel]}
+                </Label>
               </FormGroup>
               </Col>
               {
-invoicedetails && (
-  invoicedetails.source_type === 'Sales_Order' )&&
+                ( (invoicedetails && invoicedetails.source_type === 'Sales_Order') ||
+                (invoicedetails && invoicedetails.source_type_arb === 'Sales_Order') )&&
   (
   <>
-
   <Col md="12">
     <FormGroup>
-      <Label>Sales Order</Label>
+    <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.SalesOrder')?.[genLabel]}
+                  </Label>
       <Input 
             type="select" 
-            name="invoice_source_id" 
+            name="project_invoice_source_id" 
             onChange={handleInputs}>
               
               <option>Select Order</option>
@@ -210,7 +268,7 @@ invoicedetails && (
                 orderdropdown.map((e) => {
                   return (
                     <option key={e.order_id} value={e.order_id}>
-                      {e.order_code}
+                      {arb && e.order_code ?e.order_code_arb : e.order_code}
                     </option>
                   );
                 })}
@@ -219,12 +277,16 @@ invoicedetails && (
             </Col>
   </>
 )}
-
-{invoicedetails && invoicedetails.source_type === 'Goods_Delivery' && (
+{
+  ( (invoicedetails && invoicedetails.source_type === 'Goods_Delivery') ||
+  (invoicedetails && invoicedetails.source_type_arb === 'Goods_Delivery') )&&
+(
   <>
     <Col md="12">
       <FormGroup>
-        <Label>Goods Delivery</Label>
+      <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdProjectSalesInvoice.GoodsDelivery')?.[genLabel]}
+                </Label>
         <Input 
           type="select" 
           name="invoice_source_id" 
@@ -235,7 +297,7 @@ invoicedetails && (
             goodsdeliverydropdown.map((e) => {
               return (
                 <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
-                  {e.goods_delivery_code}
+                  {arb && e.goods_delivery_code ?e.goods_delivery_code_arb : e.goods_delivery_code}
                 </option>
               );
             })}
@@ -259,7 +321,7 @@ invoicedetails && (
               </Button>
               <Button
                 onClick={() => {
-                  navigate('/SalesInvoice')
+                  navigate('/ProjectSalesInvoice')
                 }}
                 type="button"
                 className="btn btn-dark shadow-none" >
