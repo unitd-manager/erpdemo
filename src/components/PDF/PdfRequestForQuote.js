@@ -235,8 +235,8 @@ const PdfRequestForQuote = ({id,quoteId}) => {
         },
  
         {
-          text: `Date :   ${(quote.quote_date)? moment(quote.quote_date).format('DD-MM-YYYY'):''}
-           Quote Code :  ${quote.quote_code ? quote.quote_code : ''}
+          text: `Date :   ${(quote.date_issued)? moment(quote.date_issued).format('DD-MM-YYYY'):''}
+           Quote Code :  ${quote.rq_code ? quote.rq_code : ''}
           Purchase Request Code : ${quote.purchase_request_code ? quote.purchase_request_code : ''
           }\n \n  `,
           style: ['invoiceAdd', 'textSize'],

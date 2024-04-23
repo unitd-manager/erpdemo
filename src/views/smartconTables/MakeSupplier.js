@@ -160,7 +160,7 @@ if (arb === true) {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/quote/getSupplierPurchase')
+      .get('/supplier/getSupplier')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -173,7 +173,7 @@ if (arb === true) {
   //Logic for adding Booking in db
 
   const insertReceipt = (code) =>{
-    const insertedOrderId = bookingDetails.purchase_order_id;
+    const insertedOrderId = bookingDetails.supplier_id;
       bookingDetails.supplier_receipt_code=code;
       api
         .post('/supplier/insert-SupplierReceipt', bookingDetails)
@@ -259,13 +259,13 @@ if (arb === true) {
                           <Label>
                           {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
                           </Label>
-                          <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
+                          <Input type="select" name="supplier_id" onChange={handleBookingInputs}>
                             <option>Select Customer</option>
                             {company &&
                               company.map((e) => {
                                 return (
-                                  <option key={e.purchase_order_id} value={e.purchase_order_id}>
-                                    {e.po_code}
+                                  <option key={e.supplier_id} value={e.supplier_id}>
+                                    {e.company_name}
                                   </option>
                                 );
                               })}
