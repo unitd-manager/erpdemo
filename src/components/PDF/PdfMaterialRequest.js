@@ -10,10 +10,9 @@ import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
-const PdfQuote = ({ id, quoteId }) => {
-  PdfQuote.propTypes = {
+const PdfMaterialRequest = ({ id }) => {
+  PdfMaterialRequest.propTypes = {
     id: PropTypes.any,
-    quoteId: PropTypes.any,
   };
   const [hfdata, setHeaderFooterData] = React.useState();
   const [quote, setQuote] = React.useState([]);
@@ -25,7 +24,7 @@ const PdfQuote = ({ id, quoteId }) => {
   //const [lineItem, setLineItem] = useState(null);
 
   React.useEffect(() => {
-    api.get('/setting/getSettingsForCompany').then((res) => {
+    api.get('/materialrequest/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
     });
   }, []);
@@ -37,7 +36,7 @@ const PdfQuote = ({ id, quoteId }) => {
 
   const getCompany = () => {
     api
-      .post('/tradingquote/getTradingquoteById', { quote_id: id })
+      .post('/materialrequest/getMaterialtequestDataById', { material_request_id: id })
       .then((res) => {
         setTenderDetails(res.data.data);
         console.log('1', res.data.data);
@@ -47,17 +46,45 @@ const PdfQuote = ({ id, quoteId }) => {
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/tradingquote/getTradingquoteById', { quote_id: id }).then((res) => {
+    api.post('/materialrequest/getMaterialtequestDataById', { material_request_id: id }).then((res) => {
       setQuote(res.data.data);
       console.log('quote', res.data.data);
     });
   };
+  // const getQuoteById = () => {
+  //   api
+  //     .post('/materialrequest/getMaterialrequestItemsById', { material_request_id: id })
+  //     .then((res) => {
+  //       const items = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+      
+  //     setLineItem(items);
+  //       console.log('quote1', res.data.data);
+  //       let grandTotal = 0;
+  //       let grand = 0;
+  //       let gst = 0;
+  //       res.data.data.forEach((elem) => {
+  //         grandTotal += elem.amount;
+  //         //  grand += elem.actual_value;
+  //       });
+  //       setGtotal(grandTotal);
+  //       gst = grandTotal * 0.07;
+  //       setGsttotal(gst);
+  //       grand = grandTotal + gst;
+  //       setTotal(grand);
+  //       //setViewLineModal(true);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching quote:', error);
+  //       // Handle the error here, e.g., display an error message to the user
+  //     });
+  // };
+
   const getQuoteById = () => {
     api
-      .post('/materialrequest/getMaterialrequestItemsById', { quote_id: quoteId })
+      .post('/materialrequest/getMaterialrequestItemsById', { material_request_id: id })
       .then((res) => {
         setLineItem(res.data.data);
-        console.log('quote1', res.data.data);
+        console.log('quote1', res.data.data[0]);
         let grandTotal = 0;
         let grand = 0;
         let gst = 0;
@@ -74,11 +101,17 @@ const PdfQuote = ({ id, quoteId }) => {
       })
       .catch(() => {});
   };
+console.log('lineitem', lineItem)
+
   React.useEffect(() => {
     getQuote();
     getQuoteById();
     getCompany();
   }, []);
+  React.useEffect(() => {
+   
+    getQuoteById();
+  }, [id]);
 
   const GetPdf = () => {
     const lineItemBody = [
@@ -92,10 +125,21 @@ const PdfQuote = ({ id, quoteId }) => {
           style: 'tableHead',
         },
         {
-          text: 'Description',
+          text: 'Brand',
           style: 'tableHead',
         },
-
+        {
+          text: 'Supplier',
+          style: 'tableHead',
+        },
+        {
+          text: 'Qty',
+          style: 'tableHead',
+        },
+        {
+          text: 'Unit Price',
+          style: 'tableHead',
+        },
         {
           text: 'Amount S$',
           style: 'tableHead',
@@ -116,22 +160,25 @@ const PdfQuote = ({ id, quoteId }) => {
           style: 'tableBody',
         },
         {
-            text: `${element.description}`,
+            text: `${element.brand}`,
             border: [false, false, false, true],
             style: 'tableBody',
           },
-        {
-          text: `${element.quantity}`,
-          border: [false, false, false, true],
-          style: 'tableBody',
-        },
-        {
+          {
+            text: `${element.company_name}`,
+            border: [false, false, false, true],
+            style: 'tableBody',
+          },
+          {
+            text: `${element.quantity}`,
+            border: [false, false, false, true],
+            style: 'tableBody',
+          },
+          {
             text: `${element.unit_price}`,
             border: [false, false, false, true],
             style: 'tableBody',
           },
-         
-
         {
           text: `${element.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
           border: [false, false, false, true],
@@ -195,7 +242,7 @@ const PdfQuote = ({ id, quoteId }) => {
             body: [
               [
                 {
-                  text: 'QUOTATION',
+                  text: 'Material Request',
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -227,8 +274,8 @@ const PdfQuote = ({ id, quoteId }) => {
         },
 
         {
-          text: `Date :   ${quote.quote_date ? moment(quote.quote_date).format('DD-MM-YYYY') : ''}
-           Quote Code :  ${quote.quote_code ? quote.quote_code : ''}\n \n  `,
+          text: `Date :   ${quote.material_request_date ? moment(quote.material_request_date).format('DD-MM-YYYY') : ''}
+           Quote Code :  ${quote.material_request_code ? quote.material_request_code : ''}\n \n  `,
           style: ['invoiceAdd', 'textSize'],
           margin: [0, -60, 0, 0],
         },
@@ -242,9 +289,9 @@ const PdfQuote = ({ id, quoteId }) => {
 
         '\n',
         {
-          text: `Dear Sir,
+          text: `Dear Sir/Madam,
 
-           With reference to the above captions, we would like to thank you for inviting us to quote for the above mentioned works and we are pleased to submit herewith our Value Quotation for you kind persual.`,
+          We would like to express our gratitude for the opportunity to fulfill your material request. Enclosed herewith, please find the requested items and their corresponding specifications for your review and consideration:`,
 
           style: ['notesText', 'textSize'],
         },
@@ -292,7 +339,7 @@ const PdfQuote = ({ id, quoteId }) => {
           },
           table: {
             headerRows: 1,
-            widths: [95, 120, 105, 100],
+            widths: [20, 130, 40, 60, 40, 40, 60],
 
             body: lineItemBody,
           },
@@ -421,4 +468,4 @@ const PdfQuote = ({ id, quoteId }) => {
   );
 };
 
-export default PdfQuote;
+export default PdfMaterialRequest;
