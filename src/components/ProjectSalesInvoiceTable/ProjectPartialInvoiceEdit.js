@@ -109,7 +109,7 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
   //Api call for getting Vehicle Insurance Data By ID
   const OrderLineItemsById = () => {
     api
-      .post('/invoice/getInvoiceByOrderItemId', { invoice_id: SalesInvoiceId })
+      .post('/projectsalesinvoice/getInvoiceByOrderItemId', { invoice_id: SalesInvoiceId })
       .then((res) => {
         setPartialInvoiceEditDetails(res.data.data);
       })

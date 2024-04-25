@@ -48,7 +48,7 @@ export default function  ItemTable({
                <td>{element.unit}</td>
                <td>{element.unit_price}</td>
                <td>{element.qty}</td>
-               <td>{element.invoice_qty}</td>
+               <td>{element.project_invoice_qty}</td>
                 <td>{element.total_cost}</td>
                 <td>{element.modification_date  ? `${element.modified_by} (Modified on ${element.modification_date})` : `${element.created_by} (Created on ${element.creation_date})`}</td>
               </tr>
