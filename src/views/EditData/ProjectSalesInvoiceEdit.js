@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,7 +12,7 @@ import api from '../../constants/api';
 import ComponentCard from '../../components/ComponentCard';
 import InvoiceDetailComp from '../../components/BookingTable/InvoiceDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
@@ -716,9 +717,10 @@ const toggle = (tab) => {
       <BreadCrumbs />
       <FormGroup>
       <ToastContainer/>
-      <ComponentCardV2>
+      <Row><Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col></Row>
+      {/* <ComponentCardV2>
       <Row>
-      <Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
+      
          <Col>
               <Button
                 color="primary"
@@ -765,7 +767,7 @@ const toggle = (tab) => {
             </Col>
           </Row>
           
-      </ComponentCardV2>
+      </ComponentCardV2> */}
       <ApiButton
               editData={editInvoiceData}
               navigate={navigate}

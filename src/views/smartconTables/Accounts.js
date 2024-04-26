@@ -129,6 +129,7 @@ const Accounts = () => {
         <CommonTable
           loading={loading}
           title="Account List"
+          module='Accounts'
           Button={
             <Link to="/AccountDetails">
               <Button color="primary" className="shadow-none">

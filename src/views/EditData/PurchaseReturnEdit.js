@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/PurchaseReturn/ProjectQuoteButton';
+//import ProjectQuoteButton from '../../components/PurchaseReturn/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/PurchaseReturn/ProjectQuoteMoreDetails';
 import QuotationAttachment from '../../components/PurchaseReturn/QuotationAttachment';
 import ReturnInvoiceItemTable from '../../components/PurchaseReturn/ReturnInvoiceItemTable';
@@ -66,7 +66,7 @@ const PurchaseReturnEdit = () => {
   console.log('insertedDataId:', insertedDataId);
   console.log('invoiceId:', purchaseInvoiceId);
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/PurchaseReturn');
   };
@@ -254,12 +254,12 @@ const PurchaseReturnEdit = () => {
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <ProjectQuoteButton
+      {/* <ProjectQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></ProjectQuoteButton>
+      ></ProjectQuoteButton> */}
 <ApiButton
               editData={editTenderData}
               navigate={navigate}

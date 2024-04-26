@@ -152,6 +152,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}s
           title={arb ? 'قائمة الفئات': 'Category List'}
+          module='Categoty'
           Button={
             <Link to="/CategoryDetails">
               <Button color="primary" className="shadow-none">

@@ -134,7 +134,7 @@ const Claints = () => {
             </Link>
           </Col>
         </Row>
-        <CommonTable loading={loading} title="Client List">
+        <CommonTable loading={loading} title="Client List" module='Client'>
           <thead>
             <tr>
               {columns.map((cell) => {

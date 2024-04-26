@@ -118,6 +118,7 @@ const CpfCalculator = () => {
         <CommonTable
           loading={loading}
           title="Cpf Calculator List"
+          module='CpfCalculator'
           Button={
             <>
               <Row>

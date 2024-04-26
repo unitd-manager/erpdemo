@@ -12,7 +12,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
+//import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
 import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
@@ -32,7 +32,7 @@ const GoodsDeliveryEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/GoodsDelivery');
   };
@@ -241,14 +241,14 @@ const GoodsDeliveryEdit = () => {
     {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
       {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
      {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} />*/}
-      <GoodsDeliveryButton
+      {/* <GoodsDeliveryButton
         editGoodsDelivery={editGoodsDelivery}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         //OrderId={OrderId}
         id={id}
-      ></GoodsDeliveryButton>
+      ></GoodsDeliveryButton> */}
 
 <ApiButton
               editData={editGoodsDelivery}

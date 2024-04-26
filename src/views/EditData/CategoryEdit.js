@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import CategoryButton from '../../components/CategoryTable/CategoryButton';
+//import CategoryButton from '../../components/CategoryTable/CategoryButton';
 import CategoryDetailComp from '../../components/CategoryTable/CategoryDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
@@ -23,12 +23,12 @@ const CategoryEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if (categoryDetails.category_title !== '') {
-      navigate('/Category');
-    }
-  };
+  // const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if (categoryDetails.category_title !== '') {
+  //     navigate('/Category');
+  //   }
+  // };
   const backToList = () => {
     navigate('/Category');
   };
@@ -154,7 +154,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       <ToastContainer></ToastContainer>
 
       {/* Button */}
-      <CategoryButton
+      {/* <CategoryButton
         editCategoryData={editCategoryData}
         navigate={navigate}
         applyChanges={applyChanges}
@@ -163,7 +163,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         backToList={backToList}
         id={id}
         setFormSubmitted={setFormSubmitted}
-      ></CategoryButton>
+      ></CategoryButton> */}
 <ApiButton
               editData={editCategoryData}
               navigate={navigate}

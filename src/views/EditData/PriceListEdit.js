@@ -20,7 +20,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import PlanningMainDetails from '../../components/PriceList/PriceMainDetails';
-import PlanningButton from '../../components/PriceList/PriceButton';
+//import PlanningButton from '../../components/PriceList/PriceButton';
 import PlanningCpanel from '../../components/PriceList/PriceListItem';
 import PlanEditModal from '../../components/PriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
@@ -94,12 +94,12 @@ const [arabic, setArabic] = useState([]);
   }
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if ((arb && plannings.customer_name_arb.trim() !== '') || (!arb && plannings.customer_name.trim() !== '')) {
-      navigate('/PriceList');
-    }
-  };
+ // const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if ((arb && plannings.customer_name_arb.trim() !== '') || (!arb && plannings.customer_name.trim() !== '')) {
+  //     navigate('/PriceList');
+  //   }
+  // };
   const backToList = () => {
     navigate('/PriceList');
   };
@@ -207,7 +207,7 @@ const handleAddNewPlanning = (e) => {
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
@@ -216,7 +216,7 @@ const handleAddNewPlanning = (e) => {
         id={id}
         formSubmitted={formSubmitted}
         setFormSubmitted={setFormSubmitted}
-       ></PlanningButton>
+       ></PlanningButton> */}
        <ApiButton
               editData={editplanningData}
               navigate={navigate}

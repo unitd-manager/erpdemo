@@ -12,7 +12,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/EquipmentRequest/TradingQuoteButton';
+//import TradingQuoteButton from '../../components/EquipmentRequest/TradingQuoteButton';
 import TradingQuoteMoreDetails from '../../components/EquipmentRequest/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/EquipmentRequest/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -73,7 +73,7 @@ const [arabic, setArabic] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/EquipmentRequest');
   };
@@ -280,13 +280,13 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TradingQuoteButton
+      {/* <TradingQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></TradingQuoteButton>
+      ></TradingQuoteButton> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

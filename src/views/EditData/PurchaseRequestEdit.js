@@ -10,7 +10,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEditButton';
+//import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEditButton';
 import PurchaseRequestItemModal from '../../components/PurchaseRquestTable/PurchaseRequestItemModal';
 import PurchaseRequestEditDetails from '../../components/PurchaseRquestTable/PurchaseRequestEditDetails';
 import PurchaseRequestLineItems from '../../components/PurchaseRquestTable/PurchaseRequestLineItems';
@@ -167,11 +167,11 @@ const PurchaseRequestEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <PurchaseEditButton
+      {/* <PurchaseEditButton
         id={id}
         editPurchaseRequestData={editPurchaseRequestData}
         navigate={navigate}
-      />
+      /> */}
       <ApiButton
               editData={editPurchaseRequestData}
               navigate={navigate}
