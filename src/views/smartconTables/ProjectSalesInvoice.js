@@ -23,7 +23,7 @@ const Opportunity = () => {
 
   const getinvoice = () => {
     api
-      .get('/projecsalesinvoice/getProjectInvoices')
+      .get('/projectsalesinvoice/getProjectInvoices')
       .then((res) => {
         setInvoice(res.data.data);
         $('#example').DataTable({
@@ -55,7 +55,7 @@ const Opportunity = () => {
 
   const getArabicCompanyName = () => {
       api
-      .get('/projectsalesinvoice/getTranslationforTradingSalesInvoice')
+      .get('/projectsalesinvoice/getTranslationforProjectSalesInvoice')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -67,7 +67,6 @@ const Opportunity = () => {
   useEffect(() => {
     getinvoice();
     getArabicCompanyName();
-
   }, []);
   let genLabel = '';
 
@@ -86,7 +85,7 @@ const Opportunity = () => {
       width: '4%',
     },
     {
-      name:arb ? 'يحرر' : 'Edit',
+      name: arabic.find(item => item.key_text === 'mdProjectSalesInvoice.Edit')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -95,7 +94,7 @@ const Opportunity = () => {
       sortable: false,
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Code')?.[genLabel], 
+      name: arabic.find(item => item.key_text === 'mdProjectSalesInvoice.InvoiceCode')?.[genLabel], 
       selector: 'invoice_code',
       sortable: true,
       grow: 0,
@@ -109,41 +108,39 @@ const Opportunity = () => {
     //   wrap: true,
     // },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.CompanyName')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Date')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.InvoiceDate')?.[genLabel],
       selector: 'invoice_date',
       sortable: true,
       grow: 0,
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Amount')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.InvoiceAmount')?.[genLabel],
       selector: 'invoice_amount',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Invoice Due Date')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.InvoiceDueDate')?.[genLabel],
      selector: 'invoice_due_date',
       sortable: true,
       grow: 2,
       width: 'auto',
     },
     {
-      name:arb ? 'حالة' : 'Status',
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.Status')?.[genLabel],
       selector: 'status',
       sortable: true,
       grow: 2,
       wrap: true,
     },
-   
-   
   ];
 
   return (

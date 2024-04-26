@@ -26,7 +26,7 @@ const ProjectReceiptDetails = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrders')
+      .get('/projectreceipts/getOrders')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -45,10 +45,10 @@ const ProjectReceiptDetails = () => {
      
       bookingDetails.receipt_code=code;
       api
-        .post('/finance/insertprojectreceipt', bookingDetails)
+        .post('/projectreceipts/insertprojectreceipt', bookingDetails)
         .then(() => {
          
-          message('Booking inserted successfully.', 'success');
+          message('Receipts inserted successfully.', 'success');
          
         })
         .catch(() => {
@@ -78,19 +78,19 @@ const ProjectReceiptDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="12">
-          <ComponentCard title="Receipt Details">
+          <ComponentCard title="Project Receipt Details">
             <Form>
               <FormGroup>
                 <Row>
                 <Col md="10">
             <Label>Orders</Label>
             <Input type="select" name="order_id" onChange={handleBookingDataInputs}>
-              <option>Select Orders</option>
+              <option>Select Project Orders</option>
               {company &&
                 company.map((e) => {
                   return (
-                    <option key={e.order_id} value={e.order_id}>
-                      {e.order_code}
+                    <option key={e.project_order_id} value={e.project_order_id}>
+                      {e.project_order_code}
                     </option>
                   );
                 })}

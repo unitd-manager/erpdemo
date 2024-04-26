@@ -20,6 +20,7 @@ import QuoteLineItem from '../../components/MaterialRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/MaterialRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 import ApiButton from '../../components/ApiButton';
+import PdfMaterialRequest from '../../components/PDF/PdfMaterialRequest';
 
 const MaterialRequestEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -312,6 +313,7 @@ const [arabic, setArabic] = useState([]);
         arabic={arabic}
         genLabel={genLabel}
       ></TradingQuoteMoreDetails>
+      <PdfMaterialRequest id={id} quoteId={id}></PdfMaterialRequest>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
