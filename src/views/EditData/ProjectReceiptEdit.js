@@ -8,11 +8,11 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ComponentCard from '../../components/ComponentCard';
-import InvoiceItem from '../../components/BookingTable/InvoiceItem';
+import ProjectInvoiceItem from '../../components/BookingTable/ProjectInvoiceItem';
 import ItemTable from '../../components/BookingTable/ItemTable';
 //import InvoiceButton from '../../components/BookingTable/InvoiceButton';
 import ReceiptDetailComp from '../../components/BookingTable/ReceiptDetailComp';
-import InvoiceItemTable from '../../components/BookingTable/InvoiceItemTable';
+import ProjectInvoiceItemTable from '../../components/BookingTable/ProjectInvoiceItemTable';
 import ApiButton from '../../components/ApiButton';
 
 const ProjecReceiptEdit = () => {
@@ -107,20 +107,20 @@ const ProjecReceiptEdit = () => {
           company={company}
         />
       </ComponentCard>
-      <InvoiceItem
+      <ProjectInvoiceItem
         editInvoiceItemData={editInvoiceItemData}
         setEditInvoiceItemData={setEditInvoiceItemData}
         invoiceInfo={id}
           // addLineItem={addLineItem}
           // AddNewLineItem={AddNewLineItem}
           // ClearValue={ClearValue}
-        ></InvoiceItem>
-          <InvoiceItemTable
+        ></ProjectInvoiceItem>
+          <ProjectInvoiceItemTable
         editModal={editModal}
         setEditModal={setEditModal}
         editInvoiceModal={editInvoiceModal}
       />
-      <ComponentCard title="Invoice Items">
+      <ComponentCard title="Project Invoice Items">
       <Col>
           <Button
             className="shadow-none"
