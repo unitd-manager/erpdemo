@@ -269,7 +269,7 @@ const handleInputs = (e) => {
                 orderdropdown.map((e) => {
                   return (
                     <option key={e.project_order_id} value={e.project_order_id}>
-                      {arb && e.project_order_code ?e.project_order_code_arb : e.project_order_code}
+                      {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}
                     </option>
                   );
                 })}
@@ -290,7 +290,7 @@ const handleInputs = (e) => {
                 </Label>
         <Input 
           type="select" 
-          name="invoice_source_id" 
+          name="project_invoice_source_id" 
           onChange={handleInputs}
         >
           <option>Select Goods Delivery</option>
@@ -298,7 +298,7 @@ const handleInputs = (e) => {
             goodsdeliverydropdown.map((e) => {
               return (
                 <option key={e.project_goods_delivery_id} value={e.project_goods_delivery_id}>
-                  {arb && e.project_goods_delivery_code ?e.project_goods_delivery_code_arb : e.project_goods_delivery_code}
+                  {arb?e.project_goods_delivery_code_arb:e.project_goods_delivery_code} - {arb?e.company_name_arb:e.company_name}
                 </option>
               );
             })}

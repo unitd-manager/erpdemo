@@ -65,7 +65,7 @@ const handleCalc = (Qty, UnitPrice) => {
 //Api call for getting Vehicle Insurance Data By ID
 const OrderLineItemsById = () => {
   api
-    .post('/invoice/getInvoiceByOrderItemId', {project_invoice_id: SalesInvoiceId})
+    .post('/projectsalesinvoice/getInvoiceByOrderItemId', {project_invoice_id: SalesInvoiceId})
     .then((res) => {
       setPartialInvoiceEditDetails(res.data.data);
     })
@@ -78,7 +78,7 @@ const OrderLineItemsById = () => {
     
     partialinvoiceeditdetails.forEach((item) => {
     api
-      .post('/invoice/editInvoiceItems', item)
+      .post('/projectsalesinvoice/editInvoiceItems', item)
       .then(() => {
         message('Line Item Edited Successfully', 'sucess');
       })

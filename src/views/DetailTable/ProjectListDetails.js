@@ -169,7 +169,7 @@ const getProposalCode = () => {
                             proposalcode.map((e) => {
                               return (
                                 <option key={e.proposal_id} value={e.proposal_id}>
-                                  {e.proposal_code}
+                                  {e.proposal_code} - {e.company_name}
                                 </option>
                               );
                             })}

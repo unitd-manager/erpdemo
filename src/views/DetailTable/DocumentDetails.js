@@ -133,7 +133,7 @@ const DocumentDetails = () => {
                             projecttitle.map((e) => {
                               return (
                                 <option key={e.project_id} value={e.project_id}>
-                                  {e.title}
+                                  {e.title} - {e.company_name}
                                 </option>
                               );
                             })}
