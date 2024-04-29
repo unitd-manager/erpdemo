@@ -290,7 +290,7 @@ const handleInputs = (e) => {
                 </Label>
         <Input 
           type="select" 
-          name="invoice_source_id" 
+          name="project_invoice_source_id" 
           onChange={handleInputs}
         >
           <option>Select Goods Delivery</option>
