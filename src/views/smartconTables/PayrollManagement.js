@@ -797,7 +797,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                       </Link>
                     </td>
                     {/* <td>{element.employee_name}</td> */}
-                    <td>{arb ? element.employee_name_arb : element.employee_name}</td>
+                    <td>{arb ? element.employee_name_arb ||element.first_name_arb : element.employee_name ||element.first_name}</td>
 
                     <td>
                       {/* <PdfPaySlipList payroll={element}></PdfPaySlipList> */}

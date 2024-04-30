@@ -55,7 +55,7 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
         setJobModal(res.data.data[0]);
       })
       .catch(() => {
-        message('JobInformation Data Not Found', 'info');
+       // message('JobInformation Data Not Found', 'info');
       });
   };
   const handleInputs = (e) => {
@@ -102,7 +102,7 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
         setAllBankModal(res.data.data);
       })
       .catch(() => {
-        message('JobInformation Data Not Found', 'info');
+       // message('JobInformation Data Not Found', 'info');
       });
   };
   //  toggle
