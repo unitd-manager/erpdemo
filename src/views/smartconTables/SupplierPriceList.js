@@ -136,9 +136,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Supplier Price List"
+          module='Supplier Price List'
           Button={
             <Link to="/SupplierPriceListDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

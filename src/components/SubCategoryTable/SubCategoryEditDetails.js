@@ -3,7 +3,7 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
 
-export default function SubCategoryEditDetails({ subcategoryeditdetails, handleInputs, category, formSubmitted, arb, arabic, }) {
+export default function SubCategoryEditDetails({ subcategoryeditdetails, handleInputs, category, formSubmitted, arb, arabic, subcategorytypedetails}) {
   SubCategoryEditDetails.propTypes = {
     subcategoryeditdetails: PropTypes.object,
     handleInputs: PropTypes.func,
@@ -11,6 +11,7 @@ export default function SubCategoryEditDetails({ subcategoryeditdetails, handleI
     formSubmitted: PropTypes.any,
     arb: PropTypes.any,
     arabic: PropTypes.any,
+    subcategorytypedetails: PropTypes.any
   };
   let genLabel = '';
 
@@ -80,7 +81,37 @@ export default function SubCategoryEditDetails({ subcategoryeditdetails, handleI
                   </Input>
                 </FormGroup>
               </Col>
-            <Col md="3">
+              <Col md="3">
+                <FormGroup>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                {arabic.find((item) => item.key_text === 'mdSubCategory.SubCategoryType')?.[genLabel]}
+              </Label>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            subcategoryeditdetails && subcategoryeditdetails.sub_category_type_arb ? subcategoryeditdetails.sub_category_type_arb :
+                            (subcategoryeditdetails && subcategoryeditdetails.sub_category_type_arb !== null ? '' : subcategoryeditdetails && subcategoryeditdetails.sub_category_type)
+                          )
+                        : (subcategoryeditdetails && subcategoryeditdetails.sub_category_type)
+                    }
+                    name={arb ? 'sub_category_type_arb' : 'sub_category_type'}
+                  >
+                    <option defaultValue="selected">Please Select</option>
+                    {subcategorytypedetails &&
+                      subcategorytypedetails.map((e) => {
+                        return (
+                          <option key={e.value} value={e.value}>
+                            {e.value}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
+            {/* <Col md="3">
               <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubCategory.SubCategoryType')?.[genLabel]}
@@ -104,7 +135,7 @@ export default function SubCategoryEditDetails({ subcategoryeditdetails, handleI
                         <option value="Awarded">{arb ?'منحت':'Regisration'}</option>
                       </Input>
               </FormGroup>
-            </Col>
+            </Col> */}
             <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -151,32 +182,50 @@ export default function SubCategoryEditDetails({ subcategoryeditdetails, handleI
                 {arabic.find((item) => item.key_text === 'mdSubCategory.Published')?.[genLabel]}
                 </Label>
                 <br></br>
-                <Input
-                name={arb ? 'published_arb' : 'published'}
+                {/* <Input
+                name="published"
                   value="1"
                   type="radio"
-                  defaultChecked={
-                   ( (subcategoryeditdetails && subcategoryeditdetails.published === 1) ||
-                   (subcategoryeditdetails && subcategoryeditdetails.published_arb === 1) ) && true
-                  }
+                  defaultChecked={subcategoryeditdetails && subcategoryeditdetails.published === 1 && true}
+                  // defaultChecked={
+                  //  ( (subcategoryeditdetails && subcategoryeditdetails.published === 1) ||
+                  //  (subcategoryeditdetails && subcategoryeditdetails.published_arb === 1) ) && true
+                  // }
                   onChange={handleInputs}
                 />
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubCategory.PublishedYes')?.[genLabel]}
                 </Label>
                 <Input
-                  name={arb ? 'published_arb' : 'published'}
+                  name="published"
                   value="0"
                   type="radio"
-                  defaultChecked={
-                    ( (subcategoryeditdetails && subcategoryeditdetails.published === 0) ||
-                    (subcategoryeditdetails && subcategoryeditdetails.published_arb === 0) ) && true
-                  }
+                  defaultChecked={subcategoryeditdetails && subcategoryeditdetails.published === 0 && true}
+                  // defaultChecked={
+                  //   ( (subcategoryeditdetails && subcategoryeditdetails.published === 0) ||
+                  //   (subcategoryeditdetails && subcategoryeditdetails.published_arb === 0) ) && true
+                  // }
                   onChange={handleInputs}
                 />
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubCategory.PublishedNo')?.[genLabel]}
-                </Label>
+                </Label> */}
+                <Input
+                    name="published"
+                    value="1"
+                    type="radio"
+                    defaultChecked={subcategoryeditdetails && subcategoryeditdetails.published === 1 && true}
+                    onChange={handleInputs}
+                  />
+                  <Label> Yes </Label>
+                  <Input
+                    name="published"
+                    value="0"
+                    type="radio"
+                    defaultChecked={subcategoryeditdetails && subcategoryeditdetails.published === 0 && true}
+                    onChange={handleInputs}
+                  />
+                  <Label>No</Label>
               </FormGroup>
             </Col>
           </Row>

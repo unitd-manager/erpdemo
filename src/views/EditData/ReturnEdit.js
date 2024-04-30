@@ -4,9 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
-  Button,
   Col,
-  FormGroup,
   Nav,
   NavItem,
   NavLink,
@@ -21,7 +19,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
 import ReturnDetailComp from '../../components/BookingTable/ReturnDetailComp';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
 import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
@@ -219,13 +217,10 @@ const InvoiceEdit = () => {
     {arb === true && <BreadCrumbs heading={returnDetails && returnDetails.title_arb} />}
      
       {/* <BreadCrumbs /> */}
-      <FormGroup>
-        <ToastContainer />
-        <ComponentCardV2>
-          <Row>
-            <Col>
-            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
-            </Col>
+      {/* <FormGroup> */}
+      
+        {/* <ComponentCardV2>
+          
             <Col>
               <Button
                 color="primary"
@@ -267,15 +262,21 @@ const InvoiceEdit = () => {
             </Col>
           </Row>
         </ComponentCardV2>
-      </FormGroup>
+      </FormGroup> */}
+      <Row>
+            <Col>
+            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
+            </Col>
+            </Row>
       <ApiButton
               editData={editInvoiceItemData}
               navigate={navigate}
-              applyChanges={editInvoiceItemData}
+              applyChanges={editInvoiceData}
              // deleteData={deleteBookingData}
               backToList={backToList}
               module="Return"
             ></ApiButton>
+              <ToastContainer />
       {/*Main Details*/}
       <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
         <ReturnDetailComp 

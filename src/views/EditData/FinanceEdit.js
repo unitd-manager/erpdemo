@@ -18,7 +18,7 @@ import FinanceInvoiceModal from '../../components/Finance/FinanceInvoiceModal';
 import CustomerFinanceReceipt from '../../components/Finance/CustomerFinanceReceipt';
 import CustomerFinanceCreditNote from '../../components/Finance/CustomerFinanceCreditNote';
 import FinanceSummary from '../../components/Finance/FinanceSummary';
-import FinanceButton from '../../components/Finance/FinanceButton';
+//import FinanceButton from '../../components/Finance/FinanceButton';
 import FinanceDeliveryAddress from '../../components/Finance/FinanceDeliveryAddress';
 import FinanceMainDetails from '../../components/Finance/FinanceMainDetails';
 import creationdatetime from '../../constants/creationdatetime';
@@ -49,7 +49,7 @@ const FinanceEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   //Button fuctions
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/Finance');
   };
@@ -226,12 +226,12 @@ console.log('ids',id)
     <>
       <BreadCrumbs heading={financeDetails && financeDetails.order_id} />
       {/* Save,Apply Buttons */}
-      <FinanceButton
+      {/* <FinanceButton
         navigate={navigate}
         editFinanceData={editFinanceData}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></FinanceButton>
+      ></FinanceButton> */}
 <ApiButton
               editData={editFinanceData}
               navigate={navigate}

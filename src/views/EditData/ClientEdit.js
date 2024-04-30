@@ -362,8 +362,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
   return (
     <>
       {/* BreadCrumbs */}
-      {eng ===true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
-      { arb === true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />}
+    
+      { arb === true ? <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />:<BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
       {/* Button List */}
       <ClientButton
         editClientsData={editClientsData}

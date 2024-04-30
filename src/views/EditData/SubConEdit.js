@@ -13,7 +13,7 @@ import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
@@ -163,7 +163,7 @@ const [arabic, setArabic] = useState([]);
 
       <Form>
         <FormGroup>
-          <ComponentCardV2>
+          {/* <ComponentCardV2>
             <Row>
               <Col>
                 <Button
@@ -200,7 +200,7 @@ const [arabic, setArabic] = useState([]);
                 </Button>
               </Col>
             </Row>
-          </ComponentCardV2>
+          </ComponentCardV2> */}
           <ApiButton
               editData={editSubConData}
               navigate={navigate}

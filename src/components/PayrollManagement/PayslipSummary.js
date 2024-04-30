@@ -170,9 +170,9 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
                   <Input
                     type="text"
                     value={
-                      payroll && payroll.employee_name
-                        ? payroll && payroll.employee_name
-                        : payroll && payroll.employee_name
+                      payroll && payroll.employee_name ||
+                         payroll && payroll.first_name
+                  
                     }
                     onChange={handleInputs}
                     name="employee_name"

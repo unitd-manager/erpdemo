@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteButton';
+//import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/ProjectQuotation/ProjectQuoteMoreDetails';
 import QuotationAttachment from '../../components/ProjectQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -69,7 +69,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectQuotation');
   };
@@ -314,13 +314,13 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <ProjectQuoteButton
+      {/* <ProjectQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectQuoteButton>
+      ></ProjectQuoteButton> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

@@ -20,7 +20,7 @@ import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PlanningMainDetails from '../../components/MaterialIssue/PriceMainDetails';
-import PlanningButton from '../../components/MaterialIssue/PriceButton';
+//import PlanningButton from '../../components/MaterialIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import PdfMaterialIssue from '../../components/PDF/PdfMaterialIssue';
@@ -74,7 +74,7 @@ const [arabic, setArabic] = useState([]);
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/MaterialIssue');
   };
@@ -146,13 +146,13 @@ const [arabic, setArabic] = useState([]);
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-       ></PlanningButton>
+       ></PlanningButton> */}
        <ApiButton
               editData={editplanningData}
               navigate={navigate}

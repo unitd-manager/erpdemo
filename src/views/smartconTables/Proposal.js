@@ -134,9 +134,10 @@ const [arabic, setArabic] = useState([]);
 
         <CommonTable
           title="Proposal List"
+          module='Proposal'
           Button={
             <Link to="/ProposalDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

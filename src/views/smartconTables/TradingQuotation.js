@@ -159,10 +159,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة الاقتباس':"Quotation List"}
-          
+          module='Quotation'
           Button={
             <Link to="/TradingQuotationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

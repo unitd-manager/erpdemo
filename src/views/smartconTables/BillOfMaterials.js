@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button,Card } from 'reactstrap';
+import { Button,Card,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -97,12 +97,14 @@ const BillOfMaterials = () => {
         <CommonTable
           loading={loading}
           title="Bill Of Materials"
-          Button={
-            
+          ExportButton={
+            <>
+            <Col>
               <Button color="primary" className="shadow-none">
                 Export
               </Button>
-              
+              </Col>
+              </>
           
           }
             

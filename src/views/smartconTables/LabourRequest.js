@@ -276,9 +276,10 @@ const [arabic, setArabic] = useState([]);
         <CommonTable
           loading={loading}
           title="Labour Request"
+          module="Labour Request"
           Button={
             <Link to="/LabourRequestDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

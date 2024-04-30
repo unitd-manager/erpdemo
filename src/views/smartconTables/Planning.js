@@ -119,9 +119,10 @@ const Leaves = () => {
         <CommonTable
           loading={loading}
           title="Planning List"
+          module='Planning'
           Button={
             <Link to="/PlanningDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

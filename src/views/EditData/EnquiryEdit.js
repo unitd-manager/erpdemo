@@ -8,7 +8,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import TenderButtons from '../../components/TenderTable/TenderButtons';
+//import TenderButtons from '../../components/TenderTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/TenderTable/TenderMoreDetails';
 import TenderAttachment from '../../components/TenderTable/TenderAttachment';
@@ -32,7 +32,7 @@ const OpportunityEdit = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Enquiry');
   };
@@ -280,14 +280,14 @@ const OpportunityEdit = () => {
       {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
       {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
       {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
-      <TenderButtons
+      {/* <TenderButtons
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         tenderDetails={tenderDetails}
         setFormSubmitted={setFormSubmitted}
-      ></TenderButtons>
+      ></TenderButtons> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

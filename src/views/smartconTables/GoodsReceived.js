@@ -139,10 +139,11 @@ const GoodsReceipt = () => {
       <ToastContainer></ToastContainer>
       <CommonTable
         loading={loading}
-        title="Goods received List"
+        title="Goods receipt List"
+        module='Goods Receipt'
         Button={
           <Link to="/GoodsReceiptDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
               Add New
             </Button>
           </Link>

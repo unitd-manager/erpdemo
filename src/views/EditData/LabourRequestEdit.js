@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useState, useContext  } from 'react';
 import {
   Row,
@@ -24,7 +25,7 @@ import api from '../../constants/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AddEmployee from '../../components/LabourRequest/AddEmployee';
 import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
-import PlanningButton from '../../components/LabourRequest/PriceButton';
+//import PlanningButton from '../../components/LabourRequest/PriceButton';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
@@ -320,14 +321,14 @@ const tablevalue =  [
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
        fetchTranslation={fetchTranslation}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-       ></PlanningButton>
+       ></PlanningButton> */}
        <ApiButton
               editData={editplanningData}
               navigate={navigate}

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,7 +12,7 @@ import api from '../../constants/api';
 import ComponentCard from '../../components/ComponentCard';
 import ProjectInvoiceMainDetails from '../../components/ProjectSalesInvoiceTable/ProjectInvoiceMainDetails';
 import creationdatetime from '../../constants/creationdatetime';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
@@ -26,7 +27,7 @@ import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({
-    invoice_date: new Date().toISOString().split('T')[0],
+   project_invoice_date: new Date().toISOString().split('T')[0],
   });
   // const [editInvoiceItemData, setEditInvoiceItemData] = useState(false);
   // const [itemDetails, setItemDetails] = useState([]);
@@ -81,7 +82,7 @@ console.log('companyid', bookingDetails.company_id)
 // Api call for getting sales order dropdown
 const getSalesOrderDropdown = () => {
   api
-    .post('/invoice/getSalesOrderDropdown', {company_id: bookingDetails.company_id} )
+    .post('/projectsalesinvoice/getSalesOrderDropdown', {company_id: bookingDetails.company_id} )
     .then((res) => {
       setOrderDropdown(res.data.data);
     })
@@ -108,7 +109,7 @@ const arb = selectedLanguage === 'Arabic';
 
 const getArabicCompanyName = () => {
   api
-    .get('/invoice/getTranslationforTradingSalesInvoice')
+    .get('/projectsalesinvoice/getTranslationforProjectSalesInvoice')
     .then((res) => {
       setArabic(res.data.data);
     })
@@ -125,7 +126,7 @@ useEffect(() => {
 //Api call for getting customer dropdown
 const getGoodsDeliveryDropdown = () => {
   api
-    .post('/invoice/getGoodsDeliveryDropdown', {company_id: bookingDetails.company_id} )
+    .post('/projectsalesinvoice/getGoodsDeliveryDropdown', {company_id: bookingDetails.company_id} )
     .then((res) => {
       setGoodsDeliveryDropdown(res.data.data);
     })
@@ -226,7 +227,7 @@ const toggle = (tab) => {
   
   const generateData = () => {
     api
-      .post('/invoice/getOrderLineItemsById', { project_order_id: orderId })
+      .post('/projectsalesinvoice/getOrderLineItemsById', { project_order_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -236,7 +237,7 @@ const toggle = (tab) => {
         }
         // Retrieve all po_product_id  values from the purchase_invoice_items table
         api
-          .get('/invoice/checkQuoteItems')
+          .get('/projectsalesinvoice/checkQuoteItems')
           .then((response) => {
             const ExistingQuoteItemsId = response.data.data; 
             const insertQuoteItems = (index) => {
@@ -267,7 +268,7 @@ const toggle = (tab) => {
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
                   api
-                    .post('/invoice/insertInvoiceItem', QuoteItemsData)
+                    .post('/projectsalesinvoice/insertInvoiceItem', QuoteItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
@@ -305,7 +306,7 @@ const toggle = (tab) => {
 
   const generatePartialData = () => {
     api
-      .post('/invoice/getOrderLineItemsById', { project_order_id: orderId })
+      .post('/projectsalesinvoice/getOrderLineItemsById', { project_order_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -315,7 +316,7 @@ const toggle = (tab) => {
         }
         // Retrieve all po_product_id  values from the purchase_invoice_items table
         api
-          .get('/invoice/checkQuoteItems')
+          .get('/projectsalesinvoice/checkQuoteItems')
           .then((response) => {
             const ExistingQuoteItemsId = response.data.data; 
             const insertQuoteItems = (index) => {
@@ -345,7 +346,7 @@ const toggle = (tab) => {
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
                   api
-                    .post('/invoice/insertInvoiceItem', QuoteItemsData)
+                    .post('/projectsalesinvoice/insertInvoiceItem', QuoteItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
@@ -383,7 +384,7 @@ const toggle = (tab) => {
 
   const generateGoodsData = () => {
     api
-      .post('/invoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
+      .post('/projectsalesinvoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
       .then((res) => {
         console.log('getGoodsLineItemsById', orderId)
         const quoteItems = res.data.data;
@@ -394,7 +395,7 @@ const toggle = (tab) => {
         }
         // Retrieve all po_product_id  values from the purchase_invoice_items table
         api
-          .get('/invoice/checkGoodsItems')
+          .get('/projectsalesinvoice/checkGoodsItems')
           .then((response) => {
             const ExistingQuoteItemsId = response.data.data; 
             const insertQuoteItems = (index) => {
@@ -425,7 +426,7 @@ const toggle = (tab) => {
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
                   api
-                    .post('/invoice/insertInvoiceItem', QuoteItemsData)
+                    .post('/projectsalesinvoice/insertInvoiceItem', QuoteItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
@@ -463,7 +464,7 @@ const toggle = (tab) => {
 
   const generatePartialGoodsData = () => {
     api
-      .post('/invoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
+      .post('/projectsalesinvoice/getGoodsLineItemsById', { project_goods_delivery_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
         console.log(' Received quote items::', quoteItems);
@@ -473,7 +474,7 @@ const toggle = (tab) => {
         }
         // Retrieve all po_product_id  values from the purchase_invoice_items table
         api
-          .get('/invoice/checkGoodsItems')
+          .get('/projectsalesinvoice/checkGoodsItems')
           .then((response) => {
             const ExistingQuoteItemsId = response.data.data; 
             const insertQuoteItems = (index) => {
@@ -503,7 +504,7 @@ const toggle = (tab) => {
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
                   api
-                    .post('/invoice/insertInvoiceItem', QuoteItemsData)
+                    .post('/projectsalesinvoice/insertInvoiceItem', QuoteItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
@@ -612,7 +613,7 @@ const toggle = (tab) => {
   // };
   const editBookingById = () => {
     api
-      .post('/invoice/getInvoiceById', { project_invoice_id: insertedDataId })
+      .post('/projectsalesinvoice/getInvoiceById', { project_invoice_id: insertedDataId })
       .then((res) => {
         setBookingDetails(res.data.data[0]);
       })
@@ -631,10 +632,9 @@ const toggle = (tab) => {
   //       //message('Booking Data Not Found', 'info');
   //     });
   // };
-
   const getOrderItemById = () => {
     api
-      .post('/invoice/getInvoiceByOrderItemId', { project_invoice_id: insertedDataId })
+      .post('/projectsalesinvoice/getInvoiceByOrderItemId', { project_invoice_id: insertedDataId })
       .then((res) => {
 
         setOrderItemDetails(res.data.data);
@@ -654,7 +654,7 @@ const toggle = (tab) => {
     bookingDetails.modification_date = creationdatetime;
     bookingDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/invoice/editInvoices', bookingDetails)
+      .post('/projectsalesinvoice/editInvoices', bookingDetails)
       .then(() => {
         message('Record edited successfully', 'success');
         
@@ -677,7 +677,7 @@ const toggle = (tab) => {
       bookingDetails.modification_date = creationdatetime;
       const updatedInvoice = { ...bookingDetails, status: 'Cancelled' };
       api
-        .post('/invoice/editInvoice', updatedInvoice)
+        .post('/projectsalesinvoice/editInvoice', updatedInvoice)
         .then(() => {
           message('Invoice cancelled successfully', 'success');
           window.location.reload();
@@ -716,9 +716,10 @@ const toggle = (tab) => {
       <BreadCrumbs />
       <FormGroup>
       <ToastContainer/>
-      <ComponentCardV2>
+      <Row><Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col></Row>
+      {/* <ComponentCardV2>
       <Row>
-      <Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
+      
          <Col>
               <Button
                 color="primary"
@@ -764,7 +765,8 @@ const toggle = (tab) => {
               </Button>
             </Col>
           </Row>
-      </ComponentCardV2>
+          
+      </ComponentCardV2> */}
       <ApiButton
               editData={editInvoiceData}
               navigate={navigate}

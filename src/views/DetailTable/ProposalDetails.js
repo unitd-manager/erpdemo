@@ -121,7 +121,7 @@ const inputClass = `form-control ${
                         return (
                           <option key={e.project_quote_id} value={e.project_quote_id}>
                             {' '}
-                            {e.quote_code}{' '}
+                            {e.quote_code} - {e.company_name}
                           </option>
                         );
                       })}

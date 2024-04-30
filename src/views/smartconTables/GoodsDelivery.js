@@ -167,9 +167,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}
           title={arb?'قائمة تسليم البضائع':'Goods Delivery List'}
+          module='Goods Delivery'
           Button={
             <Link to="/GoodsDeliveryDetails">
-              <Button color="primary" className="shadow-none"> 
+              <Button color="primary" className="shadow-none mr-2"> 
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

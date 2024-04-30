@@ -134,10 +134,12 @@ const ChangeRequest = () => {
       <CommonTable
         loading={loading}
         title="Changed Request"
+        module='ChangeRequest'
         Button={
+          
           <Link to="/ChangeRequestDetails">
-            <Button color="primary" className="shadow-none">
-              Add New
+            <Button color="primary" className="shadow-none mr-2">
+              New
             </Button>
           </Link>
         }

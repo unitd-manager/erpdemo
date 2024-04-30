@@ -93,9 +93,10 @@ const Vehicle = () => {
         <CommonTable
           loading={loading}
           title="VehicleList"
+          module='Vehicle'
           Button={
             <Link to="/VehicleDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

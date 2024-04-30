@@ -10,7 +10,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEditButton';
+//import PurchaseEditButton from '../../components/PurchaseRquestTable/PurchaseEditButton';
 import PurchaseRequestItemModal from '../../components/PurchaseRquestTable/PurchaseRequestItemModal';
 import PurchaseRequestEditDetails from '../../components/PurchaseRquestTable/PurchaseRequestEditDetails';
 import PurchaseRequestLineItems from '../../components/PurchaseRquestTable/PurchaseRequestLineItems';
@@ -50,7 +50,7 @@ const PurchaseRequestEdit = () => {
 
   const arb = selectedLanguage === 'Arabic';
 
-  const eng = selectedLanguage === 'English';
+ // const eng = selectedLanguage === 'English';
 
   const getArabicCompanyName = () => {
     api
@@ -167,11 +167,11 @@ const PurchaseRequestEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <PurchaseEditButton
+      {/* <PurchaseEditButton
         id={id}
         editPurchaseRequestData={editPurchaseRequestData}
         navigate={navigate}
-      />
+      /> */}
       <ApiButton
               editData={editPurchaseRequestData}
               navigate={navigate}
@@ -191,8 +191,8 @@ const PurchaseRequestEdit = () => {
 
       <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
         <ToastContainer></ToastContainer>
-        {eng === true && <Tab toggle={toggle} tabs={tabs} />}
-        {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
+        {/* {eng === true && <Tab toggle={toggle} tabs={tabs} />} */}
+        {arb === true ?<Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <PurchaseRequestItemModal

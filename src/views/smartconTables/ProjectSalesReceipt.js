@@ -186,9 +186,10 @@ const ProjectSalesReceipt = () => {
         <CommonTable
           loading={loading}
           title= {arb?'قائمة الاستلام': 'Receipt List'}
+          module='Sales Receipt'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               {arb ?'اضف جديد':'Add New'}
             </Button>
           }
@@ -242,8 +243,7 @@ const ProjectSalesReceipt = () => {
                               company.map((e) => {
                                 return (
                                   <option key={e.project_order_id} value={e.project_order_id}>
-                                    {' '}
-                                   {arb?e.project_order_code_arb:e.project_order_code}{' '}
+                                   {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}{' '}
                                   </option>
                                 );
                               })}

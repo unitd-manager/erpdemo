@@ -117,6 +117,7 @@ const ProjectSalesReturn = () => {
         <CommonTable 
           loading={loading}
           title={arb ?'قائمة إرجاع المبيعات':'Sales Return List'}
+          module='Sales Return'
           Button={
             <Link to="/ProjectReturnDetails">
               <Button color="primary" className="shadow-none">

@@ -108,7 +108,7 @@ const Opportunity = () => {
     //   wrap: true,
     // },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.CompanyName')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,
@@ -150,9 +150,10 @@ const Opportunity = () => {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة فاتورة المشروع':'Project Invoice List'}
+          module='Project Invoice'
           Button={
             <Link to="/ProjectSalesInvoiceDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/ProjectJobOrder/ProjectQuoteButton';
+//import ProjectQuoteButton from '../../components/ProjectJobOrder/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/ProjectJobOrder/ProjectQuoteMoreDetails';
 import JobOrderAttachment from '../../components/ProjectJobOrder/JobOrderAttachment';
 import Tab from '../../components/project/Tab';
@@ -82,7 +82,7 @@ const [arabic, setArabic] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectJobOrder');
   };
@@ -260,13 +260,13 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <ProjectQuoteButton
+      {/* <ProjectQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectQuoteButton>
+      ></ProjectQuoteButton> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

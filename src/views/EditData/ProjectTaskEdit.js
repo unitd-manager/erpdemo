@@ -16,7 +16,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
-import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
+//import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
 import ProjectTaskEditDetails from '../../components/ProjectTaskTable/ProjectTaskEditDetails';
 import AppContext from '../../context/AppContext';
 import ProjectTimeSheet from '../../components/JobOrderTable.js/ProjectTimesheet';
@@ -201,7 +201,7 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs />
-      <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} arb={arb} />
+      {/* <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} arb={arb} /> */}
       <ApiButton
               editData={editTask}
               navigate={navigate}
