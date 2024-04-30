@@ -2,6 +2,7 @@
 import { Card, CardBody, CardTitle, CardSubtitle, Table, Col, Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import LottieComponent from './LottieComponent';
+import { HasAccess ,usePermify} from '@permify/react-role';
 
 const CommonTable = (props) => {
   CommonTable.propTypes = {
@@ -9,9 +10,25 @@ const CommonTable = (props) => {
     title: PropTypes.any,
     subtitle: PropTypes.any,
     Button: PropTypes.node,
+    ImportButton: PropTypes.node,
+    ExportButton: PropTypes.node,
+    SampleButton: PropTypes.node,
     additionalClasses: PropTypes.string,
     loading: PropTypes.bool,
+    module: PropTypes.string,
   };
+  const { isAuthorized, isLoading } = usePermify();
+
+  
+  const fetchData = async (type) => {
+    // Pass roles and permissions accordingly
+    // You can send empty array or null for first param to check permissions only
+    if (await isAuthorized(null, `${module}-${type}`)) {
+       return true
+    }else{
+      return false
+    }
+};
   return (
     <div>
       <Card>
@@ -23,9 +40,31 @@ const CommonTable = (props) => {
                 {props.subtitle}
               </CardSubtitle>
             </Col>
+                
             <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
-              {props.Button}
+            <HasAccess
+                roles={null}
+                permissions={`${module}-new`}
+                renderAuthFailed={<p></p>}
+        >  {props.Button}
+        </HasAccess>
+        <HasAccess
+                roles={null}
+                permissions={`${module}-import`}
+                renderAuthFailed={<p></p>}
+        > 
+              {props.ImportButton}
+              </HasAccess>
+              {props.SampleButton}
+              <HasAccess
+                roles={null}
+                permissions={`${module}-export`}
+                renderAuthFailed={<p></p>}
+        >  
+              {props.ExportButton}
+              </HasAccess>
             </Col>
+            {/* </HasAccess> */}
           </Row>
           {props.loading ? (
              <LottieComponent />

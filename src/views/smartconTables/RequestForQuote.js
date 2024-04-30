@@ -137,9 +137,10 @@ const RequestForQuote = () => {
         <CommonTable
           loading={loading}
           title= {arb ?'قائمة الاقتباسات':'Quote List'}
+          module='RequestForQuote'
           Button={
             <Link to="/RequestForQuoteDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

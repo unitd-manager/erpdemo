@@ -127,9 +127,10 @@ const PurchaseReturn = () => {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة إرجاع المشتريات':'Purchase Return List'}
+          module='Purchase Return'
           Button={
             <Link to="/PurchaseReturnDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

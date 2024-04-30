@@ -145,9 +145,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}
           title="QuotationList"
+          module='Project Quotation'
           Button={
             <Link to="/ProjectQuotationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

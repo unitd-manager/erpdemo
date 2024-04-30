@@ -6,7 +6,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
-import AccountMapButton from '../../components/Accounts/AccountMapButton';
+//import AccountMapButton from '../../components/Accounts/AccountMapButton';
 import ComponentCard from '../../components/ComponentCard';
 import ApiButton from '../../components/ApiButton';
 
@@ -20,7 +20,7 @@ const ChartofACEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => { };
+ // const applyChanges = () => { };
   const backToList = () => {
     navigate('/ChartOfAccounts');
   };
@@ -113,12 +113,12 @@ console.log('arabic',arabic)
       <ToastContainer></ToastContainer>
     
       {/* Button */}
-      <AccountMapButton
+      {/* <AccountMapButton
         editData={editChartOfAcc}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></AccountMapButton>
+      ></AccountMapButton> */}
 <ApiButton
               editData={editChartOfAcc}
               navigate={navigate}

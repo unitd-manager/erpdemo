@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -160,13 +160,19 @@ const PurchaseRequest = () => {
         <CommonTable
                 loading={loading}
           title="Purchase Request List"
+          module='Purchase Request'
           Button={
+            <>
+            <Col md="4">
             <Link to="/PurchaseRequestDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
+            </Col>
+            </>
           }
+        
         >
           <thead>
             <tr>

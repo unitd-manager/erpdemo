@@ -56,7 +56,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
 
   const arb =selectedLanguage === 'Arabic'
-  const eng =selectedLanguage === 'English'
+  //const eng =selectedLanguage === 'English'
   // const eng =selectedLanguage === 'English'
   const getArabicValue = () => {
     api
@@ -382,11 +382,11 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
      
       <ComponentCard title="More Details">
-      {eng === true &&
+      {/* {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        } */}
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />
         }        <TabContent className="p-4" activeTab={activeTab}>
        
           <TabPane tabId="1">

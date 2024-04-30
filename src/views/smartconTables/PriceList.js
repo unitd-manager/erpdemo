@@ -139,9 +139,10 @@ const Leaves = () => {
         <CommonTable
           loading={loading}
           title={arb ? 'قائمة الاسعار': 'Price List'}
+          module='Price List'
           Button={
             <Link to="/PriceListDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

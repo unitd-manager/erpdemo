@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/MaterialRequest/TradingQuoteButton';
+//import TradingQuoteButton from '../../components/MaterialRequest/TradingQuoteButton';
 import TradingQuoteMoreDetails from '../../components/MaterialRequest/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/MaterialRequest/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -20,6 +20,7 @@ import QuoteLineItem from '../../components/MaterialRequest/QuoteLineItem';
 import EditLineItemModal from '../../components/MaterialRequest/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 import ApiButton from '../../components/ApiButton';
+import PdfMaterialRequest from '../../components/PDF/PdfMaterialRequest';
 
 const MaterialRequestEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -74,7 +75,7 @@ const [arabic, setArabic] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/MaterialRequest');
   };
@@ -278,13 +279,13 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TradingQuoteButton
+      {/* <TradingQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></TradingQuoteButton>
+      ></TradingQuoteButton> */}
      <ApiButton
               editData={editTenderData}
               navigate={navigate}
@@ -312,6 +313,7 @@ const [arabic, setArabic] = useState([]);
         arabic={arabic}
         genLabel={genLabel}
       ></TradingQuoteMoreDetails>
+      <PdfMaterialRequest id={id} quoteId={id}></PdfMaterialRequest>
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>

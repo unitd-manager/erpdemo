@@ -12,7 +12,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import Tab from '../../components/project/Tab';
 import message from '../../components/Message';
-import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeRequestButton';
+//import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeRequestButton';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
@@ -142,7 +142,7 @@ const ChangeRequestEdit = () => {
       <BreadCrumbs />
       <Form>
         <FormGroup>
-          <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} />
+          {/* <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} /> */}
           <ApiButton
               editData={editChangeRequestData}
               navigate={navigate}

@@ -166,9 +166,10 @@ const Leaves = () => {
         <CommonTable
           loading={loading}
           title="Leave List"
+          module='Leave'
           Button={
             <Link to="/LeaveDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}             
                </Button>
               

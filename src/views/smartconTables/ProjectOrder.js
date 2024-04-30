@@ -122,9 +122,10 @@ useEffect(() => {
         <CommonTable
           loading={loading}
           title="Project Order List"
+          module='Project Order'
           Button={
             <Link to="/ProjectOrderDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               Add New
               </Button>
             </Link>

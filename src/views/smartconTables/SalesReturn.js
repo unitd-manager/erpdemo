@@ -117,9 +117,10 @@ const SalesInvoice = () => {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة إرجاع المبيعات':'Sales Return List'}
+          module='Sales Return'
           Button={
             <Link to="/ReturnDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

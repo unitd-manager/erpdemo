@@ -332,9 +332,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Client List"
+          module='Client'
           Button={
             <Link to="/ClientDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

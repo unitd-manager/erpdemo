@@ -166,12 +166,15 @@ console.log('planning',planning)
           loading={loading}
           title="Bill Of Materials"
           
-          Button={
-              
+          ExportButton={
+            <>
+            <Col>
               <Button color="primary" className="shadow-none">
                 Export
               </Button>
-          
+              
+            </Col>
+            </>
           }
         > <Card  color='blue'>
           <div style={{padding:'5px', display:'flex',flex:'row',justifyContent:'space-between',fontSize:20}}><span>Ordered Qty:    {order && order.ordered_qty}</span></div></Card>
