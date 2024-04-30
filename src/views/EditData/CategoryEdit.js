@@ -41,6 +41,32 @@ const CategoryEdit = () => {
   };
   
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
+const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  // const eng =selectedLanguage === 'English'
+   
+
+  const getTranslationForCategory = () => {
+      api
+      .get('/category/getTranslationForCategory')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });   
+  };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
 
 
   //Api call for getting section dropdown
@@ -86,7 +112,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //Logic for edit data in db
   const editCategoryData = () => {
     setFormSubmitted(true);
-    if (categoryDetails.category_title !== '' ||  categoryDetails.category_title_arb !== '' ) {
+    if ((arb && categoryDetails.category_title_arb.trim() !== '') || (!arb && categoryDetails.category_title.trim() !== '')) {
       categoryDetails.modification_date = creationdatetime;
       categoryDetails.modified_by = loggedInuser.first_name;
 
@@ -115,32 +141,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       });
   };
 
-  const [arabic, setArabic] = useState([]);
-
-
-  const arb =selectedLanguage === 'Arabic'
-
-  // const eng =selectedLanguage === 'English'
-   
-
-  const getTranslationForCategory = () => {
-      api
-      .get('/category/getTranslationForCategory')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });   
-  };
-  let genLabel = '';
-
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
-
+  
   useEffect(() => {
     CategoryById();
     getSection();
