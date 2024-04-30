@@ -114,7 +114,7 @@ const OpportunityDetails = () => {
   // };
 
   const generateCode = () => {
-    api.post('/commonApi/getCodeValue', { type: 'orders' })
+    api.post('/commonApi/getCodeValue', { type: 'projectorders' })
       .then((res) => {
         const orderCode = res.data.data;
   

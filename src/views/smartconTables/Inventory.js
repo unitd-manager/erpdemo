@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Input, Button,Row,Col } from 'reactstrap';
+import { Input, Button,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -319,9 +319,10 @@ console.log('Selected language from localStorage:', selectedLanguage);
         <CommonTable 
         loading={loading}
         title={arb ? 'قائمة الجرد': 'Inventory List'}
-        Button={<>
-        <Row>
-          <Col md="6">
+        module='Inventory'
+        ImportButton={<>
+        
+          <Col md="4">
             {/* <Link to=""> */}
             <Button color="primary" className="shadow-none mr-2" onClick={() => importExcel()}>
                 Import
@@ -329,16 +330,24 @@ console.log('Selected language from localStorage:', selectedLanguage);
             {/* </Link> */}
             <input type='file' style={{display: 'none'}} id="import_excel" onChange={importExcelFile} />
             </Col>
-            <Col md="6">
-            <a href="http://43.228.126.245/erpdemoapi/storage/excelsheets/Inventory.xlsx" download>
-             <Button color="primary" className="shadow-none" >
-               Sample
-             </Button>
-             </a>
-             </Col>
-             </Row>
+           
+             
            </>
-          }>
+          }
+          SampleButton={<>
+            
+             
+                <Col md="4">
+                <a href="http://43.228.126.245/erpdemoapi/storage/excelsheets/Inventory.xlsx" download>
+                 <Button color="primary" className="shadow-none mr-2" >
+                   Sample
+                 </Button>
+                 </a>
+                 </Col>
+                
+               </>
+              }
+          >
           <thead>
             <tr>
               {columns.map((cell) => {

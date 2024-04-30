@@ -100,9 +100,10 @@ const Setting = () => {
         <CommonTable
           loading={loading}
           title="Setting List"
+          module='Setting'
           Button={
             <Link to="/SettingDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

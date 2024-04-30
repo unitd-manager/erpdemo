@@ -133,9 +133,10 @@ const Training = () => {
       <CommonTable
         loading={loading}
         title={arb ?'قائمة التدريب':"Training List"}
+        module='Training'
         Button={
           <Link to="/TrainingDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
             {arb ?'اضف جديد':'Add New'}
             </Button>
           </Link>

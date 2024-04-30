@@ -157,9 +157,10 @@ const PurchaseInvoice = () => {
       <CommonTable
         loading={loading}
         title="Purchase Invoice"
+        module='Purchase Invoice'
         Button={
           <Link to="/PurchaseInvoiceDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
               Add New
             </Button>
           </Link>

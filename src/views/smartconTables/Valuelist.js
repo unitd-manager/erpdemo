@@ -128,9 +128,10 @@ const Valuelist = () => {
         <CommonTable
           loading={loading}
           title="Value List"
+          module='Value List'
           Button={
             <Link to="/ValuelistDetails">
-              <Button color="primary" className=" shadow-none">
+              <Button color="primary" className=" shadow-none mr-2">
                 Add New
               </Button>
             </Link>

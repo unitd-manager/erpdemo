@@ -14,21 +14,19 @@ const GoodsDeliveryDetails = () => {
   const [enquirycode, setEnquiryCode] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
   
   //Api call for getting Enquiry dropdown
   const getOrderCode = () => {
-    api.get('/goodsdelivery/getOrderCode').then((res) => {
+    api.get('/projectgoodsdelivery/getOrderCode').then((res) => {
       setEnquiryCode(res.data.data);
     });
   };
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
-    order_id:'',
-    goods_delivery_date:'',
-    goods_delivery_code:''
+    project_order_id:'',
+    project_goods_delivery_date:'',
+    project_goods_delivery_code:''
   });
 
   const handleInputsTenderForms = (e) => {
@@ -36,48 +34,37 @@ const GoodsDeliveryDetails = () => {
   };
 
   //const[tenderDetails,setTenderDetails]=useState();
-  const getTendersById = () => {
-    api
-      .post('/goodsdelivery/getgoodsdeliveryById', { goods_delivery_id: id })
-      .then((res) => {
-        setTenderForms(res.data.data[0]);
-        // getContact(res.data.data.company_id);
-      })
-      .catch(() => {});
-  };
+
   //get staff details
   const { loggedInuser } = useContext(AppContext);
 
   //console.log(tenderDetails);
   const insertgoodsDelivery = (code) => {
-    if (tenderForms.order_id !== '' && tenderForms.goods_delivery_date !== '') {
-      tenderForms.goods_delivery_code = code;
+    
+      tenderForms.project_goods_delivery_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
       api
-        .post('/goodsdelivery/insertgoodsdelivery', tenderForms)
+        .post('/projectgoodsdelivery/insertgoodsdelivery', tenderForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          const OrderId = tenderForms.order_id;
-          getTendersById();
+          const OrderId = tenderForms.project_order_id;
+          console.log('orderId',OrderId);
           message('Goods inserted successfully.', 'success');
           //   setTimeout(() => {
-          navigate(`/GoodsDeliveryEdit/${insertedDataId}/${OrderId}?tab=1`);
+          navigate(`/ProjectGoodsDeliveryEdit/${insertedDataId}/${OrderId}?tab=1`);
           //   }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
-    } else {
-      setFormSubmitted(true);
-      message('Please fill all required fields', 'warning');
-    }
+    
   };
 
  // QUOTE GENERATED CODE
   const generateCode = () => {
     api
-      .post('/tender/getCodeValue', { type: 'goodsdelivery' })
+      .post('/tender/getCodeValue', { type: 'projectgoodsdelivery' })
       .then((res) => {
         insertgoodsDelivery(res.data.data);
       })
@@ -139,32 +126,26 @@ console.log('arabic', arabic);
               <FormGroup>
                 <Col md="9">
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel]}{' '}                   
+                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel]}{' '}
+                    {/*Access the value property */}  
                   </Label>
                   <Input
                     type="select"
-                    onChange={handleInputsTenderForms}
-                    //value={tenderForms?.order_id || ''}
-                    value={
-                      arb
-                        ? (
-                            tenderForms && tenderForms.order_code_arb ? tenderForms.order_code_arb :
-                            (tenderForms && tenderForms.order_code_arb !== null ? '' : tenderForms && tenderForms.order_id)
-                          )
-                        : (tenderForms && tenderForms.order_id)
-                    }
-                  //name={arb ? 'order_code_arb' : 'order_code'}
-
-                    name="order_id"
+                    onChange={(e) => {
+                      setTenderForms({ ...tenderForms, project_order_id: e.target.value });
+                      handleInputsTenderForms(e);
+                    }}
+                    value={tenderForms?.project_order_id || ''}
+                    name="project_order_id"
                   >
                     <option>Please Select</option>
                     {enquirycode &&
                       enquirycode.map((e) => {
                         return (
-                          <option key={e.order_id} value={e.order_id}>
+                          <option key={e.project_order_id} value={e.project_order_id}>
                             {' '}
-                            {arb?e.order_code_arb:e.order_code} - {arb?e.company_name_arb:e.company_name}
-                          </option> 
+                            {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}
+                          </option>
                         );
                       })}
                   </Input>
@@ -180,19 +161,21 @@ console.log('arabic', arabic);
                    
                   </Label>
 
-                    <Input
-                      type="date"
-                      name="goods_delivery_date"
-                      value={tenderForms && tenderForms.goods_delivery_date}
-                      onChange={handleInputsTenderForms}
-                      className={`form-control ${formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '')
-                          ? 'highlight'
-                          : ''
-                        }`}
-                    />
-                    {formSubmitted && tenderForms && (tenderForms.goods_delivery_date === undefined || tenderForms.goods_delivery_date.trim() === '') && (
-                      <div className="error-message">Please Select</div>
-                    )}
+                  <Input
+                    type="date"
+                    onChange={handleInputsTenderForms}
+                    value={
+                      arb
+                        ? tenderForms && tenderForms.project_goods_delivery_date_arb
+                          ? tenderForms.project_goods_delivery_datearb
+                          : tenderForms && tenderForms.project_goods_delivery_date_arb !== null
+                          ? ''
+                          : tenderForms && tenderForms.project_goods_delivery_date
+                        : tenderForms && tenderForms.project_goods_delivery_date
+                    }
+                    name={arb ? 'project_goods_delivery_date_arb' : 'project_goods_delivery_date'}
+                  ></Input>
+                   
                   </Col>
                 </Row>
               </FormGroup>

@@ -164,9 +164,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title={arb ?'طلب المبيعات':"Sales Order  List"}
+          module='Sales Order'
           Button={
             <Link to="/SalesOrderDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

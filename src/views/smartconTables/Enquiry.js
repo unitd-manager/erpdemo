@@ -155,11 +155,11 @@ if (arb === true) {
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          
+          module='Enquiry'
           title={arb ?'إضافة عناصر الاقتباس':"Enquiry List"}
           Button={
             <Link to="/EnquiryDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'إضافة عناصر الاقتباس':'Add New'}
               </Button>
             </Link>

@@ -162,9 +162,10 @@ const Loan = () => {
         <CommonTable
           loading={loading}
           title= {arb ?'لائحة القروض':'Loan List'}
+          module='Loan'
           Button={
             <Link to="/LoanDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}              </Button>
             </Link>
           }

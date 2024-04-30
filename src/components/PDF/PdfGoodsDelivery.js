@@ -10,9 +10,10 @@ import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
-const PdfMaterialRequest = ({ id }) => {
-  PdfMaterialRequest.propTypes = {
+const PdfQuote = ({ id, quoteId }) => {
+  PdfQuote.propTypes = {
     id: PropTypes.any,
+    quoteId: PropTypes.any,
   };
   const [hfdata, setHeaderFooterData] = React.useState();
   const [quote, setQuote] = React.useState([]);
@@ -24,7 +25,7 @@ const PdfMaterialRequest = ({ id }) => {
   //const [lineItem, setLineItem] = useState(null);
 
   React.useEffect(() => {
-    api.get('/materialrequest/getSettingsForCompany').then((res) => {
+    api.get('/setting/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
     });
   }, []);
@@ -36,9 +37,9 @@ const PdfMaterialRequest = ({ id }) => {
 
   const getCompany = () => {
     api
-      .post('/MaterialIssue/getMaterialIssueDataById', { material_request_id: id })
+      .post('/projectgoodsdelivery/getgoodsdeliveryById', { project_goods_delivery_id: id })
       .then((res) => {
-        setTenderDetails(res.data.data);
+        setTenderDetails(res.data.data[0]);
         console.log('1', res.data.data);
       })
       .catch(() => {});
@@ -46,45 +47,17 @@ const PdfMaterialRequest = ({ id }) => {
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/materialrequest/getMaterialtequestDataById', { material_request_id: id }).then((res) => {
-      setQuote(res.data.data);
+    api.post('/projectgoodsdelivery/getgoodsdeliveryById', { project_goods_delivery_id: id }).then((res) => {
+      setQuote(res.data.data[0]);
       console.log('quote', res.data.data);
     });
   };
-  // const getQuoteById = () => {
-  //   api
-  //     .post('/materialrequest/getMaterialrequestItemsById', { material_request_id: id })
-  //     .then((res) => {
-  //       const items = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
-      
-  //     setLineItem(items);
-  //       console.log('quote1', res.data.data);
-  //       let grandTotal = 0;
-  //       let grand = 0;
-  //       let gst = 0;
-  //       res.data.data.forEach((elem) => {
-  //         grandTotal += elem.amount;
-  //         //  grand += elem.actual_value;
-  //       });
-  //       setGtotal(grandTotal);
-  //       gst = grandTotal * 0.07;
-  //       setGsttotal(gst);
-  //       grand = grandTotal + gst;
-  //       setTotal(grand);
-  //       //setViewLineModal(true);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching quote:', error);
-  //       // Handle the error here, e.g., display an error message to the user
-  //     });
-  // };
-
   const getQuoteById = () => {
     api
-      .post('/materialrequest/getMaterialrequestItemsById', { material_request_id: id })
+      .post('/projectgoodsdelivery/getQuoteLineItemsByIdss', { project_goods_delivery_id: quoteId })
       .then((res) => {
         setLineItem(res.data.data);
-        console.log('quote1', res.data.data[0]);
+        console.log('quote1', res.data.data);
         let grandTotal = 0;
         let grand = 0;
         let gst = 0;
@@ -101,17 +74,11 @@ const PdfMaterialRequest = ({ id }) => {
       })
       .catch(() => {});
   };
-console.log('lineitem', lineItem)
-
   React.useEffect(() => {
     getQuote();
     getQuoteById();
     getCompany();
   }, []);
-  React.useEffect(() => {
-   
-    getQuoteById();
-  }, [id]);
 
   const GetPdf = () => {
     const lineItemBody = [
@@ -125,21 +92,10 @@ console.log('lineitem', lineItem)
           style: 'tableHead',
         },
         {
-          text: 'Brand',
+          text: 'Description',
           style: 'tableHead',
         },
-        {
-          text: 'Supplier',
-          style: 'tableHead',
-        },
-        {
-          text: 'Qty',
-          style: 'tableHead',
-        },
-        {
-          text: 'Unit Price',
-          style: 'tableHead',
-        },
+
         {
           text: 'Amount S$',
           style: 'tableHead',
@@ -155,30 +111,16 @@ console.log('lineitem', lineItem)
           border: [false, false, false, true],
         },
         {
-          text: `${element.title}`,
+          text: `${element.item_title}`,
           border: [false, false, false, true],
           style: 'tableBody',
         },
         {
-            text: `${element.brand}`,
-            border: [false, false, false, true],
-            style: 'tableBody',
-          },
-          {
-            text: `${element.company_name}`,
-            border: [false, false, false, true],
-            style: 'tableBody',
-          },
-          {
-            text: `${element.quantity}`,
-            border: [false, false, false, true],
-            style: 'tableBody',
-          },
-          {
-            text: `${element.unit_price}`,
-            border: [false, false, false, true],
-            style: 'tableBody',
-          },
+          text: `${element.description}`,
+          border: [false, false, false, true],
+          style: 'tableBody',
+        },
+
         {
           text: `${element.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
           border: [false, false, false, true],
@@ -242,7 +184,7 @@ console.log('lineitem', lineItem)
             body: [
               [
                 {
-                  text: 'Material Request',
+                  text: 'GOODS DELIVERY',
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -274,8 +216,8 @@ console.log('lineitem', lineItem)
         },
 
         {
-          text: `Date :   ${quote.material_request_date ? moment(quote.material_request_date).format('DD-MM-YYYY') : ''}
-           Quote Code :  ${quote.material_request_code ? quote.material_request_code : ''}\n \n  `,
+          text: `Date :   ${quote.goods_delivery_date ? moment(quote.goods_delivery_date).format('DD-MM-YYYY') : ''}
+           Code :  ${quote.goods_delivery_code ? quote.goods_delivery_code : ''}\n \n  `,
           style: ['invoiceAdd', 'textSize'],
           margin: [0, -60, 0, 0],
         },
@@ -289,9 +231,9 @@ console.log('lineitem', lineItem)
 
         '\n',
         {
-          text: `Dear Sir/Madam,
+          text: `Dear Sir,
 
-          We would like to express our gratitude for the opportunity to fulfill your material request. Enclosed herewith, please find the requested items and their corresponding specifications for your review and consideration:`,
+           With reference to the above captions, we would like to thank you for inviting us to quote for the above mentioned works and we are pleased to submit herewith our Value Quotation for you kind persual.`,
 
           style: ['notesText', 'textSize'],
         },
@@ -339,7 +281,7 @@ console.log('lineitem', lineItem)
           },
           table: {
             headerRows: 1,
-            widths: [20, 130, 40, 60, 40, 40, 60],
+            widths: [95, 120, 105, 100],
 
             body: lineItemBody,
           },
@@ -402,7 +344,7 @@ console.log('lineitem', lineItem)
           fontSize: 12,
         },
       ],
-      margin: [0, 50, 50, 50,50, 50],
+      margin: [0, 50, 50, 50],
 
       styles: {
         logo: {
@@ -468,4 +410,4 @@ console.log('lineitem', lineItem)
   );
 };
 
-export default PdfMaterialRequest;
+export default PdfQuote;

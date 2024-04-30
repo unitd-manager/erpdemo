@@ -18,14 +18,14 @@ import CommonTable from '../../components/CommonTable';
 const GoodsDelivery = () => {
   const [gdelivery, setGDelivery] = useState(null);
   const [loading, setLoading] = useState(false);
-  const getSelectedLanguageFromLocalStorage = () => {
-    return localStorage.getItem('selectedLanguage') || '';
-  };
+//   const getSelectedLanguageFromLocalStorage = () => {
+//     return localStorage.getItem('selectedLanguage') || '';
+//   };
   
-const selectedLanguage = getSelectedLanguageFromLocalStorage();
+// const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getTenders = () => {
     api
-      .get('/goodsdelivery/getgoodsdelivery')
+      .get('/projectgoodsdelivery/getgoodsdelivery')
       .then((res) => {
         setGDelivery(res.data.data);
         $('#example').DataTable({
@@ -47,38 +47,38 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         setLoading(false);
       });
   };
-  const [arabic, setArabic] = useState([]);
+  // const [arabic, setArabic] = useState([]);
 
 
-  const arb =selectedLanguage === 'Arabic'
+  // const arb =selectedLanguage === 'Arabic'
 
-  // const eng =selectedLanguage === 'English'
+  // // const eng =selectedLanguage === 'English'
    
 
-  const getArabicCompanyName = () => {
-      api
-      .get('/goodsdelivery/getTranslationforTradingGoods')
-      .then((res) => {
-        setArabic(res.data.data);
-      })
-      .catch(() => {
-        // Handle error if needed
-      });   
-  };
+  // const getArabicCompanyName = () => {
+  //     api
+  //     .get('/goodsdelivery/getTranslationforTradingGoods')
+  //     .then((res) => {
+  //       setArabic(res.data.data);
+  //     })
+  //     .catch(() => {
+  //       // Handle error if needed
+  //     });   
+  // };
 
   useEffect(() => {
     getTenders();
-    getArabicCompanyName();
+    // getArabicCompanyName();
 
   }, []);
 
-  let genLabel = '';
+  // let genLabel = '';
 
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else {
+  //   genLabel = 'value';
+  // }
   const columns = [
     {
       name: '#',
@@ -88,7 +88,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       width: '4%',
     },
     {
-      name: arb ? 'يحرر' : 'Edit' ,
+      // name: arb ? 'يحرر' : 'Edit' ,
+      name:'Edit',
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
@@ -97,63 +98,71 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       sortable: false,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Delivery Code')?.[genLabel],
-      selector: 'goods_delivery_id ',
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Delivery Code')?.[genLabel],
+      name: 'Delivery Code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Date')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Date')?.[genLabel],
+      name:'Date',
       selector: 'goods_delivery_date',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel],
+      name:'Order Code',
       selector: 'order_id',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Company Name')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Company Name')?.[genLabel],
+      name:'Company Name',
       selector: 'company_name ',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Department')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Department')?.[genLabel],
+      name:'Department',
       selector: 'department',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Salesman')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Salesman')?.[genLabel],
+      name:'Salesman',
       selector: 'sales_man',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Reference')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Reference')?.[genLabel],
+      name:'Reference',
       selector: 'goods_ref_no',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[genLabel],
+      name:'PO Code',
       selector: 'po_no',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingGoods.Status\r\n')?.[genLabel],
+      // name: arabic.find(item => item.key_text === 'mdTradingGoods.Status\r\n')?.[genLabel],
+      name:'Status',
       selector: 'goods_delivery_status',
       sortable: true,
       width: 'auto',
@@ -166,12 +175,11 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <BreadCrumbs />
         <CommonTable
           loading={loading}
-          title={arb?'قائمة تسليم البضائع':'Goods Delivery List'}
-          module='Goods Delivery'
+          title='Goods Delivery List'
           Button={
-            <Link to="/GoodsDeliveryDetails">
-              <Button color="primary" className="shadow-none mr-2"> 
-              {arb ?'اضف جديد':'Add New'}
+            <Link to="/ProjectGoodsDeliveryDetails">
+              <Button color="primary" className="shadow-none"> 
+             Add New
               </Button>
             </Link>
           }
@@ -190,23 +198,23 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                   <tr key={element.goods_delivery_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/GoodsDeliveryEdit/${element.goods_delivery_id}/${element.order_id }`}>
+                      <Link to={`/ProjectGoodsDeliveryEdit/${element.project_goods_delivery_id}/${element.project_order_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.goods_delivery_code}</td>
+                    <td>{element.project_goods_delivery_code}</td>
                     <td>
-                      {element.goods_delivery_date
-                        ? moment(element.goods_delivery_date).format('DD-MM-YYYY')
+                      {element.project_goods_delivery_date
+                        ? moment(element.project_goods_delivery_date).format('DD-MM-YYYY')
                         : ''}
                     </td>
                     <td>{element.order_code}</td>
                     <td>{element.company_name}</td>
                     <td>{element.department}</td>
                     <td>{element.sales_man}</td>
-                    <td>{element.goods_ref_no}</td>
+                    <td>{element.office_ref_no}</td>
                     <td>{element.po_no}</td>
-                    <td>{element.goods_delivery_status}</td>
+                    <td>{element.project_goods_delivery_status}</td>
                   </tr>
                 );
               })}

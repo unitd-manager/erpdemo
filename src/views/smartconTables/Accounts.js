@@ -132,7 +132,7 @@ const Accounts = () => {
           module='Accounts'
           Button={
             <Link to="/AccountDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

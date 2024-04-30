@@ -147,8 +147,8 @@ const Content = () => {
         module='Content'
         Button={
           <Link to="/ContentDetails">
-            <Button color="primary" className="shadow-none">
-              Add New
+            <Button color="primary" className="shadow-none mr-2">
+              New
             </Button>
           </Link>
         }
