@@ -75,8 +75,15 @@ export default function JobProbation({
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
-                value={job && job.overtime_payment_dates}
-                name="overtime_payment_dates"
+             
+
+                value={
+                  arb
+                    ? job && job.overtime_payment_dates_arb
+                    : job && job.overtime_payment_dates
+                }
+                name={arb ? 'overtime_payment_dates_arb' : 'overtime_payment_dates'}
+            
               />
             </FormGroup>
           </Col>

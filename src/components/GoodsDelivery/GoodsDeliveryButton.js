@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
-import PdfGoods from '../PDF/PdfGoods';
+import PdfGoodsDelivery from '../PDF/PdfGoodsDelivery';
 
 export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, backToList, navigate ,id}) {
     GoodsDeliveryButton.propTypes = {
@@ -19,7 +19,7 @@ export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, b
           <Row>
           <Col >
              
-             <PdfGoods id={id} quoteId={id}></PdfGoods>
+             <PdfGoodsDelivery id={id} quoteId={id}></PdfGoodsDelivery>
           
          </Col>
             <Col>
@@ -28,7 +28,7 @@ export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, b
                 color="primary"
                 onClick={() => {
                     editGoodsDelivery();
-                  navigate('/GoodsDelivery');
+                  navigate('/ProjectGoodsDelivery');
                 }}
               >
                 Save
