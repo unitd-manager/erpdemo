@@ -13,7 +13,7 @@ import PdfHeader from './PdfHeader';
 const PdfEquipmentIssue = ({ ProjectID }) => {
   PdfEquipmentIssue.propTypes = {
     //   id: PropTypes.any,
-    ProjectID: PropTypes.any,
+    ProjectID: PropTypes.any, 
   };
   const { id } = useParams();
   const [hfdata, setHeaderFooterData] = React.useState();

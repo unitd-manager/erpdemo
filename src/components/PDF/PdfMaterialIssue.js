@@ -10,8 +10,8 @@ import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
-const PdfMaterialRequest = ({ id }) => {
-  PdfMaterialRequest.propTypes = {
+const PdfMaterialIssue = ({ id }) => {
+    PdfMaterialIssue.propTypes = {
     id: PropTypes.any,
   };
   const [hfdata, setHeaderFooterData] = React.useState();
@@ -24,7 +24,7 @@ const PdfMaterialRequest = ({ id }) => {
   //const [lineItem, setLineItem] = useState(null);
 
   React.useEffect(() => {
-    api.get('/materialrequest/getSettingsForCompany').then((res) => {
+    api.get('/MaterialIssue/getSettingsForCompany').then((res) => {
       setHeaderFooterData(res.data.data);
     });
   }, []);
@@ -36,7 +36,7 @@ const PdfMaterialRequest = ({ id }) => {
 
   const getCompany = () => {
     api
-      .post('/MaterialIssue/getMaterialIssueDataById', { material_request_id: id })
+      .post('/MaterialIssue/getMaterialIssueDataById', { material_issue_id: id })
       .then((res) => {
         setTenderDetails(res.data.data);
         console.log('1', res.data.data);
@@ -46,7 +46,7 @@ const PdfMaterialRequest = ({ id }) => {
 
   // Get Quote By Id
   const getQuote = () => {
-    api.post('/materialrequest/getMaterialtequestDataById', { material_request_id: id }).then((res) => {
+    api.post('/MaterialIssue/getMaterialIssueDataById', { material_issue_id: id }).then((res) => {
       setQuote(res.data.data);
       console.log('quote', res.data.data);
     });
@@ -81,7 +81,7 @@ const PdfMaterialRequest = ({ id }) => {
 
   const getQuoteById = () => {
     api
-      .post('/materialrequest/getMaterialrequestItemsById', { material_request_id: id })
+      .post('/materialissue/getMaterialissueItemsById', { material_issue_id: id })
       .then((res) => {
         setLineItem(res.data.data);
         console.log('quote1', res.data.data[0]);
@@ -242,7 +242,7 @@ console.log('lineitem', lineItem)
             body: [
               [
                 {
-                  text: 'Material Request',
+                  text: 'Material Issue',
                   alignment: 'center',
                   style: 'tableHead',
                 },
@@ -462,10 +462,10 @@ console.log('lineitem', lineItem)
   return (
     <>
       <Button type="button" color="primary" onClick={GetPdf}>
-        Pdf Quote
+        Print pdf
       </Button>
     </>
-  );
+  ); 
 };
 
-export default PdfMaterialRequest;
+export default PdfMaterialIssue;

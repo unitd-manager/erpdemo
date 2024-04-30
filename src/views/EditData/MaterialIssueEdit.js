@@ -16,12 +16,14 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import '../form-editor/editor.scss';
+import '../form-editor/editor.scss'; 
 import api from '../../constants/api';
+import ComponentCardV2 from '../../components/ComponentCardV2';
 import PlanningMainDetails from '../../components/MaterialIssue/PriceMainDetails';
 import PlanningButton from '../../components/MaterialIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import PdfMaterialIssue from '../../components/PDF/PdfMaterialIssue';
 import ApiButton from '../../components/ApiButton';
 
 const MaterialIssueEdit = () => {
@@ -159,6 +161,8 @@ const [arabic, setArabic] = useState([]);
               backToList={backToList}
               module="MaterialIssue"
             ></ApiButton>
+                    <ComponentCardV2> <PdfMaterialIssue ProjectID={id}></PdfMaterialIssue></ComponentCardV2>
+
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
