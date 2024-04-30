@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button, Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -154,11 +154,15 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           title={arb ? 'قائمة الفئات': 'Category List'}
           module='Categoty'
           Button={
+            <>
+            <Col>
             <Link to="/CategoryDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
+            </Col>
+            </>
           }
         >
           <thead>

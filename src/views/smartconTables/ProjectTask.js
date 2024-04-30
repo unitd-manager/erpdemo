@@ -184,9 +184,10 @@ const [arabic, setArabic] = useState([]);
       <CommonTable
         loading={loading}
         title="Task List"
+        module='Project Task'
         Button={
           <Link to="/ProjectTaskDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
               Add New
             </Button>
           </Link>

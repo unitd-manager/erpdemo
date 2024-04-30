@@ -335,7 +335,7 @@ if (arb === true) {
           module='Client'
           Button={
             <Link to="/ClientDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

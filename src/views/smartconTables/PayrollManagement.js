@@ -761,9 +761,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}
           title="Payroll Management List"
-          Button={
-            <div>
-              <Row>
+          module='Payroll Management'
+          SampleButton={
+            <>
+           
                 <Col md="6">
                   <a
                     href="http://43.228.126.245/smartco-api/storage/excelsheets/PayrollManagement.xlsx"
@@ -774,8 +775,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     </Button>
                   </a>
                 </Col>
-              </Row>
-            </div>
+            
+            </>
           }
         >
           <thead>
