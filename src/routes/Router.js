@@ -622,7 +622,8 @@ const Routernew = () => {
           <Route path="/ProjectSalesInvoiceDetails" name="tenderdata" element={<ProjectSalesInvoiceDetails />}></Route>
           <Route path="/ProjectSalesInvoiceEdit/:insertedDataId/:orderId" name="tenderdata" element={<ProjectSalesInvoiceEdit />}></Route>
           <Route path="/ProjectSalesReceipt" name="tenderdata" element={<ProjectSalesReceipt />}></Route>
-          
+          <Route path="/ProjectSalesReturn" name="tenderdata" element={<ProjectSalesReturn />}></Route>
+
           <Route path="/Attendance" name="tenderdata" element={<Attendance />}></Route>
           <Route path="/TenderDetails" name="tenderdata" element={<TenderDetailsTable />}></Route>
           <Route path="/TranslationDetails" name="translationdetailsdata" element={<TranslationDetails />}></Route>
