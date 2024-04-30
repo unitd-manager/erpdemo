@@ -169,12 +169,14 @@ const PurchaseRequestEdit = () => {
       <BreadCrumbs />
       <PurchaseEditButton
         id={id}
+        purchaserequesteditdetails={purchaserequesteditdetails}
         editPurchaseRequestData={editPurchaseRequestData}
         navigate={navigate}
       />
       <ApiButton
               editData={editPurchaseRequestData}
               navigate={navigate}
+              id={id}
               applyChanges={editPurchaseRequestData}
               //deleteData={deleteBookingData}
               backToList={backToList}

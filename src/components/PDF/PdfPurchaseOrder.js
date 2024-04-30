@@ -83,7 +83,7 @@ const PdfPurchaseOrder = () => {
           alignment: 'center',
         },
         {
-          text: 'Uom',
+          text: 'Unit',
           style: 'tableHead',
         },
         {
@@ -92,12 +92,12 @@ const PdfPurchaseOrder = () => {
           alignment: 'center',
         },
         {
-          text: 'Unit Price S$ ',
+          text: 'Unit Price',
           style: 'tableHead',
           alignment: 'center',
         },
         {
-          text: 'Amount S$',
+          text: 'Amount',
           style: 'tableHead',
           alignment: 'center',
         },

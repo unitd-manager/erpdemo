@@ -14,7 +14,7 @@ import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
-
+import PdfPurchaseRequestList from '../../components/PDF/PdfPurchaseRequestList';
 
 
 const PurchaseRequest = () => {
@@ -143,6 +143,13 @@ const PurchaseRequest = () => {
       grow: 0,
       wrap: true,
     },   
+    {
+      name: 'Print',
+      selector: 'status',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },   
   ];
 
   return (
@@ -185,6 +192,9 @@ const PurchaseRequest = () => {
                     <td>{arb?element.company_name_arb:element.company_name}</td>
                     <td>{arb?element.department_arb:element.department}</td>
                     <td>{arb?element.status_arb:element.status}</td>
+                    <td>  
+                      <PdfPurchaseRequestList requestId={element.purchase_request_id} purchaserequest={purchaserequest} />
+ </td>
                   </tr>
                 );
               })}
