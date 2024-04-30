@@ -29,21 +29,21 @@ import AppContext from '../../context/AppContext';
 import PdfReturn from '../../components/PDF/PdfReturn';
 import ApiButton from '../../components/ApiButton';
 
-const InvoiceEdit = () => {
+const InvoiceEdit = () => { 
   const [returnDetails, setReturnDetails] = useState({});
   const [returnItemDetails, setReturnItemDetails] = useState();
-  const [projreturnInvoiceItemDetails, setProjReturnInvoiceItemDetails] = useState();
+  const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
   const { insertedDataId, invoiceId } = useParams();
   const [removedItems, setRemovedItems] = useState([]);
   console.log('insertedDataId:', insertedDataId); 
   console.log('invoiceId:', invoiceId);
-  const { loggedInuser } = useContext(AppContext);
+  const { loggedInuser } = useContext(AppContext); 
   const navigate = useNavigate();
   const handleInputs = (e) => {
     setReturnDetails({ ...returnDetails, [e.target.name]: e.target.value });
   };
   const backToList = () => {
-    navigate('/SalesReturn');
+    navigate('/ProjectSalesReturn');
   };
   const [activeTab, setActiveTab] = useState('1');
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -56,7 +56,7 @@ const InvoiceEdit = () => {
   };
   const getReturnById = () => {
     api
-      .post('/invoice/getSalesReturnId', { proj_sales_return_id: insertedDataId })
+      .post('/projectsalesreturn/getSalesReturnId', { proj_sales_return_id: insertedDataId })
       .then((res) => {
         setReturnDetails(res.data.data[0]);
       })
@@ -67,9 +67,9 @@ const InvoiceEdit = () => {
 
   const getReturnItemById = () => {
     api
-      .post('/invoice/getInvoiceItemsById', { invoice_id: invoiceId })
+      .post('/projectsalesreturn/getInvoiceItemsById', { project_invoice_id: invoiceId })
       .then((res) => {
-        setProjReturnItemDetails(res.data.data);
+        setReturnItemDetails(res.data.data);
       })
       .catch(() => {
        
@@ -78,9 +78,9 @@ const InvoiceEdit = () => {
 
   const getReturnInvoiceItemById = () => {
     api
-      .post('/invoice/getReturnInvoiceItemsById', { invoice_id: invoiceId })
+      .post('/projectsalesreturn/getReturnInvoiceItemsById', { project_invoice_id: invoiceId })
       .then((res) => {
-        setProjReturnInvoiceItemDetails(res.data.data);
+        setReturnInvoiceItemDetails(res.data.data);
       })
       .catch(() => {
        
@@ -91,21 +91,21 @@ const InvoiceEdit = () => {
     returnDetails.modification_date = creationdatetime;
     returnDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/finance/editSalesReturn', returnDetails)
+      .post('/projectsalesreturn/editSalesReturn', returnDetails)
       .then(() => {
         if (shouldNavigate) {
           setTimeout(() => {
-            navigate('/SalesReturn'); // Navigate after showing the message if shouldNavigate is true
+            navigate('/ProjectSalesReturn'); // Navigate after showing the message if shouldNavigate is true
           }, 100);
         }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
-  };
+  }; 
   const editInvoiceItemData = () => {
     api
-      .get('/finance/checkInvoiceItem')
+      .get('/projectsalesreturn/checkInvoiceItem')
       .then((response) => {
         const existingQuoteItemsIds = response.data.data;
         console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
@@ -117,7 +117,7 @@ const InvoiceEdit = () => {
 
           // Filter non-removed items
           const nonRemovedItems = returnItemDetails.filter(
-            (element) => !existingQuoteItemsIds.includes(element.invoice_item_id),
+            (element) => !existingQuoteItemsIds.includes(element.project_invoice_item_id),
           );
 
           // Loop through each non-removed return item and create an API request
@@ -125,14 +125,14 @@ const InvoiceEdit = () => {
             const salesReturnItem = {
               price: element.total_cost,
               qty_return: element.qty,
-              invoice_item_id: element.invoice_item_id,
+              project_invoice_item_id: element.invoice_item_id,
               order_id: element.order_id,
-              invoice_id: element.invoice_id,
+              project_invoice_id: element.invoice_id,
               return_date: new Date(),
             };
 
             // Create the API request for this item
-            const apiRequest = api.post('/invoice/insertSalesReturnHistory', salesReturnItem);
+            const apiRequest = api.post('/projectsalesreturn/insertSalesReturnHistory', salesReturnItem);
 
             // Add the request to the array of requests
             apiRequests.push(apiRequest);
@@ -172,7 +172,7 @@ const InvoiceEdit = () => {
 
     // Filter out the item from the returnItemDetails state
     const updatedItems = returnItemDetails.filter(
-      (item) => item.invoice_item_id !== invoiceIdToRemove,
+      (item) => item.project_invoice_item_id !== invoiceIdToRemove,
     );
     setReturnItemDetails(updatedItems);
   };
@@ -199,7 +199,7 @@ const InvoiceEdit = () => {
 
   const getArabicCompanyName = () => {
     api
-      .get('/finance/getTranslationforTradingSalesReturn')
+      .get('/projectsalesreturn/getTranslationforTradingProjSalesReturn')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -285,7 +285,7 @@ const InvoiceEdit = () => {
         <ProjReturnDetailComp 
          arb={arb}
          arabic={arabic}
-        projreturnDetails={projreturnDetails} 
+        returnDetails={returnDetails} 
         handleInputs={handleInputs} />
       </ComponentCard>
 
@@ -328,7 +328,7 @@ const InvoiceEdit = () => {
           <TabPane tabId="1">
             <Row className="border-bottom mb-3">
               <ProjReturnItemTable
-                projreturnItemDetails={projreturnItemDetails}
+                returnItemDetails={returnItemDetails}
                 invoiceInfo={insertedDataId}
                 onRemoveItem={handleRemoveItem}
                 invoiceStatus={returnDetails.invoice_status} // Pass the invoice status as a prop
@@ -336,9 +336,9 @@ const InvoiceEdit = () => {
                 arabic={arabic}
               />
             </Row>
-          </TabPane>
+          </TabPane> 
           <TabPane tabId="2">
-            <ProjReturnInvoiceItemTable projreturnInvoiceItemDetails={projreturnInvoiceItemDetails}
+            <ProjReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails}
              arb={arb}
              arabic={arabic} />
           </TabPane>

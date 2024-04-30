@@ -139,9 +139,7 @@ console.log('arabic', arabic);
               <FormGroup>
                 <Col md="9">
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel]}{' '}
-                    {/*Access the value property */}
-                   
+                    {arabic.find((item) => item.key_text === 'mdTradingGoods.Order Code')?.[genLabel]}{' '}                   
                   </Label>
                   <Input
                     type="select"
@@ -166,7 +164,7 @@ console.log('arabic', arabic);
                           <option key={e.order_code} value={e.order_code}>
                             {' '}
                             {arb?e.order_code_arb:e.order_code} - {arb?e.company_name_arb:e.company_name}
-                          </option>
+                          </option> 
                         );
                       })}
                   </Input>

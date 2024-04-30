@@ -9,17 +9,17 @@ import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
-const ReturnDetails = () => {
+const ProjectReturnDetails = () => {
   const [invoice, setInvoice] = useState();
   const [insertReturn, setInsertReturn] = useState({
-    invoice_id:'',
+    project_invoice_id:'',
   });
   const { id } = useParams();
   const navigate = useNavigate();
   const { loggedInuser } = useContext(AppContext);
   //Api call for getting company dropdown
   const getQuote = () => {
-    api.get('/invoice/getInvoice').then((res) => {
+    api.get('/projectsalesreturn/getInvoice').then((res) => {
       setInvoice(res.data.data);
     });
   };
@@ -31,18 +31,18 @@ const ReturnDetails = () => {
 
   //console.log(tenderDetails);
   const insertOrder = () => {
-    if (insertReturn.invoice_id !== '') {
+    if (insertReturn.project_invoice_id !== '') {
       // Check if it's not an empty string
       insertReturn.creation_date = creationdatetime;
       insertReturn.created_by = loggedInuser.first_name;
       api
-        .post('/invoice/insertSalesReturn', insertReturn)
+        .post('/projectsalesreturn/insertSalesReturn', insertReturn)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
-          const invoiceId = insertReturn.invoice_id;
+          const invoiceId = insertReturn.project_invoice_id;
 
           // Navigate to the next page with both invoice_id and sales_return_id
-          navigate(`/ReturnEdit/${insertedDataId}/${invoiceId}`);
+          navigate(`/ProjectReturnEdit/${insertedDataId}/${invoiceId}`);
           console.log('insertedDataId', insertedDataId);
           console.log('invoiceId', invoiceId);
         })
@@ -76,7 +76,7 @@ const ReturnDetails = () => {
 
   const getArabicCompanyName = () => {
     api
-    .get('/finance/getTranslationforTradingSalesReturn')
+    .get('/projectsalesreturn/getTranslationforTradingProjSalesReturn')
     .then((res) => {
         setArabic(res.data.data);
       })
@@ -115,8 +115,8 @@ console.log('arabic', arabic);
                     </Label>  
                   <Input
                       type="select"
-                      name="invoice_id"
-                      value={insertReturn.invoice_id}
+                      name="project_invoice_id"
+                      value={insertReturn.project_invoice_id}
                       onChange={handleInputs}
                     >
                       <option>
@@ -124,7 +124,7 @@ console.log('arabic', arabic);
                       {invoice &&
                         invoice.map((ele) => {
                           return (
-                            <option key={ele.invoice_id} value={ele.invoice_id}>
+                            <option key={ele.project_invoice_id} value={ele.project_invoice_id}>
                               {' '}
                             {arb?ele.invoice_code_arb:ele.invoice_code} - {arb?ele.company_name_arb:ele.company_name}
 
@@ -174,4 +174,4 @@ console.log('arabic', arabic);
   );
 };
 
-export default ReturnDetails;
+export default ProjectReturnDetails;
