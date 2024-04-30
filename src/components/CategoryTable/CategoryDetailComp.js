@@ -20,11 +20,11 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
         <FormGroup>
           <ComponentCard title={arb ? 'تفاصيل الفئة': 'Category Details'} creationModificationDate={categoryDetails}>
             <Row>
-              <Col md="4">
+            <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdCategory.CategoryTitle')?.[genLabel]}
-              </Label>
+              </Label><span className='required'>*</span>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -38,11 +38,10 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
                     }
                     name={arb ? 'category_title_arb' : 'category_title'}
                     className={`form-control ${
-                      formSubmitted && (categoryDetails.category_title_arb.trim() === '' || categoryDetails.category_title.trim() === '') ? 'highlight' : ''
+                    formSubmitted && ((arb && categoryDetails.category_title_arb.trim() === '') ||(!arb && categoryDetails.category_title.trim() === '')) ? 'highlight' : ''
                   }`}
-              />
-              
-              {formSubmitted && categoryDetails && categoryDetails.category_title_arb.trim() === '' && categoryDetails.category_title.trim() === '' && (
+                />
+                {formSubmitted && ((arb && categoryDetails.category_title_arb.trim() === '') || (!arb && categoryDetails.category_title.trim() === '')) && (
                   <div className="error-message">Please Enter</div>
               )}
                 </FormGroup>
@@ -63,7 +62,9 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
                       section.map((e) => {
                         return (
                           <option key={e.section_id} value={e.section_id}>
-                            {arb?e.section_title_arb :e.section_title}
+                            {' '}
+                            {arb && e.section_title_arb ?e.section_title_arb : e.section_title}
+                            {' '}
                           </option>
                         );
                       })}
@@ -240,7 +241,7 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
                             categoryDetails && categoryDetails.seo_title_arb ? categoryDetails.seo_title_arb :
                             (categoryDetails && categoryDetails.seo_title_arb !== null ? '' : categoryDetails && categoryDetails.seo_title)
                           )
-                        : (categoryDetails && categoryDetails.meta_keyword)
+                        : (categoryDetails && categoryDetails.seo_title)
                     }
                     name={arb ? 'seo_title_arb' : 'seo_title'}></Input>
                 </FormGroup>
