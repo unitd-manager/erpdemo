@@ -189,14 +189,14 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={                    
                       arb
-                        ? tenderDetails && tenderDetails.office_ref_no_arb
-                          ? tenderDetails.office_ref_no_arb
-                          : tenderDetails && tenderDetails.office_ref_no_arb !== null
+                        ? tenderDetails && tenderDetails.goods_ref_no_arb
+                          ? tenderDetails.goods_ref_no_arb
+                          : tenderDetails && tenderDetails.goods_ref_no_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.office_ref_no
-                        : tenderDetails && tenderDetails.office_ref_no
+                            : tenderDetails && tenderDetails.goods_ref_no
+                        : tenderDetails && tenderDetails.goods_ref_no
                     }
-                    name={arb ? 'office_ref_no_arb' : 'office_ref_no'}
+                    name={arb ? 'goods_ref_no_arb' : 'goods_ref_no'}
                  
                   />
                 </FormGroup>
