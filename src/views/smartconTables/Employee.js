@@ -216,8 +216,8 @@ const Cards = () => {
                   id={blg.employee_id_duplicate}
                   title= {
                     arb?
-                    (blg.first_name_arb?.split(' ').shift().toUpperCase()?blg.first_name_arb?.split(' ').shift().toUpperCase():
-                    blg.first_name_arb !== null ? '' : blg.first_name) :blg.first_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
+                    (blg.employee_name_arb?.split(' ').shift().toUpperCase()?blg.employee_name_arb?.split(' ').shift().toUpperCase():
+                    blg.employee_name_arb !== null ? '' : blg.employee_name) :blg.employee_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
                   projectDesignation={arb ? blg.project_designation_arb : blg.project_designation}
