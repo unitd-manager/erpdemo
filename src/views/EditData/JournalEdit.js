@@ -14,7 +14,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import JournalButton from '../../components/Journal/JournalButton';
+//import JournalButton from '../../components/Journal/JournalButton';
 import ComponentCard from '../../components/ComponentCard';
 import Tab from '../../components/project/Tab';
 import JournalEditDetails from '../../components/Journal/JournalEditDetails';
@@ -145,11 +145,12 @@ journalMasterData.modification_date = creationdatetime;
     return (
         <>
             <BreadCrumbs heading='' />
-            <JournalButton navigate={navigate} editJournalData={editJournalData} editJournalMasterData={editJournalMasterData} />
+            {/* <JournalButton navigate={navigate} editJournalData={editJournalData} editJournalMasterData={editJournalMasterData} /> */}
             <ApiButton
               editData={editJournalData}
               navigate={navigate}
               applyChanges={editJournalData}
+              editJournalMasterData={editJournalMasterData}
               //deleteData={deleteBookingData}
               backToList={backToList}
               module="JournalEdit"

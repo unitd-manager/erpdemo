@@ -177,7 +177,7 @@ const TradingQuotationDetails = () => {
                         return (
                           <option key={e.project_enquiry_id} value={e.project_enquiry_id}>
                             {' '}
-                            {e.enquiry_code}{' '}
+                            {e.enquiry_code} - {e.company_name}{' '}
                           </option>
                         );
                       })}

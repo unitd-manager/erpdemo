@@ -144,6 +144,7 @@ const Content = () => {
 
       <CommonTable
         title="Content List"
+        module='Content'
         Button={
           <Link to="/ContentDetails">
             <Button color="primary" className="shadow-none">

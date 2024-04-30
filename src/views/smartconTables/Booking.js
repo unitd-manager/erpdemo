@@ -111,6 +111,7 @@ const Booking = () => {
         <CommonTable
           loading={loading}
           title="Booking List"
+          module='Booking'
           Button={
             <Link to="/BookingDetails">
               <Button color="primary" className="shadow-none">

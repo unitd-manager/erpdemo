@@ -21,7 +21,7 @@ import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PlanningMainDetails from '../../components/EquipmentIssue/PriceMainDetails';
-import PlanningButton from '../../components/EquipmentIssue/PriceButton';
+//import PlanningButton from '../../components/EquipmentIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import PdfEquipmentIssue from '../../components/PDF/PdfEquipmentIssue';
@@ -43,7 +43,7 @@ const EquipmentIssueEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/EquipmentIssue');
   };
@@ -141,12 +141,12 @@ const EquipmentIssueEdit = () => {
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-       ></PlanningButton>
+       ></PlanningButton> */}
        <ApiButton
               editData={editplanningData}
               navigate={navigate}

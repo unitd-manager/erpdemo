@@ -10,7 +10,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
+//import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
 import PdfQuote from '../../components/PDF/PdfQuotation';
 import creationdatetime from '../../constants/creationdatetime';
 
@@ -118,7 +118,7 @@ const [arabic, setArabic] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
  
 
   const backToList = () => {
@@ -341,13 +341,13 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={proposalDetails && proposalDetails.project_quote_code} />
-      <ProposalButtons
+      {/* <ProposalButtons
         editProposalData={editProposalData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProposalButtons>
+      ></ProposalButtons> */}
       <ApiButton
               editData={editProposalData}
               navigate={navigate}

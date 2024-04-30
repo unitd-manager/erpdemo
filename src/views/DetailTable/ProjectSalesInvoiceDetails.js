@@ -18,6 +18,7 @@ const BookingDetails = () => {
       source_type_arb: '',
       project_order_id:'',
       project_goods_delivery_id:'',
+      project_invoice_source_id:'',
     });
     const [customerdropdown, setCustomerDropdown] = useState();
     const [orderdropdown, setOrderDropdown] = useState();
@@ -66,25 +67,25 @@ const BookingDetails = () => {
     //inserting supplier data
     const insertProjectSalesInvoice = (code) => {
       setFormSubmitted(true);
-      if (invoicedetails.company_id !== '' && (arb && invoicedetails.source_type.trim() !== '') || (!arb && invoicedetails.source_type_arb.trim() !== '')) 
+      if (((arb && invoicedetails.source_type_arb.trim() !== '') || (!arb && invoicedetails.source_type.trim() !== '')) && (invoicedetails.company_id !== ''))
       {
       invoicedetails.creation_date = creationdatetime;
       invoicedetails.created_by= loggedInuser.first_name;
-      invoicedetails.invoice_code=code
-        api.post('/invoice/insertInvoice', invoicedetails)
+      invoicedetails.project_invoice_code=code
+        api.post('/projectsalesinvoice/insertInvoice', invoicedetails)
           .then((res) => {
             const insertedDataId = res.data.data.insertId;
-            const orderId = invoicedetails.invoice_source_id;
-            const goodsdeliveryId = invoicedetails.invoice_source_id;
+            const orderId = invoicedetails.project_invoice_source_id;
+            const goodsdeliveryId = invoicedetails.project_invoice_source_id;
             const InvoiceSource = invoicedetails.source_type;
             console.log('insertedDataId', insertedDataId);
             //         console.log('orderId', orderId);
             
             if (InvoiceSource === 'Sales_Order') {
-              api.post(`/finance/updateOrderStatus/${orderId}`, { order_status: 'Invoiced' })
+              api.post(`/projectsalesinvoice/updateOrderStatus/${orderId}`, { order_status: 'Invoiced' })
             .then(() => {
               // If the status update is successful, navigate to the invoice edit page
-              navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
+              navigate(`/ProjectSalesInvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
             })
             .catch((error) => {
               console.error('Error updating order status:', error);
@@ -92,7 +93,7 @@ const BookingDetails = () => {
             });
               // navigate(`/InvoiceEdit/${insertedDataId}/${orderId}?tab=1`);
             } else if (InvoiceSource === 'Goods_Delivery') {
-              navigate(`/InvoiceEdit/${insertedDataId}/${goodsdeliveryId}?tab=2`);
+              navigate(`/ProjectSalesInvoiceEdit/${insertedDataId}/${goodsdeliveryId}?tab=2`);
             }
       })
           .catch(() => {
@@ -100,13 +101,13 @@ const BookingDetails = () => {
           });
       }
       else {
-        message('Please fill all required fields.', 'error');
+        message('Please fill all required fields.', 'warning');
       }
   };
   //Api call for getting customer dropdown
   const getCustomerDropdown = () => {
     api
-      .get('/invoice/getCustomerDropdown')
+      .get('/projectsalesinvoice/getCustomerDropdown')
       .then((res) => {
         setCustomerDropdown(res.data.data);
       })
@@ -118,7 +119,7 @@ const BookingDetails = () => {
 //Api call for getting sales order dropdown
 const getSalesOrderDropdown = (companyId) => {
   api
-    .post('/invoice/getSalesOrderDropdown', {company_id: companyId} )
+    .post('/projectsalesinvoice/getSalesOrderDropdown', {company_id: companyId} )
     .then((res) => {
       setOrderDropdown(res.data.data);
     })
@@ -130,7 +131,7 @@ const getSalesOrderDropdown = (companyId) => {
 //Api call for getting customer dropdown
 const getGoodsDeliveryDropdown = (companyId) => {
   api
-    .post('/invoice/getGoodsDeliveryDropdown', {company_id:companyId} )
+    .post('/projectsalesinvoice/getGoodsDeliveryDropdown', {company_id:companyId} )
     .then((res) => {
       setGoodsDeliveryDropdown(res.data.data);
     })
@@ -183,10 +184,10 @@ const handleInputs = (e) => {
                     value={
                       arb
                         ? (
-                            invoicedetails && invoicedetails.sub_category_title_arb ? invoicedetails.sub_category_title_arb :
-                            (invoicedetails && invoicedetails.sub_category_title_arb !== null ? '' : invoicedetails && invoicedetails.sub_category_title)
+                            invoicedetails && invoicedetails.company_name_arb ? invoicedetails.company_name_arb :
+                            (invoicedetails && invoicedetails.company_name_arb !== null ? '' : invoicedetails && invoicedetails.company_name)
                           )
-                        : (invoicedetails && invoicedetails.sub_category_title)
+                        : (invoicedetails && invoicedetails.company_name)
                     }
                     name="company_id"
                     className={`form-control ${
@@ -267,8 +268,8 @@ const handleInputs = (e) => {
               {orderdropdown &&
                 orderdropdown.map((e) => {
                   return (
-                    <option key={e.order_id} value={e.order_id}>
-                      {arb && e.order_code ?e.order_code_arb : e.order_code}
+                    <option key={e.project_order_id} value={e.project_order_id}>
+                      {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}
                     </option>
                   );
                 })}
@@ -289,15 +290,15 @@ const handleInputs = (e) => {
                 </Label>
         <Input 
           type="select" 
-          name="invoice_source_id" 
+          name="project_invoice_source_id" 
           onChange={handleInputs}
         >
           <option>Select Goods Delivery</option>
           {goodsdeliverydropdown &&
             goodsdeliverydropdown.map((e) => {
               return (
-                <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
-                  {arb && e.goods_delivery_code ?e.goods_delivery_code_arb : e.goods_delivery_code}
+                <option key={e.project_goods_delivery_id} value={e.project_goods_delivery_id}>
+                  {arb?e.project_goods_delivery_code_arb:e.project_goods_delivery_code} - {arb?e.company_name_arb:e.company_name}
                 </option>
               );
             })}

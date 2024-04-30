@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -719,7 +720,7 @@ const toggle = (tab) => {
       <ComponentCardV2>
       <Row>
       <Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
-         <Col>
+         {/* <Col>
               <Button
                 color="primary"
                 className="shadow-none"
@@ -762,7 +763,7 @@ const toggle = (tab) => {
               >
                 Back to List
               </Button>
-            </Col>
+            </Col> */}
           </Row>
       </ComponentCardV2>
       <ApiButton

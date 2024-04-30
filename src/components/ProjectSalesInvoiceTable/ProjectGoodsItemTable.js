@@ -43,12 +43,12 @@ export default function  ItemTable({
         {Array.isArray(orderitemDetails) && orderitemDetails.length > 0 ? (
           orderitemDetails.map((element) => { // Map only if orderitemDetails is an array
             return (
-              <tr key={element.invoice_id}>
+              <tr key={element.project_invoice_id}>
                <td>{element.item_title}</td>
                <td>{element.unit}</td>
                <td>{element.unit_price}</td>
                <td>{element.qty}</td>
-               <td>{element.invoice_qty}</td>
+               <td>{element.project_invoice_qty}</td>
                 <td>{element.total_cost}</td>
                 <td>{element.modification_date  ? `${element.modified_by} (Modified on ${element.modification_date})` : `${element.created_by} (Created on ${element.creation_date})`}</td>
               </tr>

@@ -6,7 +6,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import * as Icon from 'react-feather';
 import message from '../../components/Message';
-import DocumentButton from '../../components/DocumentTable/DocumentButton';
+//import DocumentButton from '../../components/DocumentTable/DocumentButton';
 import DocumentEditDetails from '../../components/DocumentTable/DocumentEditDetails';
 import ComponentCard from '../../components/ComponentCard';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
@@ -129,8 +129,8 @@ const DocumentEdit = () => {
     <>
           <BreadCrumbs heading={documenteditdetails && documenteditdetails.title} />
           {/* Save Apply and Back to list Buttons */}
-          <DocumentButton id={id} editDocumentData={editDocumentData} navigate={navigate} />
-          
+          {/* <DocumentButton id={id} editDocumentData={editDocumentData} navigate={navigate} />
+           */}
           <ApiButton
               editData={editDocumentData}
               navigate={navigate}

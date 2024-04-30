@@ -155,6 +155,7 @@ const Document = () => {
       <CommonTable
         loading={loading}
         title="Document"
+        module='Document'
         Button={
           <Link to="/DocumentDetails">
             <Button color="primary" className="shadow-none">

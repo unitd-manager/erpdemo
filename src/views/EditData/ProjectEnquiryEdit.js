@@ -7,7 +7,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import TenderButtons from '../../components/ProjectEnquiryTable/TenderButtons';
+//import TenderButtons from '../../components/ProjectEnquiryTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/ProjectEnquiryTable/TenderMoreDetails';
 import TenderAttachment from '../../components/ProjectEnquiryTable/TenderAttachment';
@@ -28,7 +28,7 @@ const OpportunityEdit = () => {
    const { loggedInuser } = useContext(AppContext);
    const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectEnquiry');
   };
@@ -230,14 +230,14 @@ console.log('Selected language from localStorage:', selectedLanguage);
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TenderButtons
+      {/* <TenderButtons
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
         eng={eng}
-      ></TenderButtons>
+      ></TenderButtons> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

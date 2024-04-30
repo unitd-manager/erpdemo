@@ -239,6 +239,7 @@ const InvoiceData = () => {
         <CommonTable
           loading={loading}
           title= {arb ?'قائمة مذكرة الخصم':'Debit Note List'}
+          module='DebitNote'
           Button={
             // Open the modal on button click
             <Button color="primary" className="shadow-none" onClick={toggleModal}>

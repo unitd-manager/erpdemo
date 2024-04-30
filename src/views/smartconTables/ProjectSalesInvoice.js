@@ -108,7 +108,7 @@ const Opportunity = () => {
     //   wrap: true,
     // },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdProjectSalesInvoice.CompanyName')?.[genLabel],
       selector: 'company_name',
       sortable: true,
       grow: 0,

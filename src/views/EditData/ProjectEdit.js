@@ -8,7 +8,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
-import ProjectButton from '../../components/ProjectTable/ProjectButton';
+//import ProjectButton from '../../components/ProjectTable/ProjectButton';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AddEmployee from '../../components/ProjectTabContent/AddEmployee';
@@ -31,7 +31,7 @@ import ApiButton from '../../components/ApiButton';
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Project');
   };
@@ -340,13 +340,13 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs />
-      <ProjectButton
+      {/* <ProjectButton
         UpdateData={UpdateData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectButton>
+      ></ProjectButton> */}
 <ApiButton
               editData={UpdateData}
               navigate={navigate}

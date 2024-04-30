@@ -139,7 +139,7 @@ const GoodsReceipt = () => {
       <ToastContainer></ToastContainer>
       <CommonTable
         loading={loading}
-        title="Goods received List"
+        title="Goods receipt List"
         Button={
           <Link to="/GoodsReceiptDetails">
             <Button color="primary" className="shadow-none">

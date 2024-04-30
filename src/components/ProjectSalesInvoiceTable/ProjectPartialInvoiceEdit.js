@@ -109,7 +109,7 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
   //Api call for getting Vehicle Insurance Data By ID
   const OrderLineItemsById = () => {
     api
-      .post('/invoice/getInvoiceByOrderItemId', { invoice_id: SalesInvoiceId })
+      .post('/projectsalesinvoice/getInvoiceByOrderItemId', { project_invoice_id: SalesInvoiceId })
       .then((res) => {
         setPartialInvoiceEditDetails(res.data.data);
       })
@@ -124,7 +124,7 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
     partialinvoiceeditdetails.forEach((item) => {
       console.log('API Request Payload:', item);
       api
-        .post('/invoice/editInvoiceItems', item)
+        .post('/projectsalesinvoice/editInvoiceItems', item)
         .then(() => {
           message('Line Item Edited Successfully', 'sucess');
         })

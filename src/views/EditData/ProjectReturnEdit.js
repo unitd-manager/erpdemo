@@ -21,7 +21,7 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
 import ProjReturnDetailComp from '../../components/BookingTable/ProjReturnDetailComp';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ProjReturnItemTable from '../../components/BookingTable/ProjReturnItemTable';
 import ProjReturnInvoiceItemTable from '../../components/BookingTable/ProjReturnInvoiceItemTable';
@@ -221,7 +221,10 @@ const InvoiceEdit = () => {
       {/* <BreadCrumbs /> */}
       <FormGroup>
         <ToastContainer />
-        <ComponentCardV2>
+        <Row> <Col>
+            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
+            </Col></Row>
+        {/* <ComponentCardV2>
           <Row>
             <Col>
             <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
@@ -266,7 +269,7 @@ const InvoiceEdit = () => {
               </Button>
             </Col>
           </Row>
-        </ComponentCardV2>
+        </ComponentCardV2> */}
         <ApiButton
               editData={editInvoiceData}
               navigate={navigate}

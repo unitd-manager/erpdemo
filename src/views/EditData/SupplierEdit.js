@@ -15,7 +15,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import creationdatetime from '../../constants/creationdatetime';
 import message from '../../components/Message';
 import api from '../../constants/api';
@@ -49,7 +49,7 @@ const SupplierEdit = () => {
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
 
   // Function to toggle tabs
   const toggle = (tab) => {
@@ -205,7 +205,7 @@ useEffect(() => {
      {eng ===true && <BreadCrumbs heading={supplier && supplier.company_name} />}
       { arb === true && <BreadCrumbs heading={supplier && supplier.company_name_arb} />}
       
-      <Form>
+      {/* <Form>
         <FormGroup>
           <ComponentCardV2>
             <Row>
@@ -251,7 +251,7 @@ useEffect(() => {
             </Row>
           </ComponentCardV2>
         </FormGroup>
-      </Form>
+      </Form> */}
       <ApiButton
               editData={editSupplierData}
               navigate={navigate}

@@ -8,7 +8,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import OrdersButton from '../../components/TenderTable/OrdersButton';
+//import OrdersButton from '../../components/TenderTable/OrdersButton';
 import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
@@ -31,7 +31,7 @@ const OpportunityEdit = () => {
   const [selectedCompany, setSelectedCompany] = useState();
   const [allCountries, setallCountries] = useState();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/SalesOrder');
   };
@@ -252,7 +252,7 @@ const OpportunityEdit = () => {
       {/* <BreadCrumbs heading={orderDetails && orderDetails.title} /> */}
       {eng === true && <BreadCrumbs heading={orderDetails && orderDetails.title} />}
       {arb === true && <BreadCrumbs heading={orderDetails && orderDetails.title_arb} />}
-      <OrdersButton
+      {/* <OrdersButton
         editTenderData={editTenderData}
         quoteId={quoteId}
         id={insertedDataId}
@@ -260,7 +260,7 @@ const OpportunityEdit = () => {
         applyChanges={applyChanges}
         backToList={backToList}
         orderDetails={orderDetails}
-      ></OrdersButton>
+      ></OrdersButton> */}
       <ApiButton
               editData={editTenderData}
               navigate={navigate}

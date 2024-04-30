@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import { Button, Nav } from 'reactstrap';
 import 'react-simple-tree-menu/dist/main.css';
@@ -14,6 +15,8 @@ const Sidebar = () => {
   const [menu, setMenu] = React.useState();
   const location = useLocation();
   const currentURL = location.pathname.split('/').slice(0, -1).join('/');
+  const storagePermit = localStorage.getItem('__permifyUser') || JSON.stringify([]);
+  const { permissions } = JSON.parse(storagePermit);
 
   const activeBg = useSelector((state) => state.customizer.sidebarBg);
   const isFixed = useSelector((state) => state.customizer.isSidebarFixed);
@@ -30,14 +33,20 @@ const Sidebar = () => {
     <div className={`sidebarBox shadow bg-${activeBg} ${isFixed ? 'fixedSidebar' : ''}`}>
       <SimpleBar style={{ height: '100%' }}>
         {/********Logo*******/}
-        <div className="d-flex p-3 align-items-center">
-          <Logo />
+        <div className="d-flex p-3 align-items-center" style={{display:'flex'}}>
+        <div style={{display:'flex',flex:0.1}}>
+        </div>
+        <div style={{display:'flex',flex:0.6}}>
+          <Logo /></div>
+          <div style={{flex:0.2}}></div>
+          <div style={{flex:0.1}}>
           <Button
             close
             size="sm"
             className="ms-auto d-sm-block d-lg-none"
             onClick={() => dispatch(ToggleMobileSidebar())}
           />
+          </div>
         </div>
         {/********Sidebar Content*******/}
         <div className="p-3 pt-1 mt-2">
@@ -45,6 +54,16 @@ const Sidebar = () => {
             {menu &&
               menu.map((navi) => {
                 if (navi.data) {
+                  let hasPermit = false;
+                  let count = 0;
+                  for (let x= 0; x < navi.data.length; x++) {
+                    if (permissions.includes(`${navi.data[x].section_title}-list`)) {
+                      count = count + 1;
+                      hasPermit = true;
+                    }
+                  }
+                  console.log('hasPermit', hasPermit)
+                  if (hasPermit) {
                   return (
                    
                       <NavSubMenu
@@ -52,7 +71,7 @@ const Sidebar = () => {
                         //icon={navi.icon}
                         title={navi.id}
                         items={navi.data}
-                        suffix={navi.data.length}
+                        suffix={count}
                         suffixColor="bg-info"
                         // toggle={() => toggle(navi.id)}
                         // collapsed={collapsed === navi.id}
@@ -60,6 +79,9 @@ const Sidebar = () => {
                       />
                  
                   );
+                }else {
+                  return null
+                }
                 }
                 return (
                   <NavItemContainer
