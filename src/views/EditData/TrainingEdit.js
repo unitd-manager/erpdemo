@@ -369,8 +369,8 @@ const TrainingEdit = () => {
 
   
   return (
-    <> {eng === true && <BreadCrumbs heading={trainingDetails && trainingDetails.title} />}
-    {arb === true && <BreadCrumbs heading={trainingDetails && trainingDetails.title_arb} />}
+    <> 
+    {arb === true ?<BreadCrumbs heading={trainingDetails && trainingDetails.title_arb} />:<BreadCrumbs heading={trainingDetails && trainingDetails.title} />}
     
       {/* <BreadCrumbs heading={trainingDetails && trainingDetails.title} /> */}
       <Form>
