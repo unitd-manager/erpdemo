@@ -50,7 +50,7 @@ const PurchaseRequestEdit = () => {
 
   const arb = selectedLanguage === 'Arabic';
 
-  const eng = selectedLanguage === 'English';
+ // const eng = selectedLanguage === 'English';
 
   const getArabicCompanyName = () => {
     api
@@ -191,8 +191,8 @@ const PurchaseRequestEdit = () => {
 
       <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
         <ToastContainer></ToastContainer>
-        {eng === true && <Tab toggle={toggle} tabs={tabs} />}
-        {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
+        {/* {eng === true && <Tab toggle={toggle} tabs={tabs} />} */}
+        {arb === true ?<Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
             <PurchaseRequestItemModal

@@ -216,11 +216,11 @@ const handleAddNewPlanning = (e) => {
       {/* Nav tab */}
       <ComponentCard title={arb?"المزيد من التفاصيل":"More Details"}>
         <ToastContainer></ToastContainer>
-        {eng === true &&
+        {/* {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        } */}
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />
         }
 
         <TabContent className="p-4" activeTab={activeTab}>
