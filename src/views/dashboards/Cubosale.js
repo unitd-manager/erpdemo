@@ -25,20 +25,20 @@ import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
  //import CustomerChart from '../../components/dashboard/CustomerChart';
 
  /*project*/
-import ProjectChart from '../../components/dashboard/ProjectChart';
-import QuoteChart from '../../components/dashboard/QuoteChart';
-import CustoChart from '../../components/dashboard/CustoChart';
-import Subcon from '../../components/dashboard/SubCon';
-import MaterialIssue from '../../components/dashboard/MaterialIssue';
-import ProjectEnq from '../../components/dashboard/ProjectEnq';
+import ProjectChart from '../../components/DashboardProj/ProjectChart';
+import QuoteChart from '../../components/DashboardProj/QuoteChart';
+import CustoChart from '../../components/DashboardProj/CustoChart';
+import Subcon from '../../components/DashboardProj/SubCon';
+import MaterialIssue from '../../components/DashboardProj/MaterialIssue';
+import ProjectEnq from '../../components/DashboardProj/ProjectEnq';
 
 /*HR*/
-import Leave from '../../components/dashboard/Leave';
-import Loan from '../../components/dashboard/Loan';
-import Training from '../../components/dashboard/Training';
-import Employee from '../../components/dashboard/Employee';
-import JobInfo from '../../components/dashboard/JobInfo';
-import Payroll from '../../components/dashboard/Payroll';
+import Leave from '../../components/DashboardHR/Leave';
+import Loan from '../../components/DashboardHR/Loan';
+import Training from '../../components/DashboardHR/Training';
+import Employee from '../../components/DashboardHR/Employee';
+import JobInfo from '../../components/DashboardHR/JobInfo';
+import Payroll from '../../components/DashboardHR/Payroll';
 
 
 const Classic = () => {
