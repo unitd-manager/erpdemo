@@ -141,7 +141,7 @@ const PurchaseRequestTable = Loadable(lazy(() => import('../views/smartconTables
 const ProjectTaskTable = Loadable(lazy(() => import('../views/smartconTables/ProjectTask')));
 const DocumentTable = Loadable(lazy(() => import('../views/smartconTables/Document')));
 const PurchaseInvoiceTable = Loadable(lazy(() => import('../views/smartconTables/PurchaseInvoice')));
-const ProjectSalesReturn = Loadable(lazy(() => import('../views/smartconTables/ProjectSalesReturn')));
+// const ProjectSalesReturn = Loadable(lazy(() => import('../views/smartconTables/ProjectSalesReturn')));
 
 const ProjectSalesReceipt = Loadable(lazy(() => import('../views/smartconTables/ProjectSalesReceipt')));
 

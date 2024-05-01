@@ -4,7 +4,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
-  Button,
   Col, 
   FormGroup,
   Nav,
@@ -277,6 +276,7 @@ const InvoiceEdit = () => {
               //deleteData={deleteBookingData}
               backToList={backToList}
               module="ProjectReturn"
+              editInvoiceItemData={editInvoiceItemData}
             ></ApiButton>
       </FormGroup>
 
