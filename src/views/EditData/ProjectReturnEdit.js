@@ -269,15 +269,27 @@ const InvoiceEdit = () => {
             </Col>
           </Row>
         </ComponentCardV2> */}
-        <ApiButton
+        {/* <ApiButton
               editData={editInvoiceData}
               navigate={navigate}
               applyChanges={editInvoiceData}
               //deleteData={deleteBookingData}
               backToList={backToList}
               module="ProjectReturn"
-              editInvoiceItemData={editInvoiceItemData}
-            ></ApiButton>
+            ></ApiButton> */}
+            <ApiButton
+          editData={() => {
+            editInvoiceData(true);
+            editInvoiceItemData();
+          }}
+          navigate={navigate}
+          applyChanges={() => {
+            editInvoiceData(false);
+            editInvoiceItemData();
+          }}
+          backToList={backToList}
+          module="ProjectReturn"
+        > </ApiButton>
       </FormGroup>
 
       {/*Main Details*/}
