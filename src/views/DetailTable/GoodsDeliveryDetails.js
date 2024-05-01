@@ -144,24 +144,24 @@ console.log('arabic', arabic);
                   <Input
                     type="select"
                     onChange={handleInputsTenderForms}
+                    //value={tenderForms?.order_id || ''}
                     value={
                       arb
-                      ? tenderForms && tenderForms.order_code_arb
-                        ? tenderForms.order_code_arb
-                        : tenderForms && tenderForms.order_code_arb !== null
-                        ? ''
-                        : tenderForms && tenderForms.order_code
-                      : tenderForms && tenderForms.order_code
-                  }
-                  name={arb ? 'order_code_arb' : 'order_code'}
+                        ? (
+                            tenderForms && tenderForms.order_code_arb ? tenderForms.order_code_arb :
+                            (tenderForms && tenderForms.order_code_arb !== null ? '' : tenderForms && tenderForms.order_id)
+                          )
+                        : (tenderForms && tenderForms.order_id)
+                    }
+                  //name={arb ? 'order_code_arb' : 'order_code'}
 
-                    //name="order_id"
+                    name="order_id"
                   >
                     <option>Please Select</option>
                     {enquirycode &&
                       enquirycode.map((e) => {
                         return (
-                          <option key={e.order_code} value={e.order_code}>
+                          <option key={e.order_id} value={e.order_id}>
                             {' '}
                             {arb?e.order_code_arb:e.order_code} - {arb?e.company_name_arb:e.company_name}
                           </option> 

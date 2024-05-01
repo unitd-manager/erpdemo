@@ -4,7 +4,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
-
   Col, 
   FormGroup,
   Nav,
