@@ -318,7 +318,7 @@ const Test = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get('/product/getProductsPagination');
+        const res = await api.get('/product/getProducts');
 
         if (res.status === 200) {
           setProducts(res.data.data);
@@ -382,13 +382,13 @@ const Test = () => {
                 </Button>
               </Link>
             </Col>
-            <Col>
+            {/* <Col>
               <a href="http://43.228.126.245/pyramidapi/storage/excelsheets/Product.xlsx" download>
                 <Button color="primary" className="shadow-none">
                   Sample
                 </Button>
               </a>
-            </Col>
+            </Col> */}
           </>
             </Col>
           </Row>

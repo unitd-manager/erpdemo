@@ -240,7 +240,7 @@ const [arabic, setArabic] = useState([]);
                           )
                         : (productDetails && productDetails.title)
                     }
-                    name={arb ? 'sub_category_title_arb' : 'sub_category_title'}
+                    name={arb ? 'title_arb' : 'title'}
                     className={`form-control ${
                       formSubmitted && ((arb && productDetails.title_arb.trim() === '') ||(!arb && productDetails.title.trim() === '')) ? 'highlight' : ''
                   }`}
@@ -374,10 +374,10 @@ const [arabic, setArabic] = useState([]);
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdProduct.ItemCode')?.[genLabel]}
+                {arabic.find((item) => item.key_text === 'mdProduct.ShortDescription')?.[genLabel]}
               </Label>
                   <Input
-                    type="text"
+                    type="textarea"
                     onChange={handleInputs}
                     value={
                       arb
