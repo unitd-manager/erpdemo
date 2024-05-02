@@ -129,7 +129,7 @@ console.log('arabic', arabic);
                 : loanForms && loanForms.employee_id
             }
             name={arb ? 'employee_id_arb' : 'employee_id'}
-             />
+             >
                   
                         <option value="" selected>
                           {arb?'الرجاء التحديد':  'Please Select'}
@@ -142,7 +142,7 @@ console.log('arabic', arabic);
                          
                               </option>;
                           })}
-                      
+                      </Input>
                     </FormGroup>
                   </Col>
                   <Col md="12">

@@ -36,7 +36,7 @@ const PdfMaterialRequest = ({ id }) => {
 
   const getCompany = () => {
     api
-      .post('/materialrequest/getMaterialtequestDataById', { material_request_id: id })
+      .post('/MaterialIssue/getMaterialIssueDataById', { material_request_id: id })
       .then((res) => {
         setTenderDetails(res.data.data);
         console.log('1', res.data.data);

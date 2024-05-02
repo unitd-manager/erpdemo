@@ -242,7 +242,7 @@ const InvoiceData = () => {
           module='CreditNote'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               Add New
             </Button>
           }

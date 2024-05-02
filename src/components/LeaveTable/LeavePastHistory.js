@@ -87,12 +87,11 @@ export default function LeavePastHistory({ PastleavesDetails,leavesDetails }) {
               pastLeaves.map((element) => {
                 return (
                   <tr key={element.employee_id}>
-                     {' '}
-                            {arb?element.employee_id_arb:element.employee_id}{' '}
+                     
                          
                     <td>{moment(element.from_date).format('YYYY-MM-DD')}</td>
                     <td>{moment(element.to_date).format('YYYY-MM-DD')}</td>
-                    <td>{element.leave_type}
+                    <td>
                     {' '}
                             {arb?element.leave_type_arb:element.leave_type}{' '}
 </td>

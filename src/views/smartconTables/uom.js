@@ -93,9 +93,10 @@ const UoM = () => {
 
         <CommonTable
           title="UoM List"
+          module='UoM'
           Button={
             <Link to="/UomDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

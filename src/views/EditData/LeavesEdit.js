@@ -128,6 +128,8 @@ const LeavesEdit = () => {
     });
   };
 
+ 
+
   //Logic for edit data in db
   const editLeavesData = () => {
     if (!leavesDetails.no_of_days) {
@@ -146,6 +148,10 @@ const LeavesEdit = () => {
           .post('/leave/editleave', leavesDetails)
           .then(() => {
             message('Record editted successfully', 'success');
+            setTimeout(()=>{
+              backToList();
+            },300)
+         
           })
           .catch(() => {
             message('Unable to edit record.', 'error');

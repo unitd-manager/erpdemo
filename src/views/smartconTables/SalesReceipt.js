@@ -186,9 +186,10 @@ const InvoiceData = () => {
         <CommonTable
           loading={loading}
           title= {arb?'قائمة الاستلام': 'Receipt List'}
+          module='Sales Receipt'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               {arb ?'اضف جديد':'Add New'}
             </Button>
           }

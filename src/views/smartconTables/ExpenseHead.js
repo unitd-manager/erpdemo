@@ -91,9 +91,10 @@ const ExpenseHead = () => {
         <CommonTable
           loading={loading}
           title="Expense Head List"
+          module="Expense Head"
           Button={
             <Link to="/ExpenseHeadDetails">
-              <Button color="primary" className=" shadow-none">
+              <Button color="primary" className=" shadow-none mr-2">
                 Add New
               </Button>
             </Link>

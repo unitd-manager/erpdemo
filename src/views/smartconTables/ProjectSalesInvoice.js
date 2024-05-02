@@ -150,9 +150,10 @@ const Opportunity = () => {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة فاتورة المشروع':'Project Invoice List'}
+          module='Project Invoice'
           Button={
             <Link to="/ProjectSalesInvoiceDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

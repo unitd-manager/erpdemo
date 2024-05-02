@@ -10,6 +10,9 @@ const CommonTable = (props) => {
     title: PropTypes.any,
     subtitle: PropTypes.any,
     Button: PropTypes.node,
+    ImportButton: PropTypes.node,
+    ExportButton: PropTypes.node,
+    SampleButton: PropTypes.node,
     additionalClasses: PropTypes.string,
     loading: PropTypes.bool,
     module: PropTypes.string,
@@ -37,13 +40,30 @@ const CommonTable = (props) => {
                 {props.subtitle}
               </CardSubtitle>
             </Col>
-                {/* <HasAccess
+                
+            <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
+            {/* <HasAccess
                 roles={null}
                 permissions={`${module}-new`}
                 renderAuthFailed={<p></p>}
-        >  */}
-            <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
-              {props.Button}
+        >   */}
+        {props.Button}
+        {/* </HasAccess> */}
+        <HasAccess
+                roles={null}
+                permissions={`${module}-import`}
+                renderAuthFailed={<p></p>}
+        > 
+              {props.ImportButton}
+              </HasAccess>
+              {props.SampleButton}
+              <HasAccess
+                roles={null}
+                permissions={`${module}-export`}
+                renderAuthFailed={<p></p>}
+        >  
+              {props.ExportButton}
+              </HasAccess>
             </Col>
             {/* </HasAccess> */}
           </Row>

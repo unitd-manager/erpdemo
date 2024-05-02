@@ -143,9 +143,10 @@ const Test = () => {
 
         <CommonTable
           title="Tender List"
+          module='Tender'
           Button={
             <Link to="/TenderDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

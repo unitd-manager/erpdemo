@@ -216,9 +216,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Supplier Receipt List"
+          module='MakeSupplierPayment'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               Add New
             </Button>
           }

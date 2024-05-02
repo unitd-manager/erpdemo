@@ -24,13 +24,41 @@ import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
  //import QuotationChart from '../../components/dashboard/QuotationChart';
  //import CustomerChart from '../../components/dashboard/CustomerChart';
 
+ /*project*/
+import ProjectChart from '../../components/DashboardProj/ProjectChart';
+import QuoteChart from '../../components/DashboardProj/QuoteChart';
+import CustoChart from '../../components/DashboardProj/CustoChart';
+import Subcon from '../../components/DashboardProj/SubCon';
+import MaterialIssue from '../../components/DashboardProj/MaterialIssue';
+import ProjectEnq from '../../components/DashboardProj/ProjectEnq';
+
+/*HR*/
+import Leave from '../../components/DashboardHR/Leave';
+import Loan from '../../components/DashboardHR/Loan';
+import Training from '../../components/DashboardHR/Training';
+import Employee from '../../components/DashboardHR/Employee';
+import JobInfo from '../../components/DashboardHR/JobInfo';
+import Payroll from '../../components/DashboardHR/Payroll';
+
 
 const Classic = () => {
   return (
     <>
       <Row>
-        <Col lg="12">
+        <Col lg="12"> 
           {/* <TestChart/> */}
+          <QuoteChart/>
+          <ProjectChart/>
+          <CustoChart/>
+          <Subcon/>
+          <MaterialIssue/>
+          <ProjectEnq/>
+          <Leave/>
+          <Loan/>
+          <Training/>
+          <Employee/>
+          <JobInfo/>
+          <Payroll/>
           <ClientChart/>
           <SalesOrderStats/>
           <GoodsDeliveryChart/>

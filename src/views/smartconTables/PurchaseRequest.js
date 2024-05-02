@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -14,7 +14,7 @@ import moment from 'moment';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
-
+import PdfPurchaseRequestList from '../../components/PDF/PdfPurchaseRequestList';
 
 
 const PurchaseRequest = () => {
@@ -143,6 +143,13 @@ const PurchaseRequest = () => {
       grow: 0,
       wrap: true,
     },   
+    {
+      name: 'Print',
+      selector: 'status',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },   
   ];
 
   return (
@@ -153,13 +160,19 @@ const PurchaseRequest = () => {
         <CommonTable
                 loading={loading}
           title="Purchase Request List"
+          module='Purchase Request'
           Button={
+            <>
+            <Col md="4">
             <Link to="/PurchaseRequestDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
+            </Col>
+            </>
           }
+        
         >
           <thead>
             <tr>
@@ -185,6 +198,9 @@ const PurchaseRequest = () => {
                     <td>{arb?element.company_name_arb:element.company_name}</td>
                     <td>{arb?element.department_arb:element.department}</td>
                     <td>{arb?element.status_arb:element.status}</td>
+                    <td>  
+                      <PdfPurchaseRequestList requestId={element.purchase_request_id} purchaserequest={purchaserequest} />
+ </td>
                   </tr>
                 );
               })}

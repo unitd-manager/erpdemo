@@ -131,9 +131,10 @@ function Timesheet() {
 
         <CommonTable
           title="Timesheet List"
+          module='Timesheet'
           Button={
             <Link to="/TenderDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
