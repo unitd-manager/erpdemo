@@ -341,8 +341,10 @@ console.log('Selected language from localStorage:', selectedLanguage);
           .post('/clients/deleteContact', { contact_id: staffId })
           .then(() => {
             Swal.fire('Deleted!', 'Contact has been deleted.', 'success');
-            message('Record deleted successfully', 'success');
-            window.location.reload();
+            message('Record deleted successfully', 'success'); 
+            setTimeout(() => {
+              window.location.reload();
+            }, 300);
           })
           .catch(() => {
             message('Unable to delete record.', 'error');
@@ -443,8 +445,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
           </TabPane>
           {/* ADD NOTE */}
           <TabPane tabId="4">
-            <AddNote recordId={id} roomName="AccountEdit" />
-            <ViewNote recordId={id} roomName="AccountEdit" />
+            <AddNote recordId={id} roomName="ClientEdit" />
+            <ViewNote recordId={id} roomName="ClientEdit" />
           </TabPane>
         </TabContent>
       </ComponentCard>

@@ -16,7 +16,6 @@ import creationdatetime from '../../constants/creationdatetime';
 
 // import TenderQuotation from '../../components/TenderTable/TenderQuotation';
 import ProposalMoreDetails from '../../components/ProposalTable/ProposalMoreDetails';
-import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
@@ -465,7 +464,14 @@ const [arabic, setArabic] = useState([]);
             <Row>
               <AddEmployee proposalDetails={proposalDetails}/>
               {/* <TaskEmployee proposalId={id}/> */}
-              <Col xs="12" md="3" className="mb-3">
+              
+            </Row>
+
+            
+          </TabPane>
+
+          <TabPane tabId="4">
+          <Col xs="12" md="3" className="mb-3">
                 <Button
                   className="shadow-none"
                   color="primary"
@@ -479,9 +485,7 @@ const [arabic, setArabic] = useState([]);
                   <Icon.File className="rounded-circle" width="20" />
                 </Button>
               </Col>
-            </Row>
-
-            <AttachmentModalV2
+          <AttachmentModalV2
               moduleId={id}
               attachmentModal={attachmentModal}
               setAttachmentModal={setAttachmentModal}
@@ -501,10 +505,6 @@ const [arabic, setArabic] = useState([]);
               update={update}
               setUpdate={setUpdate}
             />
-          </TabPane>
-
-          <TabPane tabId="3">
-            <TenderAttachment></TenderAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

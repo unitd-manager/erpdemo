@@ -234,7 +234,7 @@ const ProjectMaterialLineItem = ({
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Title')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Description')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Unit')?.[genLabel]} </th>
-                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Qty ')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Qty')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Unit Price')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Amount')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProject.Remarks')?.[genLabel]}</th>
