@@ -117,7 +117,9 @@ const RequestForQuoteDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                <Label dir={arb?"rtl":'ltr'} 
+                //style={{ textAlign: 'right' }}
+                >
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
                 <span style={{color:'red'}}>*</span> </Label>
                   <Input

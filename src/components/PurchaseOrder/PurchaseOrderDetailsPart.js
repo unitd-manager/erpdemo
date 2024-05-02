@@ -83,7 +83,7 @@ function PurchaseOrderDetailsPart({
                   ></Input>
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Status')?.[genLabel]}
@@ -116,6 +116,42 @@ function PurchaseOrderDetailsPart({
                     <option value="في تَقَدم">{arb ? 'في تَقَدم' : 'On hold'}</option>
                     <option value="في تَقَدم">{arb ? 'في الانتظار' : 'Cancelled'}</option>
                     <option value="في تَقَدم">{arb ? 'المحدد' : 'Selected'}</option>
+                  </Input>
+                </FormGroup>
+              </Col> */}
+               <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Status')?.[genLabel]}
+                  </Label>
+                  <Input
+                    type="select"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+                      const statusField = arb ? 'status_arb' : 'status';
+                      // Update the status field in your state with the selected value
+                      handleInputs({ target: { name: statusField, value: selectedValue } });
+                    }}
+                    value={
+                      arb
+                        ? purchaseDetails && purchaseDetails.status_arb
+                        : purchaseDetails && purchaseDetails.status
+                    }
+                    name="status"
+                  >
+                    <option value="">Please Select</option>
+                    <option value={arb ? 'في تَقَدم' : 'In Progress'}>{arb ? 'في تَقَدم' : 'In Progress'}</option>
+                    <option value= {arb ? 'أرسلت إلى المورد' : 'Sent to supplier'}>
+                      {arb ? 'أرسلت إلى المورد' : 'Sent to supplier'}
+                    </option>
+                    <option value= {arb ? 'تم قبول الطلب' : 'Order acknowledged'}>
+                      {arb ? 'تم قبول الطلب' : 'Order acknowledged'}
+                    </option>
+                    <option value={arb ? 'تلقى جزئيا' : 'Partially received'}>{arb ? 'تلقى جزئيا' : 'Partially received'}</option>
+                    <option value={arb ? 'مغلق' : 'Closed'}>{arb ? 'مغلق' : 'Closed'}</option>
+                    <option value={arb ? 'في تَقَدم' : 'On hold'}>{arb ? 'في تَقَدم' : 'On hold'}</option>
+                    <option value={arb ? 'في الانتظار' : 'Cancelled'}>{arb ? 'في الانتظار' : 'Cancelled'}</option>
+                    <option value={arb ? 'المحدد' : 'Selected'}>{arb ? 'المحدد' : 'Selected'}</option>
                   </Input>
                 </FormGroup>
               </Col>

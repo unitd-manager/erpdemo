@@ -71,7 +71,7 @@ const [arabic, setArabic] = useState([]);
 
   //Api for insertPlanning
   const insertPlanning = () => {
-    if (planningForms.supplier_id !== '') {
+    if (planningForms.supplier_id !== '' && planningForms.supplier_id  ) {
       planningForms.creation_date = creationdatetime;
       api
         .post('/supplierpricelistitem/insertPriceList', planningForms)

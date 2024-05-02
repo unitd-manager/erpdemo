@@ -63,7 +63,7 @@ if (arb === true) {
                   purchaseOrder.map((element) => {
                     return (
                       <tr key={element.purchase_order_id}>
-                        <td>{element.po_date?moment(element.po_date).format('YYYY-MM-DD'):''}</td>
+                        <td>{element.purchase_order_date?moment(element.purchase_order_date).format('YYYY-MM-DD'):''}</td>
                         <td>
                           <Link to={`/PurchaseOrderEdit/${element.purchase_order_id}`}>
                             {element.po_code}
