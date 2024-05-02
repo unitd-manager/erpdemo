@@ -15,6 +15,12 @@ const PdfHeader = ({ findCompany }) => {
         margin: [0, -20, 0, 0],
       },
       {
+        text: `United Technologies`,
+        alignment: 'center',
+        fontSize: 15,
+        bold:'true',
+      },
+      {
         text: `${findCompany('cp.companyAddress1')} ${findCompany(
           'cp.companyAddress2',
         )} \n  ${findCompany('cp.companyAddress3')} \n ${findCompany('cp.companyEmail')}`,

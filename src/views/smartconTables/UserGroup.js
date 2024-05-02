@@ -86,9 +86,10 @@ function UserGroup() {
           <CommonTable
             title="UserGroup List"
             loading={loading}
+            module='User Group'
             Button={
               <Link to="/UserGroupDetails">
-                <Button color="primary" className="shadow-none">
+                <Button color="primary" className="shadow-none mr-2">
                   Add New
                 </Button>
               </Link>

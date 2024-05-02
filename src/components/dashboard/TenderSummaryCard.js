@@ -27,10 +27,10 @@ const TenderSummaryCard = () => {
   const [bestTenderMonth, setBestTenderMonth] = useState();
   const getTenders = () => {
     api.get('/tender/getTenders').then((res) => {
-      setNoOfRecord(res.data.data.length);
+      setNoOfRecord(res.data.data?.length);
       let countCurrentRecord = 0;
       let countPreRecord = 0;
-      res.data.data.forEach((el) => {
+      res.data.data?.forEach((el) => {
         const CurrentMonth = moment(el.actual_submission_date).format('MM');
         if (CurrentMonth === monthNumber) {
           countCurrentRecord++;

@@ -12,9 +12,10 @@ const Support = () => {
       <BreadCrumbs />
       <CommonTable
         title="Support List"
+        module='Support'
         Button={
           <Link to="/SupportDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
               Add New
             </Button>
           </Link>

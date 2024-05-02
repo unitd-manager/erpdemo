@@ -230,9 +230,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Job Information List"
+          module="Job Information"
           Button={
             <Link to="/JobInformationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

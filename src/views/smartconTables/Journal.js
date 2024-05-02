@@ -147,9 +147,10 @@ const arabicCredit = arabic.find((item) => item.key_text === 'mdJournal.Credit')
         <CommonTable
           loading={loading}
           title="Journal List"
+          module='Journal'
           Button={
             <Link to="/JournalDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

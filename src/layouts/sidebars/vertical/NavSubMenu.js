@@ -90,7 +90,7 @@ const NavSubMenu = ({ icon, title, items, suffixColor, suffix }) => {
               </span>
             </NavLink>
           </NavItem>
-          </HasAccess>
+           </HasAccess>
         ))}
       </Collapse>
     </NavItem>

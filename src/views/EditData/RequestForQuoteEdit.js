@@ -311,14 +311,14 @@ console.error('Error fetching quote items', error);
               </Col>
             </Row>
           </ComponentCardV2>
-          <ApiButton
+          {/* <ApiButton
               editData={editQuoteData}
               navigate={navigate}
               applyChanges={editQuoteData}
               //deleteData={deleteBookingData}
               backToList={backToList}
               module="RequestForQuote"
-            ></ApiButton>
+            ></ApiButton> */}
           <ComponentCardV2>
           <Label>
           <PdfRequestForQuote id={id} quoteId={id}></PdfRequestForQuote>

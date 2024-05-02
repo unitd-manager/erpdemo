@@ -5,7 +5,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import api from '../../constants/api';
-import PdfFooter from './PdfFooter';
+//import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
 
 
@@ -41,6 +41,7 @@ const PdfPurchaseOrder = () => {
          
       });
   };
+  console.log("1111",purchaseDetails)
   const getPurchaseOrderId = () => {
     api
       .post('/purchaseorder/getPurchaseOrderByPdf', { purchase_order_id: id })
@@ -83,7 +84,7 @@ const PdfPurchaseOrder = () => {
           alignment: 'center',
         },
         {
-          text: 'Uom',
+          text: 'Unit',
           style: 'tableHead',
         },
         {
@@ -92,14 +93,14 @@ const PdfPurchaseOrder = () => {
           alignment: 'center',
         },
         {
-          text: 'Unit Price S$ ',
+          text: 'Unit Price',
           style: 'tableHead',
-          alignment: 'center',
+          alignment: 'right',
         },
         {
-          text: 'Amount S$',
+          text: 'Amount',
           style: 'tableHead',
-          alignment: 'center',
+          alignment: 'right',
         },
       ],
     ];
@@ -135,14 +136,14 @@ const PdfPurchaseOrder = () => {
           border: [false, false, false, true],
           margin: [0, 5, 0, 5],
           style: 'tableBody1',
-          alignment: 'left',
+          alignment: 'right',
         },
         {
           border: [false, false, false, true],
           text: `${(element.total_price  .toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,
           fillColor: '#f5f5f5',
           style: 'tableBody1',
-          alignment: 'left',
+          alignment: 'right',
         },
       ]);
     });
@@ -151,7 +152,7 @@ const PdfPurchaseOrder = () => {
       pageSize: 'A4',
       header: PdfHeader({ findCompany }),
       pageMargins: [40, 150, 40, 80],
-      footer: PdfFooter,
+      //footer: PdfFooter,
       content: [
         {
           layout: {
@@ -214,13 +215,18 @@ const PdfPurchaseOrder = () => {
           columns: [
             {
               stack: [
-                { text: `From:`, style: ['textSize'] },
+                { text: `From:`,  bold:'true', style: ['textSize'] },
                 '\n',
 
                 {
-                  text: `10 Jalan Besar, #15-02 Sim Lim Tower, \n  Singapore - 208787, \n Email:arif@usoftsolutions.com`,
-                  style: ['textSize'],
-                },
+                  text:` ${purchaseDetails.title ? purchaseDetails.title : ''}
+                  ${purchaseDetails.address_flat ? purchaseDetails.address_flat : ''}
+                         ${purchaseDetails.address_street ? purchaseDetails.address_street : ''}
+                         ${purchaseDetails.address_country ? purchaseDetails.address_country : ''}
+                         ${purchaseDetails.address_po_code ? purchaseDetails.address_po_code : ''}`,
+        style: [ 'textSize'],
+        bold:'true'
+      },
               ],
             },
             { 
@@ -229,7 +235,7 @@ const PdfPurchaseOrder = () => {
                 {text:` Date : ${(purchaseDetails.purchase_order_date)? moment(purchaseDetails.purchase_order_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
               //  {text:` Yr Ref No :${purchaseDetails.supplier_reference_no?purchaseDetails.supplier_reference_no:''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
                // {text:` Yr Quote Date : ${(purchaseDetails.yr_quote_date)? moment(purchaseDetails.yr_quote_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
-                {text:` Delivery Date : ${(purchaseDetails.delivery_date)? moment(purchaseDetails.delivery_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
+              //  {text:` Delivery Date : ${(purchaseDetails.delivery_date)? moment(purchaseDetails.delivery_date).format('DD-MM-YYYY'):''} `,style: [ 'textSize'],margin:[120,0,0,0]  },
 
               ],
             },
@@ -279,12 +285,12 @@ const PdfPurchaseOrder = () => {
           },
           table: {
             headerRows: 1,
-            widths: ['34%','33%', '33%'],
+            widths: ['24%','33%', '43%'],
 
             body: [
-              /*[
+              [
                 {
-                  text: 'Item',
+                  text: 'Terms',
                   alignment: 'left',
                   style: 'tableHead',
                 },
@@ -294,14 +300,14 @@ const PdfPurchaseOrder = () => {
                   style: 'tableHead',
                 },
                {
-                text: 'Currency',
+                text: 'Supplier Inv Code',
                alignment: 'right',
                 style: 'tableHead',
                 },
-              ],*/
+              ],
               [
                 {
-                  text: `${purchaseDetails.purchase_item ? purchaseDetails.purchase_item : ''}`,
+                  text: `${purchaseDetails.delivery_terms ? purchaseDetails.delivery_terms : ''}`,
                   alignment: 'left',
                   style: 'tableBody',
                   border: [false, false, false, true],
@@ -313,7 +319,7 @@ const PdfPurchaseOrder = () => {
                   border: [false, false, false, true],
                 },
                 {
-                  text: `${purchaseDetails.currency ? purchaseDetails.currency : ''}`,
+                  text: `${purchaseDetails.supplier_inv_code ? purchaseDetails.supplier_inv_code : ''}`,
                   alignment: 'right',
                   border: [false, false, false, true],
                   style: 'tableBody',
@@ -381,12 +387,12 @@ const PdfPurchaseOrder = () => {
             },
           
              {   stack:[
-    {text:`SubTotal $ : ${(gTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[130,0,0,0] },
+    {text:`SubTotal $ : ${(gTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, alignment: 'right',style: [ 'textSize'], margin :[130,0,0,0] },
      '\n',
    
-     {text:`GST:    ${(gstTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[160,0,0,0]  },
+     {text:`GST:    ${(gstTotal.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,alignment: 'right', style: [ 'textSize'], margin :[160,0,0,0]  },
      '\n',
-      {text:`Total $ :  ${(Total.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`, style: [ 'textSize'], margin :[145,0,0,0] },
+      {text:`Total $ :  ${(Total.toLocaleString('en-IN', {  minimumFractionDigits: 2 }))}`,alignment: 'right', style: [ 'textSize'], margin :[145,0,0,0] },
      
       ]},
       

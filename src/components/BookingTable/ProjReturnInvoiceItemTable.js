@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Form, Table } from 'reactstrap';
 
 export default function ItemTable({
-  projreturnInvoiceItemDetails,arb
+  returnInvoiceItemDetails,arb
  
 }) {
-  ItemTable.propTypes = {
-    projreturnInvoiceItemDetails: PropTypes.array,
+  ItemTable.propTypes = { 
+    returnInvoiceItemDetails: PropTypes.array,
     arb: PropTypes.any
 
      };
-  
+   
      
   //Structure of Invoice table
   const invoiceTableColumns = [
@@ -36,8 +36,8 @@ export default function ItemTable({
               </tr>
             </thead>
             <tbody>
-        {Array.isArray(projreturnInvoiceItemDetails) && projreturnInvoiceItemDetails.length > 0 ? (
-          projreturnInvoiceItemDetails.map((element) => { // Map only if returnInvoiceItemDetails is an array
+        {Array.isArray(returnInvoiceItemDetails) && returnInvoiceItemDetails.length > 0 ? (
+          returnInvoiceItemDetails.map((element) => { // Map only if returnInvoiceItemDetails is an array
             return (
               <tr key={element.invoice_id}>
                <td>{arb && element.item_title_arb ? element.item_title : element.item_title}</td>

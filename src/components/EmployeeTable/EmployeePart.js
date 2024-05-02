@@ -5,13 +5,13 @@ import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
 
-function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies, team,arb,arabic }) {
+function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies,arb,arabic }) {
   EmployeePart.propTypes = {
     employeeDetails: PropTypes.object,
     handleInputChange: PropTypes.func,
     allCountries: PropTypes.array,
     companies: PropTypes.array,
-    team: PropTypes.array,
+    //team: PropTypes.array,
     arb: PropTypes.any,
     arabic: PropTypes.any,
   };
@@ -109,10 +109,10 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                   value={
                     arb
                       ? (
-                        employeeDetails && employeeDetails.first_name_arb ? employeeDetails.first_name_arb :
-                          (employeeDetails && employeeDetails.first_name_arb !== null ? '' : employeeDetails && employeeDetails.first_name)
+                        employeeDetails && employeeDetails.employee_name_arb ? employeeDetails.employee_name_arb :
+                          (employeeDetails && employeeDetails.employee_name_arb !== null ? '' : employeeDetails && employeeDetails.employee_name)
                         )
-                      : (employeeDetails && employeeDetails.first_name)
+                      : (employeeDetails && employeeDetails.employee_name)
                   }
                   name={arb ? 'first_name_arb' : 'first_name'}
                   onChange={handleInputChange}
@@ -405,7 +405,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                 </Input>
               </FormGroup>
             </Col>
-            <Col md="3">
+            {/* <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Team')?.[genLabel]}</Label>
@@ -432,7 +432,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
                     ))}
                 </Input>
               </FormGroup>
-            </Col>
+            </Col> */}
             <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>

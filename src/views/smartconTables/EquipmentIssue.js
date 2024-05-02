@@ -127,10 +127,11 @@ const EquipmentIssue = () => {
         <CommonTable
           loading={loading}
           title="Equipment Issue"
+          module='Equipment Issue'
           Button={
             <Link to="/EquipmentIssueDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
           }

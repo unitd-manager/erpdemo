@@ -109,9 +109,10 @@ const Translation = () => {
         <CommonTable
         loading={loading}
           title="Translation List"
+          module='Translation'
           Button={
             <Link to="/TranslationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
