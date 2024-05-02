@@ -61,7 +61,7 @@ const {id}=useParams();
         if (hasChanges) {
           insertquote();
         }
-        //window.location.reload()
+        window.location.reload()
       })
       .catch(() => {
       });

@@ -217,7 +217,7 @@ const QuoteLineItem = ({
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Title')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Titles')?.[genLabel]},</th>
                           <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Description')?.[genLabel]},</th>
                           <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit')?.[genLabel]},</th>
                           <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Qty')?.[genLabel]},</th>

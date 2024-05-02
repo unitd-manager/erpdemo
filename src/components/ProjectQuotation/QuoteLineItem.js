@@ -236,7 +236,7 @@ const QuoteLineItem = ({
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Description')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Unit')?.[genLabel]} </th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Qty')?.[genLabel]}</th>
-                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Unit')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.UnitPrice')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Amount')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdProjectQuote.Remark')?.[genLabel]}</th>
                           <th scope="col"></th>
