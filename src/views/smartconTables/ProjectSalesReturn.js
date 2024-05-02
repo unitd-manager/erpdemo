@@ -11,7 +11,7 @@ import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
-const SalesInvoice = () => {
+const ProjectSalesReturn = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const getSelectedLanguageFromLocalStorage = () => {
@@ -21,11 +21,11 @@ const SalesInvoice = () => {
 
   const getOrders = () => {
     api
-      .get('/finance/getSalesReturns')
+      .get('/projectsalesreturn/getSalesReturns')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
-      })
+      }) 
       .catch(() => {
         setLoading(false);
       });
@@ -40,7 +40,7 @@ const SalesInvoice = () => {
 
   const getArabicCompanyName = () => {
       api
-      .get('/finance/getTranslationforTradingSalesReturn')
+      .get('/projectsalesreturn/getTranslationforTradingProjSalesReturn')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -82,7 +82,7 @@ const SalesInvoice = () => {
     },
     {
       name: arabic.find(item => item.key_text === 'mdTradingSalesReturn.Invoice Code')?.[genLabel],
-      selector: 'invoice_id',
+      selector: 'project_invoice_id',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -114,13 +114,13 @@ const SalesInvoice = () => {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-        <CommonTable
+        <CommonTable 
           loading={loading}
           title={arb ?'قائمة إرجاع المبيعات':'Sales Return List'}
           module='Sales Return'
           Button={
-            <Link to="/ReturnDetails">
-              <Button color="primary" className="shadow-none mr-2">
+            <Link to="/ProjectReturnDetails">
+              <Button color="primary" className="shadow-none">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
@@ -140,11 +140,11 @@ const SalesInvoice = () => {
                   <tr key={element.proj_sales_return_id }>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/ReturnEdit/${element.proj_sales_return_id }/${element.invoice_id }`}>
+                      <Link to={`/ProjectReturnEdit/${element.proj_sales_return_id }/${element.project_invoice_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.invoice_code}</td>
+                    <td>{element.project_invoice_code}</td>
                    <td>{element.return_date}</td>
                     <td>{element.status}</td>
                    
@@ -158,4 +158,4 @@ const SalesInvoice = () => {
   );
 };
 
-export default SalesInvoice;
+export default ProjectSalesReturn;

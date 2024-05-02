@@ -81,7 +81,7 @@ console.log('Title',ProductDetails.title);
               const InventoryCode = res1.data.data;
               message('inventory created successfully.', 'success');
               api
-              .post('/inventory/insertinventory', { product_id: insertedDataId, inventory_code:InventoryCode  })
+              .post('/inventory/insertinventory', { product_id: insertedDataId, inventory_code:InventoryCode, creation_date:creationdatetime, created_by:loggedInuser.first_name  })
             
             .then(() => {
               message('inventory created successfully.', 'success');

@@ -100,7 +100,7 @@ const getGoodsDeliveryDropdown = (companyId) => {
   api
     .post('/invoice/getGoodsDeliveryDropdown', {company_id:companyId} )
     .then((res) => {
-      setGoodsDeliveryDropdown(res.data.data);
+      setGoodsDeliveryDropdown(res.data.data); 
     })
     .catch(() => {
       message('Goods Delivery Data not found', 'info');
@@ -131,18 +131,61 @@ const handleInputs = (e) => {
       getSalesOrderDropdown();
       getGoodsDeliveryDropdown();
        },[] );
+
+       const getSelectedLanguageFromLocalStorage = () => {
+        return localStorage.getItem('selectedLanguage') || '';
+      };
+    
+      const selectedLanguage = getSelectedLanguageFromLocalStorage();
+    
+      // Use the selected language value as needed
+      console.log('Selected language from localStorage:', selectedLanguage);
+     
+    
+      const [arabic, setArabic] = useState([]);
+    
+      const arb = selectedLanguage === 'Arabic';
+    
+      // const eng = selectedLanguage === 'English';
+    
+      const getArabicCompanyName = () => {
+        api
+          .get('/invoice/getTranslationforTradingSalesInvoice')
+          .then((res) => {
+            setArabic(res.data.data);
+          })
+          .catch(() => {
+            // Handle error if needed
+          });
+      };
+    console.log('arabic', arabic);
+      useEffect(() => {
+        getArabicCompanyName();
+      }, []);
+    
+      let genLabel = '';
+    
+      if (arb === true) {
+        genLabel = 'arb_value';
+      } else { 
+        genLabel = 'value';
+      }
+    
       return (
       <div>
          <BreadCrumbs />
         <ToastContainer />
         <Row>
       <Col md="6" xs="12">
-          <ComponentCard title="Invoice Details">
+          <ComponentCard title={arb ?"تفاصيل الفاتورة":"Invoice Details"}>
             <Form>
               <FormGroup>
                 <Row>
                 <Col md="12">
-            <Label>Customer Name <span className="required"> *</span>{' '}</Label>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel]}{' '}            
+                       <span className="required"> *</span>{' '}
+               </Label>
             <Input 
             type="select" 
             name="company_id" 
@@ -155,7 +198,7 @@ const handleInputs = (e) => {
                 customerdropdown.map((e) => {
                   return (
                     <option key={e.company_id} value={e.company_id}>
-                      {e.company_name}
+                      {e.company_id}
                     </option>
                   );
                 })}
@@ -210,7 +253,7 @@ invoicedetails && (
                 orderdropdown.map((e) => {
                   return (
                     <option key={e.order_id} value={e.order_id}>
-                      {e.order_code}
+                      {e.order_code}-{e.company_name}
                     </option>
                   );
                 })}

@@ -18,9 +18,9 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
   const generateData = () => {
     
     // Step 1: Delete old order items by quote_id
-    api.delete(`/finance/deleteorder_item/${quoteId}`).then(() => {
+    api.delete(`/projectsalesorder/deleteorder_item/${quoteId}`).then(() => {
       api
-        .post('/tender/getQuoteLineItemsById', { quote_id: quoteId })
+        .post('/projectsalesorder/getQuoteLineItemsById', { project_quote_id: quoteId })
         .then((res) => {
           const quoteItems = res.data.data;
 

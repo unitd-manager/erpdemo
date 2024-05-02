@@ -12,6 +12,7 @@ function PurchaseEditButton({ editPurchaseRequestData, navigate }) {
     <div>
       <ComponentCardV2>
       <Row>
+
           <Col>
           <Button
                 className="shadow-none"
