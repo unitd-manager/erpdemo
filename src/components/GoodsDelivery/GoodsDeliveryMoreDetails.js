@@ -205,7 +205,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
-                      arabic.find((item) => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.PO Code')?.[
                         genLabel
                       ]
                     }{' '}</Label>
@@ -231,7 +231,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
-                      arabic.find((item) => item.key_text === 'mdTradingGoods.Status\r\n')?.[
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Status')?.[
                         genLabel
                       ]
                     }{' '}
