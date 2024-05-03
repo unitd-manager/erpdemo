@@ -249,7 +249,7 @@ const ChangeRequestEdit = () => {
                   </Col>
                   <Col md="3">
                 <FormGroup>
-                  <Label> Description </Label>
+                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdChangeRequest.Description')?.[genLabel]}
                   </Label>
