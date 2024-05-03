@@ -8,7 +8,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-//import OrdersButton from '../../components/TenderTable/OrdersButton';
+// import OrdersButton from '../../components/TenderTable/OrdersButton';
 import creationdatetime from '../../constants/creationdatetime';
 import OrdersMainDetails from '../../components/TenderTable/OrdersMainDetails';
 import SalesMoreDetails from '../../components/TenderTable/SalesMoreDetails';
@@ -257,7 +257,7 @@ const OpportunityEdit = () => {
         quoteId={quoteId}
         id={insertedDataId}
         navigate={navigate}
-        applyChanges={applyChanges}
+        // applyChanges={applyChanges}
         backToList={backToList}
         orderDetails={orderDetails}
       ></OrdersButton> */}
@@ -303,6 +303,9 @@ const OpportunityEdit = () => {
         invoiceDetails={invoiceDetails}
       receiptDetails={receiptDetails}
       ordersDetails={ordersDetails}
+      orderDetails={orderDetails}
+      quoteId={quoteId}
+        id={insertedDataId}
       />
     
 

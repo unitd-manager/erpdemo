@@ -93,6 +93,7 @@ const OpportunityEdit = () => {
   };
 
   const [arabic, setArabic] = useState([]);
+  const [arabicquote, setArabicQuote] = useState([]);
 
   const arb = selectedLanguage === 'Arabic';
 
@@ -109,9 +110,22 @@ const OpportunityEdit = () => {
       });
   };
 
+  const getArabicQuotation = () => {
+    api
+      .get('/tradingquote/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabicQuote(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
   console.log('arabic', arabic);
+  console.log('arabicquote', arabicquote);
   useEffect(() => {
     getArabicCompanyName();
+    getArabicQuotation();
   }, []);
 
   // Insert Company
@@ -249,20 +263,20 @@ const OpportunityEdit = () => {
       name: '#',
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel],
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Title')?.[genLabel],
     },
 
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel],
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Description')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel],
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Quantity')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel],
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Unit Price')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel],
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel],
     },
     
   ];

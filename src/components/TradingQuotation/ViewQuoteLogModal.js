@@ -12,6 +12,7 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { FaUser } from 'react-icons/fa';
 import moment from 'moment';
 import api from '../../constants/api';
 //import QuoteLogViewLineItem from './QuoteLogViewLineItem';
@@ -24,7 +25,27 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId,}) 
     quoteId: PropTypes.any,
 
   };
- 
+  const [showTooltip, setShowTooltip] = useState(false);
+  console.log('showTooltip:', showTooltip); // Log the showTooltip state
+  const handleIconMouseOver = () => {
+    console.log('Mouse over icon'); // Log when mouse over icon
+    setShowTooltip(true);
+  };
+
+  const handleIconMouseOut = () => {
+    console.log('Mouse out icon'); // Log when mouse out of icon
+    setShowTooltip(false);
+  };
+
+  const handleIconFocus = () => {
+    console.log('Icon focused'); // Log when icon is focused
+    setShowTooltip(true);
+  };
+
+  const handleIconBlur = () => {
+    console.log('Icon blurred'); // Log when icon is blurred
+    setShowTooltip(false);
+  };
   const [quoteLogViewLineItem, setQuoteLogViewLineItem] = useState(false);
   const [quote, setQuote] = useState();
   const getquotations = () => {
@@ -206,7 +227,7 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId,}) 
                                         <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Quantity')?.[genLabel]} </th>
                                         <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Unit Price')?.[genLabel]}</th>
                                         <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel]}</th>
-                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.Updated By')?.[genLabel]}</th>
+                                        <th scope="col">{arabic.find(item => item.key_text === 'mdTradingQuote.updated By')?.[genLabel]}</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -219,8 +240,22 @@ const ViewQuoteLogModal = ({ quotationsModal, toggleQuotationsModal, quoteId,}) 
                                               <td>{e.quantity}</td>
                                               <td>{e.unit_price}</td>
                                               <td>{e.amount}</td>
-                                              <td></td>
-                                              <td></td>
+                                              <td data-label="Updated By" style={{ textAlign: 'center' }}>
+                              <tooltip title={`${e.created_by} on ${e.creation_date}`}>
+                                <span
+                                  onMouseOver={handleIconMouseOver}
+                                  onMouseOut={handleIconMouseOut}
+                                  onFocus={handleIconFocus}
+                                  onBlur={handleIconBlur}
+                                  style={{
+                                    position: 'relative',
+                                    display: 'inline-block',
+                                  }}
+                                >
+                                  {/* created by */}<FaUser />
+                                </span>
+                              </tooltip>
+                            </td>
                                             </tr>
                                           );
                                         })}
