@@ -18,12 +18,14 @@ import {
   Row,
 } from 'reactstrap';
 import moment from 'moment';
+import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import PurchaseorderSupplier from '../../components/SupplierModal/PurchaseorderSupplier';
+
 
 //geting data from invoice
 const MakeSupplier = () => {
@@ -40,6 +42,7 @@ const MakeSupplier = () => {
 
  // const navigate = useNavigate();
   const [company, setCompany] = useState();
+  const [supplierId, setSupplierId] = useState(null);
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -151,7 +154,7 @@ if (arb === true) {
   const handleBookingInputs = (e) => {
     const { name, value } = e.target;
     setBookingDetails({ ...bookingDetails, [name]: value });
-
+    setSupplierId(value)
     // Fetch bookings for the selected company
    
   };
@@ -175,13 +178,14 @@ if (arb === true) {
   const insertReceipt = (code) =>{
     const insertedOrderId = bookingDetails.supplier_id;
       bookingDetails.supplier_receipt_code=code;
+      bookingDetails.receipt_code=code;
       api
         .post('/supplier/insert-SupplierReceipt', bookingDetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           setSelectedReceiptId(insertedDataId); // Store the receiptId 
           setSelectReceiptId(insertedOrderId)
-          message('Booking inserted successfully.', 'success');
+          message('Record inserted successfully.', 'success');
      
         })
         .catch(() => {
@@ -190,6 +194,9 @@ if (arb === true) {
     
   };
   const generateCode = () => {
+    
+    if(supplierId !=='' && supplierId && supplierId !==null ){
+     
     api
       .post('/commonApi/getCodeValue', { type: 'supplier' })
       .then((res) => {
@@ -202,6 +209,10 @@ if (arb === true) {
         insertReceipt('');
        
       });
+      
+    }else{
+      message('Please Select the supplier', 'error');
+    }
   };
   useEffect(() => {
     getCompany();
@@ -212,7 +223,7 @@ if (arb === true) {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-
+<ToastContainer></ToastContainer>
         <CommonTable
           loading={loading}
           title="Supplier Receipt List"

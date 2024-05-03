@@ -3,8 +3,8 @@ import { Row, TabPane,TabContent, Form, FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
 import ComponentCard from '../ComponentCard';
-import InvoiceTable from './InvoiceTable';
-import ReceiptTable from './ReceiptTable';
+import ProjectInvoiceTable from './ProjectInvoiceTable';
+import ProjectReceiptTable from './ProjectReceiptTable';
 import Tab from '../project/Tab';
 import Tabs from '../project/Tabs';
 import ProjectOrderItemsTable from './ProjectOrderItemsTable';
@@ -88,13 +88,13 @@ export default function MoreDetails({ invoiceDetails, receiptDetails, ordersDeta
             {/* Description form */}
             <TabPane tabId="2">
               <Row className="border-bottom mb-3">
-                <InvoiceTable invoiceDetails={invoiceDetails}></InvoiceTable>
+                <ProjectInvoiceTable invoiceDetails={invoiceDetails}></ProjectInvoiceTable>
               </Row>
             </TabPane>
 
             {/* attachments */}
             <TabPane tabId="3">
-              <ReceiptTable receiptDetails={receiptDetails}></ReceiptTable>
+              <ProjectReceiptTable receiptDetails={receiptDetails}></ProjectReceiptTable>
             </TabPane>
           </TabContent>
         </ComponentCard>

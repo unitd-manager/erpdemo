@@ -175,6 +175,7 @@ const PurchaseOrderDashboardTable = Loadable(lazy(() => import('../views/smartco
 const StatementofAccountsReport = Loadable(
   lazy(() => import('../views/Reports/StatementofAccountsReport')),
 );
+const AccountsDashboard = Loadable(lazy(() => import('../views/smartconTables/AccountsDashboard')));
 const NewStatementsOfAcc = Loadable(lazy(() => import('../views/Reports/NewStatementsOfAcc')));
 const AgingReportsTable = Loadable(lazy(() => import('../views/smartconTables/AgingReports')));
 const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/InvoiceByMonth')));
@@ -815,6 +816,7 @@ const Routernew = () => {
           <Route path="/SupportDetails" name="tenderdata" element={<SupportDetails />}></Route>
           <Route path="/PurchaseOrder" name="clienttdata" element={<PurchaseOrderTable />}></Route>
           <Route path="/PurchaseOrderDashboard" name="clienttdata" element={<PurchaseOrderDashboardTable/>}></Route>
+          <Route path="/AccountsDashboard" name="clienttdata" element={<AccountsDashboard/>}></Route>
            <Route
             path="/StatementofAccountsReport"
             name="clienttdata"

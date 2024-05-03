@@ -231,7 +231,7 @@ const TrainingEdit = () => {
         }
       }
     });
-    if (new Date(trainingDetails.to_date) > new Date(trainingDetails.from_date)) {
+    if ((new Date(trainingDetails.to_date) == new Date(trainingDetails.from_date)) ||(new Date(trainingDetails.to_date) > new Date(trainingDetails.from_date))) {
       if (trainingDetails.title !== '') {
         //Update training
         api
@@ -382,7 +382,7 @@ const TrainingEdit = () => {
             <ApiButton
               editData={insertTrainingData}
               navigate={navigate}
-              applyChanges={insertTrainingData}
+             // applyChanges={insertTrainingData}
               backToList={backToList}
               module="Training"
               deleteData={deleteData}

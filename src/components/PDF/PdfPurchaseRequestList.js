@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import api from '../../constants/api';
 import PdfFooter from './PdfFooter';
 import PdfHeader from './PdfHeader';
-import message from '../Message';
+//import message from '../Message';
 
 const PdfPurchaseRequest = ({requestId,purchaserequest}) => {
   PdfPurchaseRequest.propTypes = {
@@ -28,7 +28,7 @@ console.log('purchaserequest',purchaserequest);
         setPurchaseRequestItem(res.data.data);
       })
       .catch(() => {
-        message('Invoice Data Not Found', 'info');
+       // message('Invoice Data Not Found', 'info');
       });
   };
   const getInvoice = () => {
@@ -38,7 +38,7 @@ console.log('purchaserequest',purchaserequest);
         setPurchaseRequest(res.data.data[0]);
       })
       .catch(() => {
-        message('Invoice Data Not Found', 'info');
+        //message('Invoice Data Not Found', 'info');
       });
   };
 console.log('purchaserequests',purchaserequests);

@@ -118,13 +118,13 @@ const ProjectOrderEdit = () => {
   };
 
   const getInvoiceByOrderId = () => {
-    api.post('/finance/getInvoiceById', { order_id: insertedDataId }).then((res) => {
+    api.post('/projectsalesorder/getInvoiceById', { project_order_id: insertedDataId }).then((res) => {
       setInvoiceDetails(res.data.data);
     
     });
   };
   const getReceiptByOrderId = () => {
-    api.post('/finance/getReceiptByIds', { order_id: insertedDataId }).then((res) => {
+    api.post('/projectsalesorder/getReceiptByIds', { project_order_id: insertedDataId }).then((res) => {
       setReceiptDetails(res.data.data);
     
     });

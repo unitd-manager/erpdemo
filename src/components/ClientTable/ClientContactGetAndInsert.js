@@ -138,7 +138,7 @@ export default function ClientContactGetAndInsert({
       grow: 3,
     },
     {
-      name: arabic.find((item) => item.key_text === 'mdTradingContact.Position')?.[genLabel],
+      name: arabic.find((item) => item.key_text === 'mdTradingContact.position')?.[genLabel],
       selector: 'position',
       sortable: true,
       width: 'auto',
@@ -399,7 +399,7 @@ export default function ClientContactGetAndInsert({
                           </Col>
                           {/* <Col md="4">
                             <FormGroup>
-                              <Label>Position</Label>
+                              <Label>position</Label>
                               <Input
                                 type="text"
                                 name="position"

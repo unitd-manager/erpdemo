@@ -10,6 +10,7 @@ import creationdatetime from '../../constants/creationdatetime';
 
 const PurchaseReturnDetails = () => {
   const [invoice, setInvoice] = useState();
+  const [returnInvoiceId, setReturnInvoiceId] = useState(null);
   const [insertReturn, setInsertReturn] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,12 +23,13 @@ const PurchaseReturnDetails = () => {
   };
   const handleInputs = (e) => {
     setInsertReturn({ ...insertReturn, [e.target.name]: e.target.value });
+    setReturnInvoiceId(e.target.value)
   };
 
 
   //console.log(tenderDetails);
  const insertOrder = () => {
-  if (insertReturn.purchase_invoice_id !== '') {
+  if (returnInvoiceId !== '' && returnInvoiceId !==null && returnInvoiceId) {
     insertReturn.creation_date = creationdatetime;
     api
       .post('/purchasereturn/insertPurchaseReturn', insertReturn)

@@ -42,12 +42,13 @@ const CommonTable = (props) => {
             </Col>
                 
             <Col className="d-flex" style={{ justifyContent: 'flex-end' }} xl={3} sm={12}>
-            <HasAccess
+            {/* <HasAccess
                 roles={null}
                 permissions={`${module}-new`}
                 renderAuthFailed={<p></p>}
-        >  {props.Button}
-        </HasAccess>
+        >   */}
+        {props.Button}
+        {/* </HasAccess> */}
         <HasAccess
                 roles={null}
                 permissions={`${module}-import`}
