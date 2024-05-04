@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent, Col, Button, Table, Row, Label, Tooltip } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
@@ -352,11 +353,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">
