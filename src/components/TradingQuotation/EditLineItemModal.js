@@ -97,6 +97,7 @@ const {id}=useParams();
                   name="title"
                   defaultValue={lineItemData && lineItemData.title}
                   onChange={handleData}
+                  disabled
                 />
               </Col>
             </Row>

@@ -11,13 +11,16 @@ import OrderItemsTable from './OrderItemsTable';
 
 
 //VehicleDetails From VehicleEdit
-export default function VehicleMoreDetails({ invoiceDetails, receiptDetails, ordersDetails,arb,eng }) {
+export default function VehicleMoreDetails({ invoiceDetails, receiptDetails, ordersDetails,arb,eng, orderDetails, quoteId,  id }) {
   VehicleMoreDetails.propTypes = {
     invoiceDetails: PropTypes.array,
     receiptDetails: PropTypes.array,
     ordersDetails: PropTypes.array,
     eng:PropTypes.array,
-    arb:PropTypes.array
+    arb:PropTypes.array,
+    quoteId: PropTypes.any,
+    id: PropTypes.any,
+    orderDetails: PropTypes.any
   };
 
   const [activeTab, setActiveTab] = useState('1');
@@ -48,7 +51,12 @@ export default function VehicleMoreDetails({ invoiceDetails, receiptDetails, ord
             {/* ADD NODE */}
             <TabPane tabId="1">
               
-              <OrderItemsTable ordersDetails={ordersDetails}></OrderItemsTable>
+              <OrderItemsTable
+               ordersDetails={ordersDetails}
+              orderDetails={orderDetails}
+              quoteId={quoteId}
+                id={id}
+                ></OrderItemsTable>
             </TabPane>
             {/* Description form */}
             <TabPane tabId="2">

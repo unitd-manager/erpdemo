@@ -332,7 +332,7 @@ const QuoteLineItem = ({
                       <tr>
                         <th scope="col">
                           {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Title')?.[
                               genLabel
                             ]
                           }
@@ -340,38 +340,38 @@ const QuoteLineItem = ({
                         <th scope="col">
                           {' '}
                           {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.Description')?.[
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Description')?.[
                               genLabel
                             ]
                           }
                         </th>
                         <th scope="col">
-                          {arabic.find((item) => item.key_text === 'mdTradingEnq.Unit')?.[genLabel]}{' '}
+                          {arabic.find((item) => item.key_text === 'mdTradingQuote.Unit')?.[genLabel]}{' '}
                         </th>
                         <th scope="col">
                           {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.Quantity')?.[
-                              genLabel
-                            ]
-                          }
-                        </th>
-                        <th scope="col">
-                          {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.UnitPrice')?.[
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Quantity')?.[
                               genLabel
                             ]
                           }
                         </th>
                         <th scope="col">
                           {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.Amount')?.[
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Unit Price')?.[
                               genLabel
                             ]
                           }
                         </th>
                         <th scope="col">
                           {
-                            arabic.find((item) => item.key_text === 'mdTradingEnq.Remarks')?.[
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Amount')?.[
+                              genLabel
+                            ]
+                          }
+                        </th>
+                        <th scope="col">
+                          {
+                            arabic.find((item) => item.key_text === 'mdTradingQuote.Remarks')?.[
                               genLabel
                             ]
                           }

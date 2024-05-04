@@ -85,9 +85,10 @@ export default function TradingQuoteMoreDetails({
                         genLabel
                       ]
                     }{' '}
+                     </Label>{' '}
                     {/*Access the value property */}
                     <span className="required">*</span>
-                  </Label>{' '}
+                 
                   <br />
                   <Link to={`/EnquiryEdit/${tenderDetails && tenderDetails.opportunity_id}`}>
                     {arb
@@ -110,7 +111,7 @@ export default function TradingQuoteMoreDetails({
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -153,7 +154,7 @@ export default function TradingQuoteMoreDetails({
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    {/* <span className="required">*</span> */}
                   </Label>
                   <Input
                     type="date"
@@ -176,7 +177,7 @@ export default function TradingQuoteMoreDetails({
               <Col md="3">
                 <FormGroup>
                   {arabic.find((item) => item.key_text === 'mdTradingQuote.Customer')?.[genLabel]}
-                  <span className="required"> *</span>
+                  {/* <span className="required"> *</span> */}
                   <Input
                     type="select"
                     onChange={(e) => {
@@ -275,8 +276,7 @@ export default function TradingQuoteMoreDetails({
                         genLabel
                       ]
                     }{' '}
-                    {/*Access the value property */}
-                    <span className="required">*</span>
+                   
                   </Label>
                   <Input
                     type="text"
@@ -311,7 +311,7 @@ export default function TradingQuoteMoreDetails({
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingQuote.Status')?.[genLabel]}{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"

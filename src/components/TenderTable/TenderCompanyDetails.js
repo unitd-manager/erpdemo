@@ -192,7 +192,7 @@ export default function TenderCompanyDetails({
                         <FormGroup>
                           <Label dir="rtl" style={{ textAlign: 'right' }}>
                             {
-                              arabic.find((item) => item.key_text === 'mdClient.Website')?.[
+                              arabic.find((item) => item.key_text === 'mdClient.website')?.[
                                 genLabel
                               ]
                             }{' '}
@@ -240,7 +240,7 @@ export default function TenderCompanyDetails({
                       <Col md="4">
                         <FormGroup>
                           <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdClient.Fax')?.[genLabel]}{' '}
+                            {arabic.find((item) => item.key_text === 'mdClient.fax')?.[genLabel]}{' '}
                             {/*Access the value property */}
                           </Label>
                           <Input
@@ -308,10 +308,9 @@ export default function TenderCompanyDetails({
                     <Col md="4">
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
-                          <span className="required"> *</span>
                           {arabic.find((item) => item.key_text === 'mdClient.Address1')?.[genLabel]}
                         </Label>
-                        <span className="required">*</span>
+                        <span className="required"> *</span>
                         <Input
                           type="text"
                           onChange={handleInputs}
@@ -369,14 +368,13 @@ export default function TenderCompanyDetails({
                     <Col md="4">
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
-                          <span className="required"> *</span>
                           {
-                            arabic.find((item) => item.key_text === 'mdClient.Postal Code')?.[
+                            arabic.find((item) => item.key_text === 'mdClient.postalCode')?.[
                               genLabel
                             ]
                           }
                         </Label>
-                        <span className="required">*</span>
+                        <span className="required"> *</span>
                         <Input
                           type="text"
                           onChange={handleInputs}
@@ -413,14 +411,13 @@ export default function TenderCompanyDetails({
                     <Col md="4">
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
-                          <span className="required"> *</span>
                           {
-                            arabic.find((item) => item.key_text === 'mdClient.Country')?.[genLabel]
+                            arabic.find((item) => item.key_text === 'mdClient.country')?.[genLabel]
                           }{' '}
                           {/*Access the value property */}
                         </Label>
                         <Input
-                          type="text"
+                          type="select"
                           onChange={handleInputs}
                           name={arb ? 'address_country_arb' : 'address_country'}
                           value={
@@ -450,7 +447,7 @@ export default function TenderCompanyDetails({
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
                           {
-                            arabic.find((item) => item.key_text === 'mdClient.Company Source')?.[
+                            arabic.find((item) => item.key_text === 'mdClient.CompanySource')?.[
                               genLabel
                             ]
                           }{' '}
@@ -488,7 +485,7 @@ export default function TenderCompanyDetails({
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
                           {
-                            arabic.find((item) => item.key_text === 'mdClient.Supplier Type')?.[
+                            arabic.find((item) => item.key_text === 'mdClient.SupplierType')?.[
                               genLabel
                             ]
                           }{' '}
@@ -559,7 +556,7 @@ export default function TenderCompanyDetails({
                       <FormGroup>
                         <Label dir="rtl" style={{ textAlign: 'right' }}>
                           {
-                            arabic.find((item) => item.key_text === 'mdClient.Company Size')?.[
+                            arabic.find((item) => item.key_text === 'mdClient.CompanySize')?.[
                               genLabel
                             ]
                           }{' '}

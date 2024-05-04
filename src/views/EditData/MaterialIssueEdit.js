@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -25,6 +25,7 @@ import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import PdfMaterialIssue from '../../components/PDF/PdfMaterialIssue';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
 
 const MaterialIssueEdit = () => {
   //Const Variables
@@ -36,7 +37,7 @@ const MaterialIssueEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
-
+  const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -120,6 +121,7 @@ const [arabic, setArabic] = useState([]);
 
     if (
       plannings.material_issue_date      ) {
+        plannings.modified_by = loggedInuser.first_name;
       api
         .post('/materialissue/editMaterialIssue', plannings)
         .then(() => {
