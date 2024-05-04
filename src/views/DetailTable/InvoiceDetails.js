@@ -198,7 +198,7 @@ const handleInputs = (e) => {
                 customerdropdown.map((e) => {
                   return (
                     <option key={e.company_id} value={e.company_id}>
-                      {e.company_id}
+                      {e.company_name}
                     </option>
                   );
                 })}
