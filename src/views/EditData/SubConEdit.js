@@ -231,11 +231,11 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'company_name_arb': 'company_name'}
                     className={`form-control ${
-                      formSubmitted && subCon.company_name_arb.trim() && subCon.company_name.trim() === '' ? 'highlight' : ''
+                      formSubmitted && subCon.company_name_arb && subCon.company_name === '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.company_name_arb.trim()&&subCon.company_name.trim() === '' && (
+                {formSubmitted &&  subCon.company_name_arb&&subCon.company_name === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
@@ -357,11 +357,11 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'address_flat_arb': 'address_flat'}
                     className={`form-control ${
-                      formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' ? 'highlight' : ''
+                      formSubmitted &&  subCon.address_flat_arb && subCon.address_flat=== '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' && (
+                {formSubmitted &&  subCon.address_flat_arb && subCon.address_flat === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
