@@ -221,48 +221,20 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                   </Input>
                 </FormGroup>
               </Col> */}
+          
               <Col md="3">
-                <FormGroup>
-                  <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {
-                      arabic.find((item) => item.key_text === 'mdTradingOrder.Net Amount')?.[
-                        genLabel
-                      ]
-                    }{' '}
-                    {/*Access the value property */}
-                    <span className="required">*</span>
-                  </Label>
-                  <Input
-                    type="text"
-                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
-                    readOnly
-                    onChange={handleInputs}
-                    value={
-                      arb
-                        ? orderDetails && orderDetails.order_amount_arb
-                          ? orderDetails.order_amount_arb
-                          : orderDetails && orderDetails.order_amount_arb !== null
-                          ? ''
-                          : orderDetails && orderDetails.order_amount
-                        : orderDetails && orderDetails.order_amount
-                    }
-                    name={arb ? 'order_amount_arb' : 'order_amount'}
-                  ></Input>
-                </FormGroup>
-              </Col>
-              {/* <Col md="3">
                 <FormGroup>
                   <Label>Net Amount</Label>
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={orderDetails && orderDetails.amount}
-                    name="amount"
+                    value={orderDetails && orderDetails.netAmount}
+                    name="netAmount"
                     style={{ backgroundColor: '#f2f2f2', color: '#666' }}
                     readOnly
                   />
                 </FormGroup>
-              </Col> */}
+              </Col>
             </Row>
           </ComponentCard>
         </FormGroup>

@@ -1,12 +1,16 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-import TradingSummary from '../../components/dashboard/TradingSummary';
-import OrdersStatus from '../../components/dashboard/OrdersStatus';
+import QuotationDonut from '../../components/dashboard/QuotationDonut';
+import EnquiryLineChart from '../../components/dashboard/EnquiryLineChart';
+import SalesOrderStats from '../../components/dashboard/SalesOrderStats';
 import EnquirySummary from '../../components/dashboard/EnquirySummary';
 import ReturnStats from '../../components/dashboard/ReturnStats';
 import DeliveryStats from '../../components/dashboard/DeliveryStats';
 import InvoiceSummary from '../../components/dashboard/Invoice Summary';
-import SalesStats from '../../components/dashboard/SalesStats'
+import ClientChart from '../../components/dashboard/ClientChart'
+import SalesInvoicePieChart from '../../components/dashboard/SalesInvoivePieChart';
+import GoodsDeliveryChart from '../../components/dashboard/GoodsDeliveryChart';
+import SalesReturnChart from '../../components/dashboard/SalesReturnChart';
 
 const Test = () => {
 
@@ -14,9 +18,13 @@ const Test = () => {
     <div >
       <Row>
         <Col lg='12'>
-        <SalesStats />
-        <TradingSummary/>
-        <OrdersStatus/>
+       <ClientChart/>
+       <EnquiryLineChart/>
+       <QuotationDonut/>
+       <SalesOrderStats/>
+       <SalesInvoicePieChart/>
+       <GoodsDeliveryChart/>
+       <SalesReturnChart/>
         <EnquirySummary/>
         <ReturnStats/>
         <DeliveryStats/>
