@@ -165,7 +165,7 @@ const ChangeRequest = () => {
                   <td>{arb && element.change_request_title_arb ?element.change_request_title_arb : element.change_request_title}</td>
                   <td>{element.title}</td>
                   <td>{element.submission_date}</td>
-                  <td>{moment(element.proposed_implementation_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.proposed_implementation_date?moment(element.proposed_implementation_date).format('YYYY-MM-DD'):''}</td>
                 </tr>
               );
             })}
