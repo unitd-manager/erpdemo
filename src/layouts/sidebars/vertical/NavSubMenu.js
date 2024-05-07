@@ -73,12 +73,12 @@ const NavSubMenu = ({ icon, title, items, suffixColor, suffix }) => {
 
       <Collapse isOpen={!collapsed} navbar tag="ul" className="subMenu">
         {items.map((item) => (
-           <HasAccess
-           roles={null}
-           permissions={`${item.section_title}-list`}
-           renderAuthFailed={<p className='mb-0'></p>}
-           key={item.section_title}
-         >
+        //    <HasAccess
+        //    roles={null}
+        //    permissions={`${item.section_title}-list`}
+        //    renderAuthFailed={<p className='mb-0'></p>}
+        //    key={item.section_title}
+        //  >
           <NavItem
             key={item.section_title}
             className={`hide-mini  ${location.pathname === item.internal_link ? 'activeLink' : ''}`}
@@ -90,7 +90,7 @@ const NavSubMenu = ({ icon, title, items, suffixColor, suffix }) => {
               </span>
             </NavLink>
           </NavItem>
-           </HasAccess>
+          //  </HasAccess>
         ))}
       </Collapse>
     </NavItem>

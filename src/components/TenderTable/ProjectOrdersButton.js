@@ -78,6 +78,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                         console.error(`Error inserting order item ${index + 1}`, error);
                         // Continue to the next item
                         insertOrderItems(index + 1);
+                        window.location.reload();
                       });
                   }
                 } else {
