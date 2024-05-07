@@ -7,7 +7,7 @@ import ComponentCard from '../ComponentCard';
 export default function TenderMoreDetails({
   tenderDetails,
   handleInputs,
-  company,
+
   getContact,
   formSubmitted,
   arb,
@@ -17,7 +17,7 @@ export default function TenderMoreDetails({
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     getContact: PropTypes.any,
-    company: PropTypes.object,
+    
     formSubmitted:PropTypes.object,
     arb: PropTypes.any,
     arabic: PropTypes.any,
@@ -36,11 +36,74 @@ export default function TenderMoreDetails({
         <FormGroup>
           <ComponentCard title="Enquiry Details" creationModificationDate={tenderDetails}>
             <Row>
+            <Col md="3">
+                <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.Enquiry No')?.[genLabel]}
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.enquiry_code}
+                    name="enquiry_code"
+                    disabled
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.customer')?.[genLabel]}
+                  <Input
+                    type="text"
+                    onChange={(e) => {
+                      handleInputs(e);
+                      getContact(e.target.value);
+                    }}
+                    value={tenderDetails && tenderDetails.company_name}
+                    name="company_name"
+                    disabled
+                  >
+                    {/* <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb?e.company_name_arb:e.company_name}{' '}
+                          </option>
+                        );
+                      })} */}
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdProjectEnq.Title')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    
+                  </Label>
+                  <span className="required"> *</span>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? tenderDetails && tenderDetails.title_arb
+                          ? tenderDetails.title_arb
+                          : tenderDetails && tenderDetails.title_arb !== null
+                          ? ''
+                          : tenderDetails && tenderDetails.title
+                        : tenderDetails && tenderDetails.title
+                    }
+                    name={arb ? 'title_arb' : 'title'}
+
+                  ></Input>
+                </FormGroup>
+              </Col>
+
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdProjectEnq.Enquiry Date')?.[genLabel]}
-                <span className="required"> *</span>
               </Label>
                   <Input
                     type="Date"
@@ -58,16 +121,23 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
-                  {arabic.find((item) => item.key_text === 'mdProjectEnq.Enquiry No')?.[genLabel]}
+                {arabic.find((item) => item.key_text === 'mdProjectEnq.status')?.[genLabel]}
                   <Input
-                    type="text"
+                    type="select"
+                    value={tenderDetails && tenderDetails.status}
                     onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.enquiry_code}
-                    name="enquiry_code"
-                    disabled
-                  />
+                    name="status"
+                  >
+                      <option value="">Please Select</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Quotation Sent">Quotation Sent</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="On Hold">On Hold</option>
+                  </Input>
                 </FormGroup>
               </Col>
+              
+              
               <Col md="3">
                 <FormGroup>
                   {arabic.find((item) => item.key_text === 'mdProjectEnq.Reference')?.[genLabel]}
@@ -88,9 +158,21 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
+                  {arabic.find((item) => item.key_text === 'mdProjectEnq.BID Expiry')?.[genLabel]}
+                  <Input
+                    type="date"
+                    onChange={handleInputs}
+                    value={tenderDetails && tenderDetails.project_end_date}
+                    name="project_end_date"
+                  />
+                </FormGroup>
+              </Col>
+              
+              <Col md="3">
+                <FormGroup>
                 {arabic.find((item) => item.key_text === 'mdProjectEnq.service')?.[genLabel]}
                   <Input
-                    type="text"
+                    type="textarea"
                     onChange={handleInputs}
                     value={
                       arb
@@ -102,58 +184,6 @@ export default function TenderMoreDetails({
                     }
                     name={arb ? 'services_arb': 'services'}
                   />
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  {arabic.find((item) => item.key_text === 'mdProjectEnq.BID Expiry')?.[genLabel]}
-                  <Input
-                    type="date"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.project_end_date}
-                    name="project_end_date"
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col md="3">
-                <FormGroup>
-                {arabic.find((item) => item.key_text === 'mdProjectEnq.status')?.[genLabel]}
-                  <Input
-                    type="select"
-                    value={tenderDetails && tenderDetails.status}
-                    onChange={handleInputs}
-                    name="status"
-                  >
-                      <option defaultValue="selected"> Please Select </option>
-                    <option value="Approved">Approved</option>
-                    <option value="Pending">Pending</option>
-                  </Input>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  {arabic.find((item) => item.key_text === 'mdProjectEnq.customer')?.[genLabel]}
-                  <Input
-                    type="select"
-                    onChange={(e) => {
-                      handleInputs(e);
-                      getContact(e.target.value);
-                    }}
-                    value={tenderDetails && tenderDetails.company_id}
-                    name="company_id"
-                  >
-                    <option value="selected">Please Select</option>
-                    {company &&
-                      company.map((e) => {
-                        return (
-                          <option key={e.company_id} value={e.company_id}>
-                            {' '}
-                            {arb?e.company_name_arb:e.company_name}{' '}
-                          </option>
-                        );
-                      })}
-                  </Input>
                 </FormGroup>
               </Col>
             </Row>
