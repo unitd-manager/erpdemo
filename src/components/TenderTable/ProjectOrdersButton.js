@@ -78,7 +78,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                         console.error(`Error inserting order item ${index + 1}`, error);
                         // Continue to the next item
                         insertOrderItems(index + 1);
-                        window.location.reload();
+                      
                       });
                   }
                 } else {
@@ -90,6 +90,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
 
               // Start inserting order items from index 0
               insertOrderItems(0);
+              window.location.reload();
             })
             .catch((error) => {
               console.error('Error fetching quote items', error);

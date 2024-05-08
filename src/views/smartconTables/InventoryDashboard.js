@@ -3,8 +3,6 @@ import { Col, Row } from 'reactstrap';
 import ProductChart from './ProductChart';
 import StockChart from './StockChart';
 import LowStockChart from './LowStockChart';
-import InventoryChart from './InventoryChart';
-import DebitNoteChart from './DebitNoteChart';
 
 
 const Test = () => {
@@ -16,8 +14,7 @@ const Test = () => {
         <ProductChart/>
         <StockChart/>
         <LowStockChart/>
-        <InventoryChart/>
-        <DebitNoteChart/>
+     
        
         </Col>
       </Row>
