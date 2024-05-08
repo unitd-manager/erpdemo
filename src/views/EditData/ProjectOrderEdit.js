@@ -32,7 +32,7 @@ const ProjectOrderEdit = () => {
   const navigate = useNavigate();
   const applyChanges = () => {};
   const backToList = () => {
-    navigate('/SalesOrder');
+    navigate('/ProjectOrder');
   };
   const { insertedDataId, quoteId } = useParams();
   const { loggedInuser } = useContext(AppContext);

@@ -316,13 +316,7 @@ export default function ProjectTimeSheet({
               return (
                 <tr key={element.projecttimesheet_id}>
                   <td>{index + 1}</td>
-                  <td>
-                    <span
-                      onClick={() => deleteTimesheet(element.project_timesheet_id)}
-                    >
-                      <Icon.Trash2 />
-                    </span>
-                  </td>
+                  
                   <td>
                     <span
                       onClick={() => {
@@ -333,7 +327,13 @@ export default function ProjectTimeSheet({
                       <Icon.Edit2 />
                     </span>
                   </td>
-                                                 
+                  <td>
+                    <span
+                      onClick={() => deleteTimesheet(element.project_timesheet_id)}
+                    >
+                      <Icon.Trash2 />
+                    </span>
+                  </td>                           
                   {/* Modify the following block for the modification date */}
                   <td>{element.first_name}</td>
                   <td>{element.date}</td>
