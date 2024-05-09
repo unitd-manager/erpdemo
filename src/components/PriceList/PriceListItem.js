@@ -321,6 +321,7 @@ const loadOptions = (inputValue, callback) => {
     <td>
       <Input
         type="select"
+        
         onChange={(e) => {
           const newUnit = e.target.value;
           handleUnitChange(item.id, newUnit);
@@ -403,7 +404,7 @@ const loadOptions = (inputValue, callback) => {
                     </td>  */}
                     <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
                     <td>{arb && element.price_arb ?element.price_arb : element.price}</td>
-                    <td>{arb && element.unit_arb ?element.unit_arb : element.unit_arb}</td>
+                    <td>{arb && element.unit_arb ?element.unit_arb : element.unit}</td>
                     <td>
                       <div className='anchor'>
                         <span
