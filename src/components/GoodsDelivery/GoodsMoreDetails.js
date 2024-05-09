@@ -43,13 +43,13 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.project_goods_delivery_code_arb
-                          ? tenderDetails.project_goods_delivery_code_arb
-                          : tenderDetails && tenderDetails.project_goods_delivery_code_arb !== null
+                        ? tenderDetails && tenderDetails.goods_delivery_code_arb
+                          ? tenderDetails.goods_delivery_code_arb
+                          : tenderDetails && tenderDetails.goods_delivery_code_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.project_goods_delivery_code
-                        : tenderDetails && tenderDetails.project_goods_delivery_code                  }
-                    name={arb ? 'project_goods_delivery_code_arb' : 'project_goods_delivery_code'} />
+                            : tenderDetails && tenderDetails.goods_delivery_code
+                        : tenderDetails && tenderDetails.goods_delivery_code                  }
+                    name={arb ? 'goods_delivery_code_arb' : 'goods_delivery_code'} />
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -62,12 +62,12 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.project_goods_delivery_date_arb
-                          ? tenderDetails.project_goods_delivery_date_arb
-                          : tenderDetails && tenderDetails.project_goods_delivery_date_arb !== null
+                        ? tenderDetails && tenderDetails.goods_delivery_date_arb
+                          ? tenderDetails.goods_delivery_date_arb
+                          : tenderDetails && tenderDetails.goods_delivery_date_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.project_goods_delivery_date
-                        : tenderDetails && tenderDetails.project_goods_delivery_date
+                            : tenderDetails && tenderDetails.goods_delivery_date
+                        : tenderDetails && tenderDetails.goods_delivery_date
                     } />
                 </FormGroup>
               </Col>

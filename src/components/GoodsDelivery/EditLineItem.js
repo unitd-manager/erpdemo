@@ -139,7 +139,6 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                   <thead>
                     <tr>
                       <th scope="col">{arb?'غرض': 'Item'} </th>
-                      <th scope="col">{arb?'وصف': 'Description'} </th>
                       <th scope="col">{arb?'جامعة م': 'UoM'}</th>
                       <th scope="col">{arb?'الكمية': 'Qty'}</th>
                       <th scope="col">{arb?'تسليم الكمية': 'Delivery Qty'}</th>
@@ -160,15 +159,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                                 disabled
                               />
                             </td>
-                            <td data-label="Description">
-                              <Input
-                                defaultValue={item.description}
-                                type="text"
-                                name="description"
-                                onChange={(e) => updateState(index, 'description', e)}
-                                disabled
-                              />
-                            </td>
+                           
                             <td data-label="UoM">
                               <Input
                                 defaultValue={item.unit}
