@@ -282,8 +282,6 @@ const handleAddNewPlanning = (e) => {
            planData={planData}
            editPlanEditModal={editPlanEditModal}
            setPlanEditModal={setPlanEditModal}
-           arb={arb}
-        formSubmitted={formSubmitted}
         arabic={arabic}
         genLabel={genLabel}
         unitdetails={unitdetails}
