@@ -193,10 +193,10 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                           ? tenderDetails.goods_ref_no_arb
                           : tenderDetails && tenderDetails.goods_ref_no_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.goods_ref_no
-                        : tenderDetails && tenderDetails.goods_ref_no
+                            : tenderDetails && tenderDetails.project_goods_ref_no
+                        : tenderDetails && tenderDetails.project_goods_ref_no
                     }
-                    name={arb ? 'goods_ref_no_arb' : 'goods_ref_no'}
+                    name={arb ? 'goods_ref_no_arb' : 'project_goods_ref_no'}
                  
                   />
                 </FormGroup>
@@ -236,25 +236,21 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                       ]
                     }{' '}
                  </Label>                 
-                  <Input
-                    type="select"
-                    value={ 
-                    arb
-                    ? tenderDetails && tenderDetails.project_goods_delivery_status_arb
-                      ? tenderDetails.project_goods_delivery_status_arb
-                      : tenderDetails && tenderDetails.project_goods_delivery_status_arb !== null
-                      ? ''
-                      : tenderDetails && tenderDetails.project_goods_delivery_status
-                    : tenderDetails && tenderDetails.project_goods_delivery_status
-                }
-                name={arb ? 'goods_delivery_status_arb' : 'goods_delivery_status'}
-              
-                  >
-                    <option value="New">{arb ?'جديد':'New'}</option>
-                    <option value="Invoiced">{arb ?'مفوترة':'Invoiced'}</option>
-                    <option value="Delivered">{arb ?'تم التوصيل':'Delivered'}</option>
-                    
-                  </Input>
+                 <Input
+                              type="select"
+                              name="project_goods_delivery_status"
+                              onChange={handleInputs}
+                              value={tenderDetails && tenderDetails.project_goods_delivery_status}
+                            >
+                              {' '}
+                              <option value="" selected="selected">
+                                Please Select
+                              </option>
+                              <option value="New">New</option>
+                              <option value="Invoiced">Invoiced</option>
+                              <option value="Delivered">Delivered</option>
+                             
+                            </Input>
                 </FormGroup> 
               </Col>
             </Row>

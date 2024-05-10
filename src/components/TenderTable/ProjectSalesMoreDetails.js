@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Row, TabPane,TabContent, Form, FormGroup, Nav, NavItem, Col } from 'reactstrap';
+import { Row, TabPane,TabContent, Form, FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
 import ComponentCard from '../ComponentCard';
 import ProjectInvoiceTable from './ProjectInvoiceTable';
 import ProjectReceiptTable from './ProjectReceiptTable';
@@ -44,47 +43,7 @@ export default function MoreDetails({ invoiceDetails, receiptDetails, ordersDeta
           <ToastContainer></ToastContainer>
           {eng === true && <Tab toggle={toggle} tabs={tabs} />}
           {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
-           <Nav tabs>
-            <Col md="3">
-         <NavItem>
-            <NavLink
-               className={activeTab === '1' ? 'active' : ''}
-               onClick={() => {
-                 toggle('1');
-               }}
-             >
-               Order Items
-             </NavLink>
-             
-          </NavItem>
-          </Col>
-          <Col md="3">
 
-           <NavItem>
-               <NavLink
-                 className={activeTab === '2' ? 'active' : ''}
-                 onClick={() => {
-                   toggle('2');
-                 }}
-               >
-                 Invoice
-               </NavLink>
-             </NavItem>
-             </Col>
-             <Col md="3">
-
-            <NavItem>
-               <NavLink
-                 className={activeTab === '3' ? 'active' : ''}
-                 onClick={() => {
-                   toggle('3');
-                 }}
-              >
-               Receipt
-            </NavLink>
-           </NavItem>
-            </Col>
-        </Nav>
           <TabContent className="p-4" activeTab={activeTab}>
             {/* ADD NODE */}
             <TabPane tabId="1">

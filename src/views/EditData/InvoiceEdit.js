@@ -273,7 +273,7 @@ const toggle = (tab) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
                         setTimeout(() => {
-                          window.location.reload()
+                          // window.location.reload()
                         }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);

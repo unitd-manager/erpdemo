@@ -142,7 +142,7 @@ useEffect(() => {
             {orders &&
               orders.map((element, index) => {
                 return (
-                  <tr key={element.project_quote_id}>
+                  <tr key={element.project_order_id}>
                     <td>{index + 1}</td>
                     <td>
                       <Link to={`/ProjectOrderEdit/${element.project_order_id}/${element.project_quote_id }`}>

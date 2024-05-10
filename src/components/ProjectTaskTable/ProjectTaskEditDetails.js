@@ -141,7 +141,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                           onChange={handleInputs}
                           value={projectTask && projectTask.employee_id}
                         >
-                          <option value="" defaultValue="selected"></option>
+                          <option value="" selected="selected">Please Select</option>
                           {employeeProject &&
                             employeeProject.map((ele) => {
                               return (
