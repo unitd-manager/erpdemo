@@ -58,13 +58,13 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                       project_quote_id: QuoteItem.project_quote_id,
                       unit: QuoteItem.unit,
                       unit_price: QuoteItem.unit_price,
-                      quote_items_id: QuoteItem.quote_items_id,
+                      project_quote_items_id: QuoteItem.project_quote_items_id,
                     };
 
                     console.log(`Inserting order item ${index + 1}:`, orderItemData);
                     // Send a POST request to your /finance/insertorder_item API with the current order item
                     api
-                      .post('/projectsalesorder/insertorder_item', orderItemData)
+                      .post('/finance/insert_project_order_item', orderItemData)
                       .then((result) => {
                         if (result.data.msg === 'Success') {
                           console.log(`Order item ${index + 1} inserted successfully`);

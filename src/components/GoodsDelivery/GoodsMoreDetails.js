@@ -240,12 +240,12 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     type="select"
                     value={ 
                     arb
-                    ? tenderDetails && tenderDetails.project_goods_delivery_status_arb
-                      ? tenderDetails.project_goods_delivery_status_arb
-                      : tenderDetails && tenderDetails.project_goods_delivery_status_arb !== null
+                    ? tenderDetails && tenderDetails.goods_delivery_status_arb
+                      ? tenderDetails.goods_delivery_status_arb
+                      : tenderDetails && tenderDetails.goods_delivery_status_arb !== null
                       ? ''
-                      : tenderDetails && tenderDetails.project_goods_delivery_status
-                    : tenderDetails && tenderDetails.project_goods_delivery_status
+                      : tenderDetails && tenderDetails.goods_delivery_status
+                    : tenderDetails && tenderDetails.goods_delivery_status
                 }
                 name={arb ? 'goods_delivery_status_arb' : 'goods_delivery_status'}
               
