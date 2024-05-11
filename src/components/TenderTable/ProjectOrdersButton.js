@@ -83,14 +83,13 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
                   }
                 } else {
                   console.log('All order items inserted successfully');
-                 // window.location.reload(); // Reload the page after all order
+                 window.location.reload(); // Reload the page after all order
                   // You might want to trigger a UI update here
                 }
               };
 
               // Start inserting order items from index 0
               insertOrderItems(0);
-              window.location.reload();
             })
             .catch((error) => {
               console.error('Error fetching quote items', error);

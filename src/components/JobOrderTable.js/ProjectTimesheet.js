@@ -221,9 +221,9 @@ export default function ProjectTimeSheet({
                                   onChange={handleInputsTime}
                                   value={
                                     insertTimeSheet &&
-                                    moment(insertTimeSheet.date).format('YYYY-MM-DD')
+                                    moment(insertTimeSheet.from_date).format('YYYY-MM-DD')
                                   }
-                                  name="date"
+                                  name="from_date"
                                 />
                               </FormGroup>
                             </Col>
