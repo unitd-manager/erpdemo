@@ -243,6 +243,7 @@ const toggle = (tab) => {
             const insertQuoteItems = (index) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
+                console.log('QuoteItem', QuoteItem)
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
                 if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id  )) {
                   console.warn(`Quote item for order id  ${QuoteItem.order_item_id  } already exists, skipping insertion`);
@@ -263,7 +264,8 @@ const toggle = (tab) => {
                   order_item_id: QuoteItem.order_item_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -341,7 +343,8 @@ const toggle = (tab) => {
                   order_item_id: QuoteItem.order_item_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
@@ -415,13 +418,14 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  total_cost: QuoteItem.amount,
                   invoice_qty: QuoteItem.quantity,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -494,12 +498,13 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  total_cost: QuoteItem.amount,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
