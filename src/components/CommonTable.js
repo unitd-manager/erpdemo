@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { Card, CardBody, CardTitle, CardSubtitle, Table, Col, Row } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, Table, Col, Row,Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import LottieComponent from './LottieComponent';
 import { HasAccess ,usePermify} from '@permify/react-role';
@@ -48,22 +48,23 @@ const CommonTable = (props) => {
                 renderAuthFailed={<p></p>}
         >   */}
         {props.Button}
+        
         {/* </HasAccess> */}
-        <HasAccess
+        {/* <HasAccess
                 roles={null}
                 permissions={`${module}-import`}
                 renderAuthFailed={<p></p>}
-        > 
+        >  */}
               {props.ImportButton}
-              </HasAccess>
+              {/* </HasAccess> */}
               {props.SampleButton}
-              <HasAccess
+              {/* <HasAccess
                 roles={null}
                 permissions={`${module}-export`}
                 renderAuthFailed={<p></p>}
-        >  
+        >   */}
               {props.ExportButton}
-              </HasAccess>
+              {/* </HasAccess> */}
             </Col>
             {/* </HasAccess> */}
           </Row>

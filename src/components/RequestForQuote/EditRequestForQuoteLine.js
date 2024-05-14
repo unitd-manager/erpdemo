@@ -88,7 +88,7 @@ const onchangeItems = (selectedValue) => {
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
           setAddLineItem();
-          window.location.reload();
+         // window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating item:', error);
