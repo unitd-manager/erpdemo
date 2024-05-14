@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 import PdfGoodsDelivery from '../PDF/PdfGoodsDelivery';
 
-export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, backToList, navigate ,id}) {
+export default function GoodsDeliveryButton({ editGoodsDelivery, backToList ,id}) {
     GoodsDeliveryButton.propTypes = {
     editGoodsDelivery: PropTypes.func,
-    navigate: PropTypes.any,
-    applyChanges: PropTypes.func,
     backToList: PropTypes.func,
     id: PropTypes.any,
   };
@@ -28,7 +26,9 @@ export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, b
                 color="primary"
                 onClick={() => {
                     editGoodsDelivery();
-                  navigate('/ProjectGoodsDelivery');
+                    setTimeout(()=>{
+                      backToList();
+                    },500)
                 }}
               >
                 Save
@@ -40,7 +40,7 @@ export default function GoodsDeliveryButton({ editGoodsDelivery, applyChanges, b
                 color="primary"
                 onClick={() => {
                   editGoodsDelivery();
-                  applyChanges();
+                
                 }}
               >
                 Apply

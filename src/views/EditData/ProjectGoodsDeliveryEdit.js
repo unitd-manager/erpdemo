@@ -13,7 +13,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
-import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
+import ProjectGoodsAttachment from '../../components/GoodsDelivery/ProjectGoodsAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
@@ -181,6 +181,7 @@ const GoodsDeliveryEdit = () => {
                   if (result.data.msg === 'Success') {
                     console.log(`Order item ${index + 1} inserted successfully`);
                     // You might want to trigger a UI update here
+                    window.location.reload();
                   } else {
                     console.error(`Failed to insert order item ${index + 1}`);
                   }
@@ -330,7 +331,7 @@ const GoodsDeliveryEdit = () => {
             </FormGroup>
           </TabPane>
           <TabPane tabId="2">
-            <GoodsAttachment></GoodsAttachment>
+            <ProjectGoodsAttachment></ProjectGoodsAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

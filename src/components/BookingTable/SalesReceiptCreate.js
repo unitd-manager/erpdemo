@@ -72,7 +72,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
     if (orderId) {
-      api.post('/invoice/getInvoiceForReceipt', { project_order_id: orderId }).then((res) => {
+      api.post('/invoice/getInvoiceForSalesReceipt', { order_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
           element.remainingAmount = element.invoice_amount - element.prev_amount;
@@ -106,7 +106,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const generateCode = () => {
     // Check if there are selected invoices
     if (selectedInvoice.length > 0) {
-      api.post('/commonApi/getCodeValue', { type: 'projectreceipt' })
+      api.post('/commonApi/getCodeValue', { type: 'receipt' })
         .then((res) => {
           const receiptCode = res.data.data;
   
@@ -116,7 +116,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           // Prepare data for inserting into receipt table
           const receiptData = {
             receipt_code: receiptCode,
-            project_order_id: orderId,
+            order_id: orderId,
             amount: selectedInvoiceAmount,
             receipt_date: createReceipt.receipt_date,
             mode_of_payment: createReceipt.mode_of_payment,
@@ -127,7 +127,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           };
   
           // Insert into receipt table
-          api.post('/projectreceipts/insertreceipt', receiptData)
+          api.post('/finance/insertreceipt', receiptData)
             .then((receiptRes) => {
               // Extract the project_receipt_id from the response
               const projectReceiptId = receiptRes.data.project_receipt_id;
@@ -136,12 +136,12 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
               selectedInvoice.forEach((invoice) => {
                 const historyData = {
                   receipt_code: receiptCode,
-                  project_receipt_id: projectReceiptId,
-                  project_invoice_id: invoice.project_invoice_id,
+                  receipt_id: projectReceiptId,
+                  invoice_id: invoice.invoice_id,
                   amount: invoice.invoice_amount,// Corrected line
                 };
                 // Push each promise into the array
-                receiptHistoryPromises.push(api.post('/projectreceipts/insertreceipthistory', historyData));
+                receiptHistoryPromises.push(api.post('/invoice/insertreceipthistory', historyData));
               });
   
               // Use Promise.all to wait for all receipt history insertions to complete
@@ -205,7 +205,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           {invoiceReceipt && invoiceReceipt.length > 0 ? (
   invoiceReceipt.map((element) => {
     return (
-      <Row key={element.project_invoice_id}>
+      <Row key={element.invoice_id}>
         <Col md="12">
           <FormGroup check>
             <Input
@@ -213,11 +213,11 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                 addAndDeductAmount(e, element);
                 getInvoices(e, element);
               }}
-              name="project_invoice_code"
+              name="invoice_code"
               type="checkbox"
             />
             <span>
-              {element.project_invoice_code} ({element.invoice_amount})
+              {element.invoice_code} ({element.invoice_amount})
             </span>
           </FormGroup>
         </Col>

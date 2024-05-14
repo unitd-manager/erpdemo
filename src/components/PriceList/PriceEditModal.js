@@ -19,12 +19,11 @@ import '../../views/form-editor/editor.scss';
 
 import api from '../../constants/api';
 
-const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal, formSubmitted, arb, arabic, genLabel, unitdetails }) => {
+const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal, arb, arabic, genLabel, unitdetails }) => {
   PlanEditModal.propTypes = {
     planData: PropTypes.object,
     editPlanEditModal: PropTypes.bool,
     setPlanEditModal: PropTypes.func,
-    formSubmitted: PropTypes.any,
     arb: PropTypes.any,
     arabic: PropTypes.any,   
     genLabel: PropTypes.any,
@@ -79,11 +78,12 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal, formSubm
                            <Col md="4">
                               <FormGroup>
                               <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPriceList.CustomerName')?.[genLabel]}
-              </Label><span className='required'>*</span>
+                {arabic.find((item) => item.key_text === 'mdPriceList.ProductName')?.[genLabel]}
+              </Label>
               <Input
                     type="text"
                     onChange={handleInputs}
+                    disabled
                     value={
                       arb
                         ? (
@@ -93,13 +93,7 @@ const PlanEditModal = ({ planData, editPlanEditModal, setPlanEditModal, formSubm
                         : (PlaniEdit && PlaniEdit.title)
                     }
                     name={arb ? 'title_arb' : 'title'}
-                    className={`form-control ${
-                      formSubmitted && ((arb && PlaniEdit.title_arb.trim() === '') ||(!arb && PlaniEdit.title.trim() === '')) ? 'highlight' : ''
-                  }`}
-                />
-                {formSubmitted && ((arb && PlaniEdit.title_arb.trim() === '') || (!arb && PlaniEdit.title.trim() === '')) && (
-                  <div className="error-message">Please Enter</div>
-              )}
+                   />
                    </FormGroup>
                             </Col>
                             <Col md="4">

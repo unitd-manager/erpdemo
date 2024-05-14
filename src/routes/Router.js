@@ -125,6 +125,7 @@ const EditProject = Loadable(lazy(() => import('../views/cubosale/EditProject'))
 // Tender
 const TenderTable = Loadable(lazy(() => import('../views/smartconTables/Enquiry')));
 const TradingDashboard = Loadable(lazy(() => import('../views/smartconTables/TradingDashboard')));
+const PayrollDashboard = Loadable(lazy(() => import('../views/smartconTables/PayrollDashboard')));
 const ProjectDashboard = Loadable(lazy(() => import('../views/smartconTables/ProjectDashboard')));
 const OrderTable = Loadable(lazy(() => import('../views/smartconTables/SalesOrder')));
 const SalesInvoice = Loadable(lazy(() => import('../views/smartconTables/SalesInvoice')));
@@ -176,6 +177,7 @@ const StatementofAccountsReport = Loadable(
   lazy(() => import('../views/Reports/StatementofAccountsReport')),
 );
 const AccountsDashboard = Loadable(lazy(() => import('../views/smartconTables/AccountsDashboard')));
+const InventoryDashboard = Loadable(lazy(() => import('../views/smartconTables/InventoryDashboard')));
 const NewStatementsOfAcc = Loadable(lazy(() => import('../views/Reports/NewStatementsOfAcc')));
 const AgingReportsTable = Loadable(lazy(() => import('../views/smartconTables/AgingReports')));
 const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/InvoiceByMonth')));
@@ -608,6 +610,7 @@ const Routernew = () => {
           <Route path="/Enquiry" name="tenderdata" element={<TenderTable />}></Route>
           <Route path="/ProjectOrder" name="tenderdata" element={<ProjectOrder />}></Route>
           <Route path="/TradingDashboard" name="tradingdata" element={<TradingDashboard />}></Route>
+          <Route path="/PayrollDashboard" name="tradingdata" element={<PayrollDashboard />}></Route>
           <Route path="/ProjectDashboard" name="tradingdata" element={<ProjectDashboard />}></Route>
           <Route path="/SalesOrder" name="tenderdata" element={<OrderTable />}></Route>
           <Route path="/SalesInvoice" name="tenderdata" element={<SalesInvoice />}></Route>
@@ -817,6 +820,7 @@ const Routernew = () => {
           <Route path="/PurchaseOrder" name="clienttdata" element={<PurchaseOrderTable />}></Route>
           <Route path="/PurchaseOrderDashboard" name="clienttdata" element={<PurchaseOrderDashboardTable/>}></Route>
           <Route path="/AccountsDashboard" name="clienttdata" element={<AccountsDashboard/>}></Route>
+          <Route path="/InventoryDashboard" name="clienttdata" element={<InventoryDashboard/>}></Route>
            <Route
             path="/StatementofAccountsReport"
             name="clienttdata"

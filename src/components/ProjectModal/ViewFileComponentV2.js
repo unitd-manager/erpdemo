@@ -72,7 +72,7 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
                 <tr key={res.media_id}>
                   <td style={tableStyle}>
                     <a
-                      href={`https://erpardemo.unitdtechnologies.com/storage/uploads/${res.name}`}
+                      href={`http://erpardemo.unitdtechnologies.com/storage/uploads/${res.name}`}
                       target="_blank"
                       rel="noreferrer"
                     >

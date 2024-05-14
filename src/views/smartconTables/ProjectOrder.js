@@ -108,7 +108,7 @@ useEffect(() => {
     },
     {
       name: 'Amount',
-      selector: 'amount',
+      selector: 'netAmount',
       sortable: true,
       width: 'auto',
     },
@@ -142,7 +142,7 @@ useEffect(() => {
             {orders &&
               orders.map((element, index) => {
                 return (
-                  <tr key={element.project_enquiry_id}>
+                  <tr key={element.project_order_id}>
                     <td>{index + 1}</td>
                     <td>
                       <Link to={`/ProjectOrderEdit/${element.project_order_id}/${element.project_quote_id }`}>
@@ -155,7 +155,7 @@ useEffect(() => {
                     <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td>
                     <td>{element.order_status}</td>
-                    <td>{element.amount}</td>
+                    <td>{element.netAmount}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td> */}
                     {/* <td>{element.order_status }</td>

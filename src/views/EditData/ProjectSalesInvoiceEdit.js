@@ -256,6 +256,7 @@ const toggle = (tab) => {
                     project_invoice_id: insertedDataId,
                   qty: QuoteItem.qty,
                   project_invoice_qty: QuoteItem.qty,
+                  unit: QuoteItem.unit,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.item_title,
                   total_cost: QuoteItem.cost_price,
@@ -341,7 +342,8 @@ const toggle = (tab) => {
                   project_order_item_id: QuoteItem.project_order_item_id,
                   project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  project_quote_id: QuoteItem.project_quote_id
+                  project_quote_id: QuoteItem.project_quote_id,
+                  unit: QuoteItem.unit,
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
@@ -414,14 +416,15 @@ const toggle = (tab) => {
                     project_invoice_id: insertedDataId,
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
-                  item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  item_title: QuoteItem.item_title,
+                  total_cost: QuoteItem.amount,
                   project_invoice_qty: QuoteItem.quantity,
                   project_goods_delivery_item_id: QuoteItem.project_goods_delivery_item_id,
                   project_goods_delivery_id : QuoteItem.project_goods_delivery_id,
                   project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  project_quote_id: QuoteItem.project_quote_id
+                  project_quote_id: QuoteItem.project_quote_id,
+                  unit: QuoteItem.unit,
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -493,13 +496,14 @@ const toggle = (tab) => {
                     project_invoice_id: insertedDataId,
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
-                  item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  item_title: QuoteItem.item_title,
+                  total_cost: QuoteItem.amount,
                   project_goods_delivery_item_id: QuoteItem.project_goods_delivery_item_id,
                   project_goods_delivery_id : QuoteItem.project_goods_delivery_id,
                   project_invoice_source_id: bookingDetails.project_invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  project_quote_id: QuoteItem.project_quote_id
+                  project_quote_id: QuoteItem.project_quote_id,
+                  unit: QuoteItem.unit,
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData

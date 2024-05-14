@@ -54,14 +54,14 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
     const copyDeliverOrderProducts = [...partialinvoiceeditdetails];
     const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
 
-    const quantity = parseFloat(updatedObject.invoice_qty) || 0;
+    const quantity = parseFloat(updatedObject.project_invoice_qty) || 0;
     const unitPrice = parseFloat(updatedObject.unit_price) || 0;
     updatedObject.total_cost = quantity * unitPrice;
     updatedObject.modification_date = creationdatetime;
     updatedObject.modified_by = loggedInuser.first_name;
-    updatedObject.invoice_qty = e.target.value; // Set invoice_qty to the entered value
+    updatedObject.project_invoice_qty = e.target.value; // Set project_invoice_qty to the entered value
 
-    const InvoiceQty = updatedObject.invoice_qty;
+    const InvoiceQty = updatedObject.project_invoice_qty;
     const orderedQty = updatedObject.qty;
 
     if (InvoiceQty > orderedQty) {
@@ -263,18 +263,18 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
                           <Input
                             type="text"
                             onChange={(e) => {
-                              updateState(index, 'invoice_qty', e);
+                              updateState(index, 'project_invoice_qty', e);
                             }}
                             defaultValue={
                               arb
-                                ? invoiceItem && invoiceItem.invoice_qty_arb
-                                  ? invoiceItem.invoice_qty_arb
-                                  : invoiceItem && invoiceItem.invoice_qty_arb !== null
+                                ? invoiceItem && invoiceItem.project_invoice_qty_arb
+                                  ? invoiceItem.project_invoice_qty_arb
+                                  : invoiceItem && invoiceItem.project_invoice_qty_arb !== null
                                     ? ''
-                                    : invoiceItem && invoiceItem.invoice_qty
-                                : invoiceItem && invoiceItem.invoice_qty
+                                    : invoiceItem && invoiceItem.project_invoice_qty
+                                : invoiceItem && invoiceItem.project_invoice_qty
                             }
-                            name={arb ? 'invoice_qty_arb' : 'invoice_qty'}
+                            name={arb ? 'project_invoice_qty_arb' : 'project_invoice_qty'}
                           />
                         </td>
                         <td>
@@ -286,7 +286,7 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
                             type="text"
                             onChange={(e) => {
                               updateState(index, 'total_cost', e);
-                              handleCalc(invoiceItem.invoice_qty, invoiceItem.unit_price);
+                              handleCalc(invoiceItem.project_invoice_qty, invoiceItem.unit_price);
                             }}
                             defaultValue={
                               arb

@@ -19,42 +19,29 @@ const TradingJobOrderDetails = () => {
   const toggle = () => {
     setModal(!modal);
   };
-  //Api call for getting company dropdown
-  // const getCompany = () => {
-  //   api.get('/company/getCompany').then((res) => {
-  //     setCompany(res.data.data);
-  //   });
-  // };
+
   const [project, setProject] = useState();
    //Logic for adding tender in db
    const [tenderForms, setTenderForms] = useState({
-    quote_code: '',
-    quote_date: '',
+    project_id: '',
     company_id: '',
-    company_name: '',
   });
-  // const editJobById = () => {
-  //   api
-  //     .get('/labourrequest/getProjecttitle')
-  //     .then((res) => {
-  //       setProject(res.data.data);
-  //     })
-  //     .catch(() => {});
-  // };
+
 
   console.log("proj",project);
- const editJobById = () => {
-  api
-    .get('/labourrequest/getProjecttitle')
-    .then((res) => {
-      const projectData = res.data.data;
-      setProject(projectData); // Set project details in state
-      const companyId = projectData && projectData.company_id; // Extract company ID
-      // Set company ID in tenderForms state
-      setTenderForms(prevState => ({ ...prevState, company_id: companyId }));
-    })
-    .catch(() => {});
-};
+  const editJobById = () => {
+    api
+      .get('/labourrequest/getProjecttitle')
+      .then((res) => {
+        const projectData = res.data.data;
+        console.log('Project Data:', projectData); // Log projectData
+        setProject(projectData); // Set project details in state
+        const companyId = projectData && projectData.company_id; // Extract company ID
+        // Set company ID in tenderForms state
+        setTenderForms(prevState => ({ ...prevState, company_id: companyId }));
+      })
+      .catch(() => {});
+  };
 
   
 
@@ -103,7 +90,21 @@ const TradingJobOrderDetails = () => {
  
 
   const handleInputsTenderForms = (e) => {
-    setTenderForms({ ...tenderForms, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    console.log('Selected Project ID:', value);
+    
+    // Parse the value to ensure it's treated as a number
+    const projectId = parseInt(value, 10);
+  
+    const selectedProject = project.find(proj => proj.project_id === projectId);
+    console.log('Selected Project:', selectedProject);
+    const companyId = selectedProject ? selectedProject.company_id : ''; // Extract company ID from selected project
+    console.log('Company ID:', companyId); // Log company ID
+    setTenderForms(prevState => ({
+      ...prevState,
+      [name]: value,
+      company_id: companyId // Set company ID in tenderForms state
+    }));
   };
 
   //Api for getting all countries
@@ -136,7 +137,6 @@ const TradingJobOrderDetails = () => {
       tenderForms.project_id !== '' &&
       tenderForms.job_title !== '' &&
       tenderForms.job_date !== '' 
- 
     ) {
       tenderForms.job_code = code;
       tenderForms.creation_date = creationdatetime;
@@ -147,9 +147,7 @@ const TradingJobOrderDetails = () => {
           const insertedDataId = res.data.data.insertId;
           getTendersById();
           message('Job inserted successfully.', 'success');
-          //   setTimeout(() => {
           navigate(`/ProjectJobOrderEdit/${insertedDataId}?tab=1`);
-          //   }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
@@ -158,7 +156,6 @@ const TradingJobOrderDetails = () => {
       message('Please fill all required fields', 'warning');
     }
   };
-
   //QUOTE GENERATED CODE
   const generateCode = () => {
     api

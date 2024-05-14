@@ -278,7 +278,7 @@ invoicedetails && (
             goodsdeliverydropdown.map((e) => {
               return (
                 <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
-                  {e.goods_delivery_code}
+                  {e.goods_delivery_code}-{e.company_name}
                 </option>
               );
             })}

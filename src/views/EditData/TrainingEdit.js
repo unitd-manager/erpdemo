@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Row, Col, Input, Button, Form, FormGroup } from 'reactstrap';
 import { useNavigate, useParams,Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -21,6 +21,8 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 //import ComponentCardV2 from '../../components/ComponentCardV2';
 import ApiButton from '../../components/ApiButton';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const TrainingEdit = () => {
   //All state variables
@@ -39,6 +41,7 @@ const TrainingEdit = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   //Button fuctions
   // const applyChanges = () => {};
@@ -166,6 +169,8 @@ const TrainingEdit = () => {
   //edit data in link employee
   const insertTrainingStaff = (trainingId, staffObj) => {
     if (new Date(staffObj.to_date) > new Date(staffObj.from_date)) {
+      staffObj.creation_date = creationdatetime;
+      staffObj.created_by= loggedInuser.first_name;
       api
         .post('/training/insertTrainingStaff', {
           training_id: trainingId,
@@ -233,6 +238,8 @@ const TrainingEdit = () => {
     });
     if ((new Date(trainingDetails.to_date) == new Date(trainingDetails.from_date)) ||(new Date(trainingDetails.to_date) > new Date(trainingDetails.from_date))) {
       if (trainingDetails.title !== '') {
+        trainingDetails.modification_date = creationdatetime;
+        trainingDetails.modified_by= loggedInuser.first_name;
         //Update training
         api
           .post('/training/edit-Training', trainingDetails)

@@ -18,7 +18,7 @@ export default function PlanningMainDetails({ handleInputs, plannings, pricelist
 
   return (
     <>
-      <ComponentCard title={arb ? 'تحرير قائمة الأسعار': 'Price List Edit'} >
+      <ComponentCard title={arb ? 'تحرير قائمة الأسعار': 'Price List Edit'} creationModificationDate={plannings} >
         <Form>
           <FormGroup>
             <Row>
@@ -83,17 +83,15 @@ export default function PlanningMainDetails({ handleInputs, plannings, pricelist
                   <Input
                     type="select"
                     onChange={handleInputs}
-                    value={plannings && plannings.category_id}
+                    value={plannings && plannings.status}
                     name="status"
                   >
                     <option value="selected">Please Select</option>
                     {priceliststatus &&
                       priceliststatus.map((e) => {
                         return (
-                          <option key={e.category_id} value={e.category_id}>
-                            {' '}
-                            {arb && e.status_arb ?e.status_arb : e.status}
-                            {' '}
+                          <option key={e.value} value={e.value}>
+                          {e.value}
                           </option>
                         );
                       })}
