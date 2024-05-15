@@ -107,8 +107,8 @@ export default function JobProbation({
           <Col md="4">
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Working Calendar(No of Days/Week)(KET)')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '} <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Working Calendar(No of Days/Week)(KET)')?.[genLabel]}
               </Label>
              
               <Input
@@ -127,8 +127,8 @@ export default function JobProbation({
           <Col md="4">
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '} <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel]}
               </Label>
              
               <Input

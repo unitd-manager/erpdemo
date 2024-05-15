@@ -143,20 +143,27 @@ let genLabel = '';
 
 const AddNewPlanning = () => {
   // Iterate over addMoreItem to submit all line items
-  addMoreItem.forEach((item) => {
+
+  addMoreItem.forEach((item,index) => {
     item.purchase_request_id = PurchaseRequestId;
     item.created_by= loggedInuser.first_name; 
     item.creation_date = creationdatetime;
+    console.log('item',item)
     api
       .post('/purchaserequest/insertPurchaseRequestLineItem', item)
       .then(() => {
-        message('Contact inserted successfully.', 'success');
-       window.location.reload();
+        if (index === addMoreItem.length - 1) {
+        message('Records inserted successfully.', 'success');
+        setTimeout(()=>{
+          window.location.reload();
+        },300)
+        }
       })
       .catch(() => {
         message('Network connection error.', 'error');
       });
   });
+  
 };
 
 
@@ -174,6 +181,7 @@ const AddNewLineItem = () => {
 };
 
 const onchangeItem = (selectedProduct, itemId) => {
+  
   const updatedItems = addMoreItem.map((item) => {
     if (item.id === itemId) {
       return {
@@ -191,11 +199,13 @@ const onchangeItem = (selectedProduct, itemId) => {
 
 
 const handleUnitChange = (itemId, newUnit) => {
+  console.log('itemId',itemId)
+  console.log('newUnit',newUnit)
   const updatedItems = addMoreItem.map((item) => {
     if (item.id === itemId) {
       return {
         ...item,
-        unit: newUnit,
+        unit: newUnit.value,
       };
     }
     return item;
@@ -210,6 +220,8 @@ const handleUnitChange = (itemId, newUnit) => {
 
 
   const handleQtyChange = (itemId, newQty) => {
+    console.log('itemId',itemId)
+  console.log('newQty',newQty)
     const updatedItems = addMoreItem.map((item) => {
       if (item.id === itemId) {
         return {
@@ -455,15 +467,15 @@ const insertProduct = (ProductCode, ItemCode) => {
         <option value="NOS">NOS</option>
         <option value="BOX">BOX</option>
       </Input> */}
-       <td data-label="UoM">
+       
                                   <Select
                                     name="unit"
                                     onChange={(selectedOption) => {
-                                      onchangeItem(selectedOption);
+                                      handleUnitChange(item.id, selectedOption);
                                     }}
                                     options={unitdetails}
                                   />
-                                </td>
+                                
       {/* <Select
                                    
                                    onChange={(selectedOption) => {

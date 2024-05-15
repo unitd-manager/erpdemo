@@ -35,12 +35,16 @@ const PurchaseReturnDetails = () => {
       .post('/purchasereturn/insertPurchaseReturn', insertReturn)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
+        if(res.status === 401){
+          message('No invoice items to return.', 'success');
+        }
         message('Request inserted successfully.', 'success');
         setTimeout(() => {
-          navigate(`/PurchaseReturnEdit/${insertedDataId}`);
+          navigate(`/PurchaseReturnEdit/${insertedDataId}/${returnInvoiceId}`);
         }, 300);      })
-      .catch(() => {
-        message('Network connection error.', 'error');
+      .catch((err) => {
+        console.log('err',err)
+        message(err.msg, 'error');
       });
   } else {
     message('Please fill all required fields', 'warning');
