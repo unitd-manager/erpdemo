@@ -35,8 +35,9 @@ export default function ProjectQuoteMoreDetails({
               <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
+                <span className="required"> *</span>{' '}
                 {arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Number')?.[genLabel]}
-                     <span className="required"> *</span>
+                    
                   </Label>
                   <Input
                     type="text"
