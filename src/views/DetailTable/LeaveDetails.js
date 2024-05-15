@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -8,10 +8,13 @@ import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const LeaveDetails = () => {
   //Navigation and parameters
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
   //All State Variable
   const [employee, setEmployee] = useState();
   const [leaveInsertData, setLeaveInsertData] = useState({
@@ -59,6 +62,8 @@ const LeaveDetails = () => {
       ) {
         message('You already applied for that day', 'error');
       } else {
+        leaveInsertData.creation_date = creationdatetime;
+        leaveInsertData.created_by= loggedInuser.first_name;
         api
           .post('/leave/insertLeave', leaveInsertData)
           .then((res) => {
