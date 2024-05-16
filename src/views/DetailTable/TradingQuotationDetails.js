@@ -256,4 +256,5 @@ const TradingQuotationDetails = () => {
   );
 };
 
+
 export default TradingQuotationDetails;
