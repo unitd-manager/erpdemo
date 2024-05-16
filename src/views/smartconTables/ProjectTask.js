@@ -109,7 +109,7 @@ const [arabic, setArabic] = useState([]);
     {
     
       name: arabic.find(item => item.key_text === 'mdProjectTask.Job Order Title')?.[genLabel],
-      selector: 'job_order_title',
+      selector: 'job_title',
       sortable: true,
       grow: 0,
       
@@ -212,7 +212,7 @@ const [arabic, setArabic] = useState([]);
                       </Link>
                     </td>
                     <td>{arb && element.task_title_arb ?element.task_title_arb : element.task_title}</td>
-                    <td>{arb && element.job_order_title_arb ?element.job_order_title_arb : element.job_order_title}</td>
+                    <td>{arb && element.job_title_arb ?element.job_title_arb : element.job_title}</td>
                     <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.job_order_code}</td> */}

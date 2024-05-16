@@ -180,8 +180,8 @@ const GoodsDeliveryEdit = () => {
                 .then((result) => {
                   if (result.data.msg === 'Success') {
                     console.log(`Order item ${index + 1} inserted successfully`);
-                    // You might want to trigger a UI update here
                     window.location.reload();
+
                   } else {
                     console.error(`Failed to insert order item ${index + 1}`);
                   }
@@ -192,6 +192,7 @@ const GoodsDeliveryEdit = () => {
             });
   
             console.log('All new order items inserted successfully');
+           
           })
           .catch((error) => {
             console.error('Error checking order item existence', error);

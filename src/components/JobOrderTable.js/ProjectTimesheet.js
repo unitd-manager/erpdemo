@@ -16,7 +16,6 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import * as Icon from 'react-feather';
-import moment from 'moment';
 import api from '../../constants/api';
 import ProjectTimeSheetEdit from './ProjectTImeSheetEdit';
 
@@ -219,10 +218,7 @@ export default function ProjectTimeSheet({
                                 <Input
                                   type="date"
                                   onChange={handleInputsTime}
-                                  value={
-                                    insertTimeSheet &&
-                                    moment(insertTimeSheet.from_date).format('YYYY-MM-DD')
-                                  }
+                                  value={insertTimeSheet && insertTimeSheet.from_date}
                                   name="from_date"
                                 />
                               </FormGroup>
@@ -336,7 +332,7 @@ export default function ProjectTimeSheet({
                   </td>                           
                   {/* Modify the following block for the modification date */}
                   <td>{element.first_name}</td>
-                  <td>{element.date}</td>
+                  <td>{element.from_date}</td>
                   <td>{element.hours}</td>
                   <td>{element.status}</td>
                   <td>{element.description}</td>
