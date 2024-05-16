@@ -318,9 +318,9 @@ const PartialInvoiceEditModal = ({ partialinvoiceeditmodal, setPartialInvoiceEdi
             onClick={() => {
               editSalesInvoice();
               setPartialInvoiceEditModal(false);
-              setTimeout(() => {
-                window.location.reload()
-              }, 100);
+              // setTimeout(() => {
+              //   window.location.reload()
+              // }, 100);
             }}
           >
             Submit
