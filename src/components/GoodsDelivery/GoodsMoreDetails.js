@@ -201,7 +201,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
@@ -225,7 +225,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                  
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
 
               <Col md="3">
                 <FormGroup>

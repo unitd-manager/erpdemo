@@ -37,7 +37,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
     const quantity = parseFloat(updatedObject.delivery_qty) || 0;
     const unitPrice = parseFloat(updatedObject.unit_price) || 0;
     // const totalCost = parseFloat(updatedObject.total_cost);
-    updatedObject.total_cost = quantity * unitPrice;
+    updatedObject.amount = quantity * unitPrice;
 
     const DeliveryQty = updatedObject.delivery_qty;
     const orderedQty = updatedObject.quantity;
