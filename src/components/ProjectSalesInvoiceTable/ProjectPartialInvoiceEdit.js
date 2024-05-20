@@ -127,6 +127,7 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
         .post('/projectsalesinvoice/editInvoiceItems', item)
         .then(() => {
           message('Line Item Edited Successfully', 'sucess');
+          window.location.reload();
         })
         .catch(() => {
           message('Cannot Edit Line Items', 'error');
@@ -318,9 +319,9 @@ const ProjectPartialInvoiceEdit = ({ partialinvoiceeditmodal, setPartialInvoiceE
             onClick={() => {
               editSalesInvoice();
               setPartialInvoiceEditModal(false);
-              setTimeout(() => {
-                window.location.reload()
-              }, 100);
+              // setTimeout(() => {
+              //   window.location.reload()
+              // }, 100);
             }}
           >
             Submit

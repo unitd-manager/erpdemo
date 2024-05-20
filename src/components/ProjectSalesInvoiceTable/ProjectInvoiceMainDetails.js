@@ -312,14 +312,14 @@ export default function BookingDetailComp({ bookingDetails, handleInputs,arb,ara
                
                   value={
                   arb
-                  ? bookingDetails && bookingDetails.project_invoice_amount_arb
-                    ? bookingDetails.project_invoice_amount_arb
-                    : bookingDetails && bookingDetails.project_invoice_amount_arb !== null
+                  ? bookingDetails && bookingDetails.InvoiceAmount
+                    ? bookingDetails.InvoiceAmount
+                    : bookingDetails && bookingDetails.InvoiceAmount !== null
                       ? ''
-                      : bookingDetails && bookingDetails.project_invoice_amount
-                  : bookingDetails && bookingDetails.project_invoice_amount
+                      : bookingDetails && bookingDetails.InvoiceAmount
+                  : bookingDetails && bookingDetails.InvoiceAmount
               }
-              name={arb ? 'project_invoice_amount_arb' : 'project_invoice_amount'} 
+              name={arb ? 'InvoiceAmount' : 'InvoiceAmount'} 
               /></FormGroup>
                   
                              </Col>

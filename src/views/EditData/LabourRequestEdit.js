@@ -42,6 +42,7 @@ const PriceListEdit = () => {
   const [plannings, setPlannings] = useState({});
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
+  const [update, setUpdate] = useState(false);
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
@@ -95,12 +96,6 @@ const [arabic, setArabic] = useState([]);
 const { id } = useParams();
 const navigate = useNavigate();
 
-const [tables, setTables] = useState([]);
-const [selectedTable, setSelectedTable] = useState('');
-
-console.log('tables',tables)
-console.log('selectedTable',selectedTable)
-
 useEffect(() => {
   // API வழி டேட்டாபேஸ் பட்டியலை பெறுக
   api.get('/labourrequest/getTables')
@@ -113,86 +108,12 @@ useEffect(() => {
     });
 }, []);
 
-const handleTableSelect = (event) => {
-  setSelectedTable(event.target.value);
-};
-
-
 
 const tablevalue =  [
   {name:'labour_request'},
   // {name:'employee'},
 ];
   // Fetch translation when selectedLanguage or plannings changes
-  const fetchTranslation = async () => {
-    try {
-      tablevalue.forEach(async (table) => {
-        console.log('tableName',table.name)
-        const tableNames = table.name
-      const res1 = await api.post('/labourrequest/getTranslationColumnFromTables',{tableNames});
-      res1.data.data.forEach(async (item) => {
-        const columnNames = item.COLUMN_NAME_TRUNCATED;
-        
-        console.log('columnNames',columnNames)
-        const whereId = id;
-        const whereCondition = [`${tableNames}_id`]
-        console.log('whereId',whereId)
-        console.log('WhereCondition',whereCondition)
-        const res = await api.post('/labourrequest/getTableTranslation', { whereId, columnNames,tableNames,whereCondition});
-       
-          console.log('resss',res.data.data)
-        res.data.data.forEach(async (cell) => {
-
-          Object.keys(cell).forEach(async(property) => {
-            console.log('colm', cell[property]);
-        
-  
-          try {
-            const response = await axios.post(
-              'https://translation.googleapis.com/language/translate/v2',
-              {},
-              {
-                params: {
-                  q:cell[property],
-                  target: 'ar',
-                  key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
-                },
-              }
-            );
-             console.log(property,'_arb')
-             console.log('trabsss', response.data.data.translations[0].translatedText);
-            await api.post('/labourrequest/editRequestArb', {
-              tableNames,
-              whereId,
-              whereCondition,
-              labour_request_id:id,
-              [`${property}_arb`]: response.data.data.translations[0].translatedText,
-              value: response.data.data.translations[0].translatedText,
-          columnName:`${property}_arb`
-            });
-            
-          //   // const translation = JSON.parse(response.data.data.translations[0].translatedText)
-          //   // console.log('tran',translation);
-            
-          //   // const decodedJson = he.decode(response.data.data.translations[0].translatedText);
-          //   // const fixedJsonString =  decodedJson.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":');
-          //   // const fixedString = fixedJsonString.replace(/:(\s*)(\d{4}-\d{2}-\d{2})/g, ':"$2');
-          //   // const commastring= fixedString.replace(/،/g, ',');
-          //   // console.log('decoded json',decodedJson);
-          //   // console.log('fixedJsonString ',commastring);
-          //   // const newtext=JSON.parse(commastring);
-          //   // console.log('newtext',newtext.request_urgency);
-          } catch (error) {
-            console.error('Error occurred during translation:', error);
-          }
-        });
-      });
-      });
-    });
-    } catch (error) {
-      console.error('Error fetching translation column names:', error);
-    }
-  };
    
   const arb =selectedLanguage === 'Arabic'
   const eng =selectedLanguage === 'English'
@@ -308,15 +229,6 @@ const tablevalue =  [
   return (
     <>
 
-       <div>
-
-       <select id="tableSelect" onChange={handleTableSelect} value={selectedTable}>
-  <option value="">Select a table</option>
-  {tables &&tables.map(table => (
-    <option key={table} value={table}>{table}</option>
-  ))}
-</select>
-    </div>
      {/*  */}
       {/* BreadCrumbs */}
       <BreadCrumbs />
@@ -391,8 +303,11 @@ const tablevalue =  [
               desc="LabourRequest Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
+              update={update}
+              setUpdate={setUpdate}
             />
-            <ViewFileComponentV2 moduleId={id} roomName="LabourRequest" recordType="Picture" />
+            <ViewFileComponentV2 moduleId={id} roomName="LabourRequest" recordType="Picture"  update={update}
+    setUpdate={setUpdate} />
           </TabPane>
          
         </TabContent>

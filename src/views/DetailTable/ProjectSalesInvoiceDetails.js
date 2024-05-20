@@ -151,7 +151,7 @@ const handleInputs = (e) => {
 };
         const generateCode = () => {
               api
-                .post('/commonApi/getCodeValue', { type: 'invoice' })
+                .post('/commonApi/getCodeValue', { type: 'projectinvoice' })
                 .then((res) => {
                   insertProjectSalesInvoice(res.data.data);
                 })
