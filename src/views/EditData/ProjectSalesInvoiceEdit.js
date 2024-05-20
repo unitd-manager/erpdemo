@@ -433,9 +433,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        setTimeout(() => {
-                          window.location.reload()
-                        }, 100);
+                        // setTimeout(() => {
+                        //   window.location.reload()
+                        // }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -512,9 +512,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        setTimeout(() => {
-                          window.location.reload()
-                        }, 100);
+                        // setTimeout(() => {
+                        //   window.location.reload()
+                        // }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -664,7 +664,7 @@ const toggle = (tab) => {
         
         if (shouldNavigate) {
           setTimeout(() => {
-            navigate('/SalesInvoice'); // Navigate after showing the message if shouldNavigate is true
+            navigate('/ProjectSalesInvoice'); // Navigate after showing the message if shouldNavigate is true
           }, 100);
         }
       })
