@@ -55,8 +55,8 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]}  <span className="required"> *</span> 
-                </Label>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]}   
+                </Label><span className="required"> *</span>
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -75,8 +75,8 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
               <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]} <span className="required"> *</span> 
-                </Label>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]} 
+                </Label><span className="required"> *</span> 
                   <Input
                     type="date"
                     onChange={handleInputs}
@@ -97,8 +97,8 @@ function PurchaseRequestEditDetails ({ purchaserequesteditdetails, handleInputs,
               <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel]}<span className="required"> *</span> 
-                </Label>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel]} 
+                </Label><span className="required"> *</span>
                   <Input
                     type="text"
                     onChange={handleInputs}

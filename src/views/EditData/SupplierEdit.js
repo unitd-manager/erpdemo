@@ -135,7 +135,8 @@ useEffect(() => {
 
       api
         .post('/supplier/edit-Supplier', supplier)
-        .then(() => {
+        .then((res) => {
+          console.log('supplier', res.data.data);
           message('Record editted successfully', 'success');
         })
         .catch(() => {
@@ -145,6 +146,7 @@ useEffect(() => {
       message('Please fill all required fields.', 'error');
     }
   };
+  
   //Logic for edit data in db
   const Status = () => {
     api

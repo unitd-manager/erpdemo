@@ -36,7 +36,7 @@ export default function SupplierDetails({
       <FormGroup>
       
           <Row>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>
                   {/* Name <span className="required"> *</span> */}
@@ -54,7 +54,7 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Email')?.[genLabel]}</Label>
                 <Input
@@ -70,7 +70,23 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
+              <FormGroup>
+                <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Website')?.[genLabel]}</Label>
+                <Input
+                  type="text"
+                  onChange={handleInputs}
+                  
+                  value={
+                    arb
+                      ? supplier && supplier.website_arb
+                      : supplier && supplier.website
+                  }
+                  name={arb ? 'website_arb' : 'website'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Fax')?.[genLabel]}</Label>
                 <Input
@@ -88,7 +104,7 @@ export default function SupplierDetails({
             </Col>
           </Row>
           <Row>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Mobile')?.[genLabel]}</Label>
                 <Input
@@ -104,7 +120,7 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Status')?.[genLabel]}</Label>
                 <Input
@@ -128,7 +144,7 @@ export default function SupplierDetails({
                 </Input>
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.GST NO')?.[genLabel]}</Label>
                 <Input
@@ -143,9 +159,9 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-          </Row>
-          <Row>
-            <Col md="4">
+          
+          
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Payment Details')?.[genLabel]}</Label>
                 <Input
@@ -161,7 +177,9 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            </Row>
+            <Row>
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Terms')?.[genLabel]}</Label>
                 <Input
@@ -177,7 +195,7 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.ContactPerson')?.[genLabel]}</Label>
                 <Input
@@ -199,7 +217,7 @@ export default function SupplierDetails({
       <FormGroup>
         <ComponentCard title={arb?"عنوان":"Address"}>
           <Row>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Address 1')?.[genLabel]}</Label>
                 <Input
@@ -215,7 +233,7 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Address 2')?.[genLabel]}</Label>
                 <Input
@@ -231,7 +249,7 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-            <Col md="4">
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.State/Zip')?.[genLabel]}</Label>
                 <Input
@@ -247,9 +265,9 @@ export default function SupplierDetails({
                 />
               </FormGroup>
             </Col>
-          </Row>
-          <Row>
-            <Col md="4">
+          
+          
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Country')?.[genLabel]}</Label>
                 <Input
@@ -272,7 +290,10 @@ export default function SupplierDetails({
                 </Input>
               </FormGroup>
             </Col>
-            <Col md="4">
+            </Row>
+
+            <Row>
+            <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Pin Code')?.[genLabel]}</Label>
                 <Input

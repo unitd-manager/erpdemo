@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import AppContext from '../../context/AppContext';
 
 const SubConDetails = () => {
   //All state variables
@@ -16,6 +17,7 @@ const SubConDetails = () => {
   });
   //Navigation and parameters
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
   //subcon data in subconDetails
   const handleInputsSubConForms = (e) => {
     setSubConForms({ ...subConForms, [e.target.name]: e.target.value });
@@ -23,6 +25,7 @@ const SubConDetails = () => {
   //Insert subcon
   const insertSubCon = () => {
     subConForms.creation_date = creationdatetime;
+    subConForms.created_by = loggedInuser.first_name;
     if (subConForms.company_name !== '')
       api
         .post('/subcon/insertsub_con', subConForms)

@@ -560,8 +560,7 @@ const insertProduct = (ProductCode, ItemCode) => {
                     <Row>
                       <Label sm="3" dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Product Name')?.[genLabel]}
-                        <span className="required"> *</span>{' '}
-                      </Label>
+                      </Label><span className="required"> *</span>{' '}
                       <Col sm="8">
                         <Input
                           type="text"
