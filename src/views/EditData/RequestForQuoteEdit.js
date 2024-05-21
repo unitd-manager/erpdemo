@@ -146,16 +146,16 @@ const RequestForQuoteEdit = () => {
              if (index < orderItem.length) {
                const orderItems = orderItem[index];
                // Check if the purchase_quote_items_id   already exists in the ExistingRequestQuote array
-               if (ExistingRequestQuote.includes(orderItems.purchase_request_id )) {
+               if (ExistingRequestQuote.includes(orderItems.purchase_request_items_id )) {
                  if (!alreadyInserted) {
                    console.warn(
-                     `Delivery items are already Inserted (Purchase_request_id: ${orderItems.purchase_request_id })`,
+                     `Delivery items are already Inserted (Purchase_request_id: ${orderItems.purchase_request_items_id })`,
                    );
                    message('Delivery items are already Inserted', 'warning');
                    alreadyInserted = true; // Set the flag to true so the message is shown only once
-                   setTimeout(() => {
-                     alreadyInserted = false;
-                   }, 3000);
+                  //  setTimeout(() => {
+                  //    alreadyInserted = false;
+                  //  }, 3000);
                  }
                  insertRequest(index + 1);
                 } else {
@@ -170,6 +170,7 @@ const RequestForQuoteEdit = () => {
       unit: orderItems.unit,
       amount: orderItems.amount,
       description: orderItems.description,
+      purchase_request_items_id: orderItems.purchase_request_items_id
     };
     console.log(`Inserting order item ${index + 1}:`, orderItemData);
     console.log('ExistingRequestQuote:', ExistingRequestQuote);
@@ -185,7 +186,7 @@ const RequestForQuoteEdit = () => {
             alreadyInserted = true;
           }
           getOrdersByOrderId();
-          window.location.reload();
+          // window.location.reload();
         } else {
           console.error(`Failed to insert order item ${index + 1}`);
         }
