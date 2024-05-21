@@ -12,6 +12,8 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
     loanStatus: PropTypes.string,
     
   };
+  const [employee, setEmployee] = useState();
+
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -20,7 +22,15 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
 
   // Use the selected language value as needed
   console.log('Selected language from localStorage:', selectedLanguage);
-
+  const getEmployee = () => {
+    api
+      .get('/projecttask/getEmployeeName')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployee(res.data.data);
+      })
+      .catch(() => {});
+  };
 
   const [arabic, setArabic] = useState([]);
 
@@ -41,6 +51,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
   console.log('arabic', arabic);
   useEffect(() => {
     getArabicCompanyName();
+    getEmployee();
   }, []);
 
   let genLabel = '';
@@ -56,30 +67,39 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
       <FormGroup>
         <ComponentCard title="Loan Details">
           <Row>
-            <Col md="3">
-              <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-                  {arabic.find((item) => item.key_text === 'mdHRLoan.Employee Name')?.[genLabel]}{' '}
-                </Label>
-                <br />
-                {/* <span> {loanDetails && loanDetails.employee_name} </span> */}
-                <Input
-                      type="text"
-                      onChange={handleInputs}
+          <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {
+                      arabic.find((item) => item.key_text === 'mdHRLoan.Employee Name')?.[
+                        genLabel
+                      ]
+                    }
+                      <span style={{ color: 'red' }}>*</span>
+                  </Label>
 
-                      value={
-                        arb
-                ? loanDetails && loanDetails.employee_name_arb
-                  ? loanDetails.employee_name_arb
-                  : loanDetails && loanDetails.employee_name_arb !== null
-                  ? ''
-                  : loanDetails && loanDetails.employee_name
-                : loanDetails && loanDetails.employee_name
-            }
-            name={arb ? 'employee_name_arb' : 'employee_name'}
-             />
-              </FormGroup>
-            </Col>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={loanDetails && loanDetails.employee_id}
+                    name="employee_id"
+                  >
+                    <option defaultValue="selected">Please Select</option>
+                    {employee &&
+                      employee.map((e) => {
+                        return (
+                          <option key={e.employee_id} value={e.employee_id}>
+                            {' '}
+                            {arb ? e.first_name_arb : e.first_name}{' '}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>
+
+
+         
             {(loanStatus ===  'Approved' ||
               loanStatus === 'Hold' ||
                 loanStatus ===  'Denied' ||
@@ -124,6 +144,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                       {arabic.find((item) => item.key_text === 'mdHRLoan.Status')?.[genLabel]}{' '}
+                      <span style={{ color: 'red' }}>*</span>
                     </Label>
                                       <Input
                     type="select"
@@ -192,7 +213,8 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
-                      {arabic.find((item) => item.key_text === 'mdHRLoan.Loan Application Date ')?.[genLabel]}{' '}
+                      {arabic.find((item) => item.key_text === 'mdHRLoan.Loan Application Date')?.[genLabel]}{' '}
+                      <span style={{ color: 'red' }}>*</span>
                     </Label>
                 <Input
                   value={

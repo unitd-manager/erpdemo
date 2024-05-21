@@ -184,8 +184,9 @@ const handleInputs = (e) => {
                 <Col md="12">
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel]}{' '}            
-                       <span className="required"> *</span>{' '}
+                       
                </Label>
+               <span className="required"> *</span>{' '}
             <Input 
             type="select" 
             name="company_id" 

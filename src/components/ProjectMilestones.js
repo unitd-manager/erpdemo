@@ -55,7 +55,7 @@ export default function ProjectMilestones({
       const newContactWithCompanyId = insertMilestones;
       newContactWithCompanyId.project_id = id;
       api
-        .post('/milestone/insertmilestone', newContactWithCompanyId)
+        .post('/milestone/insertMilestone', newContactWithCompanyId)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           console.log(insertedDataId);

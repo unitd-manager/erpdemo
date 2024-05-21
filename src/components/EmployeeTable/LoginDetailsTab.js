@@ -83,34 +83,29 @@ function LoginDetailsTab({ employeeDetails, handleInputChange,arb,arabic }) {
           </FormGroup>
         </Col>
 
+    
         <Col md="3">
-          <FormGroup>
-          <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdEmployee.Published')?.[genLabel]}</Label>
-            <br></br>
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdEmployee.Yes')?.[genLabel]}</Label>
-            &nbsp;
-            <Input
-              name="staff_published"
-              value="1"
-              type="radio"
-              defaultChecked={employeeDetails && employeeDetails.staff_published === 1 && true}
-              onChange={handleInputChange}
-            />
-            &nbsp; &nbsp;
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdEmployee.No')?.[genLabel]}</Label>
-            &nbsp;
-            <Input
-              name="staff_published"
-              value="0"
-              type="radio"
-              defaultChecked={employeeDetails && employeeDetails.staff_published === 0 && true}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-        </Col>
+  <FormGroup>
+    <Label>Published</Label>
+    <br />
+    <Label>Yes</Label>
+    <Input
+      name="staff_published"
+      value="1"
+      type="radio"
+      checked={employeeDetails && employeeDetails.staff_published === 1}
+      onChange={handleInputChange}
+    />
+    <Label>No</Label>
+    <Input
+      name="staff_published"
+      value="0"
+      type="radio"
+      checked={employeeDetails && employeeDetails.staff_published === 0}
+      onChange={handleInputChange}
+    />
+  </FormGroup>
+</Col>
       </Row>
     </div>
   );

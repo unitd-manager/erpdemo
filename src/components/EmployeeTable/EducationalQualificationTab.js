@@ -29,9 +29,9 @@ function EducationalQualificationTab({
   return (
     <div>
       <Row>
-        <Col md="4">
+      <Col md="4">
           <FormGroup>
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
+          <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Qualification 1')?.[genLabel]}</Label>
             <Input
             name= {arb ? 'educational_qualitifcation1_arb' : 'educational_qualitifcation1'}
@@ -39,11 +39,10 @@ function EducationalQualificationTab({
               arb
                 ? (
                   educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1_arb ? educationalQualificationDetails.educational_qualitifcation1_arb :
-                    (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1)
+                    (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1_arb !== null ? '' : educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation2)
                   )
                 : (educationalQualificationDetails && educationalQualificationDetails.educational_qualitifcation1)
             }
-              
               onChange={handleEduInputs}
               type="select"
             >
@@ -52,7 +51,7 @@ function EducationalQualificationTab({
                 qualifications.map((ele) => {
                   return (
                     <option key={ele.valuelist_id} value={ele.valuelist_id}>
-                      {arb?ele.value_arb:ele.value_arb}
+                      {arb?ele.value_arb:ele.value}
                     </option>
                   );
                 })}

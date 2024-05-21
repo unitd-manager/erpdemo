@@ -26,9 +26,9 @@ export default function ProjReturnDetailComp({ returnDetails, handleInputs,arb }
 
                 <Input
                   type="text"
-                  value={returnDetails && returnDetails.invoice_code}
+                  value={returnDetails && returnDetails.project_invoice_code}
                   onChange={handleInputs}
-                  name="invoice_code"
+                  name="project_invoice_code"
                   readOnly
                 ></Input>
               </FormGroup>

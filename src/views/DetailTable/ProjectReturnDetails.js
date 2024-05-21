@@ -126,7 +126,7 @@ console.log('arabic', arabic);
                           return (
                             <option key={ele.project_invoice_id} value={ele.project_invoice_id}>
                               {' '}
-                            {arb?ele.invoice_code_arb:ele.invoice_code} - {arb?ele.company_name_arb:ele.company_name}
+                            {arb?ele.project_invoice_code_arb:ele.project_invoice_code} - {arb?ele.company_name_arb:ele.company_name}
 
                             </option>
                           );

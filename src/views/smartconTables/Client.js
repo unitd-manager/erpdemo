@@ -368,7 +368,7 @@ if (arb === true) {
                     </span>
                   </td>
                   <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
-                  <td>{arb && element.email_arb ?element.email_arb : element.emaiL}</td>
+                  <td>{arb && element.email_arb ?element.email_arb : element.email}</td>
                   <td>{arb && element.status_arb ?element.status_arb : element.status}</td>
                   <td>{arb && element.phone_arb ?element.phone_arb : element.phone}</td>
                 </tr>
