@@ -17,6 +17,7 @@ import PurchaseOrderlineItemEdit from '../../components/PurchaseOrder/PurchaseOr
 import ViewHistoryModal from '../../components/PurchaseOrder/ViewHistoryModal';
 import PurchaseOrderDetailsPart from '../../components/PurchaseOrder/PurchaseOrderDetailsPart';
 import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
+// import PurchaseOrderEditModal from '../../components/PurchaseOrder/PurchaseOrderEditModal';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
@@ -38,7 +39,7 @@ const PurchaseOrderEdit = () => {
     modelType: '',
   });
   const [pictureData, setDataForPicture] = useState({
-    modelType: '',
+    modelType: '',  
   });
   const [activeTab, setActiveTab] = useState('1');
   const [viewHistoryModal, setViewHistoryModal] = useState(false);
@@ -50,6 +51,7 @@ const PurchaseOrderEdit = () => {
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
+
   
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [arabic, setArabic] = useState([]);
@@ -266,6 +268,97 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
     });
   };
 
+
+  const generateData = () => {
+    const PurchaseQuoteId=purchaseDetails.purchase_quote_id
+    // Step 1: Delete old order items by quote_id
+    api.delete(`/purchaseorder/deleteorder_item/${PurchaseQuoteId}`).then(() => {
+      api
+        .post('/purchaseorder/getQuoteLineItemsById', { purchase_quote_id : purchaseDetails.purchase_quote_id })
+        .then((res) => {
+          const purchasequoteItems = res.data.data;
+
+          console.log('Received quote items:', purchasequoteItems);
+
+          if (purchasequoteItems.length === 0) {
+            console.warn('No quote items to insert');
+            return;
+          }
+
+          api
+            .get('/purchaseorder/checkQuoteItems')
+            .then((response) => {
+              const ExistingPurchaseQuoteItemsId = response.data.data;
+              console.log('ExistingPurchaseQuoteItemsId', response.data.data)
+              console.log('quoteitems',purchasequoteItems)
+              const insertOrderItems = (index) => {
+                if (index < purchasequoteItems.length) {
+                  const PurchaseQuoteItem = purchasequoteItems[index];
+                  // Check if the po_product_id  already exists in the ExistingReceiptItemsId array
+                  if (ExistingPurchaseQuoteItemsId.includes(PurchaseQuoteItem.purchase_quote_id)) {
+                    console.warn(
+                      `Quote item for purchase_quote_id  ${PurchaseQuoteItem.purchase_quote_id} already exists, skipping insertion`,
+                    );
+                    message('Quote items are already Inserted', 'warning');
+                    insertOrderItems(index + 1);
+                  } else {
+                    // Insert the order item
+                    const orderItemData = {
+                      purchase_order_id: id,
+                      item_title: PurchaseQuoteItem.order_code,
+                      quantity: PurchaseQuoteItem.quantity,
+                      unit: PurchaseQuoteItem.unit,
+                      description: PurchaseQuoteItem.description,
+                      product_id: PurchaseQuoteItem.product_id,
+                      supplier_id: purchaseDetails.supplier_id,
+                      cost_price: PurchaseQuoteItem.amount,
+                      purchase_quote_id: purchaseDetails.purchase_quote_id,
+                      purchase_quote_items_id: PurchaseQuoteItem.purchase_quote_items_id,
+                      amount:purchaseDetails.total_cost
+                    };
+
+                    console.log(`Inserting order item ${index + 1}:`, orderItemData);
+                    // Send a POST request to your /finance/insertorder_item API with the current order item
+                    api
+                      .post('/purchaseorder/insertPurchaseQuote_item', orderItemData)
+                      .then((result) => {
+                        if (result.data.msg === 'Success') {
+                          console.log(`Order item ${index + 1} inserted successfully`);
+                          setTimeout(() => {
+                            window.location.reload()
+                          }, 100);
+                        } else {
+                          console.error(`Failed to insert order item ${index + 1}`);
+                        }
+                        // Continue to the next item
+                        insertOrderItems(index + 1);
+                      })
+                      .catch((error) => {
+                        console.error(`Error inserting order item ${index + 1}`, error);
+                        // Continue to the next item
+                        insertOrderItems(index + 1);
+                      });
+                  }
+                } else {
+                  console.log('All order items inserted successfully');
+                 // window.location.reload(); // Reload the page after all order
+                  // You might want to trigger a UI update here
+                }
+              };
+
+              // Start inserting order items from index 0
+              insertOrderItems(0);
+            })
+            .catch((error) => {
+              console.error('Error fetching quote items', error);
+            });
+        })
+        .catch((error) => {
+          console.error('Error deleting old order items', error);
+        });
+    });
+  }
+
   useEffect(() => {
     getSupplier();
     getPoProduct();
@@ -280,6 +373,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       getRequestForQuote(selectedProjectId);
     }
   }, [purchaseDetails && purchaseDetails.supplier_id]);
+
 
   return (
     <>
@@ -306,17 +400,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         arb={arb}
         genLabel={genLabel}
       />
-         <Col>
-              <Button
-                className="shadow-none"
-                color="primary"
-                style={{marginBottom:'10px'}}
-                onClick={() => {
-                }}
-              >
-                Generate Data
-              </Button>
-            </Col>
+         
       <ComponentCard title="Product Linked">
         <AddPoModal
           PurchaseOrderId={id}
@@ -326,7 +410,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         />
 
         <Row className="mb-4">
-          <Col md="2">
+          {/* <Col md="2">
             <Button
               color="primary"
               onClick={() => {
@@ -335,7 +419,17 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
             >
               Add Product
             </Button>
-          </Col>
+          </Col> */}
+          <Col md="2">
+              <Button
+                color="success"
+                onClick={() => {
+                  generateData();
+                }}
+              >
+                Generate Purchase Order Data
+              </Button>
+            </Col>
           <Col md="2">
             <Button
               color="success"
@@ -346,11 +440,38 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
               Add all Qty to Stock
             </Button>
           </Col>
+
+          
+          {/* <PurchaseOrderEditModal
+                  purchaseordereditmodal={purchaseordereditmodal}
+                  setPurchaseOrderEditModal={setPurchaseOrderEditModal}
+                  PurchaseOrderId={id}
+                  arb={arb}
+          arabic={arabic}
+          products={products}
+          product={product}
+          handlePOInputs={handlePOInputs}
+          getCheckedPoProducts={getCheckedPoProducts}
+                    ></PurchaseOrderEditModal> */}
+            {/* <Button
+              color="success"
+              onClick={() => {
+                setPurchaseOrderEditModal(true);
+              }}
+            >
+              Edit Purchase Order Items
+            </Button>
+             */}
+          
        
           <Col md="3">
             <b color="primary">{arabic.find(item => item.key_text === 'mdPurchaseOrder.Grand Total')?.[genLabel]}:{gTotal}</b>
           </Col>
+
+         
         </Row>
+
+
      
         <ProductLinkedTable
           products={products}
