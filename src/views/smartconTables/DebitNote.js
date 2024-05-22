@@ -222,6 +222,10 @@ const InvoiceData = () => {
         insertReceipt('');
        
       });
+    // setModalOpen(false); // Close the first modal
+    //    setSecondModalOpen(true); // Open the second modal
+    // insertReceipt('');
+       
   };
   useEffect(() => {
     getCompany();
@@ -266,7 +270,7 @@ const InvoiceData = () => {
                     <td>{arb?element.mode_of_payment_arb:element.mode_of_payment}</td>
                     <td>{arb?element.debit_note_status_arb:element.debit_note_status}</td>
                     <td>{arb?element.amount_arb:element.amount}</td>
-                    <td>{moment(element.debit_note_date).format('DD-MM-YYYY')}</td>
+                    <td>{element.debit_note_date?moment(element.debit_note_date).format('DD-MM-YYYY'):''}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}

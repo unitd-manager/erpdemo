@@ -674,7 +674,7 @@ const toggle = (tab) => {
       });
   };
   const backToList = () => {
-    navigate('/SalesInvoice');
+    navigate('/ProjectSalesInvoice');
   };
   const cancelInvoice = () => {
     if (bookingDetails.status !== 'Paid') {
