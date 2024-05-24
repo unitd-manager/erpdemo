@@ -48,6 +48,7 @@ const PurchaseOrderEdit = () => {
   const [gTotal, setGtotal] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isFieldDisabled, setIsFieldDisabled] = useState(true);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -267,9 +268,13 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       modelType: 'picture',
     });
   };
-
+  console.log('setIsFieldDisabled before click', isFieldDisabled);
 
   const generateData = () => {
+
+    setIsFieldDisabled(true); // Disable the field at the start of the operation
+  console.log('setIsFieldDisabled before click', isFieldDisabled);
+    
     const PurchaseQuoteId=purchaseDetails.purchase_quote_id
     // Step 1: Delete old order items by quote_id
     api.delete(`/purchaseorder/deleteorder_item/${PurchaseQuoteId}`).then(() => {
@@ -324,9 +329,9 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                       .then((result) => {
                         if (result.data.msg === 'Success') {
                           console.log(`Order item ${index + 1} inserted successfully`);
-                          setTimeout(() => {
-                            window.location.reload()
-                          }, 100);
+                          // setTimeout(() => {
+                          //   window.location.reload()
+                          // }, 100);
                         } else {
                           console.error(`Failed to insert order item ${index + 1}`);
                         }
@@ -341,7 +346,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                   }
                 } else {
                   console.log('All order items inserted successfully');
-                 // window.location.reload(); // Reload the page after all order
+                  setIsFieldDisabled(false);
                   // You might want to trigger a UI update here
                 }
               };
@@ -351,10 +356,12 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
             })
             .catch((error) => {
               console.error('Error fetching quote items', error);
+              setIsFieldDisabled(false);
             });
         })
         .catch((error) => {
           console.error('Error deleting old order items', error);
+          setIsFieldDisabled(false);
         });
     });
   }
@@ -399,6 +406,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         arabic={arabic}
         arb={arb}
         genLabel={genLabel}
+        isFieldDisabled={isFieldDisabled}
       />
          
       <ComponentCard title="Product Linked">
@@ -423,9 +431,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           <Col md="2">
               <Button
                 color="success"
-                onClick={() => {
-                  generateData();
-                }}
+                onClick={generateData}
               >
                 Generate Purchase Order Data
               </Button>

@@ -11,6 +11,7 @@ function PurchaseOrderDetailsPart({
   request,
   arabic,
   arb,
+  isFieldDisabled,
 }) {
   PurchaseOrderDetailsPart.propTypes = {
     purchaseDetails: PropTypes.object,
@@ -19,6 +20,7 @@ function PurchaseOrderDetailsPart({
     request: PropTypes.array,
     arabic: PropTypes.any,
     arb: PropTypes.any,
+    isFieldDisabled: PropTypes.any,
   };
 
   let genLabel = '';
@@ -194,6 +196,7 @@ function PurchaseOrderDetailsPart({
                     value={purchaseDetails && purchaseDetails.purchase_quote_id}
                     name="purchase_quote_id"
                     onChange={handleInputs}
+                    disabled={!isFieldDisabled}
                   >
                     <option defaultValue="selected">Please Select</option>
                     {request &&
