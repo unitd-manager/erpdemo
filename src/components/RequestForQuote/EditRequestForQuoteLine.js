@@ -26,11 +26,7 @@ const EditRequestForQuoteLine = ({ editRequestForQuoteLine, setEditRequestForQuo
 
 
   // Initialize state with data from props
-  const [addLineItem, setAddLineItem] = useState([
-    {
-    purchase_quote_items_id : id
-    }
-]);
+  const [addLineItem, setAddLineItem] = useState([]);
 const [unitdetails, setUnitDetails] = useState();
   // Fetch data from API
   const getUnit = () => {
@@ -44,34 +40,45 @@ const [unitdetails, setUnitDetails] = useState();
     });
   }
 //onchange function
-const onchangeItems = (selectedValue) => {
-  const updatedItems = addLineItem.map((item) => {
-    if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
-      return {
-        ...item,
-        unit: selectedValue.value,  // Update the unit with the selected option's value
-        value: selectedValue.value  // Update the value with the selected option's value
-      };
-    }
-    return item;
-  });
+// const onchangeItems = (selectedValue) => {
+//   const updatedItems = addLineItem.map((item) => {
+//     if (item.unit === selectedValue.value) {  // Compare with selectedValue.value
+//       return {
+//         ...item,
+//         unit: selectedValue.value,  // Update the unit with the selected option's value
+//         value: selectedValue.value  // Update the value with the selected option's value
+//       };
+//     }
+//     return item;
+//   });
 
-  setAddLineItem(updatedItems);
-};
+//   setAddLineItem(updatedItems);
+// };
+
+const onchangeItems = (selectedValue, index) => {
+    const updatedItems = [...addLineItem];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      unit: selectedValue.value,
+      value: selectedValue.value
+    };
+    setAddLineItem(updatedItems);
+  };
+
 
   // Function to update state
-  function updateState(index, property, e) {
-    const copyDeliverOrderProducts = [...addLineItem];
-    const updatedObject = { ...copyDeliverOrderProducts[index], [property]: e.target.value };
+  // Update state function
+  const updateState = (index, property, e) => {
+    const updatedItems = [...addLineItem];
+    const updatedObject = { ...updatedItems[index], [property]: e.target.value };
     
-  const quantitys = parseFloat(updatedObject.quantity) || 0;
-  const unitPrice = parseFloat(updatedObject.amount) || 0;
-  // const totalCost = parseFloat(updatedObject.total_cost);
-  updatedObject.total_cost = quantitys * unitPrice;
+    const quantity = parseFloat(updatedObject.quantity) || 0;
+    const unitPrice = parseFloat(updatedObject.amount) || 0;
+    updatedObject.total_cost = quantity * unitPrice;
 
-    copyDeliverOrderProducts[index] = updatedObject;
-    setAddLineItem(copyDeliverOrderProducts);
-  }
+    updatedItems[index] = updatedObject;
+    setAddLineItem(updatedItems);
+  };
   
   const getOrdersByOrderId = () => {
     api.post('/quote/RequestLineItemById', { purchase_quote_id : id }).then((res) => {
@@ -87,8 +94,9 @@ const onchangeItems = (selectedValue) => {
         .post('quote/editTabQuoteLineItems',item )
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
-          setAddLineItem();
-          window.location.reload();
+          // setAddLineItem();
+         window.location.reload();
+        //  setEditRequestForQuoteLine(false)
         })
         .catch((error) => {
           console.error('Error updating item:', error);
@@ -107,7 +115,7 @@ const onchangeItems = (selectedValue) => {
   return (
     <>
       <Modal size="xl" isOpen={editRequestForQuoteLine}>
-        <ModalHeader>Edit PO Line Items</ModalHeader>
+        <ModalHeader>Edit Purchase Request Line Items</ModalHeader>
 
         <ModalBody>
           <FormGroup>
@@ -120,7 +128,7 @@ const onchangeItems = (selectedValue) => {
                       disabled
                       type="text"
                       name="supplier"
-                      value={addLineItem && addLineItem.company_name}
+                      value={addLineItem[0]?.company_name || ''}
                     />
                   </Col>
                   <Col md="3">
@@ -129,7 +137,7 @@ const onchangeItems = (selectedValue) => {
                       disabled
                       type="text"
                       name="purchase_request_code"
-                      value={addLineItem && addLineItem.purchase_request_code}
+                      value={addLineItem[0]?.purchase_request_code || ''}
                     />
                   </Col>
                 </Row>
@@ -156,19 +164,19 @@ const onchangeItems = (selectedValue) => {
                            type="text"
                             name="title"
                             defaultValue={el.title}
-                            onChange={(e) => updateState(index, 'title', e)}
+                            // onChange={(e) => updateState(index, 'title', e)}
+                            disabled
                           />
                         </td>
                         <td data-label="unit">
-                        <Select
-                                name="unit" 
-                               // defaultValue={el.unit}
-                                //value={{ value: el.unit, label: el.unit }}
-                                onChange={(selectedOption) => {onchangeItems(selectedOption, index)}
-                    }
-                                options={unitdetails}/>
-                              
-                            </td>
+                          
+                      <Select
+                        name="unit"
+                        defaultValue={{ value: el.unit, label: el.unit }}
+                        onChange={(selectedOption) => onchangeItems(selectedOption, index)}
+                        options={unitdetails}
+                      />
+                    </td>
                         <td data-label="quantity">
                           <Input
                             type="text"
@@ -193,6 +201,7 @@ const onchangeItems = (selectedValue) => {
                             type="text"
                             name="total_cost"
                             onChange={(e) => updateState(index, 'total_cost', e)}
+                            disabled
                           />
                         </td>
                         <td data-label="Remarks">

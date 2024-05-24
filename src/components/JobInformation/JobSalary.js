@@ -49,7 +49,8 @@ export default function JobSalary({ handleInputsJobInformation, job,arb, arabic 
           <Col md="4">
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Govt donation')?.[genLabel]}   <span className="required"> *</span>
+            <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Govt donation')?.[genLabel]}  
               </Label>
             
               <Input

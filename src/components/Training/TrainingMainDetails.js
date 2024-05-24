@@ -53,14 +53,14 @@ console.log('arabic', arabic);
   }
 
   return (
-    <ComponentCard title={arb? 'التفاصيل الرئيسية':"Main Details"}>
+    <ComponentCard title={arb? 'التفاصيل الرئيسية':"Main Details"} creationModificationDate={trainingDetails}>
       <Form>
         <Row>
           <Col md="4"> 
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdHRTraining.Title')?.[genLabel]}{' '}                   
-             <span style={{ color: 'red' }}>*</span></Label>
+             </Label><span className='required'>*</span>
               <Input
                 type="text"
                 onChange={handleInputs}
@@ -84,6 +84,7 @@ console.log('arabic', arabic);
             <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdHRTraining.From Date')?.[genLabel]}{' '}                   
               </Label>
+              <span className='required'>*</span>
               <Input
                 type="date"
                 onChange={handleInputs}
@@ -104,7 +105,8 @@ console.log('arabic', arabic);
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdHRTraining.To Date')?.[genLabel]}{' '}                   
-              </Label>              
+              </Label> 
+              <span className='required'>*</span>             
               <Input
                 type="date"
                 onChange={handleInputs}

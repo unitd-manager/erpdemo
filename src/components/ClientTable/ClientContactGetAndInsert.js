@@ -138,7 +138,7 @@ export default function ClientContactGetAndInsert({
       grow: 3,
     },
     {
-      name: arabic.find((item) => item.key_text === 'mdTradingContact.position')?.[genLabel],
+      name: arabic.find((item) => item.key_text === 'mdTradingContact.Position')?.[genLabel],
       selector: 'position',
       sortable: true,
       width: 'auto',

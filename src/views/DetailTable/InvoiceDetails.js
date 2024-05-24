@@ -184,8 +184,9 @@ const handleInputs = (e) => {
                 <Col md="12">
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Company Name')?.[genLabel]}{' '}            
-                       <span className="required"> *</span>{' '}
+                       
                </Label>
+               <span className="required"> *</span>{' '}
             <Input 
             type="select" 
             name="company_id" 
@@ -198,7 +199,7 @@ const handleInputs = (e) => {
                 customerdropdown.map((e) => {
                   return (
                     <option key={e.company_id} value={e.company_id}>
-                      {e.company_id}
+                      {e.company_name}
                     </option>
                   );
                 })}
@@ -278,7 +279,7 @@ invoicedetails && (
             goodsdeliverydropdown.map((e) => {
               return (
                 <option key={e.goods_delivery_id} value={e.goods_delivery_id}>
-                  {e.goods_delivery_code}
+                  {e.goods_delivery_code}-{e.company_name}
                 </option>
               );
             })}

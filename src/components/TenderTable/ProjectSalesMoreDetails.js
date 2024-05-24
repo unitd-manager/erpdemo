@@ -9,7 +9,6 @@ import Tab from '../project/Tab';
 import Tabs from '../project/Tabs';
 import ProjectOrderItemsTable from './ProjectOrderItemsTable';
 
-
 //VehicleDetails From VehicleEdit
 export default function MoreDetails({ invoiceDetails, receiptDetails, ordersDetails,arb,eng }) {
   MoreDetails.propTypes = {
@@ -44,41 +43,7 @@ export default function MoreDetails({ invoiceDetails, receiptDetails, ordersDeta
           <ToastContainer></ToastContainer>
           {eng === true && <Tab toggle={toggle} tabs={tabs} />}
           {arb === true && <Tabs toggle={toggle} tabsArb={tabsArb} />}
-          {/* <
-          {/* <Nav tabs>
-          <NavItem>
-              <NavLink
-                className={activeTab === '1' ? 'active' : ''}
-                onClick={() => {
-                  toggle('1');
-                }}
-              >
-                Order Items
-              </NavLink>
-            </NavItem>
 
-            <NavItem>
-              <NavLink
-                className={activeTab === '2' ? 'active' : ''}
-                onClick={() => {
-                  toggle('2');
-                }}
-              >
-                Invoice
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={activeTab === '3' ? 'active' : ''}
-                onClick={() => {
-                  toggle('3');
-                }}
-              >
-                Receipt
-              </NavLink>
-            </NavItem>
-            
-          </Nav> */}
           <TabContent className="p-4" activeTab={activeTab}>
             {/* ADD NODE */}
             <TabPane tabId="1">

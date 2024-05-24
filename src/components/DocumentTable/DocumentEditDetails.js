@@ -152,7 +152,7 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                     <Input
                           type="text"
                           onChange={handleInputs}
-                          value={documenteditdetails && moment(documenteditdetails.estimated_finish_date).format('YYYY-MM-DD')}
+                          value={documenteditdetails && documenteditdetails.estimated_finish_date}
                           name="estimated_finish_date"
                           disabled>
                      </Input>

@@ -129,14 +129,14 @@ export default function BookingDetailComp({ bookingDetails, handleInputs,arb,ara
                         value={
                         
                         arb
-                        ? bookingDetails && bookingDetails.project_order_code_arb
-                          ? bookingDetails.project_order_code_arb
-                          : bookingDetails && bookingDetails.project_order_code_arb !== null
+                        ? bookingDetails && bookingDetails.order_code_arb
+                          ? bookingDetails.order_code_arb
+                          : bookingDetails && bookingDetails.order_code_arb !== null
                             ? ''
-                            : bookingDetails && bookingDetails.project_order_code
-                        : bookingDetails && bookingDetails.project_order_code
+                            : bookingDetails && bookingDetails.order_code
+                        : bookingDetails && bookingDetails.order_code
                     }
-                    name={arb ? 'project_order_code_arb' : 'project_order_code'} 
+                    name={arb ? 'order_code_arb' : 'order_code'} 
                     />
                         {/* <option>Select Order</option>
               {orderdropdown &&
@@ -312,14 +312,14 @@ export default function BookingDetailComp({ bookingDetails, handleInputs,arb,ara
                
                   value={
                   arb
-                  ? bookingDetails && bookingDetails.project_invoice_amount_arb
-                    ? bookingDetails.project_invoice_amount_arb
-                    : bookingDetails && bookingDetails.project_invoice_amount_arb !== null
+                  ? bookingDetails && bookingDetails.InvoiceAmount
+                    ? bookingDetails.InvoiceAmount
+                    : bookingDetails && bookingDetails.InvoiceAmount !== null
                       ? ''
-                      : bookingDetails && bookingDetails.project_invoice_amount
-                  : bookingDetails && bookingDetails.project_invoice_amount
+                      : bookingDetails && bookingDetails.InvoiceAmount
+                  : bookingDetails && bookingDetails.InvoiceAmount
               }
-              name={arb ? 'project_invoice_amount_arb' : 'project_invoice_amount'} 
+              name={arb ? 'InvoiceAmount' : 'InvoiceAmount'} 
               /></FormGroup>
                   
                              </Col>

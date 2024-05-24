@@ -132,7 +132,7 @@ if (arb === true) {
       grow: 3,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingEnq.Quotation Code')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdTradingQuote.Enquiry Code')?.[genLabel],
       selector: 'opportunity_code',
       sortable: true,
       grow: 2,

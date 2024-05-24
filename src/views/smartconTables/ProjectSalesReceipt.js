@@ -72,7 +72,7 @@ const ProjectSalesReceipt = () => {
 
   const getArabicCompanyName = () => {
       api
-      .get('/invoice/getTranslationforProjectSalesReceipt')
+      .get('/translation/getTranslationForProjectReceipt')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -156,7 +156,7 @@ const ProjectSalesReceipt = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrders')
+      .get('/projectreceipts/getOrders')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -208,7 +208,7 @@ const ProjectSalesReceipt = () => {
                   <tr key={element.project_receipt_id}>
                     <td>{index + 1}</td>
 
-                    <td>{element.project_order_code}</td>
+                    <td>{element.order_code}</td>
                     <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
                     <td>{element.receipt_status}</td>
@@ -243,7 +243,7 @@ const ProjectSalesReceipt = () => {
                               company.map((e) => {
                                 return (
                                   <option key={e.project_order_id} value={e.project_order_id}>
-                                   {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}{' '}
+                                   {arb?e.order_code_arb:e.order_code}
                                   </option>
                                 );
                               })}

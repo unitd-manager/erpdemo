@@ -58,8 +58,8 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.job_order_title}
-                          name="job_order_title"
+                          value={projectTask && projectTask.job_title}
+                          name="job_title"
                           disabled
                         />
                       </FormGroup>
@@ -73,8 +73,8 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.job_order_code}
-                          name="job_order_code"
+                          value={projectTask && projectTask.job_code}
+                          name="job_code"
                           disabled
                         />
                       </FormGroup>
@@ -93,7 +93,9 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                           name="project_id"
                           disabled
                         >
-                          <option defaultValue="selected">Please Select</option>
+                           <option value="" selected="selected">
+                            Please Select
+                          </option>
                           {projectdetails &&
                             projectdetails.map((e) => {
                               return (
@@ -139,7 +141,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                           onChange={handleInputs}
                           value={projectTask && projectTask.employee_id}
                         >
-                          <option value="" defaultValue="selected"></option>
+                          <option value="" selected="selected">Please Select</option>
                           {employeeProject &&
                             employeeProject.map((ele) => {
                               return (
@@ -321,11 +323,11 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                             arb
                               ? (
                                   projectTask && projectTask.actual_hours_arb ? projectTask.actual_hours_arb :
-                                  (projectTask && projectTask.actual_hours_arb !== null ? '' : projectTask && projectTask.estimated_hours)
+                                  (projectTask && projectTask.actual_hours_arb !== null ? '' : projectTask && projectTask.actual_hours)
                                 )
-                              : (projectTask && projectTask.estimated_hours)
+                              : (projectTask && projectTask.actual_hours)
                           }
-                          name={arb ? 'actual_hours_arb': 'estimated_hours'}
+                          name={arb ? 'actual_hours_arb': 'actual_hours'}
                         />
                       </FormGroup>
                     </Col>

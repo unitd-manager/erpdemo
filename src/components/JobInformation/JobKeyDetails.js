@@ -76,13 +76,14 @@ export default function Jobinformationedit({
             <Col md="6">
               <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
+                <span className="required"> *</span>{' '}
                   {
                     arabic.find(
                       (item) =>
                         item.key_text === 'mdJobInformation.Employment Start/Commencement Date ',
                     )?.[genLabel]
                   }
-                  <span className="required"> *</span>
+                  
                 </Label>
 
                 <Input

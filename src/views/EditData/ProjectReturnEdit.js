@@ -34,7 +34,7 @@ const InvoiceEdit = () => {
   const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
   const { insertedDataId, invoiceId } = useParams();
   const [removedItems, setRemovedItems] = useState([]);
-  console.log('insertedDataId:', insertedDataId); 
+  console.log('inserteDataId:', insertedDataId); 
   console.log('invoiceId:', invoiceId);
   const { loggedInuser } = useContext(AppContext); 
   const navigate = useNavigate();

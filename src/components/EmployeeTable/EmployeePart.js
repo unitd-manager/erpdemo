@@ -78,7 +78,7 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
   return (
     <div>
       <FormGroup>
-        <ComponentCard title="Personal Information">
+        <ComponentCard title="Personal Information" creationModificationDate={employeeDetails}>
           <Row>
             <Col md="3">
               <FormGroup>

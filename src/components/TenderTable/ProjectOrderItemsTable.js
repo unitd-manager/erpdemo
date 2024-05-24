@@ -50,7 +50,6 @@ export default function CustomerFinanceInvoice({ ordersDetails }) {
 
   //Structure of Invoice table
   const invoiceTableColumns = [
-    { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Order Code')?.[genLabel] },
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Item Title')?.[genLabel] },
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Unit')?.[genLabel] },
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Price')?.[genLabel] },
@@ -76,8 +75,6 @@ export default function CustomerFinanceInvoice({ ordersDetails }) {
                 ordersDetails.map((element) => {
                   return (
                     <tr key={element.project_order_id}>
-                      <td>{element.project_order_code}</td>
-
                       <td>
                         {arb && element.item_title_arb
                           ? element.item_title_arb

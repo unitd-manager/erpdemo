@@ -65,6 +65,9 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
                       .then((result) => {
                         if (result.data.msg === 'Success') {
                           console.log(`Order item ${index + 1} inserted successfully`);
+                          setTimeout(() => {
+                            window.location.reload()
+                          }, 100);
                         } else {
                           console.error(`Failed to insert order item ${index + 1}`);
                         }
@@ -144,6 +147,7 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Unit')?.[genLabel] },
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Price')?.[genLabel] },
     { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Quantity')?.[genLabel] },
+    { name: arabic.find((item) => item.key_text === 'mdTradingOrder.Total Cost')?.[genLabel] },
   ];
 
   const renderGenerateDataButton = () => {
@@ -194,8 +198,9 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
                       </td>
 
                       <td>{arb && element.unit_arb ? element.unit_arb : element.unit}</td>
-                      <td>{element.cost_price}</td>
+                      <td>{element.unit_price}</td>
                       <td>{element.qty}</td>
+                      <td>{element.cost_price}</td>
                     </tr>
                   );
                 })}

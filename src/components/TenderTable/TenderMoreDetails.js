@@ -79,6 +79,37 @@ export default function TenderMoreDetails({
               </Col>
               <Col md="3">
                 <FormGroup>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.customer')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={(e) => {
+                      handleInputs(e);
+                      // getContact(e.target.value);
+                    }}
+                    value={tenderDetails && tenderDetails.company_name}
+                    name="company_name"
+                    disabled
+                  >
+                    {/* <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb?e.company_name_arb:e.company_name}{' '}
+                          </option>
+                        );
+                      })} */}
+                  </Input>
+                </FormGroup>
+              </Col>
+
+              <Col md="3">
+                <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}{' '}
                     {/*Access the value property */}

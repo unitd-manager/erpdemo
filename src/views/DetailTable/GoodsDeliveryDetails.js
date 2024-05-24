@@ -77,7 +77,7 @@ const GoodsDeliveryDetails = () => {
  // QUOTE GENERATED CODE
   const generateCode = () => {
     api
-      .post('/tender/getCodeValue', { type: 'goodsdelivery' })
+      .post('/commonApi/getCodeValue', { type: 'goodsdelivery' })
       .then((res) => {
         insertgoodsDelivery(res.data.data);
       })

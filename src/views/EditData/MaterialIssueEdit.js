@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -7,6 +7,7 @@ import {
   TabPane,
   TabContent,
 } from 'reactstrap';
+import * as Icon from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
@@ -25,6 +26,7 @@ import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import PdfMaterialIssue from '../../components/PDF/PdfMaterialIssue';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
 
 const MaterialIssueEdit = () => {
   //Const Variables
@@ -36,11 +38,12 @@ const MaterialIssueEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
-
+  const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+  const [update, setUpdate] = useState(false);
+
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 const [arabic, setArabic] = useState([]);
 
@@ -120,6 +123,7 @@ const [arabic, setArabic] = useState([]);
 
     if (
       plannings.material_issue_date      ) {
+        plannings.modified_by = loggedInuser.first_name;
       api
         .post('/materialissue/editMaterialIssue', plannings)
         .then(() => {
@@ -190,33 +194,36 @@ const [arabic, setArabic] = useState([]);
             <Row>
              
               <Col xs="12" md="3" className="mb-3">
-                <Button
-                  color="primary"
-                  className="shadow-none"
-                  onClick={() => {
-                    setRoomName('MaterialIssue');
-                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
-                    dataForAttachment();
-                    setAttachmentModal(true);
-                  }}
-                >
-                  Add
-                </Button>
-              </Col>
-            </Row>
-
-            <AttachmentModalV2
-              moduleId={id}
-              attachmentModal={attachmentModal}
-              setAttachmentModal={setAttachmentModal}
-              roomName={RoomName}
-              fileTypes={fileTypes}
-              altTagData="MaterialIssue Data"
-              desc="MaterialIssue Data"
-              recordType="Picture"
-              mediaType={attachmentData.modelType}
-            />
-            <ViewFileComponentV2 moduleId={id} roomName="MaterialIssue" recordType="Picture" />
+              <Button
+        className="shadow-none"
+        color="primary"
+        onClick={() => {
+          setRoomName('MaterialIssue');
+          setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+          dataForAttachment();
+          setAttachmentModal(true);
+          
+        }}
+      >
+        <Icon.File className="rounded-circle" width="20" />
+      </Button>
+    </Col>
+  </Row>
+  <AttachmentModalV2
+    moduleId={id}
+    attachmentModal={attachmentModal}
+    setAttachmentModal={setAttachmentModal}
+    roomName={RoomName}
+    fileTypes={fileTypes}
+    altTagData="MaterialIssue Data"
+    desc="MaterialIssue Data"
+    recordType="RelatedPicture"
+    mediaType={attachmentData.modelType}
+    update={update}
+    setUpdate={setUpdate}
+  />
+  <ViewFileComponentV2 moduleId={id} roomName="MaterialIssue" recordType="RelatedPicture" update={update}
+    setUpdate={setUpdate} />
           </TabPane>
          
         </TabContent>

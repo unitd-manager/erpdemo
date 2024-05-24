@@ -197,7 +197,7 @@ if (arb === true) {
                     <td>{arb && element.company_name_arb ? element.company_name_arb : element.company_name}</td>
                     <td>{arb && element.office_ref_no_arb ? element.office_ref_no_arb : element.office_ref_no}</td>
                     <td>{arb && element.order_status_arb ? element.order_status_arb : element.order_status}</td>
-                    <td>{element.amount}</td>
+                    <td>{element.order_amount}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.office_ref_no}</td> */}
                     {/* <td>{element.order_status }</td>

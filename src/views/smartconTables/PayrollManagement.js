@@ -22,7 +22,6 @@ import PrintPayslipModal from '../../components/PayrollManagement/PrintPayslipMo
 // import PrintIR8AModal from '../../components/PayrollManagement/PrintIR8AModal';
 // import { columns } from '../../data/PayrollHR/PayrollColumn';
 // import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
-// 
 
 const Payrollmanagement = () => {
   //state variables
@@ -497,7 +496,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const generatePayslips = () => {
     navigate(`/PayrollManagement?month=${filterPeriod.month}&year=${filterPeriod.year}`);
     // setLoading(true);
-    api.get('/projecttask/timesheettopayroll').then((res) => {
+    api.get('/payrollmanagement/getJobInformationPayroll').then((res) => {
       setJobInformationRecords(res.data.data);
       console.log('jobinformationrecords', res.data.data);
       console.log('jobinformationrecords', jobInformationRecords);

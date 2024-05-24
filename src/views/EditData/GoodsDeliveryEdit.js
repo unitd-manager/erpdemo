@@ -17,7 +17,7 @@ import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
-import GoodsDeliveryMoreDetails from '../../components/GoodsDelivery/GoodsDeliveryMoreDetails';
+import GoodsMoreDetails from '../../components/GoodsDelivery/GoodsMoreDetails';
 import EditLineItem from '../../components/GoodsDelivery/EditLineItem';
 import ApiButton from '../../components/ApiButton';
  
@@ -148,6 +148,7 @@ const GoodsDeliveryEdit = () => {
         console.log('Received items:', DeliveryItems);
         if (DeliveryItems.length === 0) {
           console.warn('No Delivery items to insert');
+          message('No order item  record', 'warning');
           return;
         }
         // Retrieve all order_item_id  values from the goods_delivery_items table
@@ -228,7 +229,6 @@ const GoodsDeliveryEdit = () => {
   const columns1 = [
     { name:arb ? 'رقم لا' : 'SN.No' },
     { name:arb ? 'عنوان البند' : 'Item Title' },
-    { name:arb ? 'وصف' : 'Description' },
     { name:arb ? 'وحدة' : 'Unit' },
     { name:arb ? 'الكمية المطلوبة' : 'Ordered Quantity' },
     { name:arb ? 'كمية تسليمها' : 'Delivered Quantity' },
@@ -258,7 +258,7 @@ const GoodsDeliveryEdit = () => {
               backToList={backToList}
               module="GoodsDelivery"
             ></ApiButton>
-      <GoodsDeliveryMoreDetails
+      <GoodsMoreDetails
       arb={arb}
       arabic={arabic}
         handleInputs={handleInputs}
@@ -266,7 +266,7 @@ const GoodsDeliveryEdit = () => {
         tenderDetails={tenderDetails}
         companyhandleInputs={companyhandleInputs}
 
-      ></GoodsDeliveryMoreDetails>
+      ></GoodsMoreDetails>
 
       <ComponentCard title={arb ? 'المزيد من التفاصيل' : 'More Details'}>
         <ToastContainer></ToastContainer>
@@ -331,7 +331,6 @@ const GoodsDeliveryEdit = () => {
                           <tr key={element.goods_delivery_id}>
                             <td>{index + 1}</td>
                             <td>{element.title}</td>
-                            <td>{element.description}</td>
                             <td>{element.unit}</td>
                             <td>{element.quantity}</td>
                             <td>{element.delivery_qty}</td>

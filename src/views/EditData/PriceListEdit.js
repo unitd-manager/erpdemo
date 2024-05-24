@@ -39,6 +39,7 @@ const PriceListEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
+  const [priceliststatus, setPricelistStatus] = useState();
   const [update, setUpdate] = useState(false);
   const [planningDetails, setPlanningDetails] = useState(null);
   const [newPlanningData, setNewPlanningData] = useState({
@@ -144,9 +145,21 @@ const [arabic, setArabic] = useState([]);
     });
   };
 
+   //Api call for getting Staff Type From Valuelist
+   const getPricelistStatus = () => {
+    api
+      .get('/pricelistitem/getPricelistStatusFromValuelist')
+      .then((res) => {
+        setPricelistStatus(res.data.data);
+      })
+      .catch(() => {
+        message('SubCategory Type Data Not Found', 'info');
+      });
+  };
+
+
   //Logic for edit data in db
   const editplanningData = () => {
-    
     setFormSubmitted(true);
     if ((arb && plannings.customer_name_arb.trim() !== '') || (!arb && plannings.customer_name.trim() !== '')) {
       plannings.modification_date = creationdatetime;
@@ -200,6 +213,7 @@ const handleAddNewPlanning = (e) => {
     getCpanelLinked();
     getTranslationForPriceList();
     getUnitFromValuelist();
+    getPricelistStatus();
   }, [id]);
 
   return (
@@ -233,6 +247,7 @@ const handleAddNewPlanning = (e) => {
         formSubmitted={formSubmitted}
         arabic={arabic}
         genLabel={genLabel}
+        priceliststatus={priceliststatus}
         ></PlanningMainDetails>
 
       {/* Nav tab */}
@@ -267,8 +282,6 @@ const handleAddNewPlanning = (e) => {
            planData={planData}
            editPlanEditModal={editPlanEditModal}
            setPlanEditModal={setPlanEditModal}
-           arb={arb}
-        formSubmitted={formSubmitted}
         arabic={arabic}
         genLabel={genLabel}
         unitdetails={unitdetails}

@@ -37,7 +37,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
     const quantity = parseFloat(updatedObject.delivery_qty) || 0;
     const unitPrice = parseFloat(updatedObject.unit_price) || 0;
     // const totalCost = parseFloat(updatedObject.total_cost);
-    updatedObject.total_cost = quantity * unitPrice;
+    updatedObject.amount = quantity * unitPrice;
 
     const DeliveryQty = updatedObject.delivery_qty;
     const orderedQty = updatedObject.quantity;
@@ -139,7 +139,6 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                   <thead>
                     <tr>
                       <th scope="col">{arb?'غرض': 'Item'} </th>
-                      <th scope="col">{arb?'وصف': 'Description'} </th>
                       <th scope="col">{arb?'جامعة م': 'UoM'}</th>
                       <th scope="col">{arb?'الكمية': 'Qty'}</th>
                       <th scope="col">{arb?'تسليم الكمية': 'Delivery Qty'}</th>
@@ -160,15 +159,7 @@ const InvoiceModal = ({ editModal, setEditModal, getgoodsLineItemById }) => {
                                 disabled
                               />
                             </td>
-                            <td data-label="Description">
-                              <Input
-                                defaultValue={item.description}
-                                type="text"
-                                name="description"
-                                onChange={(e) => updateState(index, 'description', e)}
-                                disabled
-                              />
-                            </td>
+                           
                             <td data-label="UoM">
                               <Input
                                 defaultValue={item.unit}

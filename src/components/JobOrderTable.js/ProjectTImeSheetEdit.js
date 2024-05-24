@@ -181,28 +181,7 @@ console.log("projectTimesheetId",projectTimesheetId);
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>creation Date</Label>
-                          <Input
-                            type="text"
-                            onChange={handleInputs}
-                            value={projecttime && projecttime.creation_date}
-                            name="creation_date"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>Modification Date</Label>
-                          <Input
-                            type="text"
-                            onChange={handleInputs}
-                            value={projecttime && projecttime.modification_date}
-                            name="modification_date"
-                          />
-                        </FormGroup>
-                      </Col>
+                      
                     </Row>
                   </Form>
                 </CardBody>

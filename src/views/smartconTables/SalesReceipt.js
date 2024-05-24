@@ -23,7 +23,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
+import SalesReceiptCreate from '../../components/BookingTable/SalesReceiptCreate';
 import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 
 //geting data from invoice
@@ -292,9 +292,9 @@ const InvoiceData = () => {
           {arb?'إنشاء إيصال': 'Create receipt'}
           </ModalHeader>
           <ModalBody>
-       <ReceiptCreate 
+       <SalesReceiptCreate 
        orderId={ selectOrderId}
-       ></ReceiptCreate>
+       ></SalesReceiptCreate>
           </ModalBody>
         </Modal>
       </div>

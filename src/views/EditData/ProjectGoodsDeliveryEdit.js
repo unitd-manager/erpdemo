@@ -13,7 +13,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import GoodsDeliveryButton from '../../components/GoodsDelivery/GoodsDeliveryButton';
-import GoodsAttachment from '../../components/GoodsDelivery/GoodsAttachment';
+import ProjectGoodsAttachment from '../../components/GoodsDelivery/ProjectGoodsAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
@@ -136,9 +136,6 @@ const GoodsDeliveryEdit = () => {
         message('Unable to edit record.', 'error');
       });
   };
-
-  // Generate Data for Delivery Items
-  
   const generateData = () => {
     api.post('/projectgoodsdelivery/getOrdersById', { project_order_id: tenderDetails.project_order_id })
       .then((res) => {
@@ -149,16 +146,13 @@ const GoodsDeliveryEdit = () => {
           return;
         }
   
-        // Retrieve all existing project_order_item_ids from the project_goods_delivery_item table
-        api.get('/projectgoodsdelivery/checkDeliveryItems')
-          .then((response) => {
-            const ExistingDeliveryItemsId = response.data.data.map(item => item.project_order_item_id);
+        // Delete existing project_goods_delivery_item records for the given project_goods_delivery_id
+        api.post('/projectgoodsdelivery/deleteGoodsDeliveryItems', { project_goods_delivery_id: insertedDataId })
+          .then((deleteResponse) => {
+            console.log('Deleted existing delivery items:', deleteResponse.data);
   
-            // Filter out DeliveryItems that are already inserted
-            const newDeliveryItems = DeliveryItems.filter(item => !ExistingDeliveryItemsId.includes(item.project_order_item_id));
-  
-            // Insert only the new DeliveryItems
-            newDeliveryItems.forEach((DeliveryItem, index) => {
+            // Insert new DeliveryItems
+            DeliveryItems.forEach((DeliveryItem, index) => {
               const DeliveryItemsData = {
                 creation_date: creationdatetime,
                 modified_by: loggedInuser.first_name,
@@ -180,7 +174,8 @@ const GoodsDeliveryEdit = () => {
                 .then((result) => {
                   if (result.data.msg === 'Success') {
                     console.log(`Order item ${index + 1} inserted successfully`);
-                    // You might want to trigger a UI update here
+                    window.location.reload();
+
                   } else {
                     console.error(`Failed to insert order item ${index + 1}`);
                   }
@@ -193,7 +188,7 @@ const GoodsDeliveryEdit = () => {
             console.log('All new order items inserted successfully');
           })
           .catch((error) => {
-            console.error('Error checking order item existence', error);
+            console.error('Error deleting existing delivery items', error);
           });
       })
       .catch((error) => {
@@ -330,7 +325,7 @@ const GoodsDeliveryEdit = () => {
             </FormGroup>
           </TabPane>
           <TabPane tabId="2">
-            <GoodsAttachment></GoodsAttachment>
+            <ProjectGoodsAttachment></ProjectGoodsAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

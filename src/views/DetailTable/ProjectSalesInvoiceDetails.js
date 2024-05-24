@@ -151,7 +151,7 @@ const handleInputs = (e) => {
 };
         const generateCode = () => {
               api
-                .post('/commonApi/getCodeValue', { type: 'invoice' })
+                .post('/commonApi/getCodeValue', { type: 'projectinvoice' })
                 .then((res) => {
                   insertProjectSalesInvoice(res.data.data);
                 })
@@ -269,7 +269,7 @@ const handleInputs = (e) => {
                 orderdropdown.map((e) => {
                   return (
                     <option key={e.project_order_id} value={e.project_order_id}>
-                      {arb?e.project_order_code_arb:e.project_order_code} - {arb?e.company_name_arb:e.company_name}
+                      {arb?e.order_code_arb:e.order_code} - {arb?e.company_name_arb:e.company_name}
                     </option>
                   );
                 })}

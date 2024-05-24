@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +19,7 @@ import api from '../../constants/api';
 import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
 import SubConTable from '../../components/SubConModal/SubConTable';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
 
 const SubConEdit = () => {
   //all state variables
@@ -29,7 +30,7 @@ const SubConEdit = () => {
   const [editWorkOrderLinked, setEditWorkOrderLinked] = useState(false);
   const [subconStatus, setSubconStatus] = useState();
   const [formSubmitted, setFormSubmitted] = useState(false);
-
+  const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -84,6 +85,7 @@ const [arabic, setArabic] = useState([]);
     
     if (subCon.company_name !== '' && subCon.address_flat !== ''){
       subCon.modification_date = creationdatetime;
+      subCon.modified_by = loggedInuser.first_name;
 
       api
         .post('/subcon/edit-Subcon', subCon)
@@ -211,13 +213,13 @@ const [arabic, setArabic] = useState([]);
             ></ApiButton>
           <ComponentCard title="SubCon Details" creationModificationDate={subCon}>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubcon.Name')?.[genLabel]}
-                <span className="required"> *</span>
-              </Label>
+                
+              </Label><span className="required"> *</span>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -231,15 +233,15 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'company_name_arb': 'company_name'}
                     className={`form-control ${
-                      formSubmitted && subCon.company_name_arb.trim() && subCon.company_name.trim() === '' ? 'highlight' : ''
+                      formSubmitted && subCon.company_name_arb && subCon.company_name === '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.company_name_arb.trim()&&subCon.company_name.trim() === '' && (
+                {formSubmitted &&  subCon.company_name_arb&&subCon.company_name === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -260,7 +262,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -281,9 +283,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -304,7 +304,9 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              </Row>
+              <Row>
+              <Col md="3">
                 <FormGroup>
                 
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -336,13 +338,13 @@ const [arabic, setArabic] = useState([]);
         <FormGroup>
           <ComponentCard title="Address">
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubcon.Address 1')?.[genLabel]}
-                <span className="required"> *</span>
-              </Label>
+                
+              </Label><span className="required"> *</span>
                  
                   <Input
                     type="text"
@@ -357,15 +359,15 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'address_flat_arb': 'address_flat'}
                     className={`form-control ${
-                      formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' ? 'highlight' : ''
+                      formSubmitted &&  subCon.address_flat_arb && subCon.address_flat=== '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' && (
+                {formSubmitted &&  subCon.address_flat_arb && subCon.address_flat === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -387,9 +389,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -411,7 +411,7 @@ const [arabic, setArabic] = useState([]);
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>

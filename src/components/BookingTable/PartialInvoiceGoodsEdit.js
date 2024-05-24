@@ -307,9 +307,9 @@ const OrderLineItemsById = () => {
             onClick={() => {
               editSalesInvoice();
               setPartialGoodsInvoiceEditModal(false);
-              setTimeout(() => {
-                window.location.reload()
-              }, 100);
+              // setTimeout(() => {
+              //   window.location.reload()
+              // }, 100);
             }}
           >
             Submit

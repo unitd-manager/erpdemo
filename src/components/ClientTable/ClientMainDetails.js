@@ -36,6 +36,7 @@ export default function ClientMainDetails({
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdClient.companyName')?.[genLabel]}
               </Label>
+              <span className='required'>*</span>
               <Input
                 type="text"
                 onChange={handleInputs}
@@ -115,6 +116,7 @@ export default function ClientMainDetails({
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdClient.email')?.[genLabel]}
               </Label>
+              <span className='required'>*</span>
               <Input
                 type="text"
                 onChange={handleInputs}

@@ -212,7 +212,7 @@ const GoodsDelivery = () => {
                     <td>{element.company_name}</td>
                     <td>{element.department}</td>
                     <td>{element.sales_man}</td>
-                    <td>{element.office_ref_no}</td>
+                    <td>{element.project_goods_ref_no}</td>
                     <td>{element.po_no}</td>
                     <td>{element.project_goods_delivery_status}</td>
                   </tr>

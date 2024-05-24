@@ -389,11 +389,8 @@ const [arabic, setArabic] = useState([]);
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
         {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
