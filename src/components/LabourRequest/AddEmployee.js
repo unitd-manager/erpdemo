@@ -59,7 +59,7 @@ import MonthYear from '../ProjectModal/MonthYear';
   //getting Employee data by Employee id
   const getLinkedEmployee = () => {
   // eslint-disable-next-line
-     api.post('/timesheet/getTimesheetStaffById', { project_id: parseInt(id) })
+     api.post('/timesheet/getTimesheetLabourById', { labour_request_id: parseInt(id) })
       .then((res) => {
         console.log("res.data.data",res.data.data)
         setGetEmployeeLinked(res.data.data)

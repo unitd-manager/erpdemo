@@ -308,7 +308,7 @@ const tablevalue =  [
   return (
     <>
 
-       <div>
+       {/* <div>
 
        <select id="tableSelect" onChange={handleTableSelect} value={selectedTable}>
   <option value="">Select a table</option>
@@ -316,7 +316,7 @@ const tablevalue =  [
     <option key={table} value={table}>{table}</option>
   ))}
 </select>
-    </div>
+    </div> */}
      {/*  */}
       {/* BreadCrumbs */}
       <BreadCrumbs />
