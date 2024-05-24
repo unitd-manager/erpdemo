@@ -153,10 +153,7 @@ const LeavesEdit = () => {
           .post('/leave/editleave', leavesDetails)
           .then(() => {
             message('Record editted successfully', 'success');
-            setTimeout(()=>{
-              backToList();
-            },300)
-         
+                   
           })
           .catch(() => {
             message('Unable to edit record.', 'error');
