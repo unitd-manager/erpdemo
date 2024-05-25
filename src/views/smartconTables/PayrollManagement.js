@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Icon from 'react-feather';
-import { Row, Col, Button, Card, Badge } from 'reactstrap';
+import { Row, Col, Button, Card, Badge,Modal,ModalBody,ModalFooter,ModalHeader } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -42,11 +42,13 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //handleinputs
   const [arabic, setArabic] = useState([]);
 
+  const [showModal, setShowModal] = useState(false);
 
   const arb =selectedLanguage === 'Arabic'
 
   // const eng =selectedLanguage === 'English'
-   
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
   const getArabicLabels = () => {
       api
@@ -654,21 +656,35 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       <div className=" pt-xs-25">
         <BreadCrumbs />
         <ToastContainer></ToastContainer>
-
-        <Card style={{ padding: '10px' }}>
-          <div>
-          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Plase create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
-
-            {empWithoutJobInfo.map((el) => {
-              return (
-                <span style={{ marginRight: '5px' }}>
-                  <Badge> {el.employee_name}</Badge>
-                </span>
-              );
-            })}
-          </div>
-        </Card>
-
+        <Button class="primary" onClick={handleShowModal}>
+         Employee Name
+        </Button>
+           {/* Modal */}
+           <Modal  size="lg" isOpen={showModal} toggle={handleCloseModal}>     
+           <ModalHeader closeButton>
+            
+          </ModalHeader>
+          <ModalBody>
+            <Card style={{ padding: '10px' }}>
+              <div>
+                <h5>
+                {arabic.find(item => item.key_text === 'mdPayrollManagement.Plase create Job information records for the below employees to make them appear in payroll')?.[genLabel]}
+                </h5>
+                {empWithoutJobInfo.map((el) => (
+                  <span style={{ marginRight: '5px' }}>
+                    <Badge>{el.employee_name}</Badge>
+                  </span>
+                ))}
+              </div>
+            </Card>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </ModalFooter>
+        </Modal>
+        
         <Card className="p-2">
           <Row>
             <Col md="2">
