@@ -12,11 +12,9 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 const LeaveDetails = () => {
-  // Navigation and parameters
   const navigate = useNavigate();
   const { loggedInuser } = useContext(AppContext);
 
-  // All State Variable
   const [employee, setEmployee] = useState([]);
   const [leaveInsertData, setLeaveInsertData] = useState({
     employee_id: '',
@@ -25,12 +23,10 @@ const LeaveDetails = () => {
     leave_type: '',
   });
 
-  // Setting data in leaveInsertData
   const handleInputs = (e) => {
     setLeaveInsertData({ ...leaveInsertData, [e.target.name]: e.target.value });
   };
 
-  // Function to check if a date is within a range
   function isDateInRange(dateToCheck, fromDateArray, toDateArray) {
     for (let i = 0; i < fromDateArray.length; i++) {
       const fromDate = new Date(fromDateArray[i]);
@@ -43,7 +39,6 @@ const LeaveDetails = () => {
     return false; // The date is not within any of the ranges
   }
 
-  // Function to calculate the number of days in the current and next month
   const calculateLeaveDays = (fromDate, toDate) => {
     const fromMoment = moment(fromDate);
     const toMoment = moment(toDate);
@@ -55,14 +50,13 @@ const LeaveDetails = () => {
       ? endOfMonth.diff(fromMoment, 'days') + 1
       : toMoment.diff(fromMoment, 'days') + 1;
 
-    const daysInNextMonth = toMoment.isAfter(startOfNextMonth)
+    const daysInNextMonth = toMoment.isSameOrAfter(startOfNextMonth)
       ? toMoment.diff(startOfNextMonth, 'days') + 1
       : 0;
 
     return { daysInCurrentMonth, daysInNextMonth };
   };
 
-  // Function to insert a new leave
   const insertLeave = () => {
     if (new Date(leaveInsertData.to_date) >= new Date(leaveInsertData.from_date)) {
       if (
@@ -81,7 +75,6 @@ const LeaveDetails = () => {
         ) {
           message('You already applied for that day', 'error');
         } else {
-          // Calculate no_of_days and no_of_days_next_month
           const { daysInCurrentMonth, daysInNextMonth } = calculateLeaveDays(
             leaveInsertData.from_date,
             leaveInsertData.to_date
@@ -113,7 +106,6 @@ const LeaveDetails = () => {
     }
   };
 
-  // Get employee data for the dropdown
   const getEmployee = () => {
     api.get('/leave/getEmployee').then((res) => {
       res.data.data.forEach((el) => {

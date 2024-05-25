@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, Button, TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
@@ -20,6 +20,9 @@ import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
 import SubConTable from '../../components/SubConModal/SubConTable';
 import ApiButton from '../../components/ApiButton';
 import AppContext from '../../context/AppContext';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
+
 
 const SubConEdit = () => {
   //all state variables
@@ -31,10 +34,22 @@ const SubConEdit = () => {
   const [subconStatus, setSubconStatus] = useState();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const { loggedInuser } = useContext(AppContext);
+  const [activeTab, setActiveTab] = useState('1');
+
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+  const tabs = [
+    { id: '1', name: 'Job Order Linked' },
+    
+  ];
+  const tabsArb = [
+    { id: '1', name: 'أمر العمل مرتبط' },
+   
+  ];
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 const [arabic, setArabic] = useState([]);
 
@@ -463,7 +478,19 @@ const [arabic, setArabic] = useState([]);
         setEditWorkOrderLinked={setEditWorkOrderLinked}
       ></WorkOrderLinked>
         <ToastContainer></ToastContainer>
+        <ComponentCard title="More Details">
+{ arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
+        }
+
+        <TabContent className="p-4" activeTab={activeTab}>
+       
+<TabPane tabId="1">
+
         <SubConTable subConWorkOrder={subConWorkOrder}></SubConTable>
+        </TabPane>
+        </TabContent>
+        </ComponentCard>
     </>
   );
 };

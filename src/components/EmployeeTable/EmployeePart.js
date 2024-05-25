@@ -2,8 +2,6 @@ import React from 'react';
 import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import ComponentCard from '../ComponentCard';
-
 
 function EmployeePart({ employeeDetails, handleInputChange, allCountries, companies,arb,arabic }) {
   EmployeePart.propTypes = {
@@ -78,7 +76,6 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
   return (
     <div>
       <FormGroup>
-        <ComponentCard title="Personal Information" creationModificationDate={employeeDetails}>
           <Row>
             <Col md="3">
               <FormGroup>
@@ -552,7 +549,6 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
               </FormGroup>
             </Col>
           </Row>
-        </ComponentCard>
       </FormGroup>
     </div>
   );
