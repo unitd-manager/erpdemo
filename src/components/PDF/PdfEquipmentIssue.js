@@ -33,6 +33,7 @@ const PdfEquipmentIssue = ({ ProjectID }) => {
     const filteredResult = hfdata.find((e) => e.key_text === key);
     return filteredResult.value;
   };
+  console.log("111111",ProjectID,id)
   // Get Line Item
   const getPoProduct = () => {
     api
@@ -113,6 +114,9 @@ const PdfEquipmentIssue = ({ ProjectID }) => {
       ],
     ];
     products.forEach((element, index) => {
+      const unitPrice = element.unit_price || 0; // Default to 0 if undefined
+      const amount = element.amount || 0; // Default to 0 if undefined
+
       productItems.push([
         {
           text: `${index + 1}`,
@@ -135,14 +139,14 @@ const PdfEquipmentIssue = ({ ProjectID }) => {
           style: 'tableBody',
         },
         {
-          text: `${element.unit_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+          text: `${unitPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
           border: [false, false, false, true],
           margin: [0, 5, 0, 5],
           style: 'tableBody1',
         },
         {
           border: [false, false, false, true],
-          text: `${element.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+          text: `${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
           fillColor: '#f5f5f5',
           style: 'tableBody1',
         },
@@ -202,7 +206,7 @@ const PdfEquipmentIssue = ({ ProjectID }) => {
             body: [
               [
                 {
-                  text: `~Equipment Request~`,
+                  text: `~Equipment Issues~`,
                   alignment: 'center',
                   style: 'tableHead',
                 },

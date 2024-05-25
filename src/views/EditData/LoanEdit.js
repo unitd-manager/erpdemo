@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormGroup } from 'reactstrap';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -14,6 +14,8 @@ import LoanDetailComp from '../../components/LoanTable/LoanDetailComp';
 //import ComponentCardV2 from '../../components/ComponentCardV2';
 //import LoanButtons from '../../components/LoanTable/LoanButton';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const LoanEdit = () => {
   //All state variables
@@ -24,6 +26,8 @@ const LoanEdit = () => {
   const [paymentdetails, setPaymentDetails] = useState();
   const [addpaymentModal, setAddPaymentModal] = useState(false);
   const [loanStatus, setLoanStatus] = useState();
+  const { loggedInuser } = useContext(AppContext);
+
   //const [loanStartDate, setLoanStartDate] = useState(null); // State variable to store the loan start date
 
   //  AttachmentModal
@@ -106,6 +110,8 @@ const LoanEdit = () => {
       loanDetails.amount !== '' &&
       loanDetails.month_amount !== ''
     ) {
+      loanDetails.modification_date = creationdatetime;
+      loanDetails.modified_by= loggedInuser.first_name;
       api
         .post('/loan/edit-Loan', loanDetails)
         .then(() => {

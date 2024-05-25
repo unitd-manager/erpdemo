@@ -94,8 +94,9 @@ const onchangeItems = (selectedValue, index) => {
         .post('quote/editTabQuoteLineItems',item )
         .then((res) => {
           console.log('API Response:', res.data.data); // Log the API response
-          setAddLineItem();
-         // window.location.reload();
+          // setAddLineItem();
+         window.location.reload();
+        //  setEditRequestForQuoteLine(false)
         })
         .catch((error) => {
           console.error('Error updating item:', error);
@@ -114,7 +115,7 @@ const onchangeItems = (selectedValue, index) => {
   return (
     <>
       <Modal size="xl" isOpen={editRequestForQuoteLine}>
-        <ModalHeader>Edit PO Line Items</ModalHeader>
+        <ModalHeader>Edit Purchase Request Line Items</ModalHeader>
 
         <ModalBody>
           <FormGroup>
@@ -200,6 +201,7 @@ const onchangeItems = (selectedValue, index) => {
                             type="text"
                             name="total_cost"
                             onChange={(e) => updateState(index, 'total_cost', e)}
+                            disabled
                           />
                         </td>
                         <td data-label="Remarks">

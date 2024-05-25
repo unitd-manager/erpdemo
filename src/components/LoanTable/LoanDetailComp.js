@@ -24,7 +24,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
   console.log('Selected language from localStorage:', selectedLanguage);
   const getEmployee = () => {
     api
-      .get('/projecttask/getEmployeeName')
+      .get('/loan/TabEmployee')
       .then((res) => {
         console.log(res.data.data);
         setEmployee(res.data.data);
@@ -65,7 +65,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
   return (
     <Form>
       <FormGroup>
-        <ComponentCard title="Loan Details">
+        <ComponentCard title="Loan Details" creationModificationDate={loanDetails}>
           <Row>
           <Col md="3">
                 <FormGroup>
@@ -90,7 +90,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
                         return (
                           <option key={e.employee_id} value={e.employee_id}>
                             {' '}
-                            {arb ? e.first_name_arb : e.first_name}{' '}
+                            {arb ? e.employee_name_arb : e.employee_name}{' '}
                           </option>
                         );
                       })}
@@ -108,7 +108,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
                 <Col md="3">
                   <FormGroup>
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
-                      {arabic.find((item) => item.key_text === 'mdHRLoan.Status ')?.[genLabel]}{' '}
+                      {arabic.find((item) => item.key_text === 'mdHRLoan.Status')?.[genLabel]}{' '}
                     </Label>
                     <Input
                       type="select"

@@ -146,7 +146,7 @@ const [arabic, setArabic] = useState([]);
     // Get purchaseOrder By Id
   const getworkOrder = () => {
     api
-      .post('/subcon/getWorkOrderLinkedss', { sub_con_id: id })
+      .post('/subcon/getJobWorkOrderLink', { sub_con_id: id })
       .then((res) => {
         setSubConWorkOrder(res.data.data);
       })

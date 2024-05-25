@@ -184,7 +184,7 @@ const Opportunity = () => {
                       {!element.source_type && 'No Source'}
                     </td> */}
                     <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
-                    <td>{arb && element.project_invoice_arb ?element.project_invoice_arb : element.project_invoice}</td>
+                    <td>{arb && element.project_invoice_date_arb ?element.project_invoice_date_arb : element.project_invoice_date}</td>
                     <td>{arb && element.project_invoice_amount ?element.project_invoice_amount : element.project_invoice_amount}</td>
                     <td>{arb && element.project_invoice_due_date_arb ?element.project_invoice_due_date_arb : element.project_invoice_due_date}</td>
                     <td>{arb && element.status_arb ?element.status_arb : element.status}</td>

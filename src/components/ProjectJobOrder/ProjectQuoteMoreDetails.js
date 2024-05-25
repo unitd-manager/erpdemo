@@ -2,19 +2,14 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCard from '../ComponentCard';
-import TenderContactDetails from './TenderContactDetails';
 
 export default function ProjectQuoteMoreDetails({
   tenderDetails,
   handleInputs,
-  handleAddNewContact,
   company,
-  contact,
-  AddNewContact,
-  addContactModal,
-  addContactToggle,
   getContact,
   arb,
+  subcon,
   arabic,
   genLabel
 }) {
@@ -22,11 +17,7 @@ export default function ProjectQuoteMoreDetails({
     tenderDetails: PropTypes.object,
     handleInputs: PropTypes.object,
     company: PropTypes.object,
-    contact: PropTypes.any,
-    addContactModal: PropTypes.any,
-    addContactToggle: PropTypes.any,
-    AddNewContact: PropTypes.any,
-    handleAddNewContact: PropTypes.any,
+    subcon: PropTypes.object,
     getContact: PropTypes.any,
     arb: PropTypes.any,
     arabic: PropTypes.any,
@@ -115,47 +106,7 @@ export default function ProjectQuoteMoreDetails({
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>
-                    Contact (OR){' '}
-                    <span className="anchor" onClick={addContactToggle.bind(null)}>
-                      <b>
-                        <u>Add New Contact</u>
-                      </b>
-                    </span>
-                  </Label>
-                  {/* <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdJobOrder.Contact')?.[genLabel]}
-              </Label> */}
-                  <Input
-                    type="select"
-                    onChange={handleInputs}
-                    value={tenderDetails && tenderDetails.contact_id}
-                    name="contact_id"
-                  >
-                    <option value="" selected>
-                      Please Select
-                    </option>
-                    {contact &&
-                      contact.map((e) => {
-                        return (
-                          <option key={e.contact_id} value={e.contact_id}>
-                            {arb?e.first_name_arb:e.first_name}
-                          </option>
-                        );
-                      })}
-
-                  <TenderContactDetails
-                    addContactModal={addContactModal}
-                    addContactToggle={addContactToggle}
-                    AddNewContact={AddNewContact}
-                    handleAddNewContact={handleAddNewContact}
-                  ></TenderContactDetails>
-                  </Input>
-                  
-                </FormGroup>
-              </Col>
+          
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -176,7 +127,29 @@ export default function ProjectQuoteMoreDetails({
                   />
                 </FormGroup>
               </Col>
-             
+              <Col md="3">
+                <Label>SubCon</Label>
+              <FormGroup>
+                <Input
+                  type="select"
+                  name="sub_con_id"
+                  onChange={handleInputs}
+                  value={tenderDetails && tenderDetails.sub_con_id}
+
+                >
+                  <option value="">Select SubCon</option>
+
+                  {subcon &&
+                    subcon.map((ele) => {
+                      return (
+                        <option key={ele.sub_con_id} value={ele.sub_con_id}>
+                          {ele.company_name}
+                        </option>
+                      );
+                    })}
+                </Input>
+              </FormGroup>
+            </Col>
 
               <Col md="3">
                 <FormGroup>

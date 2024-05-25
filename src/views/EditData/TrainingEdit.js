@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Row, Col, Input, Button, Form, FormGroup } from 'reactstrap';
+import { Row, Col, Input, Button, Form, FormGroup, TabContent, TabPane } from 'reactstrap';
 import { useNavigate, useParams,Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import random from 'random';
@@ -23,10 +23,12 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import ApiButton from '../../components/ApiButton';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 const TrainingEdit = () => {
   //All state variables
-
+  const [activeTab, setActiveTab] = useState('1');
   const [trainingDetails, setTrainingDetails] = useState();
   const [employeeLinked, setEmployeeLinked] = useState();
   const [prevEmployee, setPreviousEmployee] = useState();
@@ -42,7 +44,19 @@ const TrainingEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { loggedInuser } = useContext(AppContext);
-
+  const tabs = [
+    { id: '1', name: 'Linked Employee' },
+    { id: '2', name: 'Attachments' },
+    
+  ];
+  const tabsArb = [
+    { id: '1', name: 'الموظف المرتبط' },
+    { id: '2', name: 'المرفقات' },
+   
+  ];
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
   //Button fuctions
   // const applyChanges = () => {};
   const backToList = () => {
@@ -415,53 +429,14 @@ const TrainingEdit = () => {
         trainingDetails={trainingDetails}
         handleInputs={handleInputs}
       ></TrainingCompany>
-      {/* Attachment */}
-      <Form>
-        <FormGroup>
-          <ComponentCard title={arb ? 'المرفقات':"Attachments"}>
-            <Row>
-              <Col xs="12" md="3" className="mb-3">
-                <Button
-                  className="shadow-none"
-                  color="primary"
-                  onClick={() => {
-                    setRoomName('Training');
-                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
-                    dataForAttachment();
-                    setAttachmentModal(true);
-                  }}
-                >
-                  <Icon.File className="rounded-circle" width="20" />
-                </Button>
-              </Col>
-            </Row>
-            <AttachmentModalV2
-            arb={arb}
-            arabic={arabic}
-              moduleId={id}
-              attachmentModal={attachmentModal}
-              setAttachmentModal={setAttachmentModal}
-              roomName={RoomName}
-              fileTypes={fileTypes}
-              altTagData="TrainingRelated Data"
-              desc="TrainingRelated Data"
-              recordType="TrainingRelatedPicture"
-              mediaType={attachmentData.modelType}
-              update={update}
-              setUpdate={setUpdate}
-            />
-            <ViewFileComponentV2
-            arb={arb}
-            arabic={arabic}
-              moduleId={id}
-              roomName="Training"
-              recordType="TrainingRelatedPicture"
-              update={update}
-              setUpdate={setUpdate}
-            />
-          </ComponentCard>
-        </FormGroup>
-      </Form>
+ <ComponentCard title="More Details">
+{ arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
+        }
+
+        <TabContent className="p-4" activeTab={activeTab}>
+       
+<TabPane tabId="1">
 
       <ComponentCard>
         {/* Training Staff */}
@@ -598,6 +573,59 @@ const TrainingEdit = () => {
             </tbody>
           </table>
         </Row>
+      </ComponentCard>
+      </TabPane>
+      <TabPane tabId="2">
+
+{/* Attachment */}
+<Form>
+  <FormGroup>
+    <ComponentCard title={arb ? 'المرفقات':"Attachments"}>
+      <Row>
+        <Col xs="12" md="3" className="mb-3">
+          <Button
+            className="shadow-none"
+            color="primary"
+            onClick={() => {
+              setRoomName('Training');
+              setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+              dataForAttachment();
+              setAttachmentModal(true);
+            }}
+          >
+            <Icon.File className="rounded-circle" width="20" />
+          </Button>
+        </Col>
+      </Row>
+      <AttachmentModalV2
+      arb={arb}
+      arabic={arabic}
+        moduleId={id}
+        attachmentModal={attachmentModal}
+        setAttachmentModal={setAttachmentModal}
+        roomName={RoomName}
+        fileTypes={fileTypes}
+        altTagData="TrainingRelated Data"
+        desc="TrainingRelated Data"
+        recordType="TrainingRelatedPicture"
+        mediaType={attachmentData.modelType}
+        update={update}
+        setUpdate={setUpdate}
+      />
+      <ViewFileComponentV2
+      arb={arb}
+      arabic={arabic}
+        moduleId={id}
+        roomName="Training"
+        recordType="TrainingRelatedPicture"
+        update={update}
+        setUpdate={setUpdate}
+      />
+    </ComponentCard>
+  </FormGroup>
+</Form>
+</TabPane>
+      </TabContent>
       </ComponentCard>
     </>
   );

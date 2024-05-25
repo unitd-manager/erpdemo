@@ -130,7 +130,8 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
           api.post('/finance/insertreceipt', receiptData)
             .then((receiptRes) => {
               // Extract the project_receipt_id from the response
-              const projectReceiptId = receiptRes.data.project_receipt_id;
+              const projectReceiptId = receiptRes.data.data.insertId;
+              console.log('projectReceiptId', projectReceiptId)
   
               // Prepare and execute insertion into receipt history for each selected invoice
               selectedInvoice.forEach((invoice) => {
