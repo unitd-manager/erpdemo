@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { Row, TabContent, TabPane, Form, FormGroup } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -19,6 +19,9 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import Tab from '../../components/project/Tab';
 import ApiButton from '../../components/ApiButton';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+
 
 const EmployeeEdit = () => {
   //state variables
@@ -26,6 +29,8 @@ const EmployeeEdit = () => {
   const [employeeDetails, setEmployeeDetails] = useState({
     nationality: '',
   });
+  const { loggedInuser } = useContext(AppContext);
+
   const [contactInformationDetails, setContactInformationDetails] = useState({
     employee_id: '',
     address_area: '',
@@ -134,7 +139,11 @@ const EmployeeEdit = () => {
   };
   //handle inputs and set data
   const handleInputChange = (e) => {
-    setEmployeeDetails({ ...employeeDetails, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEmployeeDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
   };
   const handlePassTypeInputs = (e) => {
     setTabPassTypeDetails({ ...tabPassTypeDetails, [e.target.name]: e.target.value });
@@ -171,7 +180,7 @@ const EmployeeEdit = () => {
   // Get Employee data By Employee id
   const getEmployeeById = () => {
     api
-      .post('/employeeModule/getEmployeeById', { employee_id: id })
+      .post('/employeeModule/getEmployeeByID', { employee_id: id })
       .then((res) => {
         setEmployeeDetails(res.data.data[0]);
       })
@@ -279,6 +288,9 @@ const EmployeeEdit = () => {
       employeeDetails.nationality !== '' &&
       employeeDetails.nationality !== '' // Check if nationality is not "Please Select"
     ) {
+      employeeDetails.modification_date = creationdatetime;
+      employeeDetails.modified_by= loggedInuser.first_name;
+
       api
         .post('/employeeModule/edit-Employee', employeeDetails)
         .then(() => {
