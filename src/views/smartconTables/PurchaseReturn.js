@@ -98,15 +98,16 @@ const PurchaseReturn = () => {
       sortable: false,
     },
     {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Number')?.[genLabel],
-      selector: 'purchase_invoice_code',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.PurchaseReturnCode')?.[genLabel],
+      selector: 'purchase_return_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
+
     {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Date')?.[genLabel],
-      selector: 'purchase_invoice_date',
+      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.PoCode')?.[genLabel],
+      selector: 'po_code',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -150,13 +151,13 @@ const PurchaseReturn = () => {
                   <tr key={element.purchase_return_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}/${element.purchase_invoice_id}?tab=1 }`}>
+                      <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}/${element.purchase_order_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
                    
-                    <td>{arb?element.purchase_invoice_code_arb:element.purchase_invoice_code}</td>
-                    <td>{element.purchase_invoice_date}</td>
+                    <td>{arb?element.purchase_invoice_code_arb:element.purchase_return_code}</td>
+                    <td>{arb?element.po_code_arb:element.po_code}</td>
                     <td>{element.purchase_return_date}</td>
                    
                   </tr>

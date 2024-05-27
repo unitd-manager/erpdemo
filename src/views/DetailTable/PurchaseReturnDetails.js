@@ -237,7 +237,7 @@ const PurchaseReturnDetails = () => {
 
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValue', { type: 'purchaseOrder' })
+      .post('/commonApi/getCodeValue', { type: 'PurchaseReturn' })
       .then((res) => {
         insertPurchaseReturn(res.data.data);
       })
