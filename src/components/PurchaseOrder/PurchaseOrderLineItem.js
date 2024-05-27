@@ -180,7 +180,7 @@ const PurchaseOrderlineItemEdit = ({
               setEditModal(false);
               setTimeout(() => {
                 window.location.reload();
-              }, 300);
+              }, 1800);
             }}
           >
             Save & Continue

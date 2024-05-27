@@ -150,6 +150,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           elem.status = 'Closed';
           elem.qty_updated = elem.qty_delivered;
           elem.qty_in_stock += parseFloat(elem.qty_delivered);
+          elem.stock += parseFloat(elem.qty_delivered);
+           elem.qty_in_stock=elem.stock;
           api.post('/product/edit-ProductQty', elem);
           api
             .post('/purchaseorder/editTabPurchaseOrderLineItem', elem)
@@ -195,7 +197,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       .post('/purchaseorder/editTabPurchaseOrderLineItem', product)
       .then(() => {
         message('product edited successfully.', 'success');
-        window.location.reload();
+        //window.location.reload();
       })
       .catch(() => {
         message('unable to edit product.', 'danger');
