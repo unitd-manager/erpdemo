@@ -229,6 +229,15 @@ const tablevalue =  [
   return (
     <>
 
+       {/* <div>
+
+       <select id="tableSelect" onChange={handleTableSelect} value={selectedTable}>
+  <option value="">Select a table</option>
+  {tables &&tables.map(table => (
+    <option key={table} value={table}>{table}</option>
+  ))}
+</select>
+    </div> */}
      {/*  */}
       {/* BreadCrumbs */}
       <BreadCrumbs />

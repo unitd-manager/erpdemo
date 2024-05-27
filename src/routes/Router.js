@@ -460,8 +460,8 @@ const Routernew = () => {
             name="clienttdata"
             element={<IncomeHeadEdit />}
           ></Route>
-          <Route path="/LoanEdit/:id" name="clienttdata" element={<LoanEdit />}></Route>
-          <Route path="/SubConEdit/:id" name="clienttdata" element={<SubConEdit />}></Route>
+        <Route path="/LoanEdit/:id/:employeeId" element={<LoanEdit />} />
+        <Route path="/SubConEdit/:id" name="clienttdata" element={<SubConEdit />}></Route>
           <Route path="/SupplierEdit/:id" name="clienttdata" element={<SupplierEdit />}></Route>
           <Route
             path="/JobInformationEdit/:id"

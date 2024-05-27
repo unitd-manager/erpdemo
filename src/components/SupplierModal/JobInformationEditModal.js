@@ -195,7 +195,7 @@ const JobInformation = ({ JobInformationEditModal, setJobInformationEditModal })
                 </Col>
               </Row>
             </ComponentCardV2>
-            <ComponentCard title="Details of Employment (KET)">
+            <ComponentCard title="Details of Employment (KET)" creationModificationDate={jobModal}>
               <ToastContainer></ToastContainer>
               <JobInformationKeyDetails
             
