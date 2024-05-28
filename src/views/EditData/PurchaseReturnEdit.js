@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent, Table, Row } from 'reactstrap';
+import { TabPane, TabContent, Col, Button, Row } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
-import * as Icon from 'react-feather';
-import Swal from 'sweetalert2';
+// import * as Icon from 'react-feather';
+// import Swal from 'sweetalert2';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
@@ -21,10 +21,10 @@ import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
 
 const PurchaseReturnEdit = () => {
-  const [tenderDetails, setTenderDetails] = useState();
+  const [tenderDetails, setTenderDetails] = useState([]);
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
-  const [lineItem, setLineItem] = useState();
+  // const [lineItem, setLineItem] = useState();
   const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
@@ -62,9 +62,9 @@ const PurchaseReturnEdit = () => {
   };
 
   const [activeTab, setActiveTab] = useState('1');
-  const { insertedDataId, purchaseInvoiceId } = useParams();
+  const { insertedDataId, PurchaseOrderId } = useParams();
   console.log('insertedDataId:', insertedDataId);
-  console.log('invoiceId:', purchaseInvoiceId);
+  console.log('PurchaseOrderId:', PurchaseOrderId);
   const navigate = useNavigate();
   //const applyChanges = () => {};
   const backToList = () => {
@@ -80,14 +80,14 @@ const PurchaseReturnEdit = () => {
   console.log(viewLineToggle);
   const tabs = [
     { id: '1', name: 'Return Items' },
-    { id: '2', name: 'Purchase Return' },
-    { id: '3', name: 'Attachment' },
+    // { id: '2', name: 'Purchase Return' },
+    { id: '2', name: 'Attachment' },
   ];
 
   const tabsArb = [
     { id: '1', name: 'إرجاع العناصر' },
-    { id: '2', name: 'عودة شراء' },
-    { id: '3', name: 'مرفق' },
+    // { id: '2', name: 'عودة شراء' },
+    { id: '2', name: 'مرفق' },
   ];
 
   const toggle = (tab) => {
@@ -100,14 +100,14 @@ const PurchaseReturnEdit = () => {
     });
   };
 
-  const getReturnInvoiceItemById = () => {
-    api
-      .post('/purchasereturn/getInvoiceItemsById', { purchase_invoice_id: purchaseInvoiceId })
-      .then((res) => {
-        setReturnInvoiceItemDetails(res.data.data);
-      })
-      .catch(() => {});
-  };
+  // const getReturnInvoiceItemById = () => {
+  //   api
+  //     .post('/purchasereturn/getInvoiceItemsById', { purchase_invoice_id: PurchaseOrderId })
+  //     .then((res) => {
+  //       setReturnInvoiceItemDetails(res.data.data);
+  //     })
+  //     .catch(() => {});
+  // };
 
   // Get Tenders By Id
   const editTenderById = () => {
@@ -115,6 +115,7 @@ const PurchaseReturnEdit = () => {
       .post('/purchasereturn/getPurchaseReturnById', { purchase_return_id: insertedDataId })
       .then((res) => {
         setTenderDetails(res.data.data[0]);
+        console.log('setTenderDetails',res.data.data[0] )
       })
       .catch(() => {});
   };
@@ -124,7 +125,16 @@ const PurchaseReturnEdit = () => {
   };
 
   //Logic for edit data in db
-
+    const getReturnInvoiceItemById = () => {
+      api
+        .post('/purchasereturn/getOrderedItemsById', { purchase_order_id: PurchaseOrderId })
+        .then((res) => {
+          setReturnInvoiceItemDetails(res.data.data);
+          console.log('setReturnInvoiceItemDetails', res.data.data)
+        })
+        .catch(() => {});
+    };
+  
   const editTenderData = () => {
     tenderDetails.modification_date = creationdatetime;
     tenderDetails.modified_by = loggedInuser.first_name;
@@ -145,14 +155,14 @@ const PurchaseReturnEdit = () => {
     });
   };
   // Get Line Item
-  const getLineItem = () => {
-    api
-      .post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: insertedDataId })
-      .then((res) => {
-        setLineItem(res.data.data);
-        //setAddLineItemModal(true);
-      });
-  };
+  // const getLineItem = () => {
+  //   api
+  //     .post('/purchasereturn/getQuoteLineItemsById', { purchase_return_id: insertedDataId })
+  //     .then((res) => {
+  //       setLineItem(res.data.data);
+  //       //setAddLineItemModal(true);
+  //     });
+  // };
   // Add new Contact
 
   const [newContactData, setNewContactData] = useState({
@@ -189,67 +199,67 @@ const PurchaseReturnEdit = () => {
     }
   };
 
-  let genLabel = '';
+  // let genLabel = '';
 
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
+  // if (arb === true) {
+  //   genLabel = 'arb_value';
+  // } else {
+  //   genLabel = 'value';
+  // }
 
   useEffect(() => {
     editTenderById();
-    getLineItem();
+    // getLineItem();
     getCompany();
     getReturnInvoiceItemById();
     getArabicCompanyName();
     // getAllCountries();
   }, [insertedDataId]);
 
-  const columns1 = [
-    {
-      name: '#',
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Title')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Description')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Qty')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Unit Price')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Amount')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Updated By')?.[genLabel],
-    },
-    {
-      name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Action')?.[genLabel],
-    },
-  ];
-  const deleteRecord = (deleteID) => {
-    Swal.fire({
-      title: `Are you sure? ${insertedDataId}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/projectquote/deleteEditItem', { project_quote_items_id: deleteID }).then(() => {
-          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-          window.location.reload();
-        });
-      }
-    });
-  };
+  // const columns1 = [
+  //   {
+  //     name: '#',
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Title')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Description')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Qty')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Unit Price')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Amount')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Updated By')?.[genLabel],
+  //   },
+  //   {
+  //     name: arabic.find((item) => item.key_text === 'mdPurchaseReturn.Action')?.[genLabel],
+  //   },
+  // ];
+  // const deleteRecord = (deleteID) => {
+  //   Swal.fire({
+  //     title: `Are you sure? ${insertedDataId}`,
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete it!',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       api.post('/projectquote/deleteEditItem', { project_quote_items_id: deleteID }).then(() => {
+  //         Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
+  //         window.location.reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
     <>
@@ -291,12 +301,30 @@ const PurchaseReturnEdit = () => {
         {arb === true? <Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
+            <Row>
+          <Col md="2">
+              <Button
+                color="success"
+                onClick={getReturnInvoiceItemById}
+              >
+                Generate Data
+              </Button>
+            </Col>
+            <Col md="2">
+              <Button
+                color="success"
+                // onClick={getReturnInvoiceItemById}
+              >
+                Detect Stock
+              </Button>
+            </Col>
+            </Row>
             <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} 
             arabic={arabic}
             arb={arb}
             />
           </TabPane>
-          <TabPane tabId="2">
+          {/* <TabPane tabId="2">
             <br />
             <Row>
               <div className="container">
@@ -336,10 +364,10 @@ const PurchaseReturnEdit = () => {
                   </tbody>
                 </Table>
               </div>
-            </Row>
+            </Row> */}
             {/* End View Line Item Modal */}
-          </TabPane>
-          <TabPane tabId="3">
+          {/* </TabPane> */}
+          <TabPane tabId="2">
             <QuotationAttachment
             arabic={arabic}
             arb={arb}

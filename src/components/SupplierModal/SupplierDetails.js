@@ -42,6 +42,7 @@ export default function SupplierDetails({
                   {/* Name <span className="required"> *</span> */}
                   {arabic.find((item) => item.key_text === 'mdSupplier.Name')?.[genLabel]}
                 </Label>
+                <span className='required'>*</span>
                 <Input
                   type="text"
                   onChange={handleInputs}
@@ -57,6 +58,7 @@ export default function SupplierDetails({
             <Col md="3">
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Email')?.[genLabel]}</Label>
+                <span className='required'>*</span>
                 <Input
                   type="text"
                   onChange={handleInputs}
@@ -183,7 +185,7 @@ export default function SupplierDetails({
               <FormGroup>
                 <Label>{arabic.find((item) => item.key_text === 'mdSupplier.Terms')?.[genLabel]}</Label>
                 <Input
-                  type="text"
+                  type="textarea"
                   onChange={handleInputs}
                  
                   value={
