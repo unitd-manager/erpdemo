@@ -89,13 +89,6 @@ console.log('arabic',arabic)
 useEffect(() => {
   getArabicCompanyName();
 }, []);
-
-  const tabs = [
-    { id: '1', name: 'Attachment' },
-  ];
-  const tabsArb =  [
-    {id:'1',name:'مرفق'},
-  ];
    // Attachment
    const dataForAttachment = () => {
     setDataForAttachment({
@@ -112,6 +105,14 @@ useEffect(() => {
 
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const tabs = [
+    { id: '1', name: 'Purchase Order Linked' },
+    { id: '2', name: ' Attachment' },
+  ];
+  const tabsArb =  [
+    {id:'1',name:'أمر الشراء مرتبط'},
+    {id:'2',name:'مرفق'},
+  ];
   
   // Get Supplier By Id
   const editSupplierById = () => {
@@ -129,7 +130,11 @@ useEffect(() => {
  
   //Logic for edit data in db
   const editSupplierData = () => {
-    if (supplier.company_name !== '') {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(supplier.email)) {
+      message('Invalid email address', 'warning');
+    } else if (supplier.company_name !== '' && 
+    supplier.email !== '')
+       {
       supplier.modification_date = creationdatetime;
       supplier.modified_by= loggedInuser.first_name; 
 
@@ -143,7 +148,7 @@ useEffect(() => {
           message('Unable to edit record.', 'error');
         });
         }  else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
   
@@ -158,7 +163,7 @@ useEffect(() => {
         message('Unable to edit record.', 'error');
       });
   };
-
+  
   useEffect(() => {
     editSupplierById();
   }, [id]);
@@ -201,6 +206,8 @@ useEffect(() => {
     getSupplierStatus();
     Status();
   }, []);
+
+ 
 
   return (
     <>
@@ -277,31 +284,40 @@ useEffect(() => {
         eng={eng}
       ></SupplierDetails>
   </ComponentCard>
-      <PurchaseOrderLinked
+     
+      <ToastContainer></ToastContainer>
+      
+
+       {/* Attachment Tab */}
+       
+
+        <ComponentCard title="More Details">
+        <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        <TabContent className="p-4" activeTab={activeTab}>
+          {/* Contact Linked */}
+          <TabPane tabId="1">
+          <SupplierTable purchaseOrder={purchaseOrder}
+       arb={arb}
+       arabic={arabic}
+       eng={eng}></SupplierTable>
+
+          <PurchaseOrderLinked
         editPurchaseOrderLinked={editPurchaseOrderLinked}
         setEditPurchaseOrderLinked={setEditPurchaseOrderLinked}
         arb={arb}
         arabic={arabic}
         eng={eng}
       ></PurchaseOrderLinked>
-      <ToastContainer></ToastContainer>
-      <SupplierTable purchaseOrder={purchaseOrder}
-       arb={arb}
-       arabic={arabic}
-       eng={eng}></SupplierTable>
-
-
-       {/* Attachment Tab */}
-       <ComponentCard title="More Details">
-           <ToastContainer></ToastContainer>
-           {/* {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        } */}
-        { arb === true ?
-        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
-        }
-           <TabContent className="p-4" activeTab={activeTab}>
-           <TabPane tabId="1">
+       </TabPane>
+          { /* Invoice Linked Portal */}
+           <TabPane tabId="2">
            <Form>
               <FormGroup>
                   <Row>
@@ -338,8 +354,10 @@ useEffect(() => {
               </FormGroup>
             </Form>
           </TabPane>
+          { /* Attachment Portal */ }
+          
         </TabContent>
-        </ComponentCard>
+      </ComponentCard>
     </>
 
   );

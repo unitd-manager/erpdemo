@@ -152,7 +152,7 @@ const PurchaseReturn = () => {
                     <td>{index + 1}</td>
                     <td>
                       <Link to={`/PurchaseReturnEdit/${element.purchase_return_id}/${element.purchase_order_id}?tab=1`}>
-                        <Icon.Edit2 />
+                        <Icon.Edit2/>
                       </Link>
                     </td>
                    
