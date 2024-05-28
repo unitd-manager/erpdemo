@@ -35,7 +35,7 @@ export default function SupplierTable({ subConWorkOrder }) {
   ];
 
   return (
-    <ComponentCard title="Work Order Linked">
+    <ComponentCard title="Job Order Linked">
       <Form>
         <div className="MainDiv">
           <div className="container">
