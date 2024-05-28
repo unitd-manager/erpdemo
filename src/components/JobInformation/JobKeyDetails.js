@@ -68,7 +68,7 @@ export default function Jobinformationedit({
           </Col>
         </Row>
       </ComponentCardV2>
-      <ComponentCard title="Details of Employment (KET)">
+      <ComponentCard title="Details of Employment (KET)" creationModificationDate={job}>
         <ToastContainer></ToastContainer>
         <br />
         <FormGroup>
