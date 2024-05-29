@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +7,8 @@ import ComponentCard from '../../components/ComponentCard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const JobInformationDetails = () => {
   //All state variables
@@ -17,6 +19,7 @@ const JobInformationDetails = () => {
     fin_no: '',
     status: 'current',
   });
+  const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -66,6 +69,8 @@ const JobInformationDetails = () => {
   //inserting data of job information
   const insertJobInformation = () => {
     if (jobForms.employee_id !== '') {
+      jobForms.creation_date = creationdatetime;
+      jobForms.created_by= loggedInuser.first_name;
       api
         .post('/jobinformation/insertjob_information', jobForms)
         .then((res) => {

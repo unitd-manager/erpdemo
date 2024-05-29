@@ -158,8 +158,8 @@ if (arb === true) {
              
               <Input
                 type="select"
-                value={job && job.position}
-                name="position"
+                value={job && job.designation}
+                name="designation"
                 onChange={handleInputsJobInformation}
               >
                 <option defaultValue="selected">Please Select</option>

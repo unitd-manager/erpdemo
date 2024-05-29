@@ -23,6 +23,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
+import creationdatetime from '../../constants/creationdatetime';
 import Jobinformationedit from '../../components/JobInformation/Jobinformationedit';
 import JobKeyDetails from '../../components/JobInformation/JobKeyDetails';
 import JobLeaveandMedical from '../../components/JobInformation/JobLeaveandMedical';
@@ -206,7 +207,8 @@ useEffect(() => {
     //job.overtime_pay_rate = overTimeRate;
     job.deduction4 = parseFloat(job.deduction4);
     if (job.act_join_date && job.working_days && job.basic_pay && job.join_date && job.govt_donation) {
-     
+      job.modification_date = creationdatetime;
+      job.modified_by= loggedInuser.first_name;
       api
         .post('/jobinformation/edit-jobinformation', job)
         .then(() => {
