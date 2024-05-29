@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import {
   Row,
   Col,
@@ -37,6 +37,7 @@ import JobTermination from '../../components/JobInformation/JobInformationTermin
 import JobBank from '../../components/JobInformation/Job';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import AppContext from '../../context/AppContext';
 
 const JobInformationEdit = () => {
   //All state variable
@@ -56,7 +57,8 @@ const JobInformationEdit = () => {
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+  const { loggedInuser } = useContext(AppContext);
+
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
 const arb =selectedLanguage === 'Arabic'
@@ -209,6 +211,7 @@ useEffect(() => {
     if (job.act_join_date && job.working_days && job.basic_pay && job.join_date && job.govt_donation) {
       job.modification_date = creationdatetime;
       job.modified_by= loggedInuser.first_name;
+
       api
         .post('/jobinformation/edit-jobinformation', job)
         .then(() => {
