@@ -21,7 +21,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arb,
   }
   return (
     <>
-      <ComponentCard title={arb?"تحرير قائمة الأسعار":"Price List Edit"}>
+      <ComponentCard title={arb?"تحرير قائمة الأسعار":"Price List Edit"}  creationModificationDate={plannings}>
         <Form>
           <FormGroup>
             <Row>
