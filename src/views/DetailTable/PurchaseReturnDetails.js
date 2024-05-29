@@ -254,16 +254,17 @@ const PurchaseReturnDetails = () => {
   return (
     <div>
       <BreadCrumbs />
-      <Row>
         <ToastContainer></ToastContainer>
+        <Row>
         <Col md="6">
           <ComponentCard title="Key Details">
             <Form>
               <FormGroup>
                 <Row>
-                  <Label dir="rtl" style={{ textAlign: 'left' }}>
+                <Col md="12">
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Supplier Name')?.[genLabel]}
-                  </Label>
+                  </Label> <span className='required'>*</span>
                   <Input
                     type="select"
                     name="supplier_id"
@@ -283,11 +284,13 @@ const PurchaseReturnDetails = () => {
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
                 <Row>
+                <Col md="12">
                   <Label dir="rtl" style={{ textAlign: 'left' }}>
                     Po Code
-                  </Label>
+                  </Label>  <span className="required">*</span>
                   <Input
                     type="select"
                     name="purchase_order_id"
@@ -307,6 +310,7 @@ const PurchaseReturnDetails = () => {
                         );
                       })}
                   </Input>
+                  </Col>
                 </Row>
                 <FormGroup>
                   <Row>

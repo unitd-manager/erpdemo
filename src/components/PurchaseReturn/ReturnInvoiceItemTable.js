@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Table, Input, Button } from 'reactstrap';
+import { useParams } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import api from '../../constants/api';
 import message from '../Message';
@@ -20,6 +21,7 @@ export default function ItemTable({
     arb: PropTypes.array,
     getCheckedPoProducts: PropTypes.func,
   };
+  const { insertedDataId } = useParams();
   const [stockChangeId, setStockChangeId] = useState();
   const [stockinputOpen, setStockinputOpen] = useState(false);
   const [returnQty, setReturnQty] = useState({
@@ -76,6 +78,14 @@ export default function ItemTable({
       .then((res) => {
         message('Return Qty updated successfully', 'success');
 console.log('purchasereturnhistorydetails', res.data.data);
+api.post('/purchasereturn/editpurchasereturn', {
+  purchase_return_id: insertedDataId, 
+  status: 'Returned',
+  modified_by: loggedInuser.first_name, 
+  modification_date:creationdatetime})
+      .then(() => {
+        
+      })
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
