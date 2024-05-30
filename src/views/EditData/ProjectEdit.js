@@ -215,8 +215,8 @@ const [arabic, setArabic] = useState([]);
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdProject.Customer')?.[genLabel],
-      selector: 'company_name',
+      name: arabic.find(item => item.key_text === 'mdProject.SubCon Title')?.[genLabel],
+      selector: 'sub_con_title',
       sortable: true,
       grow: 0,
     },
@@ -373,11 +373,8 @@ const [arabic, setArabic] = useState([]);
         <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
 
-        {/* Call Modal's */}
-    {/* <Tab toggle={toggle} tabs={tabs} /> */}
-        {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
-          {/* Start Tab Content 1 */}
+     
 
           <TabPane tabId="1">
             <br />
@@ -615,7 +612,7 @@ const [arabic, setArabic] = useState([]);
                     </td>
                     <td>{element.job_title}</td>
                     <td>{element.job_date}</td>
-                    <td>{element.company_name}</td>
+                    <td><Link to={`/SubConEdit/${element.sub_con_id}`}>{element.sub_con_title}</Link></td>
                     <td>{element.ref_no_job}</td>
                     <td>{element.job_status}</td>
                     <td>{element.total_amount}</td>

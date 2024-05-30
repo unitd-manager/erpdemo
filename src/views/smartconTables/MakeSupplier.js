@@ -38,6 +38,7 @@ const MakeSupplier = () => {
   const [secondModalOpen, setSecondModalOpen] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [selectReceiptId, setSelectReceiptId] = useState(null);
+  const [hasAmountToPay, setHasAmountToPay] = useState(false);
   //Navigation and Parameter Constants
 
  // const navigate = useNavigate();
@@ -97,6 +98,7 @@ if (arb === true) {
       });
   };
 
+  
   //Structure of Invoice list view
   const columns = [
     {
@@ -174,7 +176,7 @@ if (arb === true) {
 
 
   //Logic for adding Booking in db
-
+ 
   const insertReceipt = (code) =>{
     const insertedOrderId = bookingDetails.supplier_id;
       bookingDetails.supplier_receipt_code=code;
@@ -214,9 +216,59 @@ if (arb === true) {
       message('Please Select the supplier', 'error');
     }
   };
+  
+  const getMakePayment = () => {
+    if (supplierId) {
+      console.log('Fetching payment data for receipt ID:', supplierId); // Debug log
+      api.post('/supplier/getMakePayment', { supplier_id: supplierId }).then((res) => {
+        const datafromapi = res.data.data;
+        let amountExists = false;
+
+        datafromapi.forEach((element) => {
+          element.remainingAmount = element.prev_inv_amount - element.prev_amount;
+          console.log('Remaining amount for element:', element.remainingAmount); // Debug log
+          if (element.remainingAmount > 0) {
+            amountExists = true;
+          }
+        });
+
+        console.log('Amount exists:', amountExists); // Debug log
+        setHasAmountToPay(amountExists);
+        if (!amountExists) {
+          alert('There is No Purchase Ordered Items Available to Pay ');
+        }
+      }).catch((error) => {
+        console.error('Error fetching payment data:', error); // Debug log for errors
+      });
+    } else {
+      console.log('No receipt ID selected'); // Debug log
+    }
+  };
+  // const handleSaveAndContinue = () => {
+  //   if (hasAmountToPay) {
+  //     generateCode(); // Call the function to generate the code and open the second modal
+  //   } else {
+  //     message.error('No amount to pay.'); // Show an error alert message
+  //   }
+  // };
+  const handleSaveAndContinue = () => {
+    console.log('Button clicked, hasAmountToPay:', hasAmountToPay); // Debug log
+    if (hasAmountToPay) {
+      generateCode(); // Call the function to generate the code and open the second modal
+    } else {
+      message.error('No amount to pay.'); // Show an error alert message
+      console.log('No amount to pay, showing message.'); // Debug log
+    }
+  };
+
+  useEffect(() => {
+    getMakePayment();
+  }, [supplierId]); // Ensure this useEffect runs when selectReceiptId changes
+
   useEffect(() => {
     getCompany();
     getInvoice();
+    
   }, [id]);
 
   return (
@@ -290,7 +342,7 @@ if (arb === true) {
                     <FormGroup>
                       <Row>
                         <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                          <Button
+                          {/* <Button
                             color="primary"
                             onClick={() => {
                               generateCode();
@@ -300,7 +352,16 @@ if (arb === true) {
                             className="btn mr-2 shadow-none"
                           >
                             {arb?'حفظ ومتابعة':'Save & Continue'}
-                          </Button>
+                          </Button> */}
+                          <Button
+      color="primary"
+      onClick={handleSaveAndContinue}
+      type="button"
+      className="btn mr-2 shadow-none"
+      disabled={!hasAmountToPay} // Disable the button if no amount to pay
+    >
+      {arb ? 'حفظ ومتابعة' : 'Save & Continue'}
+    </Button>
                           <Button
                             onClick={() => {
                               //navigate(-1);

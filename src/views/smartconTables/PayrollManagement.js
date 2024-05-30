@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Icon from 'react-feather';
-import { Row, Col, Button, Card, Badge } from 'reactstrap';
+import { Row, Col, Button, Card, Badge,Modal,ModalBody,ModalFooter,ModalHeader } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -42,11 +42,13 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   //handleinputs
   const [arabic, setArabic] = useState([]);
 
+  const [showModal, setShowModal] = useState(false);
 
   const arb =selectedLanguage === 'Arabic'
 
   // const eng =selectedLanguage === 'English'
-   
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
   const getArabicLabels = () => {
       api
@@ -290,7 +292,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
          
 
           
-          console.log('payrollyear', basicpays);
+          console.log('basicpay', basicpays);
           console.log('payrollyear', payrollyear);
           
 
@@ -303,6 +305,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
          
             })
             .then((res) => {
+              console.log('resdata',res.data.data[0])
               const { byEmployee, byEmployer } = res.data.data[0];
               const { capAmountEmployee, capAmountEmployer } = res.data.data[0];
               console.log('by', byEmployee);
@@ -438,20 +441,20 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
               const normalHoursPay=parseFloat(obj.total_normal_hours)*parseFloat(obj.hourly_pay);
               const realAmount=parseFloat(normalHoursPay)+parseFloat(obj.ot_amount);
 
-              if(obj.pay ==='GroupPay'){
-              if(parseFloat(obj.ot_hours) > 72 ){
-                obj.ot_hours=72;
-                obj.ot_amount= parseFloat(obj.ot_hours)*parseFloat(obj.overtime_pay_rate);
-                }
-                const actualAmount=parseFloat(obj.ot_amount)+parseFloat(obj.basic_pay)
-              if(obj.total_share > actualAmount ){
-                                obj.allowance1=parseFloat(obj.allowance1)+parseFloat(obj.total_share)-parseFloat(actualAmount)
-                                              }
-              console.log('objectishere',obj)
-              console.log('actualamount',actualAmount)
-              }
-              if(obj.pay ==='HourlyPay'){
-              
+              // if(obj.pay ==='GroupPay'){
+              // if(parseFloat(obj.ot_hours) > 72 ){
+              //   obj.ot_hours=72;
+              //   obj.ot_amount= parseFloat(obj.ot_hours)*parseFloat(obj.overtime_pay_rate);
+              //   }
+              //   const actualAmount=parseFloat(obj.ot_amount)+parseFloat(obj.basic_pay)
+              // if(obj.total_share > actualAmount ){
+              //                   obj.allowance1=parseFloat(obj.allowance1)+parseFloat(obj.total_share)-parseFloat(actualAmount)
+              //                                 }
+              // console.log('objectishere',obj)
+              // console.log('actualamount',actualAmount)
+              // }
+               //if(obj.pay ==='HourlyPay'){
+              console.log('obj',obj);
                 if(parseFloat(obj.ot_hours) > 72 ){
                   obj.ot_hours=72;
                   obj.ot_amount= parseFloat(obj.ot_hours)*parseFloat(obj.overtime_pay_rate);
@@ -462,7 +465,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                                     obj.allowance1=parseFloat(obj.allowance1)+parseFloat(realAmount)-parseFloat(actualAmount)
                                                   }
                
-              }
+             // }
               api
                 .post('/payrollmanagement/insertpayroll_management', obj)
                 .then(() => {
@@ -496,7 +499,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const generatePayslips = () => {
     navigate(`/PayrollManagement?month=${filterPeriod.month}&year=${filterPeriod.year}`);
     // setLoading(true);
-    api.get('/payrollmanagement/getJobInformationPayroll').then((res) => {
+    api.get('/projecttask/timesheettopayroll').then((res) => {
       setJobInformationRecords(res.data.data);
       console.log('jobinformationrecords', res.data.data);
       console.log('jobinformationrecords', jobInformationRecords);
@@ -654,21 +657,35 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       <div className=" pt-xs-25">
         <BreadCrumbs />
         <ToastContainer></ToastContainer>
-
-        <Card style={{ padding: '10px' }}>
-          <div>
-          <h5>{arabic.find(item => item.key_text === 'mdPayrollManagement.Plase create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
-
-            {empWithoutJobInfo.map((el) => {
-              return (
-                <span style={{ marginRight: '5px' }}>
-                  <Badge> {el.employee_name}</Badge>
-                </span>
-              );
-            })}
-          </div>
-        </Card>
-
+        <Button class="primary" onClick={handleShowModal}>
+         Employee Name
+        </Button>
+           {/* Modal */}
+           <Modal  size="lg" isOpen={showModal} toggle={handleCloseModal}>     
+           <ModalHeader closeButton>
+            
+          </ModalHeader>
+          <ModalBody>
+            <Card style={{ padding: '10px' }}>
+              <div>
+                <h5>
+                {arabic.find(item => item.key_text === 'mdPayrollManagement.Plase create Job information records for the below employees to make them appear in payroll')?.[genLabel]}
+                </h5>
+                {empWithoutJobInfo.map((el) => (
+                  <span style={{ marginRight: '5px' }}>
+                    <Badge>{el.employee_name}</Badge>
+                  </span>
+                ))}
+              </div>
+            </Card>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </ModalFooter>
+        </Modal>
+        
         <Card className="p-2">
           <Row>
             <Col md="2">

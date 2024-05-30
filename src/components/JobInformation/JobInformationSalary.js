@@ -181,8 +181,8 @@ export default function JobProbation({
             <Col md="4">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Over Time Rate')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '}<span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Over Time Rate')?.[genLabel]} 
               </Label>
                 
                 <Input

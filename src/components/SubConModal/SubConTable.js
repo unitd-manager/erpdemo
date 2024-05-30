@@ -11,31 +11,31 @@ export default function SupplierTable({ subConWorkOrder }) {
   };
 
   const subConTableColumn = [
+   
+    {
+      name: 'Job Code',
+    },
+    {
+      name: 'Title',
+    },
     {
       name: 'Date',
     },
+   
     {
       name: 'Project',
     },
     {
-      name: 'WO Code',
-    },
-    {
-      name: 'Amount',
-    },
-    {
       name: 'Status',
     },
-    {
-      name: 'Balance',
-    },
+ 
     {
       name: '',
     },
   ];
 
   return (
-    <ComponentCard title="Work Order Linked">
+    <ComponentCard title="Job Order Linked">
       <Form>
         <div className="MainDiv">
           <div className="container">
@@ -51,29 +51,16 @@ export default function SupplierTable({ subConWorkOrder }) {
                 {subConWorkOrder &&
                   subConWorkOrder.map((element) => {
                     return (
-                      <tr key={element.sub_con_work_order_id}>
-                        <td>{moment(element.work_order_date).format('YYYY-MM-DD')}</td>
+                      <tr key={element.project_job_id}>
+                        <td>{element.job_code}</td>
+                        <td>{element.job_title}</td>
+                        <td>{moment(element.job_date).format('YYYY-MM-DD')}</td>
                         <td>
                           <Link to={`/ProjectEdit/${element.project_id}?tab=1`}>{element.title}</Link>
                         </td>
-                        <td>{element.sub_con_worker_code}</td>
-                        <td>{element.amount}</td>
-                        <td>
-                          {/* {parseFloat(element.prev_amount) === 0 && 'Paid'}
-                          {parseFloat(element.amount) === parseFloat(element.prev_amount) && 'New'}
-                          {parseFloat(element.amount) > parseFloat(element.prev_amount) &&
-                            'Partially Paid'} */}
-                             {element.status}
-                        </td>
-                        <td>
-                          {element.amount?parseFloat(element.amount) - parseFloat(element.prev_amount) :0
-                      }
-                        </td>
-                        <td>
-                          <Link to={`/SubConHistory/${element.sub_con_work_order_id}`}>
-                            Receipt
-                          </Link>
-                        </td>
+                        <td>{element.job_status}</td>
+                       
+                      
                       </tr>
                     );
                   })}

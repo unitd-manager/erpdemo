@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,8 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const EmployeeDetails = () => {
   //state variables
@@ -38,6 +40,8 @@ const EmployeeDetails = () => {
   const handlePasstype = (e) => {
     setPasstype(e.target.value);
   };
+  const { loggedInuser } = useContext(AppContext);
+
 
   //Insert Employee Data
   // Import necessary modules and components
@@ -54,7 +58,8 @@ const EmployeeDetails = () => {
     employeeData.year_of_completion1 = moment();
     employeeData.year_of_completion2 = moment();
     employeeData.year_of_completion3 = moment();
-
+    employeeData.creation_date = creationdatetime;
+    employeeData.created_by= loggedInuser.first_name;
     api
       .post('/employeemodule/insertEmployee', employeeData)
       .then((res) => {
