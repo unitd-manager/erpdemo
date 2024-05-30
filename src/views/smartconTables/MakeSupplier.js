@@ -324,7 +324,7 @@ if (arb === true) {
                           {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
                           </Label>
                           <Input type="select" name="supplier_id" onChange={handleBookingInputs}>
-                            <option>Select Customer</option>
+                            <option>Select Supplier</option>
                             {company &&
                               company.map((e) => {
                                 return (
