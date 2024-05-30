@@ -114,7 +114,9 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
           // Handle success (you might want to show a success message)
           console.log('Receipt updated successfully', receiptRes);
           console.log('Invoice status updated successfully', invoiceRes);
-          //window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
         })
         .catch((error) => {
           // Handle error (you might want to show an error message)
@@ -192,7 +194,7 @@ const PurchaseorderSupplier = ({ receiptId, orderId,arb,arabic }) => {
     );
   })
 ) : (
-  <p>No unpaid invoices available.</p>
+  <p>No unpaid purchase available.</p>
 )}
             <br></br>
             {/* { invoiceReceipt && invoiceReceipt.length>0? */}
