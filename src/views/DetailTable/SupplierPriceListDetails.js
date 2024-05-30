@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate, useParams  } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,11 +7,13 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const SupplierPriceListDetails = () => {
   //Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   //Logic for adding Planning in db
   const [planningForms, setPlanningForms] = useState({
@@ -73,6 +75,7 @@ const [arabic, setArabic] = useState([]);
   const insertPlanning = () => {
     if (planningForms.supplier_id !== '' && planningForms.supplier_id  ) {
       planningForms.creation_date = creationdatetime;
+      planningForms.created_by= loggedInuser.first_name;
       api
         .post('/supplierpricelistitem/insertPriceList', planningForms)
         .then((res) => {
