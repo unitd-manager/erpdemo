@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -9,6 +9,8 @@ import api from '../../constants/api';
 //import AccountMapButton from '../../components/Accounts/AccountMapButton';
 import ComponentCard from '../../components/ComponentCard';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
+
 
 const ChartofACEdit = () => {
   //Const Variables
@@ -78,10 +80,13 @@ console.log('arabic',arabic)
   const handleInputs = (e) => {
     setChartofAC({ ...chartofAC, [e.target.name]: e.target.value });
   };
+  const { loggedInuser } = useContext(AppContext);
 
-  //Logic for edit data in db
+  //Logic for edit data in db 
   const editChartOfAcc = () => {
     chartofAC.modification_date = creationdatetime;
+    chartofAC.modified_by = loggedInuser.first_name;
+
       api
         .post('/chartofaccounts/editChartAc', chartofAC)
         .then(() => {
