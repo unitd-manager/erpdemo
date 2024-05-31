@@ -10,12 +10,13 @@ import message from '../Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 
-const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId,arb }) => {
+const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId,arb, projectId }) => {
   ChooseEmployee.propTypes = {
     chooseEmp: PropTypes.bool,
     setChooseEmp: PropTypes.func,
     ProposalId: PropTypes.any,
     arb: PropTypes.any,
+    projectId: PropTypes.any,
   };
 
   const { id } = useParams();
@@ -27,7 +28,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId,arb }) => {
       const items = res.data.data;
       const finaldat = [];
       items.forEach((item) => {
-        finaldat.push({ value: item.employee_id, label: item.first_name });
+        finaldat.push({ value: item.employee_id, label: item.employee_name });
       });
       setEmployeeLinked(finaldat);
     });
@@ -82,7 +83,7 @@ const ChooseEmployee = ({ chooseEmp, setChooseEmp,ProposalId,arb }) => {
 
         if (foundObj) {
           obj.employee_id = foundObj.employee_id;
-          obj.project_id = id;
+          obj.project_id = projectId;
           obj.creation_date = creationdatetime;
           obj.month = moment().month() + 1;
           obj.year = moment().year();
