@@ -106,7 +106,7 @@ if (arb === true) {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.CustomerName')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.SupplierListName')?.[genLabel],
       selector: 'customer_name',
       sortable: true,
       grow: 0,

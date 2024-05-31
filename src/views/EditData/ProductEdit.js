@@ -311,12 +311,12 @@ const [arabic, setArabic] = useState([]);
                     value={
                       arb
                         ? (
-                            productDetails && productDetails.qty_in_stock_arb ? productDetails.qty_in_stock_arb :
-                            (productDetails && productDetails.qty_in_stock_arb !== null ? '' : productDetails && productDetails.qty_in_stock)
+                            productDetails && productDetails.actual_stock_arb ? productDetails.actual_stock_arb :
+                            (productDetails && productDetails.actual_stock_arb !== null ? '' : productDetails && productDetails.actual_stock)
                           )
-                        : (productDetails && productDetails.qty_in_stock)
+                        : (productDetails && productDetails.actual_stock)
                     }
-                    name={arb ? 'qty_in_stock_arb' : 'qty_in_stock'}
+                    name={arb ? 'actual_stock_arb' : 'actual_stock'}
                     disabled
                   />
                 </FormGroup>

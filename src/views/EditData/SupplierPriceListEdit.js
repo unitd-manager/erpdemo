@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -26,6 +26,7 @@ import PlanEditModal from '../../components/SupplierPriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
 
 const SupplierPriceListEdit = () => {
   //Const Variables
@@ -53,6 +54,7 @@ const SupplierPriceListEdit = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   // Button Save Apply Back List
   //const applyChanges = () => {};
@@ -140,6 +142,8 @@ useEffect(() => {
       plannings.effective_date &&
       plannings.customer_name 
       ) {
+        plannings.creation_date = creationdatetime;
+        plannings.created_by= loggedInuser.first_name;
       api
         .post('/supplierpricelistitem/editPriceList', plannings)
         .then(() => {

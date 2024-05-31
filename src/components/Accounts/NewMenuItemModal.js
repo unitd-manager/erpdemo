@@ -262,7 +262,7 @@ if (arb === true) {
                   <Col md="12">
                     <FormGroup>
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
-                        {arabic.find((item) => item.key_text === 'mdAccMap.Ttile')?.[genLabel]}<span className="required"> *</span>
+                        {arabic.find((item) => item.key_text === 'mdAccMap.TitleArb')?.[genLabel]}<span className="required"> *</span>
                       </Label>                     
                        <Input
                         type="text"
