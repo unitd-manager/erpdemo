@@ -299,7 +299,7 @@ const [arabic, setArabic] = useState([]);
                   <tr key={element.labour_request_id}>
                     <td>{i + 1}</td>
                     <td>
-                      <Link to={`/LabourRequestEdit/${element.labour_request_id}?tab=1`}>
+                      <Link to={`/LabourRequestEdit/${element.labour_request_id}/${element.project_id }`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

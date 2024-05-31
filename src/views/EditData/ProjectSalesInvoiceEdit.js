@@ -415,6 +415,7 @@ const toggle = (tab) => {
                     created_by : loggedInuser.first_name, 
                     project_invoice_id: insertedDataId,
                   qty: QuoteItem.quantity,
+                  project_order_id: QuoteItem.project_order_id,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.item_title,
                   total_cost: QuoteItem.amount,
@@ -433,9 +434,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        // setTimeout(() => {
-                        //   window.location.reload()
-                        // }, 100);
+                        setTimeout(() => {
+                          window.location.reload()
+                        }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }

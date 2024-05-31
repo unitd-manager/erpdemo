@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CommonTable from '../CommonTable';
 import TimesheetModal from '../ProjectModal/TimesheetModal';
-import ChooseEmployee from '../ProjectModal/ChooseEmployee';
+import ProjectChooseEmployee from '../ProjectModal/ProjectChooseEmployee';
 import api from '../../constants/api';
 import PdfEmpTimesheet from '../PDF/PdfEmpTimesheet';
 
@@ -18,7 +18,7 @@ const AddEmployee = ({ProposalId,projectId,arb,arabic,genLabel}) => {
   };
 
   const { id } = useParams();
-
+console.log('prokjectId',projectId);
   const [timesheet, setTimesheet] = useState(false);
   const [chooseEmp, setChooseEmp] = useState(false);
   const [getemployeeLinked, setGetEmployeeLinked] = useState();
@@ -106,7 +106,7 @@ console.log('getemployeeLinked',getemployeeLinked)
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp}arb={arb}genlabel={genLabel}arabic={arabic} setChooseEmp={setChooseEmp}ProposalId={ProposalId} />
+     <ProjectChooseEmployee chooseEmp={chooseEmp}arb={arb}genlabel={genLabel}arabic={arabic} setChooseEmp={setChooseEmp}ProposalId={ProposalId} projectId={projectId} />
     <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 
     getSingleEmployeeData={getSingleEmployeeData} 
     setSingleEmployeeData={setSingleEmployeeData} />
