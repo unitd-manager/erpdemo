@@ -84,7 +84,7 @@ api.post('/purchasereturn/editpurchasereturn', {
   modified_by: loggedInuser.first_name, 
   modification_date:creationdatetime})
       .then(() => {
-        
+       
       })
       })
       .catch(() => {
@@ -93,10 +93,19 @@ api.post('/purchasereturn/editpurchasereturn', {
   };
 
   const updatePoProduct = () => {
+    console.log('return qty',returnQty)
     api.post('/purchasereturn/updatePoProduct', returnQty)
       .then((res1) => {
         message('Return Qty updated successfully', 'success');
         console.log('returnQty', res1.data.data);
+        api
+        .post('/inventory/editInventoryStock', returnQty)
+        .then(() => {
+          message('Quantity updated in inventory successfully.', 'success');
+        })
+        .catch(() => {
+          message('unable to update quantity in inventory.', 'danger');
+        });
       })
       .catch(() => {
         message('Unable to edit record.', 'error');

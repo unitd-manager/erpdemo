@@ -5,6 +5,7 @@ import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
 function PurchaseOrderDetailsPart({
+  products,
   purchaseDetails,
   handleInputs,
   supplier,
@@ -21,8 +22,9 @@ function PurchaseOrderDetailsPart({
     arabic: PropTypes.any,
     arb: PropTypes.any,
     isFieldDisabled: PropTypes.any,
+    products: PropTypes.array,
   };
-
+console.log('products',products)
   let genLabel = '';
 
   if (arb === true) {
@@ -186,7 +188,7 @@ function PurchaseOrderDetailsPart({
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="3">
+             {products.length<1 && <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ Code')?.[genLabel]}
@@ -209,7 +211,7 @@ function PurchaseOrderDetailsPart({
                       })}
                   </Input>
                 </FormGroup>
-              </Col>
+              </Col>}
             </Row>
             <Row>
               <Col md="3">

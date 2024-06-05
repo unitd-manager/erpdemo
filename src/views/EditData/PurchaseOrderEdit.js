@@ -32,7 +32,7 @@ const PurchaseOrderEdit = () => {
   const [product, setProduct] = useState();
   const [historyProduct, setHistoryProduct] = useState();
   const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [attachmentData, setDataForAttachment] = useState({
@@ -400,6 +400,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
             </ComponentCardV2>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
+       products={products}
         supplier={supplier}
         request={request}
         handleInputs={handleInputs}
