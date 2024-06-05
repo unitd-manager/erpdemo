@@ -93,7 +93,7 @@ const [arabic, setArabic] = useState([]);
 // const handleLanguageChange = (language) => {
 //   setSelectedLanguage(language);
 // };
-const { id } = useParams();
+const { id, projectId } = useParams();
 const navigate = useNavigate();
 
 useEffect(() => {
@@ -285,7 +285,7 @@ const tablevalue =  [
           {/* Start Tab Content 10 */}
           <TabPane tabId="1" eventkey="addEmployee">
             <Row>
-              <AddEmployee  arb={arb}/>
+              <AddEmployee  arb={arb} projectId={projectId}/>
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   color="primary"
