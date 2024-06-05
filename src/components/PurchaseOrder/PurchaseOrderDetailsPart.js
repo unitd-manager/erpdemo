@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Row, Col, Input, Form, FormGroup, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
@@ -188,6 +189,30 @@ console.log('products',products)
                   </Input>
                 </FormGroup>
               </Col>
+              {products.length>1 && <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ Code')?.[genLabel]}
+                  </Label>
+                  <Input
+                    type="select"
+                    value={purchaseDetails && purchaseDetails.purchase_quote_id}
+                    name="purchase_quote_id"
+                    onChange={handleInputs}
+                    disabled
+                  >
+                    <option defaultValue="selected">Please Select</option>
+                    {request &&
+                      request.map((e) => {
+                        return (
+                          <option key={e.supplier_id} value={e.purchase_quote_id}>
+                            {e.rq_code}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>}
              {products.length<1 && <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -198,7 +223,7 @@ console.log('products',products)
                     value={purchaseDetails && purchaseDetails.purchase_quote_id}
                     name="purchase_quote_id"
                     onChange={handleInputs}
-                    disabled={!isFieldDisabled}
+                   // disabled={!isFieldDisabled}
                   >
                     <option defaultValue="selected">Please Select</option>
                     {request &&

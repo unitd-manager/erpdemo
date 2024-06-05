@@ -224,7 +224,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
     console.log('last month last date', lastmonthlastdate);
 
     console.log('filtered', Arr);
-    await Arr.forEach(async (obj) => {
+    await Arr.forEach(async (obj,index) => {
       const workingDaysInWeek = obj.working_days;
       // const daysInMonth = moment(obj.payslip_start_date);
       // const endDate = moment(obj.payslip_end_date);
@@ -334,8 +334,14 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                 .then(() => {
                   //generatecpfcalculator();
                   
-                 // message('Payrolls created successfully.', 'success');
+                 message('Payrolls created successfully.', 'success');
                   // setLoading(false);
+                  if(index === Arr.length -1){
+                    setTimeout(()=>{
+                      window.location.reload();
+                    },300)
+                  }
+                  
                 })
                 .catch(() => {
                   message('Unable to create record', 'info');
@@ -343,9 +349,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           
         });
     });
-    setTimeout(()=>{
-      window.location.reload();
-    },2000)
+   
  
   
   };
