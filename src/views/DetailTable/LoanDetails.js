@@ -31,6 +31,8 @@ const LoanDetails = () => {
     employee_id: '',
     amount: '',
     month_amount: '',
+    date:'',
+    status:'',
   });
 
   const handleLoanForms = (e) => {
