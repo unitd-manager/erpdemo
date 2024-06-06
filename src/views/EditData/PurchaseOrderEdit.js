@@ -92,7 +92,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getPurchaseOrderId = () => {
     api.post('/purchaseorder/getPurchaseOrderById', { purchase_order_id: id }).then((res) => {
       setPurchaseDetails(res.data.data[0]);
-      setSupplierId(res.data.data[0].supplier_id);
+      setSupplierId(res.data.data[0]?.supplier_id);
     });
   };
 
