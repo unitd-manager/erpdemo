@@ -218,6 +218,7 @@ export default function ProjectQuoteMoreDetails({
                     value={tenderDetails && tenderDetails.total_amount}
                     onChange={handleInputs}
                     name="total_amount"
+                    readOnly
                   />
                 </FormGroup>
               </Col>
