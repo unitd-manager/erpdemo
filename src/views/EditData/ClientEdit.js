@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { TabPane, TabContent } from 'reactstrap';
+import { TabPane, TabContent} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 // import axios from 'axios';
+// import { saveAs } from 'file-saver';
 import ClientButton from '../../components/ClientTable/ClientButton';
 import ClientMainDetails from '../../components/ClientTable/ClientMainDetails';
 import ContactEditModal from '../../components/Tender/ContactEditModal';
@@ -29,6 +30,7 @@ const ClientsEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
   const [contactData, setContactData] = useState();
   const [addContactModal, setAddContactModal] = useState(false);
+  const [addLogModal, setAddLogModal] = useState(false);
   const [clientsDetails, setClientsDetails] = useState();
   const [contactsDetails, setContactsDetails] = useState(null);
   const [invoicedetails, setInvoiceDetails] = useState(null);
@@ -36,10 +38,45 @@ const ClientsEdit = () => {
   const [allCountries, setallCountries] = useState();
   const { loggedInuser } = useContext(AppContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
-
+  const [log, setLog] = useState();
    // Navigation and Parameter Constants
    const { id } = useParams();
    const navigate = useNavigate();
+
+   const contactLog = loggedInuser.first_name;
+   const generateLogEntry = (buttonName, index) => {
+    const dateTime = new Date().toISOString();
+    return `${dateTime}: ${contactLog}: Button '${buttonName}' at index ${index} was clicked.\n`;
+  };
+  
+  const logButtonActivityToFile = (buttonName) => {
+    const logEntry = generateLogEntry(buttonName);
+    const existingLog = localStorage.getItem('buttonActivityLog') || '';
+    console.log('existingLog',existingLog)
+    const updatedLog = existingLog + logEntry;
+    localStorage.setItem('buttonActivityLog', updatedLog);
+    setLog(updatedLog)
+    // Save log to file
+    // const blob = new Blob([updatedLog], { type: 'text/plain;charset=utf-8' });
+    // console.log('blob',blob)
+    // saveAs(blob, 'overall_log.sql');
+  };
+ 
+  // const downloadLogFile = () => {
+  //   const logContent = localStorage.getItem('buttonActivityLog') || '';
+  //   const blob = new Blob([logContent], { type: 'text/plain' });
+  //   const url = window.URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = 'overall_log.sql';
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
+  // };
+  
+  // // Example usage:
+  // logButtonActivityToFile('Submit'); // Log button 'Submit' activity
+  // downloadLogFile(); // Download the log file
 
   const tablevalue =  [
     {name:'company'},
@@ -152,6 +189,10 @@ console.log('Selected language from localStorage:', selectedLanguage);
   };
   const addContactToggle = () => {
     setAddContactModal(!addContactModal);
+  };
+
+  const addLogToggle = () => {
+    setAddLogModal(!addLogModal);
   };
 
   //Client Functions/Methods
@@ -360,7 +401,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
   }, [id]);
 
   return (
-    <>
+     <>
       {/* BreadCrumbs */}
       {eng ===true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
       { arb === true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />}
@@ -370,6 +411,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
         tablevalue={tablevalue}
         navigate={navigate}
         applyChanges={applyChanges}
+        logButtonActivityToFile={logButtonActivityToFile}
         DeleteClient={DeleteClient}
         backToList={backToList}
         sendMail={sendMail}
@@ -380,6 +422,9 @@ console.log('Selected language from localStorage:', selectedLanguage);
         eng={eng}
         id={id}
         whereCondition={whereCondition}
+        addLogToggle={addLogToggle}
+        addLogModal={addLogModal}
+        log={log}
       ></ClientButton>
 
       {/* Client Main details */}
