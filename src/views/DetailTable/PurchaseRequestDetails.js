@@ -120,7 +120,7 @@ const PurchaseRequestDetails = () => {
                   <Col md="12">
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel]} 
-                <span className="required"> *</span> </Label>
+                 </Label><span className="required"> *</span>
                     <Input
                       type="date"
                       onChange={handleInputs}
@@ -137,7 +137,7 @@ const PurchaseRequestDetails = () => {
                   <Col md="12">
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel]}
-                <span className="required"> *</span> </Label>
+                 </Label><span className="required"> *</span>
                     <Input
                       type="date"
                       onChange={handleInputs}

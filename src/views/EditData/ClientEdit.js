@@ -320,12 +320,12 @@ console.log('Selected language from localStorage:', selectedLanguage);
     setFormSubmitted(true);
     const newContactWithCompanyId = newContactData;
     newContactWithCompanyId.company_id = id;
-    // if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
-    //   message('Invalid email address', 'warning');
-    // }
-    // else
-    //  if (newContactWithCompanyId.salutation !== '' && 
-    // newContactWithCompanyId.first_name !== '' ) {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(newContactWithCompanyId.email)) {
+      message('Invalid email address', 'warning');
+    }
+    else
+     if (newContactWithCompanyId.salutation !== '' && 
+    newContactWithCompanyId.first_name !== '' ) {
       newContactWithCompanyId.creation_date = creationdatetime;
       newContactWithCompanyId.created_by = loggedInuser.first_name;
       api
@@ -337,9 +337,9 @@ console.log('Selected language from localStorage:', selectedLanguage);
         .catch(() => {
           message('Network connection error.', 'error');
         });
-    // } else {
-    //   message('Please fill all required fields', 'warning');
-    // }
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
   };
 
   //  deleteRecord
@@ -382,8 +382,10 @@ console.log('Selected language from localStorage:', selectedLanguage);
           .post('/clients/deleteContact', { contact_id: staffId })
           .then(() => {
             Swal.fire('Deleted!', 'Contact has been deleted.', 'success');
-            message('Record deleted successfully', 'success');
-            window.location.reload();
+            message('Record deleted successfully', 'success'); 
+            setTimeout(() => {
+              window.location.reload();
+            }, 300);
           })
           .catch(() => {
             message('Unable to delete record.', 'error');
@@ -403,8 +405,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
   return (
      <>
       {/* BreadCrumbs */}
-      {eng ===true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
-      { arb === true && <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />}
+    
+      { arb === true ? <BreadCrumbs heading={clientsDetails && clientsDetails.company_name_arb} />:<BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />}
       {/* Button List */}
       <ClientButton
         editClientsData={editClientsData}
@@ -488,8 +490,8 @@ console.log('Selected language from localStorage:', selectedLanguage);
           </TabPane>
           {/* ADD NOTE */}
           <TabPane tabId="4">
-            <AddNote recordId={id} roomName="AccountEdit" />
-            <ViewNote recordId={id} roomName="AccountEdit" />
+            <AddNote recordId={id} roomName="ClientEdit" />
+            <ViewNote recordId={id} roomName="ClientEdit" />
           </TabPane>
         </TabContent>
       </ComponentCard>

@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import { TabContent, TabPane, Table, Row } from 'reactstrap';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import TenderButtons from '../../components/ProjectEnquiryTable/TenderButtons';
+//import TenderButtons from '../../components/ProjectEnquiryTable/TenderButtons';
 import creationdatetime from '../../constants/creationdatetime';
 import TenderMoreDetails from '../../components/ProjectEnquiryTable/TenderMoreDetails';
 import TenderAttachment from '../../components/ProjectEnquiryTable/TenderAttachment';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 
 const OpportunityEdit = () => {
@@ -27,10 +31,20 @@ const OpportunityEdit = () => {
    const { loggedInuser } = useContext(AppContext);
    const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  const [activeTab, setActiveTab] = useState('1');
+  const [lineItem, setLineItem] = useState([]);
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectEnquiry');
   };
+  const tabs = [
+    { id: '1', name: 'Quotation' },
+    { id: '2', name: 'Attachment' },
+  ];
+  const tabsArb = [
+    { id: '1', name: 'جهات الاتصال المرتبطة' },
+    { id: '2', name: 'مرفق' },
+  ];
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
@@ -46,6 +60,16 @@ console.log('Selected language from localStorage:', selectedLanguage);
   };
   const addCompanyToggle = () => {
     setAddCompanyModal(!addCompanyModal);
+  };
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const getLineItem = () => {
+    api.post('/projectenquiry/getProjectQuoteLineItemsById', { project_enquiry_id: id }).then((res) => {
+      setLineItem(res.data.data);
+      //setAddLineItemModal(true);
+    });
   };
 
   // Get Company Data
@@ -106,6 +130,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
   };
 
   const [arabic, setArabic] = useState([]);
+  const [arabicquote, setArabicQuote] = useState([]);
 
 
   const arb =selectedLanguage === 'Arabic'
@@ -123,6 +148,20 @@ console.log('Selected language from localStorage:', selectedLanguage);
         // Handle error if needed
       });   
   };
+
+  const getArabicQuotation = () => {
+    api
+      .get('/tradingquote/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabicQuote(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+
+  console.log('arabic', arabic);
+  console.log('arabicquote', arabicquote);
 
 
 
@@ -216,7 +255,38 @@ console.log('Selected language from localStorage:', selectedLanguage);
       setallCountries(res.data.data);
     });
   };
+  let genLabel = '';
+
+  if (arb === true) {
+    genLabel = 'arb_value';
+  } else {
+    genLabel = 'value';
+  }
+
   
+  const columns1 = [
+    {
+      name: '#',
+    },
+    {
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Title')?.[genLabel],
+    },
+
+    {
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Description')?.[genLabel],
+    },
+    {
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Quantity')?.[genLabel],
+    },
+    {
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Unit Price')?.[genLabel],
+    },
+    {
+      name:arabicquote.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel],
+    },
+    
+  ];
+
 
   useEffect(() => {
     editTenderById();
@@ -224,19 +294,31 @@ console.log('Selected language from localStorage:', selectedLanguage);
     getCompany();
     getAllCountries();
     getArabicCompanyName();
+    getLineItem();
+    getArabicQuotation();
   }, [id]);
 
   return (
     <>
-      <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <TenderButtons
+    {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
+      {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
+      {/* <BreadCrumbs heading={tenderDetails && tenderDetails.title} /> */}
+      {/* <TenderButtons
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
         eng={eng}
-      ></TenderButtons>
+      ></TenderButtons> */}
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectEnquiry"
+            ></ApiButton>
      <TenderMoreDetails
         companyInsertData={companyInsertData}
         newContactData={newContactData}
@@ -262,13 +344,53 @@ console.log('Selected language from localStorage:', selectedLanguage);
           arabic={arabic}
           eng={eng}
       ></TenderMoreDetails>
-
-      <ComponentCard title="More Details">
+ <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-
-      
-            <TenderAttachment ></TenderAttachment>
-      
+        {/* Nav Tab */}
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
+        <TabContent className="p-4" activeTab={activeTab}>
+          <TabPane tabId="1">
+            <br />
+            <Row>
+              <div className="container">
+                <Table id="example" className="display border border-secondary rounded">
+                  <thead>
+                    <tr>
+                      {columns1.map((cell) => {
+                        return <td key={cell.name}>{cell.name}</td>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lineItem &&
+                      lineItem.map((e, index) => {
+                        return (
+                          <tr key={e.opportunity_id}>
+                            <td>{index + 1}</td>
+                            {/* <td data-label="Title">{e.title}</td> */}
+                            <td>{arb && e.title_arb ? e.title_arb : e.title}</td>
+                            <td data-label="Description">{e.description}</td>
+                            <td data-label="Quantity">{e.quantity}</td>
+                            <td data-label="Unit Price">{e.unit_price}</td>
+                            <td data-label="Amount">{e.amount}</td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </div>
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <TenderAttachment></TenderAttachment>
+          </TabPane>
+        </TabContent>
       </ComponentCard>
     </>
   );

@@ -222,6 +222,10 @@ const InvoiceData = () => {
         insertReceipt('');
        
       });
+    // setModalOpen(false); // Close the first modal
+    //    setSecondModalOpen(true); // Open the second modal
+    // insertReceipt('');
+       
   };
   useEffect(() => {
     getCompany();
@@ -239,9 +243,10 @@ const InvoiceData = () => {
         <CommonTable
           loading={loading}
           title= {arb ?'قائمة مذكرة الخصم':'Debit Note List'}
+          module='DebitNote'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               Add New
             </Button>
           }
@@ -265,7 +270,7 @@ const InvoiceData = () => {
                     <td>{arb?element.mode_of_payment_arb:element.mode_of_payment}</td>
                     <td>{arb?element.debit_note_status_arb:element.debit_note_status}</td>
                     <td>{arb?element.amount_arb:element.amount}</td>
-                    <td>{moment(element.debit_note_date).format('DD-MM-YYYY')}</td>
+                    <td>{element.debit_note_date?moment(element.debit_note_date).format('DD-MM-YYYY'):''}</td>
                     {/* <td>  
                       <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
  </td> */}

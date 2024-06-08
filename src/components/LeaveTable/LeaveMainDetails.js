@@ -50,7 +50,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails,differenc
  
   return (
     <>
-      <ComponentCard title= {arb? 'اترك التعديل': "Leave Edit"}>
+      <ComponentCard title= {arb? 'اترك التعديل': "Leave Edit"} creationModificationDate={leavesDetails}>
         <Form>
           <FormGroup>
             <Row>

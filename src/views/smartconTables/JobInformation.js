@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Badge, Button, Card } from 'reactstrap';
+import { Badge, Button, Card, Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter, } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -20,6 +23,12 @@ const JobInformation = () => {
   const [jobInformation, setJobInformation] = useState(null);
   const [empWithoutJobInfo, setEmpWithoutJobInfo] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+const [showModal, setShowModal] = useState(false);
+
+const handleCloseModal = () => setShowModal(false);
+const handleShowModal = () => setShowModal(true);
+
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -64,6 +73,7 @@ if (arb === true) {
 } else {
   genLabel = 'value';
 }
+
   //getting data from jobinformation
   const getJobInformation = () => {
     api
@@ -185,24 +195,45 @@ if (arb === true) {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-        <Card style={{padding:'10px'}}>
-          <div>
-            <h5>{arabic.find(item => item.key_text === 'mdJobInformation.Please create Job information records for the below employees to make them appear in payroll')?.[genLabel]}</h5>
-          {
-            empWithoutJobInfo.map((el)=>{
-              return(
-                <span style={{marginRight:'5px'}}><Badge> {el.employee_name}</Badge></span>
-              )
-            })
-          }
-          </div>
-        </Card>
+        <Button class="primary" onClick={handleShowModal}>
+         Employee Name
+        </Button>
+           {/* Modal */}
+           <Modal  size="lg" isOpen={showModal} toggle={handleCloseModal}>     
+           <ModalHeader closeButton>
+            
+          </ModalHeader>
+          <ModalBody>
+            <Card style={{ padding: '10px' }}>
+              <div>
+                <h5>
+                  {arabic.find(
+                    (item) =>
+                      item.key_text ===
+                      'mdJobInformation.Please create Job information records for the below employees to make them appear in payroll'
+                  )?.[genLabel]}
+                </h5>
+                {empWithoutJobInfo.map((el) => (
+                  <span style={{ marginRight: '5px' }}>
+                    <Badge>{el.employee_name}</Badge>
+                  </span>
+                ))}
+              </div>
+            </Card>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </ModalFooter>
+        </Modal>
         <CommonTable
           loading={loading}
           title="Job Information List"
+          module="Job Information"
           Button={
             <Link to="/JobInformationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
@@ -248,9 +279,13 @@ if (arb === true) {
               )}
           </tbody>
         </CommonTable>
+        
+     
       </div>
     </div>
+    
   );
+  
 };
 
 export default JobInformation;

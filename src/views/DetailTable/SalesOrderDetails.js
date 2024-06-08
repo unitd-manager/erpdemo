@@ -73,34 +73,58 @@ const OpportunityDetails = () => {
     setInsertQuote({ ...insertQuote, [e.target.name]: e.target.value });
   };
 
-
+  const insertOrder = (orderCode,companyId) => {
+    if ( insertQuote.quote_id.trim() !== '') {
+      insertQuote.order_code = orderCode;
+      insertQuote.creation_date = creationdatetime;
+      insertQuote.created_by = loggedInuser.first_name;
+      insertQuote.company_id = companyId;
+      api
+        .post('/finance/insertOrder', insertQuote)
+        .then((res) => {
+          const insertedDataId = res.data.data.insertId;
+           const quoteId = insertQuote.quote_id;
+          
+          //         // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
+            
+                  navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
+                  console.log('insertedDataId', insertedDataId);
+                  console.log('quoteId', quoteId);
+        })
+        .catch(() => {
+          message('Network connection error.', 'error');
+        });
+    } else {
+      message('Please fill all required fields', 'warning');
+    }
+  };
   //console.log(tenderDetails);
- const insertOrder = (orderCode,companyId) => {
-  console.log('insertQuote.quote_id:', insertQuote.quote_id);
-  if (insertQuote.quote_id !== '') {
-    insertQuote.order_code = orderCode;
-    insertQuote.creation_date = creationdatetime;
-    insertQuote.created_by = loggedInuser.first_name;
-    insertQuote.company_id = companyId;
-    api
-      .post('/finance/insertOrder', insertQuote)
-      .then((res) => {
-        const insertedDataId = res.data.data.insertId;
-        const quoteId = insertQuote.quote_id;
+//  const insertOrder = (orderCode,companyId) => {
+//   console.log('insertQuote.quote_id:', insertQuote.quote_id);
+//   if (insertQuote.quote_id.trim() !== '') {
+//     insertQuote.order_code = orderCode;
+//     insertQuote.creation_date = creationdatetime;
+//     insertQuote.created_by = loggedInuser.first_name;
+//     insertQuote.company_id = companyId;
+//     api
+//       .post('/finance/insertOrder', insertQuote)
+//       .then((res) => {
+//         const insertedDataId = res.data.data.insertId;
+//         const quoteId = insertQuote.quote_id;
 
-        // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
+//         // Navigate to OrdersEdit page with quote_id and insertedDataId as query parameters
   
-        navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
-        console.log('insertedDataId', insertedDataId);
-        console.log('quoteId', quoteId);
-      })
-      .catch(() => {
-        message('Network connection error.', 'error');
-      });
-  } else {
-    message('Please fill all required fields', 'warning');
-  }
-};
+//         navigate(`/OrdersEdit/${insertedDataId}/${quoteId}`);
+//         console.log('insertedDataId', insertedDataId);
+//         console.log('quoteId', quoteId);
+//       })
+//       .catch(() => {
+//         message('Network connection error.', 'error');
+//       });
+//   } else {
+//     message('Please fill all required fields', 'warning');
+//   }
+// };
   //QUTO GENERATED CODE
   // const generateCode = () => {
   //   api
@@ -203,7 +227,7 @@ const OpportunityDetails = () => {
                         return (
                           <option key={e.quote_id} value={e.quote_id}>
                             {' '}
-                            {arb?e.quote_code_arb:e.quote_code}{' '}
+                            {arb?e.quote_code_arb:e.quote_code} - {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}

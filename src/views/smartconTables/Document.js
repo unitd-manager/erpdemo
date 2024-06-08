@@ -7,7 +7,6 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
@@ -155,10 +154,11 @@ const Document = () => {
       <CommonTable
         loading={loading}
         title="Document"
+        module='Document'
         Button={
           <Link to="/DocumentDetails">
-            <Button color="primary" className="shadow-none">
-              Add New
+            <Button color="primary" className="shadow-none mr-2">
+              New
             </Button>
           </Link>
         }
@@ -184,10 +184,10 @@ const Document = () => {
                   <td>{element.document_code}</td>
                   <td>{element.document_title}</td>
                   <td>{element.title}</td>
-                  <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.start_date}</td>
                   <td>{element.quote_status}</td>
                   <td>{element.budget_inhouse}</td>
-                  <td>{moment(element.estimated_finish_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.estimated_finish_date}</td>
                 </tr>
               );
             })}

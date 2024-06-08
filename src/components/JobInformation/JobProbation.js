@@ -158,8 +158,8 @@ if (arb === true) {
              
               <Input
                 type="select"
-                value={job && job.position}
-                name="position"
+                value={job && job.designation}
+                name="designation"
                 onChange={handleInputsJobInformation}
               >
                 <option defaultValue="selected">Please Select</option>
@@ -223,8 +223,8 @@ if (arb === true) {
 
           <Col md="4">
             <FormGroup>
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Joined/Arrival Date ')?.[genLabel]} <span className="required"> *</span>{' '}
+            <Label dir="rtl" style={{ textAlign: 'right' }}><span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Joined/Arrival Date ')?.[genLabel]} 
               </Label>
             
               <Input
@@ -238,7 +238,8 @@ if (arb === true) {
           <Col md="4">
           <FormGroup>
           <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Status')?.[genLabel]} <span className="required"> *</span>{' '}
+          <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Status')?.[genLabel]}
               </Label>
           
             <Input

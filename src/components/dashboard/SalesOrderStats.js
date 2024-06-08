@@ -79,7 +79,7 @@ const SalesOrderStats = () => {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Sales Order Statistics (Bar Chart)">
+        <ComponentCard title="Sales Order Statistics">
           <Form>
             {/* Add any form elements or filters if needed */}
           </Form>

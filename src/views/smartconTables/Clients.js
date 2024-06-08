@@ -128,13 +128,13 @@ const Claints = () => {
         <Row>
           <Col md="6">
             <Link to="/ClientsDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
           </Col>
         </Row>
-        <CommonTable loading={loading} title="Client List">
+        <CommonTable loading={loading} title="Client List" module='Client'>
           <thead>
             <tr>
               {columns.map((cell) => {

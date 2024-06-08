@@ -20,10 +20,11 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import PlanningMainDetails from '../../components/Planning/PlanningMainDetails';
-import PlanningButton from '../../components/Planning/PlanningButton';
+//import PlanningButton from '../../components/Planning/PlanningButton';
 import PlanningCpanel from '../../components/Planning/PlanningCpanel';
 import PlanEditModal from '../../components/Planning/PlanEditModal';
 import Tab from '../../components/project/Tab';
+import ApiButton from '../../components/ApiButton';
 
 const PlanningEdit = () => {
   //Const Variables
@@ -56,7 +57,7 @@ const PlanningEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Planning');
   };
@@ -319,13 +320,20 @@ const handleAddNewPlanning = (e) => {
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-       ></PlanningButton>
-       
+       ></PlanningButton> */}
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Planning"
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}

@@ -6,12 +6,12 @@ export default function ItemTable({
   returnInvoiceItemDetails,arb
  
 }) {
-  ItemTable.propTypes = {
+  ItemTable.propTypes = { 
     returnInvoiceItemDetails: PropTypes.array,
     arb: PropTypes.any
 
      };
-  
+   
      
   //Structure of Invoice table
   const invoiceTableColumns = [
@@ -40,7 +40,7 @@ export default function ItemTable({
           returnInvoiceItemDetails.map((element) => { // Map only if returnInvoiceItemDetails is an array
             return (
               <tr key={element.invoice_id}>
-               <td>{element.item_title}</td>
+               <td>{arb && element.item_title_arb ? element.item_title : element.item_title}</td>
                <td>{element.qty_return}</td>
                {/* <td>{element.price}</td> */}
               </tr>

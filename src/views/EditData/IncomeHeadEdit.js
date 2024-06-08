@@ -23,10 +23,11 @@ import message from '../../components/Message';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
-import IncomeButton from '../../components/IncomeHeadTable/IncomeButton';
+//import IncomeButton from '../../components/IncomeHeadTable/IncomeButton';
 import IncomeHeadMainDetails from '../../components/IncomeHeadTable/IncomeHeadMainDetails';
 import IncomeHeadSubHead from '../../components/IncomeHeadTable/IncomeHeadSubHead';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const IncomeEdit = () => {
   //Const Variables
@@ -55,7 +56,7 @@ const IncomeEdit = () => {
     setAddContactModal(!addContactModal);
   };
   // Button
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Incomehead');
   };
@@ -151,13 +152,20 @@ const IncomeEdit = () => {
     <>
       <BreadCrumbs heading={incomeDetails && incomeDetails.title} />
       {/* button */}
-      <IncomeButton
+      {/* <IncomeButton
         editIncomeData={editIncomeData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></IncomeButton>
-
+      ></IncomeButton> */}
+<ApiButton
+              editData={editIncomeData}
+              navigate={navigate}
+              applyChanges={editIncomeData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="IncomeHead"
+            ></ApiButton>
       {/* Income Head Details */}
       <ComponentCard title="Income Head Details" creationModificationDate={incomeDetails}>
         <IncomeHeadMainDetails

@@ -18,12 +18,14 @@ import {
   Row,
 } from 'reactstrap';
 import moment from 'moment';
+import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import PurchaseorderSupplier from '../../components/SupplierModal/PurchaseorderSupplier';
+
 
 //geting data from invoice
 const MakeSupplier = () => {
@@ -36,10 +38,12 @@ const MakeSupplier = () => {
   const [secondModalOpen, setSecondModalOpen] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [selectReceiptId, setSelectReceiptId] = useState(null);
+  const [hasAmountToPay, setHasAmountToPay] = useState(false);
   //Navigation and Parameter Constants
 
  // const navigate = useNavigate();
   const [company, setCompany] = useState();
+  const [supplierId, setSupplierId] = useState(null);
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -94,6 +98,7 @@ if (arb === true) {
       });
   };
 
+  
   //Structure of Invoice list view
   const columns = [
     {
@@ -151,7 +156,7 @@ if (arb === true) {
   const handleBookingInputs = (e) => {
     const { name, value } = e.target;
     setBookingDetails({ ...bookingDetails, [name]: value });
-
+    setSupplierId(value)
     // Fetch bookings for the selected company
    
   };
@@ -160,7 +165,7 @@ if (arb === true) {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/quote/getSupplierPurchase')
+      .get('/supplier/getSupplier')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -171,17 +176,18 @@ if (arb === true) {
 
 
   //Logic for adding Booking in db
-
+ 
   const insertReceipt = (code) =>{
-    const insertedOrderId = bookingDetails.purchase_order_id;
+    const insertedOrderId = bookingDetails.supplier_id;
       bookingDetails.supplier_receipt_code=code;
+      bookingDetails.receipt_code=code;
       api
         .post('/supplier/insert-SupplierReceipt', bookingDetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           setSelectedReceiptId(insertedDataId); // Store the receiptId 
           setSelectReceiptId(insertedOrderId)
-          message('Booking inserted successfully.', 'success');
+          message('Record inserted successfully.', 'success');
      
         })
         .catch(() => {
@@ -190,6 +196,9 @@ if (arb === true) {
     
   };
   const generateCode = () => {
+    
+    if(supplierId !=='' && supplierId && supplierId !==null ){
+     
     api
       .post('/commonApi/getCodeValue', { type: 'supplier' })
       .then((res) => {
@@ -202,23 +211,78 @@ if (arb === true) {
         insertReceipt('');
        
       });
+      
+    }else{
+      message('Please Select the supplier', 'error');
+    }
   };
+  
+  const getMakePayment = () => {
+    if (supplierId) {
+      console.log('Fetching payment data for receipt ID:', supplierId); // Debug log
+      api.post('/supplier/getMakePayment', { supplier_id: supplierId }).then((res) => {
+        const datafromapi = res.data.data;
+        let amountExists = false;
+
+        datafromapi.forEach((element) => {
+          element.remainingAmount = element.prev_inv_amount - element.prev_amount;
+          console.log('Remaining amount for element:', element.remainingAmount); // Debug log
+          if (element.remainingAmount > 0) {
+            amountExists = true;
+          }
+        });
+
+        console.log('Amount exists:', amountExists); // Debug log
+        setHasAmountToPay(amountExists);
+        if (!amountExists) {
+          alert('There is No Purchase Ordered Items Available to Pay ');
+        }
+      }).catch((error) => {
+        console.error('Error fetching payment data:', error); // Debug log for errors
+      });
+    } else {
+      console.log('No receipt ID selected'); // Debug log
+    }
+  };
+  // const handleSaveAndContinue = () => {
+  //   if (hasAmountToPay) {
+  //     generateCode(); // Call the function to generate the code and open the second modal
+  //   } else {
+  //     message.error('No amount to pay.'); // Show an error alert message
+  //   }
+  // };
+  const handleSaveAndContinue = () => {
+    console.log('Button clicked, hasAmountToPay:', hasAmountToPay); // Debug log
+    if (hasAmountToPay) {
+      generateCode(); // Call the function to generate the code and open the second modal
+    } else {
+      message.error('No amount to pay.'); // Show an error alert message
+      console.log('No amount to pay, showing message.'); // Debug log
+    }
+  };
+
+  useEffect(() => {
+    getMakePayment();
+  }, [supplierId]); // Ensure this useEffect runs when selectReceiptId changes
+
   useEffect(() => {
     getCompany();
     getInvoice();
+    
   }, [id]);
 
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs />
-
+<ToastContainer></ToastContainer>
         <CommonTable
           loading={loading}
           title="Supplier Receipt List"
+          module='MakeSupplierPayment'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               Add New
             </Button>
           }
@@ -259,13 +323,13 @@ if (arb === true) {
                           <Label>
                           {arabic.find((item) => item.key_text === 'mdMakeSupplier.PurchaseOrders')?.[genLabel]}
                           </Label>
-                          <Input type="select" name="purchase_order_id" onChange={handleBookingInputs}>
-                            <option>Select Customer</option>
+                          <Input type="select" name="supplier_id" onChange={handleBookingInputs}>
+                            <option>Select Supplier</option>
                             {company &&
                               company.map((e) => {
                                 return (
-                                  <option key={e.purchase_order_id} value={e.purchase_order_id}>
-                                    {e.po_code}
+                                  <option key={e.supplier_id} value={e.supplier_id}>
+                                    {e.company_name}
                                   </option>
                                 );
                               })}
@@ -278,7 +342,7 @@ if (arb === true) {
                     <FormGroup>
                       <Row>
                         <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                          <Button
+                          {/* <Button
                             color="primary"
                             onClick={() => {
                               generateCode();
@@ -288,7 +352,16 @@ if (arb === true) {
                             className="btn mr-2 shadow-none"
                           >
                             {arb?'حفظ ومتابعة':'Save & Continue'}
-                          </Button>
+                          </Button> */}
+                          <Button
+      color="primary"
+      onClick={handleSaveAndContinue}
+      type="button"
+      className="btn mr-2 shadow-none"
+      disabled={!hasAmountToPay} // Disable the button if no amount to pay
+    >
+      {arb ? 'حفظ ومتابعة' : 'Save & Continue'}
+    </Button>
                           <Button
                             onClick={() => {
                               //navigate(-1);

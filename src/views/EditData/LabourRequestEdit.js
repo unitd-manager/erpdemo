@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useState, useContext  } from 'react';
 import {
   Row,
@@ -24,12 +25,13 @@ import api from '../../constants/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AddEmployee from '../../components/LabourRequest/AddEmployee';
 import PlanningMainDetails from '../../components/LabourRequest/PriceMainDetails';
-import PlanningButton from '../../components/LabourRequest/PriceButton';
+//import PlanningButton from '../../components/LabourRequest/PriceButton';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AppContext from '../../context/AppContext';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PdfLabourRequest from '../../components/PDF/PdfLabourRequest';
+import ApiButton from '../../components/ApiButton';
 
 
 
@@ -40,6 +42,7 @@ const PriceListEdit = () => {
   const [plannings, setPlannings] = useState({});
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
+  const [update, setUpdate] = useState(false);
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
@@ -90,14 +93,8 @@ const [arabic, setArabic] = useState([]);
 // const handleLanguageChange = (language) => {
 //   setSelectedLanguage(language);
 // };
-const { id } = useParams();
+const { id, projectId } = useParams();
 const navigate = useNavigate();
-
-const [tables, setTables] = useState([]);
-const [selectedTable, setSelectedTable] = useState('');
-
-console.log('tables',tables)
-console.log('selectedTable',selectedTable)
 
 useEffect(() => {
   // API வழி டேட்டாபேஸ் பட்டியலை பெறுக
@@ -111,86 +108,12 @@ useEffect(() => {
     });
 }, []);
 
-const handleTableSelect = (event) => {
-  setSelectedTable(event.target.value);
-};
-
-
 
 const tablevalue =  [
   {name:'labour_request'},
   // {name:'employee'},
 ];
   // Fetch translation when selectedLanguage or plannings changes
-  const fetchTranslation = async () => {
-    try {
-      tablevalue.forEach(async (table) => {
-        console.log('tableName',table.name)
-        const tableNames = table.name
-      const res1 = await api.post('/labourrequest/getTranslationColumnFromTables',{tableNames});
-      res1.data.data.forEach(async (item) => {
-        const columnNames = item.COLUMN_NAME_TRUNCATED;
-        
-        console.log('columnNames',columnNames)
-        const whereId = id;
-        const whereCondition = [`${tableNames}_id`]
-        console.log('whereId',whereId)
-        console.log('WhereCondition',whereCondition)
-        const res = await api.post('/labourrequest/getTableTranslation', { whereId, columnNames,tableNames,whereCondition});
-       
-          console.log('resss',res.data.data)
-        res.data.data.forEach(async (cell) => {
-
-          Object.keys(cell).forEach(async(property) => {
-            console.log('colm', cell[property]);
-        
-  
-          try {
-            const response = await axios.post(
-              'https://translation.googleapis.com/language/translate/v2',
-              {},
-              {
-                params: {
-                  q:cell[property],
-                  target: 'ar',
-                  key: 'AIzaSyA_eJTEvBDRBHo8SYmq_2PyCh8s_Pl6It4', // Replace with your Google Translate API key
-                },
-              }
-            );
-             console.log(property,'_arb')
-             console.log('trabsss', response.data.data.translations[0].translatedText);
-            await api.post('/labourrequest/editRequestArb', {
-              tableNames,
-              whereId,
-              whereCondition,
-              labour_request_id:id,
-              [`${property}_arb`]: response.data.data.translations[0].translatedText,
-              value: response.data.data.translations[0].translatedText,
-          columnName:`${property}_arb`
-            });
-            
-          //   // const translation = JSON.parse(response.data.data.translations[0].translatedText)
-          //   // console.log('tran',translation);
-            
-          //   // const decodedJson = he.decode(response.data.data.translations[0].translatedText);
-          //   // const fixedJsonString =  decodedJson.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":');
-          //   // const fixedString = fixedJsonString.replace(/:(\s*)(\d{4}-\d{2}-\d{2})/g, ':"$2');
-          //   // const commastring= fixedString.replace(/،/g, ',');
-          //   // console.log('decoded json',decodedJson);
-          //   // console.log('fixedJsonString ',commastring);
-          //   // const newtext=JSON.parse(commastring);
-          //   // console.log('newtext',newtext.request_urgency);
-          } catch (error) {
-            console.error('Error occurred during translation:', error);
-          }
-        });
-      });
-      });
-    });
-    } catch (error) {
-      console.error('Error fetching translation column names:', error);
-    }
-  };
    
   const arb =selectedLanguage === 'Arabic'
   const eng =selectedLanguage === 'English'
@@ -306,7 +229,7 @@ const tablevalue =  [
   return (
     <>
 
-       <div>
+       {/* <div>
 
        <select id="tableSelect" onChange={handleTableSelect} value={selectedTable}>
   <option value="">Select a table</option>
@@ -314,19 +237,27 @@ const tablevalue =  [
     <option key={table} value={table}>{table}</option>
   ))}
 </select>
-    </div>
+    </div> */}
      {/*  */}
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
        fetchTranslation={fetchTranslation}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-       ></PlanningButton>
+       ></PlanningButton> */}
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="LabourRequest"
+            ></ApiButton>
        <ComponentCardV2>
         <PdfLabourRequest></PdfLabourRequest>
        </ComponentCardV2>
@@ -343,11 +274,9 @@ const tablevalue =  [
       {/* Nav tab */}
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+       
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />
         }
    
 
@@ -356,7 +285,7 @@ const tablevalue =  [
           {/* Start Tab Content 10 */}
           <TabPane tabId="1" eventkey="addEmployee">
             <Row>
-              <AddEmployee  arb={arb}/>
+              <AddEmployee  arb={arb} projectId={projectId}/>
               <Col xs="12" md="3" className="mb-3">
                 <Button
                   color="primary"
@@ -383,8 +312,11 @@ const tablevalue =  [
               desc="LabourRequest Data"
               recordType="Picture"
               mediaType={attachmentData.modelType}
+              update={update}
+              setUpdate={setUpdate}
             />
-            <ViewFileComponentV2 moduleId={id} roomName="LabourRequest" recordType="Picture" />
+            <ViewFileComponentV2 moduleId={id} roomName="LabourRequest" recordType="Picture"  update={update}
+    setUpdate={setUpdate} />
           </TabPane>
          
         </TabContent>

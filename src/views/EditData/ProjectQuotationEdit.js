@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent, Col, Button, Table, Row, Label, Tooltip } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
@@ -11,7 +12,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteButton';
+//import ProjectQuoteButton from '../../components/ProjectQuotation/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/ProjectQuotation/ProjectQuoteMoreDetails';
 import QuotationAttachment from '../../components/ProjectQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -22,6 +23,7 @@ import EditMaterialLineItemModal from '../../components/ProjectQuotation/EditMat
 import MaterialLineItem from '../../components/ProjectQuotation/MaterialLineItem';
 import AppContext from '../../context/AppContext';
 import PdfQuote from '../../components/PDF/PdfQuotation';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -68,7 +70,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectQuotation');
   };
@@ -313,13 +315,21 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <ProjectQuoteButton
+      {/* <ProjectQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectQuoteButton>
+      ></ProjectQuoteButton> */}
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectQuotation"
+            ></ApiButton>
       <Col md="4">
         <Label>
           <PdfQuote id={id} quoteId={id}></PdfQuote>
@@ -343,11 +353,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
         <TabContent className="p-4" activeTab={activeTab}>
         <TabPane tabId="1">

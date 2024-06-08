@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import React, { useState, useEffect, useContext } from 'react';
+import { Row, Col, Form, FormGroup, Label, Input, Button, TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
@@ -13,11 +13,16 @@ import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
 import SubConTable from '../../components/SubConModal/SubConTable';
+import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
+
 
 const SubConEdit = () => {
   //all state variables
@@ -28,11 +33,23 @@ const SubConEdit = () => {
   const [editWorkOrderLinked, setEditWorkOrderLinked] = useState(false);
   const [subconStatus, setSubconStatus] = useState();
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const { loggedInuser } = useContext(AppContext);
+  const [activeTab, setActiveTab] = useState('1');
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+  const tabs = [
+    { id: '1', name: 'Job Order Linked' },
+    
+  ];
+  const tabsArb = [
+    { id: '1', name: 'أمر العمل مرتبط' },
+   
+  ];
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 const [arabic, setArabic] = useState([]);
 
@@ -83,6 +100,7 @@ const [arabic, setArabic] = useState([]);
     
     if (subCon.company_name !== '' && subCon.address_flat !== ''){
       subCon.modification_date = creationdatetime;
+      subCon.modified_by = loggedInuser.first_name;
 
       api
         .post('/subcon/edit-Subcon', subCon)
@@ -109,7 +127,9 @@ const [arabic, setArabic] = useState([]);
         message('Unable to edit record.', 'error');
       });
   };
-
+  const backToList = () => {
+    navigate('/Subcon');
+  };
   useEffect(() => {
     getsubCon();
     getArabicCompanyName();
@@ -141,7 +161,7 @@ const [arabic, setArabic] = useState([]);
     // Get purchaseOrder By Id
   const getworkOrder = () => {
     api
-      .post('/subcon/getWorkOrderLinkedss', { sub_con_id: id })
+      .post('/subcon/getJobWorkOrderLink', { sub_con_id: id })
       .then((res) => {
         setSubConWorkOrder(res.data.data);
       })
@@ -160,7 +180,7 @@ const [arabic, setArabic] = useState([]);
 
       <Form>
         <FormGroup>
-          <ComponentCardV2>
+          {/* <ComponentCardV2>
             <Row>
               <Col>
                 <Button
@@ -197,17 +217,24 @@ const [arabic, setArabic] = useState([]);
                 </Button>
               </Col>
             </Row>
-          </ComponentCardV2>
-          
+          </ComponentCardV2> */}
+          <ApiButton
+              editData={editSubConData}
+              navigate={navigate}
+              applyChanges={editSubConData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="SubCon"
+            ></ApiButton>
           <ComponentCard title="SubCon Details" creationModificationDate={subCon}>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubcon.Name')?.[genLabel]}
-                <span className="required"> *</span>
-              </Label>
+                
+              </Label><span className="required"> *</span>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -221,15 +248,15 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'company_name_arb': 'company_name'}
                     className={`form-control ${
-                      formSubmitted && subCon.company_name_arb.trim() && subCon.company_name.trim() === '' ? 'highlight' : ''
+                      formSubmitted && subCon.company_name_arb && subCon.company_name === '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.company_name_arb.trim()&&subCon.company_name.trim() === '' && (
+                {formSubmitted &&  subCon.company_name_arb&&subCon.company_name === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -250,7 +277,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -271,9 +298,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -294,7 +319,9 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              </Row>
+              <Row>
+              <Col md="3">
                 <FormGroup>
                 
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -326,13 +353,13 @@ const [arabic, setArabic] = useState([]);
         <FormGroup>
           <ComponentCard title="Address">
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubcon.Address 1')?.[genLabel]}
-                <span className="required"> *</span>
-              </Label>
+                
+              </Label><span className="required"> *</span>
                  
                   <Input
                     type="text"
@@ -347,15 +374,15 @@ const [arabic, setArabic] = useState([]);
                     }
                     name={arb ? 'address_flat_arb': 'address_flat'}
                     className={`form-control ${
-                      formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' ? 'highlight' : ''
+                      formSubmitted &&  subCon.address_flat_arb && subCon.address_flat=== '' ? 'highlight' : ''
                     }`}
                   />
                 </FormGroup>
-                {formSubmitted &&  subCon.address_flat_arb.trim() && subCon.address_flat.trim() === '' && (
+                {formSubmitted &&  subCon.address_flat_arb && subCon.address_flat === '' && (
                   <div className="error-message">Please Enter</div>
                 )}
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -377,9 +404,7 @@ const [arabic, setArabic] = useState([]);
                   />
                 </FormGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -401,7 +426,7 @@ const [arabic, setArabic] = useState([]);
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -453,7 +478,19 @@ const [arabic, setArabic] = useState([]);
         setEditWorkOrderLinked={setEditWorkOrderLinked}
       ></WorkOrderLinked>
         <ToastContainer></ToastContainer>
+        <ComponentCard title="More Details">
+{ arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
+        }
+
+        <TabContent className="p-4" activeTab={activeTab}>
+       
+<TabPane tabId="1">
+
         <SubConTable subConWorkOrder={subConWorkOrder}></SubConTable>
+        </TabPane>
+        </TabContent>
+        </ComponentCard>
     </>
   );
 };

@@ -49,6 +49,7 @@ const QuoteLineItem = ({
       id: random.int(1, 99),
       unit: '',
       quantity: '',
+      brand:'',
       unit_price: '',
       amount: '',
       remarks: '',
@@ -92,6 +93,7 @@ const QuoteLineItem = ({
       {
         id: new Date().getTime().toString(),
         unit: '',
+        brand: '',
         quantity: '',
         unit_price: '',
         remarks: '',
@@ -291,6 +293,7 @@ const QuoteLineItem = ({
                         <tr>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Title')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Supplier')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Brand')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Unit')?.[genLabel]} </th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Qty')?.[genLabel]}</th>
                           <th scope="col">{arabic.find((item) => item.key_text === 'mdMaterialRequest.Unit Price')?.[genLabel]}</th>
@@ -330,6 +333,9 @@ const QuoteLineItem = ({
                                     }}
                                     options={supplier}
                                   />
+                                </td>
+                                <td data-label="Brand">
+                                  <Input Value={item.brand} type="text" name="brand" />
                                 </td>
                                 <td data-label="Unit">
                                   <Select

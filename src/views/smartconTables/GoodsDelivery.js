@@ -167,9 +167,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}
           title={arb?'قائمة تسليم البضائع':'Goods Delivery List'}
+          module='Goods Delivery'
           Button={
             <Link to="/GoodsDeliveryDetails">
-              <Button color="primary" className="shadow-none"> 
+              <Button color="primary" className="shadow-none mr-2"> 
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
@@ -203,7 +204,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     <td>{element.company_name}</td>
                     <td>{element.department}</td>
                     <td>{element.sales_man}</td>
-                    <td>{element.office_ref_no}</td>
+                    <td>{element.goods_ref_no}</td>
                     <td>{element.po_no}</td>
                     <td>{element.goods_delivery_status}</td>
                   </tr>
@@ -217,3 +218,4 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 };
 
 export default GoodsDelivery;
+ 

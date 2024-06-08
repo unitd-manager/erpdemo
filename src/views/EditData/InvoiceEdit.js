@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -22,6 +23,7 @@ import GoodsItemTable from '../../components/BookingTable/GoodsItemTable';
 import PartialInvoiceGoodsEdit from '../../components/BookingTable/PartialInvoiceGoodsEdit';
 import AppContext from '../../context/AppContext';
 import PdfCreateInvoice from '../../components/PDF/PdfCreateInvoice';
+import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [bookingDetails, setBookingDetails] = useState({
@@ -241,6 +243,7 @@ const toggle = (tab) => {
             const insertQuoteItems = (index) => {
               if (index < quoteItems.length) {
                 const QuoteItem = quoteItems[index];  
+                console.log('QuoteItem', QuoteItem)
                 // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
                 if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id  )) {
                   console.warn(`Quote item for order id  ${QuoteItem.order_item_id  } already exists, skipping insertion`);
@@ -261,7 +264,8 @@ const toggle = (tab) => {
                   order_item_id: QuoteItem.order_item_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -271,7 +275,7 @@ const toggle = (tab) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
                         setTimeout(() => {
-                          window.location.reload()
+                          // window.location.reload()
                         }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
@@ -339,7 +343,8 @@ const toggle = (tab) => {
                   order_item_id: QuoteItem.order_item_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
@@ -413,13 +418,14 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  total_cost: QuoteItem.amount,
                   invoice_qty: QuoteItem.quantity,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -492,12 +498,13 @@ const toggle = (tab) => {
                   qty: QuoteItem.quantity,
                   unit_price: QuoteItem.unit_price,
                   item_title: QuoteItem.title,
-                  total_cost: QuoteItem.total_cost,
+                  total_cost: QuoteItem.amount,
                   goods_delivery_item_id: QuoteItem.goods_delivery_item_id,
                   goods_delivery_id : QuoteItem.goods_delivery_id,
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id
+                  quote_id: QuoteItem.quote_id,
+                  unit:QuoteItem.unit
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -718,7 +725,7 @@ const toggle = (tab) => {
       <ComponentCardV2>
       <Row>
       <Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col>
-         <Col>
+         {/* <Col>
               <Button
                 color="primary"
                 className="shadow-none"
@@ -761,10 +768,17 @@ const toggle = (tab) => {
               >
                 Back to List
               </Button>
-            </Col>
+            </Col> */}
           </Row>
       </ComponentCardV2>
-      
+      <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Invoice"
+            ></ApiButton>
       </FormGroup>
   
       {/*Main Details*/}

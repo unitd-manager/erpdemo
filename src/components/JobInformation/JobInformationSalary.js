@@ -75,8 +75,15 @@ export default function JobProbation({
               <Input
                 type="date"
                 onChange={handleInputsJobInformation}
-                value={job && job.overtime_payment_dates}
-                name="overtime_payment_dates"
+             
+
+                value={
+                  arb
+                    ? job && job.overtime_payment_dates_arb
+                    : job && job.overtime_payment_dates
+                }
+                name={arb ? 'overtime_payment_dates_arb' : 'overtime_payment_dates'}
+            
               />
             </FormGroup>
           </Col>
@@ -100,8 +107,8 @@ export default function JobProbation({
           <Col md="4">
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Working Calendar(No of Days/Week)(KET)')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '} <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Working Calendar(No of Days/Week)(KET)')?.[genLabel]}
               </Label>
              
               <Input
@@ -120,8 +127,8 @@ export default function JobProbation({
           <Col md="4">
             <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '} <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Basic Pay')?.[genLabel]}
               </Label>
              
               <Input
@@ -174,8 +181,8 @@ export default function JobProbation({
             <Col md="4">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {' '}
-                {arabic.find((item) => item.key_text === 'mdJobInformation.Over Time Rate')?.[genLabel]} <span className="required"> *</span>{' '}
+                {' '}<span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdJobInformation.Over Time Rate')?.[genLabel]} 
               </Label>
                 
                 <Input

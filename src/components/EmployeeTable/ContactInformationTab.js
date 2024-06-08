@@ -100,7 +100,7 @@ function ContactInformationTab({ contactInformationDetails, handleCiInputs,arb,a
                 
                 onChange={handleCiInputs}
                 type="text"
-                disabled
+                
               />
             </FormGroup>
           </Col>
@@ -252,7 +252,7 @@ function ContactInformationTab({ contactInformationDetails, handleCiInputs,arb,a
                 
                 onChange={handleCiInputs}
                 type="text"
-                disabled
+                
               />
             </FormGroup>
           </Col>

@@ -90,7 +90,7 @@ const BookingDetails = () => {
                 company.map((e) => {
                   return (
                     <option key={e.order_id} value={e.order_id}>
-                      {e.order_code}
+                      {e.order_code} - {e.company_name}
                     </option>
                   );
                 })}

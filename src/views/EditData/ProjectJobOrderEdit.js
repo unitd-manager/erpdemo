@@ -11,7 +11,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import ProjectQuoteButton from '../../components/ProjectJobOrder/ProjectQuoteButton';
+//import ProjectQuoteButton from '../../components/ProjectJobOrder/ProjectQuoteButton';
 import ProjectQuoteMoreDetails from '../../components/ProjectJobOrder/ProjectQuoteMoreDetails';
 import JobOrderAttachment from '../../components/ProjectJobOrder/JobOrderAttachment';
 import Tab from '../../components/project/Tab';
@@ -20,16 +20,16 @@ import QuoteLineItem from '../../components/ProjectJobOrder/QuoteLineItem';
 import EditLineItemModal from '../../components/ProjectJobOrder/EditLineItemModal';
 import AppContext from '../../context/AppContext';
 import PdfQuote from '../../components/PDF/PdfJobOrder';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectJobOrderEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [company, setCompany] = useState();
-  const [contact, setContact] = useState();
+  const [subcon, setSubCon] = useState();
   const [addLineItemModal, setAddLineItemModal] = useState(false);
   const [lineItem, setLineItem] = useState();
   const [viewLineModal, setViewLineModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState();
   const [editLineModelItem, setEditLineModelItem] = useState(null);
   const [editLineModal, setEditLineModal] = useState(false);
   //const [quoteLine, setQuoteLine] = useState();
@@ -40,7 +40,6 @@ const ProjectJobOrderEdit = () => {
     setHoveredRowIndex(index === hoveredRowIndex ? null : index);
   };
 
-  //const [contact, setContact] = useState();
   //   const [addContactModal, setAddContactModal] = useState(false);
   //   const [addCompanyModal, setAddCompanyModal] = useState(false);
 
@@ -69,7 +68,11 @@ const [arabic, setArabic] = useState([]);
         // Handle error if needed
       });   
   };
-  
+  const getSubcon = () => {
+    api.get('/subcon/getSubcon').then((res) => {
+      setSubCon(res.data.data);
+    });
+  };
   let genLabel = '';
 
   if (arb === true) {
@@ -81,7 +84,7 @@ const [arabic, setArabic] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/ProjectJobOrder');
   };
@@ -107,24 +110,13 @@ const [arabic, setArabic] = useState([]);
   const toggle = (tab) => {
     setActiveTab(tab);
   };
-  const getContact = (companyId) => {
-    setSelectedCompany(companyId);
-    api.post('/company/getContactByCompanyId', { company_id: companyId }).then((res) => {
-      setContact(res.data.data);
-
-    });
-  };
 
   // Get Tenders By Id
 
   const editTenderById = () => {
     api.post('/joborder/getJobOrderById', { project_job_id: id }).then((res) => {
       setTenderDetails(res.data.data[0]);
- // Assuming you have a company_id in your response data
- const companyId = res.data.data[0].company_id;
-
- // Call getContact with the companyId
- getContact(companyId);
+ 
     });
   };
 
@@ -179,35 +171,13 @@ const [arabic, setArabic] = useState([]);
   const handleAddNewContact = (e) => {
     setNewContactData({ ...newContactData, [e.target.name]: e.target.value });
   };
-
-  const AddNewContact = () => {
-    const newDataWithCompanyId = newContactData;
-    newDataWithCompanyId.company_id = selectedCompany;
-    if (
-      newDataWithCompanyId.salutation !== '' &&
-      newDataWithCompanyId.first_name !== '' 
-    
-    ) {
-      api
-        .post('/tender/insertContact', newDataWithCompanyId)
-        .then(() => {
-          getContact(newDataWithCompanyId.company_id);
-          message('Contact Inserted Successfully', 'success');
-          window.location.reload();
-        })
-        .catch(() => {
-          message('Unable to add Contact! try again later', 'error');
-        });
-    } else {
-      message('All fields are required.', 'info');
-    }
-  };
  
   useEffect(() => {
     editTenderById();
     getLineItem();
     getCompany();
     getArabicCompanyName();
+    getSubcon();
     // getAllCountries();
   }, [id]);
 
@@ -259,13 +229,21 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={tenderDetails && tenderDetails.title} />
-      <ProjectQuoteButton
+      {/* <ProjectQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectQuoteButton>
+      ></ProjectQuoteButton> */}
+      <ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectJobOrder"
+            ></ApiButton>
       <Col md="4">
         <Label>
           <PdfQuote id={id} quoteId={id}></PdfQuote>
@@ -279,10 +257,8 @@ const [arabic, setArabic] = useState([]);
         addContactModal={addContactModal}
         tenderDetails={tenderDetails}
         company={company}
-        contact={contact}
-        AddNewContact={AddNewContact}
+        subcon={subcon}
         addContactToggle={addContactToggle}
-        getContact={getContact}
         arb={arb}
         arabic={arabic}
         genLabel={genLabel}

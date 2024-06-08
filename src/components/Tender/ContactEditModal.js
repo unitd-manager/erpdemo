@@ -58,6 +58,9 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
         message('Unable to edit record.', 'error');
       });
     }  
+    else {
+      message('Please fill all required fields', 'warning');
+    }
   };
   const handleSave = () => {
     //setFormSubmitted(true);
@@ -165,7 +168,7 @@ const ContactEditModal = ({ contactData, editContactEditModal, setEditContactEdi
             <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdTradingContact.Name')?.[genLabel]}
-              </Label>
+              </Label><span className="required"> *</span>
               <Input
                 type="text"
                 onChange={handleInputs}

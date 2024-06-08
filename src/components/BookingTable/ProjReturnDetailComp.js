@@ -3,14 +3,14 @@ import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
-  ReturnDetailComp.propTypes = {
+export default function ProjReturnDetailComp({ returnDetails, handleInputs,arb }) {
+  ProjReturnDetailComp.propTypes = {
     returnDetails: PropTypes.object,
     handleInputs: PropTypes.func,
     arb: PropTypes.any,
    // arabic: PropTypes.any,
     
-  };
+  }; 
 
   return (
     <>
@@ -26,9 +26,9 @@ export default function ReturnDetailComp({ returnDetails, handleInputs,arb }) {
 
                 <Input
                   type="text"
-                  value={returnDetails && returnDetails.invoice_code}
+                  value={returnDetails && returnDetails.project_invoice_code}
                   onChange={handleInputs}
-                  name="invoice_code"
+                  name="project_invoice_code"
                   readOnly
                 ></Input>
               </FormGroup>

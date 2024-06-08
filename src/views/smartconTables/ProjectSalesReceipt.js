@@ -53,7 +53,7 @@ const ProjectSalesReceipt = () => {
   //getting data from invoice table
   const getInvoice = () => {
     api
-      .get('/invoice/getReceipts')
+      .get('/projectreceipts/getProjectReceipts')
       .then((res) => {
         setInvoice(res.data.data);
         setLoading(false);
@@ -72,7 +72,7 @@ const ProjectSalesReceipt = () => {
 
   const getArabicCompanyName = () => {
       api
-      .get('/invoice/getTranslationforProjectSalesReceipt')
+      .get('/translation/getTranslationForProjectReceipt')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -98,27 +98,27 @@ const ProjectSalesReceipt = () => {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Order No')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Order No')?.[genLabel],
       selector: 'order_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Receipt Code')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Receipt Code')?.[genLabel],
       selector: 'receipt_code',
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Mode of Payment')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Mode of Payment')?.[genLabel],
       selector: 'mode_of_payment',
       sortable: true,
       grow: 0,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Status')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Status')?.[genLabel],
       selector: 'receipt_status',
       sortable: true,
       grow: 2,
@@ -126,7 +126,7 @@ const ProjectSalesReceipt = () => {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Amount')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Amount')?.[genLabel],
       selector: 'amount',
       sortable: true,
       width: 'auto',
@@ -134,14 +134,14 @@ const ProjectSalesReceipt = () => {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Date')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Date')?.[genLabel],
       selector: 'receipt_date',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingSalesReceipt.Print')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdProjectSalesReceipt.Print')?.[genLabel],
       sortable: true,
       width: 'auto',
       grow: 3,
@@ -156,7 +156,7 @@ const ProjectSalesReceipt = () => {
   //Api call for getting company dropdown
   const getCompany = () => {
     api
-      .get('/finance/getOrders')
+      .get('/projectreceipts/getOrders')
       .then((res) => {
         setCompany(res.data.data);
       })
@@ -186,9 +186,10 @@ const ProjectSalesReceipt = () => {
         <CommonTable
           loading={loading}
           title= {arb?'قائمة الاستلام': 'Receipt List'}
+          module='Sales Receipt'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               {arb ?'اضف جديد':'Add New'}
             </Button>
           }
@@ -204,7 +205,7 @@ const ProjectSalesReceipt = () => {
             {invoice &&
               invoice.map((element, index) => {
                 return (
-                  <tr key={element.receipt_id}>
+                  <tr key={element.project_receipt_id}>
                     <td>{index + 1}</td>
 
                     <td>{element.order_code}</td>
@@ -214,7 +215,7 @@ const ProjectSalesReceipt = () => {
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     <td>  
-                      <PdfCreateListReceipt receiptId={element.receipt_id} invoice={invoice} />
+                      <PdfCreateListReceipt receiptId={element.project_receipt_id} invoice={invoice} />
  </td>
                   </tr>
                 );
@@ -241,9 +242,8 @@ const ProjectSalesReceipt = () => {
                             {company &&
                               company.map((e) => {
                                 return (
-                                  <option key={e.order_id} value={e.order_id}>
-                                    {' '}
-                                   {arb?e.order_code_arb:e.order_code}{' '}
+                                  <option key={e.project_order_id} value={e.project_order_id}>
+                                   {arb?e.order_code_arb:e.order_code}
                                   </option>
                                 );
                               })}

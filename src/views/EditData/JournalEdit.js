@@ -14,11 +14,12 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import JournalButton from '../../components/Journal/JournalButton';
+//import JournalButton from '../../components/Journal/JournalButton';
 import ComponentCard from '../../components/ComponentCard';
 import Tab from '../../components/project/Tab';
 import JournalEditDetails from '../../components/Journal/JournalEditDetails';
 import message from '../../components/Message';
+import ApiButton from '../../components/ApiButton';
 
 const JournalEdit = () => {
     const navigate = useNavigate();
@@ -73,6 +74,9 @@ const handleInputs = (e, journalMasterId, journalId) => {
     }
 };
 
+const backToList = () => {
+  navigate('/Journal');
+};
   //Logic for edit data in db
   const editJournalData = () => {
     journalData.modification_date = creationdatetime;
@@ -141,7 +145,16 @@ journalMasterData.modification_date = creationdatetime;
     return (
         <>
             <BreadCrumbs heading='' />
-            <JournalButton navigate={navigate} editJournalData={editJournalData} editJournalMasterData={editJournalMasterData} />
+            {/* <JournalButton navigate={navigate} editJournalData={editJournalData} editJournalMasterData={editJournalMasterData} /> */}
+            <ApiButton
+              editData={editJournalData}
+              navigate={navigate}
+              applyChanges={editJournalData}
+              editJournalMasterData={editJournalMasterData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="JournalEdit"
+            ></ApiButton>
             <JournalEditDetails journalData={journalData} handleInputs={handleInputs} journalMasterData={journalMasterData} handleInputsMaster={handleInputsMaster} />
             <ComponentCard title="More Details">
                 <ToastContainer></ToastContainer>

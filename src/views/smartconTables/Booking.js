@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import moment from 'moment';
-import { Button } from 'reactstrap';
+import { Button,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -111,12 +111,17 @@ const Booking = () => {
         <CommonTable
           loading={loading}
           title="Booking List"
+          module='Booking'
           Button={
+            <>
+            <Col>
             <Link to="/BookingDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
+            </Col>
+            </>
           }
         >
           <thead>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Row, Col, Button, FormGroup, Label, Input, Form } from 'reactstrap';
+import { Row, Col, FormGroup, Label, Input, Form } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
-import ComponentCardV2 from '../ComponentCardV2';
+//import ComponentCardV2 from '../ComponentCardV2';
+import ApiButton from '../ApiButton';
 
 function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, eng, arb, arabic }) {
   InventoryEditPart.propTypes = {
@@ -26,7 +27,7 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
   //navigation
   const navigate = useNavigate();
   // Route Change
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/Inventory');
   };
@@ -38,7 +39,7 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
         <ToastContainer></ToastContainer>
         <Form>
           <FormGroup>
-            <ComponentCardV2>
+            {/* <ComponentCardV2>
               <Row>
                 <Col>
                   <Button
@@ -77,7 +78,16 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
                   </Button>
                 </Col>
               </Row>
-            </ComponentCardV2>
+            </ComponentCardV2> */}
+            
+            <ApiButton
+              editData={editinventoryData}
+              navigate={navigate}
+              applyChanges={editinventoryData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Inventory"
+            ></ApiButton>
 
             <ComponentCard  title={arb ? 'تفاصيل المخزون': 'Inventory Details'} creationModificationDate={inventoryDetails}>
               <Row>

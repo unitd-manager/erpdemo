@@ -16,10 +16,11 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
-import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
+//import ProjectTaskEditButton from '../../components/ProjectTaskTable/ProjectTaskEditButton';
 import ProjectTaskEditDetails from '../../components/ProjectTaskTable/ProjectTaskEditDetails';
 import AppContext from '../../context/AppContext';
 import ProjectTimeSheet from '../../components/JobOrderTable.js/ProjectTimesheet';
+import ApiButton from '../../components/ApiButton';
 
 const TaskEdit = () => {
   //All state variable
@@ -136,7 +137,9 @@ const [arabic, setArabic] = useState([]);
   //       message('Company not found', 'info');
   //     });
   // };
-  
+  const backToList = () => {
+    navigate('/ProjectTask');
+  };
   //handleInputs data
   const handleInputs = (e) => {
     setProjectTask({ ...projectTask, [e.target.name]: e.target.value });
@@ -198,7 +201,15 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs />
-      <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} arb={arb} />
+      {/* <ProjectTaskEditButton id={id} editTask={editTask} navigate={navigate} arb={arb} /> */}
+      <ApiButton
+              editData={editTask}
+              navigate={navigate}
+              applyChanges={editTask}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectTask"
+            ></ApiButton>
       {/* projectTask Details */}
       <ProjectTaskEditDetails
          projectTask={projectTask}

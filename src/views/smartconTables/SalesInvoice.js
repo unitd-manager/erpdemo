@@ -153,9 +153,10 @@ const Opportunity = () => {
         <CommonTable
           loading={loading}
           title="Sales Invoice List"
+          module='Sales Invoice'
           Button={
             <Link to="/InvoiceDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>
@@ -185,11 +186,11 @@ const Opportunity = () => {
                       {element.source_type === 'Sales_Order' && element.order_code}
                       {!element.source_type && 'No Source'}
                     </td> */}
-                    <td>{element.company_name}</td>
-                    <td>{element.invoice_date}</td>
-                    <td>{element.invoice_amount}</td>
-                    <td>{element.invoice_due_date }</td>
-                    <td>{element.status}</td>
+                    <td>{arb && element.company_name_arb ? element.company_name_arb : element.company_name}</td>
+                    <td>{arb && element.invoice_date_arb ? element.invoice_date_arb : element.invoice_date}</td>
+                    <td>{arb && element.invoice_amount_arb ? element.invoice_amount_arb : element.invoice_amount}</td>
+                    <td>{arb && element.invoice_due_date_arb ? element.invoice_due_date_arb : element.invoice_due_date }</td>
+                    <td>{arb && element.status_arb ? element.status_arb : element.status}</td>
                   
                   </tr>
                 );

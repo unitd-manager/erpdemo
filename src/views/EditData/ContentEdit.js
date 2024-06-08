@@ -12,11 +12,12 @@ import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import PictureAttachmentModalV2 from '../../components/Tender/PictureAttachmentModalV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
+import ApiButton from '../../components/ApiButton';
 
 const ContentUpdate = () => {
   // All state variables
@@ -37,7 +38,9 @@ const ContentUpdate = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/Content');
+  };
   //Setting data in contentDetails
   const handleInputs = (e) => {
     setContentDetails({ ...contentDetails, [e.target.name]: e.target.value });
@@ -134,7 +137,7 @@ const ContentUpdate = () => {
       <BreadCrumbs heading={contentDetails && contentDetails.title} />
       <Form>
         <FormGroup>
-          <ComponentCardV2>
+          {/* <ComponentCardV2>
             <Row>
               <Col>
                 <Button
@@ -167,7 +170,15 @@ const ContentUpdate = () => {
                 </Button>
               </Col>
             </Row>
-          </ComponentCardV2>
+          </ComponentCardV2> */}
+          <ApiButton
+              editData={editContentData}
+              navigate={navigate}
+              applyChanges={editContentData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Content"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Content details">
             <ToastContainer></ToastContainer>

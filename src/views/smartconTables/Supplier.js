@@ -112,8 +112,15 @@ if (arb === true) {
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdSupplier.Website')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplier.Email')?.[genLabel],
       selector: 'email',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
+      name: arabic.find(item => item.key_text === 'mdSupplier.Website')?.[genLabel],
+      selector: 'website',
       sortable: true,
       grow: 2,
       wrap: true,
@@ -135,9 +142,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Supplier List"
+          module='Supplier'
           Button={
             <Link to="/SupplierDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
@@ -163,6 +171,7 @@ if (arb === true) {
                     </td>
                     <td>{arb?element.company_name_arb:element.company_name}</td>
                     <td>{arb?element.email_arb:element.email}</td>
+                    <td>{arb?element.email_arb:element.website}</td>
                     <td>{element.mobile}</td>
                   </tr>
                 );

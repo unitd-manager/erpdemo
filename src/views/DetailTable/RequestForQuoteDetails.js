@@ -40,6 +40,8 @@ const RequestForQuoteDetails = () => {
   const handleInputs = (e) => {
     setRequestForQuote({ ...requestForQuote, [e.target.name]: e.target.value });
   };
+
+  console.log('requestForQuote', requestForQuote)
   //inserting data of job information
   const insertJobInformation = (code) => {
     if(requestForQuote.purchase_request_id !==''){
@@ -51,10 +53,11 @@ const RequestForQuoteDetails = () => {
       .post('/quote/insertQuote', requestForQuote)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
-        const selectedQuoteId = encodeURIComponent(requestForQuote.purchase_quote_id);
+        const selectedQuoteId = encodeURIComponent(requestForQuote.purchase_request_id);
+        console.log('selectedQuoteId', selectedQuoteId);
         message('Request For Quote inserted successfully.', 'success');
         setTimeout(() => {
-          navigate(`/RequestForQuoteEdit/${insertedDataId}?tab=1&purchase_quote_id=${selectedQuoteId}`);
+          navigate(`/RequestForQuoteEdit/${insertedDataId}?tab=1&purchase_request_id=${selectedQuoteId}`);
         }, 300);
       })
       .catch(() => {
@@ -117,7 +120,9 @@ const RequestForQuoteDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                <Label dir={arb?"rtl":'ltr'} 
+                //style={{ textAlign: 'right' }}
+                >
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
                 <span style={{color:'red'}}>*</span> </Label>
                   <Input

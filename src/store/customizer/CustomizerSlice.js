@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  topbarBg: 'primary',
+  topbarBg: 'logoColor',
   customizerSidebar: false,
   isRTL: false,
   isDark: false,

@@ -41,7 +41,10 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                 <Button
                   onClick={() => {
                     editData();
-                    navigate('/Leave');
+                    setTimeout(()=>{
+                      backToList();
+                    },500)
+                   
                   }}
                   color="primary">
                   Save
@@ -57,7 +60,7 @@ const ApiButton = ({ editData, navigate, applyChanges, backToList, module }) => 
                 <Button
                   onClick={() => {
                     editData();
-                    applyChanges();
+                    //applyChanges();
                   }}
                   color="primary"
                 >

@@ -17,9 +17,9 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
         <Form>
           <FormGroup>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
-                  <Label>Project Name</Label>
+                 
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdMaterialIssue.Project Name')?.[genLabel]}
               </Label>
@@ -31,7 +31,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
                   name="proj_title" disabled
                 />                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdMaterialIssue.Code')?.[genLabel]}
@@ -46,7 +46,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
                 />  
                </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
           
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -61,9 +61,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
                 </FormGroup>
               </Col>
               
-            </Row>
-            <Row>
-            <Col md="4">
+            <Col md="3">
                 <FormGroup>
                   
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -84,7 +82,9 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              </Row>
+              <Row>
+              <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdMaterialIssue.Authorized By')?.[genLabel]}
@@ -104,7 +104,7 @@ export default function PlanningMainDetails({ handleInputs, plannings,arabic,gen
                   />
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdMaterialIssue.Notes')?.[genLabel]}

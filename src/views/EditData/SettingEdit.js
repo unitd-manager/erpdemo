@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
+import ApiButton from '../../components/ApiButton';
 
 const SettingEdit = () => {
   //All state variable
@@ -20,7 +21,7 @@ const SettingEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Setting');
   };
@@ -64,9 +65,10 @@ const SettingEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <Form>
+      <ToastContainer></ToastContainer>
+      {/* <Form>
         <FormGroup>
-          <ToastContainer></ToastContainer>
+          
           <ComponentCardV2>
             <Row>
               <Col>
@@ -125,7 +127,15 @@ const SettingEdit = () => {
             </Row>
           </ComponentCardV2>
         </FormGroup>
-      </Form>
+      </Form> */}
+      <ApiButton
+              editData={editSettingData}
+              navigate={navigate}
+              applyChanges={editSettingData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Setting"
+            ></ApiButton>
       {/* Setting Details */}
       <Form>
         <FormGroup>

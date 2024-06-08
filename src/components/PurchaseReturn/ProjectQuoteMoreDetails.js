@@ -35,8 +35,9 @@ export default function ProjectQuoteMoreDetails({
               <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPurchaseReturn.Purchase Invoice Number')?.[genLabel]}
-                     <span className="required"> *</span>
+                <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdPurchaseReturn.PurchaseReturnCode')?.[genLabel]}
+                    
                   </Label>
                   <Input
                     type="text"
@@ -44,12 +45,35 @@ export default function ProjectQuoteMoreDetails({
                     value={
                       arb
                         ? (
-                            tenderDetails && tenderDetails.purchase_invoice_code_arb ? tenderDetails.purchase_invoice_code_arb :
-                            (tenderDetails && tenderDetails.purchase_invoice_code_arb !== null ? '' : tenderDetails && tenderDetails.purchase_invoice_code)
+                            tenderDetails && tenderDetails.purchase_return_code_arb ? tenderDetails.purchase_return_code_arb :
+                            (tenderDetails && tenderDetails.purchase_return_code_arb !== null ? '' : tenderDetails && tenderDetails.purchase_return_code)
                           )
-                        : (tenderDetails && tenderDetails.purchase_invoice_code)
+                        : (tenderDetails && tenderDetails.purchase_return_code)
                     }
-                    name={arb ? 'purchase_invoice_code_arb' : 'purchase_invoice_code'}
+                    name={arb ? 'purchase_return_code_arb' : 'purchase_return_code'}
+                    disabled
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="3">
+                <FormGroup>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                <span className="required"> *</span>{' '}
+                {arabic.find((item) => item.key_text === 'mdPurchaseReturn.PoCode')?.[genLabel]}
+                    
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={handleInputs}
+                    value={
+                      arb
+                        ? (
+                            tenderDetails && tenderDetails.po_code_arb ? tenderDetails.po_code_arb :
+                            (tenderDetails && tenderDetails.po_code_arb !== null ? '' : tenderDetails && tenderDetails.po_code)
+                          )
+                        : (tenderDetails && tenderDetails.po_code)
+                    }
+                    name={arb ? 'po_code_arb' : 'po_code'}
                     disabled
                   />
                 </FormGroup>

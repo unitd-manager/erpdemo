@@ -34,7 +34,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -59,12 +59,12 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
-                      arabic.find((item) => item.key_text === 'mdTradingOrder.Order Code')?.[
+                      arabic.find((item) => item.key_text === 'mdTradingOrder.Quote Code')?.[
                         genLabel
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -93,7 +93,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -123,7 +123,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -152,7 +152,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="date"
@@ -179,12 +179,11 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
-                    type="text"
-                    style={{ backgroundColor: '#f2f2f2', color: '#666' }}
-                    readOnly
+                    type="select"
+                    
                     onChange={handleInputs}
                     value={
                       arb
@@ -232,7 +231,7 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                   
                   </Label>
                   <Input
                     type="text"

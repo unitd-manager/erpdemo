@@ -217,13 +217,13 @@ const QuoteLineItem = ({
                     <table className="lineitem">
                       <thead>
                         <tr>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Title')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Description')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Qty')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit Price')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Amount')?.[genLabel]},</th>
-                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Remarks')?.[genLabel]},</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Title')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Description')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Qty')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Unit Price')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Amount')?.[genLabel]}</th>
+                          <th scope="col">{arabic.find(item => item.key_text === 'mdJobOrder.Remarks')?.[genLabel]}</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>

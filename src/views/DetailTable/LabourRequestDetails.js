@@ -45,9 +45,10 @@ const LabourRequestDetails = () => {
         .post('/labourrequest/insertLabourRequest', planningForms)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
+          const projectId = planningForms.project_id;
           message('Request inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/LabourRequestEdit/${insertedDataId}`);
+            navigate(`/LabourRequestEdit/${insertedDataId}/${projectId}`);
           }, 300);
         })
         .catch(() => {

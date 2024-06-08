@@ -60,7 +60,7 @@ const EnquiryLineChart = () => {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Enquiry Statistics (Line Chart)">
+        <ComponentCard title="Enquiry Statistics">
           <Form>
             {/* Add any form elements or filters if needed */}
           </Form>

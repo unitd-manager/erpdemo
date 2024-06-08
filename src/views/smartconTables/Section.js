@@ -123,9 +123,10 @@ const SectionDetails = () => {
         <CommonTable
           loading={loading}
           title="Section List"
+          module='Menu'
           Button={
             <Link to="/SectionDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

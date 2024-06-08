@@ -115,14 +115,14 @@ export default function ClientContactGetAndInsert({
       grow: 0,
       wrap: true,
     },
-    // {
-    //   name: arabic.find((item) => item.key_text === 'mdTradingContact.Email')?.[genLabel],
-    //   //name: 'Email',
-    //   selector: 'email',
-    //   sortable: true,
-    //   grow: 2,
-    //   wrap: true,
-    // },
+    {
+      name: arabic.find((item) => item.key_text === 'mdTradingContact.Email')?.[genLabel],
+      //name: 'Email',
+      selector: 'email',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
     {
       name: arabic.find((item) => item.key_text === 'mdTradingContact.Phone')?.[genLabel],
       //name: 'Phone(Direct)',
@@ -190,7 +190,7 @@ export default function ClientContactGetAndInsert({
             <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdTradingContact.Name')?.[genLabel]}
-              </Label>
+              </Label> <span className='required'>*</span>
               <Input
                 type="text"
                 onChange={handleAddNewContact}
@@ -209,11 +209,11 @@ export default function ClientContactGetAndInsert({
             </FormGroup>
           </Col>
 
-          {/* <Col md="4">
+          <Col md="4">
             <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdTradingContact.Email')?.[genLabel]}
-              </Label>
+              </Label> <span className='required'>*</span>
               <Input
                 type="text"
                 onChange={handleAddNewContact}
@@ -230,7 +230,7 @@ export default function ClientContactGetAndInsert({
                 name={arb ? 'email_arb' : 'email'}
               />
             </FormGroup>
-          </Col> */}
+          </Col>
                           {/* <Col md="4">
                             <FormGroup>
                               <Label>
@@ -266,7 +266,7 @@ export default function ClientContactGetAndInsert({
                                   )?.[genLabel]
                                 }{' '}
                                 {/*Access the value property */}
-                                <span className="required">*</span>
+                            
                               </Label>
                               <Input
                                 type="text"
@@ -281,7 +281,7 @@ export default function ClientContactGetAndInsert({
                                     : newContactData && newContactData.position
                                 }
                                 name={arb ? 'position_arb' : 'position'}
-                                
+              
                               ></Input>
                             </FormGroup>
                           </Col>
@@ -294,7 +294,7 @@ export default function ClientContactGetAndInsert({
                                   )?.[genLabel]
                                 }{' '}
                                 {/*Access the value property */}
-                                <span className="required">*</span>
+                                
                               </Label>
                               <Input
                                 type="text"
@@ -322,7 +322,7 @@ export default function ClientContactGetAndInsert({
                                   )?.[genLabel]
                                 }{' '}
                                 {/*Access the value property */}
-                                <span className="required">*</span>
+                               
                               </Label>
                               <Input
                                 type="text"
@@ -350,7 +350,7 @@ export default function ClientContactGetAndInsert({
                                   )?.[genLabel]
                                 }{' '}
                                 {/*Access the value property */}
-                                <span className="required">*</span>
+                                
                               </Label>
                               <Input
                                 type="text"
@@ -378,7 +378,7 @@ export default function ClientContactGetAndInsert({
                                   )?.[genLabel]
                                 }{' '}
                                 {/*Access the value property */}
-                                <span className="required">*</span>
+                                
                               </Label>
                               <Input
                                 type="text"
@@ -399,7 +399,7 @@ export default function ClientContactGetAndInsert({
                           </Col>
                           {/* <Col md="4">
                             <FormGroup>
-                              <Label>Position</Label>
+                              <Label>position</Label>
                               <Input
                                 type="text"
                                 name="position"

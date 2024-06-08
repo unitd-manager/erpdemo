@@ -159,9 +159,10 @@ const Cards = () => {
         
           loading={loading}
           title={arb ?'قائمة موظف':'Employee List'}
+          module='Employee'
           Button={
             <>
-              <Row>
+              
                 <Col md="4">
                   <Link to="/EmployeeDetails">
                     <Button color="primary" className="shadow-none">
@@ -169,7 +170,13 @@ const Cards = () => {
                     </Button>
                   </Link>
                 </Col>
-                <Col md="4">
+               
+              
+            </>
+          }
+          ImportButton={
+            <>
+             <Col md="4">
             {/* <Link to=""> */}
             <Button color="primary" className="shadow-none mr-2" onClick={() => importExcel()}>
             {arb ?'يستورد':'Import'}
@@ -177,18 +184,21 @@ const Cards = () => {
             {/* </Link> */}
             <input type='file' style={{display: 'none'}} id="import_excel" onChange={importExcelFile} />
             </Col>
-                <Col md="4">
-                  <a
-                    href="http://43.228.126.245/smartco-api/storage/excelsheets/Employee.xlsx"
-                    download
-                  >
-                    <Button color="primary" className="shadow-none">
-                    {arb ?'عينة':'Sample'}
-                    </Button>
-                  </a>
-                </Col>
-              </Row>
             </>
+          }
+          SampleButton={
+            <>
+          <Col md="4">
+          <a
+            href="http://43.228.126.245/smartco-api/storage/excelsheets/Employee.xlsx"
+            download
+          >
+            <Button color="primary" className="shadow-none">
+            {arb ?'عينة':'Sample'}
+            </Button>
+          </a>
+        </Col>
+        </>
           }
           
         >
@@ -206,8 +216,8 @@ const Cards = () => {
                   id={blg.employee_id_duplicate}
                   title= {
                     arb?
-                    (blg.first_name_arb?.split(' ').shift().toUpperCase()?blg.first_name_arb?.split(' ').shift().toUpperCase():
-                    blg.first_name_arb !== null ? '' : blg.first_name) :blg.first_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
+                    (blg.employee_name_arb?.split(' ').shift().toUpperCase()?blg.employee_name_arb?.split(' ').shift().toUpperCase():
+                    blg.employee_name_arb !== null ? '' : blg.employee_name) :blg.employee_name}  // before: title={blg.employee_name.charAt(0).toUpperCase() + blg.employee_name.slice(1)}
                   dateOfBirth={blg.date_of_birth}
                   empId={blg.employee_id_duplicate}
                   projectDesignation={arb ? blg.project_designation_arb : blg.project_designation}

@@ -11,10 +11,10 @@ import api from '../../constants/api';
 import MonthYear from '../ProjectModal/MonthYear';
 
 
-  export default function AddEmployee({ arb }) {
+  export default function AddEmployee({ arb, projectId }) {
     AddEmployee.propTypes = {
       arb: PropTypes.any,
-      
+      projectId: PropTypes.any,
     };
 
   const { id } = useParams();
@@ -59,7 +59,7 @@ import MonthYear from '../ProjectModal/MonthYear';
   //getting Employee data by Employee id
   const getLinkedEmployee = () => {
   // eslint-disable-next-line
-     api.post('/timesheet/getTimesheetStaffById', { project_id: parseInt(id) })
+     api.post('/timesheet/getTimesheetLabourById', { labour_request_id: parseInt(id) })
       .then((res) => {
         console.log("res.data.data",res.data.data)
         setGetEmployeeLinked(res.data.data)
@@ -101,7 +101,7 @@ import MonthYear from '../ProjectModal/MonthYear';
              return (
              <tr>
               <td>{i+1}</td>
-              <td>{e.first_name}</td>
+              <td>{e.employee_name}</td>
               <td style={{display:'flex',justifyContent:'center'}}>
               <span
                                 className="addline"
@@ -118,7 +118,7 @@ import MonthYear from '../ProjectModal/MonthYear';
         </CommonTable>
       </Col>
     </Row>
-     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} arb={arb}/>
+     <ChooseEmployee chooseEmp={chooseEmp} setChooseEmp={setChooseEmp} arb={arb} projectId={projectId}/>
      <MonthYear chooseMonthYear={chooseMonthYear} setChooseMonthYear={setChooseMonthYear} getSingleEmployeeData={getSingleEmployeeData} 
     setSingleEmployeeData={setSingleEmployeeData} />
     <TimesheetModal timesheet={timesheet} setTimesheet={setTimesheet} 

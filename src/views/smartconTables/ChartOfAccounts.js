@@ -135,10 +135,11 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Chart Of Account List"
+          module='ChartOfAccount'
           Button={
             <Link to="/ChartOfAccountDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
+              <Button color="primary" className="shadow-none mr-2">
+                New
               </Button>
             </Link>
           }

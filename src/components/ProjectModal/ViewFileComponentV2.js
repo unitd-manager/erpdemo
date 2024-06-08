@@ -5,13 +5,13 @@ import * as Icon from 'react-feather';
 import message from '../Message';
 import api from '../../constants/api';
 
-function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
+function ViewFileComponentV2({ moduleId, roomName, update, setUpdate, arb }) {
   ViewFileComponentV2.propTypes = {
     moduleId: PropTypes.string,
     roomName: PropTypes.string,
-    update:PropTypes.bool,
-    setUpdate:PropTypes.func,
-    arb:PropTypes.any
+    update: PropTypes.bool,
+    setUpdate: PropTypes.func,
+    arb: PropTypes.any
   };
 
   const tableStyle = {};
@@ -25,7 +25,7 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
 
   const deleteFile = (fileId) => {
     Swal.fire({
-      title: `Are you sure?`,
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -39,7 +39,7 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
           .then((res) => {
             console.log(res);
             Swal.fire('Deleted!', 'Media has been deleted.', 'success');
-            setUpdate(!update)
+            setUpdate(!update);
           })
           .catch(() => {
             message('Unable to Delete Media', 'info');
@@ -51,52 +51,64 @@ function ViewFileComponentV2({ moduleId, roomName,update,setUpdate,arb }) {
   useEffect(() => {
     getFiles();
   }, [update]);
-  
+
   useEffect(() => {
     getFiles();
   }, []);
+
+  const getHostnameUrl = () => {
+    const { hostname } = window.location;
+    if (hostname === 'erpardemo.unitdtechnologies.com') {
+      return 'https://erpardemo.unitdtechnologies.com/storage/uploads/';
+    }
+    if (hostname === 'erpclient.unitdtechnologies.com') {
+      return 'https://erpclient.unitdtechnologies.com/storage/uploads/';
+    }
+    if (hostname === 'localhost.com') {
+      return 'http://localhost.com/storage/uploads/';
+    }
+    return '';
+  };
 
   return (
     <>
       <table style={tableStyle}>
         <thead>
           <tr style={tableStyle}>
-            <th style={tableStyle}>{arb ?'اسم الملف':'File Name'}</th>
+            <th style={tableStyle}>{arb ? 'اسم الملف' : 'File Name'}</th>
             <th width="5%"></th>
           </tr>
         </thead>
         <tbody>
           {getFile ? (
-            getFile.map((res) => {
-              return (
-                <tr key={res.media_id}>
-                  <td style={tableStyle}>
-                    <a
-                      href={`https://erpardemo.unitdtechnologies.com/storage/uploads/${res.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {res.name}
-                    </a>
-                  </td>
-                  <td style={tableStyle}>
-                    <button
-                      type="button"
-                      className="btn shadow-none"
-                      onClick={() => {
-                        deleteFile(res.media_id);
-                      }}
-                    >
-                      <Icon.Trash2 />{' '}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
+            getFile.map((res) => (
+              <tr key={res.media_id}>
+                <td style={tableStyle}>
+                  <a
+                    href={`${getHostnameUrl()}${res.name}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {res.name}
+                  </a>
+                </td>
+                <td style={tableStyle}>
+                  <button
+                    type="button"
+                    className="btn shadow-none"
+                    onClick={() => {
+                      deleteFile(res.media_id);
+                    }}
+                  >
+                    <Icon.Trash2 />{' '}
+                  </button>
+                </td>
+              </tr>
+            ))
           ) : (
             <tr>
               <td>
-                <p>{arb ?'لم يتم تحميل أي ملفات حتى الآن':'No files uploaded yet'}</p>
+                <p>{arb ? 'لم يتم تحميل أي ملفات حتى الآن' : 'No files uploaded yet'}</p>
               </td>
             </tr>
           )}

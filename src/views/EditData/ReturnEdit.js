@@ -4,9 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
-  Button,
   Col,
-  FormGroup,
   Nav,
   NavItem,
   NavLink,
@@ -21,12 +19,13 @@ import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
 import ReturnDetailComp from '../../components/BookingTable/ReturnDetailComp';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
 import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
 import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
-import PdfReturn from '../../components/PDF/PdfReturn';
+import PdfReturn from '../../components/PDF/PdfReturn'; 
+import ApiButton from '../../components/ApiButton';
 
 const InvoiceEdit = () => {
   const [returnDetails, setReturnDetails] = useState({});
@@ -102,63 +101,63 @@ const InvoiceEdit = () => {
         message('Unable to edit record.', 'error');
       });
   };
-  const editInvoiceItemData = () => {
-    api
-      .get('/finance/checkInvoiceItem')
-      .then((response) => {
-        const existingQuoteItemsIds = response.data.data;
-        console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
+  // const editInvoiceItemData = () => {
+  //   api
+  //     .get('/finance/checkInvoiceItem')
+  //     .then((response) => {
+  //       const existingQuoteItemsIds = response.data.data;
+  //       console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
 
-        // Check if there are return item details
-        if (returnItemDetails && returnItemDetails.length > 0) {
-          // Create an array to store the API requests
-          const apiRequests = [];
+  //       // Check if there are return item details
+  //       if (returnItemDetails && returnItemDetails.length > 0) {
+  //         // Create an array to store the API requests
+  //         const apiRequests = [];
 
-          // Filter non-removed items
-          const nonRemovedItems = returnItemDetails.filter(
-            (element) => !existingQuoteItemsIds.includes(element.invoice_item_id),
-          );
+  //         // Filter non-removed items
+  //         const nonRemovedItems = returnItemDetails.filter(
+  //           (element) => !existingQuoteItemsIds.includes(element.invoice_item_id),
+  //         );
 
-          // Loop through each non-removed return item and create an API request
-          nonRemovedItems.forEach((element) => {
-            const salesReturnItem = {
-              price: element.total_cost,
-              qty_return: element.qty,
-              invoice_item_id: element.invoice_item_id,
-              order_id: element.order_id,
-              invoice_id: element.invoice_id,
-              return_date: new Date(),
-            };
+  //         // Loop through each non-removed return item and create an API request
+  //         nonRemovedItems.forEach((element) => {
+  //           const salesReturnItem = {
+  //             price: element.total_cost,
+  //             qty_return: element.qty,
+  //             invoice_item_id: element.invoice_item_id,
+  //             order_id: element.order_id,
+  //             invoice_id: element.invoice_id,
+  //             return_date: new Date(),
+  //           };
 
-            // Create the API request for this item
-            const apiRequest = api.post('/invoice/insertSalesReturnHistory', salesReturnItem);
+  //           // Create the API request for this item
+  //           const apiRequest = api.post('/invoice/insertSalesReturnHistory', salesReturnItem);
 
-            // Add the request to the array of requests
-            apiRequests.push(apiRequest);
-          });
+  //           // Add the request to the array of requests
+  //           apiRequests.push(apiRequest);
+  //         });
 
-          // Execute all API requests using Promise.all
-          if (apiRequests.length > 0) {
-            Promise.all(apiRequests)
-              .then(() => {
-                message('Records edited successfully', 'success');
-              })
-              .catch((error) => {
-                console.error('Error inserting records:', error);
-                message('Unable to edit records.', 'error');
-              });
-          } else {
-            message('No new items to insert', 'info');
-          }
-        } else {
-          message('No items to insert', 'info');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching existing quote items:', error);
-        message('Error fetching existing quote items.', 'error');
-      });
-  };
+  //         // Execute all API requests using Promise.all
+  //         if (apiRequests.length > 0) {
+  //           Promise.all(apiRequests)
+  //             .then(() => {
+  //               message('Records edited successfully', 'success');
+  //             })
+  //             .catch((error) => {
+  //               console.error('Error inserting records:', error);
+  //               message('Unable to edit records.', 'error');
+  //             });
+  //         } else {
+  //           message('No new items to insert', 'info');
+  //         }
+  //       } else {
+  //         message('No items to insert', 'info');
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching existing quote items:', error);
+  //       message('Error fetching existing quote items.', 'error');
+  //     });
+  // };
  
   const handleRemoveItem = (invoiceIdToRemove) => {
     // Find the item with the given invoice_id and add it to the removedItems array
@@ -218,13 +217,10 @@ const InvoiceEdit = () => {
     {arb === true && <BreadCrumbs heading={returnDetails && returnDetails.title_arb} />}
      
       {/* <BreadCrumbs /> */}
-      <FormGroup>
-        <ToastContainer />
-        <ComponentCardV2>
-          <Row>
-            <Col>
-            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
-            </Col>
+      {/* <FormGroup> */}
+      
+        {/* <ComponentCardV2>
+          
             <Col>
               <Button
                 color="primary"
@@ -266,8 +262,21 @@ const InvoiceEdit = () => {
             </Col>
           </Row>
         </ComponentCardV2>
-      </FormGroup>
-
+      </FormGroup> */}
+      <Row>
+            <Col>
+            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
+            </Col>
+            </Row>
+      <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Return"
+            ></ApiButton>
+              <ToastContainer />
       {/*Main Details*/}
       <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
         <ReturnDetailComp 

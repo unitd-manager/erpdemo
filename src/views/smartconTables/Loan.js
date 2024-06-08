@@ -139,7 +139,7 @@ const Loan = () => {
       grow: 3,
     },
     {
-      name: arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payable	')?.[genLabel],
+      name: arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payable')?.[genLabel],
       selector: 'amount_payable',
       sortable: true,
       width: 'auto',
@@ -162,9 +162,10 @@ const Loan = () => {
         <CommonTable
           loading={loading}
           title= {arb ?'لائحة القروض':'Loan List'}
+          module='Loan'
           Button={
             <Link to="/LoanDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}              </Button>
             </Link>
           }
@@ -183,7 +184,7 @@ const Loan = () => {
                   <tr key={element.loan_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/LoanEdit/${element.loan_id}?tab=1`}>
+                      <Link to={`/LoanEdit/${element.loan_id}/${element.employee_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

@@ -132,7 +132,7 @@ if (arb === true) {
       grow: 3,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdTradingEnq.Quotation Code')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdTradingQuote.Enquiry Code')?.[genLabel],
       selector: 'opportunity_code',
       sortable: true,
       grow: 2,
@@ -159,10 +159,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title={arb ?'قائمة الاقتباس':"Quotation List"}
-          
+          module='Quotation'
           Button={
             <Link to="/TradingQuotationDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
               {arb ?'اضف جديد':'Add New'}
               </Button>
             </Link>

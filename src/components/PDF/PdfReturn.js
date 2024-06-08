@@ -339,7 +339,7 @@ const PdfPaySlip = ({returnId,invoiceId}) => {
   return (
     <>
       <Button type="button" className="btn btn-dark mr-2" onClick={GetPdf}>
-        Print Return Data
+        Print Pdf
       </Button>
     </>
   );

@@ -1,3 +1,5 @@
+
+/*eslint-disable*/
 import React, { useEffect, useState, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button , TabContent, TabPane} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
@@ -18,6 +20,7 @@ import Tabs from '../../components/project/Tabs';
 import Tab from '../../components/project/Tab';
 import RequestPurchase from '../../components/RequestForQuote/RequestPurchase';
 import PdfRequestForQuote from '../../components/PDF/PdfRequestForQuote';
+import ApiButton from '../../components/ApiButton';
 
 
 const RequestForQuoteEdit = () => {
@@ -143,16 +146,16 @@ const RequestForQuoteEdit = () => {
              if (index < orderItem.length) {
                const orderItems = orderItem[index];
                // Check if the purchase_quote_items_id   already exists in the ExistingRequestQuote array
-               if (ExistingRequestQuote.includes(orderItems.purchase_request_id )) {
+               if (ExistingRequestQuote.includes(orderItems.purchase_request_items_id )) {
                  if (!alreadyInserted) {
                    console.warn(
-                     `Delivery items are already Inserted (Purchase_request_id: ${orderItems.purchase_request_id })`,
+                     `Delivery items are already Inserted (Purchase_request_id: ${orderItems.purchase_request_items_id })`,
                    );
                    message('Delivery items are already Inserted', 'warning');
                    alreadyInserted = true; // Set the flag to true so the message is shown only once
-                   setTimeout(() => {
-                     alreadyInserted = false;
-                   }, 3000);
+                  //  setTimeout(() => {
+                  //    alreadyInserted = false;
+                  //  }, 3000);
                  }
                  insertRequest(index + 1);
                 } else {
@@ -167,6 +170,7 @@ const RequestForQuoteEdit = () => {
       unit: orderItems.unit,
       amount: orderItems.amount,
       description: orderItems.description,
+      purchase_request_items_id: orderItems.purchase_request_items_id
     };
     console.log(`Inserting order item ${index + 1}:`, orderItemData);
     console.log('ExistingRequestQuote:', ExistingRequestQuote);
@@ -182,7 +186,7 @@ const RequestForQuoteEdit = () => {
             alreadyInserted = true;
           }
           getOrdersByOrderId();
-          window.location.reload();
+          // window.location.reload();
         } else {
           console.error(`Failed to insert order item ${index + 1}`);
         }
@@ -308,6 +312,14 @@ console.error('Error fetching quote items', error);
               </Col>
             </Row>
           </ComponentCardV2>
+          {/* <ApiButton
+              editData={editQuoteData}
+              navigate={navigate}
+              applyChanges={editQuoteData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="RequestForQuote"
+            ></ApiButton> */}
           <ComponentCardV2>
           <Label>
           <PdfRequestForQuote id={id} quoteId={id}></PdfRequestForQuote>
@@ -414,20 +426,20 @@ console.error('Error fetching quote items', error);
           </ComponentCard>
         </FormGroup>
       </Form>
-      {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+      <ComponentCard title={arb ?'المزيد من التفاصيل':'More Details'}>
+     
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
       <TabContent className="p-4" activeTab={activeTab}>
       <TabPane tabId="1" eventkey="MoreDetails">
-                {orderDetails && <RequestPurchase
+                <RequestPurchase
   orderDetails={orderDetails}
           />
-          }
+          
           </TabPane>
           </TabContent>
+          </ComponentCard>
     </>
   );
 };

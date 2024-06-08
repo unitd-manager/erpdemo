@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Row, Col, Button } from 'reactstrap';
+import { Col, Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -118,18 +118,19 @@ const CpfCalculator = () => {
         <CommonTable
           loading={loading}
           title="Cpf Calculator List"
+          module='CpfCalculator'
           Button={
             <>
-              <Row>
+              
                 <Col md="6">
                   <Link to="/CpfCalculatorDetails">
-                    <Button color="primary" className="shadow-none">
+                    <Button color="primary" className="shadow-none mr-2">
                       New
                     </Button>
                   </Link>
                 </Col>
                 
-              </Row>
+              
             </>
           }
         >

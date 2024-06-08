@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -6,8 +6,11 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
-import AccountMapButton from '../../components/Accounts/AccountMapButton';
+//import AccountMapButton from '../../components/Accounts/AccountMapButton';
 import ComponentCard from '../../components/ComponentCard';
+import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
+
 
 const ChartofACEdit = () => {
   //Const Variables
@@ -19,7 +22,7 @@ const ChartofACEdit = () => {
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => { };
+ // const applyChanges = () => { };
   const backToList = () => {
     navigate('/ChartOfAccounts');
   };
@@ -77,10 +80,13 @@ console.log('arabic',arabic)
   const handleInputs = (e) => {
     setChartofAC({ ...chartofAC, [e.target.name]: e.target.value });
   };
+  const { loggedInuser } = useContext(AppContext);
 
-  //Logic for edit data in db
+  //Logic for edit data in db 
   const editChartOfAcc = () => {
     chartofAC.modification_date = creationdatetime;
+    chartofAC.modified_by = loggedInuser.first_name;
+
       api
         .post('/chartofaccounts/editChartAc', chartofAC)
         .then(() => {
@@ -112,13 +118,20 @@ console.log('arabic',arabic)
       <ToastContainer></ToastContainer>
     
       {/* Button */}
-      <AccountMapButton
+      {/* <AccountMapButton
         editData={editChartOfAcc}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-      ></AccountMapButton>
-
+      ></AccountMapButton> */}
+<ApiButton
+              editData={editChartOfAcc}
+              navigate={navigate}
+              applyChanges={editChartOfAcc}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ChartofAC"
+            ></ApiButton>
       {/* Main Details */}
       <ComponentCard title="Chart of AC Edit" creationModificationDate={chartofAC}>
         <Form>

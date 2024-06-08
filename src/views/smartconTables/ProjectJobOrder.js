@@ -130,7 +130,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
     },
     {
      
-      name: arabic.find(item => item.key_text === 'mdJobOrder.Reference')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdJobOrder.Supplier')?.[genLabel],
       selector: 'ref_no_job',
       sortable: true,
       width: 'auto',
@@ -160,9 +160,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
         <CommonTable
           loading={loading}
           title="JobOrderList"
+          module='Job Order'
           Button={
             <Link to="/ProjectJobOrderDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
@@ -190,7 +191,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     <td>{arb && element.job_title_arb ?element.job_title_arb : element.job_title}</td>
                     <td>{element.job_date}</td>
                     <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
-                    <td>{arb && element.ref_no_job_arb ?element.ref_no_job_arb : element.ref_no_job}</td>
+                    <td>{element.sub_con_title}</td>
                     <td>{element.job_status}</td>
                     <td>{element.total_amount}</td>
                   </tr>

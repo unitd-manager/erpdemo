@@ -106,7 +106,7 @@ if (arb === true) {
     },
 
     {
-      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.CustomerName')?.[genLabel],
+      name: arabic.find(item => item.key_text === 'mdSupplierPriceList.SupplierListName')?.[genLabel],
       selector: 'customer_name',
       sortable: true,
       grow: 0,
@@ -136,9 +136,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Supplier Price List"
+          module='Supplier Price List'
           Button={
             <Link to="/SupplierPriceListDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

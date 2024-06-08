@@ -78,6 +78,7 @@ const TradingQuotationDetails = () => {
 
   //Logic for adding tender in db
   const [tenderForms, setTenderForms] = useState({
+    project_enquiry_id:'',
     quote_code: '',
     quote_date: '',
     company_id: '',
@@ -114,7 +115,7 @@ const TradingQuotationDetails = () => {
 
   //console.log(tenderDetails);
   const insertQuote = (code) => {
-    if (tenderForms.enquiry_code !== '' && tenderForms.quote_date !== '') {
+    if ((tenderForms.project_enquiry_id !=='') && tenderForms.quote_date !== '') {
       tenderForms.quote_code = code;
       tenderForms.creation_date = creationdatetime;
       tenderForms.created_by = loggedInuser.first_name;
@@ -171,13 +172,13 @@ const TradingQuotationDetails = () => {
                     value={tenderForms && tenderForms.project_enquiry_id}
                     name="project_enquiry_id"
                   >
-                    <option>Please Select</option>
+                    <option value=''>Please Select</option>
                     {enquirycode &&
                       enquirycode.map((e) => {
                         return (
                           <option key={e.project_enquiry_id} value={e.project_enquiry_id}>
                             {' '}
-                            {e.enquiry_code}{' '}
+                            {e.enquiry_code} - {e.company_name}{' '}
                           </option>
                         );
                       })}

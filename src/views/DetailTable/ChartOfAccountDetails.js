@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,6 +7,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 
 const ChartOfAccountDetails = () => {
   //Navigation and Parameter Constants
@@ -62,6 +63,7 @@ if (arb === true) {
 } else {
   genLabel = 'value';
 }
+const { loggedInuser } = useContext(AppContext);
 
   //Logic for adding Planning in db
   const [chartOfAccountForms, setChartOfAccountForms] = useState({
@@ -83,6 +85,7 @@ if (arb === true) {
   const insertChartOfAccount = () => {
 
     if ((chartOfAccountForms.title !== '' || chartOfAccountForms.title_arb !== '') && chartOfAccountForms.acc_category_id !== '') {      chartOfAccountForms.creation_date = creationdatetime;
+      chartOfAccountForms.created_by = loggedInuser.first_name;
       api
         .post('/chartOfAccounts/insertChartAc', chartOfAccountForms)
         .then((res) => {

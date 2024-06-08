@@ -23,7 +23,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
-import ReceiptCreate from '../../components/BookingTable/ReceiptCreate';
+import SalesReceiptCreate from '../../components/BookingTable/SalesReceiptCreate';
 import PdfCreateListReceipt from '../../components/PDF/PdfCreateListReciept';
 
 //geting data from invoice
@@ -186,9 +186,10 @@ const InvoiceData = () => {
         <CommonTable
           loading={loading}
           title= {arb?'قائمة الاستلام': 'Receipt List'}
+          module='Sales Receipt'
           Button={
             // Open the modal on button click
-            <Button color="primary" className="shadow-none" onClick={toggleModal}>
+            <Button color="primary" className="shadow-none mr-2" onClick={toggleModal}>
               {arb ?'اضف جديد':'Add New'}
             </Button>
           }
@@ -210,7 +211,7 @@ const InvoiceData = () => {
                     <td>{element.order_code}</td>
                     <td>{element.receipt_code}</td>
                     <td>{element.mode_of_payment}</td>
-                    <td>{element.receipt_status}</td>
+                    <td>{arb && element.receipt_status_arb ? element.receipt_status_arb : element.receipt_status}</td>
                     <td>{element.amount}</td>
                     <td>{moment(element.receipt_date).format('DD-MM-YYYY')}</td>
                     <td>  
@@ -291,9 +292,9 @@ const InvoiceData = () => {
           {arb?'إنشاء إيصال': 'Create receipt'}
           </ModalHeader>
           <ModalBody>
-       <ReceiptCreate 
+       <SalesReceiptCreate 
        orderId={ selectOrderId}
-       ></ReceiptCreate>
+       ></SalesReceiptCreate>
           </ModalBody>
         </Modal>
       </div>

@@ -59,8 +59,6 @@ export default function TenderMoreDetails({
                         genLabel
                       ]
                     }{' '}
-                    {/*Access the value property */}
-                    <span className="required">*</span>
                   </Label>
                   <Input
                     type="text"
@@ -75,16 +73,49 @@ export default function TenderMoreDetails({
                         : tenderDetails && tenderDetails.opportunity_code
                     }
                     name={arb ? 'opportunity_code_arb' : 'opportunity_code'}
+                    disabled
                   />
                 </FormGroup>
               </Col>
               <Col md="3">
                 <FormGroup>
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.customer')?.[genLabel]}{' '}
+                    {/*Access the value property */}
+                    
+                  </Label>
+                  <Input
+                    type="text"
+                    onChange={(e) => {
+                      handleInputs(e);
+                      // getContact(e.target.value);
+                    }}
+                    value={tenderDetails && tenderDetails.company_name}
+                    name="company_name"
+                    disabled
+                  >
+                    {/* <option value="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => {
+                        return (
+                          <option key={e.company_id} value={e.company_id}>
+                            {' '}
+                            {arb?e.company_name_arb:e.company_name}{' '}
+                          </option>
+                        );
+                      })} */}
+                  </Input>
+                </FormGroup>
+              </Col>
+
+              <Col md="3">
+                <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingEnq.Title')?.[genLabel]}{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
+                  <span className="required"> *</span>
                   <Input
                     type="text"
                     onChange={handleInputs}
@@ -97,6 +128,8 @@ export default function TenderMoreDetails({
                           : tenderDetails && tenderDetails.title
                         : tenderDetails && tenderDetails.title
                     }
+                    name={arb ? 'title_arb' : 'title'}
+
                   ></Input>
                 </FormGroup>
               </Col>
@@ -128,7 +161,7 @@ export default function TenderMoreDetails({
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="date"
@@ -157,7 +190,7 @@ export default function TenderMoreDetails({
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="select"
@@ -241,7 +274,7 @@ export default function TenderMoreDetails({
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingEnq.Reference')?.[genLabel]}{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="text"
@@ -268,7 +301,7 @@ export default function TenderMoreDetails({
                       ]
                     }{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="date"
@@ -291,7 +324,7 @@ export default function TenderMoreDetails({
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdTradingEnq.Notes')?.[genLabel]}{' '}
                     {/*Access the value property */}
-                    <span className="required">*</span>
+                    
                   </Label>
                   <Input
                     type="textarea"

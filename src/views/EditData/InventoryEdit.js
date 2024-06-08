@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Row, Col, Form, TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,7 +20,7 @@ import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import ClientAttachmentPortal from '../../components/ClientTable/ClientAttachmentPortal';
 import ProjectLinkedTable from '../../components/Inventory/ProjectLinkedTable';
-
+import AppContext from '../../context/AppContext';
 
 const Test = () => {
   //state variables
@@ -45,6 +45,7 @@ const Test = () => {
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
+  const { loggedInuser } = useContext(AppContext);
   
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
@@ -121,7 +122,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
   //update Inventory
   const editinventoryData = () => {
     inventoryDetails.modification_date = creationdatetime;
-
+    inventoryDetails.modified_by = loggedInuser.first_name
     api
       .post('/inventory/editinventoryMain', inventoryDetails)
       .then(() => {

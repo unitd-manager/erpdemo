@@ -35,9 +35,9 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const SubmitNote = () => {
     api.post('/note/addNote', addNoteData).then(() => {
       message('Add Note Successfully', 'success');
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 400);
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
     });
   };
 

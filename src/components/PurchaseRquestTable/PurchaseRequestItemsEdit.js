@@ -149,9 +149,9 @@ const PurchaseRequestItemsEditModal = ({ addPurchaseOrderEditModal, setAddPurcha
             onClick={() => {
               editPurchaseRequestItems();
               setAddPurchaseOrderEditModal(false);
-              setTimeout(() => {
-                window.location.reload()
-              }, 100);
+              // setTimeout(() => {
+              //   window.location.reload()
+              // }, 100);
             }}
           >
             {arb ?'يُقدِّم':'Submit'}

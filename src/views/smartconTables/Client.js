@@ -332,9 +332,10 @@ if (arb === true) {
         <CommonTable
           loading={loading}
           title="Client List"
+          module='Client'
           Button={
             <Link to="/ClientDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>
@@ -366,10 +367,10 @@ if (arb === true) {
                       <Flag value={element.flag ? 1 : 0} />
                     </span>
                   </td>
-                  <td>{arb ? element.company_name_arb : element.company_name}</td>
-                  <td>{arb ? element.email_arb : element.email}</td>
-                  <td>{element.status}</td>
-                  <td>{arb ? element.phone_arb : element.phone}</td>
+                  <td>{arb && element.company_name_arb ?element.company_name_arb : element.company_name}</td>
+                  <td>{arb && element.email_arb ?element.email_arb : element.email}</td>
+                  <td>{arb && element.status_arb ?element.status_arb : element.status}</td>
+                  <td>{arb && element.phone_arb ?element.phone_arb : element.phone}</td>
                 </tr>
               ))}
           </tbody>

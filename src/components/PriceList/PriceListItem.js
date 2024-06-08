@@ -36,6 +36,10 @@ export default function PlanningCpanel({
   //newPlanningData,
   setNewPlanningData,
   quoteLine,
+  arb,
+  arabic, 
+  genLabel,
+  unitdetails,
 }) {
   PlanningCpanel.propTypes = {
     setPlanData: PropTypes.func,
@@ -47,6 +51,10 @@ export default function PlanningCpanel({
    // handleAddNewPlanning: PropTypes.func,
     //newPlanningData: PropTypes.object,
     quoteLine: PropTypes.any,
+    arb: PropTypes.any,
+    arabic: PropTypes.any,   
+    genLabel: PropTypes.any,
+    unitdetails: PropTypes.array,
   };
 
 
@@ -57,9 +65,12 @@ const [addMoreItem, setMoreItem] = useState([
   {
     id: random.int(1, 99).toString(),
     unit: '',
+    unit_arb:'',
     price: '',
+    price_arb: '',
     product_id: '', // Initialize product_id here
-    title: '', // Initialize title here
+    title: '', 
+    title_arb: '',// Initialize title here
   },
 ]);
 const deleteRecord = (deleteID) => {
@@ -105,9 +116,12 @@ const AddNewLineItem = () => {
     {
       id: new Date().getTime().toString(),
       unit: '',
-      price: '',
-      product_id: '', // Initialize product_id here
-      title: '', // Initialize title here
+    unit_arb:'',
+    price: '',
+    price_arb: '',
+    product_id: '', // Initialize product_id here
+    title: '', 
+    title_arb: '',// Initialize title here
     },
   ]);
 };
@@ -121,6 +135,9 @@ const onchangeItem = (selectedProduct, itemId) => {
         title: selectedProduct.label,
         price: selectedProduct.price || '',
         unit: selectedProduct.unit || '',
+        title_arb: selectedProduct.label,
+        price_arb: selectedProduct.price || '',
+        unit_arb: selectedProduct.unit || '',
       };
     }
     return item;
@@ -169,62 +186,75 @@ const loadOptions = (inputValue, callback) => {
   //  Table Contact
   const columns = [
     {
-      name: 'id',
+      name: arabic.find(item => item.key_text === 'mdPriceList.ID')?.[genLabel], 
       selector: 'price_list_item_id',
       grow: 0,
       wrap: true,
       width: '4%',
     },
-   
-    // {
-    //   name: 'Del',
-    //   selector: 'delete',
-    //   cell: () => <Icon.Trash />,
-    //   grow: 0,
-    //   width: 'auto',
-    //   wrap: true,
-    // },
     {
-      name: 'Name',
+      name: arabic.find(item => item.key_text === 'mdPriceList.ProductName')?.[genLabel], 
       selector: 'title',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Price',
+      name: arabic.find(item => item.key_text === 'mdPriceList.Price')?.[genLabel],
       selector: 'price',
       sortable: true,
       grow: 0,
     },
     {
-      name: 'Unit',
+      name: arabic.find(item => item.key_text === 'mdPriceList.Unit')?.[genLabel],
       selector: 'unit',
       sortable: true,
       width: 'auto',
       grow: 3,
     },
     {
-      name: 'Action',
+      name: arabic.find(item => item.key_text === 'mdPriceList.Action')?.[genLabel],
       selector: 'edit',
       cell: () => <Icon.Edit2 />,
       grow: 0,
       width: 'auto',
       button: true,
       sortable: false,
-    },
-    
+    },  
   ];
+  const columns1 = [
+  {
+    name: arabic.find(item => item.key_text === 'mdPriceList.ProductName')?.[genLabel], 
+    selector: 'title',
+    sortable: true,
+    grow: 2,
+    wrap: true,
+  },
+  {
+    name: arabic.find(item => item.key_text === 'mdPriceList.Price')?.[genLabel],
+    selector: 'price',
+    sortable: true,
+    grow: 0,
+  },
+  {
+    name: arabic.find(item => item.key_text === 'mdPriceList.Unit')?.[genLabel],
+    selector: 'unit',
+    sortable: true,
+    width: 'auto',
+    grow: 3,
+  },
+];
+
   return (
     <Form>
        <Row>
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggle.bind(null)}>
-              Add New Item{' '}
+            {arb ? 'أضف أداة جديدة': 'Add New Item'} {' '}
             </Button>
             <Modal size="lg" isOpen={addContactModal} toggle={addContactToggle.bind(null)}>
-              <ModalHeader toggle={addContactToggle.bind(null)}>New Item </ModalHeader>
+              <ModalHeader toggle={addContactToggle.bind(null)}> {arb ? 'عنصر جديد': 'New Item'} </ModalHeader>
               <ModalBody>
                 <Row>
                 <Row>
@@ -237,21 +267,19 @@ const loadOptions = (inputValue, callback) => {
                           AddNewLineItem();
                         }}
                       >
-                        Add Line Item
+                        {arb ? 'إضافة عنصر السطر': 'Add Line Item'}
                       </Button>
                     </Col>
                   </Row>
                   <Card>
                     <table className="lineitem">
-                      <thead>
-                        <tr>
-                          <th scope="col">Title </th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Unit </th>
-                         
-                          <th scope="col"></th>
-                        </tr>
-                      </thead>
+                    <thead>
+            <tr>
+              {columns1.map((cell) => {
+                return <td key={cell.name}>{cell.name}</td>;
+              })}
+            </tr>
+          </thead>
                       <tbody>
                       {addMoreItem.map((item) => (
   <tr key={item.id}>
@@ -270,35 +298,53 @@ const loadOptions = (inputValue, callback) => {
         loadOptions={loadOptions}
       />
       <Input value={item.product_id} type="hidden" name="product_id"></Input>
-      <Input value={item.title} type="hidden" name="title"></Input>
+      <Input value={arb && item.title_arb ?item.title_arb : item.title} type="hidden" name="title"></Input>
     </td>
     <td>
       <Input
         type="text"
-        name="price"
+        name={arb ? 'price_arb' : 'price'}
         key={item.id}
         onChange={(e) => {
           onchangeItem(e, item.id);
         }}
-        value={item.price}
+        value={
+          arb
+            ? (
+              item && item.price_arb ? item.price_arb :
+                (item && item.price_arb !== null ? '' : item && item.price)
+              )
+            : (item && item.price)
+        }
       />
     </td>
     <td>
       <Input
         type="select"
+        
         onChange={(e) => {
           const newUnit = e.target.value;
           handleUnitChange(item.id, newUnit);
         }}
-        value={item.unit}
-        name="unit"
+        value={
+          arb
+            ? (
+              item && item.unit_arb ? item.unit_arb :
+                (item && item.unit_arb !== null ? '' : item && item.unit)
+              )
+            : (item && item.unit)
+        }
+        name={arb ? 'unit_arb' : 'unit'}
       >
-        <option defaultValue="selected">Please Select</option>
-        <option value="KGS">KGS</option>
-        <option value="PCS">PCS</option>
-        <option value="EA">EA</option>
-        <option value="NOS">NOS</option>
-        <option value="BOX">BOX</option>
+        <option defaultValue="selected">{arb ? 'الرجاء التحديد': 'Please Select'}</option>
+                  {unitdetails &&
+                    unitdetails.map((ele) => {
+                      return (
+                        <option key={arb && ele.value_arb ?ele.value_arb : ele.value} value={arb && ele.value_arb ?ele.value_arb : ele.value}>
+                          {arb && ele.value_arb ?ele.value_arb : ele.value}
+                        </option>
+                        );
+                      })}
       </Input>
     </td>
   </tr>
@@ -356,9 +402,9 @@ const loadOptions = (inputValue, callback) => {
                         </span>
                       </div>
                     </td>  */}
-                    <td>{element.title}</td>
-                    <td>{element.price}</td>
-                    <td>{element.unit}</td>
+                    <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
+                    <td>{arb && element.price_arb ?element.price_arb : element.price}</td>
+                    <td>{arb && element.unit_arb ?element.unit_arb : element.unit}</td>
                     <td>
                       <div className='anchor'>
                         <span

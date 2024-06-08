@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Col,
@@ -20,11 +20,14 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import PlanningMainDetails from '../../components/SupplierPriceList/PriceMainDetails';
-import PlanningButton from '../../components/SupplierPriceList/PriceButton';
+//import PlanningButton from '../../components/SupplierPriceList/PriceButton';
 import PlanningCpanel from '../../components/SupplierPriceList/PriceListItem';
 import PlanEditModal from '../../components/SupplierPriceList/PriceEditModal';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const SupplierPriceListEdit = () => {
   //Const Variables
@@ -52,9 +55,10 @@ const SupplierPriceListEdit = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/SupplierPriceList');
   };
@@ -139,6 +143,8 @@ useEffect(() => {
       plannings.effective_date &&
       plannings.customer_name 
       ) {
+        plannings.creation_date = creationdatetime;
+        plannings.created_by= loggedInuser.first_name;
       api
         .post('/supplierpricelistitem/editPriceList', plannings)
         .then(() => {
@@ -183,7 +189,7 @@ const handleAddNewPlanning = (e) => {
       {eng ===true && <BreadCrumbs heading={plannings && plannings.company_name} />}
       { arb === true && <BreadCrumbs heading={plannings && plannings.company_name_arb} />}
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
@@ -191,8 +197,18 @@ const handleAddNewPlanning = (e) => {
         arb={arb}
         arabic={arabic}
         eng={eng}
-       ></PlanningButton>
-       
+       ></PlanningButton> */}
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="SupplierPriceList"
+              arb={arb}
+        arabic={arabic}
+        eng={eng}
+            ></ApiButton>
        {/* Main Details */}
       <PlanningMainDetails
         handleInputs={handleInputs}
@@ -205,11 +221,11 @@ const handleAddNewPlanning = (e) => {
       {/* Nav tab */}
       <ComponentCard title={arb?"المزيد من التفاصيل":"More Details"}>
         <ToastContainer></ToastContainer>
-        {eng === true &&
+        {/* {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        } */}
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />:<Tab toggle={toggle} tabs={tabs} />
         }
 
         <TabContent className="p-4" activeTab={activeTab}>

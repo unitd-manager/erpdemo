@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import {
   Row,
   Col,
@@ -23,6 +23,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
+import creationdatetime from '../../constants/creationdatetime';
 import Jobinformationedit from '../../components/JobInformation/Jobinformationedit';
 import JobKeyDetails from '../../components/JobInformation/JobKeyDetails';
 import JobLeaveandMedical from '../../components/JobInformation/JobLeaveandMedical';
@@ -36,6 +37,7 @@ import JobTermination from '../../components/JobInformation/JobInformationTermin
 import JobBank from '../../components/JobInformation/Job';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import AppContext from '../../context/AppContext';
 
 const JobInformationEdit = () => {
   //All state variable
@@ -55,12 +57,13 @@ const JobInformationEdit = () => {
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
-  
+  const { loggedInuser } = useContext(AppContext);
+
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
 const arb =selectedLanguage === 'Arabic'
 
-  const eng =selectedLanguage === 'English'
+  //const eng =selectedLanguage === 'English'
 const getArabicLabels = () => {
   api
     .get('/translation/getTranslationForJobInformation')
@@ -206,7 +209,9 @@ useEffect(() => {
     //job.overtime_pay_rate = overTimeRate;
     job.deduction4 = parseFloat(job.deduction4);
     if (job.act_join_date && job.working_days && job.basic_pay && job.join_date && job.govt_donation) {
-     
+      job.modification_date = creationdatetime;
+      job.modified_by= loggedInuser.first_name;
+
       api
         .post('/jobinformation/edit-jobinformation', job)
         .then(() => {
@@ -323,13 +328,13 @@ useEffect(() => {
         {job && job.employee_name}
       </CardTitle>
       <CardTitle>
-        {job && job.fin_no ? null : (
+        {/* {job && job.fin_no ? null : (
           <>
             <Label>NRIC No:</Label>
             {job && job.nric_no}
             <br />
           </>
-        )}
+        )} */}
         {job && job.nric_no && !job.fin_no ? null : (
           <>
             <Label>FIN No:</Label>
@@ -363,11 +368,11 @@ useEffect(() => {
           ></JobKeyDetails>
 
           <ComponentCard title="More Details">
-          {eng === true &&
+          {/* {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        } */}
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />:  <Tab toggle={toggle} tabs={tabs} />
         }
             <TabContent className="p-4" activeTab={activeTab}>
               <TabPane tabId="1">

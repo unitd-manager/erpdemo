@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { TabPane, TabContent, Col, Button, Table, Row, Label } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../form-editor/editor.scss';
@@ -12,7 +13,7 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
+//import TradingQuoteButton from '../../components/TradingQuotation/TradingQuoteButton';
 import TradingQuoteMoreDetails from '../../components/TradingQuotation/TradingQuoteMoreDetails';
 import QuotationAttachment from '../../components/TradingQuotation/QuotationAttachment';
 import Tab from '../../components/project/Tab';
@@ -23,6 +24,7 @@ import ViewQuoteLogModal from '../../components/TradingQuotation/ViewQuoteLogMod
 
 import EditLineItemModal from '../../components/TradingQuotation/EditLineItemModal';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const TradingQuotationEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
@@ -46,7 +48,7 @@ const TradingQuotationEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/Quotation');
   };
@@ -289,7 +291,7 @@ const TradingQuotationEdit = () => {
 
   const getArabicCompanyName = () => {
     api
-      .get('/enquiry/getTranslationforTradingEnq')
+      .get('/tradingquote/getTranslationforTradingQuote')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -318,26 +320,29 @@ const TradingQuotationEdit = () => {
       name: '#',
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Title')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Title')?.[genLabel],
     },
 
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Description')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Description')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Quantity')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Unit')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.UnitPrice')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Quantity')?.[genLabel],
     },
     {
-      name:arabic.find(item => item.key_text === 'mdTradingEnq.Amount')?.[genLabel],
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Unit Price')?.[genLabel],
     },
     {
-      name: 'Updated By ',
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Amount')?.[genLabel],
     },
     {
-      name: 'Action ',
+      name: arabic.find(item => item.key_text === 'mdTradingQuote.updated By')?.[genLabel],
+    },
+    {
+      name:arabic.find(item => item.key_text === 'mdTradingQuote.Action')?.[genLabel],
     },
   ];
 
@@ -347,15 +352,23 @@ const TradingQuotationEdit = () => {
       {eng === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title} />}
       {arb === true && <BreadCrumbs heading={tenderDetails && tenderDetails.title_arb} />}
 
-      <TradingQuoteButton
+      {/* <TradingQuoteButton
         editTenderData={editTenderData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         id={id}
         insertquote={insertquote}
-      ></TradingQuoteButton>
-
+      ></TradingQuoteButton> */}
+<ApiButton
+              editData={editTenderData}
+              navigate={navigate}
+              applyChanges={editTenderData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              insertquote={insertquote}
+              module="TradingQuotation"
+            ></ApiButton>
       <TradingQuoteMoreDetails
         newContactData={newContactData}
         handleInputs={handleInputs}
@@ -453,10 +466,11 @@ const TradingQuotationEdit = () => {
                             <td>{index + 1}</td>
                             <td data-label="Title">{e.title}</td>
                             <td data-label="Description">{e.description}</td>
+                            <td data-label="unit">{e.unit}</td>
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By">
+                            <td data-label="Updated By" style={{ textAlign: 'center' }}>
                               <tooltip title={`${e.created_by} on ${e.creation_date}`}>
                                 <span
                                   onMouseOver={handleIconMouseOver}
@@ -468,7 +482,7 @@ const TradingQuotationEdit = () => {
                                     display: 'inline-block',
                                   }}
                                 >
-                                  created by
+                                  {/* created by */}<FaUser />
                                 </span>
                               </tooltip>
                             </td>

@@ -131,9 +131,10 @@ const Staff = () => {
         <CommonTable
           loading={loading}
           title="User List"
+          module='Staff'
           Button={
             <Link to="/StaffDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

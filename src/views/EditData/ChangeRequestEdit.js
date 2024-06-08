@@ -12,10 +12,11 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import Tab from '../../components/project/Tab';
 import message from '../../components/Message';
-import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeRequestButton';
+//import ChangeRequestButton from '../../components/ChangeRequestTable/ChangeRequestButton';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
+import ApiButton from '../../components/ApiButton';
 
 const ChangeRequestEdit = () => {
   // All state variables
@@ -34,7 +35,9 @@ const ChangeRequestEdit = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/ChangeRequest');
+  };
   //Get Staff Details
   const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
@@ -139,8 +142,15 @@ const ChangeRequestEdit = () => {
       <BreadCrumbs />
       <Form>
         <FormGroup>
-          <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} />
-          
+          {/* <ChangeRequestButton id={id} editChangeRequestData={editChangeRequestData} navigate={navigate} /> */}
+          <ApiButton
+              editData={editChangeRequestData}
+              navigate={navigate}
+              applyChanges={editChangeRequestData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ChangeRequest"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Change request Details" creationModificationDate={changerequesteditdetails}>
             <ToastContainer></ToastContainer>
@@ -239,7 +249,7 @@ const ChangeRequestEdit = () => {
                   </Col>
                   <Col md="3">
                 <FormGroup>
-                  <Label> Description </Label>
+                  
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdChangeRequest.Description')?.[genLabel]}
                   </Label>

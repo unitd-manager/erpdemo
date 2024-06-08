@@ -43,14 +43,15 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.goods_delivery_code_arb
-                          ? tenderDetails.goods_delivery_code_arb
-                          : tenderDetails && tenderDetails.goods_delivery_code_arb !== null
+                        ? tenderDetails && tenderDetails.project_goods_delivery_code_arb
+                          ? tenderDetails.project_goods_delivery_code_arb
+                          : tenderDetails && tenderDetails.project_goods_delivery_code_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.goods_delivery_code
-                        : tenderDetails && tenderDetails.goods_delivery_code
-                    }
-                    name={arb ? 'goods_delivery_code_arb' : 'goods_delivery_code'} />
+                            : tenderDetails && tenderDetails.project_goods_delivery_code
+                        : tenderDetails && tenderDetails.project_goods_delivery_code                  }
+                    name={arb ? 'project_goods_delivery_code_arb' : 'project_goods_delivery_code'} 
+                    readOnly
+                    />
                 </FormGroup>
               </Col>
               <Col md="3">
@@ -63,12 +64,12 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={
                       arb
-                        ? tenderDetails && tenderDetails.goods_delivery_date_arb
-                          ? tenderDetails.goods_delivery_date_arb
-                          : tenderDetails && tenderDetails.goods_delivery_date_arb !== null
+                        ? tenderDetails && tenderDetails.project_goods_delivery_date_arb
+                          ? tenderDetails.project_goods_delivery_date_arb
+                          : tenderDetails && tenderDetails.project_goods_delivery_date_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.goods_delivery_date
-                        : tenderDetails && tenderDetails.goods_delivery_date
+                            : tenderDetails && tenderDetails.project_goods_delivery_date
+                        : tenderDetails && tenderDetails.project_goods_delivery_date
                     } />
                 </FormGroup>
               </Col>
@@ -93,7 +94,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                         : tenderDetails && tenderDetails.order_code
                     }
                     name={arb ? 'order_code_arb' : 'order_code'}
-
+                     readOnly
                   ></Input> 
                 </FormGroup>
               </Col>
@@ -118,6 +119,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                         : tenderDetails && tenderDetails.company_name
                     }
                     name={arb ? 'company_name_arb' : 'company_name'}
+                    readOnly
                   />
 
                 </FormGroup>
@@ -189,14 +191,14 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                     onChange={handleInputs}
                     value={                    
                       arb
-                        ? tenderDetails && tenderDetails.office_ref_no_arb
-                          ? tenderDetails.office_ref_no_arb
-                          : tenderDetails && tenderDetails.office_ref_no_arb !== null
+                        ? tenderDetails && tenderDetails.project_goods_ref_no_arb
+                          ? tenderDetails.goods_ref_no_arb
+                          : tenderDetails && tenderDetails.project_goods_ref_no_arb !== null
                             ? ''
-                            : tenderDetails && tenderDetails.office_ref_no
-                        : tenderDetails && tenderDetails.office_ref_no
+                            : tenderDetails && tenderDetails.project_goods_ref_no
+                        : tenderDetails && tenderDetails.project_goods_ref_no
                     }
-                    name={arb ? 'office_ref_no_arb' : 'office_ref_no'}
+                    name={arb ? 'project_goods_ref_no_arb' : 'project_goods_ref_no'}
                  
                   />
                 </FormGroup>
@@ -205,7 +207,7 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
-                      arabic.find((item) => item.key_text === 'mdTradingGoods.PO Code\r\n')?.[
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.PO Code')?.[
                         genLabel
                       ]
                     }{' '}</Label>
@@ -231,30 +233,26 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {
-                      arabic.find((item) => item.key_text === 'mdTradingGoods.Status\r\n')?.[
+                      arabic.find((item) => item.key_text === 'mdTradingGoods.Status')?.[
                         genLabel
                       ]
                     }{' '}
                  </Label>                 
-                  <Input
-                    type="select"
-                    value={ 
-                    arb
-                    ? tenderDetails && tenderDetails.goods_delivery_status_arb
-                      ? tenderDetails.goods_delivery_status_arb
-                      : tenderDetails && tenderDetails.goods_delivery_status_arb !== null
-                      ? ''
-                      : tenderDetails && tenderDetails.goods_delivery_status
-                    : tenderDetails && tenderDetails.goods_delivery_status
-                }
-                name={arb ? 'goods_delivery_status_arb' : 'goods_delivery_status'}
-              
-                  >
-                    <option value="New">{arb ?'جديد':'New'}</option>
-                    <option value="Invoiced">{arb ?'مفوترة':'New'}</option>
-                    <option value="Delivered">{arb ?'تم التوصيل':'New'}</option>
-                    
-                  </Input>
+                 <Input
+                              type="select"
+                              name="project_goods_delivery_status"
+                              onChange={handleInputs}
+                              value={tenderDetails && tenderDetails.project_goods_delivery_status}
+                            >
+                              {' '}
+                              <option value="" selected="selected">
+                                Please Select
+                              </option>
+                              <option value="New">New</option>
+                              <option value="Invoiced">Invoiced</option>
+                              <option value="Delivered">Delivered</option>
+                             
+                            </Input>
                 </FormGroup> 
               </Col>
             </Row>

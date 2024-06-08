@@ -15,7 +15,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import creationdatetime from '../../constants/creationdatetime';
 import message from '../../components/Message';
 import api from '../../constants/api';
@@ -25,6 +25,7 @@ import SupplierDetails from '../../components/SupplierModal/SupplierDetails';
 import AppContext from '../../context/AppContext';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
+import ApiButton from '../../components/ApiButton';
 
 
 const SupplierEdit = () => {
@@ -48,7 +49,7 @@ const SupplierEdit = () => {
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
 
   // Function to toggle tabs
   const toggle = (tab) => {
@@ -88,20 +89,15 @@ console.log('arabic',arabic)
 useEffect(() => {
   getArabicCompanyName();
 }, []);
-
-  const tabs = [
-    { id: '1', name: 'Attachment' },
-  ];
-  const tabsArb =  [
-    {id:'1',name:'مرفق'},
-  ];
    // Attachment
    const dataForAttachment = () => {
     setDataForAttachment({
       modelType: 'attachment',
     });
   };
-
+  const backToList = () => {
+    navigate('/Supplier');
+  };
   //Handle input function
   const handleInputs = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
@@ -109,6 +105,14 @@ useEffect(() => {
 
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const tabs = [
+    { id: '1', name: 'Purchase Order Linked' },
+    { id: '2', name: ' Attachment' },
+  ];
+  const tabsArb =  [
+    {id:'1',name:'أمر الشراء مرتبط'},
+    {id:'2',name:'مرفق'},
+  ];
   
   // Get Supplier By Id
   const editSupplierById = () => {
@@ -126,22 +130,28 @@ useEffect(() => {
  
   //Logic for edit data in db
   const editSupplierData = () => {
-    if (supplier.company_name !== '') {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(supplier.email)) {
+      message('Invalid email address', 'warning');
+    } else if (supplier.company_name !== '' && 
+    supplier.email !== '')
+       {
       supplier.modification_date = creationdatetime;
       supplier.modified_by= loggedInuser.first_name; 
 
       api
         .post('/supplier/edit-Supplier', supplier)
-        .then(() => {
+        .then((res) => {
+          console.log('supplier', res.data.data);
           message('Record editted successfully', 'success');
         })
         .catch(() => {
           message('Unable to edit record.', 'error');
         });
         }  else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
+  
   //Logic for edit data in db
   const Status = () => {
     api
@@ -153,7 +163,7 @@ useEffect(() => {
         message('Unable to edit record.', 'error');
       });
   };
-
+  
   useEffect(() => {
     editSupplierById();
   }, [id]);
@@ -197,12 +207,14 @@ useEffect(() => {
     Status();
   }, []);
 
+ 
+
   return (
     <>
      {eng ===true && <BreadCrumbs heading={supplier && supplier.company_name} />}
       { arb === true && <BreadCrumbs heading={supplier && supplier.company_name_arb} />}
       
-      <Form>
+      {/* <Form>
         <FormGroup>
           <ComponentCardV2>
             <Row>
@@ -248,7 +260,16 @@ useEffect(() => {
             </Row>
           </ComponentCardV2>
         </FormGroup>
-      </Form>
+      </Form> */}
+      <ApiButton
+              editData={editSupplierData}
+              navigate={navigate}
+              applyChanges={editSupplierData}
+             // deleteData={deleteBookingData}
+              backToList={backToList}
+              arb={arb}
+              module="Supplier"
+            ></ApiButton>
       <ComponentCard title={arb?"تفاصيل المورد":"Supplier Details"} creationModificationDate={supplier}>
 
       <SupplierDetails
@@ -263,31 +284,40 @@ useEffect(() => {
         eng={eng}
       ></SupplierDetails>
   </ComponentCard>
-      <PurchaseOrderLinked
+     
+      <ToastContainer></ToastContainer>
+      
+
+       {/* Attachment Tab */}
+       
+
+        <ComponentCard title="More Details">
+        <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+        {eng === true &&
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        <TabContent className="p-4" activeTab={activeTab}>
+          {/* Contact Linked */}
+          <TabPane tabId="1">
+          <SupplierTable purchaseOrder={purchaseOrder}
+       arb={arb}
+       arabic={arabic}
+       eng={eng}></SupplierTable>
+
+          <PurchaseOrderLinked
         editPurchaseOrderLinked={editPurchaseOrderLinked}
         setEditPurchaseOrderLinked={setEditPurchaseOrderLinked}
         arb={arb}
         arabic={arabic}
         eng={eng}
       ></PurchaseOrderLinked>
-      <ToastContainer></ToastContainer>
-      <SupplierTable purchaseOrder={purchaseOrder}
-       arb={arb}
-       arabic={arabic}
-       eng={eng}></SupplierTable>
-
-
-       {/* Attachment Tab */}
-       <ComponentCard title="More Details">
-           <ToastContainer></ToastContainer>
-           {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
-        }
-           <TabContent className="p-4" activeTab={activeTab}>
-           <TabPane tabId="1">
+       </TabPane>
+          { /* Invoice Linked Portal */}
+           <TabPane tabId="2">
            <Form>
               <FormGroup>
                   <Row>
@@ -324,8 +354,10 @@ useEffect(() => {
               </FormGroup>
             </Form>
           </TabPane>
+          { /* Attachment Portal */ }
+          
         </TabContent>
-        </ComponentCard>
+      </ComponentCard>
     </>
 
   );

@@ -8,7 +8,7 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
-import ProjectButton from '../../components/ProjectTable/ProjectButton';
+//import ProjectButton from '../../components/ProjectTable/ProjectButton';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AddEmployee from '../../components/ProjectTabContent/AddEmployee';
@@ -26,11 +26,12 @@ import ActualHourStatsProject from '../../components/dashboard/ProjectStats/Actu
 import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
 import ProjectMilestones from '../../components/ProjectMilestones';
 import ProjectMilestoneEdit from '../../components/ProjectMilestoneEdit';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Project');
   };
@@ -44,7 +45,7 @@ const [arabic, setArabic] = useState([]);
 
   const arb =selectedLanguage === 'Arabic'
 
-  const eng =selectedLanguage === 'English'
+ // const eng =selectedLanguage === 'English'
   
 
   const getArabicCompanyName = () => {
@@ -214,8 +215,8 @@ const [arabic, setArabic] = useState([]);
       wrap: true,
     },
     {
-      name: arabic.find(item => item.key_text === 'mdProject.Customer')?.[genLabel],
-      selector: 'company_name',
+      name: arabic.find(item => item.key_text === 'mdProject.SubCon Title')?.[genLabel],
+      selector: 'sub_con_title',
       sortable: true,
       grow: 0,
     },
@@ -339,14 +340,21 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs />
-      <ProjectButton
+      {/* <ProjectButton
         UpdateData={UpdateData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProjectButton>
-
+      ></ProjectButton> */}
+<ApiButton
+              editData={UpdateData}
+              navigate={navigate}
+              applyChanges={UpdateData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Project"
+            ></ApiButton>
       <ProjectEditForm
         projectDetail={projectDetail}
         setProjectDetail={setProjectDetail}
@@ -360,18 +368,13 @@ const [arabic, setArabic] = useState([]);
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+       
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
 
-        {/* Call Modal's */}
-    {/* <Tab toggle={toggle} tabs={tabs} /> */}
-        {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
-          {/* Start Tab Content 1 */}
+     
 
           <TabPane tabId="1">
             <br />
@@ -609,7 +612,7 @@ const [arabic, setArabic] = useState([]);
                     </td>
                     <td>{element.job_title}</td>
                     <td>{element.job_date}</td>
-                    <td>{element.company_name}</td>
+                    <td><Link to={`/SubConEdit/${element.sub_con_id}`}>{element.sub_con_title}</Link></td>
                     <td>{element.ref_no_job}</td>
                     <td>{element.job_status}</td>
                     <td>{element.total_amount}</td>

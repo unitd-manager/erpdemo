@@ -76,8 +76,8 @@ const ReturnDetails = () => {
 
   const getArabicCompanyName = () => {
     api
-      .get('/goodsdelivery/getTranslationforTradingGoods')
-      .then((res) => {
+    .get('/finance/getTranslationforTradingSalesReturn')
+    .then((res) => {
         setArabic(res.data.data);
       })
       .catch(() => {
@@ -126,7 +126,7 @@ console.log('arabic', arabic);
                           return (
                             <option key={ele.invoice_id} value={ele.invoice_id}>
                               {' '}
-                            {arb?ele.invoice_code_arb:ele.invoice_code}{' '}
+                            {arb?ele.invoice_code_arb:ele.invoice_code} - {arb?ele.company_name_arb:ele.company_name}
 
                             </option>
                           );

@@ -11,7 +11,7 @@ import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
 
 const TradingQuotationDetails = () => {
-  const [enquirycode, setEnquiryCode] = useState();
+  const [enquirycode, setEnquiryCode] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -101,17 +101,33 @@ const TradingQuotationDetails = () => {
   //     });
   // };
 
+  const [companyid, setCompanyId] = useState();
+  const getCompanyId = () => {
+    api
+      .post('/tradingquote/getCompanyId', { opportunity_id: tenderForms.opportunity_id })
+      .then((res) => {
+        setCompanyId(res.data.data[0]);
+        console.log('setCompanyId', res.data.data[0]);
+      })
+  };
+
+
+  useEffect(() => {
+    getCompanyId(tenderForms.opportunity_id);
+  }, [tenderForms.opportunity_id]);
+  
+
   const generateCode = () => {
     api
       .post('/tender/getCodeValue', { type: 'quote' })
       .then((res) => {
         const code = res.data.data;
+        console.log('Code:', code);
+        
         // Fetch company_id based on opportunity_id
-        const selectedEnquiry = enquirycode.find(
-          (enquiry) => enquiry.opportunity_id === tenderForms.opportunity_id
-        );
-        console.log('Selected Enquiry:', selectedEnquiry);
-        if (selectedEnquiry) {
+        const selectedEnquiry = companyid; // Use the companyid state directly
+  
+        if (selectedEnquiry && selectedEnquiry.company_id) {
           const companyId = selectedEnquiry.company_id;
           console.log('Company ID:', companyId);
           insertQuote(code, companyId);
@@ -125,8 +141,34 @@ const TradingQuotationDetails = () => {
         insertQuote('', ''); // If error, pass empty string for code and company_id
       });
   };
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
+  // Use the selected language value as needed
+  console.log('Selected language from localStorage:', selectedLanguage);
+ 
+
+  const [arabic, setArabic] = useState([]);
+
+  const arb = selectedLanguage === 'Arabic';
+
+  // const eng = selectedLanguage === 'English';
+
+  const getArabicCompanyName = () => {
+    api
+      .get('/finance/getTranslationforTradingQuote')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+  };
+  console.log('arabic', arabic);
   useEffect(() => {
+    getArabicCompanyName();
     getEnquiryCode();
   }, [id]);
   const inputClass = `form-control ${
@@ -156,13 +198,13 @@ const TradingQuotationDetails = () => {
                         return (
                           <option key={e.opportunity_id} value={e.opportunity_id}>
                             {' '}
-                            {e.opportunity_code}{' '}
+                            {e.opportunity_code} - {arb?e.company_name_arb:e.company_name}
                           </option>
                         );
                       })}
                   </Input>
                   {(formSubmitted && !tenderForms.opportunity_id) && (
-      <div className="error-message">Please Select the Quote Code</div>
+      <div className="error-message">Please Select</div>
     )}
                 </Col>
               </FormGroup>

@@ -134,10 +134,12 @@ const ChangeRequest = () => {
       <CommonTable
         loading={loading}
         title="Changed Request"
+        module='ChangeRequest'
         Button={
+          
           <Link to="/ChangeRequestDetails">
-            <Button color="primary" className="shadow-none">
-              Add New
+            <Button color="primary" className="shadow-none mr-2">
+              New
             </Button>
           </Link>
         }
@@ -163,7 +165,7 @@ const ChangeRequest = () => {
                   <td>{arb && element.change_request_title_arb ?element.change_request_title_arb : element.change_request_title}</td>
                   <td>{element.title}</td>
                   <td>{element.submission_date}</td>
-                  <td>{moment(element.proposed_implementation_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.proposed_implementation_date?moment(element.proposed_implementation_date).format('YYYY-MM-DD'):''}</td>
                 </tr>
               );
             })}

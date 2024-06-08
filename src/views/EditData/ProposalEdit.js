@@ -10,13 +10,12 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
+//import ProposalButtons from '../../components/ProposalTable/ProposalButtons';
 import PdfQuote from '../../components/PDF/PdfQuotation';
 import creationdatetime from '../../constants/creationdatetime';
 
 // import TenderQuotation from '../../components/TenderTable/TenderQuotation';
 import ProposalMoreDetails from '../../components/ProposalTable/ProposalMoreDetails';
-import TenderAttachment from '../../components/TenderTable/TenderAttachment';
 import Tab from '../../components/project/Tab';
 import Tabs from '../../components/project/Tabs';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
@@ -25,6 +24,7 @@ import AppContext from '../../context/AppContext';
 //import ProposalEmployee from '../../components/ProposalTabContent/AddProposalEmployee';
 //import TaskEmployee from '../../components/ProposalTabContent/ProposalEmployee';
 import AddEmployee from '../../components/ProposalTabContent/AddEmployee';
+import ApiButton from '../../components/ApiButton';
 
 const ProposalEdit = () => {
   
@@ -117,7 +117,7 @@ const [arabic, setArabic] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
  
 
   const backToList = () => {
@@ -340,13 +340,21 @@ const [arabic, setArabic] = useState([]);
   return (
     <>
       <BreadCrumbs heading={proposalDetails && proposalDetails.project_quote_code} />
-      <ProposalButtons
+      {/* <ProposalButtons
         editProposalData={editProposalData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
         arb={arb}
-      ></ProposalButtons>
+      ></ProposalButtons> */}
+      <ApiButton
+              editData={editProposalData}
+              navigate={navigate}
+              applyChanges={editProposalData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Proposal"
+            ></ApiButton>
        <Col md="4">
         <Label>
         {proposalDetails && <PdfQuote id={proposalDetails.project_quote_id} quoteId={proposalDetails.project_quote_id}></PdfQuote>}
@@ -381,11 +389,8 @@ const [arabic, setArabic] = useState([]);
 
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
-        {eng === true &&
-        <Tab toggle={toggle} tabs={tabs} />
-        }
-        { arb === true &&
-        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        { arb === true ?
+        <Tabs toggle={toggle} tabsArb={tabsArb} />: <Tab toggle={toggle} tabs={tabs} />
         }
         {/* <Tab toggle={toggle} tabs={tabs} /> */}
         <TabContent className="p-4" activeTab={activeTab}>
@@ -456,7 +461,14 @@ const [arabic, setArabic] = useState([]);
             <Row>
               <AddEmployee proposalDetails={proposalDetails}/>
               {/* <TaskEmployee proposalId={id}/> */}
-              <Col xs="12" md="3" className="mb-3">
+              
+            </Row>
+
+            
+          </TabPane>
+
+          <TabPane tabId="4">
+          <Col xs="12" md="3" className="mb-3">
                 <Button
                   className="shadow-none"
                   color="primary"
@@ -470,9 +482,7 @@ const [arabic, setArabic] = useState([]);
                   <Icon.File className="rounded-circle" width="20" />
                 </Button>
               </Col>
-            </Row>
-
-            <AttachmentModalV2
+          <AttachmentModalV2
               moduleId={id}
               attachmentModal={attachmentModal}
               setAttachmentModal={setAttachmentModal}
@@ -492,10 +502,6 @@ const [arabic, setArabic] = useState([]);
               update={update}
               setUpdate={setUpdate}
             />
-          </TabPane>
-
-          <TabPane tabId="3">
-            <TenderAttachment></TenderAttachment>
           </TabPane>
         </TabContent>
       </ComponentCard>

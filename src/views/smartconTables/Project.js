@@ -158,9 +158,10 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
       <CommonTable
         loading={loading}
         title="Project List"
+        module='Project'
         Button={
           <Link to="/ProjectListDetails">
-            <Button color="primary" className="shadow-none">
+            <Button color="primary" className="shadow-none mr-2">
               Add New
             </Button>
           </Link>
@@ -180,7 +181,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                   <tr key={element.title}>
                     <td>{i + 1}</td>
                     <td>
-                      <Link to={`/projectEdit/${element.project_id}?tab=1`}>
+                      <Link to={`/projectEdit/${element.project_id}/${element.proposal_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

@@ -1,26 +1,24 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
 
 
-// Define the base URL(s) conditionally
+dotenv.config();
 let baseURL;
 
-if (process.env.NODE_ENV === 'production') {
-  baseURL = 'https://erpardemo.unitdtechnologies.com:2006';
+const { hostname } = window.location;
+console.log('prod',process.env.REACT_APP_PRODUCTION_URL)
+
+if (hostname === 'erpardemo.unitdtechnologies.com') {
+  baseURL = process.env.REACT_APP_PRODUCTION_URL;
+} else if (hostname === 'erpclient.unitdtechnologies.com') { 
+  baseURL = process.env.REACT_APP_TEST_URL;
 } else {
-  baseURL = 'http://localhost:2005';
+  baseURL = process.env.REACT_APP_LOCAL_URL;
 }
 
-console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('Current Hostname:', hostname,baseURL);
 const api = axios.create({
-  baseURL, // Use the baseURL variable here
+  baseURL,
 });
 
-
 export default api;
-
-
-
-
-
-
-

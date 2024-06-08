@@ -164,9 +164,10 @@ const SubCategory = () => {
         <CommonTable
         loading={loading}
           title={arb ? 'قائمة الفئات الفرعية': 'SubCategory List'}
+          module='SubCategory'
           Button={
             <Link to="/SubCategoryDetails">
-              <Button color="primary" className="shadow-none">
+              <Button color="primary" className="shadow-none mr-2">
                 Add New
               </Button>
             </Link>

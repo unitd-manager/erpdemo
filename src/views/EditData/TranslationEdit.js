@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -10,12 +10,13 @@ import htmlToDraft from 'html-to-draftjs';
 import {EditorState, convertToRaw, ContentState } from 'draft-js';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 // import SettingCreationModification from '../../components/SettingTable/SettingCreationModification';
 import creationdatetime from '../../constants/creationdatetime';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
+import ApiButton from '../../components/ApiButton';
 
 const TranslationEdit = () => {
   //All state variable
@@ -26,7 +27,7 @@ const TranslationEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/translation');
   };
@@ -98,10 +99,10 @@ const TranslationEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <Form>
-        <FormGroup>
+      {/* <Form>
+        <FormGroup> */}
           <ToastContainer></ToastContainer>
-          <ComponentCardV2>
+          {/* <ComponentCardV2>
             <Row>
               <Col>
                 <Button
@@ -160,7 +161,15 @@ const TranslationEdit = () => {
             </Row>
           </ComponentCardV2>
         </FormGroup>
-      </Form>
+      </Form> */}
+      <ApiButton
+              editData={editSettingData}
+              navigate={navigate}
+              applyChanges={editSettingData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="Translation"
+            ></ApiButton>
       {/* Translation Details */}
       <Form>
         <FormGroup>

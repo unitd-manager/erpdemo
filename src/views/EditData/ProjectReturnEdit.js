@@ -4,8 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import { ToastContainer } from 'react-toastify';
 import {
-  Button,
-  Col,
+  Col, 
   FormGroup,
   Nav,
   NavItem,
@@ -20,29 +19,30 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
 import ComponentCard from '../../components/ComponentCard';
-import ReturnDetailComp from '../../components/BookingTable/ReturnDetailComp';
-import ComponentCardV2 from '../../components/ComponentCardV2';
+import ProjReturnDetailComp from '../../components/BookingTable/ProjReturnDetailComp';
+//import ComponentCardV2 from '../../components/ComponentCardV2';
 // import InvoiceItem from '../../components/BookingTable/InvoiceItem';
-import ReturnItemTable from '../../components/BookingTable/ReturnItemTable';
-import ReturnInvoiceItemTable from '../../components/BookingTable/ReturnInvoiceItemTable';
+import ProjReturnItemTable from '../../components/BookingTable/ProjReturnItemTable';
+import ProjReturnInvoiceItemTable from '../../components/BookingTable/ProjReturnInvoiceItemTable';
 import AppContext from '../../context/AppContext';
 import PdfReturn from '../../components/PDF/PdfReturn';
+import ApiButton from '../../components/ApiButton';
 
-const InvoiceEdit = () => {
+const InvoiceEdit = () => { 
   const [returnDetails, setReturnDetails] = useState({});
   const [returnItemDetails, setReturnItemDetails] = useState();
   const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
   const { insertedDataId, invoiceId } = useParams();
   const [removedItems, setRemovedItems] = useState([]);
-  console.log('insertedDataId:', insertedDataId);
+  console.log('inserteDataId:', insertedDataId); 
   console.log('invoiceId:', invoiceId);
-  const { loggedInuser } = useContext(AppContext);
+  const { loggedInuser } = useContext(AppContext); 
   const navigate = useNavigate();
   const handleInputs = (e) => {
     setReturnDetails({ ...returnDetails, [e.target.name]: e.target.value });
   };
   const backToList = () => {
-    navigate('/SalesReturn');
+    navigate('/ProjectSalesReturn');
   };
   const [activeTab, setActiveTab] = useState('1');
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -55,7 +55,7 @@ const InvoiceEdit = () => {
   };
   const getReturnById = () => {
     api
-      .post('/invoice/getSalesReturnId', { sales_return_id: insertedDataId })
+      .post('/projectsalesreturn/getSalesReturnId', { proj_sales_return_id: insertedDataId })
       .then((res) => {
         setReturnDetails(res.data.data[0]);
       })
@@ -66,7 +66,7 @@ const InvoiceEdit = () => {
 
   const getReturnItemById = () => {
     api
-      .post('/invoice/getInvoiceItemsById', { invoice_id: invoiceId })
+      .post('/projectsalesreturn/getInvoiceItemsById', { project_invoice_id: invoiceId })
       .then((res) => {
         setReturnItemDetails(res.data.data);
       })
@@ -77,7 +77,7 @@ const InvoiceEdit = () => {
 
   const getReturnInvoiceItemById = () => {
     api
-      .post('/invoice/getReturnInvoiceItemsById', { invoice_id: invoiceId })
+      .post('/projectsalesreturn/getReturnInvoiceItemsById', { project_invoice_id: invoiceId })
       .then((res) => {
         setReturnInvoiceItemDetails(res.data.data);
       })
@@ -90,75 +90,75 @@ const InvoiceEdit = () => {
     returnDetails.modification_date = creationdatetime;
     returnDetails.modified_by = loggedInuser.first_name;
     api
-      .post('/finance/editSalesReturn', returnDetails)
+      .post('/projectsalesreturn/editSalesReturn', returnDetails)
       .then(() => {
         if (shouldNavigate) {
           setTimeout(() => {
-            navigate('/SalesReturn'); // Navigate after showing the message if shouldNavigate is true
+            navigate('/ProjectSalesReturn'); // Navigate after showing the message if shouldNavigate is true
           }, 100);
         }
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
-  };
-  const editInvoiceItemData = () => {
-    api
-      .get('/finance/checkInvoiceItem')
-      .then((response) => {
-        const existingQuoteItemsIds = response.data.data;
-        console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
+  }; 
+  // const editInvoiceItemData = () => {
+  //   api
+  //     .get('/projectsalesreturn/checkInvoiceItem')
+  //     .then((response) => {
+  //       const existingQuoteItemsIds = response.data.data;
+  //       console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
 
-        // Check if there are return item details
-        if (returnItemDetails && returnItemDetails.length > 0) {
-          // Create an array to store the API requests
-          const apiRequests = [];
+  //       // Check if there are return item details
+  //       if (returnItemDetails && returnItemDetails.length > 0) {
+  //         // Create an array to store the API requests
+  //         const apiRequests = [];
 
-          // Filter non-removed items
-          const nonRemovedItems = returnItemDetails.filter(
-            (element) => !existingQuoteItemsIds.includes(element.invoice_item_id),
-          );
+  //         // Filter non-removed items
+  //         const nonRemovedItems = returnItemDetails.filter(
+  //           (element) => !existingQuoteItemsIds.includes(element.project_invoice_item_id),
+  //         );
 
-          // Loop through each non-removed return item and create an API request
-          nonRemovedItems.forEach((element) => {
-            const salesReturnItem = {
-              price: element.total_cost,
-              qty_return: element.qty,
-              invoice_item_id: element.invoice_item_id,
-              order_id: element.order_id,
-              invoice_id: element.invoice_id,
-              return_date: new Date(),
-            };
+  //         // Loop through each non-removed return item and create an API request
+  //         nonRemovedItems.forEach((element) => {
+  //           const salesReturnItem = {
+  //             price: element.total_cost,
+  //             qty_return: element.qty,
+  //             project_invoice_item_id: element.invoice_item_id,
+  //             order_id: element.order_id,
+  //             project_invoice_id: element.invoice_id,
+  //             return_date: new Date(),
+  //           };
 
-            // Create the API request for this item
-            const apiRequest = api.post('/invoice/insertSalesReturnHistory', salesReturnItem);
+  //           // Create the API request for this item
+  //           const apiRequest = api.post('/projectsalesreturn/insertSalesReturnHistory', salesReturnItem);
 
-            // Add the request to the array of requests
-            apiRequests.push(apiRequest);
-          });
+  //           // Add the request to the array of requests
+  //           apiRequests.push(apiRequest);
+  //         });
 
-          // Execute all API requests using Promise.all
-          if (apiRequests.length > 0) {
-            Promise.all(apiRequests)
-              .then(() => {
-                message('Records edited successfully', 'success');
-              })
-              .catch((error) => {
-                console.error('Error inserting records:', error);
-                message('Unable to edit records.', 'error');
-              });
-          } else {
-            message('No new items to insert', 'info');
-          }
-        } else {
-          message('No items to insert', 'info');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching existing quote items:', error);
-        message('Error fetching existing quote items.', 'error');
-      });
-  };
+  //         // Execute all API requests using Promise.all
+  //         if (apiRequests.length > 0) {
+  //           Promise.all(apiRequests)
+  //             .then(() => {
+  //               message('Records edited successfully', 'success');
+  //             })
+  //             .catch((error) => {
+  //               console.error('Error inserting records:', error);
+  //               message('Unable to edit records.', 'error');
+  //             });
+  //         } else {
+  //           message('No new items to insert', 'info');
+  //         }
+  //       } else {
+  //         message('No items to insert', 'info');
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching existing quote items:', error);
+  //       message('Error fetching existing quote items.', 'error');
+  //     });
+  // };
  
   const handleRemoveItem = (invoiceIdToRemove) => {
     // Find the item with the given invoice_id and add it to the removedItems array
@@ -171,7 +171,7 @@ const InvoiceEdit = () => {
 
     // Filter out the item from the returnItemDetails state
     const updatedItems = returnItemDetails.filter(
-      (item) => item.invoice_item_id !== invoiceIdToRemove,
+      (item) => item.project_invoice_item_id !== invoiceIdToRemove,
     );
     setReturnItemDetails(updatedItems);
   };
@@ -198,7 +198,7 @@ const InvoiceEdit = () => {
 
   const getArabicCompanyName = () => {
     api
-      .get('/finance/getTranslationforTradingSalesReturn')
+      .get('/projectsalesreturn/getTranslationforTradingProjSalesReturn')
       .then((res) => {
         setArabic(res.data.data);
       })
@@ -220,7 +220,10 @@ const InvoiceEdit = () => {
       {/* <BreadCrumbs /> */}
       <FormGroup>
         <ToastContainer />
-        <ComponentCardV2>
+        <Row> <Col>
+            <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
+            </Col></Row>
+        {/* <ComponentCardV2>
           <Row>
             <Col>
             <PdfReturn returnDetails={returnDetails} returnId={insertedDataId} invoiceId={invoiceId}></PdfReturn>
@@ -265,12 +268,27 @@ const InvoiceEdit = () => {
               </Button>
             </Col>
           </Row>
-        </ComponentCardV2>
+        </ComponentCardV2> */}
+        {/* <ApiButton
+              editData={editInvoiceData}
+              navigate={navigate}
+              applyChanges={editInvoiceData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="ProjectReturn"
+            ></ApiButton> */}
+            <ApiButton
+          editData={editInvoiceData}
+          navigate={navigate}
+          applyChanges={editInvoiceData}
+          backToList={backToList}
+          module="ProjectReturn"
+        > </ApiButton>
       </FormGroup>
 
       {/*Main Details*/}
       <ComponentCard title= {arb ? 'تفاصيل الفاتورة' : 'Invoice Details' } creationModificationDate={returnDetails}>
-        <ReturnDetailComp 
+        <ProjReturnDetailComp 
          arb={arb}
          arabic={arabic}
         returnDetails={returnDetails} 
@@ -315,7 +333,7 @@ const InvoiceEdit = () => {
           {/* Description form */}
           <TabPane tabId="1">
             <Row className="border-bottom mb-3">
-              <ReturnItemTable
+              <ProjReturnItemTable
                 returnItemDetails={returnItemDetails}
                 invoiceInfo={insertedDataId}
                 onRemoveItem={handleRemoveItem}
@@ -324,9 +342,9 @@ const InvoiceEdit = () => {
                 arabic={arabic}
               />
             </Row>
-          </TabPane>
+          </TabPane> 
           <TabPane tabId="2">
-            <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails}
+            <ProjReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails}
              arb={arb}
              arabic={arabic} />
           </TabPane>

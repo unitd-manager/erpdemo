@@ -3,10 +3,11 @@ import {
   Row,
   Col,
  
-  Button,
+  Button, 
   TabPane,
   TabContent,
 } from 'reactstrap';
+import * as Icon from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
@@ -21,10 +22,12 @@ import '../form-editor/editor.scss';
 import api from '../../constants/api';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import PlanningMainDetails from '../../components/EquipmentIssue/PriceMainDetails';
-import PlanningButton from '../../components/EquipmentIssue/PriceButton';
+//import PlanningButton from '../../components/EquipmentIssue/PriceButton';
 import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import PdfEquipmentIssue from '../../components/PDF/PdfEquipmentIssue';
+import ApiButton from '../../components/ApiButton';
+
 
 const EquipmentIssueEdit = () => {
   //Const Variables
@@ -36,13 +39,14 @@ const EquipmentIssueEdit = () => {
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
   });
+  const [update, setUpdate] = useState(false);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
 
   // Button Save Apply Back List
-  const applyChanges = () => {};
+ // const applyChanges = () => {};
   const backToList = () => {
     navigate('/EquipmentIssue');
   };
@@ -140,12 +144,20 @@ const EquipmentIssueEdit = () => {
       {/* BreadCrumbs */}
       <BreadCrumbs />
       {/* Button */}
-      <PlanningButton
+      {/* <PlanningButton
        editData={editplanningData}
         navigate={navigate}
         applyChanges={applyChanges}
         backToList={backToList}
-       ></PlanningButton>
+       ></PlanningButton> */}
+       <ApiButton
+              editData={editplanningData}
+              navigate={navigate}
+              applyChanges={editplanningData}
+              //deleteData={deleteBookingData}
+              backToList={backToList}
+              module="EquipmentIssue"
+            ></ApiButton>
         <ComponentCardV2> <PdfEquipmentIssue ProjectID={id}></PdfEquipmentIssue></ComponentCardV2>
        {/* Main Details */}
       <PlanningMainDetails
@@ -170,33 +182,36 @@ const EquipmentIssueEdit = () => {
             <Row>
              
               <Col xs="12" md="3" className="mb-3">
-                <Button
-                  color="primary"
-                  className="shadow-none"
-                  onClick={() => {
-                    setRoomName('EquipmentIssue');
-                    setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
-                    dataForAttachment();
-                    setAttachmentModal(true);
-                  }}
-                >
-                  Add
-                </Button>
-              </Col>
-            </Row>
-
-            <AttachmentModalV2
-              moduleId={id}
-              attachmentModal={attachmentModal}
-              setAttachmentModal={setAttachmentModal}
-              roomName={RoomName}
-              fileTypes={fileTypes}
-              altTagData="EquipmentIssue Data"
-              desc="EquipmentIssue Data"
-              recordType="Picture"
-              mediaType={attachmentData.modelType}
-            />
-            <ViewFileComponentV2 moduleId={id} roomName="EquipmentIssue" recordType="Picture" />
+              <Button
+        className="shadow-none"
+        color="primary"
+        onClick={() => {
+          setRoomName('EquipmentIssue');
+          setFileTypes(['JPG', 'JPEG', 'PNG', 'GIF', 'PDF']);
+          dataForAttachment();
+          setAttachmentModal(true);
+          
+        }}
+      >
+        <Icon.File className="rounded-circle" width="20" />
+      </Button>
+    </Col>
+  </Row>
+  <AttachmentModalV2
+    moduleId={id}
+    attachmentModal={attachmentModal}
+    setAttachmentModal={setAttachmentModal}
+    roomName={RoomName}
+    fileTypes={fileTypes}
+    altTagData="EquipmentIssue Data"
+    desc="EquipmentIssue Data"
+    recordType="RelatedPicture"
+    mediaType={attachmentData.modelType}
+    update={update}
+    setUpdate={setUpdate}
+  />
+  <ViewFileComponentV2 moduleId={id} roomName="EquipmentIssue" recordType="RelatedPicture" update={update}
+    setUpdate={setUpdate} />
           </TabPane>
          
         </TabContent>

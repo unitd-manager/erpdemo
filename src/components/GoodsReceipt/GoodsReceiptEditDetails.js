@@ -5,7 +5,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
-import GoodsReceiptEditButton from './GoodsReceiptEditButton';
+//import GoodsReceiptEditButton from './GoodsReceiptEditButton';
+import ApiButton from '../ApiButton';
 
 
 
@@ -21,10 +22,12 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
         arb: PropTypes.any,
   };
   
-  
+  console.log('id',id)
   // Navigation and Parameter Constants
   const navigate = useNavigate();
-
+  const backToList = () => {
+    navigate('/GoodsReceipt');
+  };
   let genLabel = '';
 
   if (arb === true) {
@@ -38,7 +41,15 @@ const GoodsReceiptEditDetails = ({ goodsreceipteditdetails, handleInputs, employ
     <BreadCrumbs heading={goodsreceipteditdetails && goodsreceipteditdetails.title} />
     <Form>
         <FormGroup>
-        <GoodsReceiptEditButton id={id} editGoodsReceiptData={editGoodsReceiptData} navigate={navigate} />
+        {/* <GoodsReceiptEditButton id={id} editGoodsReceiptData={editGoodsReceiptData} navigate={navigate} />
+         */}
+        <ApiButton
+              editData={editGoodsReceiptData}
+              navigate={navigate}
+              applyChanges={editGoodsReceiptData}
+              backToList={backToList}
+              module="GoodsReceipt"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title={arb ?'تفاصيل استلام البضائع':'Goods Receipt Details'} creationModificationDate={goodsreceipteditdetails}>
             <ToastContainer></ToastContainer>
