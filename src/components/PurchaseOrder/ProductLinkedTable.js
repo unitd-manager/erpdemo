@@ -170,7 +170,7 @@ if (arb === true) {
                     <td>{arb ? element.selling_price_arb : element.selling_price}</td>
                     <td>{arb ? element.gst_arb : element.gst}</td>
                     <td>{element.stock}</td>
-                    <td>{arb ? element.quantity_arb : element.quantity}</td>
+                    <td>{arb ? element.qty_arb : element.qty}</td>
                     <td>{arb ? element.damage_qty_arb : element.damage_qty}</td>
                     <td>{arb ? element.qty_delivered_arb : element.qty_delivered}</td>
                     <td>{arb ? element.qty_balance_arb : element.qty_balance}</td>

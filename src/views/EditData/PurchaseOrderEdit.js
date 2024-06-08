@@ -313,7 +313,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     const orderItemData = {
                       purchase_order_id: id,
                       item_title: PurchaseQuoteItem.order_code,
-                      quantity: PurchaseQuoteItem.quantity,
+                      qty: PurchaseQuoteItem.quantity,
                       unit: PurchaseQuoteItem.unit,
                       description: PurchaseQuoteItem.description,
                       product_id: PurchaseQuoteItem.product_id,
