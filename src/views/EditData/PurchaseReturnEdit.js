@@ -21,7 +21,7 @@ import Tab from '../../components/project/Tab';
 import AppContext from '../../context/AppContext';
 import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
-import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
+//import ProductLinkedTable from '../../components/PurchaseOrder/ProductLinkedTable';
 
 const PurchaseReturnEdit = () => {
   const [tenderDetails, setTenderDetails] = useState([]);
@@ -32,11 +32,7 @@ const PurchaseReturnEdit = () => {
   const [addContactModal, setAddContactModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState();
   const [returnInvoiceItemDetails, setReturnInvoiceItemDetails] = useState();
-  const [product, setProduct] = useState();
-  const [editModal, setEditModal] = useState(false);
-  const [selectedPoProducts, setSelectedPoProducts] = useState([]);
-  const [historyProduct, setHistoryProduct] = useState();
-  const [viewHistoryModal, setViewHistoryModal] = useState(false);
+  
   //const [quoteLine, setQuoteLine] = useState();
 
   //const [contact, setContact] = useState();
@@ -106,31 +102,7 @@ const PurchaseReturnEdit = () => {
       setContact(res.data.data);
     });
   };
-  const deletePoProduct = (poProductId) => {
-    Swal.fire({
-      title: `Are you sure? `,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api
-          .post('purchaseorder/deletePoProduct', { po_product_id: poProductId })
-          .then(() => {
-            Swal.fire('Deleted!', 'PoProduct has been deleted.', 'success');
-            setTimeout(() => {
-              window.location.reload();
-            }, 300);
-          })
-          .catch(() => {
-            message('Unable to Delete PO Product', 'info');
-          });
-      }
-    });
-  };
+ 
 
   // const getReturnInvoiceItemById = () => {
   //   api
@@ -239,53 +211,8 @@ const PurchaseReturnEdit = () => {
   //   genLabel = 'value';
   // }
  //checked objects
- const getCheckedPoProducts = (checkboxVal, index, Obj) => {
-  if (checkboxVal.target.checked === true) {
-    setSelectedPoProducts([...selectedPoProducts, Obj]);
-  }
-  if (checkboxVal.target.checked !== true) {
-    const copyselectedPoProducts = [...selectedPoProducts];
-    copyselectedPoProducts.splice(index, 1);
-    setSelectedPoProducts(copyselectedPoProducts);
-  }
-};
 
-  //Add to stocks
-  const addQtytoStocks = () => {
-    if (selectedPoProducts) {
-      selectedPoProducts.forEach((elem) => {
-        if (elem.status !== 'Closed') {
-          elem.status = 'Closed';
-          elem.qty_updated = elem.qty_delivered;
-          elem.qty_in_stock += parseFloat(elem.qty_delivered);
-          elem.stock += parseFloat(elem.qty_delivered);
-           elem.qty_in_stock=elem.stock;
-          api.post('/product/edit-ProductQty', elem);
-          api
-            .post('/purchaseorder/editTabPurchaseOrderLineItem', elem)
-            .then(() => {
-              api
-                .post('/inventory/editInventoryStock', elem)
-                .then(() => {
-                  message('Quantity updated in inventory successfully.', 'success');
-                })
-                .catch(() => {
-                  message('unable to update quantity in inventory.', 'danger');
-                });
-              message('Quantity added successfully.', 'success');
-            })
-            .catch(() => {
-              message('unable to add quantity.', 'danger');
-            });
-        } else {
-          message('This product is already added', 'danger');
-        }
-      });
-    } else {
-      alert('Please select atleast one product');
-    }
-  };
-
+  
   useEffect(() => {
     editTenderById();
     // getLineItem();
@@ -389,28 +316,10 @@ const PurchaseReturnEdit = () => {
                 Generate Data
               </Button>
             </Col>
-            <Col md="2">
-              <Button
-                color="success"
-                // onClick={getReturnInvoiceItemById}
-                onClick={() => {
-                  addQtytoStocks();
-                }}
-              >
-                Detect Stock
-              </Button>
-            </Col>
+          
             </Row>
             
-        <ProductLinkedTable
-          products={returnInvoiceItemDetails}
-          setProduct={setProduct}
-          getCheckedPoProducts={getCheckedPoProducts}
-          setEditModal={setEditModal}
-          setViewHistoryModal={setViewHistoryModal}
-          deletePoProduct={deletePoProduct}
-          setHistoryProduct={setHistoryProduct}
-        />
+      
             <ReturnInvoiceItemTable returnInvoiceItemDetails={returnInvoiceItemDetails} 
             arabic={arabic}
             arb={arb}

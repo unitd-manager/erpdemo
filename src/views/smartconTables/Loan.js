@@ -139,7 +139,7 @@ const Loan = () => {
       grow: 3,
     },
     {
-      name: arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payabl')?.[genLabel],
+      name: arabic.find(item => item.key_text ===  'mdHRLoan.Amount Payable')?.[genLabel],
       selector: 'amount_payable',
       sortable: true,
       width: 'auto',

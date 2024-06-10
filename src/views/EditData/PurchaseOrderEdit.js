@@ -32,7 +32,7 @@ const PurchaseOrderEdit = () => {
   const [product, setProduct] = useState();
   const [historyProduct, setHistoryProduct] = useState();
   const [addPurchaseOrderModal, setAddPurchaseOrderModal] = useState();
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [attachmentData, setDataForAttachment] = useState({
@@ -92,7 +92,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
   const getPurchaseOrderId = () => {
     api.post('/purchaseorder/getPurchaseOrderById', { purchase_order_id: id }).then((res) => {
       setPurchaseDetails(res.data.data[0]);
-      setSupplierId(res.data.data[0].supplier_id);
+      setSupplierId(res.data.data[0]?.supplier_id);
     });
   };
 
@@ -313,7 +313,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     const orderItemData = {
                       purchase_order_id: id,
                       item_title: PurchaseQuoteItem.order_code,
-                      quantity: PurchaseQuoteItem.quantity,
+                      qty: PurchaseQuoteItem.quantity,
                       unit: PurchaseQuoteItem.unit,
                       description: PurchaseQuoteItem.description,
                       product_id: PurchaseQuoteItem.product_id,
@@ -400,6 +400,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
             </ComponentCardV2>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
+       products={products}
         supplier={supplier}
         request={request}
         handleInputs={handleInputs}

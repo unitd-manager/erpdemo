@@ -49,7 +49,9 @@ export default function GoodsDeliveryMoreDetails({ tenderDetails, handleInputs, 
                             ? ''
                             : tenderDetails && tenderDetails.project_goods_delivery_code
                         : tenderDetails && tenderDetails.project_goods_delivery_code                  }
-                    name={arb ? 'project_goods_delivery_code_arb' : 'project_goods_delivery_code'} />
+                    name={arb ? 'project_goods_delivery_code_arb' : 'project_goods_delivery_code'} 
+                    readOnly
+                    />
                 </FormGroup>
               </Col>
               <Col md="3">

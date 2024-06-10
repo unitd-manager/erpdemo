@@ -22,23 +22,23 @@ export default function LeadStats() {
     setIsLoading(true);
     setShowChart(false);
   
-    api.get('/invoice/getInvoice', { params: { month: selectedMonth } })
+    api.get('/stats/getInvoice', { params: { month: selectedMonth } })
       .then((response) => {
         setIsLoading(false);
   
         if (response.data && response.data.data && response.data.data.length > 0) {
           const hourData = response.data.data;
-  
+          console.log('hourData',hourData)
           // Filter data based on the selected year and month
           const filteredData = hourData.filter(item => {
-            const dateObject = new Date(item.lead_date);
+            const dateObject = new Date(item.invoice_date);
             return  dateObject.getMonth() === months.indexOf(selectedMonth);
           });
           
-          const titles = filteredData.map((item) => item.first_name);
-          const actualHours = filteredData.map((item) => item.cold_call_count);
+          const titles = filteredData.map((item) => item.invoice_code);
+          const actualHours = filteredData.map((item) => item.source_type);
 
-          const ids = filteredData.map((item) => item.lead_id); // Extract lead IDs
+          const ids = filteredData.map((item) => item.invoice_id); // Extract lead IDs
 
           setLeadId(ids); // Update lead IDs state
 
@@ -130,7 +130,7 @@ export default function LeadStats() {
 
   const seriescolumn = [
     {
-      name: 'Lead Count',
+      name: 'Sales Count',
       data: actualHourData,
     },
   ];
@@ -168,9 +168,10 @@ export default function LeadStats() {
             </Row>
           </Form>
           {showChart && (
-  <Link to={`/LeadEdit/${leadID}`}>
-    <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-  </Link>
+  <Link to={`/LeadEdit/${leadID[0]}`}>
+  <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+</Link>
+
 )}
         </ComponentCard>
       </Col>

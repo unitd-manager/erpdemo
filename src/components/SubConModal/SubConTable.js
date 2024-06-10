@@ -56,7 +56,7 @@ export default function SupplierTable({ subConWorkOrder }) {
                         <td>{element.job_title}</td>
                         <td>{moment(element.job_date).format('YYYY-MM-DD')}</td>
                         <td>
-                          <Link to={`/ProjectEdit/${element.project_id}?tab=1`}>{element.title}</Link>
+                          <Link to={`/ProjectEdit/${element.project_id}/${element.proposal_id}?tab=1`}>{element.title}</Link>
                         </td>
                         <td>{element.job_status}</td>
                        

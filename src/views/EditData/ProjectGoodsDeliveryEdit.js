@@ -206,7 +206,6 @@ const GoodsDeliveryEdit = () => {
   const columns1 = [
     { name:arb ? 'رقم لا' : 'SN.No' },
     { name:arb ? 'عنوان البند' : 'Item Title' },
-    { name:arb ? 'وصف' : 'Description' },
     { name:arb ? 'وحدة' : 'Unit' },
     { name:arb ? 'الكمية المطلوبة' : 'Ordered Quantity' },
     { name:arb ? 'كمية تسليمها' : 'Delivered Quantity' },
@@ -310,7 +309,6 @@ const GoodsDeliveryEdit = () => {
                           <tr key={element.goods_delivery_id}>
                             <td>{index + 1}</td>
                             <td>{element.item_title}</td>
-                            <td>{element.description}</td>
                             <td>{element.unit}</td>
                             <td>{element.quantity}</td>
                             <td>{element.delivery_qty}</td>

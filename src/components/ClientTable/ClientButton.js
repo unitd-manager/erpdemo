@@ -1,10 +1,13 @@
 import React from 'react';
-import { Row, Col, Form, FormGroup, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Button, ModalFooter,
+  Modal,
+  ModalHeader,
+  ModalBody,CardBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ComponentCardV2 from '../ComponentCardV2';
 import CommonTranslationEdit from '../CommonTranslationEdit';
 
-export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted,arb,id,tablevalue,whereCondition}) {
+export default function ClientButton({clientsDetails,navigate,editClientsData, applyChanges, backToList , setFormSubmitted,arb,id,tablevalue,whereCondition,logButtonActivityToFile,addLogToggle,addLogModal,log}) {
   ClientButton.propTypes = {
     editClientsData: PropTypes.any,
     applyChanges: PropTypes.func,
@@ -16,7 +19,10 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
     id: PropTypes.any,
     tablevalue: PropTypes.any,
     whereCondition: PropTypes.any,
-  
+    logButtonActivityToFile:PropTypes.any,
+    addLogToggle:PropTypes.any,
+    addLogModal:PropTypes.any,
+    log:PropTypes.any
   };
   const handleSave = () => {
     console.log('Handling Save...');
@@ -40,6 +46,7 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
   // Now navigate to the '/Client' route
   navigate('/Client');
   };
+  console.log('log',log)
   return (
     <Form>
       <FormGroup>
@@ -47,6 +54,40 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
         <ComponentCardV2>
           <Row>
           <CommonTranslationEdit tablevalue = {tablevalue} id = {id} whereCondition = {whereCondition} ></CommonTranslationEdit>
+
+
+          <Col>
+          <Button color="primary" className="shadow-none" onClick={addLogToggle.bind(null)}>
+              Log View
+            </Button>
+            <Modal size="lg" isOpen={addLogModal} toggle={addLogToggle.bind(null)}>
+              <ModalHeader toggle={addLogToggle.bind(null)}>Log View</ModalHeader>
+              <ModalBody>
+                <Row>
+                  <Col md="12">
+                    <CardBody>
+                      <Form>
+                        <Row>
+                          {log}
+                        </Row>
+                      </Form>
+                    </CardBody>
+                  </Col>
+                </Row>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="secondary"
+                  className="shadow-none"
+                  onClick={addLogToggle.bind(null)}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+
+          
+          </Col>
             <Col>
               <Button
                 className="shadow-none"
@@ -54,6 +95,7 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
                 onClick={() => {
                   console.log('Clicked Save');
                   handleSave();
+                  logButtonActivityToFile('Save')
                   // console.log('formSubmitted:', formSubmitted);
                   setFormSubmitted(true);
                   // editClientsData();
@@ -70,6 +112,7 @@ export default function ClientButton({clientsDetails,navigate,editClientsData, a
                 onClick={() => {
                   setFormSubmitted(true);
                   editClientsData();
+                  logButtonActivityToFile('Apply')
                   applyChanges();
                 }}
               >

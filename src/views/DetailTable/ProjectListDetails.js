@@ -72,7 +72,7 @@ const ProjectDetails = () => {
 
     message('Project data inserted successfully.', 'success');
     setTimeout(() => {
-      navigate(`/ProjectEdit/${projectId}`);
+      navigate(`/ProjectEdit/${projectId}/${proposalId}`);
     }, 300);
   };
 
@@ -105,10 +105,11 @@ const ProjectDetails = () => {
             .post('/project/insertProject', projectdetails)
             .then((res) => {
               const projectId = res.data.data.insertId;
+              const proposalId = projectdetails.proposal_id;
               console.log('Inserted Project ID:', projectId);
 
               // Insert employees and materials
-              insertEmployeesAndMaterials(proposalData.proposal_id, projectId);
+              insertEmployeesAndMaterials(proposalData.proposal_id, projectId, proposalId);
             })
             .catch((error) => {
               console.error('Error inserting project:', error);

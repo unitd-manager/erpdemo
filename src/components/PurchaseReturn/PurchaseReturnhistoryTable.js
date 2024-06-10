@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { Row, Button, Table } from 'reactstrap';
 import * as Icon from 'react-feather';
@@ -5,7 +6,7 @@ import PropTypes from 'prop-types';
 import api from '../../constants/api';
 // import { purchaseTableColumn } from '../../data/PurchaseOrder/PurchaseTableColumn';
 
-function ProductLinkedTable({
+function PurchaseReturnhistoryTable({
   products,
   setProduct,
   getCheckedPoProducts,
@@ -14,7 +15,7 @@ function ProductLinkedTable({
   deletePoProduct,
   setHistoryProduct,
 }) {
-  ProductLinkedTable.propTypes = {
+  PurchaseReturnhistoryTable.propTypes = {
     products: PropTypes.array,
     setProduct: PropTypes.func,
     getCheckedPoProducts: PropTypes.func,
@@ -61,7 +62,35 @@ if (arb === true) {
 } else {
   genLabel = 'value';
 }
+const alcolumns = [    
+    {
+        name: '',
+      },
+      // {
+      //   name: 'D.O',
+      // },
+      {
+        name: '#',
+      },  
+    {
+      name: "Returned Qty",
+     
+    },
+    {
+        name: "Status",
+        
+      },
+      
+    {
+        name: "Created By",
+        
+      },
+      {
+        name: "Creation Date",
+        
+      }
 
+  ]
   const purchaseTableColumn = [
     {
       name: '',
@@ -114,26 +143,26 @@ if (arb === true) {
     {
       name: arabic.find(item => item.key_text === 'mdPurchaseOrder.Actual Total Amount')?.[genLabel],
     },
-    {
-      name: 'Edit	',
-      selector: 'edit',
-      cell: () => <Icon.Edit2 />,
-      grow: 0,
-      width: 'auto',
-      button: true,
-      sortable: false,
-    },
-    {
-      name: 'Delete',
-      selector: 'delete',
-      cell: () => <Icon.Trash />,
-      grow: 0,
-      width: 'auto',
-      wrap: true,
-    },
-    {
-      name: arabic.find(item => item.key_text === 'mdPurchaseOrder.History')?.[genLabel],
-    },
+    // {
+    //   name: 'Edit	',
+    //   selector: 'edit',
+    //   cell: () => <Icon.Edit2 />,
+    //   grow: 0,
+    //   width: 'auto',
+    //   button: true,
+    //   sortable: false,
+    // },
+    // {
+    //   name: 'Delete',
+    //   selector: 'delete',
+    //   cell: () => <Icon.Trash />,
+    //   grow: 0,
+    //   width: 'auto',
+    //   wrap: true,
+    // },
+    // {
+    //   name: arabic.find(item => item.key_text === 'mdPurchaseOrder.History')?.[genLabel],
+    // },
   ];
   return (
     <div>
@@ -141,7 +170,7 @@ if (arb === true) {
         <Table id="example" className="display border border-secondary rounded">
           <thead title="Purchase Order Linked ">
             <tr>
-              {purchaseTableColumn.map((cell) => {
+              {alcolumns.map((cell) => {
                 return <td key={cell.name}>{cell.name}</td>;
               })}
             </tr>
@@ -164,56 +193,13 @@ if (arb === true) {
                     </td>
                   
                     <td>{index + 1}</td>
-                    <td>{arb ? element.item_code_arb : element.item_code}</td>
-                    <td>{arb ? element.title_arb : element.title}</td>
-                    <td>{arb ? element.cost_price_arb : element.cost_price}</td>
-                    <td>{arb ? element.selling_price_arb : element.selling_price}</td>
-                    <td>{arb ? element.gst_arb : element.gst}</td>
-                    <td>{element.stock}</td>
-                    <td>{arb ? element.qty_arb : element.qty}</td>
-                    <td>{arb ? element.damage_qty_arb : element.damage_qty}</td>
-                    <td>{arb ? element.qty_delivered_arb : element.qty_delivered}</td>
-                    <td>{arb ? element.qty_balance_arb : element.qty_balance}</td>
-                    <td>{arb ? element.status_arb : element.status}</td>
-                    <td>{arb ? element.po_value_arb : element.po_value}</td>
-                    <td>{arb ? element.actual_value_arb : element.actual_value}</td>
-
-                    <td>
-                      <Button
-                        color="primary"
-                        onClick={() => {
-                          setProduct(element);
-                          setEditModal(true);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </td>
-                    <td>
-                      <div className="anchor">
-                        <span
-                          onClick={() => {
-                            deletePoProduct(element.po_product_id);
-                          }}
-                        >
-                          <Icon.Trash2 />
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        className="anchor"
-                        onClick={() => {
-                          setHistoryProduct(element.product_id);
-                          setViewHistoryModal(true);
-                        }}
-                      >
-                        <b>
-                          <u>{arabic.find(item => item.key_text === 'mdPurchaseOrder.View History')?.[genLabel]}</u>
-                        </b>
-                      </div>
-                    </td>
-                  </tr>
+                    <td>{element.purchase_return_qty}</td>
+                
+                <td>{element.created_by}</td>
+                <td>{element.creation_date}</td>
+                {/* <td>{element.modified_by}{element.modification_date}</td> */}
+            
+                </tr>
                 );
               })}
           </tbody>
@@ -223,4 +209,4 @@ if (arb === true) {
   );
 }
 
-export default ProductLinkedTable;
+export default PurchaseReturnhistoryTable;

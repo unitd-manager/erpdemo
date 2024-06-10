@@ -102,63 +102,63 @@ const InvoiceEdit = () => {
         message('Unable to edit record.', 'error');
       });
   }; 
-  const editInvoiceItemData = () => {
-    api
-      .get('/projectsalesreturn/checkInvoiceItem')
-      .then((response) => {
-        const existingQuoteItemsIds = response.data.data;
-        console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
+  // const editInvoiceItemData = () => {
+  //   api
+  //     .get('/projectsalesreturn/checkInvoiceItem')
+  //     .then((response) => {
+  //       const existingQuoteItemsIds = response.data.data;
+  //       console.log('existingQuoteItemsIds:', existingQuoteItemsIds);
 
-        // Check if there are return item details
-        if (returnItemDetails && returnItemDetails.length > 0) {
-          // Create an array to store the API requests
-          const apiRequests = [];
+  //       // Check if there are return item details
+  //       if (returnItemDetails && returnItemDetails.length > 0) {
+  //         // Create an array to store the API requests
+  //         const apiRequests = [];
 
-          // Filter non-removed items
-          const nonRemovedItems = returnItemDetails.filter(
-            (element) => !existingQuoteItemsIds.includes(element.project_invoice_item_id),
-          );
+  //         // Filter non-removed items
+  //         const nonRemovedItems = returnItemDetails.filter(
+  //           (element) => !existingQuoteItemsIds.includes(element.project_invoice_item_id),
+  //         );
 
-          // Loop through each non-removed return item and create an API request
-          nonRemovedItems.forEach((element) => {
-            const salesReturnItem = {
-              price: element.total_cost,
-              qty_return: element.qty,
-              project_invoice_item_id: element.invoice_item_id,
-              order_id: element.order_id,
-              project_invoice_id: element.invoice_id,
-              return_date: new Date(),
-            };
+  //         // Loop through each non-removed return item and create an API request
+  //         nonRemovedItems.forEach((element) => {
+  //           const salesReturnItem = {
+  //             price: element.total_cost,
+  //             qty_return: element.qty,
+  //             project_invoice_item_id: element.invoice_item_id,
+  //             order_id: element.order_id,
+  //             project_invoice_id: element.invoice_id,
+  //             return_date: new Date(),
+  //           };
 
-            // Create the API request for this item
-            const apiRequest = api.post('/projectsalesreturn/insertSalesReturnHistory', salesReturnItem);
+  //           // Create the API request for this item
+  //           const apiRequest = api.post('/projectsalesreturn/insertSalesReturnHistory', salesReturnItem);
 
-            // Add the request to the array of requests
-            apiRequests.push(apiRequest);
-          });
+  //           // Add the request to the array of requests
+  //           apiRequests.push(apiRequest);
+  //         });
 
-          // Execute all API requests using Promise.all
-          if (apiRequests.length > 0) {
-            Promise.all(apiRequests)
-              .then(() => {
-                message('Records edited successfully', 'success');
-              })
-              .catch((error) => {
-                console.error('Error inserting records:', error);
-                message('Unable to edit records.', 'error');
-              });
-          } else {
-            message('No new items to insert', 'info');
-          }
-        } else {
-          message('No items to insert', 'info');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching existing quote items:', error);
-        message('Error fetching existing quote items.', 'error');
-      });
-  };
+  //         // Execute all API requests using Promise.all
+  //         if (apiRequests.length > 0) {
+  //           Promise.all(apiRequests)
+  //             .then(() => {
+  //               message('Records edited successfully', 'success');
+  //             })
+  //             .catch((error) => {
+  //               console.error('Error inserting records:', error);
+  //               message('Unable to edit records.', 'error');
+  //             });
+  //         } else {
+  //           message('No new items to insert', 'info');
+  //         }
+  //       } else {
+  //         message('No items to insert', 'info');
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching existing quote items:', error);
+  //       message('Error fetching existing quote items.', 'error');
+  //     });
+  // };
  
   const handleRemoveItem = (invoiceIdToRemove) => {
     // Find the item with the given invoice_id and add it to the removedItems array
@@ -278,15 +278,9 @@ const InvoiceEdit = () => {
               module="ProjectReturn"
             ></ApiButton> */}
             <ApiButton
-          editData={() => {
-            editInvoiceData(true);
-            editInvoiceItemData();
-          }}
+          editData={editInvoiceData}
           navigate={navigate}
-          applyChanges={() => {
-            editInvoiceData(false);
-            editInvoiceItemData();
-          }}
+          applyChanges={editInvoiceData}
           backToList={backToList}
           module="ProjectReturn"
         > </ApiButton>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Row, Col, Input, Form, FormGroup, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
@@ -5,6 +6,7 @@ import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
 function PurchaseOrderDetailsPart({
+  products,
   purchaseDetails,
   handleInputs,
   supplier,
@@ -21,8 +23,9 @@ function PurchaseOrderDetailsPart({
     arabic: PropTypes.any,
     arb: PropTypes.any,
     isFieldDisabled: PropTypes.any,
+    products: PropTypes.array,
   };
-
+console.log('products',products)
   let genLabel = '';
 
   if (arb === true) {
@@ -186,7 +189,7 @@ function PurchaseOrderDetailsPart({
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {products.length>1 && <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ Code')?.[genLabel]}
@@ -196,7 +199,7 @@ function PurchaseOrderDetailsPart({
                     value={purchaseDetails && purchaseDetails.purchase_quote_id}
                     name="purchase_quote_id"
                     onChange={handleInputs}
-                    disabled={!isFieldDisabled}
+                    disabled
                   >
                     <option defaultValue="selected">Please Select</option>
                     {request &&
@@ -209,7 +212,31 @@ function PurchaseOrderDetailsPart({
                       })}
                   </Input>
                 </FormGroup>
-              </Col>
+              </Col>}
+             {products.length<1 && <Col md="3">
+                <FormGroup>
+                  <Label dir="rtl" style={{ textAlign: 'right' }}>
+                    {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ Code')?.[genLabel]}
+                  </Label>
+                  <Input
+                    type="select"
+                    value={purchaseDetails && purchaseDetails.purchase_quote_id}
+                    name="purchase_quote_id"
+                    onChange={handleInputs}
+                   // disabled={!isFieldDisabled}
+                  >
+                    <option defaultValue="selected">Please Select</option>
+                    {request &&
+                      request.map((e) => {
+                        return (
+                          <option key={e.supplier_id} value={e.purchase_quote_id}>
+                            {e.rq_code}
+                          </option>
+                        );
+                      })}
+                  </Input>
+                </FormGroup>
+              </Col>}
             </Row>
             <Row>
               <Col md="3">
