@@ -143,7 +143,7 @@ useEffect(() => {
       plannings.effective_date &&
       plannings.customer_name 
       ) {
-       // plannings.creation_date = creationdatetime;
+       plannings.creation_date = creationdatetime;
         plannings.created_by= loggedInuser.first_name;
       api
         .post('/supplierpricelistitem/editPriceList', plannings)
