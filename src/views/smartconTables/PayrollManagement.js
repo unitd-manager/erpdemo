@@ -19,6 +19,7 @@ import CommonTable from '../../components/CommonTable';
 import TerminatingPayslipModal from '../../components/PayrollManagement/TerminatingPayslipModal';
 import UpdateOtModal from '../../components/PayrollManagement/updateOtModal';
 import PrintPayslipModal from '../../components/PayrollManagement/PrintPayslipModal';
+//import FileExporter from '../../components/Excelarabexport';
 // import PrintIR8AModal from '../../components/PayrollManagement/PrintIR8AModal';
 // import { columns } from '../../data/PayrollHR/PayrollColumn';
 // import PdfPaySlipList from '../../components/PDF/PdfPaySlipList';
@@ -641,6 +642,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
             payrollManagementsdata={payrollManagementsdata}
           />
         )} */}
+        {/* <FileExporter/> */}
         <CommonTable
           loading={loading}
           title="Payroll Management List"
