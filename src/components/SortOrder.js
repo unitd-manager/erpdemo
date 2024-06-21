@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Row, Col } from 'reactstrap';
 // import * as Icon from 'react-feather';
@@ -6,6 +6,7 @@ import api from '../constants/api';
 import message from './Message';
 
 const SortOrder = ({ value, tablename, idColumn, idValue }) => {
+  const [initialValue, setValue] = useState(value);
   SortOrder.propTypes = {
     tablename: PropTypes.string,
     idColumn: PropTypes.string,
@@ -13,7 +14,8 @@ const SortOrder = ({ value, tablename, idColumn, idValue }) => {
     value: PropTypes.any,
   };
   const SortingOrder = (e) => {
-    if (e.target.value === '') {
+    const newValue = e.target.value;
+    if (newValue === '') {
       message('Enter valid sort order', 'warning');
     } else {
       api
@@ -21,11 +23,12 @@ const SortOrder = ({ value, tablename, idColumn, idValue }) => {
           tablename,
           idColumn,
           idValue,
-          value: e.target.value,
+          value:newValue,
         })
         .then((res) => {
           if (res.status === 200) {
-            window.location.reload();
+            // window.location.reload();
+            setValue(newValue);
           } else {
             message('Unable to edit record.', 'error');
           }
@@ -49,7 +52,8 @@ const SortOrder = ({ value, tablename, idColumn, idValue }) => {
             style={{ minWidth: 70 }}
             type="number"
             name="sort_order"
-            defaultValue={value ? value.toString() : '0'}
+            defaultValue={initialValue ? initialValue.toString() : '0'}
+            onChange={(e) => setValue(e.target.value)}
           ></Input>
         </Col>
       </Row>

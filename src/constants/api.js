@@ -13,7 +13,8 @@ if (hostname === 'erpardemo.unitdtechnologies.com') {
 } else if (hostname === 'erpclient.unitdtechnologies.com') { 
   baseURL = process.env.REACT_APP_TEST_URL;
 } else {
-  baseURL = process.env.REACT_APP_LOCAL_URL;
+  //baseURL = process.env.REACT_APP_PRODUCTION_URL;
+   baseURL = process.env.REACT_APP_LOCAL_URL;
 }
 
 console.log('Current Hostname:', hostname,baseURL);
