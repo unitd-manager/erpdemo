@@ -132,7 +132,7 @@ const OpportunityEdit = () => {
   };
 
   const getOrdersByOrderId = () => {
-    api.post('/finance/getOrdersByIds', { order_id: insertedDataId }).then((res) => {
+    api.post('/finance/getOrderItemsById', { order_id: insertedDataId }).then((res) => {
       setOrdersDetails(res.data.data);
     
     });

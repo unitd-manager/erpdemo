@@ -27,8 +27,6 @@ const GoodsDeliveryEdit = () => {
   const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
-  const { insertedDataId } = useParams();
-
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -233,7 +231,7 @@ const GoodsDeliveryEdit = () => {
         }
   
         // Step 2: Fetch existing project_quote_items_id from the project_order_item table
-        api.post('/goodsdelivery/getGoodsDeliveryItemsByGoodsDeliveryId', { goods_delivery_id: insertedDataId })
+        api.post('/goodsdelivery/getGoodsDeliveryItemsByGoodsDeliveryId', { goods_delivery_id: id })
           .then((existingItemsRes) => {
             const existingItems = existingItemsRes.data.data;
             const existingQuoteItemIds = new Set(existingItems.map(item => item.order_item_id));
@@ -244,7 +242,7 @@ const GoodsDeliveryEdit = () => {
                 const quoteItem = quoteItems[index];
   
                 const orderItemData = {
-                  goods_delivery_id: insertedDataId,
+                  goods_delivery_id: id,
                   quantity: quoteItem.qty,
                   amount: quoteItem.cost_price,
                   title: quoteItem.item_title,
@@ -258,7 +256,7 @@ const GoodsDeliveryEdit = () => {
                   // Update the existing order item
                   console.log(`Updating existing order item ${index + 1}:`, orderItemData);
   
-                  api.post('/finance/update_order_item', orderItemData)
+                  api.post('/goodsdelivery/update_Goods_Delivery_item', orderItemData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} updated successfully`);
