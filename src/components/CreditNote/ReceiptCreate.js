@@ -66,7 +66,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
     if (orderId) {
-      api.post('/invoice/getInvoiceForReceipt', { order_id: orderId }).then((res) => {
+      api.post('/invoice/getInvoiceForReceiptOld', { order_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
           element.remainingAmount = element.invoice_amount - element.prev_amount;
