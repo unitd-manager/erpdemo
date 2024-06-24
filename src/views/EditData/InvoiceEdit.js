@@ -372,6 +372,7 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
+                        totalInvoiceAmount += QuoteItem.cost_price; // Add to total invoice amount
                         setTimeout(() => {
                           window.location.reload()
                         }, 100);
@@ -390,6 +391,21 @@ const toggle = (tab) => {
               } else {
                 console.log('All order items inserted successfully');
                 // You might want to trigger a UI update here
+                api
+                .post('/invoice/updateInvoiceAmount', {
+                  invoice_id: insertedDataId,
+                  invoice_amount: totalInvoiceAmount,
+                })
+                .then((updateResponse) => {
+                  if (updateResponse.data.msg === 'Success') {
+                    console.log('Invoice amount updated successfully');
+                  } else {
+                    console.error('Failed to update invoice amount');
+                  }
+                })
+                .catch((updateError) => {
+                  console.error('Error updating invoice amount', updateError);
+                });
               }
             }; 
             // Start inserting order items from index 0
