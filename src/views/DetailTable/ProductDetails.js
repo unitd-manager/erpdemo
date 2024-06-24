@@ -91,7 +91,7 @@ console.log('Title',ProductDetails.title);
               message('Unable to create inventory.', 'error');
             });
           setTimeout(() => {
-            navigate(`/ProductEdit/${insertedDataId}`);
+            navigate(`/ProductEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
