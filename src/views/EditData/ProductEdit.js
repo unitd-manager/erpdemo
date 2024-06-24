@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { TabPane, TabContent, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+// import { Editor } from 'react-draft-wysiwyg';
+// import draftToHtml from 'draftjs-to-html';
+// import htmlToDraft from 'html-to-draftjs';
+// import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import * as Icon from 'react-feather';
@@ -19,6 +19,8 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import AppContext from '../../context/AppContext';
 import ApiButton from '../../components/ApiButton';
+import Tab from '../../components/project/Tab';
+import Tabs from '../../components/project/Tabs';
 
 
 const ProductUpdate = () => {
@@ -26,7 +28,7 @@ const ProductUpdate = () => {
 
   const [productDetails, setProductDetails] = useState();
   const [categoryLinked, setCategoryLinked] = useState([]);
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
   const [pictureroomname, setPictureRoomName] = useState('');
   const [attachmentroomname, setAttachmentRoomName] = useState('');
   const [picturefiletypes, setPictureFileTypes] = useState('');
@@ -69,7 +71,8 @@ const [arabic, setArabic] = useState([]);
 
   const arb =selectedLanguage === 'Arabic'
 
-  // const eng =selectedLanguage === 'English'
+
+  const eng =selectedLanguage === 'English'
    
 
   const getTranslationForProduct = () => {
@@ -90,29 +93,41 @@ const [arabic, setArabic] = useState([]);
     genLabel = 'value';
   }
 
+  const [activeTab, setActiveTab] = useState('1');
+
+  const tabs = [
+    { id: '1', name: 'Attachment' },
+  ];
+  const tabsArb = [ 
+    { id: '1', name: 'مرفق' },
+  ];
+  const toggle = (tab) => {
+    setActiveTab(tab);
+  };
+
   //setting data in Description Modal productDetails
-  const handleDataEditor = (e, type) => {
-    setProductDetails({
-      ...productDetails,
-      [type]: draftToHtml(convertToRaw(e.getCurrentContent())),
-    });
-  };
-  //Description Modal
-  const convertHtmlToDraft = (existingQuoteformal) => {
-    const contentBlock = htmlToDraft(existingQuoteformal && existingQuoteformal);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      setDescription(editorState);
-    }
-  };
+  // const handleDataEditor = (e, type) => {
+  //   setProductDetails({
+  //     ...productDetails,
+  //     [type]: draftToHtml(convertToRaw(e.getCurrentContent())),
+  //   });
+  // };
+  // //Description Modal
+  // const convertHtmlToDraft = (existingQuoteformal) => {
+  //   const contentBlock = htmlToDraft(existingQuoteformal && existingQuoteformal);
+  //   if (contentBlock) {
+  //     const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+  //     const editorState = EditorState.createWithContent(contentState);
+  //     setDescription(editorState);
+  //   }
+  // };
   // Get Product data By product id
   const getProductById = () => {
     api
       .post('/product/getProduct', { product_id: id })
       .then((res) => {
         setProductDetails(res.data.data[0]);
-        convertHtmlToDraft(res.data.data[0].description);
+        // convertHtmlToDraft(res.data.data[0].description);
       })
       .catch(() => {
         
@@ -426,10 +441,10 @@ const [arabic, setArabic] = useState([]);
             </Row>
           </ComponentCard>
           {/* Product Details Form */}
-          <ComponentCard title="Product details">
-            <Row>
+          {/* <ComponentCard title="Product details">
+            <Row> */}
               {/* Description form */}
-              <ComponentCard title="Description">
+              {/* <ComponentCard title="Description">
                 <Editor
                   editorState={description}
                   wrapperClassName="demo-wrapper mb-0"
@@ -439,14 +454,30 @@ const [arabic, setArabic] = useState([]);
                     setDescription(e);
                   }}
                 />
-              </ComponentCard>
-            </Row>
-          </ComponentCard>
+              </ComponentCard> */}
+            {/* </Row>
+          </ComponentCard> */}
         </FormGroup>
       </Form>
 {/* Picture and Attachments Form */}
 
-<Form>
+
+
+      <br />
+
+      <ComponentCard title={arb ? 'المزيد من التفاصيل' : 'More Details'}>
+        <ToastContainer></ToastContainer>
+        {eng === true &&
+
+        <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <Tabs toggle={toggle} tabsArb={tabsArb} />
+        }
+        <TabContent className="p-4" activeTab={activeTab}>
+         
+          <TabPane tabId="1">
+          <Form>
               <FormGroup>
               <ComponentCard title="Picture">
                   <Row>
@@ -521,8 +552,9 @@ const [arabic, setArabic] = useState([]);
                     </ComponentCard>
               </FormGroup>
             </Form>
-
-      <br />
+          </TabPane>
+        </TabContent>
+      </ComponentCard>
     </>
   );
 };

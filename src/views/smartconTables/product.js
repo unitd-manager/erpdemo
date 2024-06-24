@@ -287,7 +287,7 @@ const Test = () => {
     headerName: arabic.find(item => item.key_text === 'mdProduct.Unit')?.[genLabel],
     width: 100 
   },
-    { field: arb ? 'qty_in_stock_arb' : 'qty_in_stock' , 
+    { field: arb ? 'actual_stock_arb' : 'actual_stock' , 
     headerName: arabic.find(item => item.key_text === 'mdProduct.QuantityinStock')?.[genLabel],
     width: 100 
   },
