@@ -150,6 +150,9 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
                         console.error(`Failed to update order item ${index + 1}`);
                       }
                       processOrderItems(index + 1);
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     })
                     .catch((error) => {
                       console.error(`Error updating order item ${index + 1}`, error);
@@ -169,6 +172,9 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
                       processOrderItems(index + 1);
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     })
                     .catch((error) => {
                       console.error(`Error inserting order item ${index + 1}`, error);
