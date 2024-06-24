@@ -57,6 +57,7 @@ const InvoiceEdit = () => {
   };
 
   const InvoiceSource = bookingDetails.source_type;
+  const orderType = bookingDetails.record_type;
 
 const getDefaultActiveTab = () => {
   if (InvoiceSource === 'Sales_Order') {
@@ -751,7 +752,7 @@ const toggle = (tab) => {
     // editItemById();
     getOrderItemById();
    }, [insertedDataId]);
-
+console.log("1Q1Q11",orderType)
   return (
     <>
       <BreadCrumbs />
@@ -845,13 +846,15 @@ const toggle = (tab) => {
         </NavLink>
       </NavItem>
     )}
-    {InvoiceSource !== 'Sales_Order' && (
+
+    {InvoiceSource !== 'Sales_Order' && orderType !== 'POS' && (
       <NavItem>
         <NavLink onClick={() => toggle('2')} active={activeTab === '2'}>
         {arb?'بند فاتورة البضائع': 'Goods Invoice Item'} 
         </NavLink>
       </NavItem>
     )}
+    
     <NavItem>
       <NavLink onClick={() => toggle('3')} active={activeTab === '3'}>
       {arb?'مرفق': 'Attachment'} 
@@ -862,6 +865,8 @@ const toggle = (tab) => {
           <TabPane tabId="1">
           
           <Row className="mb-4">
+          {orderType !== 'POS' && (
+
           <Col md="3">
           {(hideButtonVisible &&( (hideButtonVisible &&orderitemDetails.length===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
           <Button
@@ -876,6 +881,9 @@ const toggle = (tab) => {
             </Button>
           )}
             </Col>
+          )}
+                    {orderType !== 'POS' && (
+
           <Col md="3">
                   <PartialINvoiceEdit
                   partialinvoiceeditmodal={partialinvoiceeditmodal}
@@ -901,6 +909,7 @@ const toggle = (tab) => {
            
         
       </Col>
+       )}
           </Row>   
           <OrderItemTable
         orderitemDetails={orderitemDetails}

@@ -17,6 +17,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
     receipt_status: 'Paid',
+    order_id:orderId,
     receipt_date: moment().format('YYYY-MM-DD'),
     receipt_code: '',
   });
