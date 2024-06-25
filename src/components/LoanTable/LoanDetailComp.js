@@ -70,12 +70,13 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
           <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
+                  <span style={{ color: 'red' }}>*</span>
                     {
                       arabic.find((item) => item.key_text === 'mdHRLoan.Employee Name')?.[
                         genLabel
                       ]
                     }
-                      <span style={{ color: 'red' }}>*</span>
+                 
                   </Label>
 
                   <Input
@@ -180,6 +181,7 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             <Col md="3">
               <FormGroup>
             <Label dir="rtl" style={{ textAlign: 'right' }}>
+            <span style={{ color: 'red' }}>*</span>
                       {arabic.find((item) => item.key_text === 'mdHRLoan.Type of Loan')?.[genLabel]}{' '}
                     </Label>
                 
@@ -213,8 +215,9 @@ export default function LoanDetailComp({ loanDetails, loanStatus, handleInputs }
             <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
+              <span style={{ color: 'red' }}>*</span>
                       {arabic.find((item) => item.key_text === 'mdHRLoan.Loan Application Date')?.[genLabel]}{' '}
-                      <span style={{ color: 'red' }}>*</span>
+                  
                     </Label>
                 <Input
                   value={

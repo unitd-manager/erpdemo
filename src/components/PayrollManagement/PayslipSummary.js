@@ -79,11 +79,12 @@ function PayslipSummary({ payroll, handleInputs, workingDaysInMonth }) {
               <Col md="4">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Start Date')?.[genLabel]}
                 <span className="required" style={{ color: 'red' }}>
                       {' '}
                       *
                     </span>
+                {arabic.find((item) => item.key_text === 'mdPayrollManagement.Start Date')?.[genLabel]}
+                
               </Label>
                   
                   <Input

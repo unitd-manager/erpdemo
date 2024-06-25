@@ -240,7 +240,7 @@ const PdfPaySlip = () => {
                 },
                 {},
                 {
-                  text: `${payroll.basic_pay.toLocaleString('en-IN', {
+                  text: `${payroll.basic_pay?.toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
                   })}`,
                   alignment: 'right',
