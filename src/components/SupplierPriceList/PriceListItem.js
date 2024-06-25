@@ -88,6 +88,10 @@ const deleteRecord = (deleteID) => {
 const AddNewPlanning = () => {
   // Iterate over addMoreItem to submit all line items
   addMoreItem.forEach((item) => {
+    if (item.title !== '' &&
+      item.unit !== ''
+      )
+      {
     item.supplier_price_list_id = quoteLine;
 
     api
@@ -95,11 +99,16 @@ const AddNewPlanning = () => {
       .then(() => {
         message('Contact inserted successfully.', 'success');
        window.location.reload();
+      
       })
       .catch(() => {
         message('Network connection error.', 'error');
       });
+    } else {
+      message('Please fill all required field.', 'warning');
+    }
   });
+  
 };
 
 

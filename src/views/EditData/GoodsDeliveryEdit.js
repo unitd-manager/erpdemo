@@ -27,8 +27,6 @@ const GoodsDeliveryEdit = () => {
   const [company, setCompany] = useState();
   const [editModal, setEditModal] = useState(false);
   const { loggedInuser } = useContext(AppContext);
-  //const { insertedDataId, OrderId } = useParams();
-
   const [activeTab, setActiveTab] = useState('1');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -140,80 +138,171 @@ const GoodsDeliveryEdit = () => {
 
   // Generate Data for Delivery Items
   
+  // const generateData = () => {
+  //   api
+  //     .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
+  //     .then((res) => {
+  //       const DeliveryItems = res.data.data;
+  //       console.log('Received items:', DeliveryItems);
+  //       if (DeliveryItems.length === 0) {
+  //         console.warn('No Delivery items to insert');
+  //         message('No order item  record', 'warning');
+  //         return;
+  //       }
+  //       // Retrieve all order_item_id  values from the goods_delivery_items table
+  //       api
+  //         .get('/goodsdelivery/checkDeliveryItems')
+  //         .then((response) => {
+  //           const ExistingDeliveryItemsId = response.data.data;
+  //           const insertDeliveryItems = (index) => {
+  //             if (index < DeliveryItems.length) {
+  //               const DeliveryItem = DeliveryItems[index];
+  //               // Check if the order_item_id  already exists in the ExistingDeliveryItemsId array
+  //               if (ExistingDeliveryItemsId.includes(DeliveryItem.order_item_id)) {
+  //                 console.warn(
+  //                   `Delivery items are already Inserted  ${DeliveryItem.order_item_id}  already exists, skipping insertion`,
+  //                 );
+  //                 message('Delivery items are already Inserted', 'warning');
+  //                 insertDeliveryItems(index + 1);
+  //               } else {
+  //                 // Insert the order item
+  //                 const DeliveryItemsData = {
+  //                   creation_date: creationdatetime, 
+  //                   modified_by: loggedInuser.first_name,
+  //                   goods_delivery_id: id,
+  //                   order_id: DeliveryItem.order_id,
+  //                   order_item_id: DeliveryItem.order_item_id,
+  //                   title: DeliveryItem.item_title,
+  //                   unit: DeliveryItem.unit,
+  //                   unit_price: DeliveryItem.unit_price,
+  //                   amount: DeliveryItem.cost_price,
+  //                   description: DeliveryItem.description,
+  //                   quantity: DeliveryItem.qty, 
+  //                 };
+  //                 console.log(`Inserting order item ${index + 1}:`, DeliveryItemsData);
+  //                 // Send a POST request to your /goodsdelivery/insertGoodsDeliveryItems API with the current DeliveryItemsData
+  //                 api
+  //                   .post('/goodsdelivery/insertgoodsdeliveryitem', DeliveryItemsData)
+  //                   .then((result) => {
+  //                     if (result.data.msg === 'Success') {
+  //                       console.log(`Order item ${index + 1} inserted successfully`);
+  //                       window.location.reload();
+  //                     } else {
+  //                       console.error(`Failed to insert order item ${index + 1}`);
+  //                     }
+  //                     // Continue to the next item
+  //                     insertDeliveryItems(index + 1);
+  //                   })
+  //                   .catch((error) => {
+  //                     console.error(`Error inserting order item ${index + 1}`, error);
+  //                     // Continue to the next item
+  //                     insertDeliveryItems(index + 1);
+  //                   });
+  //               }
+  //             } else {
+  //               console.log('All order items inserted successfully');
+  //               // You might want to trigger a UI update here
+  //             }
+  //           };
+  //           // Start inserting order items from index 0
+  //           insertDeliveryItems(0);
+  //         })
+  //         .catch((error) => {
+  //           console.error('Error checking order item existence', error);
+  //         });
+  //     })
+
+  //     .catch((error) => {
+  //       console.error('Error fetching quote items', error);
+  //     });
+  // };
+
   const generateData = () => {
-    api
-      .post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id })
+  
+    // Step 1: Fetch quote items by quote_id
+    api.post('/goodsdelivery/getOrdersById', { order_id: tenderDetails.order_id  })
       .then((res) => {
-        const DeliveryItems = res.data.data;
-        console.log('Received items:', DeliveryItems);
-        if (DeliveryItems.length === 0) {
-          console.warn('No Delivery items to insert');
-          message('No order item  record', 'warning');
+        const quoteItems = res.data.data;
+        console.log('Received quote items:', quoteItems);
+  
+        if (quoteItems.length === 0) {
+          console.warn('No quote items to process');
           return;
         }
-        // Retrieve all order_item_id  values from the goods_delivery_items table
-        api
-          .get('/goodsdelivery/checkDeliveryItems')
-          .then((response) => {
-            const ExistingDeliveryItemsId = response.data.data;
-            const insertDeliveryItems = (index) => {
-              if (index < DeliveryItems.length) {
-                const DeliveryItem = DeliveryItems[index];
-                // Check if the order_item_id  already exists in the ExistingDeliveryItemsId array
-                if (ExistingDeliveryItemsId.includes(DeliveryItem.order_item_id)) {
-                  console.warn(
-                    `Delivery items are already Inserted  ${DeliveryItem.order_item_id}  already exists, skipping insertion`,
-                  );
-                  message('Delivery items are already Inserted', 'warning');
-                  insertDeliveryItems(index + 1);
+  
+        // Step 2: Fetch existing project_quote_items_id from the project_order_item table
+        api.post('/goodsdelivery/getGoodsDeliveryItemsByGoodsDeliveryId', { goods_delivery_id: id })
+          .then((existingItemsRes) => {
+            const existingItems = existingItemsRes.data.data;
+            const existingQuoteItemIds = new Set(existingItems.map(item => item.order_item_id));
+            console.log('Existing order_item_id:', existingQuoteItemIds);
+  
+            const processOrderItems = (index) => {
+              if (index < quoteItems.length) {
+                const quoteItem = quoteItems[index];
+  
+                const orderItemData = {
+                  goods_delivery_id: id,
+                  quantity: quoteItem.qty,
+                  amount: quoteItem.cost_price,
+                  title: quoteItem.item_title,
+                  order_id: quoteItem.order_id,
+                  unit: quoteItem.unit,
+                  unit_price: quoteItem.unit_price,
+                  order_item_id: quoteItem.order_item_id,
+                };
+  
+                if (existingQuoteItemIds.has(quoteItem.order_item_id)) {
+                  // Update the existing order item
+                  console.log(`Updating existing order item ${index + 1}:`, orderItemData);
+  
+                  api.post('/goodsdelivery/update_Goods_Delivery_item', orderItemData)
+                    .then((result) => {
+                      if (result.data.msg === 'Success') {
+                        console.log(`Order item ${index + 1} updated successfully`);
+                      } else {
+                        console.error(`Failed to update order item ${index + 1}`);
+                      }
+                      processOrderItems(index + 1);
+                    })
+                    .catch((error) => {
+                      console.error(`Error updating order item ${index + 1}`, error);
+                      processOrderItems(index + 1);
+                    });
                 } else {
-                  // Insert the order item
-                  const DeliveryItemsData = {
-                    creation_date: creationdatetime, 
-                    modified_by: loggedInuser.first_name,
-                    goods_delivery_id: id,
-                    order_id: DeliveryItem.order_id,
-                    order_item_id: DeliveryItem.order_item_id,
-                    title: DeliveryItem.item_title,
-                    unit: DeliveryItem.unit,
-                    unit_price: DeliveryItem.unit_price,
-                    amount: DeliveryItem.cost_price,
-                    description: DeliveryItem.description,
-                    quantity: DeliveryItem.qty, 
-                  };
-                  console.log(`Inserting order item ${index + 1}:`, DeliveryItemsData);
-                  // Send a POST request to your /goodsdelivery/insertGoodsDeliveryItems API with the current DeliveryItemsData
-                  api
-                    .post('/goodsdelivery/insertgoodsdeliveryitem', DeliveryItemsData)
+                  // Insert new order item
+                  console.log(`Inserting order item ${index + 1}:`, orderItemData);
+  
+                  api.post('/goodsdelivery/insertgoodsdeliveryitem', orderItemData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        window.location.reload();
+                        // Add the inserted item to the set to avoid future duplicates
+                        existingQuoteItemIds.add(quoteItem.quote_items_id);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
-                      // Continue to the next item
-                      insertDeliveryItems(index + 1);
+                      processOrderItems(index + 1);
                     })
                     .catch((error) => {
                       console.error(`Error inserting order item ${index + 1}`, error);
-                      // Continue to the next item
-                      insertDeliveryItems(index + 1);
+                      processOrderItems(index + 1);
                     });
                 }
               } else {
-                console.log('All order items inserted successfully');
-                // You might want to trigger a UI update here
+                console.log('All order items processed successfully');
+                // Optionally reload the page or trigger a state update
+                // window.location.reload();
               }
             };
-            // Start inserting order items from index 0
-            insertDeliveryItems(0);
+  
+            // Start processing order items from index 0
+            processOrderItems(0);
           })
           .catch((error) => {
-            console.error('Error checking order item existence', error);
+            console.error('Error fetching existing project order items', error);
           });
       })
-
       .catch((error) => {
         console.error('Error fetching quote items', error);
       });

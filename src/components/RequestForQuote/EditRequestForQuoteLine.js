@@ -212,11 +212,6 @@ const onchangeItems = (selectedValue, index) => {
                             onChange={(e) => updateState(index, 'description', e)}
                           />
                         </td>
-                        <td data-label="Action">
-                          <div className="anchor">
-                            <span>Clear</span>
-                          </div>
-                        </td>
                       </tr>
                     );
                   })}

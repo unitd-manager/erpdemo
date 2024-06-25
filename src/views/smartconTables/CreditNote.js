@@ -39,7 +39,7 @@ const InvoiceData = () => {
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
-
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState('');
   const navigate = useNavigate();
   const [invoiveId, setInvoiceId] = useState();
   const [order, setOrder] = useState();
@@ -168,23 +168,24 @@ const InvoiceData = () => {
       .get('/creditnote/getInvoice')
       .then((res) => {
         setInvoiceId(res.data.data);
-        const invoiceData = res.data.data
-        const InvoiceId = invoiceData[0].invoice_id
-        api
-          .post('/creditnote/getOrderCreditDebitNote', { invoice_id: InvoiceId })
-          .then((res1) => {
-            setOrder(res1.data.data);
-          })
-          .catch(() => {
-          
-          });
+        const invoiceData = res.data.data;
+        const firstInvoiceId = invoiceData[0]?.invoice_id || ''; // Check if data exists before accessing
+        setSelectedInvoiceId(firstInvoiceId); // Set selectedInvoiceId to first invoice_id
+        if (firstInvoiceId !== '') {
+          api
+            .post('/creditnote/getOrderCreditDebitNote', { invoice_id: firstInvoiceId })
+            .then((res1) => {
+              setOrder(res1.data.data);
+            })
+            .catch(() => {
+              // Handle error if needed
+            });
+        }
       })
       .catch(() => {
         message('Company not found', 'info');
       });
   };
-
- 
 
   //Logic for adding Booking in db
 
@@ -224,12 +225,26 @@ const InvoiceData = () => {
       });
   };
   useEffect(() => {
-    getCompany();
     getInvoice();
     getArabicCompanyName();
   }, [id]);
 
+  useEffect(() => {
+    getCompany();
+  }, []);
 
+  useEffect(() => {
+    if (selectedInvoiceId !== '') {
+      api
+        .post('/creditnote/getOrderCreditDebitNote', { invoice_id: selectedInvoiceId })
+        .then((res1) => {
+          setOrder(res1.data.data);
+        })
+        .catch(() => {
+          // Handle error if needed
+        });
+    }
+  }, [selectedInvoiceId]);
 
   return (
     <div className="MainDiv">
@@ -287,7 +302,9 @@ const InvoiceData = () => {
                       <Col md="10">
                       <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdCreditNote.Invoice')?.[genLabel]} </Label>
-                          <Input type="select" name="order_id" onChange={handleBookingInputs}>
+                          <Input type="select" name="order_id"  onChange={(e) => {
+                              setSelectedInvoiceId(e.target.value);
+                            }}>
                             <option>{arb ?'حدد الفاتورة':'Select Invoice'}</option>
                             {invoiveId &&
                               invoiveId.map((e) => {

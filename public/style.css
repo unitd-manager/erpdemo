@@ -12,3 +12,8 @@
 input[type="text"], select {
     width: 100%;
 }
+.float_left.viewAllOrderBtnml20 {
+   
+    display: flex;
+    gap: 20px;
+  }

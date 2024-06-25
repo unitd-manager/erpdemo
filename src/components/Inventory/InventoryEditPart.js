@@ -168,7 +168,7 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
                 </Col>
               </Row>
               <Row>
-                <Col md="3">
+                {/* <Col md="3">
                   <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdInventory.ItemCode')?.[genLabel]}
@@ -185,7 +185,7 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData, 
                 disabled
                 />
                </FormGroup>
-                </Col>
+                </Col> */}
                 <Col md="3">
                   <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>

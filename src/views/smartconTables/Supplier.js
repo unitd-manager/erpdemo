@@ -165,7 +165,7 @@ if (arb === true) {
                   <tr key={element.supplier_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/SupplierEdit/${element.supplier_id}`}>
+                      <Link to={`/SupplierEdit/${element.supplier_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

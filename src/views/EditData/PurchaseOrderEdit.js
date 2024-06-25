@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import { Row, Col, Button, TabContent, TabPane } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -23,6 +23,8 @@ import Tabs from '../../components/project/Tabs';
 import ApiButton from '../../components/ApiButton';
 import PdfPurchaseOrder from '../../components/PDF/PdfPurchaseOrder';
 import ComponentCardV2 from '../../components/ComponentCardV2';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const PurchaseOrderEdit = () => {
   //All state variable
@@ -48,6 +50,7 @@ const PurchaseOrderEdit = () => {
   const [gTotal, setGtotal] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { loggedInuser } = useContext(AppContext);
   const [isFieldDisabled, setIsFieldDisabled] = useState(true);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
@@ -181,6 +184,8 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
   //Update Setting
   const editPurchaseData = () => {
+    purchaseDetails.modification_date = creationdatetime;
+    purchaseDetails.modified_by = loggedInuser.first_name;
     api
       .post('/purchaseorder/editTabPurchaseOrder', purchaseDetails)
       .then(() => {
@@ -313,7 +318,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                     const orderItemData = {
                       purchase_order_id: id,
                       item_title: PurchaseQuoteItem.order_code,
-                      quantity: PurchaseQuoteItem.quantity,
+                      qty: PurchaseQuoteItem.quantity,
                       unit: PurchaseQuoteItem.unit,
                       description: PurchaseQuoteItem.description,
                       product_id: PurchaseQuoteItem.product_id,
@@ -436,7 +441,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
                 color="success"
                 onClick={generateData}
               >
-                Generate Purchase Order Data
+                Generate Data
               </Button>
             </Col>
           <Col md="2">

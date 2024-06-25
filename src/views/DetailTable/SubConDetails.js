@@ -33,7 +33,7 @@ const SubConDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Subcon inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/SubConEdit/${insertedDataId}`);
+            navigate(`/SubConEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
@@ -41,7 +41,7 @@ const SubConDetails = () => {
         });
     else {
       setFormSubmitted(true);
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
 

@@ -57,6 +57,7 @@ const InvoiceEdit = () => {
   };
 
   const InvoiceSource = bookingDetails.source_type;
+  const orderType = bookingDetails.record_type;
 
 const getDefaultActiveTab = () => {
   if (InvoiceSource === 'Sales_Order') {
@@ -224,56 +225,58 @@ const toggle = (tab) => {
     });
   };
 
-  
   const generateData = () => {
     api
       .post('/invoice/getOrderLineItemsById', { order_id: orderId })
       .then((res) => {
         const quoteItems = res.data.data;
-        console.log(' Received quote items::', quoteItems);
+        console.log('Received quote items::', quoteItems);
         if (quoteItems.length === 0) {
           console.warn('No Quote items to insert');
           return;
         }
-        // Retrieve all po_product_id  values from the purchase_invoice_items table
+        // Retrieve all po_product_id values from the purchase_invoice_items table
         api
           .get('/invoice/checkQuoteItems')
           .then((response) => {
-            const ExistingQuoteItemsId = response.data.data; 
+            const ExistingQuoteItemsId = response.data.data;
+            let totalInvoiceAmount = 0; // Initialize total invoice amount
+  
             const insertQuoteItems = (index) => {
               if (index < quoteItems.length) {
-                const QuoteItem = quoteItems[index];  
-                console.log('QuoteItem', QuoteItem)
-                // Check if the po_product_id  already exists in the ExistingQuoteItemsId array
-                if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id  )) {
-                  console.warn(`Quote item for order id  ${QuoteItem.order_item_id  } already exists, skipping insertion`);
+                const QuoteItem = quoteItems[index];
+                console.log('QuoteItem', QuoteItem);
+                // Check if the po_product_id already exists in the ExistingQuoteItemsId array
+                if (ExistingQuoteItemsId.includes(QuoteItem.order_item_id)) {
+                  console.warn(`Quote item for order id ${QuoteItem.order_item_id} already exists, skipping insertion`);
                   message('Invoice items are already Inserted', 'warning');
                   insertQuoteItems(index + 1);
                 } else {
                   // Insert the order item
                   const QuoteItemsData = {
-                    creation_date : creationdatetime,
-                    created_by : loggedInuser.first_name, 
+                    creation_date: creationdatetime,
+                    created_by: loggedInuser.first_name,
                     invoice_id: insertedDataId,
-                  qty: QuoteItem.qty,
-                  invoice_qty: QuoteItem.qty,
-                  unit_price: QuoteItem.unit_price,
-                  item_title: QuoteItem.item_title,
-                  total_cost: QuoteItem.cost_price,
-                  order_id: QuoteItem.order_id,
-                  order_item_id: QuoteItem.order_item_id,
-                  invoice_source_id: bookingDetails.invoice_source_id,
-                  source_type: bookingDetails.source_type,
-                  quote_id: QuoteItem.quote_id,
-                  unit:QuoteItem.unit
-                  };  
-                  console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
-                  // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
+                    qty: QuoteItem.qty,
+                    invoice_qty: QuoteItem.qty,
+                    unit_price: QuoteItem.unit_price,
+                    item_title: QuoteItem.item_title,
+                    total_cost: QuoteItem.cost_price,
+                    order_id: QuoteItem.order_id,
+                    order_item_id: QuoteItem.order_item_id,
+                    invoice_source_id: bookingDetails.invoice_source_id,
+                    source_type: bookingDetails.source_type,
+                    quote_id: QuoteItem.quote_id,
+                    unit: QuoteItem.unit,
+                  };
+                  console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);
+                  // Send a POST request to your /invoice/insertInvoiceItem API with the current QuoteItemsData
                   api
                     .post('/invoice/insertInvoiceItem', QuoteItemsData)
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
+                        totalInvoiceAmount += QuoteItem.cost_price; // Add to total invoice amount
                         setTimeout(() => {
                           // window.location.reload()
                         }, 100);
@@ -291,9 +294,25 @@ const toggle = (tab) => {
                 }
               } else {
                 console.log('All order items inserted successfully');
+                // Update the invoice amount in the invoice table
+                api
+                  .post('/invoice/updateInvoiceAmount', {
+                    invoice_id: insertedDataId,
+                    invoice_amount: totalInvoiceAmount,
+                  })
+                  .then((updateResponse) => {
+                    if (updateResponse.data.msg === 'Success') {
+                      console.log('Invoice amount updated successfully');
+                    } else {
+                      console.error('Failed to update invoice amount');
+                    }
+                  })
+                  .catch((updateError) => {
+                    console.error('Error updating invoice amount', updateError);
+                  });
                 // You might want to trigger a UI update here
               }
-            }; 
+            };
             // Start inserting order items from index 0
             insertQuoteItems(0);
           })
@@ -305,6 +324,7 @@ const toggle = (tab) => {
         console.error('Error fetching quote items', error);
       });
   };
+  
 
   const generatePartialData = () => {
     api
@@ -353,6 +373,7 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
+                        totalInvoiceAmount += QuoteItem.cost_price; // Add to total invoice amount
                         setTimeout(() => {
                           window.location.reload()
                         }, 100);
@@ -371,6 +392,21 @@ const toggle = (tab) => {
               } else {
                 console.log('All order items inserted successfully');
                 // You might want to trigger a UI update here
+                api
+                .post('/invoice/updateInvoiceAmount', {
+                  invoice_id: insertedDataId,
+                  invoice_amount: totalInvoiceAmount,
+                })
+                .then((updateResponse) => {
+                  if (updateResponse.data.msg === 'Success') {
+                    console.log('Invoice amount updated successfully');
+                  } else {
+                    console.error('Failed to update invoice amount');
+                  }
+                })
+                .catch((updateError) => {
+                  console.error('Error updating invoice amount', updateError);
+                });
               }
             }; 
             // Start inserting order items from index 0
@@ -716,7 +752,7 @@ const toggle = (tab) => {
     // editItemById();
     getOrderItemById();
    }, [insertedDataId]);
-
+console.log("1Q1Q11",orderType)
   return (
     <>
       <BreadCrumbs />
@@ -810,13 +846,15 @@ const toggle = (tab) => {
         </NavLink>
       </NavItem>
     )}
-    {InvoiceSource !== 'Sales_Order' && (
+
+    {InvoiceSource !== 'Sales_Order' && orderType !== 'POS' && (
       <NavItem>
         <NavLink onClick={() => toggle('2')} active={activeTab === '2'}>
         {arb?'بند فاتورة البضائع': 'Goods Invoice Item'} 
         </NavLink>
       </NavItem>
     )}
+    
     <NavItem>
       <NavLink onClick={() => toggle('3')} active={activeTab === '3'}>
       {arb?'مرفق': 'Attachment'} 
@@ -827,6 +865,8 @@ const toggle = (tab) => {
           <TabPane tabId="1">
           
           <Row className="mb-4">
+          {orderType !== 'POS' && (
+
           <Col md="3">
           {(hideButtonVisible &&( (hideButtonVisible &&orderitemDetails.length===0) || (orderitemDetails.length>0 && qtyMatch.length >0)) ) && (
           <Button
@@ -841,6 +881,9 @@ const toggle = (tab) => {
             </Button>
           )}
             </Col>
+          )}
+                    {orderType !== 'POS' && (
+
           <Col md="3">
                   <PartialINvoiceEdit
                   partialinvoiceeditmodal={partialinvoiceeditmodal}
@@ -866,6 +909,7 @@ const toggle = (tab) => {
            
         
       </Col>
+       )}
           </Row>   
           <OrderItemTable
         orderitemDetails={orderitemDetails}

@@ -119,7 +119,7 @@ if (arb === true) {
         message('Record edited successfully', 'success');
         setTimeout(() => {
           window.location.reload();
-        }, 300);
+        }, 1000);
       })
       .catch(() => {
         message('Menu Item Data Not inserted', 'info');

@@ -149,7 +149,7 @@ const [arabic, setArabic] = useState([]);
                   <tr key={element.sub_con_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/SubConEdit/${element.sub_con_id}`}>
+                      <Link to={`/SubConEdit/${element.sub_con_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
