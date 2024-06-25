@@ -76,10 +76,6 @@ const alcolumns = [
       name: "Returned Qty",
      
     },
-    {
-        name: "Status",
-        
-      },
       
     {
         name: "Created By",

@@ -112,7 +112,7 @@ const [arabic, setArabic] = useState([]);
         });
       }else {
         setFormSubmitted(true);
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
   //Logic for edit data in db
@@ -165,9 +165,9 @@ const [arabic, setArabic] = useState([]);
       .then((res) => {
         setSubConWorkOrder(res.data.data);
       })
-      .catch(() => {
-        message('SubCon not found', 'info');
-      });
+      // .catch(() => {
+      //   message('SubCon not found', 'info');
+      // });
   };
     getworkOrder();
     subconeditdetails();
@@ -359,7 +359,7 @@ const [arabic, setArabic] = useState([]);
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdSubcon.Address 1')?.[genLabel]}
                 
-              </Label><span className="required"> *</span>
+              </Label>
                  
                   <Input
                     type="text"

@@ -76,7 +76,7 @@ const [arabic, setArabic] = useState([]);
           const insertedDataId = res.data.data.insertId;
           message('Price inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/PriceListEdit/${insertedDataId}`);
+            navigate(`/PriceListEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {

@@ -50,7 +50,7 @@ const PurchaseRequestDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('PurchaseRequest inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/PurchaseRequestEdit/${insertedDataId}`);
+            navigate(`/PurchaseRequestEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
@@ -113,7 +113,7 @@ const PurchaseRequestDetails = () => {
       <ToastContainer></ToastContainer>
       <Row>
         <Col md="6">
-          <ComponentCard title={arb ?'التفاصيل الرئيسية':'Key Details'}>
+          <ComponentCard title={arb ?'تفاصيل طلب الشراء ':'Purchase Request Details'}>
             <Form>
               <FormGroup>
                 <Row>

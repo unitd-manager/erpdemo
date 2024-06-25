@@ -327,7 +327,7 @@ const PurchaseReturnDetails = () => {
                       </Button>
                       <Button
                         onClick={() => {
-                          navigate('/PurchaseOrder');
+                          navigate('/PurchaseReturn');
                         }}
                         type="button"
                         className="btn btn-dark shadow-none"

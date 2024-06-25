@@ -82,7 +82,7 @@ const [arabic, setArabic] = useState([]);
           const insertedDataId = res.data.data.insertId;
           message('Price inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/SupplierPriceListEdit/${insertedDataId}`);
+            navigate(`/SupplierPriceListEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {

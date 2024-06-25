@@ -330,11 +330,11 @@ console.error('Error fetching quote items', error);
       {/* Setting Details */}
       <Form>
         <FormGroup>
-        <ComponentCard title= {arb ?'تفاصيل الوثيقة':'Document Details'} creationModificationDate={quoteDetails}>
+        <ComponentCard title= {arb ?'تفاصيل الاقتباس':'Quote Details'} creationModificationDate={quoteDetails}>
             {' '}
             <ToastContainer></ToastContainer>
             <Row>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Purchase Request Code')?.[genLabel]}
@@ -344,7 +344,7 @@ console.error('Error fetching quote items', error);
                   
                 </FormGroup>
               </Col>
-              <Col md="4">
+              <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Request For Quote Code')?.[genLabel]}
@@ -354,7 +354,7 @@ console.error('Error fetching quote items', error);
                   
                 </FormGroup>
               </Col>
-                <Col md="4">
+                <Col md="3">
                   <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Status')?.[genLabel]}
@@ -373,7 +373,7 @@ console.error('Error fetching quote items', error);
                       </Input>
                   </FormGroup>
                 </Col>  
-                <Col md="4">
+                <Col md="3">
                     <FormGroup>
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Date Issued')?.[genLabel]}
@@ -386,7 +386,7 @@ console.error('Error fetching quote items', error);
                       />
                     </FormGroup>
                   </Col>
-                  <Col md="4">
+                  <Col md="3">
                     <FormGroup>
                     <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdRequestForQuote.Due Date')?.[genLabel]}

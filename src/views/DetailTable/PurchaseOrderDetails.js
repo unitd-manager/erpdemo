@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +7,8 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import message from '../../components/Message';
+import AppContext from '../../context/AppContext';
+import creationdatetime from '../../constants/creationdatetime';
 
 const PurchaseOrderDetails = () => {
   //All state variables
@@ -15,6 +17,7 @@ const PurchaseOrderDetails = () => {
     supplier_id: '',
     company_name: '',
   });
+  const { loggedInuser } = useContext(AppContext);
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
@@ -63,6 +66,8 @@ const PurchaseOrderDetails = () => {
    const insertPurchaseOrder = (code) => {
     purchaseForms.purchase_order_date = moment();
     purchaseForms.po_code=code;
+    purchaseForms.creation_date = creationdatetime;
+    purchaseForms.created_by = loggedInuser.first_name;
     if (purchaseForms.supplier_id !== '') {
       api
         .post('/purchaseorder/insertPurchaseOrder', purchaseForms)
@@ -70,7 +75,7 @@ const PurchaseOrderDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Purchase Order inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/PurchaseOrderEdit/${insertedDataId}`);
+            navigate(`/PurchaseOrderEdit/${insertedDataId}?tab=1`);
           }, 500);
         })
         .catch(() => {
@@ -99,16 +104,18 @@ const PurchaseOrderDetails = () => {
   return (
     <div>
       <BreadCrumbs />
-      <Row>
+    
         <ToastContainer></ToastContainer>
+        <Row>
         <Col md="6">
-          <ComponentCard title="Key Details">
+          <ComponentCard title="Purchase Order Details">
             <Form>
               <FormGroup>
                 <Row>
-                <Label dir="rtl" style={{ textAlign: 'left' }}>
+                <Col md="12">
+                <Label dir="rtl" style={{ textAlign: 'right' }}>
                 {arabic.find((item) => item.key_text === 'mdPurchaseOrder.Supplier Name')?.[genLabel]}
-              </Label>
+              </Label><span className='required'>*</span>
          
                   <Input
                     type="select"
@@ -131,6 +138,7 @@ const PurchaseOrderDetails = () => {
 
 
                 </Input>
+                </Col>
                 </Row>
 
                 <FormGroup>

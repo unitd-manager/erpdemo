@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button,Col } from 'reactstrap';
+import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import $ from 'jquery';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-import 'datatables.net-buttons/js/buttons.html5';
-import 'datatables.net-buttons/js/buttons.print';
+// import 'datatables.net-buttons/js/buttons.html5';
+// import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import api from '../../constants/api';
@@ -20,7 +20,7 @@ import PdfPurchaseRequestList from '../../components/PDF/PdfPurchaseRequestList'
 const PurchaseRequest = () => {
   //All state variable
   const [purchaserequest, setPurchaseRequest] = useState(null);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
@@ -55,10 +55,10 @@ const PurchaseRequest = () => {
     genLabel = 'value';
   }
 
-  //getting data from purchaserequest
+  //Getting data from purchaserequest
   const getPurchaseRequest = () => {
-    setLoading(true)
-    api.get('/purchaserequest/getPurchaseRequest')
+    api
+      .get('/purchaserequest/getPurchaseRequest') 
       .then((res) => {
         setPurchaseRequest(res.data.data);
         $('#example').DataTable({
@@ -66,28 +66,29 @@ const PurchaseRequest = () => {
           pageLength: 20,
           processing: true,
           dom: 'Bfrtip',
-          searching: true,
-          buttons: [ {
-            extend: 'print',
-            text: "Print",
-            className:"shadow-none btn btn-primary",
-        }],
+          // buttons: [
+          //   {
+          //     extend: 'print',
+          //     text: 'Print',
+          //     className: 'shadow-none btn btn-primary',
+          //   },
+          // ],
         });
-        setLoading(false)
-      }).catch(()=>{
-        setLoading(false)
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
-    };
+  };
 
   useEffect(() => {
-    getArabicCompanyName();
     getPurchaseRequest();
+    getArabicCompanyName();
   }, []);
-  //structure of purchaserequest list view
+  //Structure of purchaserequest list view
   const columns = [
     {
       name: '#',
-      selector: 'purchase_request_id',
       grow: 0,
       wrap: true,
       width: '4%',
@@ -112,69 +113,62 @@ const PurchaseRequest = () => {
       name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Request Date')?.[genLabel],
       selector: 'purchase_request_date',
       sortable: true,
-      grow: 0,
-      wrap: true,
+      width: 'auto',
+      grow: 3,
     },
     {
       name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Purchase Delivery Date')?.[genLabel],
       selector: 'purchase_delivery_date',
       sortable: true,
-      grow: 0,
-      wrap: true,
+      width: 'auto',
+      grow: 3,
     },
     {
       name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Customer Name')?.[genLabel],
       selector: 'company_name',
       sortable: true,
-      grow: 0,
-      wrap: true,
+      width: 'auto',
+      grow: 3,
     },
     {
-        name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel],
-        selector: 'department',
-        sortable: true,
-        grow: 0,
-        wrap: true,
-      },  
+      name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Department')?.[genLabel],
+      selector: 'department',
+      sortable: true,
+      width: 'auto',
+      grow: 3,
+    },
     {
       name: arabic.find((item) => item.key_text === 'mdPurchaseRequest.Status')?.[genLabel],
-      selector: 'status',
+      selector: 'department',
       sortable: true,
-      grow: 0,
-      wrap: true,
-    },   
+      width: 'auto',
+      grow: 3,
+    },
     {
       name: 'Print',
-      selector: 'status',
       sortable: true,
-      grow: 0,
-      wrap: true,
-    },   
+      width: 'auto',
+      grow: 3,
+    },
+  
   ];
-
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
-        <BreadCrumbs/>
-
+        <BreadCrumbs />
         <CommonTable
-                loading={loading}
-          title="Purchase Request List"
+          loading={loading}
+          title= {arb ?'قائمة الاقتباسات':'Purchase Request List'}
           module='Purchase Request'
           Button={
-            <>
-            <Col md="4">
             <Link to="/PurchaseRequestDetails">
               <Button color="primary" className="shadow-none mr-2">
-                New
+                Add New
               </Button>
             </Link>
-            </Col>
-            </>
           }
-        
         >
-          <thead>
+            <thead>
             <tr>
               {columns.map((cell) => {
                 return <td key={cell.name}>{cell.name}</td>;
@@ -188,7 +182,7 @@ const PurchaseRequest = () => {
                   <tr key={element.purchase_request_id}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to={`/PurchaseRequestEdit/${element.purchase_request_id}`}>
+                      <Link to={`/PurchaseRequestEdit/${element.purchase_request_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>
@@ -205,10 +199,11 @@ const PurchaseRequest = () => {
                 );
               })}
           </tbody>
-          </CommonTable>
+        </CommonTable>
       </div>
     </div>
   );
 };
 
 export default PurchaseRequest;
+
