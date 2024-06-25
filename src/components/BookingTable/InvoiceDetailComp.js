@@ -112,7 +112,7 @@ export default function BookingDetailComp({ bookingDetails, handleInputs,arb,ara
             </Col>
             {
               bookingDetails && (
-                bookingDetails.source_type === 'Sales_Order') &&
+                bookingDetails.source_type === 'Sales_Order' || bookingDetails.record_type === 'POS') &&
               (
                 <>
 

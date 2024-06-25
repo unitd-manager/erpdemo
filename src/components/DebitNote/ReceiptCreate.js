@@ -62,18 +62,16 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       setSelectedInvoice(invoices);
     }
   };
-
+ 
   //Getting receipt data by order id
   const getinvoiceReceipt = () => {
     if (orderId) {
-      api.post('/invoice/getInvoiceForReceipt', { order_id: orderId }).then((res) => {
+      api.post('/invoice/getInvoiceForSalesReceipt', { order_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
           element.remainingAmount = element.invoice_amount - element.prev_amount;
         });
-        const result = datafromapi.filter((el) => {
-          return el.invoice_amount !== el.prev_amount;
-        });
+        const result = datafromapi.filter((el) => el.invoice_amount !== el.prev_amount);
         setInvoiceReceipt(result);
       });
     }

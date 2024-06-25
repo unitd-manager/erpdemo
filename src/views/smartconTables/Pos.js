@@ -58,11 +58,9 @@ const OrderList = () => {
                     setbillId(order.bill_number);
                     setcompanyId(order.company_name);
                     setSessionOrder(order.gst_status);
-                    setshippingCharges(parseFloat(order.shipping_charge));
-                    setdiscountCharges(parseFloat(order.discount));
+                    setshippingCharges(parseFloat(order.shipping_charge) || 0);
+                    setdiscountCharges(parseFloat(order.discount) || 0);
                     setIsOrderActive(order.order_status);
-
-
                 } else {
                     console.error('Invalid order data', order);
                 }
@@ -72,6 +70,7 @@ const OrderList = () => {
         };
         fetchData();
     }, []);
+    
     useEffect(() => {
         if (sessionOrderId) {
             api.post('/finance/getOrdersByIds', { order_id: sessionOrderId })
@@ -87,7 +86,7 @@ const OrderList = () => {
                     let subtotalWithDiscount1 = 0;
                     let total = 0;
                     let total1 = 0;
-
+    
                     items.forEach(item => {
                         totalQty += item.qty;
                         const subtotal = item.qty * item.unit_price;
@@ -107,8 +106,10 @@ const OrderList = () => {
                     setOverallSubtotalWithoutDiscount(subtotalWithoutDiscount);
                     setOverallSubtotalWithDiscount(subtotalWithDiscount1);
                     // Include shipping charges in total calculation
-                    const totalWithShipping = total + parseFloat(shippingCharges) -parseFloat(discountCharge);
-                    const total1WithShipping1 = total1 + parseFloat(shippingCharges)-parseFloat(discountCharge);
+                    const shippingChargesValue = parseFloat(shippingCharges) || 0;
+                    const discountChargeValue = parseFloat(discountCharge) || 0;
+                    const totalWithShipping = total + shippingChargesValue - discountChargeValue;
+                    const total1WithShipping1 = total1 + shippingChargesValue - discountChargeValue;
                     setTotalOverall(totalWithShipping);
                     setRoundOffAmount(Math.round(totalWithShipping) - totalWithShipping);
                     setOverallNetTotal(Math.round(totalWithShipping));
@@ -120,8 +121,8 @@ const OrderList = () => {
                     console.error('Error fetching order items:', error);
                 });
         }
-    }, [sessionOrderId, shippingCharges,discountCharge]);
-
+    }, [sessionOrderId, shippingCharges, discountCharge]);
+    
     const handleModeOfPaymentChange = (e) => {
         setModeOfPayment(e.target.value);
     };
@@ -189,16 +190,20 @@ const OrderList = () => {
     };
 
     const addProductToOrderItems = (selectedProduct) => {
-        const newItem = {
-            order_id: sessionOrderId,
-            qty: selectedProduct.qty,
-            record_id: selectedProduct.value,
-            item_title: selectedProduct.label,
-            unit: selectedProduct.unit,
-            unit_price: selectedProduct.price,
-            vat: selectedProduct.gst,
-            discount_type: "No discount"
-        };
+        const costPrice = selectedProduct.unit_price * selectedProduct.qty;
+console.log("q1q1q1q1",costPrice)
+    // Create newItem object with cost_price included
+    const newItem = {
+        order_id: sessionOrderId,
+        qty: selectedProduct.qty,
+        record_id: selectedProduct.value,
+        item_title: selectedProduct.label,
+        unit: selectedProduct.unit,
+        unit_price: selectedProduct.price,
+        vat: selectedProduct.gst,
+        discount_type: "No discount",
+        cost_price: costPrice  // Include cost_price in newItem
+    };
 
         api.post('/poss/insertorder_item', newItem)
             .then(() => {
@@ -231,7 +236,16 @@ const OrderList = () => {
     const updateQuantity = (orderItemId, newQty) => {
         const updatedItem = orderItems.find(item => item.order_item_id === orderItemId);
         if (updatedItem) {
-            const updatedData = { ...updatedItem, qty: newQty };
+
+            const newCostPrice = updatedItem.unit_price * newQty;
+
+            // Prepare updated data object
+            const updatedData = {
+                ...updatedItem,
+                qty: newQty,
+                cost_price: newCostPrice
+            };
+    
 
             api.post('/poss/updateOrderItem', updatedData)
                 .then(() => {
@@ -728,7 +742,7 @@ const removeClient = () => {
                                         <td colSpan={5} className='totalQty'>Total Qty</td>
                                         <td className='totalQty'>{qtyTotal}</td>
                                         <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
-                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum}</td>
+                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum+discountCharge}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
