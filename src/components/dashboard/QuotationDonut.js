@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col } from 'reactstrap';
 import Chart from 'react-apexcharts';
-//import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
+import api from '../../constants/api';
+
 
 const QuotationDonut = () => {
   const [quotationStats, setQuotationStats] = useState(null);
 
   // Function to fetch Quotation statistics
-  const fetchQuotationStats = () => {
-    // Mock data for demonstration (replace with actual API call)
-    const mockData = {
-      with_due: 15,
-      due: 5,
-      over_due: 20,
-    };
-    setQuotationStats(mockData);
+  const fetchQuotationStats = async () => {
+    try {
+      const { data } = await api.get('/quote/getQuoteStats'); // Replace with your API endpoint
+
+      const statusCounts = data.data.reduce((acc, quote) => {
+        acc[quote.quote_status] = (acc[quote.quote_status] || 0) + 1;
+        return acc;
+      }, {});
+
+      setQuotationStats(statusCounts);
+    } catch (error) {
+      console.error('Error fetching quotation stats:', error);
+    }
   };
 
   useEffect(() => {
@@ -51,20 +57,29 @@ const QuotationDonut = () => {
       'rgb(38, 198, 218)',
       'rgb(116, 90, 242)',
       '#ef5350',
+      '#66bb6a',
     ],
     tooltip: {
       fillSeriesColor: false,
       theme: 'dark',
     },
     labels: [
-      'With Due',
-      'Due',
-      'Over Due',
+      'New',
+      'Awarded',
+      'Quoted',
+      'Not Awarded',
+      'Cancelled',
     ],
   };
 
   const seriesDonut = quotationStats
-    ? [quotationStats.with_due || 0, quotationStats.due || 0, quotationStats.over_due || 0]
+    ? [
+        quotationStats.New || 0,
+        quotationStats.Awarded || 0,
+        quotationStats.Quoted || 0,
+        quotationStats['Not Awarded'] || 0,
+        quotationStats.Cancelled || 0,
+      ]
     : [];
 
   return (

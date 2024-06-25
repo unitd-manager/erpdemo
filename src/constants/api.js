@@ -1,23 +1,23 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-
-dotenv.config();
-let baseURL;
 
 const { hostname } = window.location;
-console.log('prod',process.env.REACT_APP_PRODUCTION_URL)
+console.log('Current Hostname:', hostname);
+console.log('Production URL:', process.env.REACT_APP_PRODUCTION_URL);
+console.log('Test URL:', process.env.REACT_APP_TEST_URL);
+console.log('Local URL:', process.env.REACT_APP_LOCAL_URL);
+
+let baseURL;
 
 if (hostname === 'erpardemo.unitdtechnologies.com') {
-  baseURL = process.env.REACT_APP_PRODUCTION_URL;
-} else if (hostname === 'erpclient.unitdtechnologies.com') { 
-  baseURL = process.env.REACT_APP_TEST_URL;
+  baseURL = 'https://erpardemo.unitdtechnologies.com:2020';
+} else if (hostname === 'erpclient.unitdtechnologies.com') {
+  baseURL = 'https://erpclient.unitdtechnologies.com:2010';
 } else {
-  //baseURL = process.env.REACT_APP_PRODUCTION_URL;
-   baseURL = process.env.REACT_APP_LOCAL_URL;
+  baseURL = 'http://localhost:2020';
 }
 
-console.log('Current Hostname:', hostname,baseURL);
+console.log('Selected Base URL:', baseURL);
+
 const api = axios.create({
   baseURL,
 });

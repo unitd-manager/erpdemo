@@ -513,9 +513,9 @@ const toggle = (tab) => {
                     .then((result) => {
                       if (result.data.msg === 'Success') {
                         console.log(`Order item ${index + 1} inserted successfully`);
-                        // setTimeout(() => {
-                        //   window.location.reload()
-                        // }, 100);
+                        setTimeout(() => {
+                          window.location.reload()
+                        }, 100);
                       } else {
                         console.error(`Failed to insert order item ${index + 1}`);
                       }
@@ -722,56 +722,7 @@ const toggle = (tab) => {
       <FormGroup>
       <ToastContainer/>
       <Row><Col>  <PdfCreateInvoice bookingDetails={bookingDetails} orderitemDetails={orderitemDetails} invoiceId={insertedDataId} ></PdfCreateInvoice></Col></Row>
-      {/* <ComponentCardV2>
-      <Row>
       
-         <Col>
-              <Button
-                color="primary"
-                className="shadow-none"
-                onClick={() => {
-                  editInvoiceData(true);
-                
-                }}
-              >
-                Save
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                color="primary"
-                className="shadow-none"
-                onClick={() => {
-                  editInvoiceData(false);
-                }}
-              >
-                Apply
-              </Button>
-            </Col>
-            <Col>
-            <Button
-        color="danger"
-        className="shadow-none"
-        onClick={cancelInvoice}
-        disabled={bookingDetails.status === 'Paid'}
-      >
-        Cancel
-      </Button>
-            </Col>
-            <Col>
-              <Button
-                className="shadow-none"
-                color="dark"
-                onClick={() => {
-                  backToList();
-                }}
-              >
-                Back to List
-              </Button>
-            </Col>
-          </Row>
-          
-      </ComponentCardV2> */}
       <ApiButton
               editData={editInvoiceData}
               navigate={navigate}
@@ -792,12 +743,7 @@ const toggle = (tab) => {
           arb={arb}
           arabic={arabic}
           />
-          {/* {eng === true &&
-
-<Tab toggle={toggle} tabs={tabs} />
-}
-{ arb === true &&
-<Tabs toggle={toggle} tabsArb={tabsArb} />} */}
+      
 
       </ComponentCard>
       

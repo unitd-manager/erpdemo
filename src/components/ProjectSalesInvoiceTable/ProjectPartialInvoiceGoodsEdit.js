@@ -6,7 +6,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Label,
   Table, 
   Input,
 } from 'reactstrap';
@@ -81,6 +80,7 @@ const OrderLineItemsById = () => {
       .post('/projectsalesinvoice/editInvoiceItems', item)
       .then(() => {
         message('Line Item Edited Successfully', 'sucess');
+        window.location.reload();
       })
       .catch(() => {
         message('Cannot Edit Line Items', 'error');
@@ -123,13 +123,7 @@ const OrderLineItemsById = () => {
   useEffect(() => {
     getArabicCompanyName();
   }, []);
-  let genLabel = '';
 
-  if (arb === true) {
-    genLabel = 'arb_value';
-  } else {
-    genLabel = 'value';
-  }
 
   return (
     <>
@@ -168,9 +162,7 @@ const OrderLineItemsById = () => {
                     return (
                       <tr key={invoiceItem.id}>                     
                         <td >
-                        <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Title')?.[genLabel]}{' '}
-                          </Label>
+                    
                           <Input
                             type="text"
                             disabled
@@ -187,9 +179,7 @@ const OrderLineItemsById = () => {
                           />
                         </td>
                         <td >
-                        <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Unit')?.[genLabel]}{' '}
-                          </Label>
+                        
                           <Input
                             type="text"
                             disabled
@@ -207,9 +197,7 @@ const OrderLineItemsById = () => {
 
                         </td>
                         <td >
-                          <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Unit Price')?.[genLabel]}{' '}
-                          </Label>
+                         
                           <Input
                             type="text"
                             onChange={(e) => {
@@ -230,9 +218,7 @@ const OrderLineItemsById = () => {
                           />
                         </td>
                         <td >
-                          <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Ordered Quantity')?.[genLabel]}{' '}
-                          </Label>
+                        
                           <Input
                             type="text"
                             disabled
@@ -249,9 +235,7 @@ const OrderLineItemsById = () => {
                           />
                         </td>
                         <td>
-                        <Label dir="rtl" style={{ textAlign: 'right' }}>
-                            {arabic.find((item) => item.key_text === 'mdTradingSalesInvoice.Invoice Quantity')?.[genLabel]}{' '}
-                          </Label>
+                       
                           <Input
                             type="text"
                             onChange={(e) => {
@@ -307,9 +291,7 @@ const OrderLineItemsById = () => {
             onClick={() => {
               editSalesInvoice();
               setPartialGoodsInvoiceEditModal(false);
-              setTimeout(() => {
-                window.location.reload()
-              }, 100);
+         
             }}
           >
             Submit
