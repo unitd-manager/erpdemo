@@ -123,7 +123,7 @@ const getCheckedPoProducts = (checkboxVal, index, Obj) => {
       ]
     useEffect(()=>{
         getPurchaseReturmItemsById();
-    },[PoProductId])
+    },[])
 
   return (
     <>

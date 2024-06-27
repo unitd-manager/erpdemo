@@ -95,6 +95,10 @@ const deleteRecord = (deleteID) => {
 const AddNewPlanning = () => {
   // Iterate over addMoreItem to submit all line items
   addMoreItem.forEach((item) => {
+    if (item.title !== '' &&
+      item.unit !== ''
+      )
+      {
     item.price_list_id = quoteLine;
 
     api
@@ -106,7 +110,11 @@ const AddNewPlanning = () => {
       .catch(() => {
         message('Network connection error.', 'error');
       });
+    } else {
+      message('Please fill all required field.', 'warning');
+    }
   });
+  
 };
 
 

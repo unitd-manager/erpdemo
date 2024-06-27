@@ -111,7 +111,7 @@ const Document = () => {
     },
     {
         name: arabic.find(item => item.key_text === 'mdDocument.Project Title')?.[genLabel],
-        selector: 'title',
+        selector: 'project_title',
         grow: 0,
         wrap: true,
         width: '4%',
@@ -183,7 +183,7 @@ const Document = () => {
                   </td>
                   <td>{element.document_code}</td>
                   <td>{element.document_title}</td>
-                  <td>{element.title}</td>
+                  <td>{element.project_title}</td>
                   <td>{element.start_date}</td>
                   <td>{element.quote_status}</td>
                   <td>{element.budget_inhouse}</td>

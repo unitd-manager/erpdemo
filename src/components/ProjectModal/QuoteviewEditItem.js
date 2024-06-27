@@ -46,8 +46,8 @@ const {id}=useParams();
       .post('/tender/edit-TabQuoteLine', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
-        message('Edit Line Item Udated Successfully.', 'success');
-        window.location.reload()
+        message('Edit Line Item Updated Successfully.', 'success');
+        window.location.reload();
       })
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');

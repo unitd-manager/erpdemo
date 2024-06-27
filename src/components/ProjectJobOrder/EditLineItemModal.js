@@ -53,8 +53,8 @@ const {id}=useParams();
       .post('/joborder/edit-TabJobLine', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
-        message('Edit Line Item Udated Successfully.', 'success');
-        window.location.reload()
+        message('Edit Line Item Updated Successfully.', 'success');
+        window.location.reload();
       })
       .catch(() => {
         message('Unable to edit job. please fill all fields', 'error');

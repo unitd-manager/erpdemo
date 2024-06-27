@@ -145,6 +145,10 @@ const AddNewPlanning = () => {
   // Iterate over addMoreItem to submit all line items
 
   addMoreItem.forEach((item,index) => {
+    if (item.title !== '' &&
+      item.unit !== ''
+      )
+      {
     item.purchase_request_id = PurchaseRequestId;
     item.created_by= loggedInuser.first_name; 
     item.creation_date = creationdatetime;
@@ -162,6 +166,9 @@ const AddNewPlanning = () => {
       .catch(() => {
         message('Network connection error.', 'error');
       });
+    } else {
+      message('Please fill all required field.', 'warning');
+    }
   });
   
 };
@@ -287,6 +294,7 @@ const insertProduct = (ProductCode, ItemCode) => {
           .then(() => {
             message('inventory created successfully.', 'success');
             //  getProduct();
+            setAddNewProductModal(false);
           })
           })
           .catch(() => {
@@ -558,9 +566,9 @@ const insertProduct = (ProductCode, ItemCode) => {
                 <Row>
                   <FormGroup>
                     <Row>
-                      <Label sm="3" dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Product Name')?.[genLabel]}
-                      </Label><span className="required"> *</span>{' '}
+                    <Label dir="rtl" style={{ textAlign: 'left' }}>
+                {arabic.find((item) => item.key_text === 'mdPurchaseRequest.Product Name')?.[genLabel]}  
+                <span className="required"> *</span></Label>{' '}
                       <Col sm="8">
                         <Input
                           type="text"
@@ -582,7 +590,7 @@ const insertProduct = (ProductCode, ItemCode) => {
             className="shadow-none"
             onClick={() => {
               generateCode();
-              setAddNewProductModal(false);
+              // setAddNewProductModal(false);
               // getProduct();
               // setTimeout(() => {
               //   window;

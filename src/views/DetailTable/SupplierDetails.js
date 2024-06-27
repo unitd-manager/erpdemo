@@ -32,14 +32,14 @@ const SupplierDetails = () => {
           const insertedDataId = res.data.data.insertId;
           message('Supplier inserted successfully.', 'success');
           setTimeout(() => {
-            navigate(`/SupplierEdit/${insertedDataId}`);
+            navigate(`/SupplierEdit/${insertedDataId}?tab=1`);
           }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
     else {
-      message('Please fill all required fields.', 'error');
+      message('Please fill all required fields.', 'warning');
     }
   };
   const [arabic, setArabic] = useState([]);

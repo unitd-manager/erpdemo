@@ -26,8 +26,9 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs,arb,arabic })
       <Col md="4">
         <FormGroup>
           <Label dir="rtl" style={{ textAlign: 'right' }}>
+          <span style={{ color: 'red' }}>*</span>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Pass Type')?.[genLabel]}
-             <span style={{ color: 'red' }}>*</span>
+           
           </Label>
           <Input
           name= {arb ? 'citizen_arb' : 'citizen'}
@@ -58,9 +59,9 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs,arb,arabic })
       {tabPassTypeDetails.citizen === 'Citizen' && (
         <Col md="4">
           <FormGroup>
-          <Label dir="rtl" style={{ textAlign: 'right' }}>
+          <Label dir="rtl" style={{ textAlign: 'right' }}> <span style={{ color: 'red' }}>*</span>
                 {arabic.find((item) => item.key_text === 'mdEmployee.NRIC No')?.[genLabel]}
-               <span style={{ color: 'red' }}>*</span>
+              
             </Label>
             <Input
             name= {arb ? 'nric_no_arb' : 'nric_no'}
@@ -85,9 +86,9 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs,arb,arabic })
           {' '}
           <Col md="4">
             <FormGroup>
-            <Label dir="rtl" style={{ textAlign: 'right' }}>
+            <Label dir="rtl" style={{ textAlign: 'right' }}> <span style={{ color: 'red' }}>*</span>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Fin No')?.[genLabel]}
-                 <span style={{ color: 'red' }}>*</span>
+                
               </Label>
               <Input
               name= {arb ? 'fin_no_arb' : 'fin_no'}
@@ -295,8 +296,8 @@ function TabPassTypeTab({ tabPassTypeDetails, handlePassTypeInputs,arb,arabic })
           <Row>
             <Col md="4">
               <FormGroup>
-              <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdEmployee.Work Permit No')?.[genLabel]} <span style={{ color: 'red' }}>*</span> </Label>
+              <Label dir="rtl" style={{ textAlign: 'right' }}><span style={{ color: 'red' }}>*</span> 
+                {arabic.find((item) => item.key_text === 'mdEmployee.Work Permit No')?.[genLabel]} </Label>
                 <Input
                 name= {arb ? 'work_permit_arb' : 'work_permit'}
                   

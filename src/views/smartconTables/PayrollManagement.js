@@ -262,7 +262,7 @@ const selectedLanguage = getSelectedLanguageFromLocalStorage();
           (totalBasicPay / workingDaysInMonth) *
           actualWorkingDays
         ).toFixed(2);
-        obj.total_basic_pay_for_month = basicPayPercentage;
+        obj.total_basic_pay_for_month = parseFloat(basicPayPercentage);
       }
 
       // // Example usage:

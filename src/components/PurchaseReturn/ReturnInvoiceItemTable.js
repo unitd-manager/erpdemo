@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Table, Input, Button } from 'reactstrap';
@@ -137,7 +138,7 @@ api.post('/purchasereturn/editpurchasereturn', {
               {Array.isArray(returnInvoiceItemDetails) && returnInvoiceItemDetails.length > 0 ? (
                 returnInvoiceItemDetails.map((element) => (
                   <tr key={element.po_product_id}>
-                    <td>
+                    {/* <td>
                       <input
                         type="checkbox"
                         id="sno"
@@ -145,7 +146,8 @@ api.post('/purchasereturn/editpurchasereturn', {
                         value={element.po_product_id}
                         onChange={(e) => getCheckedPoProducts(e, element)}
                       />
-                    </td>
+                    </td> */}
+                    <td></td>
                     <td>{element.title}</td>
                     <td>{element.quantity}</td>
                     <td>{element.return_qty}</td>
@@ -161,7 +163,7 @@ api.post('/purchasereturn/editpurchasereturn', {
                           className="shadow-none"
                           onClick={() => {
                             insertPurchasereturnHistory(element);
-                            updatePoProduct();
+                            //updatePoProduct();
                             setStockinputOpen(false);
                           }}
                         >
@@ -226,11 +228,11 @@ api.post('/purchasereturn/editpurchasereturn', {
           </Table>
         </div>
       </div>
-      <ViewReturnHistoryModal
+     {returnHistoryModal && <ViewReturnHistoryModal
                       returnHistoryModal={returnHistoryModal}
                       SetReturnHistoryModal={SetReturnHistoryModal}
                       PoProductId={modalId}
-                    />
+                    />}
     </Form>
   );
 }

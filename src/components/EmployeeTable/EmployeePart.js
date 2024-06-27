@@ -100,9 +100,9 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
-              <Label dir="rtl" style={{ textAlign: 'right' }}>
+              <Label dir="rtl" style={{ textAlign: 'right' }}><span style={{ color: 'red' }}>*</span> 
                 {arabic.find((item) => item.key_text === 'mdEmployee.Full Name')?.[genLabel]}
-                   <span style={{ color: 'red' }}>*</span>
+                   
                 </Label>
                 <Input
                   value={
@@ -147,9 +147,9 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             </Col>
             <Col md="3">
               <FormGroup>
-              <Label dir="rtl" style={{ textAlign: 'right' }}>
+              <Label dir="rtl" style={{ textAlign: 'right' }}><span style={{ color: 'red' }}>*</span>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Gender')?.[genLabel]}
-                   <span style={{ color: 'red' }}>*</span>
+                   
                 </Label>
                 <Input
                   
@@ -275,9 +275,10 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             <Col md="3">
               <FormGroup>
               <Label dir="rtl" style={{ textAlign: 'right' }}>
+              <span style={{ color: 'red' }}>*</span>
                 {arabic.find((item) => item.key_text === 'mdEmployee.Nationality')?.[genLabel]}
                   {/* Nationality */}
-                   <span style={{ color: 'red' }}>*</span>
+                   
                 </Label>
                 {/* <Input
                   name="nationality"
