@@ -219,7 +219,7 @@ console.log("q1q1q1q1",costPrice)
     };
 
     const deleteItem = (orderItemId) => {
-        api.post('/poss/deleteOrderItem', { order_item_id: orderItemId })
+        api.delete('/poss/deleteOrderItem', { order_item_id: orderItemId })
             .then(() => {
                 setOrderItems(orderItems.filter(item => item.order_item_id !== orderItemId));
                 message('Product deleted successfully', 'success');

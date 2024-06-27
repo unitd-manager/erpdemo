@@ -80,7 +80,7 @@ export default function TenderMoreDetails({
               <Col md="3">
                 <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdTradingEnq.customer')?.[genLabel]}{' '}
+                    {arabic.find((item) => item.key_text === 'mdTradingEnq.Customer')?.[genLabel]}{' '}
                     {/*Access the value property */}
                     
                   </Label>

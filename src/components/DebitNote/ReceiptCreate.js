@@ -297,6 +297,17 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
               >
                 Save
               </Button>
+              
+              <Button
+                onClick={() => {
+                  deleteCreatedReceipt();
+                }}
+                type="button"
+                 color="secondary"
+                  className="shadow-none"
+              >
+                Cancel
+              </Button>
             </FormGroup>
           </Form>
         </Col>
