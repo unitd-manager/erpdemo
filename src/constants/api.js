@@ -13,7 +13,7 @@ if (hostname === 'erpardemo.unitdtechnologies.com') {
 } else if (hostname === 'erpclient.unitdtechnologies.com') {
   baseURL = 'https://erpclient.unitdtechnologies.com:2010';
 } else {
-  baseURL = 'https://erpardemo.unitdtechnologies.com:2020';
+  baseURL = process.env.REACT_APP_LOCAL_URL;
 }
 
 console.log('Selected Base URL:', baseURL);
