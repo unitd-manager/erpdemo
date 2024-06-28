@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, FormGroup, Label, Input } from 'reactstrap';
+import { Row, Col, FormGroup, Label } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
@@ -26,8 +26,7 @@ const ProjectEnq = () => {
     api.get('/company/getCompany')
       .then(response => {
         const { data } = response.data;
-      
-        setCompanies(data); // Save the full company data array
+        setCompanies(data);
       })
       .catch(error => {
         console.log('Error fetching company data:', error);
@@ -72,8 +71,7 @@ const ProjectEnq = () => {
             <Col md="4">
               <FormGroup>
                 <Label>Company</Label>
-                <Input
-                  type="select"
+                <select
                   name="company_id"
                   onChange={handleCompanyChange}
                   value={selectedCompany}
@@ -84,7 +82,7 @@ const ProjectEnq = () => {
                       {company.company_name}
                     </option>
                   ))}
-                </Input>
+                </select>
               </FormGroup>
             </Col>
           </Row>
@@ -92,7 +90,7 @@ const ProjectEnq = () => {
             <Chart options={optionsDonutChart} series={seriesDonutChart} type="donut" height="350" />
           ) : (
             <p>No data available for the chart.</p>
-          )}
+          )}zz
         </ComponentCard>
       </Col>
     </Row>
