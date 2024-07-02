@@ -197,6 +197,9 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
         .post('/commonApi/getCodeValue', { type: 'receipt' })
         .then((res) => {
           insertReceipt(res.data.data);
+          setTimeout(() => {
+            window.location.reload();
+          }, 800);
         })
         .catch(() => {
           insertReceipt('');
@@ -353,6 +356,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
                 onClick={generateCode}
                 type="button"
                 className="btn btn-dark shadow-none"
+                
               >
                 Save
               </Button>
