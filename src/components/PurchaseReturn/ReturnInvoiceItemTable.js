@@ -56,8 +56,11 @@ export default function ItemTable({
     setPurchaseReturnHistoryDetails({
       purchase_return_id: element.purchase_return_id,
       po_product_id: element.po_product_id,
+      product_id: element.product_id,
       purchase_order_id: element.purchase_order_id,
       purchase_return_qty: value, // Adjust this if needed
+      quantity:element.quantity,
+      return_qty:element.return_qty
     });
     console.log('purchasereturnhistorydetails:', {
       purchase_return_id: element.purchase_return_id,
@@ -71,10 +74,13 @@ export default function ItemTable({
     });
   };
   console.log('ModalId', modalId);
-
+  console.log('returnInvoiceItemDetails', returnInvoiceItemDetails);
+  
   const insertPurchasereturnHistory = () => {
+    if((parseFloat(purchasereturnhistorydetails.quantity)-parseFloat(purchasereturnhistorydetails.return_qty))>=parseFloat(purchasereturnhistorydetails.purchase_return_qty)){
     purchasereturnhistorydetails.creation_date = creationdatetime;
     purchasereturnhistorydetails.created_by = loggedInuser.first_name;
+    purchasereturnhistorydetails.status = 'Pending';
     api.post('/purchasereturn/insertPurchasereturnHistory', purchasereturnhistorydetails)
       .then((res) => {
         message('Return Qty updated successfully', 'success');
@@ -91,6 +97,9 @@ api.post('/purchasereturn/editpurchasereturn', {
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
+    }else{
+      message('Please Enter less quantity than the available quantity.', 'danger');
+    }
   };
 
   const updatePoProduct = () => {

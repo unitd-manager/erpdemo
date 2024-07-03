@@ -106,6 +106,7 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label dir="rtl" style={{ textAlign: 'right' }}>
+                      <span className="required"> *</span>
                         {arabic.find((item) => item.key_text === 'mdHRLoan.Employee Name')?.[genLabel]}{' '}
                       </Label>
                       <Input
@@ -128,6 +129,7 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label dir="rtl" style={{ textAlign: 'right' }}>
+                      <span className="required"> *</span>
                         {arabic.find((item) => item.key_text === 'mdHRLoan.Total Loan Amount')?.[genLabel]}{' '}
                       </Label>
                       <Input
@@ -141,8 +143,9 @@ const LoanDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label dir="rtl" style={{ textAlign: 'right' }}>
+                      <span className="required"> *</span>
                         {arabic.find((item) => item.key_text === 'mdHRLoan.Amount Payable(per month)')?.[genLabel]}{' '}
-                        <span className="required"> *</span>
+                       
                       </Label>
                       <Input
                         type="number"

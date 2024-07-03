@@ -27,6 +27,7 @@ function PurchaseReturnhistoryTable({
   const getSelectedLanguageFromLocalStorage = () => {
     return localStorage.getItem('selectedLanguage') || '';
   };
+  console.log('product',products);
   
 const selectedLanguage = getSelectedLanguageFromLocalStorage();
 
@@ -74,6 +75,10 @@ const alcolumns = [
       },  
     {
       name: "Returned Qty",
+     
+    },
+    {
+      name: "Status",
      
     },
       
@@ -190,7 +195,7 @@ const alcolumns = [
                   
                     <td>{index + 1}</td>
                     <td>{element.purchase_return_qty}</td>
-                
+                    <td>{element.status}</td>
                 <td>{element.created_by}</td>
                 <td>{element.creation_date}</td>
                 {/* <td>{element.modified_by}{element.modification_date}</td> */}

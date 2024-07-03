@@ -508,7 +508,7 @@ const TrainingEdit = () => {
                 AddNewLineItem();
               }}
             >
-              {arb?'الموظف المرتبط': 'Linked Employee'}
+              {arb?'الموظف المرتبط': 'Link Employee'}
             </Button>
           </Col>
         </Row>

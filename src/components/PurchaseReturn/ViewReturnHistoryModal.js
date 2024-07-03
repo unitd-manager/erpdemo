@@ -27,36 +27,38 @@ function ViewReturnHistoryModal({returnHistoryModal,SetReturnHistoryModal,PoProd
 //Add to stocks
 const addQtytoStocks = () => {
   console.log('selected')
-  if (selectedPoProducts.length > 1) {
+  if (selectedPoProducts.length > 0) {
     console.log('selected',selectedPoProducts)
     selectedPoProducts.forEach((elem) => {
       if (elem.status !== 'Closed') {
         elem.status = 'Closed';
         elem.qty_updated = elem.qty_delivered;
-        elem.qty_in_stock -= parseFloat(elem.purchase_return_qty);
+        elem.quantity -= parseFloat(elem.purchase_return_qty);
+        elem.qty_in_stock -=parseFloat(elem.purchase_return_qty);
         elem.stock -= parseFloat(elem.purchase_return_qty);
-         elem.qty_in_stock=elem.stock;
-        api.post('/product/edit-ProductQty', elem);
+        
+         console.log('elem',elem);
+        api.post('/product/edit-ProductQty', elem) .then(() => {
         api
-          .post('/purchaseorder/editTabPurchaseOrderLineItem', elem)
+          .post('/purchaseorder/editTabPurchaseOrderLineItem', elem)})
           .then(() => {
             api
               .post('/inventory/editInventoryStock', elem)
-              .then(() => {
-                message('Quantity updated in inventory successfully.', 'success');
-              })
-              .catch(() => {
-                message('unable to update quantity in inventory.', 'danger');
-              });
-            message('Quantity added successfully.', 'success');
+              
+              }).then(() => {
+                api.post('/purchasereturn/editpurchasereturnhistory', elem)}).then(() => {
+                 
+                
+              message('Quantity added successfully.', 'success');
+           
           })
           .catch(() => {
             message('unable to add quantity.', 'danger');
           });
-      } else {
-        message('This product is already added', 'danger');
-      }
-    });
+    } else {
+         message('This product is already added', 'danger');
+       }
+     });
   } else {
     message('Please select atleast one product','danger');
   }
@@ -139,7 +141,7 @@ const getCheckedPoProducts = (checkboxVal, index, Obj) => {
                   addQtytoStocks();
                 }}
               >
-                Detect Stock
+                Deduct Stock
               </Button>
             </Col>
       </Row>

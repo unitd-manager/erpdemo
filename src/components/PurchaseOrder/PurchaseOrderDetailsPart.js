@@ -133,7 +133,7 @@ console.log('products',products)
                   </Input>
                 </FormGroup>
               </Col>
-              {products.length>1 && <Col md="3">
+              {products.length>0 && <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdPurchaseOrder.RQ Code')?.[genLabel]}

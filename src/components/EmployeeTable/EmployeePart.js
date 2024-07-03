@@ -203,7 +203,8 @@ function EmployeePart({ employeeDetails, handleInputChange, allCountries, compan
             <Col md="3">
               <FormGroup>
                 <Label dir="rtl" style={{ textAlign: 'right' }}>
-                {arabic.find((item) => item.key_text === 'mdEmployee.Date of Birth')?.[genLabel]} <span style={{ color: 'red' }}>*</span>
+                <span style={{ color: 'red' }}>*</span>
+                {arabic.find((item) => item.key_text === 'mdEmployee.Date of Birth')?.[genLabel]} 
                 </Label>
                 <Input
                   type="date"
