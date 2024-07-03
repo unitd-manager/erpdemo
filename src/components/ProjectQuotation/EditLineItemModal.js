@@ -57,11 +57,12 @@ const {id}=useParams();
       .post('/projectquote/edit-TabQuoteLine', lineItemData)
       .then((res) => {
         console.log('edit Line Item', res.data.data);
-        message('Edit Line Item Udated Successfully.', 'success');
+        message('Edit Line Item Updated Successfully.', 'success');
+        window.location.reload();
         if (hasChanges) {
           insertquote();
         }
-        window.location.reload()
+       
       })
       .catch(() => {
       });

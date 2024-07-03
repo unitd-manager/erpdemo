@@ -7,6 +7,7 @@ const OrderList = () => {
     const [sessionOrderId, setSessionOrderId] = useState('');
     const [billId, setbillId] = useState('');
     const [companyId, setcompanyId] = useState('');
+    const [companyId1, setcompanyId1] = useState('');
     const [sessionOrder, setSessionOrder] = useState('');
     const [shippingCharges, setshippingCharges] = useState(0);
     const [discountCharge, setdiscountCharges] = useState(0);
@@ -38,9 +39,7 @@ const OrderList = () => {
         api.post('/poss/updateGSTStatus', { order_id: sessionOrderId, gst_status: newGSTStatus })
             .then(() => {
                 message(`GST ${newGSTStatus}`, 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
+               
             })
             .catch(error => {
                 console.error('Error updating GST status:', error);
@@ -57,6 +56,7 @@ const OrderList = () => {
                     setSessionOrderId(order.order_id);
                     setbillId(order.bill_number);
                     setcompanyId(order.company_name);
+                    setcompanyId1(order.company_id);
                     setSessionOrder(order.gst_status);
                     setshippingCharges(parseFloat(order.shipping_charge) || 0);
                     setdiscountCharges(parseFloat(order.discount) || 0);
@@ -126,8 +126,19 @@ const OrderList = () => {
     const handleModeOfPaymentChange = (e) => {
         setModeOfPayment(e.target.value);
     };
-    
+    const [companies, setCompany] = useState('');
 
+    const getOrdersByOrderId = () => {
+        api.post('/poss/getCompanyById', { company_id: companyId1 }).then((res) => {
+          setCompany(res.data.data[0]);
+        
+        });
+      };
+console.log("111111111111",companies)
+      useEffect(() => {
+        getOrdersByOrderId();
+      }, [companyId1]);
+    
 
     const endNewOrder = () => {
         api.post('/poss/cancelOrder', { order_id: sessionOrderId })
@@ -219,7 +230,7 @@ console.log("q1q1q1q1",costPrice)
     };
 
     const deleteItem = (orderItemId) => {
-        api.post('/poss/deleteOrderItem', { order_item_id: orderItemId })
+        api.delete('/poss/deleteOrderItem', { order_item_id: orderItemId })
             .then(() => {
                 setOrderItems(orderItems.filter(item => item.order_item_id !== orderItemId));
                 message('Product deleted successfully', 'success');
@@ -253,9 +264,7 @@ console.log("q1q1q1q1",costPrice)
                     setOrderItems(orderItems.map(item =>
                         item.order_item_id === orderItemId ? updatedData : item
                     ));
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 300);
+                  
                 })
                 .catch(() => {
                     message('Unable to update quantity.', 'error');
@@ -428,6 +437,9 @@ const loadClientOptions = (inputValue, callback) => {
             const options = clients.map((client) => ({
                 value: client.company_id,
                 label: client.company_name,
+                address: client.address_street,
+                phone: client.phone,
+        
             }));
             callback(options);
         })
@@ -435,7 +447,7 @@ const loadClientOptions = (inputValue, callback) => {
             console.error('Error loading client options:', error);
         });
 };
-
+console.log("aaaaaa",selectedClient?.address)
 const addClient = () => {
     if (selectedClient) {
         api.post('/poss/updateClientId', { order_id: sessionOrderId, company_id: selectedClient.value })
@@ -471,18 +483,29 @@ const removeClient = () => {
         <div>
             <div className="panel panel-info">
                 <div className="panel-heading floatbox">
-                    <div className="orderDatePOSHeader float_left">
+                    {/* <div className="orderDatePOSHeader float_left">
                         <Input type="text" value='' readOnly />
-                    </div>
+                    </div> */}
 
                  
                     <div className="float_left viewAllOrderBtnml20">
                         <a target='_blank' href="/#/Salesorder" className="btn btn-primary">View All Order</a>
                  
-                        <Button onClick={toggleGSTCalculation} className="btn btn-primary ml10">
+                        {/* <Button onClick={toggleGSTCalculation} className="btn btn-primary ml10">
                             {sessionOrder === "ON" ? "Disable GST" : "Enable GST"}
 
-                        </Button>
+                        </Button> */}
+                          <div className="gst-toggle">
+    <Label>
+      <Input type="radio" name="gst-status" value="ON" checked={sessionOrder === "ON"} onChange={toggleGSTCalculation} />
+      ON     
+    </Label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <Label>
+      <Input type="radio" name="gst-status" value="OFF" checked={sessionOrder === "OFF"} onChange={toggleGSTCalculation} />
+      OFF
+    </Label>
+  </div>
+
 
                         <Button
                             type="button"
@@ -579,19 +602,19 @@ const removeClient = () => {
                     <table className="table table-hover table-bordered mt20" id="addProductTablePOS">
                         <thead>
                             <tr>
-                                <th>Sr No.</th>
-                                <th>Product</th>
-                                <th>Unit</th>
-                                <th>Qty</th>
-                                <th>Rate</th>
-                                <th>Dis Type</th>
-                                <th>Dis Amt</th>
+                                <th width="5%" >Sr No.</th>
+                                <th width="35%" >Product</th>
+                                <th width="5%" >Unit</th>
+                                <th width="7%" >Qty</th>
+                                <th width="5%" >Rate</th>
+                                <th width="5%" >Dis Type</th>
+                                <th width="7%" >Dis Amt</th>
                                 {sessionOrder === "ON" && (
-                                    <th className="txtRight">GST Amount</th>
+                                    <th width="5%"  className="txtRight">GST Amount</th>
                                 )}
 
-                                <th>Amt</th>
-                                <th>Action</th>
+                                <th width="5%" >Amt</th>
+                                <th width="5%" >Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -659,95 +682,89 @@ const removeClient = () => {
                         </tbody>
                     </table>
                     <>
-                        {isOrderActive !== "Cancelled" ? (
-                            <div className="float_left viewAllOrderml20 mt50">
-                                <Button onClick={openModal1} className="btn btn-primary">
-                                    Apply Discount
-                                </Button>
-                                <Modal isOpen={isModalOpen1} toggle={closeModal1}>
-                                    <ModalHeader toggle={closeModal1}>Enter Discount</ModalHeader>
-                                    <ModalBody>
-                                        {/* Input field to enter shipping charge amount */}
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            value={discountCharge}
-                                            onChange={handleDiscountChargeChange}
-                                            placeholder="Enter discount charge amount"
-                                        />
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        {/* Button to submit shipping charge */}
-                                        <Button color="primary" onClick={applyDiscount}>Apply</Button>{' '}
-                                        {/* Button to close the modal */}
-                                        <Button color="secondary" onClick={closeModal1}>Cancel</Button>
-                                    </ModalFooter>
-                                </Modal>
-                                <Button onClick={openModal} className="btn btn-primary ml10">
-                                    Apply Shipping Charge
-                                </Button>
-                                {/* Modal component */}
-                                <Modal isOpen={isModalOpen} toggle={closeModal}>
-                                    <ModalHeader toggle={closeModal}>Enter Shipping Charge</ModalHeader>
-                                    <ModalBody>
-                                        {/* Input field to enter shipping charge amount */}
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            value={shippingCharge}
-                                            onChange={handleShippingChargeChange}
-                                            placeholder="Enter shipping charge amount"
-                                        />
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        {/* Button to submit shipping charge */}
-                                        <Button color="primary" onClick={applyShippingCharge}>Apply</Button>{' '}
-                                        {/* Button to close the modal */}
-                                        <Button color="secondary" onClick={closeModal}>Cancel</Button>
-                                    </ModalFooter>
-                                </Modal>
-                                <Button onClick={addClient} className="btn btn-primary ml10">
-                                Add Client
-                            </Button>
-                                <Button onClick={removeClient} className="btn btn-primary ml10">
-                                    Remove Client
-                                </Button>
-                                <div className="client-search">
-                                    
-                                <AsyncSelect
-                                    loadOptions={loadClientOptions}
-                                    onChange={setSelectedClient}
-                                    isClearable
-                                    placeholder="Search for a client"
-                                />
-                                   {companyId && (
-                        <div>
-                            <p>Company Name: {companyId}</p>
-                        </div>
-                    )}
-                            </div>
-                         
-                            </div>
+    {isOrderActive !== "Cancelled" ? (
+        <div className="float_left viewAllOrderml20 mt50">
+            <Button onClick={openModal1} className="btn btn-primary mr-2 mb-2">
+                Apply Discount
+            </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Modal isOpen={isModalOpen1} toggle={closeModal1}>
+                <ModalHeader toggle={closeModal1}>Enter Discount</ModalHeader>
+                <ModalBody>
+                    <Input
+                        type="number"
+                        min="0"
+                        value={discountCharge}
+                        onChange={handleDiscountChargeChange}
+                        placeholder="Enter discount charge amount"
+                    />
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={applyDiscount}>Apply</Button>{' '}
+                    <Button color="secondary" onClick={closeModal1}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+            
+            <Button onClick={openModal} className="btn btn-primary mr-2 mb-2">
+                Apply Shipping Charge
+            </Button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <Modal isOpen={isModalOpen} toggle={closeModal}>
+                <ModalHeader toggle={closeModal}>Enter Shipping Charge</ModalHeader>
+                <ModalBody>
+                    <Input
+                        type="number"
+                        min="0"
+                        value={shippingCharge}
+                        onChange={handleShippingChargeChange}
+                        placeholder="Enter shipping charge amount"
+                    />
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={applyShippingCharge}>Apply</Button>{' '}
+                    <Button color="secondary" onClick={closeModal}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+            
+            <Button onClick={addClient} className="btn btn-primary mr-2 mb-2">
+                Add Client
+            </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+            <Button onClick={removeClient} className="btn btn-primary mb-2">
+                Remove Client
+            </Button>
 
-                            
-                        ) : (
-                            <p></p>
-                        )}
-                    </>
+            <div className="client-search mt-2" style={{ maxWidth: '300px' }}>
+                <AsyncSelect
+                    loadOptions={loadClientOptions}
+                    onChange={setSelectedClient}
+                    isClearable
+                    placeholder="Search for a client"
+                    styles={{ container: (provided) => ({ ...provided, marginBottom: '10px' }) }}
+                />
+                {companyId && (
+                    <div>
+                        <p>Company Name: {companyId}</p>
+                        <p>Mobile: {companies && companies.phone || 'N/A'}</p>
+                        <p>Email: {companies && companies.email || 'N/A'}</p>
+                        <p>Address: {companies && companies.address_street || 'N/A'}</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    ) : (
+        <p></p>
+    )}
+</>
+
                     <>
                         {isOrderActive !== "Cancelled" ? (
                             <table className="table table-bordered mt20">
                                 <tbody>
-                                    <tr>
-                                        <td colSpan={5} className='totalQty'>Total Qty</td>
-                                        <td className='totalQty'>{qtyTotal}</td>
-                                        <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
-                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum+discountCharge}</td>
-                                        <td></td>
-                                    </tr>
+                                   
                                     <tr>
                                         <td colSpan={5} className='totalFontSize'>Shipping Charge</td>
                                         <td id='fld_shipping_charge' className='txtRight totalFontSize'>{shippingCharges}</td>
+                                        <td colSpan={3} className='totalDiscount totalFontSize'>Total Qty</td>
+                                        <td className='totalQty'>{qtyTotal}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
@@ -755,7 +772,9 @@ const removeClient = () => {
     <td id='fld_net_amount' className='txtRight totalFontSize'>
         {sessionOrder === "ON" ? (parseFloat(totalOverall) || 0).toFixed(2) : (parseFloat(overallSubtotalWithDiscount) || 0).toFixed(2)}
     </td>
-    <td></td>
+    <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
+                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum+discountCharge}</td>
+                                        <td></td>
 </tr>
 <tr>
     <td colSpan={5} className='totalFontSize'>Round Off</td>
@@ -792,7 +811,7 @@ const removeClient = () => {
                                         <td className='netTotal balance'>{change}</td>
                                         <td></td>
                                         <td>
-                                            <Button onClick={saveAmountGiven} className="btn btn-primary">Save</Button>
+                                            <Button onClick={saveAmountGiven} className="btn btn-primary">Submit</Button>
                                         </td>
                                     </tr>
                                     <input type='hidden' id='fld_subtotal_amount' name='subtotal_amount' value={overallNetTotal} />

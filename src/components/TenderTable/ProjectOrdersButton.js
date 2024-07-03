@@ -94,7 +94,7 @@ export default function TenderButtons({ editTenderData, applyChanges, backToList
               } else {
                 console.log('All order items processed successfully');
                 // Optionally reload the page or trigger a state update
-                // window.location.reload();
+              window.location.reload();
               }
             };
   

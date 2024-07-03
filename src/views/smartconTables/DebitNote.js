@@ -4,7 +4,7 @@ import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import {
   Button,
   Col,
@@ -40,7 +40,7 @@ const InvoiceData = () => {
   const [selectReceiptId, setSelectReceiptId] = useState(null);
   //Navigation and Parameter Constants
 
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const [invoiveId, setInvoiceId] = useState();
   const [order, setOrder] = useState();
   const toggleModal = () => {
@@ -356,7 +356,8 @@ const InvoiceData = () => {
                           </Button>
                           <Button
                             onClick={() => {
-                              navigate(-1);
+                              window.location.reload();
+
                             }}
                             type="button"
                             className="btn btn-dark shadow-none"
@@ -373,8 +374,8 @@ const InvoiceData = () => {
           </ModalBody>
         </Modal>
 
-        <Modal isOpen={secondModalOpen} toggle={() => setSecondModalOpen(!secondModalOpen)}>
-          <ModalHeader toggle={() => setSecondModalOpen(!secondModalOpen)}>
+        <Modal isOpen={secondModalOpen}>
+          <ModalHeader>
           {arb ?'إنشاء إيصال':'Create receipt'}
           </ModalHeader>
           <ModalBody>

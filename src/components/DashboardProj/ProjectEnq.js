@@ -1,16 +1,51 @@
-import React from 'react';
-import { Row, Col } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, FormGroup, Label } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
+import api from '../../constants/api';
 
 const ProjectEnq = () => {
-  // Static data for project enquiries
-  const enquiryData = [
-    { enquiryName: 'Enquiry A', actual: 60, target: 80 }, // Enquiry name, actual progress, and target progress
-    { enquiryName: 'Enquiry B', actual: 80, target: 90 },
-    { enquiryName: 'Enquiry C', actual: 40, target: 70 },
-    // Add more data as needed
-  ];
+  const [enquiryData, setEnquiryData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState('');
+
+  useEffect(() => {
+    // Fetch data from the project enquiry API
+    api.get('/projectenquiry/getProjectEnquiry')
+      .then(response => {
+        const { data } = response.data;
+        setEnquiryData(data);
+        setFilteredData(data);
+      })
+      .catch(error => {
+        console.log('Error fetching project enquiry data:', error);
+      });
+
+    // Fetch data from the companies API
+    api.get('/company/getCompany')
+      .then(response => {
+        const { data } = response.data;
+        setCompanies(data);
+      })
+      .catch(error => {
+        console.log('Error fetching company data:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Filter data based on selected company
+    if (selectedCompany) {
+      const filtered = enquiryData.filter(enquiry => enquiry.company_id === selectedCompany);
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(enquiryData);
+    }
+  }, [selectedCompany, enquiryData]);
+
+  const handleCompanyChange = (e) => {
+    setSelectedCompany(e.target.value);
+  };
 
   const optionsDonutChart = {
     chart: {
@@ -19,24 +54,43 @@ const ProjectEnq = () => {
       type: 'donut',
       height: '350',
     },
-    labels: enquiryData.map((enquiry) => enquiry.enquiryName),
-    colors: ['#36a2eb', '#ff6384', '#ffce56'], // Colors for each segment of the donut chart
+    labels: filteredData.map(enquiry => enquiry.enquiryName),
+    colors: ['#36a2eb', '#ff6384', '#ffce56'], // Customize colors as needed
     tooltip: {
       theme: 'dark',
     },
   };
 
-  const seriesDonutChart = enquiryData.map((enquiry) => enquiry.actual);
+  const seriesDonutChart = filteredData.map(enquiry => enquiry.actual);
 
   return (
     <Row>
       <Col md="12">
         <ComponentCard title="Project Enquiry (Donut Chart)">
-          {enquiryData.length > 0 ? (
+          <Row>
+            <Col md="4">
+              <FormGroup>
+                <Label>Company</Label>
+                <select
+                  name="company_id"
+                  onChange={handleCompanyChange}
+                  value={selectedCompany}
+                >
+                  <option value="">Please Select</option>
+                  {companies.map(company => (
+                    <option key={company.company_id} value={company.company_id}>
+                      {company.company_name}
+                    </option>
+                  ))}
+                </select>
+              </FormGroup>
+            </Col>
+          </Row>
+          {filteredData.length > 0 ? (
             <Chart options={optionsDonutChart} series={seriesDonutChart} type="donut" height="350" />
           ) : (
             <p>No data available for the chart.</p>
-          )}
+          )}zz
         </ComponentCard>
       </Col>
     </Row>

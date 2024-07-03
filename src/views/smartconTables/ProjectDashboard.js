@@ -5,12 +5,10 @@ import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart'
 import LabourSummary from '../../components/dashboard/LabourSummary';
 import MaterrialIssueChart from '../../components/dashboard/MaterialIssueChart';
 import ProjectChart from '../../components/DashboardProj/ProjectChart';
-import QuoteChart from '../../components/DashboardProj/QuoteChart';
-import CustoChart from '../../components/DashboardProj/CustoChart';
 import Subcon from '../../components/DashboardProj/SubCon';
 import MaterialIssue from '../../components/DashboardProj/MaterialIssue';
-import ProjectEnq from '../../components/DashboardProj/ProjectEnq';
-
+import ProjectQuotationChart  from '../../components/dashboard/ProjectQuotationChart'
+import ProjectEnquiryChart from '../../components/dashboard/ProjectEnquiryChart';
 
 const Test = () => {
 
@@ -18,9 +16,8 @@ const Test = () => {
     <div >
       <Row>
         <Col lg='12'>
-        <CustoChart/>
-        <ProjectEnq/>
-        <QuoteChart/>
+        <ProjectEnquiryChart/>
+        <ProjectQuotationChart/>
         <ProjectChart/>
         <Subcon/>
         <MaterialIssue/>

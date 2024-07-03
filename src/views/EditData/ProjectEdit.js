@@ -615,7 +615,7 @@ const [arabic, setArabic] = useState([]);
                     <td><Link to={`/SubConEdit/${element.sub_con_id}`}>{element.sub_con_title}</Link></td>
                     <td>{element.ref_no_job}</td>
                     <td>{element.job_status}</td>
-                    <td>{element.total_amount}</td>
+                    <td>{element.amount}</td>
                   </tr>
                 );
               })}

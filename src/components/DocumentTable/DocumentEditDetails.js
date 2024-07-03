@@ -64,8 +64,8 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                     <Input
                           type="text"
                           onChange={handleInputs}
-                          value={documenteditdetails && documenteditdetails.title}
-                          name="title"
+                          value={documenteditdetails && documenteditdetails.project_title}
+                          name="project_title"
                           disabled>
                      </Input>
               </FormGroup>
@@ -94,8 +94,8 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                     <Input
                           type="text"
                           onChange={handleInputs}
-                          value={documenteditdetails && documenteditdetails.budget_inhouse}
-                          name="budget_inhouse"
+                          value={documenteditdetails && documenteditdetails.budget}
+                          name="budget"
                           disabled>
                      </Input>
               </FormGroup>
@@ -128,22 +128,9 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdDocument.Quote Status')?.[genLabel]}
-                  </Label>
-                    <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={documenteditdetails && documenteditdetails.quote_status}
-                          name="quote_status"
-                          disabled>
-                     </Input>
-              </FormGroup>
-              </Col>
-              </Row>
-              <Row>
+             
+              
+            
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -252,20 +239,7 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdDocument.State')?.[genLabel]}
-                  </Label>
-                    <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={documenteditdetails && documenteditdetails.address_state}
-                          name="address_state"
-                          disabled>
-                     </Input>
-              </FormGroup>
-              </Col>
+           
               <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
@@ -359,7 +333,7 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
+              {/* <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdDocument.PO Code')?.[genLabel]}
@@ -372,8 +346,8 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                     disabled
                   />
                 </FormGroup>
-              </Col>
-              <Col md="3">
+              </Col> */}
+              {/* <Col md="3">
                 <FormGroup>
                   <Label dir="rtl" style={{ textAlign: 'right' }}>
                     {arabic.find((item) => item.key_text === 'mdDocument.State')?.[genLabel]}
@@ -400,7 +374,7 @@ function DocumentEditDetails ({ documenteditdetails, handleInputs, arabic, arb, 
                           disabled>
                      </Input>
         </FormGroup>
-              </Col>
+              </Col> */}
               </Row>
               </ComponentCard>
             </Form>

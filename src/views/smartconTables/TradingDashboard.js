@@ -19,6 +19,7 @@ const Test = () => {
       <Row>
         <Col lg='12'>
        <ClientChart/>
+      
        <EnquiryLineChart/>
        <QuotationDonut/>
        <SalesOrderStats/>

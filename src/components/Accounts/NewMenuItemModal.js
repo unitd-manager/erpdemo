@@ -284,7 +284,7 @@ if (arb === true) {
                     </FormGroup>
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Col md="12">
                     <FormGroup>
                         <Label>{arb === true ? 'يرجى اختيار' : 'Customer'}</Label>
@@ -298,7 +298,7 @@ if (arb === true) {
                         </Input>
                     </FormGroup>
                 </Col>
-                </Row>
+                </Row> */}
               </Form>
             </Col>
           </Row>

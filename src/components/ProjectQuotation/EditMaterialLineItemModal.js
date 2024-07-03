@@ -51,27 +51,17 @@ const {id}=useParams();
     lineItemData.modified_by = loggedInuser.first_name;
     //lineItemData.amount=totalAmount;
     lineItemData.amount = parseFloat(lineItemData.quantity) * parseFloat(lineItemData.unit_price) 
-    //const updatedTotalAmount = lineItemData.amount;
-  
-    //if (updatedTotalAmount < tenderDetails.total_amount) {
       api
       .post('/projectquote/edit-QuoteLine', lineItemData)
-      .then((res) => {
-        console.log('edit Line Item', res.data.data);
-        message('Edit Line Item Udated Successfully.', 'success');
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+      .then(() => {
+        message('Edit Line Item Updated Successfully.', 'success');
+        console.log("API call successful, reloading page.");
+        window.location.reload();
       })
       .catch(() => {
         message('Unable to edit quote. please fill all fields', 'error');
       });
-    // }else {
-    //   window.alert('Total amount exceeds the quote total amount!');
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 300);
-    //     }
+  
   
   };
   const [unitdetails, setUnitDetails] = useState();
