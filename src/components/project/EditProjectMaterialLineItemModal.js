@@ -65,7 +65,6 @@ const {id}=useParams();
       
       })
       .catch(() => {
-        message('Unable to edit quote. please fill all fields', 'error');
       });
     // }else {
     //   window.alert('Total amount exceeds the quote total amount!');

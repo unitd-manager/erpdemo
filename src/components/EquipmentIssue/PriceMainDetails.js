@@ -59,26 +59,7 @@ export default function PlanningMainDetails({ handleInputs, plannings, arabic, a
                   />
                 </FormGroup>
               </Col>
-              <Col md="3">
-                <FormGroup>
-                <Label dir="rtl" style={{ textAlign: 'right' }}>
-                    {arabic.find((item) => item.key_text === 'mdEquipmentIssue.ReasonForIssue')?.[genLabel]}
-                  </Label>
-                  <Input
-                    type="text"
-                    onChange={handleInputs}
-                    value={
-                      arb
-                        ? (
-                            plannings && plannings.reason_for_issue_arb ? plannings.reason_for_issue_arb :
-                            (plannings && plannings.reason_for_issue_arb !== null ? '' : plannings && plannings.reason_for_issue)
-                          )
-                        : (plannings && plannings.reason_for_issue)
-                    }
-                    name={arb ? 'reason_for_issue_arb': 'reason_for_issue'}
-                                />
-                </FormGroup>
-              </Col>
+           
             </Row>
             <Row>
          

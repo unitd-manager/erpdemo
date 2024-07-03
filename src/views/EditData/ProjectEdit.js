@@ -163,9 +163,7 @@ const [arabic, setArabic] = useState([]);
     {
       name: arabic.find(item => item.key_text === 'mdProject.Amount')?.[genLabel],
     },
-    {
-      name: arabic.find(item => item.key_text === 'mdProject.Updated By')?.[genLabel],
-    },
+  
     {
       name: arabic.find(item => item.key_text === 'mdProject.Action')?.[genLabel],
     },
@@ -497,7 +495,6 @@ const [arabic, setArabic] = useState([]);
                             <td data-label="Quantity">{e.quantity}</td>
                             <td data-label="Unit Price">{e.unit_price}</td>
                             <td data-label="Amount">{e.amount}</td>
-                            <td data-label="Updated By">{e.created_by} {e.creation_date}</td>
                             <td data-label="Actions">
                               <span
                                 className="addline"
