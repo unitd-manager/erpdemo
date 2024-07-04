@@ -172,6 +172,20 @@ export default function ProjectMilestones({
                         </Col>
                         <Col md="4">
                           <FormGroup>
+                            <Label>Actual Compl date</Label>
+                            <Input
+                              type="date"
+                              onChange={handleInputsmilestone}
+                              value={
+                                insertMilestones &&
+                                moment(insertMilestones.actual_completed_date).format('YYYY-MM-DD')
+                              }
+                              name="actual_completed_date"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="4">
+                          <FormGroup>
                             <Label>Status</Label>
                             <Input
                               type="select"

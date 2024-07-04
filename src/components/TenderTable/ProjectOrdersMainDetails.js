@@ -198,7 +198,6 @@ export default function TenderMoreDetails({ orderDetails, handleInputs, arb, ara
                      <option defaultValue="selected">Please Select</option>
                     <option value="new">New</option>
                     <option value="Invoiced">Invoiced</option>
-                    <option value="paid">Paid</option>
                     <option value="Cancelled">Cancelled</option>
                   </Input>
                 </FormGroup>

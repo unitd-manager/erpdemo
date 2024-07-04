@@ -334,8 +334,7 @@ const [arabic, setArabic] = useState([]);
                     value={subCon && subCon.status}
                   >
                     <option defaultValue="selected">Please Select</option>
-                    <option value="current">Current</option>
-                    <option value="old">Old</option>
+                 
                     {subconStatus &&
                       subconStatus.map((ele) => {
                         return (

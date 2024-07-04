@@ -45,13 +45,13 @@ const ProjectMilestoneEdit = ({
       .post('/milestone/editMilestone', milestoneEdit)
       .then(() => {
         message('Record editted successfully', 'success');
+        window.location.reload();
         getMilestone();
         setTimeout(() => {
           setEditTaskEditModals(false);
         }, 300);
       })
       .catch(() => {
-        message('Unable to edit record.', 'error');
       });
   };
 
