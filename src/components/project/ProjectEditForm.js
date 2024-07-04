@@ -209,10 +209,10 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
                   >
                     <option value="selected">Please Select</option>
                     {incharge &&
-                      incharge.map((ele) => {
+                      incharge.map((e) => {
                         return (
-                          <option value={ele.employee_id} key={ele.first_name}>
-                            {arb?ele.first_name_arb:ele.first_name}
+                          <option key={e.employee_id} value={e.employee_id}>
+                            {arb?e.first_name_arb:e.first_name}
                           </option>
                         );
                       })}

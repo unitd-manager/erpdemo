@@ -294,7 +294,7 @@ const [arabic, setArabic] = useState([]);
   };
   const getIncharge = () => {
     api
-      .get('/tender/projectIncharge')
+      .get('/proposal/getProjectManager')
       .then((res) => {
         setIncharge(res.data.data);
       })
