@@ -17,7 +17,6 @@ import RequestForQuotePie from '../../components/dashboard/RequestForQuotePie';
  //import QuotationChart from '../../components/dashboard/QuotationChart';
  //import CustomerChart from '../../components/dashboard/CustomerChart';
 
-
 /*HR*/
 
 
@@ -27,6 +26,7 @@ const Classic = () => {
       <Row>
         <Col lg="12"> 
           {/* <TestChart/> */}
+          
            <TenderSummaryCard />
           <ProjectSummaryChart />
           <TaskSummary/>

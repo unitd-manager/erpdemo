@@ -96,7 +96,10 @@ export default function StatsPmsProjectId({ id }) {
     : [];
 
   return (
+    <>
+    
     <Row>
+      
       <Col md="12">
         <ComponentCard title="Employee Statistics">
           <Form>
@@ -141,5 +144,6 @@ export default function StatsPmsProjectId({ id }) {
         </ComponentCard>
       </Col>
     </Row>
+    </>
   );
 }

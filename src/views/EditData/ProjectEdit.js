@@ -27,6 +27,7 @@ import PriorityStatsProject from '../../components/dashboard/ProjectStats/Priori
 import ProjectMilestones from '../../components/ProjectMilestones';
 import ProjectMilestoneEdit from '../../components/ProjectMilestoneEdit';
 import ApiButton from '../../components/ApiButton';
+import Gantt from '../../components/dashboard/ProjectStats/Gantt';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -378,6 +379,12 @@ const [arabic, setArabic] = useState([]);
 
           <TabPane tabId="1">
             <br />
+            <>
+            <Row>
+             <Col md='12'>
+             <Gantt projectId={id}/>
+             </Col>
+            </Row>
             <Row>
               <Col>
                 <StatsPmsProjectId id={id}></StatsPmsProjectId>
@@ -386,6 +393,7 @@ const [arabic, setArabic] = useState([]);
                 <DueStatsProject id={id}></DueStatsProject>
               </Col>
             </Row>
+            </>
             <br />
             <Row>
               <Col sm="4" lg="10" xl="6" xxl="6">
