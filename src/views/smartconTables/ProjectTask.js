@@ -216,7 +216,7 @@ const [arabic, setArabic] = useState([]);
                     <td>{arb && element.title_arb ?element.title_arb : element.title}</td>
                     {/* <td>{element.company_name}</td>
                     <td>{element.job_order_code}</td> */}
-                    <td>{arb && element.first_name_arb ?element.first_name_arb : element.first_name}</td>
+                    <td>{arb && element.employee_name_arb ?element.employee_name_arb : element.employee_name}</td>
                     <td>{element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
                     <td>{arb && element.completion_arb ?element.completion_arb : element.completion}</td> 

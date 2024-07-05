@@ -212,7 +212,7 @@ const ProjectEditForm = ({ projectDetail, setProjectDetail, contact, incharge,fo
                       incharge.map((e) => {
                         return (
                           <option key={e.employee_id} value={e.employee_id}>
-                            {arb?e.first_name_arb:e.first_name}
+                            {arb?e.employee_name_arb:e.employee_name}
                           </option>
                         );
                       })}

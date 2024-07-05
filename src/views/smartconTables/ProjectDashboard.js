@@ -6,7 +6,7 @@ import LabourSummary from '../../components/dashboard/LabourSummary';
 import MaterrialIssueChart from '../../components/dashboard/MaterialIssueChart';
 import ProjectChart from '../../components/DashboardProj/ProjectChart';
 import Subcon from '../../components/DashboardProj/SubCon';
-import MaterialIssue from '../../components/DashboardProj/MaterialIssue';
+import ProjectOrderStats from '../../components/DashboardProj/ProjectOrderStats';
 import ProjectQuotationChart  from '../../components/dashboard/ProjectQuotationChart'
 import ProjectEnquiryChart from '../../components/dashboard/ProjectEnquiryChart';
 
@@ -20,7 +20,7 @@ const Test = () => {
         <ProjectQuotationChart/>
         <ProjectChart/>
         <Subcon/>
-        <MaterialIssue/>
+        <ProjectOrderStats/>
         <ProjectSummaryChart/>
         <TaskSummary/>
         <LabourSummary/>
