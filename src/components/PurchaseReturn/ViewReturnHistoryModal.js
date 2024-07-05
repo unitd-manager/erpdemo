@@ -33,14 +33,12 @@ const addQtytoStocks = () => {
       if (elem.status !== 'Closed') {
         elem.status = 'Closed';
         elem.qty_updated = elem.qty_delivered;
-        elem.quantity -= parseFloat(elem.purchase_return_qty);
+        elem.qty -= parseFloat(elem.purchase_return_qty);
         elem.qty_in_stock -=parseFloat(elem.purchase_return_qty);
         elem.stock -= parseFloat(elem.purchase_return_qty);
         
          console.log('elem',elem);
-        api.post('/product/edit-ProductQty', elem) .then(() => {
-        api
-          .post('/purchaseorder/editTabPurchaseOrderLineItem', elem)})
+        api.post('/product/edit-ProductQty', elem)
           .then(() => {
             api
               .post('/inventory/editInventoryStock', elem)

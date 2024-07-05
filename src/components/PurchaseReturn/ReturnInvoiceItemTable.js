@@ -59,7 +59,7 @@ export default function ItemTable({
       product_id: element.product_id,
       purchase_order_id: element.purchase_order_id,
       purchase_return_qty: value, // Adjust this if needed
-      quantity:element.quantity,
+      qty:element.qty,
       return_qty:element.return_qty
     });
     console.log('purchasereturnhistorydetails:', {
@@ -77,7 +77,11 @@ export default function ItemTable({
   console.log('returnInvoiceItemDetails', returnInvoiceItemDetails);
   
   const insertPurchasereturnHistory = () => {
-    if((parseFloat(purchasereturnhistorydetails.quantity)-parseFloat(purchasereturnhistorydetails.return_qty))>=parseFloat(purchasereturnhistorydetails.purchase_return_qty)){
+    console.log('quantity', purchasereturnhistorydetails.qty);
+    console.log('return_qty', purchasereturnhistorydetails.return_qty);
+    console.log('purchase_return_qty', purchasereturnhistorydetails.purchase_return_qty);
+    console.log('diff',(parseFloat(purchasereturnhistorydetails.qty)-parseFloat(purchasereturnhistorydetails.return_qty ||0)));
+    if((parseFloat(purchasereturnhistorydetails.qty ||0 )-parseFloat(purchasereturnhistorydetails.return_qty || 0))>=parseFloat(purchasereturnhistorydetails.purchase_return_qty)){
     purchasereturnhistorydetails.creation_date = creationdatetime;
     purchasereturnhistorydetails.created_by = loggedInuser.first_name;
     purchasereturnhistorydetails.status = 'Pending';
@@ -85,14 +89,14 @@ export default function ItemTable({
       .then((res) => {
         message('Return Qty updated successfully', 'success');
 console.log('purchasereturnhistorydetails', res.data.data);
-api.post('/purchasereturn/editpurchasereturn', {
-  purchase_return_id: insertedDataId, 
-  status: 'Returned',
-  modified_by: loggedInuser.first_name, 
-  modification_date:creationdatetime})
-      .then(() => {
+// api.post('/purchasereturn/editpurchasereturn', {
+//   purchase_return_id: insertedDataId, 
+//   status: 'Returned',
+//   modified_by: loggedInuser.first_name, 
+//   modification_date:creationdatetime})
+//       .then(() => {
        
-      })
+//       })
       })
       .catch(() => {
         message('Unable to edit record.', 'error');
@@ -158,7 +162,7 @@ api.post('/purchasereturn/editpurchasereturn', {
                     </td> */}
                     <td></td>
                     <td>{element.title}</td>
-                    <td>{element.quantity}</td>
+                    <td>{element.qty}</td>
                     <td>{element.return_qty}</td>
                     {stockinputOpen && stockChangeId === element.po_product_id ? (
                       <td>
