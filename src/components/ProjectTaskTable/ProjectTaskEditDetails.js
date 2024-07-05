@@ -107,27 +107,7 @@ function PurchaseRequestEditDetails ({ projectTask, handleInputs, projectdetails
                         </Input>
                       </FormGroup>
                     </Col>
-                    {/* <Col md="3">
-                      <FormGroup>
-                        <Label>Company Name</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputs}
-                          value={projectTask && projectTask.company_id}
-                          name="company_id"
-                        >
-                          <option defaultValue="selected">Please Select</option>
-                          {companydetails &&
-                            companydetails.map((e) => {
-                              return (
-                                <option key={e.company_id} value={e.company_id}>
-                                  {e.company_name}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col> */}
+                    
                     
                     <Col md="3">
                       <FormGroup>
