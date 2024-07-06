@@ -250,6 +250,7 @@ const GoodsDeliveryEdit = () => {
                   unit: quoteItem.unit,
                   unit_price: quoteItem.unit_price,
                   order_item_id: quoteItem.order_item_id,
+                  record_id: quoteItem.record_id
                 };
   
                 if (existingQuoteItemIds.has(quoteItem.order_item_id)) {

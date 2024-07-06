@@ -57,7 +57,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
   const tabs = [
     { id: '1', name: 'Purchase Orders Linked' },
-    { id: '2', name: 'Projects Linked' },
+    { id: '2', name: 'Materials Used Linked' },
     { id: '3', name: ' Attachment' },
   ];
   const tabsArb =  [
@@ -110,7 +110,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
 
   const getproductquantity = (productid) => {
     api
-      .post(`inventory/getProductQuantity`, { product_id: productid })
+      .post(`inventory/getPurchaseSoldQTY`, { product_id: productid })
       .then((res) => {
         setProductQty(res.data.data[0]);
       })

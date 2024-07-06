@@ -136,6 +136,7 @@ export default function CustomerFinanceInvoice({ ordersDetails, quoteId , id, or
                   unit: quoteItem.unit,
                   unit_price: quoteItem.unit_price,
                   quote_items_id: quoteItem.quote_items_id,
+                  record_id:quoteItem.product_id
                 };
   
                 if (existingQuoteItemIds.has(quoteItem.quote_items_id)) {

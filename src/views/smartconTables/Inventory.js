@@ -362,7 +362,7 @@ console.log('Selected language from localStorage:', selectedLanguage);
                   <tr key={element.inventory_id}>
                     <td>{element.inventory_id}</td>
                     <td>
-                      <Link to={`/inventoryEdit/${element.inventory_id}`}>
+                      <Link to={`/inventoryEdit/${element.inventory_id}?tab=1`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

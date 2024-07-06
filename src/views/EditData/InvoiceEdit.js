@@ -268,6 +268,7 @@ const toggle = (tab) => {
                     source_type: bookingDetails.source_type,
                     quote_id: QuoteItem.quote_id,
                     unit: QuoteItem.unit,
+                    record_id: QuoteItem.record_id
                   };
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);
                   // Send a POST request to your /invoice/insertInvoiceItem API with the current QuoteItemsData
@@ -364,7 +365,8 @@ const toggle = (tab) => {
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
                   quote_id: QuoteItem.quote_id,
-                  unit:QuoteItem.unit
+                  unit:QuoteItem.unit,
+                  record_id:QuoteItem.record_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData\
@@ -461,7 +463,8 @@ const toggle = (tab) => {
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
                   quote_id: QuoteItem.quote_id,
-                  unit:QuoteItem.unit
+                  unit:QuoteItem.unit,
+                  record_id:QuoteItem.record_id,
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData
@@ -540,7 +543,8 @@ const toggle = (tab) => {
                   invoice_source_id: bookingDetails.invoice_source_id,
                   source_type: bookingDetails.source_type,
                   quote_id: QuoteItem.quote_id,
-                  unit:QuoteItem.unit
+                  unit:QuoteItem.unit,
+                  record_id:QuoteItem.record_id
                   };  
                   console.log(`Inserting order item ${index + 1}:`, QuoteItemsData);  
                   // Send a POST request to your /goodsreceipt/insertGoodsReceiptItems API with the current QuoteItemsData

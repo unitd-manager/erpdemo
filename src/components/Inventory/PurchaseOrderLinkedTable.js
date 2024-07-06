@@ -22,7 +22,7 @@ function PurchaseOrderLinkedTable({ tabPurchaseOrdersLinked, eng, arb, }) {
             <tr>
             <th scope="col">{arb ?'رمز الشراء':'PO Code'}</th>
             <th scope="col">{arb ?'تاريخ أمر الشراء':'PO Date'}</th>
-            <th scope="col">{arb ?'عنوان المشروع':'Project Title'}</th>
+            {/* <th scope="col">{arb ?'عنوان المشروع':'Project Title'}</th> */}
             <th scope="col">{arb ?' اسم العميل ':'Client Name'}</th>
             <th scope="col">{arb ?'كمية ':'Amount'}</th>
             <th scope="col">{arb ?'كمية':'Qty'}</th>
@@ -46,8 +46,8 @@ function PurchaseOrderLinkedTable({ tabPurchaseOrdersLinked, eng, arb, }) {
                         ? moment(element.purchase_order_date).format('YYYY-MM-DD')
                         : ''}
                     </td>
-                    <td>{eng ===true && element.title}
-                        { arb === true && element.title_arb} </td>
+                    {/* <td>{eng ===true && element.title}
+                        { arb === true && element.title_arb} </td> */}
                     <td>{eng ===true && element.company_name}
                         { arb === true && element.company_name_arb}</td>
                     <td>{eng ===true && element.cost_price}
