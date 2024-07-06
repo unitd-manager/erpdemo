@@ -27,15 +27,41 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
 
   const handleInputreceipt = (e) => {
     const { name, value } = e.target;
-    setCreateReceipt({ ...createReceipt, [name]: value });
+    if (name === 'amount') {
+      const amount = parseFloat(value);
+      setSelectedInvoiceAmount(amount);
+      setCreateReceipt((prevState) => ({
+        ...prevState,
+        amount,
+      }));
+    } else {
+      setCreateReceipt((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const addAndDeductAmount = (checkboxVal, receiptObj) => {
     const remainingAmount = receiptObj.invoice_amount - receiptObj.prev_amount;
     if (checkboxVal.target.checked) {
-      setSelectedInvoiceAmount(selectedInvoiceAmount + parseFloat(remainingAmount));
+      setSelectedInvoiceAmount((prevAmount) => {
+        const newAmount = prevAmount + parseFloat(remainingAmount);
+        setCreateReceipt((prevState) => ({
+          ...prevState,
+          amount: newAmount,
+        }));
+        return newAmount;
+      });
     } else {
-      setSelectedInvoiceAmount(selectedInvoiceAmount - parseFloat(remainingAmount));
+      setSelectedInvoiceAmount((prevAmount) => {
+        const newAmount = prevAmount - parseFloat(remainingAmount);
+        setCreateReceipt((prevState) => ({
+          ...prevState,
+          amount: newAmount,
+        }));
+        return newAmount;
+      });
     }
   };
 
@@ -59,9 +85,6 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   };
 
   const updateReceipt = () => {
-    const updatedAmount = parseFloat(createReceipt.amount) + selectedInvoiceAmount;
-    setCreateReceipt({ ...createReceipt, amount: updatedAmount });
-
     const updatedReceiptData = {
       credit_note_id: receiptId,
       amount: createReceipt.amount,
@@ -81,7 +104,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
 
       const updatedInvoiceStatusData = {
         invoice_id: invoiceIds,
-        status: 'Paid',
+        status: 'Due',
       };
 
       const updateInvoiceStatusPromise = api.post('/creditnote/editInvoice', updatedInvoiceStatusData);
@@ -253,15 +276,13 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
               >
                 Save
               </Button>
-
-            
               <Button
                 onClick={() => {
                   deleteCreatedReceipt();
                 }}
                 type="button"
-                 color="secondary"
-                  className="shadow-none"
+                color="secondary"
+                className="shadow-none"
               >
                 Cancel
               </Button>

@@ -55,7 +55,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       api.post('/invoice/getInvoiceForSalesReceipt', { order_id: orderId }).then((res) => {
         const datafromapi = res.data.data;
         datafromapi.forEach((element) => {
-          element.remainingAmount = element.invoice_amount - element.prev_amount;
+          element.remainingAmount = element.invoice_amount - element.prev_amount - element.credit_amount;
         });
         const result = datafromapi.filter((el) => el.invoice_amount !== el.prev_amount);
         setInvoiceReceipt(result);
@@ -65,7 +65,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
 
   const result = [];
   const addAndDeductAmount = (checkboxVal, receiptObj) => {
-    const remainingAmount = receiptObj.invoice_amount - receiptObj.prev_amount
+    const remainingAmount = receiptObj.invoice_amount - receiptObj.prev_amount -receiptObj.credit_amount
     if (checkboxVal.target.checked === true) {
       setTotalAmount(parseFloat(totalAmount) + parseFloat(remainingAmount));
       setCreateReceipt({

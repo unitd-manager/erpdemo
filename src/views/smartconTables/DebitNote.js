@@ -208,8 +208,12 @@ const InvoiceData = () => {
     if (bookingDetails.company_id !== '' && bookingDetails.debit_note_id !== '') {
 
       bookingDetails.debit_note_code=code;
+      const receiptDetails = {
+        ...bookingDetails,
+        invoice_id: selectedInvoiceId,  // Add selectedInvoiceId here
+      };
       api
-        .post('/debitnote/insertdebitnote', bookingDetails)
+        .post('/debitnote/insertdebitnote', receiptDetails)
         .then((res) => {
           const insertedDataId = res.data.data.insertId;
           setSelectedReceiptId(insertedDataId); // Store the receiptId 
