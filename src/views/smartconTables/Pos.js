@@ -4,6 +4,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 
 const OrderList = () => {
+    
     const [sessionOrderId, setSessionOrderId] = useState('');
     const [billId, setbillId] = useState('');
     const [companyId, setcompanyId] = useState('');
@@ -22,6 +23,7 @@ const OrderList = () => {
     const [overallNetTotal1, setOverallNetTotal1] = useState(0);
     const [amountGiven, setAmountGiven] = useState('');
     const [change, setChange] = useState(0);
+    const [selectedClient, setSelectedClient] = useState(null); // State for selected client
     const [overallSubtotalWithoutDiscount, setOverallSubtotalWithoutDiscount] = useState(0);
     const [overallSubtotalWithDiscount, setOverallSubtotalWithDiscount] = useState(0);
     console.log("sdasd", overallSubtotalWithoutDiscount)
@@ -39,7 +41,7 @@ const OrderList = () => {
         api.post('/poss/updateGSTStatus', { order_id: sessionOrderId, gst_status: newGSTStatus })
             .then(() => {
                 message(`GST ${newGSTStatus}`, 'success');
-               
+
             })
             .catch(error => {
                 console.error('Error updating GST status:', error);
@@ -70,7 +72,7 @@ const OrderList = () => {
         };
         fetchData();
     }, []);
-    
+
     useEffect(() => {
         if (sessionOrderId) {
             api.post('/finance/getOrdersByIds', { order_id: sessionOrderId })
@@ -86,7 +88,7 @@ const OrderList = () => {
                     let subtotalWithDiscount1 = 0;
                     let total = 0;
                     let total1 = 0;
-    
+
                     items.forEach(item => {
                         totalQty += item.qty;
                         const subtotal = item.qty * item.unit_price;
@@ -121,8 +123,8 @@ const OrderList = () => {
                     console.error('Error fetching order items:', error);
                 });
         }
-    }, [sessionOrderId, shippingCharges, discountCharge]);
-    
+    }, [sessionOrderId, shippingCharges, discountCharge,orderItems]);
+
     const handleModeOfPaymentChange = (e) => {
         setModeOfPayment(e.target.value);
     };
@@ -130,58 +132,116 @@ const OrderList = () => {
 
     const getOrdersByOrderId = () => {
         api.post('/poss/getCompanyById', { company_id: companyId1 }).then((res) => {
-          setCompany(res.data.data[0]);
-        
+            setCompany(res.data.data[0]);
+
         });
-      };
-console.log("111111111111",companies)
-      useEffect(() => {
+    };
+    useEffect(() => {
         getOrdersByOrderId();
-      }, [companyId1]);
+    }, [companyId1]);
+    const clearOrderState = () => {
+        setSessionOrderId('');
+        setbillId('');
+        setcompanyId('');
+        setcompanyId1('');
+        setSessionOrder('');
+        setshippingCharges(0);
+        setdiscountCharges(0);
+        setOrderItems([]);
+        setModeOfPayment('');
+        setQtyTotal(0);
+        setDiscountPercentageAmountSum(0);
+        setTotalOverall(0);
+        setRoundOffAmount(0);
+        setOverallNetTotal(0);
+        setRoundOffAmount1(0);
+        setOverallNetTotal1(0);
+        setAmountGiven('');
+        setChange(0);
+        setOverallSubtotalWithoutDiscount(0);
+        setOverallSubtotalWithDiscount(0);
+        setNumRows(0);
+        setIsOrderActive(true);
+        setCompany('');
+        setSelectedClient(null);
+    };
     
 
+    
     const endNewOrder = () => {
         api.post('/poss/cancelOrder', { order_id: sessionOrderId })
             .then(() => {
+                clearOrderState();
+                setIsOrderActive("Cancelled");
                 message('Order ended successfully.', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
             })
             .catch(error => {
                 console.error('Error ending order:', error);
+                message('Unable to end order.', 'error');
             });
     };
-
+    
     const startNewOrder = () => {
         api.get('/poss/createNewOrder')
-            .then(() => {
-                // const insertedDataId = res.data.data.insertId;
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
-                // console.log(insertedDataId);
+            .then((res) => {
+                console.log('API Response:', res.data); // Log the response to verify structure
+                const newOrderData = res.data;
+    
+                if (!newOrderData) {
+                    throw new Error('New order data is undefined');
+                }
+    
+                clearOrderState(); // Clear the order state first
+    
+                // Update the state with new order data
+                setSessionOrderId(newOrderData.order_id);
+                setbillId(newOrderData.bill_number);
+                setcompanyId(newOrderData.company_name);
+                setcompanyId1(newOrderData.company_id);
+                setSessionOrder(newOrderData.gst_status);
+                setshippingCharges(parseFloat(newOrderData.shipping_charge) || 0);
+                setdiscountCharges(parseFloat(newOrderData.discount) || 0);
+                setIsOrderActive(newOrderData.order_status);
+    
+                // Display success message
                 message('New order started successfully.', 'success');
-             
             })
             .catch(error => {
                 console.error('Error starting new order:', error);
+                message('Unable to start new order.', 'error');
             });
     };
-
+    
     const StartendNewOrder = () => {
         api.post('/poss/cancelOrderandNew', { order_id: sessionOrderId })
-            .then(() => {
+            .then((res) => {
+                console.log('API Response:', res.data); // Log the response to verify structure
+
+                const newOrderData = res.data;
+    
+                if (!newOrderData) {
+                    throw new Error('New order data is undefined');
+                }
+    
+                clearOrderState();
+    
+                setSessionOrderId(newOrderData.order_id);
+                setbillId(newOrderData.bill_number);
+                setcompanyId(newOrderData.company_name);
+                setcompanyId1(newOrderData.company_id);
+                setSessionOrder(newOrderData.gst_status);
+                setshippingCharges(parseFloat(newOrderData.shipping_charge) || 0);
+                setdiscountCharges(parseFloat(newOrderData.discount) || 0);
+                setIsOrderActive(newOrderData.order_status);
+    
                 message('Order canceled and new order started successfully.', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
             })
             .catch(error => {
                 console.error('Error starting and ending new order:', error);
+                message('Unable to start and end new order.', 'error');
             });
     };
-
+    
     const loadOptions = (inputValue, callback) => {
         api.get(`/product/getProductsbySearchFilter`, { params: { keyword: inputValue } })
             .then((res) => {
@@ -202,27 +262,25 @@ console.log("111111111111",companies)
 
     const addProductToOrderItems = (selectedProduct) => {
         const costPrice = selectedProduct.unit_price * selectedProduct.qty;
-console.log("q1q1q1q1",costPrice)
-    // Create newItem object with cost_price included
-    const newItem = {
-        order_id: sessionOrderId,
-        qty: selectedProduct.qty,
-        record_id: selectedProduct.value,
-        item_title: selectedProduct.label,
-        unit: selectedProduct.unit,
-        unit_price: selectedProduct.price,
-        vat: selectedProduct.gst,
-        discount_type: "No discount",
-        cost_price: costPrice  // Include cost_price in newItem
-    };
+        console.log("q1q1q1q1", costPrice)
+        // Create newItem object with cost_price included
+        const newItem = {
+            order_id: sessionOrderId,
+            qty: selectedProduct.qty,
+            record_id: selectedProduct.value,
+            item_title: selectedProduct.label,
+            unit: selectedProduct.unit,
+            unit_price: selectedProduct.price,
+            vat: selectedProduct.gst,
+            discount_type: "No discount",
+            cost_price: costPrice  // Include cost_price in newItem
+        };
 
         api.post('/poss/insertorder_item', newItem)
             .then(() => {
                 message('Product added successfully', 'success');
                 setOrderItems([...orderItems, newItem]);
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
+               
             })
             .catch(() => {
                 message('Unable to add product.', 'error');
@@ -230,13 +288,11 @@ console.log("q1q1q1q1",costPrice)
     };
 
     const deleteItem = (orderItemId) => {
-        api.delete('/poss/deleteOrderItem', { order_item_id: orderItemId })
+        api.post('/poss/deleteOrderItem', { order_item_id: orderItemId })
             .then(() => {
                 setOrderItems(orderItems.filter(item => item.order_item_id !== orderItemId));
                 message('Product deleted successfully', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
+
             })
             .catch(error => {
                 console.error('Error deleting product:', error);
@@ -244,10 +300,11 @@ console.log("q1q1q1q1",costPrice)
             });
     };
     console.log("111", sessionOrder)
+    
     const updateQuantity = (orderItemId, newQty) => {
         const updatedItem = orderItems.find(item => item.order_item_id === orderItemId);
+        
         if (updatedItem) {
-
             const newCostPrice = updatedItem.unit_price * newQty;
 
             // Prepare updated data object
@@ -256,7 +313,7 @@ console.log("q1q1q1q1",costPrice)
                 qty: newQty,
                 cost_price: newCostPrice
             };
-    
+
 
             api.post('/poss/updateOrderItem', updatedData)
                 .then(() => {
@@ -264,7 +321,7 @@ console.log("q1q1q1q1",costPrice)
                     setOrderItems(orderItems.map(item =>
                         item.order_item_id === orderItemId ? updatedData : item
                     ));
-                  
+
                 })
                 .catch(() => {
                     message('Unable to update quantity.', 'error');
@@ -283,9 +340,7 @@ console.log("q1q1q1q1",costPrice)
                     setOrderItems(orderItems.map(item =>
                         item.order_item_id === orderItemId ? updatedData : item
                     ));
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 300);
+                  
                 })
                 .catch(() => {
                     message('Unable to update discount.', 'error');
@@ -310,9 +365,7 @@ console.log("q1q1q1q1",costPrice)
                     setOrderItems(orderItems.map(item =>
                         item.order_item_id === orderItemId ? updatedData : item
                     ));
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 300);
+                  
                 })
                 .catch(() => {
                     message('Unable to update discount type.', 'error');
@@ -366,7 +419,7 @@ console.log("q1q1q1q1",costPrice)
                 message('Shipping charge applied successfully.', 'success');
                 setTimeout(() => {
                     window.location.reload();
-                  }, 300);
+                }, 300);
                 // Perform any necessary actions after updating the shipping charge
             })
             .catch(error => {
@@ -386,9 +439,7 @@ console.log("q1q1q1q1",costPrice)
             .then(() => {
                 // Success message
                 message('Discount charge applied successfully.', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
+               
                 // Perform any necessary actions after updating the shipping charge
             })
             .catch(error => {
@@ -404,7 +455,7 @@ console.log("q1q1q1q1",costPrice)
             order_id: sessionOrderId,
             amount_given: amountGiven,
             subtotal_amount: overallNetTotal,
-            mode_of_payment:modeOfPayment,
+            mode_of_payment: modeOfPayment,
         };
 
         api.post('/poss/generateBillAndCreateOrder', data)
@@ -412,7 +463,7 @@ console.log("q1q1q1q1",costPrice)
                 message('Amount saved successfully.', 'success');
                 setTimeout(() => {
                     window.location.reload();
-                  }, 300);
+                }, 300);
             })
             .catch(error => {
                 console.error('Error saving amount:', error);
@@ -428,57 +479,56 @@ console.log("q1q1q1q1",costPrice)
     };
 
 
-    const [selectedClient, setSelectedClient] = useState(null); // State for selected client
 
-const loadClientOptions = (inputValue, callback) => {
-    api.get(`/poss/getClientsByName`, { params: { keyword: inputValue } })
-        .then((res) => {
-            const clients = res.data.data;
-            const options = clients.map((client) => ({
-                value: client.company_id,
-                label: client.company_name,
-                address: client.address_street,
-                phone: client.phone,
-        
-            }));
-            callback(options);
-        })
-        .catch(error => {
-            console.error('Error loading client options:', error);
-        });
-};
-console.log("aaaaaa",selectedClient?.address)
-const addClient = () => {
-    if (selectedClient) {
-        api.post('/poss/updateClientId', { order_id: sessionOrderId, company_id: selectedClient.value })
+    const loadClientOptions = (inputValue, callback) => {
+        api.get(`/poss/getClientsByName`, { params: { keyword: inputValue } })
+            .then((res) => {
+                const clients = res.data.data;
+                const options = clients.map((client) => ({
+                    value: client.company_id,
+                    label: client.company_name,
+                    address: client.address_street,
+                    phone: client.phone,
+
+                }));
+                callback(options);
+            })
+            .catch(error => {
+                console.error('Error loading client options:', error);
+            });
+    };
+    console.log("aaaaaa", selectedClient?.address)
+    const addClient = () => {
+        if (selectedClient) {
+            api.post('/poss/updateClientId', { order_id: sessionOrderId, company_id: selectedClient.value })
+                .then(() => {
+                    message('Client added successfully', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                })
+                .catch(() => {
+                    message('Unable to add client.', 'error');
+                });
+        } else {
+            message('Please select a client.', 'error');
+        }
+    };
+
+
+    const removeClient = () => {
+        api.post('/poss/removeClientId', { order_id: sessionOrderId })
             .then(() => {
-                message('Client added successfully', 'success');
+                message('Client removed successfully', 'success');
                 setTimeout(() => {
                     window.location.reload();
-                  }, 300);
+                }, 300);
             })
             .catch(() => {
                 message('Unable to add client.', 'error');
             });
-    } else {
-        message('Please select a client.', 'error');
-    }
-};
-
-
-const removeClient = () => {
-    api.post('/poss/removeClientId', { order_id: sessionOrderId })
-    .then(() => {
-        message('Client removed successfully', 'success');
-        setTimeout(() => {
-            window.location.reload();
-          }, 300);
-    })
-    .catch(() => {
-        message('Unable to add client.', 'error');
-    });
-};
-
+    };
+   
     return (
         <div>
             <div className="panel panel-info">
@@ -487,24 +537,24 @@ const removeClient = () => {
                         <Input type="text" value='' readOnly />
                     </div> */}
 
-                 
+
                     <div className="float_left viewAllOrderBtnml20">
                         <a target='_blank' href="/#/Salesorder" className="btn btn-primary">View All Order</a>
-                 
+
                         {/* <Button onClick={toggleGSTCalculation} className="btn btn-primary ml10">
                             {sessionOrder === "ON" ? "Disable GST" : "Enable GST"}
 
                         </Button> */}
-                          <div className="gst-toggle">
-    <Label>
-      <Input type="radio" name="gst-status" value="ON" checked={sessionOrder === "ON"} onChange={toggleGSTCalculation} />
-      ON     
-    </Label>&nbsp;&nbsp;&nbsp;&nbsp;
-    <Label>
-      <Input type="radio" name="gst-status" value="OFF" checked={sessionOrder === "OFF"} onChange={toggleGSTCalculation} />
-      OFF
-    </Label>
-  </div>
+                        <div className="gst-toggle">
+                            <Label>
+                                <Input type="radio" name="gst-status" value="ON" checked={sessionOrder === "ON"} onChange={toggleGSTCalculation} />
+                                ON
+                            </Label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <Label>
+                                <Input type="radio" name="gst-status" value="OFF" checked={sessionOrder === "OFF"} onChange={toggleGSTCalculation} />
+                                OFF
+                            </Label>
+                        </div>
 
 
                         <Button
@@ -549,15 +599,15 @@ const removeClient = () => {
                                 </td>
                                 <td width="10%"><Label>Mode Of Payment:</Label></td>
                                 <td width="20%">
-                                     <div className="float_left modeOfPaymentDropdown">
-                        <select value={modeOfPayment} onChange={handleModeOfPaymentChange}>
-                            <option value=''>Please Select</option>
-                            {mopArray.map((mop) => (
-                                <option value={mop}>{mop}</option>
-                            ))}
-                        </select>
-                    </div></td>
-                                
+                                    <div className="float_left modeOfPaymentDropdown">
+                                        <select value={modeOfPayment} onChange={handleModeOfPaymentChange}>
+                                            <option value=''>Please Select</option>
+                                            {mopArray.map((mop) => (
+                                                <option value={mop}>{mop}</option>
+                                            ))}
+                                        </select>
+                                    </div></td>
+
                                 <td width="15%" align="center">
                                     <>
                                         {isOrderActive !== "Cancelled" ? (
@@ -610,7 +660,7 @@ const removeClient = () => {
                                 <th width="5%" >Dis Type</th>
                                 <th width="7%" >Dis Amt</th>
                                 {sessionOrder === "ON" && (
-                                    <th width="5%"  className="txtRight">GST Amount</th>
+                                    <th width="5%" className="txtRight">GST Amount</th>
                                 )}
 
                                 <th width="5%" >Amt</th>
@@ -664,9 +714,17 @@ const removeClient = () => {
                                                     />
                                                 </td>
                                                 {sessionOrder === "ON" && (
-                                                    <td className="txtRight">{gstValue.toFixed(2)} ({item.vat}%)</td>
+                                                    <td className="txtRight">
+                                                        {Number.isNaN(gstValue) ? "0.00" : gstValue.toFixed(2)} ({item.vat}%)
+                                                    </td>
+
                                                 )}
-                                                <td className="txtRight">{sessionOrder === "ON" ? total.toFixed(2) : subtotalWithDiscount.toFixed(2)}</td>
+                                                <td className="txtRight">
+                                                    {sessionOrder === "ON"
+                                                        ? (Number.isNaN(total) ? "0.00" : total.toFixed(2))
+                                                        : (Number.isNaN(subtotalWithDiscount) ? "0.00" : subtotalWithDiscount.toFixed(2))}
+                                                </td>
+
                                                 <td>
                                                     <Button color="danger" onClick={() => deleteItem(item.order_item_id)}>Delete</Button>
                                                 </td>
@@ -682,84 +740,84 @@ const removeClient = () => {
                         </tbody>
                     </table>
                     <>
-    {isOrderActive !== "Cancelled" ? (
-        <div className="float_left viewAllOrderml20 mt50">
-            <Button onClick={openModal1} className="btn btn-primary mr-2 mb-2">
-                Apply Discount
-            </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Modal isOpen={isModalOpen1} toggle={closeModal1}>
-                <ModalHeader toggle={closeModal1}>Enter Discount</ModalHeader>
-                <ModalBody>
-                    <Input
-                        type="number"
-                        min="0"
-                        value={discountCharge}
-                        onChange={handleDiscountChargeChange}
-                        placeholder="Enter discount charge amount"
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={applyDiscount}>Apply</Button>{' '}
-                    <Button color="secondary" onClick={closeModal1}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-            
-            <Button onClick={openModal} className="btn btn-primary mr-2 mb-2">
-                Apply Shipping Charge
-            </Button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <Modal isOpen={isModalOpen} toggle={closeModal}>
-                <ModalHeader toggle={closeModal}>Enter Shipping Charge</ModalHeader>
-                <ModalBody>
-                    <Input
-                        type="number"
-                        min="0"
-                        value={shippingCharge}
-                        onChange={handleShippingChargeChange}
-                        placeholder="Enter shipping charge amount"
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={applyShippingCharge}>Apply</Button>{' '}
-                    <Button color="secondary" onClick={closeModal}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-            
-            <Button onClick={addClient} className="btn btn-primary mr-2 mb-2">
-                Add Client
-            </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
-            <Button onClick={removeClient} className="btn btn-primary mb-2">
-                Remove Client
-            </Button>
+                        {isOrderActive !== "Cancelled" ? (
+                            <div className="float_left viewAllOrderml20 mt50">
+                                <Button onClick={openModal1} className="btn btn-primary mr-2 mb-2">
+                                    Apply Discount
+                                </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <Modal isOpen={isModalOpen1} toggle={closeModal1}>
+                                    <ModalHeader toggle={closeModal1}>Enter Discount</ModalHeader>
+                                    <ModalBody>
+                                        <Input
+                                            type="number"
+                                            min="0"
+                                            value={discountCharge}
+                                            onChange={handleDiscountChargeChange}
+                                            placeholder="Enter discount charge amount"
+                                        />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="primary" onClick={applyDiscount}>Apply</Button>{' '}
+                                        <Button color="secondary" onClick={closeModal1}>Cancel</Button>
+                                    </ModalFooter>
+                                </Modal>
 
-            <div className="client-search mt-2" style={{ maxWidth: '300px' }}>
-                <AsyncSelect
-                    loadOptions={loadClientOptions}
-                    onChange={setSelectedClient}
-                    isClearable
-                    placeholder="Search for a client"
-                    styles={{ container: (provided) => ({ ...provided, marginBottom: '10px' }) }}
-                />
-                {companyId && (
-                    <div>
-                        <p>Company Name: {companyId}</p>
-                        <p>Mobile: {companies && companies.phone || 'N/A'}</p>
-                        <p>Email: {companies && companies.email || 'N/A'}</p>
-                        <p>Address: {companies && companies.address_street || 'N/A'}</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    ) : (
-        <p></p>
-    )}
-</>
+                                <Button onClick={openModal} className="btn btn-primary mr-2 mb-2">
+                                    Apply Shipping Charge
+                                </Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <Modal isOpen={isModalOpen} toggle={closeModal}>
+                                    <ModalHeader toggle={closeModal}>Enter Shipping Charge</ModalHeader>
+                                    <ModalBody>
+                                        <Input
+                                            type="number"
+                                            min="0"
+                                            value={shippingCharge}
+                                            onChange={handleShippingChargeChange}
+                                            placeholder="Enter shipping charge amount"
+                                        />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="primary" onClick={applyShippingCharge}>Apply</Button>{' '}
+                                        <Button color="secondary" onClick={closeModal}>Cancel</Button>
+                                    </ModalFooter>
+                                </Modal>
+
+                                <Button onClick={addClient} className="btn btn-primary mr-2 mb-2">
+                                    Add Client
+                                </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <Button onClick={removeClient} className="btn btn-primary mb-2">
+                                    Remove Client
+                                </Button>
+
+                                <div className="client-search mt-2" style={{ maxWidth: '300px' }}>
+                                    <AsyncSelect
+                                        loadOptions={loadClientOptions}
+                                        onChange={setSelectedClient}
+                                        isClearable
+                                        placeholder="Search for a client"
+                                        styles={{ container: (provided) => ({ ...provided, marginBottom: '10px' }) }}
+                                    />
+                                    {companyId && (
+                                        <div>
+                                            <p>Company Name: {companyId}</p>
+                                            <p>Mobile: {companies && companies.phone || 'N/A'}</p>
+                                            <p>Email: {companies && companies.email || 'N/A'}</p>
+                                            <p>Address: {companies && companies.address_street || 'N/A'}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <p></p>
+                        )}
+                    </>
 
                     <>
                         {isOrderActive !== "Cancelled" ? (
                             <table className="table table-bordered mt20">
                                 <tbody>
-                                   
+
                                     <tr>
                                         <td colSpan={5} className='totalFontSize'>Shipping Charge</td>
                                         <td id='fld_shipping_charge' className='txtRight totalFontSize'>{shippingCharges}</td>
@@ -768,28 +826,28 @@ const removeClient = () => {
                                         <td></td>
                                     </tr>
                                     <tr>
-    <td colSpan={5} className='totalFontSize'>Total Amount</td>
-    <td id='fld_net_amount' className='txtRight totalFontSize'>
-        {sessionOrder === "ON" ? (parseFloat(totalOverall) || 0).toFixed(2) : (parseFloat(overallSubtotalWithDiscount) || 0).toFixed(2)}
-    </td>
-    <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
-                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum+discountCharge}</td>
+                                        <td colSpan={5} className='totalFontSize'>Total Amount</td>
+                                        <td id='fld_net_amount' className='txtRight totalFontSize'>
+                                            {sessionOrder === "ON" ? (parseFloat(totalOverall) || 0).toFixed(2) : (parseFloat(overallSubtotalWithDiscount) || 0).toFixed(2)}
+                                        </td>
+                                        <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
+                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum + discountCharge}</td>
                                         <td></td>
-</tr>
-<tr>
-    <td colSpan={5} className='totalFontSize'>Round Off</td>
-    <td id='fld_roundOff_amount' className='txtRight totalFontSize'>
-        {sessionOrder === "ON" ? (parseFloat(roundOffAmount) || 0).toFixed(2) : (parseFloat(roundOffAmount1) || 0).toFixed(2)}
-    </td>
-    <td></td>
-</tr>
-<tr>
-    <td colSpan={5} className='netTotal'>Net Total</td>
-    <td id='fld_netTotal_amount' className='txtRight netTotal'>
-        {sessionOrder === "ON" ? (parseFloat(overallNetTotal) || 0).toFixed(2) : (parseFloat(overallNetTotal1) || 0).toFixed(2)}
-    </td>
-    <td></td>
-</tr>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={5} className='totalFontSize'>Round Off</td>
+                                        <td id='fld_roundOff_amount' className='txtRight totalFontSize'>
+                                            {sessionOrder === "ON" ? (parseFloat(roundOffAmount) || 0).toFixed(2) : (parseFloat(roundOffAmount1) || 0).toFixed(2)}
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={5} className='netTotal'>Net Total</td>
+                                        <td id='fld_netTotal_amount' className='txtRight netTotal'>
+                                            {sessionOrder === "ON" ? (parseFloat(overallNetTotal) || 0).toFixed(2) : (parseFloat(overallNetTotal1) || 0).toFixed(2)}
+                                        </td>
+                                        <td></td>
+                                    </tr>
 
                                     <tr className='txt_20px'>
                                         <td colSpan={5} className='txtRight'>Amount Paid</td>
