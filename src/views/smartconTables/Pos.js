@@ -4,6 +4,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 
 const OrderList = () => {
+   
     
     const [sessionOrderId, setSessionOrderId] = useState('');
     const [billId, setbillId] = useState('');
@@ -739,7 +740,144 @@ const OrderList = () => {
 
                         </tbody>
                     </table>
+                   
+
                     <>
+  {isOrderActive !== "Cancelled" ? (
+    <table className="table table-bordered mt20">
+      <tbody>
+        <tr>
+          <td colSpan="5"></td>
+          <td align="right" className="totalDiscount totalFontSize txtRight">Total Qty</td>
+          <td className="totalQty">{qtyTotal}</td>
+        </tr>
+        <tr>
+          <td colSpan="5"></td>
+          <td className="totalDiscount totalFontSize txtRight">Total Discount</td>
+          <td id="fld_totalDiscount_amount" align="right" className="totalDiscount totalFontSize">
+            {discountPercentageAmountSum + discountCharge}
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="5"></td>
+          <td className="totalFontSize txtRight">Total Amount</td>
+          <td id="fld_net_amount" align="right" className="txtRight totalFontSize">
+            {sessionOrder === "ON" ? (parseFloat(totalOverall) || 0).toFixed(2) : (parseFloat(overallSubtotalWithDiscount) || 0).toFixed(2)}
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="5"></td>
+          <td className="totalFontSize txtRight">Shipping Charge</td>
+          <td id="fld_shipping_charge" align="right" className="txtRight totalFontSize">{shippingCharges}</td>
+        </tr>
+        <tr>
+          <td colSpan="5"></td>
+          <td className="totalFontSize txtRight">Round Off</td>
+          <td id="fld_roundOff_amount" align="right" className="txtRight totalFontSize">
+            {sessionOrder === "ON" ? (parseFloat(roundOffAmount) || 0).toFixed(2) : (parseFloat(roundOffAmount1) || 0).toFixed(2)}
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="5"></td>
+          <td className="netTotal txtRight">Net Total</td>
+          <td id="fld_netTotal_amount" align="right" className="txtRight netTotal">
+            {sessionOrder === "ON" ? (parseFloat(overallNetTotal) || 0).toFixed(2) : (parseFloat(overallNetTotal1) || 0).toFixed(2)}
+          </td>
+        </tr>
+        <tr className="txt_20px">
+          <td colSpan="5"></td>
+          <td className="txtRight">Amount Paid</td>
+          <td align="right" className="txtRight amountGiven">
+            <input
+              type="number"
+              value={amountGiven}
+              id="fld_amount_given"
+              className="text w150 txtRight txt_20px"
+              name="amount_given"
+              total={overallNetTotal}
+              onChange={handleAmountGivenChange}
+            />
+          </td>
+        </tr>
+        <tr className="balanceRow">
+          <td colSpan="5"></td>
+          <td className="netTotal txtRight">Change</td>
+          <td align="right" className="netTotal balance">{change}</td>
+        </tr>
+        <tr>
+          <td colSpan="6"></td>
+          <td align="right">
+            <Button onClick={saveAmountGiven} className="btn btn-primary">Submit</Button>
+          </td>
+        </tr>
+        <input type="hidden" id="fld_subtotal_amount" name="subtotal_amount" value={overallNetTotal} />
+        <input type="hidden" id="fld_qty_total" name="qty_total" value={qtyTotal} />
+        <input type="hidden" id="fld_company_id" name="company_id" value={companyId1} />
+        <input type="hidden" id="fld_products_total" name="fld_products_total" value={numRows} />
+        <input type="hidden" id="fld_current_order_id" name="fld_current_order_id" value={sessionOrderId} />
+        <input type="hidden" id="fld_current_mode_of_payment" name="mode_of_payment" value={modeOfPayment} />
+      </tbody>
+    </table>
+  ) : (
+    <p></p>
+  )}
+  <style>
+    {`
+      .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border-collapse: collapse;
+      }
+
+      .table-bordered {
+        border: 1px solid #dee2e6;
+      }
+
+      .table-bordered th,
+      .table-bordered td {
+        border: 1px solid #dee2e6;
+      }
+
+      .txtRight {
+        text-align: right;
+      }
+
+      .totalFontSize {
+        font-size: 1.1rem;
+      }
+
+      .netTotal {
+        font-weight: bold;
+      }
+
+      .w150 {
+        width: 150px;
+      }
+
+      @media (max-width: 768px) {
+        .table {
+          display: block;
+          overflow-x: auto;
+        }
+
+        .w150 {
+          width: 100px;
+        }
+
+        .totalFontSize {
+          font-size: 1rem;
+        }
+
+        .txt_20px {
+          font-size: 1rem;
+        }
+      }
+    `}
+  </style>
+</>
+<>
                         {isOrderActive !== "Cancelled" ? (
                             <div className="float_left viewAllOrderml20 mt50">
                                 <Button onClick={openModal1} className="btn btn-primary mr-2 mb-2">
@@ -789,6 +927,7 @@ const OrderList = () => {
                                 <Button onClick={removeClient} className="btn btn-primary mb-2">
                                     Remove Client
                                 </Button>
+                                
 
                                 <div className="client-search mt-2" style={{ maxWidth: '300px' }}>
                                     <AsyncSelect
@@ -813,77 +952,6 @@ const OrderList = () => {
                         )}
                     </>
 
-                    <>
-                        {isOrderActive !== "Cancelled" ? (
-                            <table className="table table-bordered mt20">
-                                <tbody>
-
-                                    <tr>
-                                        <td colSpan={5} className='totalFontSize'>Shipping Charge</td>
-                                        <td id='fld_shipping_charge' className='txtRight totalFontSize'>{shippingCharges}</td>
-                                        <td colSpan={3} className='totalDiscount totalFontSize'>Total Qty</td>
-                                        <td className='totalQty'>{qtyTotal}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={5} className='totalFontSize'>Total Amount</td>
-                                        <td id='fld_net_amount' className='txtRight totalFontSize'>
-                                            {sessionOrder === "ON" ? (parseFloat(totalOverall) || 0).toFixed(2) : (parseFloat(overallSubtotalWithDiscount) || 0).toFixed(2)}
-                                        </td>
-                                        <td colSpan={3} className='totalDiscount totalFontSize'>Total Discount</td>
-                                        <td id='fld_totalDiscount_amount' className='totalDiscount totalFontSize'>{discountPercentageAmountSum + discountCharge}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={5} className='totalFontSize'>Round Off</td>
-                                        <td id='fld_roundOff_amount' className='txtRight totalFontSize'>
-                                            {sessionOrder === "ON" ? (parseFloat(roundOffAmount) || 0).toFixed(2) : (parseFloat(roundOffAmount1) || 0).toFixed(2)}
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={5} className='netTotal'>Net Total</td>
-                                        <td id='fld_netTotal_amount' className='txtRight netTotal'>
-                                            {sessionOrder === "ON" ? (parseFloat(overallNetTotal) || 0).toFixed(2) : (parseFloat(overallNetTotal1) || 0).toFixed(2)}
-                                        </td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr className='txt_20px'>
-                                        <td colSpan={5} className='txtRight'>Amount Paid</td>
-                                        <td className='txtRight amountGiven'>
-                                            <input
-                                                type='number'
-                                                value={amountGiven}
-                                                id='fld_amount_given'
-                                                className='text w150 txtRight txt_20px'
-                                                name='amount_given'
-                                                total={overallNetTotal}
-                                                onChange={handleAmountGivenChange}
-                                            />
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr className='balanceRow'>
-                                        <td colSpan={5} className='netTotal'>Change</td>
-                                        <td className='netTotal balance'>{change}</td>
-                                        <td></td>
-                                        <td>
-                                            <Button onClick={saveAmountGiven} className="btn btn-primary">Submit</Button>
-                                        </td>
-                                    </tr>
-                                    <input type='hidden' id='fld_subtotal_amount' name='subtotal_amount' value={overallNetTotal} />
-                                    <input type='hidden' id='fld_qty_total' name='qty_total' value={qtyTotal} />
-                                    <input type='hidden' id='fld_products_total' name='fld_products_total' value={numRows} />
-                                    <input type='hidden' id='fld_current_order_id' name='fld_current_order_id' value={sessionOrderId} />
-                                    <input type='hidden' id='fld_current_mode_of_payment' name='mode_of_payment' value={modeOfPayment} />
-
-                                </tbody>
-                            </table>
-                        ) : (
-                            <p></p>
-                        )}
-                    </>
                 </div>
             </div>
         </div>
