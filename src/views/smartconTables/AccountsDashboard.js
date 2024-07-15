@@ -5,7 +5,10 @@ import JournalAccountsChart1 from './JournalAccountsChart1';
 import LedgerChart from './LedgerChart';
 import CreditNoteChart from './CreditNoteChart';
 import DebitNoteChart from './DebitNoteChart';
-
+import BalanceSheetChart from './BalanceSheetChart';
+import ExpensesOverTimeChart from './ExpensesOverTimeChart';
+import CreditNotrAgingChart from './CreditNotrAgingChart';
+import DebitNoteStatusChart from './DebitNoteStatusChart';
 
 const Test = () => {
 
@@ -13,6 +16,10 @@ const Test = () => {
     <div >
       <Row>
         <Col lg='12'>
+        <BalanceSheetChart/>
+        <ExpensesOverTimeChart/>
+        <CreditNotrAgingChart/>
+        <DebitNoteStatusChart/>
         <JournalAccountsChart/>
         <JournalAccountsChart1/>
         <LedgerChart/>
