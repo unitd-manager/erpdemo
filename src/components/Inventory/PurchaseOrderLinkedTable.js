@@ -13,6 +13,7 @@ function PurchaseOrderLinkedTable({ tabPurchaseOrdersLinked, eng, arb, }) {
     arb: PropTypes.any,
   };
 
+  
 
   return (
     <div>

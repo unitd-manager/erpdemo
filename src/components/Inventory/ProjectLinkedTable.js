@@ -13,6 +13,7 @@ function ProjectLinkedTable({ projectsLinked, eng, arb, }) {
     arb: PropTypes.any,
   };
 
+  
 
   return (
     <div>

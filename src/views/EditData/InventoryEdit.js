@@ -274,7 +274,6 @@ console.log('Selected language from localStorage:', selectedLanguage);
         </TabContent>
       </ComponentCard>
 
-       
       </>
   );
 };
