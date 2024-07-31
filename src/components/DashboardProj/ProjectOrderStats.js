@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, FormGroup, Label, Input } from 'reactstrap';
+import { Form, Row, Col, FormGroup, Label, Input, Alert } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api'; // Assuming this is configured with axios or fetch
@@ -8,6 +8,7 @@ const SalesOrderStats = () => {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
   const [salesOrderStats, setSalesOrderStats] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Function to fetch all companies
   const fetchCompanies = async () => {
@@ -16,16 +17,33 @@ const SalesOrderStats = () => {
       setCompanies(data);
     } catch (error) {
       console.error("Error fetching companies:", error);
+      setErrorMessage("Error fetching companies");
     }
   };
 
   // Function to fetch Sales Order statistics for the selected company
   const fetchSalesOrderStats = async (companyId) => {
     try {
-      const { data } = await api.get(`/projectsalesorder/getProjectOrderStats?companyId=${companyId}`);
-      setSalesOrderStats(data);
+      const { data } = await api.get('/projectsalesorder/getProjectOrderStats', {
+        params: { company_id: companyId }
+      });
+
+      if (data.data.length === 0) {
+        setSalesOrderStats(null);
+        setErrorMessage('No orders found for the selected company');
+        return;
+      }
+
+      const statusCounts = data.data.reduce((acc, order) => {
+        acc[order.order_status] = (acc[order.order_status] || 0) + order.count;
+        return acc;
+      }, {});
+
+      setSalesOrderStats(statusCounts);
+      setErrorMessage('');
     } catch (error) {
       console.error('Error fetching sales order stats:', error);
+      setErrorMessage('Error fetching sales order stats');
     }
   };
 
@@ -50,7 +68,7 @@ const SalesOrderStats = () => {
       labels: {
         style: {
           colors: ['#36a2eb', '#ff6384', '#ffce56'],
-          fontSize: '12px',
+          fontSize: '15px',
         },
       },
     },
@@ -116,6 +134,11 @@ const SalesOrderStats = () => {
               </Input>
             </FormGroup>
           </Form>
+          {errorMessage && (
+            <Alert color="danger">
+              {errorMessage}
+            </Alert>
+          )}
           {salesOrderStats && (
             <Chart options={optionsBarChart} series={seriesBarChart} type="bar" height="350" />
           )}
