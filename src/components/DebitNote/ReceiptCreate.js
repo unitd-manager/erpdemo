@@ -114,7 +114,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
         .then(() => {
           console.log('DebitNote updated successfully');
-          // window.location.reload();
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating receipt or invoice status', error);
@@ -123,7 +123,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       updateReceiptPromise
         .then(() => {
           console.log('DebitNote updated successfully');
-          // window.location.reload();
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating receipt', error);
