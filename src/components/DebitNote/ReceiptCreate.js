@@ -15,9 +15,9 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const [selectedInvoiceAmount, setSelectedInvoiceAmount] = useState(0);
   const [createReceipt, setCreateReceipt] = useState({
     amount: 0,
-    credit_note_status: 'Paid',
-    credit_note_date: moment().format('YYYY-MM-DD'),
-    credit_note_code: '',
+    debit_note_status: 'Paid',
+    debit_note_date: moment().format('YYYY-MM-DD'),
+    debit_note_code: '',
     mode_of_payment: 'Cash',
     remarks: '',
     cheque_no: '',
@@ -88,12 +88,12 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
 
   const updateReceipt = () => {
     const updatedReceiptData = {
-      credit_note_id: receiptId,
+      debit_note_id: receiptId,
       amount: createReceipt.amount,
       mode_of_payment: createReceipt.mode_of_payment,
-      credit_note_date: createReceipt.credit_note_date,
+      debit_note_date: createReceipt.debit_note_date,
       remarks: createReceipt.remarks,
-      credit_note_status: 'Paid',
+      debit_note_status: 'Paid',
       cheque_date: createReceipt.cheque_date,
       cheque_no: createReceipt.cheque_no,
       bank_name: createReceipt.bank_name,
@@ -114,7 +114,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       Promise.all([updateReceiptPromise, updateInvoiceStatusPromise])
         .then(() => {
           console.log('DebitNote updated successfully');
-          window.location.reload();
+          // window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating receipt or invoice status', error);
@@ -123,7 +123,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
       updateReceiptPromise
         .then(() => {
           console.log('DebitNote updated successfully');
-          window.location.reload();
+          // window.location.reload();
         })
         .catch((error) => {
           console.error('Error updating receipt', error);
@@ -134,7 +134,7 @@ const FinanceReceiptData = ({ receiptId, orderId }) => {
   const deleteCreatedReceipt = () => {
     if (receiptId) {
       api
-        .delete('/debitnote/deleteReceipt', { data: { credit_note_id: receiptId } })
+        .delete('/debitnote/deleteReceipt', { data: { debit_note_id: receiptId } })
         .then(() => {
           console.log('Created receipt record deleted successfully');
           setTimeout(() => {
